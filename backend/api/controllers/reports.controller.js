@@ -11,28 +11,60 @@ import {
   deleteComplianceReport as deleteComplianceReportService
 } from '../../services/compliance/reports.service.js';
 
-const ok = (res, data, meta = {}) =>
-  res.json({
+function buildMeta(extra = {}) {
+  return {
+    timestamp: new Date().toISOString(),
+    ...extra
+  };
+}
+
+function ok(res, data, meta = {}) {
+  return res.json({
     data,
-    meta,
+    meta: buildMeta(meta),
     error: null
   });
+}
 
-const created = (res, data, meta = {}) =>
-  res.status(201).json({
+function created(res, data, meta = {}) {
+  return res.status(201).json({
     data,
-    meta,
+    meta: buildMeta(meta),
     error: null
   });
+}
 
-const notFound = (res) =>
-  res.status(404).json({
+function notFound(res, message = 'Informe no encontrado') {
+  return res.status(404).json({
     data: null,
-    meta: {},
+    meta: buildMeta(),
     error: {
-      message: 'Informe no encontrado'
+      code: 'NOT_FOUND',
+      message
     }
   });
+}
+
+function forbidden(res, message = 'Scope de organización no válido.') {
+  return res.status(403).json({
+    data: null,
+    meta: buildMeta(),
+    error: {
+      code: 'INVALID_SCOPE',
+      message
+    }
+  });
+}
+
+function normalizeReportType(value) {
+  const type = String(value || 'all').trim().toLowerCase();
+
+  if (['all', 'ma', 'compliance'].includes(type)) {
+    return type;
+  }
+
+  return 'all';
+}
 
 function getRequestScope(req) {
   return {
@@ -41,10 +73,27 @@ function getRequestScope(req) {
   };
 }
 
+function validateScope(res, scope) {
+  if (!scope.organizationId) {
+    forbidden(res, 'Usuario sin organización asignada.');
+    return false;
+  }
+
+  if (!scope.userId) {
+    forbidden(res, 'Usuario no identificado.');
+    return false;
+  }
+
+  return true;
+}
+
 export async function listReports(req, res, next) {
   try {
     const scope = getRequestScope(req);
-    const type = req.query.type || 'all';
+
+    if (!validateScope(res, scope)) return null;
+
+    const type = normalizeReportType(req.query.type);
 
     const ma =
       type === 'compliance'
@@ -75,6 +124,8 @@ export async function generateMaReport(req, res, next) {
   try {
     const scope = getRequestScope(req);
 
+    if (!validateScope(res, scope)) return null;
+
     const item = await createMaReport({
       ...req.body,
       organizationId: scope.organizationId,
@@ -90,6 +141,8 @@ export async function generateMaReport(req, res, next) {
 export async function generateComplianceReport(req, res, next) {
   try {
     const scope = getRequestScope(req);
+
+    if (!validateScope(res, scope)) return null;
 
     const item = await createComplianceReport({
       ...req.body,
@@ -107,6 +160,8 @@ export async function getComplianceReportById(req, res, next) {
   try {
     const scope = getRequestScope(req);
 
+    if (!validateScope(res, scope)) return null;
+
     const item = await getReportById(req.params.id, {
       organizationId: scope.organizationId
     });
@@ -122,6 +177,8 @@ export async function getComplianceReportById(req, res, next) {
 export async function updateComplianceReport(req, res, next) {
   try {
     const scope = getRequestScope(req);
+
+    if (!validateScope(res, scope)) return null;
 
     const item = await updateComplianceReportService(
       req.params.id,
@@ -147,9 +204,15 @@ export async function deleteComplianceReport(req, res, next) {
   try {
     const scope = getRequestScope(req);
 
+    if (!validateScope(res, scope)) return null;
+
     const result = await deleteComplianceReportService(req.params.id, {
       organizationId: scope.organizationId
     });
+
+    if (!result || result.deleted === false) {
+      return notFound(res);
+    }
 
     return ok(res, result);
   } catch (error) {
