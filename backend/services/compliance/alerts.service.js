@@ -1,5 +1,14 @@
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
 
+const suppliersStore = createSqliteEntityStore('compliance_suppliers', 'supplier', {
+  status: 'active',
+  tier: 'Tier 1',
+  criticality: 'Media',
+  spend: 0,
+  riskScore: 50,
+  resilienceScore: 50
+});
+
 const alertsStore = createSqliteEntityStore('compliance_alerts', 'alert', {
   status: 'open',
   severity: 'medium',
@@ -48,6 +57,20 @@ function createValidationError(message, code = 'VALIDATION_ERROR') {
   return error;
 }
 
+function createForbiddenError(message, code = 'INVALID_ORGANIZATION_SCOPE') {
+  const error = new Error(message);
+  error.status = 403;
+  error.code = code;
+  return error;
+}
+
+function createNotFoundError(message, code = 'NOT_FOUND') {
+  const error = new Error(message);
+  error.status = 404;
+  error.code = code;
+  return error;
+}
+
 function normalizeText(value) {
   return String(value || '').trim();
 }
@@ -70,11 +93,18 @@ function normalizeCategory(value) {
   return VALID_CATEGORIES.includes(category) ? category : 'General Risk';
 }
 
+function assertOrganizationScope(organizationId) {
+  if (!organizationId) {
+    throw createForbiddenError(
+      'Scope de organización no definido. No se puede operar sin organizationId.'
+    );
+  }
+}
+
 function belongsToOrganization(item, organizationId) {
   if (!item) return false;
-
-  // Compatibilidad con datos antiguos sin organizationId.
-  if (!item.organizationId) return true;
+  if (!organizationId) return false;
+  if (!item.organizationId) return false;
 
   return item.organizationId === organizationId;
 }
@@ -82,9 +112,33 @@ function belongsToOrganization(item, organizationId) {
 function applyOwnership(payload = {}, scope = {}) {
   return {
     ...payload,
-    organizationId: scope.organizationId || payload.organizationId || '',
-    userId: scope.userId || payload.userId || ''
+    organizationId: scope.organizationId || '',
+    userId: scope.userId || ''
   };
+}
+
+async function assertSupplierBelongsToOrganization(supplierId, organizationId) {
+  assertOrganizationScope(organizationId);
+
+  const normalizedSupplierId = normalizeText(supplierId);
+
+  if (!normalizedSupplierId) {
+    throw createValidationError(
+      'La alerta debe estar asociada a un proveedor.',
+      'ALERT_SUPPLIER_REQUIRED'
+    );
+  }
+
+  const supplier = await suppliersStore.getById(normalizedSupplierId);
+
+  if (!belongsToOrganization(supplier, organizationId)) {
+    throw createNotFoundError(
+      'Proveedor no encontrado para esta organización.',
+      'SUPPLIER_NOT_FOUND'
+    );
+  }
+
+  return supplier;
 }
 
 function normalizeAlertPayload(payload = {}, options = {}) {
@@ -148,6 +202,8 @@ async function removeMany(store, items = []) {
 }
 
 export const listAlerts = async (scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const items = await alertsStore.list();
 
   return items.filter((item) =>
@@ -156,6 +212,8 @@ export const listAlerts = async (scope = {}) => {
 };
 
 export const getAlertById = async (id, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const item = await alertsStore.getById(id);
 
   if (!belongsToOrganization(item, scope.organizationId)) {
@@ -166,7 +224,14 @@ export const getAlertById = async (id, scope = {}) => {
 };
 
 export const createAlert = async (payload = {}) => {
+  assertOrganizationScope(payload.organizationId);
+
   const normalizedPayload = normalizeAlertPayload(payload);
+
+  await assertSupplierBelongsToOrganization(
+    normalizedPayload.supplierId,
+    payload.organizationId
+  );
 
   const item = applyOwnership(
     {
@@ -184,6 +249,8 @@ export const createAlert = async (payload = {}) => {
 };
 
 export const updateAlert = async (id, patch = {}, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const existing = await alertsStore.getById(id);
 
   if (!belongsToOrganization(existing, scope.organizationId)) {
@@ -194,13 +261,20 @@ export const updateAlert = async (id, patch = {}, scope = {}) => {
     isPatch: true
   });
 
+  if (Object.prototype.hasOwnProperty.call(normalizedPatch, 'supplierId')) {
+    await assertSupplierBelongsToOrganization(
+      normalizedPatch.supplierId,
+      scope.organizationId
+    );
+  }
+
   const safePatch = applyOwnership(
     {
       ...normalizedPatch,
       updatedAt: new Date().toISOString()
     },
     {
-      organizationId: scope.organizationId || existing.organizationId,
+      organizationId: scope.organizationId,
       userId: patch.userId || existing.userId
     }
   );
@@ -209,6 +283,8 @@ export const updateAlert = async (id, patch = {}, scope = {}) => {
 };
 
 export const deleteAlert = async (id, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const existing = await alertsStore.getById(id);
 
   if (!belongsToOrganization(existing, scope.organizationId)) {

@@ -45,6 +45,13 @@ function createValidationError(message, code = 'VALIDATION_ERROR') {
   return error;
 }
 
+function createForbiddenError(message, code = 'INVALID_ORGANIZATION_SCOPE') {
+  const error = new Error(message);
+  error.status = 403;
+  error.code = code;
+  return error;
+}
+
 function createConflictError(message, code = 'DUPLICATE_SUPPLIER') {
   const error = new Error(message);
   error.status = 409;
@@ -101,11 +108,18 @@ function normalizeCriticality(value) {
   return VALID_CRITICALITIES.includes(criticality) ? criticality : 'Media';
 }
 
+function assertOrganizationScope(organizationId) {
+  if (!organizationId) {
+    throw createForbiddenError(
+      'Scope de organización no definido. No se puede operar sin organizationId.'
+    );
+  }
+}
+
 function belongsToOrganization(item, organizationId) {
   if (!item) return false;
-
-  // Compatibilidad con datos antiguos sin organizationId.
-  if (!item.organizationId) return true;
+  if (!organizationId) return false;
+  if (!item.organizationId) return false;
 
   return item.organizationId === organizationId;
 }
@@ -113,8 +127,8 @@ function belongsToOrganization(item, organizationId) {
 function applyOwnership(payload = {}, scope = {}) {
   return {
     ...payload,
-    organizationId: scope.organizationId || payload.organizationId || '',
-    userId: scope.userId || payload.userId || ''
+    organizationId: scope.organizationId || '',
+    userId: scope.userId || ''
   };
 }
 
@@ -177,6 +191,8 @@ async function assertNoDuplicateSupplierName({
   organizationId,
   excludeId = ''
 }) {
+  assertOrganizationScope(organizationId);
+
   const normalizedName = normalizeComparableText(name);
 
   if (!normalizedName) return;
@@ -210,6 +226,8 @@ async function removeMany(store, items = []) {
 }
 
 export const listSuppliers = async (scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const items = await suppliersStore.list();
 
   return items.filter((item) =>
@@ -218,6 +236,8 @@ export const listSuppliers = async (scope = {}) => {
 };
 
 export const getSupplierById = async (id, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const item = await suppliersStore.getById(id);
 
   if (!belongsToOrganization(item, scope.organizationId)) {
@@ -228,6 +248,8 @@ export const getSupplierById = async (id, scope = {}) => {
 };
 
 export const createSupplier = async (payload = {}) => {
+  assertOrganizationScope(payload.organizationId);
+
   const normalizedPayload = normalizeSupplierPayload(payload);
 
   await assertNoDuplicateSupplierName({
@@ -250,6 +272,8 @@ export const createSupplier = async (payload = {}) => {
 };
 
 export const updateSupplier = async (id, patch = {}, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const existing = await suppliersStore.getById(id);
 
   if (!belongsToOrganization(existing, scope.organizationId)) {
@@ -263,7 +287,7 @@ export const updateSupplier = async (id, patch = {}, scope = {}) => {
   if (Object.prototype.hasOwnProperty.call(normalizedPatch, 'name')) {
     await assertNoDuplicateSupplierName({
       name: normalizedPatch.name,
-      organizationId: scope.organizationId || existing.organizationId,
+      organizationId: scope.organizationId,
       excludeId: id
     });
   }
@@ -275,7 +299,7 @@ export const updateSupplier = async (id, patch = {}, scope = {}) => {
       updatedAt: new Date().toISOString()
     },
     {
-      organizationId: scope.organizationId || existing.organizationId,
+      organizationId: scope.organizationId,
       userId: patch.userId || existing.userId
     }
   );
@@ -284,6 +308,8 @@ export const updateSupplier = async (id, patch = {}, scope = {}) => {
 };
 
 export const deleteSupplier = async (id, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const existing = await suppliersStore.getById(id);
 
   if (!belongsToOrganization(existing, scope.organizationId)) {
@@ -295,6 +321,7 @@ export const deleteSupplier = async (id, scope = {}) => {
   }
 
   const allAlerts = await alertsStore.list();
+
   const removedAlerts = allAlerts.filter((alert) => {
     return (
       belongsToOrganization(alert, scope.organizationId) &&
@@ -305,6 +332,7 @@ export const deleteSupplier = async (id, scope = {}) => {
   const removedAlertIds = new Set(removedAlerts.map((alert) => alert.id));
 
   const allEvidence = await evidenceStore.list();
+
   const removedEvidence = allEvidence.filter((item) => {
     return (
       belongsToOrganization(item, scope.organizationId) &&
@@ -313,6 +341,7 @@ export const deleteSupplier = async (id, scope = {}) => {
   });
 
   const allReviews = await reviewsStore.list();
+
   const removedReviews = allReviews.filter((review) => {
     return (
       belongsToOrganization(review, scope.organizationId) &&
@@ -321,6 +350,7 @@ export const deleteSupplier = async (id, scope = {}) => {
   });
 
   const allReports = await reportsStore.list();
+
   const removedReports = allReports.filter((report) => {
     return (
       belongsToOrganization(report, scope.organizationId) &&

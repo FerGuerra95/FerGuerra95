@@ -7,28 +7,50 @@ import {
   decideReview as decideService
 } from '../../services/compliance/reviews.service.js';
 
-const ok = (res, data, meta = {}) =>
-  res.json({
+function buildMeta(extra = {}) {
+  return {
+    timestamp: new Date().toISOString(),
+    ...extra
+  };
+}
+
+function ok(res, data, meta = {}) {
+  return res.json({
     data,
-    meta,
+    meta: buildMeta(meta),
     error: null
   });
+}
 
-const created = (res, data, meta = {}) =>
-  res.status(201).json({
+function created(res, data, meta = {}) {
+  return res.status(201).json({
     data,
-    meta,
+    meta: buildMeta(meta),
     error: null
   });
+}
 
-const notFound = (res) =>
-  res.status(404).json({
+function notFound(res, message = 'Revisión no encontrada') {
+  return res.status(404).json({
     data: null,
-    meta: {},
+    meta: buildMeta(),
     error: {
-      message: 'Revisión no encontrada'
+      code: 'NOT_FOUND',
+      message
     }
   });
+}
+
+function forbidden(res, message = 'Scope de organización no válido.') {
+  return res.status(403).json({
+    data: null,
+    meta: buildMeta(),
+    error: {
+      code: 'INVALID_SCOPE',
+      message
+    }
+  });
+}
 
 function getRequestScope(req) {
   return {
@@ -37,9 +59,25 @@ function getRequestScope(req) {
   };
 }
 
+function validateScope(res, scope) {
+  if (!scope.organizationId) {
+    forbidden(res, 'Usuario sin organización asignada.');
+    return false;
+  }
+
+  if (!scope.userId) {
+    forbidden(res, 'Usuario no identificado.');
+    return false;
+  }
+
+  return true;
+}
+
 export async function listReviews(req, res, next) {
   try {
     const scope = getRequestScope(req);
+
+    if (!validateScope(res, scope)) return null;
 
     const items = await listService({
       organizationId: scope.organizationId
@@ -58,6 +96,8 @@ export async function createReviewDecision(req, res, next) {
   try {
     const scope = getRequestScope(req);
 
+    if (!validateScope(res, scope)) return null;
+
     const item = await createService({
       ...req.body,
       organizationId: scope.organizationId,
@@ -74,6 +114,8 @@ export async function getReviewById(req, res, next) {
   try {
     const scope = getRequestScope(req);
 
+    if (!validateScope(res, scope)) return null;
+
     const item = await getService(req.params.id, {
       organizationId: scope.organizationId
     });
@@ -89,6 +131,8 @@ export async function getReviewById(req, res, next) {
 export async function updateReviewDecision(req, res, next) {
   try {
     const scope = getRequestScope(req);
+
+    if (!validateScope(res, scope)) return null;
 
     const item = await updateService(
       req.params.id,
@@ -114,6 +158,8 @@ export async function decideReview(req, res, next) {
   try {
     const scope = getRequestScope(req);
 
+    if (!validateScope(res, scope)) return null;
+
     const item = await decideService(
       req.params.id,
       {
@@ -128,7 +174,9 @@ export async function decideReview(req, res, next) {
 
     if (!item) return notFound(res);
 
-    return ok(res, item);
+    return ok(res, item, {
+      action: 'review_decided'
+    });
   } catch (error) {
     return next(error);
   }
@@ -138,9 +186,15 @@ export async function deleteReviewDecision(req, res, next) {
   try {
     const scope = getRequestScope(req);
 
+    if (!validateScope(res, scope)) return null;
+
     const result = await deleteService(req.params.id, {
       organizationId: scope.organizationId
     });
+
+    if (!result || result.deleted === false) {
+      return notFound(res);
+    }
 
     return ok(res, result);
   } catch (error) {

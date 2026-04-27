@@ -6,28 +6,50 @@ import {
   deleteSupplier as deleteService
 } from '../../services/compliance/suppliers.service.js';
 
-const ok = (res, data, meta = {}) =>
-  res.json({
+function buildMeta(extra = {}) {
+  return {
+    timestamp: new Date().toISOString(),
+    ...extra
+  };
+}
+
+function ok(res, data, meta = {}) {
+  return res.json({
     data,
-    meta,
+    meta: buildMeta(meta),
     error: null
   });
+}
 
-const created = (res, data, meta = {}) =>
-  res.status(201).json({
+function created(res, data, meta = {}) {
+  return res.status(201).json({
     data,
-    meta,
+    meta: buildMeta(meta),
     error: null
   });
+}
 
-const notFound = (res) =>
-  res.status(404).json({
+function notFound(res, message = 'Proveedor no encontrado') {
+  return res.status(404).json({
     data: null,
-    meta: {},
+    meta: buildMeta(),
     error: {
-      message: 'Proveedor no encontrado'
+      code: 'NOT_FOUND',
+      message
     }
   });
+}
+
+function forbidden(res, message = 'Scope de organización no válido.') {
+  return res.status(403).json({
+    data: null,
+    meta: buildMeta(),
+    error: {
+      code: 'INVALID_SCOPE',
+      message
+    }
+  });
+}
 
 function getRequestScope(req) {
   return {
@@ -36,9 +58,25 @@ function getRequestScope(req) {
   };
 }
 
+function validateScope(res, scope) {
+  if (!scope.organizationId) {
+    forbidden(res, 'Usuario sin organización asignada.');
+    return false;
+  }
+
+  if (!scope.userId) {
+    forbidden(res, 'Usuario no identificado.');
+    return false;
+  }
+
+  return true;
+}
+
 export async function listSuppliers(req, res, next) {
   try {
     const scope = getRequestScope(req);
+
+    if (!validateScope(res, scope)) return null;
 
     const items = await listService({
       organizationId: scope.organizationId
@@ -57,6 +95,8 @@ export async function createSupplier(req, res, next) {
   try {
     const scope = getRequestScope(req);
 
+    if (!validateScope(res, scope)) return null;
+
     const item = await createService({
       ...req.body,
       organizationId: scope.organizationId,
@@ -73,6 +113,8 @@ export async function getSupplierById(req, res, next) {
   try {
     const scope = getRequestScope(req);
 
+    if (!validateScope(res, scope)) return null;
+
     const item = await getService(req.params.id, {
       organizationId: scope.organizationId
     });
@@ -88,6 +130,8 @@ export async function getSupplierById(req, res, next) {
 export async function updateSupplier(req, res, next) {
   try {
     const scope = getRequestScope(req);
+
+    if (!validateScope(res, scope)) return null;
 
     const item = await updateService(
       req.params.id,
@@ -113,9 +157,15 @@ export async function deleteSupplier(req, res, next) {
   try {
     const scope = getRequestScope(req);
 
+    if (!validateScope(res, scope)) return null;
+
     const result = await deleteService(req.params.id, {
       organizationId: scope.organizationId
     });
+
+    if (!result || result.deleted === false) {
+      return notFound(res);
+    }
 
     return ok(res, result);
   } catch (error) {
