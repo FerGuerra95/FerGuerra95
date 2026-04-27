@@ -26,15 +26,15 @@ router.get(
 );
 
 router.patch(
-  '/:id',
-  requirePermission(PERMISSIONS.UPDATE_REVIEW),
-  controller.updateReviewDecision
-);
-
-router.patch(
   '/:id/decide',
   requirePermission(PERMISSIONS.DECIDE_REVIEW),
   controller.decideReview
+);
+
+router.patch(
+  '/:id',
+  requirePermission(PERMISSIONS.UPDATE_REVIEW),
+  controller.updateReviewDecision
 );
 
 router.delete(
