@@ -15,17 +15,23 @@ build/
 .env.test.local
 .env.production.local
 
-# Backend local data
-backend/data/*.json
-backend/data/*.sqlite
-backend/data/*.sqlite-wal
-backend/data/*.sqlite-shm
-backend/data/*.db
-backend/data/*.db-wal
-backend/data/*.db-shm
+# Local SQLite / backend data
+data/
+backend/data/
 
-# Keep backend/data folder structure if needed
+# Keep folder structure if needed
+!data/.gitkeep
 !backend/data/.gitkeep
+
+# SQLite files
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+*.db-wal
+*.db-shm
+*.sqlite-backup
+*.db-backup
 
 # Logs
 logs/
@@ -61,10 +67,3 @@ temp/
 # Local exports / generated reports
 exports/
 reports/
-*.pdf
-*.xlsx
-*.docx
-
-# SQLite backups
-*.sqlite-backup
-*.db-backup

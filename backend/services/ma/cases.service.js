@@ -36,6 +36,13 @@ function createValidationError(message, code = 'VALIDATION_ERROR') {
   return error;
 }
 
+function createForbiddenError(message, code = 'INVALID_ORGANIZATION_SCOPE') {
+  const error = new Error(message);
+  error.status = 403;
+  error.code = code;
+  return error;
+}
+
 function createConflictError(message, code = 'DUPLICATE_MA_CASE') {
   const error = new Error(message);
   error.status = 409;
@@ -67,11 +74,18 @@ function normalizeStatus(value) {
   return VALID_STATUSES.includes(status) ? status : 'draft';
 }
 
+function assertOrganizationScope(organizationId) {
+  if (!organizationId) {
+    throw createForbiddenError(
+      'Scope de organización no definido. No se puede operar sin organizationId.'
+    );
+  }
+}
+
 function belongsToOrganization(item, organizationId) {
   if (!item) return false;
-
-  // Compatibilidad con casos antiguos sin organizationId.
-  if (!item.organizationId) return true;
+  if (!organizationId) return false;
+  if (!item.organizationId) return false;
 
   return item.organizationId === organizationId;
 }
@@ -79,8 +93,8 @@ function belongsToOrganization(item, organizationId) {
 function applyOwnership(payload = {}, scope = {}) {
   return {
     ...payload,
-    organizationId: scope.organizationId || payload.organizationId || '',
-    userId: scope.userId || payload.userId || ''
+    organizationId: scope.organizationId || '',
+    userId: scope.userId || ''
   };
 }
 
@@ -165,7 +179,10 @@ function validateCasePayload(payload = {}, options = {}) {
 
   if (!isPatch || Object.prototype.hasOwnProperty.call(next, 'financials')) {
     const caseName = extractCaseName(next);
-    const normalizedFinancials = normalizeFinancials(next.financials || {}, caseName);
+    const normalizedFinancials = normalizeFinancials(
+      next.financials || {},
+      caseName
+    );
 
     const sector = extractSector({
       ...next,
@@ -183,7 +200,10 @@ function validateCasePayload(payload = {}, options = {}) {
 
     const ebitdaValue = getEbitdaValue(normalizedFinancials);
 
-    if (ebitdaValue !== null && (!Number.isFinite(ebitdaValue) || ebitdaValue <= 0)) {
+    if (
+      ebitdaValue !== null &&
+      (!Number.isFinite(ebitdaValue) || ebitdaValue <= 0)
+    ) {
       throw createValidationError(
         'El EBITDA del deal M&A debe ser mayor que 0.',
         'MA_CASE_EBITDA_INVALID'
@@ -218,6 +238,8 @@ async function assertNoDuplicateCaseName({
   organizationId,
   excludeId = ''
 }) {
+  assertOrganizationScope(organizationId);
+
   const normalizedName = normalizeComparableText(name);
 
   if (!normalizedName) return;
@@ -228,7 +250,10 @@ async function assertNoDuplicateCaseName({
     if (!belongsToOrganization(item, organizationId)) return false;
     if (excludeId && item.id === excludeId) return false;
 
-    return normalizeComparableText(item.name || item.financials?.name) === normalizedName;
+    return (
+      normalizeComparableText(item.name || item.financials?.name) ===
+      normalizedName
+    );
   });
 
   if (duplicated) {
@@ -250,13 +275,15 @@ function normalizeSnapshot(snapshot = {}, scope = {}) {
       updatedAt: currentTime
     },
     {
-      organizationId: scope.organizationId || snapshot.organizationId,
-      userId: scope.userId || snapshot.userId
+      organizationId: scope.organizationId,
+      userId: scope.userId
     }
   );
 }
 
 export const listMaCases = async (scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const items = await casesStore.list();
 
   return items.filter((item) =>
@@ -265,6 +292,8 @@ export const listMaCases = async (scope = {}) => {
 };
 
 export const getMaCaseById = async (id, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const item = await casesStore.getById(id);
 
   if (!belongsToOrganization(item, scope.organizationId)) {
@@ -275,6 +304,8 @@ export const getMaCaseById = async (id, scope = {}) => {
 };
 
 export const createMaCase = async (payload = {}) => {
+  assertOrganizationScope(payload.organizationId);
+
   const normalizedPayload = validateCasePayload(payload);
 
   await assertNoDuplicateCaseName({
@@ -302,6 +333,8 @@ export const createMaCase = async (payload = {}) => {
 };
 
 export const updateMaCase = async (id, patch = {}, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const existing = await casesStore.getById(id);
 
   if (!belongsToOrganization(existing, scope.organizationId)) {
@@ -318,7 +351,7 @@ export const updateMaCase = async (id, patch = {}, scope = {}) => {
   ) {
     await assertNoDuplicateCaseName({
       name: normalizedPatch.name || normalizedPatch.financials?.name,
-      organizationId: scope.organizationId || existing.organizationId,
+      organizationId: scope.organizationId,
       excludeId: id
     });
   }
@@ -329,7 +362,7 @@ export const updateMaCase = async (id, patch = {}, scope = {}) => {
       updatedAt: new Date().toISOString()
     },
     {
-      organizationId: scope.organizationId || existing.organizationId,
+      organizationId: scope.organizationId,
       userId: patch.userId || existing.userId
     }
   );
@@ -338,6 +371,8 @@ export const updateMaCase = async (id, patch = {}, scope = {}) => {
 };
 
 export const deleteMaCase = async (id, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const existing = await casesStore.getById(id);
 
   if (!belongsToOrganization(existing, scope.organizationId)) {
@@ -352,6 +387,8 @@ export const deleteMaCase = async (id, scope = {}) => {
 };
 
 export async function addMaSnapshot(caseId, snapshot = {}, scope = {}) {
+  assertOrganizationScope(scope.organizationId);
+
   const item = await casesStore.getById(caseId);
 
   if (!belongsToOrganization(item, scope.organizationId)) {
@@ -361,7 +398,7 @@ export async function addMaSnapshot(caseId, snapshot = {}, scope = {}) {
   const currentTime = new Date().toISOString();
 
   const nextSnapshot = normalizeSnapshot(snapshot, {
-    organizationId: scope.organizationId || item.organizationId,
+    organizationId: scope.organizationId,
     userId: snapshot.userId || item.userId
   });
 
@@ -374,7 +411,7 @@ export async function addMaSnapshot(caseId, snapshot = {}, scope = {}) {
     snapshots: nextSnapshots,
     lastSnapshotAt: currentTime,
     updatedAt: currentTime,
-    organizationId: scope.organizationId || item.organizationId,
+    organizationId: scope.organizationId,
     userId: item.userId || snapshot.userId || ''
   });
 }

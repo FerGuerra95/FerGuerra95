@@ -1,13 +1,12 @@
 import crypto from 'node:crypto';
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const DATA_DIR = path.resolve(__dirname, '../../data');
-const USERS_FILE = path.join(DATA_DIR, 'users.json');
+import {
+  allSql,
+  getSql,
+  runSql,
+  transaction,
+  fromJson
+} from '../../storage/sqliteStorage.js';
 
 const AUTH_SECRET =
   process.env.AUTH_SECRET || 'ceo-os-local-development-secret';
@@ -16,7 +15,7 @@ const TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7;
 
 const VALID_ROLES = ['admin', 'user', 'viewer'];
 
-const SEED_USERS = [
+const DEMO_USERS = [
   {
     id: 'u_demo_admin',
     name: 'Fernando',
@@ -49,6 +48,10 @@ const SEED_USERS = [
   }
 ];
 
+function isProduction() {
+  return process.env.NODE_ENV === 'production';
+}
+
 function createError(message, status = 401, code = 'AUTH_ERROR') {
   const error = new Error(message);
   error.status = status;
@@ -56,12 +59,18 @@ function createError(message, status = 401, code = 'AUTH_ERROR') {
   return error;
 }
 
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, {
-      recursive: true
-    });
-  }
+function normalizeEmail(email) {
+  return String(email || '').trim().toLowerCase();
+}
+
+function normalizeRole(role) {
+  const normalizedRole = String(role || 'viewer').trim().toLowerCase();
+
+  return VALID_ROLES.includes(normalizedRole) ? normalizedRole : 'viewer';
+}
+
+function normalizeWorkspaces(workspaces) {
+  return Array.isArray(workspaces) ? workspaces : [];
 }
 
 function base64url(input) {
@@ -142,10 +151,26 @@ function verifyPassword(password, user) {
   return safeCompare(candidateHash, user.passwordHash);
 }
 
-function normalizeRole(role) {
-  const normalizedRole = String(role || 'viewer').trim().toLowerCase();
+function now() {
+  return new Date().toISOString();
+}
 
-  return VALID_ROLES.includes(normalizedRole) ? normalizedRole : 'viewer';
+function mapDbUser(row) {
+  if (!row) return null;
+
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    role: normalizeRole(row.role),
+    organizationId: row.organization_id,
+    workspaces: normalizeWorkspaces(fromJson(row.workspaces_json, [])),
+    status: row.status || 'active',
+    passwordHash: row.password_hash,
+    passwordSalt: row.password_salt,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at
+  };
 }
 
 function sanitizeUser(user) {
@@ -157,135 +182,209 @@ function sanitizeUser(user) {
     email: user.email,
     role: normalizeRole(user.role),
     organizationId: user.organizationId,
-    workspaces: Array.isArray(user.workspaces) ? user.workspaces : [],
+    workspaces: normalizeWorkspaces(user.workspaces),
     status: user.status || 'active',
     createdAt: user.createdAt,
     updatedAt: user.updatedAt
   };
 }
 
-function readUsersFile() {
-  ensureDataDir();
+function getAllUsers() {
+  return allSql(
+    `
+      SELECT
+        id,
+        name,
+        email,
+        role,
+        organization_id,
+        workspaces_json,
+        status,
+        password_hash,
+        password_salt,
+        created_at,
+        updated_at
+      FROM users
+      ORDER BY created_at ASC
+    `
+  ).map(mapDbUser);
+}
 
-  if (!fs.existsSync(USERS_FILE)) {
+function getUserByEmail(email) {
+  const row = getSql(
+    `
+      SELECT
+        id,
+        name,
+        email,
+        role,
+        organization_id,
+        workspaces_json,
+        status,
+        password_hash,
+        password_salt,
+        created_at,
+        updated_at
+      FROM users
+      WHERE email = @email
+      LIMIT 1
+    `,
+    {
+      email: normalizeEmail(email)
+    }
+  );
+
+  return mapDbUser(row);
+}
+
+function getUserById(id) {
+  const row = getSql(
+    `
+      SELECT
+        id,
+        name,
+        email,
+        role,
+        organization_id,
+        workspaces_json,
+        status,
+        password_hash,
+        password_salt,
+        created_at,
+        updated_at
+      FROM users
+      WHERE id = @id
+      LIMIT 1
+    `,
+    {
+      id
+    }
+  );
+
+  return mapDbUser(row);
+}
+
+function userExistsByIdOrEmail({ id, email }) {
+  return Boolean(
+    getSql(
+      `
+        SELECT id
+        FROM users
+        WHERE id = @id OR email = @email
+        LIMIT 1
+      `,
+      {
+        id,
+        email: normalizeEmail(email)
+      }
+    )
+  );
+}
+
+function insertUser(user) {
+  const createdAt = now();
+  const passwordRecord = createPasswordRecord(user.password);
+
+  runSql(
+    `
+      INSERT INTO users (
+        id,
+        name,
+        email,
+        role,
+        organization_id,
+        workspaces_json,
+        status,
+        password_hash,
+        password_salt,
+        created_at,
+        updated_at
+      )
+      VALUES (
+        @id,
+        @name,
+        @email,
+        @role,
+        @organizationId,
+        @workspacesJson,
+        @status,
+        @passwordHash,
+        @passwordSalt,
+        @createdAt,
+        @updatedAt
+      )
+    `,
+    {
+      id: user.id,
+      name: user.name,
+      email: normalizeEmail(user.email),
+      role: normalizeRole(user.role),
+      organizationId: user.organizationId,
+      workspacesJson: JSON.stringify(normalizeWorkspaces(user.workspaces)),
+      status: user.status || 'active',
+      passwordHash: passwordRecord.passwordHash,
+      passwordSalt: passwordRecord.passwordSalt,
+      createdAt,
+      updatedAt: createdAt
+    }
+  );
+}
+
+function getBootstrapUsers() {
+  if (!isProduction()) {
+    return DEMO_USERS;
+  }
+
+  const email = normalizeEmail(process.env.BOOTSTRAP_ADMIN_EMAIL);
+  const password = String(process.env.BOOTSTRAP_ADMIN_PASSWORD || '').trim();
+
+  if (!email || !password) {
     return [];
   }
 
-  try {
-    const raw = fs.readFileSync(USERS_FILE, 'utf8');
-    const parsed = JSON.parse(raw);
-
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeUsersFile(users) {
-  ensureDataDir();
-
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf8');
-}
-
-function buildSeedUser(seedUser) {
-  const now = new Date().toISOString();
-  const passwordRecord = createPasswordRecord(seedUser.password);
-
-  return {
-    id: seedUser.id,
-    name: seedUser.name,
-    email: seedUser.email.toLowerCase(),
-    role: normalizeRole(seedUser.role),
-    organizationId: seedUser.organizationId,
-    workspaces: seedUser.workspaces,
-    status: seedUser.status || 'active',
-    ...passwordRecord,
-    createdAt: now,
-    updatedAt: now
-  };
-}
-
-function buildSeedUsers() {
-  return SEED_USERS.map(buildSeedUser);
-}
-
-function normalizeStoredUser(user) {
-  const now = new Date().toISOString();
-
-  const normalizedUser = {
-    ...user,
-    email: String(user.email || '').trim().toLowerCase(),
-    role: normalizeRole(user.role),
-    workspaces: Array.isArray(user.workspaces) ? user.workspaces : [],
-    status: user.status || 'active',
-    createdAt: user.createdAt || now,
-    updatedAt: user.updatedAt || now
-  };
-
-  if (!hasPasswordRecord(normalizedUser) && normalizedUser.password) {
-    const passwordRecord = createPasswordRecord(normalizedUser.password);
-
-    delete normalizedUser.password;
-
-    return {
-      ...normalizedUser,
-      ...passwordRecord,
-      updatedAt: now
-    };
+  if (password.length < 12) {
+    throw createError(
+      'BOOTSTRAP_ADMIN_PASSWORD debe tener al menos 12 caracteres en producción.',
+      500,
+      'WEAK_BOOTSTRAP_PASSWORD'
+    );
   }
 
-  delete normalizedUser.password;
-
-  return normalizedUser;
+  return [
+    {
+      id: process.env.BOOTSTRAP_ADMIN_ID || 'u_bootstrap_admin',
+      name: process.env.BOOTSTRAP_ADMIN_NAME || 'Admin',
+      email,
+      password,
+      role: 'admin',
+      organizationId:
+        process.env.BOOTSTRAP_ORGANIZATION_ID || 'org_bootstrap',
+      workspaces: ['ma', 'compliance'],
+      status: 'active'
+    }
+  ];
 }
 
 function ensureUsersSeeded() {
-  const existingUsers = readUsersFile().map(normalizeStoredUser);
+  const bootstrapUsers = getBootstrapUsers();
 
-  if (existingUsers.length === 0) {
-    const seedUsers = buildSeedUsers();
-
-    writeUsersFile(seedUsers);
-
-    return seedUsers;
+  if (bootstrapUsers.length === 0) {
+    return getAllUsers();
   }
 
-  let changed = false;
-  const nextUsers = [...existingUsers];
-
-  for (const seedUser of SEED_USERS) {
-    const existingById = nextUsers.find((item) => item.id === seedUser.id);
-    const existingByEmail = nextUsers.find(
-      (item) =>
-        String(item.email || '').toLowerCase() ===
-        String(seedUser.email || '').toLowerCase()
-    );
-
-    if (!existingById && !existingByEmail) {
-      nextUsers.push(buildSeedUser(seedUser));
-      changed = true;
+  transaction(() => {
+    for (const user of bootstrapUsers) {
+      if (!userExistsByIdOrEmail(user)) {
+        insertUser(user);
+      }
     }
-  }
-
-  const normalizedUsers = nextUsers.map((user) => {
-    const normalized = normalizeStoredUser(user);
-
-    if (JSON.stringify(normalized) !== JSON.stringify(user)) {
-      changed = true;
-    }
-
-    return normalized;
   });
 
-  if (changed) {
-    writeUsersFile(normalizedUsers);
-  }
-
-  return normalizedUsers;
+  return getAllUsers();
 }
 
 function createToken(user) {
-  const now = Math.floor(Date.now() / 1000);
+  const issuedAt = Math.floor(Date.now() / 1000);
 
   const header = {
     alg: 'HS256',
@@ -297,9 +396,9 @@ function createToken(user) {
     email: user.email,
     role: normalizeRole(user.role),
     organizationId: user.organizationId,
-    workspaces: user.workspaces || [],
-    iat: now,
-    exp: now + TOKEN_TTL_SECONDS
+    workspaces: normalizeWorkspaces(user.workspaces),
+    iat: issuedAt,
+    exp: issuedAt + TOKEN_TTL_SECONDS
   };
 
   const encodedHeader = base64urlJson(header);
@@ -323,10 +422,17 @@ function verifyToken(token) {
     throw createError('Token inválido.', 401, 'INVALID_TOKEN');
   }
 
-  const payload = parseBase64urlJson(encodedPayload);
-  const now = Math.floor(Date.now() / 1000);
+  let payload;
 
-  if (payload.exp && payload.exp < now) {
+  try {
+    payload = parseBase64urlJson(encodedPayload);
+  } catch {
+    throw createError('Token inválido.', 401, 'INVALID_TOKEN');
+  }
+
+  const currentTime = Math.floor(Date.now() / 1000);
+
+  if (payload.exp && payload.exp <= currentTime) {
     throw createError('Token caducado.', 401, 'TOKEN_EXPIRED');
   }
 
@@ -334,14 +440,12 @@ function verifyToken(token) {
 }
 
 export async function loginUser({ email, password }) {
-  const users = ensureUsersSeeded();
+  ensureUsersSeeded();
 
-  const normalizedEmail = String(email || '').trim().toLowerCase();
+  const normalizedEmail = normalizeEmail(email);
   const normalizedPassword = String(password || '').trim();
 
-  const user = users.find((item) => {
-    return String(item.email || '').toLowerCase() === normalizedEmail;
-  });
+  const user = getUserByEmail(normalizedEmail);
 
   if (!user || user.status === 'inactive') {
     throw createError(
@@ -372,9 +476,10 @@ export async function loginUser({ email, password }) {
 
 export async function getUserFromToken(token) {
   const payload = verifyToken(token);
-  const users = ensureUsersSeeded();
 
-  const user = users.find((item) => item.id === payload.sub);
+  ensureUsersSeeded();
+
+  const user = getUserById(payload.sub);
 
   if (!user || user.status === 'inactive') {
     throw createError('Usuario no encontrado.', 401, 'USER_NOT_FOUND');

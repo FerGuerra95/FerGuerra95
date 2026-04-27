@@ -21,12 +21,6 @@ function assertSafeIdentifier(value) {
   return text;
 }
 
-function camelToSnake(value) {
-  return String(value || '')
-    .replace(/([A-Z])/g, '_$1')
-    .toLowerCase();
-}
-
 function snakeToCamel(value) {
   return String(value || '').replace(/_([a-z])/g, (_match, letter) =>
     letter.toUpperCase()
@@ -117,7 +111,10 @@ function buildInsertPayload({ tableName, idPrefix, defaults = {}, payload = {} }
     if (value === undefined) return;
 
     if (column.endsWith('_json')) {
-      valuesByColumn[column] = toJson(value, column === 'items_json' ? [] : null);
+      valuesByColumn[column] = toJson(
+        value,
+        column === 'items_json' ? [] : null
+      );
       return;
     }
 
@@ -194,6 +191,7 @@ export function createSqliteEntityStore(tableName, idPrefix, defaults = {}) {
       if (!existing) return null;
 
       const columns = getColumns(safeTable);
+
       const nextPatch = {
         ...patch,
         id,
@@ -231,7 +229,9 @@ export function createSqliteEntityStore(tableName, idPrefix, defaults = {}) {
         return existing;
       }
 
-      const assignments = updateColumns.map((column) => `${column} = @${column}`);
+      const assignments = updateColumns.map(
+        (column) => `${column} = @${column}`
+      );
 
       runSql(
         `
@@ -257,25 +257,10 @@ export function createSqliteEntityStore(tableName, idPrefix, defaults = {}) {
       };
     },
 
-    async replaceAll(items = []) {
-      const database = getDatabase();
-
-      const replaceTransaction = database.transaction(() => {
-        database.prepare(`DELETE FROM ${safeTable}`).run();
-
-        items.forEach((item) => {
-          insertEntity({
-            tableName: safeTable,
-            idPrefix,
-            defaults,
-            payload: item
-          });
-        });
-      });
-
-      replaceTransaction();
-
-      return this.list();
+    async replaceAll() {
+      throw new Error(
+        `replaceAll está deshabilitado para ${safeTable}. No se permite borrar tablas completas en arquitectura multi-tenant.`
+      );
     }
   };
 }

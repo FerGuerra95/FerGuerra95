@@ -53,6 +53,9 @@ export function initializeDatabaseSchema() {
     CREATE INDEX IF NOT EXISTS idx_compliance_suppliers_name
       ON compliance_suppliers (organization_id, name);
 
+    CREATE INDEX IF NOT EXISTS idx_compliance_suppliers_status
+      ON compliance_suppliers (organization_id, status);
+
     CREATE TABLE IF NOT EXISTS compliance_alerts (
       id TEXT PRIMARY KEY,
       organization_id TEXT NOT NULL,
@@ -76,6 +79,12 @@ export function initializeDatabaseSchema() {
 
     CREATE INDEX IF NOT EXISTS idx_compliance_alerts_status
       ON compliance_alerts (organization_id, status);
+
+    CREATE INDEX IF NOT EXISTS idx_compliance_alerts_organization_supplier
+      ON compliance_alerts (organization_id, supplier_id);
+
+    CREATE INDEX IF NOT EXISTS idx_compliance_alerts_organization_severity
+      ON compliance_alerts (organization_id, severity);
 
     CREATE TABLE IF NOT EXISTS compliance_evidence (
       id TEXT PRIMARY KEY,
@@ -103,6 +112,12 @@ export function initializeDatabaseSchema() {
     CREATE INDEX IF NOT EXISTS idx_compliance_evidence_alert_id
       ON compliance_evidence (alert_id);
 
+    CREATE INDEX IF NOT EXISTS idx_compliance_evidence_organization_supplier
+      ON compliance_evidence (organization_id, supplier_id);
+
+    CREATE INDEX IF NOT EXISTS idx_compliance_evidence_organization_alert
+      ON compliance_evidence (organization_id, alert_id);
+
     CREATE TABLE IF NOT EXISTS compliance_reviews (
       id TEXT PRIMARY KEY,
       organization_id TEXT NOT NULL,
@@ -126,6 +141,15 @@ export function initializeDatabaseSchema() {
 
     CREATE INDEX IF NOT EXISTS idx_compliance_reviews_alert_id
       ON compliance_reviews (alert_id);
+
+    CREATE INDEX IF NOT EXISTS idx_compliance_reviews_organization_status
+      ON compliance_reviews (organization_id, status);
+
+    CREATE INDEX IF NOT EXISTS idx_compliance_reviews_organization_supplier
+      ON compliance_reviews (organization_id, supplier_id);
+
+    CREATE INDEX IF NOT EXISTS idx_compliance_reviews_organization_alert
+      ON compliance_reviews (organization_id, alert_id);
 
     CREATE TABLE IF NOT EXISTS compliance_reports (
       id TEXT PRIMARY KEY,
@@ -155,6 +179,12 @@ export function initializeDatabaseSchema() {
     CREATE INDEX IF NOT EXISTS idx_compliance_reports_supplier_id
       ON compliance_reports (supplier_id);
 
+    CREATE INDEX IF NOT EXISTS idx_compliance_reports_organization_supplier
+      ON compliance_reports (organization_id, supplier_id);
+
+    CREATE INDEX IF NOT EXISTS idx_compliance_reports_organization_status
+      ON compliance_reports (organization_id, status);
+
     CREATE TABLE IF NOT EXISTS ma_cases (
       id TEXT PRIMARY KEY,
       organization_id TEXT NOT NULL,
@@ -176,6 +206,12 @@ export function initializeDatabaseSchema() {
     CREATE INDEX IF NOT EXISTS idx_ma_cases_name
       ON ma_cases (organization_id, name);
 
+    CREATE INDEX IF NOT EXISTS idx_ma_cases_status
+      ON ma_cases (organization_id, status);
+
+    CREATE INDEX IF NOT EXISTS idx_ma_cases_user
+      ON ma_cases (organization_id, user_id);
+
     CREATE TABLE IF NOT EXISTS ma_reports (
       id TEXT PRIMARY KEY,
       organization_id TEXT NOT NULL,
@@ -194,6 +230,20 @@ export function initializeDatabaseSchema() {
 
     CREATE INDEX IF NOT EXISTS idx_ma_reports_case_id
       ON ma_reports (case_id);
+
+    CREATE INDEX IF NOT EXISTS idx_ma_reports_organization_case
+      ON ma_reports (organization_id, case_id);
+
+    CREATE INDEX IF NOT EXISTS idx_ma_reports_organization_status
+      ON ma_reports (organization_id, status);
+
+    INSERT INTO schema_migrations (id, name, applied_at)
+    VALUES (
+      '001_initial_runtime_schema',
+      'Initial runtime schema for CEO OS MVP',
+      datetime('now')
+    )
+    ON CONFLICT(id) DO NOTHING;
   `);
 }
 

@@ -6,28 +6,77 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const DATA_DIR = path.resolve(__dirname, '../data');
-const DATABASE_FILE = path.join(DATA_DIR, 'ceo_os.sqlite');
+const DEFAULT_DATA_DIR = path.resolve(__dirname, '../data');
+const DEFAULT_DATABASE_FILE = path.join(DEFAULT_DATA_DIR, 'ceo_os.sqlite');
 
 let db = null;
+let activeDatabaseFile = null;
 
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, {
+function isProduction() {
+  return process.env.NODE_ENV === 'production';
+}
+
+function getConfiguredDatabasePath() {
+  return (
+    process.env.DB_PATH ||
+    process.env.SQLITE_PATH ||
+    process.env.SQLITE_DB_PATH ||
+    ''
+  );
+}
+
+function resolveDatabaseFile() {
+  const configuredPath = getConfiguredDatabasePath();
+
+  if (!configuredPath.trim()) {
+    if (isProduction()) {
+      throw new Error(
+        'DB_PATH es obligatorio en producción para evitar que SQLite use una ruta no persistente.'
+      );
+    }
+
+    return DEFAULT_DATABASE_FILE;
+  }
+
+  if (path.isAbsolute(configuredPath)) {
+    return configuredPath;
+  }
+
+  return path.resolve(process.cwd(), configuredPath);
+}
+
+function ensureDatabaseDir(databaseFile) {
+  const databaseDir = path.dirname(databaseFile);
+
+  if (!fs.existsSync(databaseDir)) {
+    fs.mkdirSync(databaseDir, {
       recursive: true
     });
   }
 }
 
+function configureDatabase(database) {
+  database.pragma('journal_mode = WAL');
+  database.pragma('foreign_keys = ON');
+  database.pragma('busy_timeout = 5000');
+  database.pragma('synchronous = NORMAL');
+}
+
+export function getDatabaseFilePath() {
+  return activeDatabaseFile || resolveDatabaseFile();
+}
+
 export function getDatabase() {
   if (db) return db;
 
-  ensureDataDir();
+  const databaseFile = resolveDatabaseFile();
 
-  db = new Database(DATABASE_FILE);
+  ensureDatabaseDir(databaseFile);
 
-  db.pragma('journal_mode = WAL');
-  db.pragma('foreign_keys = ON');
+  db = new Database(databaseFile);
+  activeDatabaseFile = databaseFile;
+
+  configureDatabase(db);
 
   return db;
 }
@@ -37,6 +86,7 @@ export function closeDatabase() {
 
   db.close();
   db = null;
+  activeDatabaseFile = null;
 }
 
 export function execSql(sql) {
@@ -59,11 +109,11 @@ export function allSql(sql, params = {}) {
   return database.prepare(sql).all(params);
 }
 
-export function transaction(callback) {
+export function transaction(callback, ...args) {
   const database = getDatabase();
   const wrapped = database.transaction(callback);
 
-  return wrapped();
+  return wrapped(...args);
 }
 
 export function createSqliteId(prefix = 'item') {

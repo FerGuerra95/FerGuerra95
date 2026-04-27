@@ -41,7 +41,11 @@ router.post(
   '/cases/:id/snapshots',
   requirePermission(PERMISSIONS.UPDATE_MA_CASE),
   (req, res, next) => {
-    req.body.caseId = req.params.id;
+    req.body = {
+      ...(req.body || {}),
+      caseId: req.params.id
+    };
+
     return controller.runValuation(req, res, next);
   }
 );

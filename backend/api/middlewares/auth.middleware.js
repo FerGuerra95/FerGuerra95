@@ -1,6 +1,6 @@
 import { getUserFromToken } from '../../services/auth/auth.service.js';
 
-export const PERMISSIONS = {
+export const PERMISSIONS = Object.freeze({
   READ: 'read',
 
   CREATE_SUPPLIER: 'create:supplier',
@@ -28,14 +28,12 @@ export const PERMISSIONS = {
   UPDATE_MA_CASE: 'update:ma_case',
   DELETE_MA_CASE: 'delete:ma_case',
   CREATE_MA_REPORT: 'create:ma_report'
-};
+});
 
-const ROLE_PERMISSIONS = {
-  admin: [
-    '*'
-  ],
+const ROLE_PERMISSIONS = Object.freeze({
+  admin: Object.freeze(['*']),
 
-  user: [
+  user: Object.freeze([
     PERMISSIONS.READ,
 
     PERMISSIONS.CREATE_SUPPLIER,
@@ -56,12 +54,12 @@ const ROLE_PERMISSIONS = {
     PERMISSIONS.CREATE_MA_CASE,
     PERMISSIONS.UPDATE_MA_CASE,
     PERMISSIONS.CREATE_MA_REPORT
-  ],
+  ]),
 
-  viewer: [
+  viewer: Object.freeze([
     PERMISSIONS.READ
-  ]
-};
+  ])
+});
 
 function getBearerToken(req) {
   const header = req.headers.authorization || '';
@@ -78,6 +76,10 @@ function getRole(user) {
 }
 
 function userHasPermission(user, permission) {
+  if (!user?.id) {
+    return false;
+  }
+
   const role = getRole(user);
   const permissions = ROLE_PERMISSIONS[role] || ROLE_PERMISSIONS.viewer;
 
@@ -124,6 +126,10 @@ export const requireAuth = async (req, res, next) => {
       return unauthorized(res, 'Sesión no válida.');
     }
 
+    if (!user?.organizationId) {
+      return forbidden(res, 'Usuario sin organización asignada.');
+    }
+
     req.user = user;
     req.organizationId = user.organizationId;
     req.role = getRole(user);
@@ -145,7 +151,12 @@ export const requireAuth = async (req, res, next) => {
 
 export function requireRole(...allowedRoles) {
   return (req, res, next) => {
+    if (!req.user?.id) {
+      return unauthorized(res, 'Sesión no válida.');
+    }
+
     const role = getRole(req.user);
+
     const normalizedAllowedRoles = allowedRoles.map((item) =>
       String(item || '').trim().toLowerCase()
     );
@@ -160,6 +171,10 @@ export function requireRole(...allowedRoles) {
 
 export function requirePermission(permission) {
   return (req, res, next) => {
+    if (!req.user?.id) {
+      return unauthorized(res, 'Sesión no válida.');
+    }
+
     if (!permission) {
       return forbidden(res, 'Permiso no definido.');
     }
@@ -178,5 +193,7 @@ export function can(user, permission) {
 
 export function getPermissionsForRole(role) {
   const normalizedRole = String(role || 'viewer').trim().toLowerCase();
-  return ROLE_PERMISSIONS[normalizedRole] || ROLE_PERMISSIONS.viewer;
+  const permissions = ROLE_PERMISSIONS[normalizedRole] || ROLE_PERMISSIONS.viewer;
+
+  return [...permissions];
 }

@@ -1,16 +1,10 @@
-import {
-  getUserFromToken,
-  loginUser
-} from '../../services/auth/auth.service.js';
+import { loginUser } from '../../services/auth/auth.service.js';
 
-function getBearerToken(req) {
-  const header = req.headers.authorization || '';
-
-  if (!header.startsWith('Bearer ')) {
-    return '';
-  }
-
-  return header.slice(7).trim();
+function buildMeta(extra = {}) {
+  return {
+    timestamp: new Date().toISOString(),
+    ...extra
+  };
 }
 
 function sendAuthError(res, error) {
@@ -18,9 +12,10 @@ function sendAuthError(res, error) {
 
   return res.status(status).json({
     data: null,
-    meta: {},
+    meta: buildMeta(),
     error: {
-      message: error?.message || 'No autorizado'
+      code: error?.code || 'AUTH_ERROR',
+      message: error?.message || 'No autorizado.'
     }
   });
 }
@@ -32,8 +27,9 @@ export const login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({
         data: null,
-        meta: {},
+        meta: buildMeta(),
         error: {
+          code: 'VALIDATION_ERROR',
           message: 'Email y contraseña son obligatorios.'
         }
       });
@@ -49,9 +45,9 @@ export const login = async (req, res) => {
         user: result.user,
         token: result.token
       },
-      meta: {
+      meta: buildMeta({
         mode: 'json-auth'
-      },
+      }),
       error: null
     });
   } catch (error) {
@@ -64,37 +60,21 @@ export const logout = async (_req, res) => {
     data: {
       loggedOut: true
     },
-    meta: {},
+    meta: buildMeta({
+      mode: 'json-auth'
+    }),
     error: null
   });
 };
 
 export const me = async (req, res) => {
-  try {
-    const token = getBearerToken(req);
-
-    if (!token) {
-      return res.status(401).json({
-        data: null,
-        meta: {},
-        error: {
-          message: 'Token no encontrado.'
-        }
-      });
-    }
-
-    const user = await getUserFromToken(token);
-
-    return res.json({
-      data: {
-        user
-      },
-      meta: {
-        mode: 'json-auth'
-      },
-      error: null
-    });
-  } catch (error) {
-    return sendAuthError(res, error);
-  }
+  return res.json({
+    data: {
+      user: req.user
+    },
+    meta: buildMeta({
+      mode: 'json-auth'
+    }),
+    error: null
+  });
 };

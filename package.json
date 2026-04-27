@@ -1,16 +1,21 @@
 {
-  "name": "unified-platform-mvp",
+  "name": "ceos-os",
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest",
-    "test:run": "vitest run",
     "server": "node backend/server.js",
-    "server:dev": "node --watch backend/server.js"
+    "server:dev": "node --watch backend/server.js",
+    "start": "node backend/server.js",
+    "prod": "npm run build && npm start",
+    "test": "vitest",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "better-sqlite3": "^12.9.0",
