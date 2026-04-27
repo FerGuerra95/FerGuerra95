@@ -7,15 +7,42 @@ const reportsStore = createSqliteEntityStore('ma_reports', 'ma_report', {
   payload: {}
 });
 
+const VALID_REPORT_STATUSES = [
+  'draft',
+  'generated',
+  'exported',
+  'archived'
+];
+
+function createForbiddenError(message, code = 'INVALID_ORGANIZATION_SCOPE') {
+  const error = new Error(message);
+  error.status = 403;
+  error.code = code;
+  return error;
+}
+
 function normalizeText(value) {
   return String(value || '').trim();
 }
 
+function normalizeStatus(value) {
+  const status = normalizeText(value) || 'generated';
+
+  return VALID_REPORT_STATUSES.includes(status) ? status : 'generated';
+}
+
+function assertOrganizationScope(organizationId) {
+  if (!organizationId) {
+    throw createForbiddenError(
+      'Scope de organización no definido. No se puede operar sin organizationId.'
+    );
+  }
+}
+
 function belongsToOrganization(item, organizationId) {
   if (!item) return false;
-
-  // Compatibilidad con datos antiguos sin organizationId.
-  if (!item.organizationId) return true;
+  if (!organizationId) return false;
+  if (!item.organizationId) return false;
 
   return item.organizationId === organizationId;
 }
@@ -23,8 +50,8 @@ function belongsToOrganization(item, organizationId) {
 function applyOwnership(payload = {}, scope = {}) {
   return {
     ...payload,
-    organizationId: scope.organizationId || payload.organizationId || '',
-    userId: scope.userId || payload.userId || ''
+    organizationId: scope.organizationId || '',
+    userId: scope.userId || ''
   };
 }
 
@@ -35,19 +62,23 @@ function normalizeReportPayload(payload = {}) {
     'M&A Report';
 
   const caseId = normalizeText(payload.caseId || payload.case_id);
+  const status = normalizeStatus(payload.status);
 
   return {
     ...payload,
     caseId,
     title,
     type: 'ma',
-    status: normalizeText(payload.status) || 'generated',
+    status,
     payload: {
+      ...(payload.payload && typeof payload.payload === 'object'
+        ? payload.payload
+        : {}),
       ...payload,
       caseId,
       title,
       type: 'ma',
-      status: normalizeText(payload.status) || 'generated'
+      status
     }
   };
 }
@@ -55,9 +86,10 @@ function normalizeReportPayload(payload = {}) {
 function expandReport(entity) {
   if (!entity) return null;
 
-  const payload = entity.payload && typeof entity.payload === 'object'
-    ? entity.payload
-    : {};
+  const payload =
+    entity.payload && typeof entity.payload === 'object'
+      ? entity.payload
+      : {};
 
   return {
     ...payload,
@@ -67,6 +99,8 @@ function expandReport(entity) {
 }
 
 export const listMaReports = async (scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const items = await reportsStore.list();
 
   return items
@@ -75,6 +109,8 @@ export const listMaReports = async (scope = {}) => {
 };
 
 export const getMaReportById = async (id, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const item = await reportsStore.getById(id);
 
   if (!belongsToOrganization(item, scope.organizationId)) {
@@ -85,6 +121,8 @@ export const getMaReportById = async (id, scope = {}) => {
 };
 
 export const createMaReport = async (payload = {}) => {
+  assertOrganizationScope(payload.organizationId);
+
   const normalizedPayload = normalizeReportPayload(payload);
 
   const item = applyOwnership(
@@ -105,6 +143,8 @@ export const createMaReport = async (payload = {}) => {
 };
 
 export const deleteMaReport = async (id, scope = {}) => {
+  assertOrganizationScope(scope.organizationId);
+
   const existing = await reportsStore.getById(id);
 
   if (!belongsToOrganization(existing, scope.organizationId)) {
