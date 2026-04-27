@@ -1,0 +1,1 @@
+import React from 'react'; export function BarChart(){ return <div className="empty">BarChart placeholder</div>; }

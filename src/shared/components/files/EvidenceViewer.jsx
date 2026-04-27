@@ -1,0 +1,1 @@
+import React from 'react'; import { Card } from '../ui/Card.jsx'; export function EvidenceViewer(){ return <Card><h3>Evidence Viewer</h3><p className="muted">Visor de evidencia preparado para Compliance.</p></Card>; }

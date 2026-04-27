@@ -1,0 +1,1 @@
+import React from 'react'; import { Card } from '../../../shared/components/ui/Card.jsx'; export function GeopoliticalContextCard() { return <Card><h3>GeopoliticalContextCard</h3><p className='muted'>Placeholder del módulo Compliance.</p></Card>; }

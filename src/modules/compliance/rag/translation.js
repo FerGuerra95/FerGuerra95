@@ -1,0 +1,1 @@
+export async function translation(text){ return text; }

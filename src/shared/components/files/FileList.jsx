@@ -1,0 +1,1 @@
+import React from 'react'; import { EmptyState } from '../ui/EmptyState.jsx'; export function FileList(){ return <EmptyState title="Sin archivos" description="Aún no hay ficheros cargados en este módulo." />; }

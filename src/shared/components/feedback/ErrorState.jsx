@@ -1,0 +1,1 @@
+import React from 'react'; export function ErrorState({ message = 'Ha ocurrido un error.' }) { return <div className="notice"><strong>Error:</strong> {message}</div>; }

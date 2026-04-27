@@ -1,0 +1,1 @@
+export function chunking(text = ''){ return text ? [text] : []; }

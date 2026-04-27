@@ -1,0 +1,1 @@
+import React from 'react'; export function SuccessToast({ message }) { return <div style={{ background: '#0f172a', border: '1px solid rgba(16,185,129,0.35)', color: '#d1fae5', borderRadius: 14, padding: '12px 14px', minWidth: 260, boxShadow: '0 12px 22px rgba(0,0,0,0.25)' }}>{message}</div>; }

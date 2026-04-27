@@ -1,0 +1,1 @@
+import React from 'react'; import { Card } from '../../../shared/components/ui/Card.jsx'; export function SupplierTable() { return <Card><h3>SupplierTable</h3><p className='muted'>Placeholder del módulo Compliance.</p></Card>; }

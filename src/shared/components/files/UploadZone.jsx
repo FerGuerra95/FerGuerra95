@@ -1,0 +1,1 @@
+import React from 'react'; import { Card } from '../ui/Card.jsx'; export function UploadZone(){ return <Card><h3>UploadZone</h3><p className="muted">Placeholder para subida de documentos.</p></Card>; }

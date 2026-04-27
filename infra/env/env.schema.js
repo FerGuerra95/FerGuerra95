@@ -1,0 +1,22 @@
+export const envSchema = {
+  NODE_ENV: ['development', 'test', 'staging', 'production'],
+  PORT: 'number',
+  APP_URL: 'string',
+  API_URL: 'string',
+  JWT_SECRET: 'string',
+  JWT_EXPIRES_IN: 'string',
+  SESSION_SECRET: 'string',
+  DATABASE_URL: 'string',
+  STORAGE_DRIVER: 'string',
+  STORAGE_PATH: 'string',
+  SMTP_HOST: 'string',
+  SMTP_PORT: 'number',
+  EMAIL_FROM: 'string',
+  TRANSLATION_PROVIDER: 'string',
+  NEWS_PROVIDER: 'string',
+  OCR_PROVIDER: 'string',
+  RAG_PROVIDER: 'string',
+  GEODATA_PROVIDER: 'string',
+  ENABLE_METRICS: 'boolean',
+  LOG_LEVEL: ['debug', 'info', 'warn', 'error']
+};

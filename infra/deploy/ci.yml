@@ -1,0 +1,10 @@
+# Deploy
+
+Pasos mínimos sugeridos:
+
+1. Crear `.env` desde `.env.example`.
+2. Levantar base de datos y API con Docker Compose.
+3. Ejecutar migraciones.
+4. Configurar reverse proxy.
+5. Activar logging y alertas.
+6. Separar entornos: development / staging / production.

@@ -1,0 +1,7 @@
+-- Core M&A tables
+CREATE TABLE IF NOT EXISTS ma_cases (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  sector TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
