@@ -11,6 +11,8 @@ const AuthContext = createContext(null);
 
 const AUTH_STORAGE_KEY = 'ceo_os_auth_session';
 
+const IS_DEMO_AUTH_ENABLED = import.meta.env.DEV;
+
 export const PERMISSIONS = {
   READ: 'read',
 
@@ -166,7 +168,7 @@ function readStoredSession() {
   }
 }
 
-function writeStoredSession(user, mode = 'local', token = '') {
+function writeStoredSession(user, mode = 'backend', token = '') {
   try {
     localStorage.setItem(
       AUTH_STORAGE_KEY,
@@ -191,6 +193,13 @@ function clearStoredSession() {
 }
 
 function loginWithDemoUser({ email, password }) {
+  if (!IS_DEMO_AUTH_ENABLED) {
+    return {
+      ok: false,
+      message: 'El acceso demo/local está desactivado en producción.'
+    };
+  }
+
   const normalizedEmail = String(email || '').trim().toLowerCase();
   const normalizedPassword = String(password || '').trim();
 
@@ -229,15 +238,17 @@ async function loginWithBackend({ email, password }) {
   const token = data?.token || data?.accessToken || payload?.token || '';
   const rawUser = data?.user || data;
 
+  if (!token) {
+    throw new Error('Respuesta de login sin token.');
+  }
+
   if (!rawUser?.id) {
     throw new Error('Respuesta de login inválida.');
   }
 
   const safeUser = sanitizeUser(rawUser);
 
-  if (token) {
-    httpClient.setAuthToken(token);
-  }
+  httpClient.setAuthToken(token);
 
   return {
     ok: true,
@@ -261,9 +272,23 @@ async function fetchCurrentUserFromBackend() {
   return sanitizeUser(rawUser);
 }
 
+function shouldRestoreStoredSession(storedSession) {
+  if (!storedSession?.user) return false;
+
+  if (storedSession.mode === 'backend' && storedSession.token) {
+    return true;
+  }
+
+  if (IS_DEMO_AUTH_ENABLED && storedSession.mode === 'local') {
+    return true;
+  }
+
+  return false;
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [authMode, setAuthMode] = useState('local');
+  const [authMode, setAuthMode] = useState('backend');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -274,34 +299,72 @@ export function AuthProvider({ children }) {
 
       const storedSession = readStoredSession();
 
+      if (!shouldRestoreStoredSession(storedSession)) {
+        clearStoredSession();
+        httpClient.clearAuthToken();
+
+        if (!cancelled) {
+          setUser(null);
+          setAuthMode('backend');
+          setIsLoading(false);
+        }
+
+        return;
+      }
+
       if (storedSession?.token) {
         httpClient.setAuthToken(storedSession.token);
       }
 
-      try {
-        const backendUser = await fetchCurrentUserFromBackend();
+      if (storedSession?.mode === 'backend') {
+        try {
+          const backendUser = await fetchCurrentUserFromBackend();
 
-        if (!cancelled && backendUser) {
-          setUser(backendUser);
-          setAuthMode('backend');
-          writeStoredSession(
-            backendUser,
-            'backend',
-            storedSession?.token || httpClient.getAuthToken?.() || ''
-          );
-          setIsLoading(false);
+          if (!cancelled && backendUser) {
+            setUser(backendUser);
+            setAuthMode('backend');
+            writeStoredSession(
+              backendUser,
+              'backend',
+              storedSession?.token || httpClient.getAuthToken?.() || ''
+            );
+            setIsLoading(false);
+            return;
+          }
+        } catch {
+          clearStoredSession();
+          httpClient.clearAuthToken();
+
+          if (!cancelled) {
+            setUser(null);
+            setAuthMode('backend');
+            setIsLoading(false);
+          }
+
           return;
         }
-      } catch {
-        // Si el backend no responde, mantenemos sesión local si existe.
       }
 
-      if (!cancelled && storedSession?.user) {
-        setUser(sanitizeUser(storedSession.user));
-        setAuthMode(storedSession.mode || 'local');
+      if (
+        IS_DEMO_AUTH_ENABLED &&
+        storedSession?.mode === 'local' &&
+        storedSession?.user
+      ) {
+        if (!cancelled) {
+          setUser(sanitizeUser(storedSession.user));
+          setAuthMode('local');
+          setIsLoading(false);
+        }
+
+        return;
       }
+
+      clearStoredSession();
+      httpClient.clearAuthToken();
 
       if (!cancelled) {
+        setUser(null);
+        setAuthMode('backend');
         setIsLoading(false);
       }
     }
@@ -314,6 +377,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function login({ email, password }) {
+    clearStoredSession();
+    httpClient.clearAuthToken();
+
     try {
       const backendResult = await loginWithBackend({
         email,
@@ -330,19 +396,34 @@ export function AuthProvider({ children }) {
 
       return backendResult;
     } catch {
-      const demoResult = loginWithDemoUser({
-        email,
-        password
-      });
+      if (!IS_DEMO_AUTH_ENABLED) {
+        setUser(null);
+        setAuthMode('backend');
+        clearStoredSession();
+        httpClient.clearAuthToken();
 
-      if (!demoResult.ok) {
         return {
           ok: false,
           message: 'Email o contraseña incorrectos.'
         };
       }
 
-      httpClient.clearAuthToken();
+      const demoResult = loginWithDemoUser({
+        email,
+        password
+      });
+
+      if (!demoResult.ok) {
+        setUser(null);
+        setAuthMode('local');
+        clearStoredSession();
+        httpClient.clearAuthToken();
+
+        return {
+          ok: false,
+          message: 'Email o contraseña incorrectos.'
+        };
+      }
 
       setUser(demoResult.user);
       setAuthMode('local');
@@ -354,7 +435,7 @@ export function AuthProvider({ children }) {
 
   function logout() {
     setUser(null);
-    setAuthMode('local');
+    setAuthMode('backend');
     clearStoredSession();
     httpClient.clearAuthToken();
   }
@@ -374,6 +455,8 @@ export function AuthProvider({ children }) {
       isAdmin: role === 'admin',
       isUser: role === 'user',
       isViewer: role === 'viewer',
+
+      isDemoAuthEnabled: IS_DEMO_AUTH_ENABLED,
 
       PERMISSIONS,
 
