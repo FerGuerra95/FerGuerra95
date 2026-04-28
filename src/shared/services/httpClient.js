@@ -1,5 +1,10 @@
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+const DEFAULT_API_BASE_URL = import.meta.env.DEV
+  ? 'http://localhost:4000/api'
+  : '/api';
+
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL?.trim() || DEFAULT_API_BASE_URL
+).replace(/\/$/, '');
 
 const AUTH_TOKEN_KEY = 'ceo_os_auth_token';
 
@@ -29,6 +34,16 @@ function clearAuthToken() {
   }
 }
 
+function normalizePath(path) {
+  const safePath = String(path || '');
+
+  if (safePath.startsWith('/')) {
+    return safePath;
+  }
+
+  return `/${safePath}`;
+}
+
 async function parseResponse(response) {
   const text = await response.text();
 
@@ -54,7 +69,7 @@ async function parseResponse(response) {
 }
 
 async function request(path, options = {}) {
-  const url = `${API_BASE_URL}${path}`;
+  const url = `${API_BASE_URL}${normalizePath(path)}`;
   const token = getAuthToken();
 
   const headers = {
