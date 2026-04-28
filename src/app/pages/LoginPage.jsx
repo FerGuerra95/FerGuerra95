@@ -4,21 +4,50 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../../shared/components/ui/Button.jsx';
 import { useAuth } from '../providers/AuthProvider.jsx';
 
+function resolveInitialForm(isDemoAuthEnabled) {
+  if (isDemoAuthEnabled) {
+    return {
+      email: 'admin@ceoos.local',
+      password: 'admin123'
+    };
+  }
+
+  return {
+    email: '',
+    password: ''
+  };
+}
+
+function resolveRedirectPath(location) {
+  const from = location.state?.from?.pathname;
+
+  if (!from || from === '/login') {
+    return '/ma/dashboard';
+  }
+
+  return from;
+}
+
 export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isAuthenticated, isLoading } = useAuth();
 
-  const [form, setForm] = useState({
-    email: 'admin@ceoos.local',
-    password: 'admin123'
-  });
+  const {
+    login,
+    isAuthenticated,
+    isLoading,
+    isDemoAuthEnabled = false
+  } = useAuth();
+
+  const [form, setForm] = useState(() =>
+    resolveInitialForm(isDemoAuthEnabled)
+  );
 
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const from = location.state?.from?.pathname || '/ma/dashboard';
+  const from = resolveRedirectPath(location);
 
   function updateField(key, value) {
     setError('');
@@ -32,17 +61,25 @@ export function LoginPage() {
   async function handleSubmit(event) {
     event.preventDefault();
 
+    const email = String(form.email || '').trim();
+    const password = String(form.password || '').trim();
+
+    if (!email || !password) {
+      setError('Introduce email y contraseña.');
+      return;
+    }
+
     setError('');
     setIsSubmitting(true);
 
     try {
       const result = await login({
-        email: form.email,
-        password: form.password
+        email,
+        password
       });
 
-      if (!result.ok) {
-        setError(result.message || 'No se pudo iniciar sesión.');
+      if (!result?.ok) {
+        setError(result?.message || 'Email o contraseña incorrectos.');
         return;
       }
 
@@ -134,6 +171,7 @@ export function LoginPage() {
               value={form.email}
               onChange={(event) => updateField('email', event.target.value)}
               autoComplete="email"
+              disabled={isSubmitting}
             />
           </div>
 
@@ -153,6 +191,7 @@ export function LoginPage() {
                 value={form.password}
                 onChange={(event) => updateField('password', event.target.value)}
                 autoComplete="current-password"
+                disabled={isSubmitting}
                 style={{
                   paddingRight: 52
                 }}
@@ -167,6 +206,7 @@ export function LoginPage() {
                 title={
                   showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
                 }
+                disabled={isSubmitting}
                 style={{
                   position: 'absolute',
                   right: 10,
@@ -176,7 +216,7 @@ export function LoginPage() {
                   borderRadius: 12,
                   display: 'grid',
                   placeItems: 'center',
-                  cursor: 'pointer',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
                   background: 'rgba(255,255,255,0.06)',
                   color: '#95a0b8'
                 }}
@@ -201,30 +241,32 @@ export function LoginPage() {
             </div>
           ) : null}
 
-          <Button type="submit" loading={isSubmitting}>
+          <Button type="submit" loading={isSubmitting} disabled={isSubmitting}>
             <LogIn size={16} />
             {isSubmitting ? 'Entrando...' : 'Entrar'}
           </Button>
         </form>
 
-        <div
-          className="card"
-          style={{
-            marginTop: 18,
-            background: 'rgba(255,255,255,0.04)',
-            padding: 14
-          }}
-        >
-          <div className="row">
-            <Lock size={16} />
-            <div>
-              <strong>Credenciales demo</strong>
-              <p className="muted" style={{ marginBottom: 0 }}>
-                admin@ceoos.local · admin123
-              </p>
+        {isDemoAuthEnabled ? (
+          <div
+            className="card"
+            style={{
+              marginTop: 18,
+              background: 'rgba(255,255,255,0.04)',
+              padding: 14
+            }}
+          >
+            <div className="row">
+              <Lock size={16} />
+              <div>
+                <strong>Credenciales demo</strong>
+                <p className="muted" style={{ marginBottom: 0 }}>
+                  admin@ceoos.local · admin123
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </div>
   );
