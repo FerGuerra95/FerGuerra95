@@ -1,10 +1,26 @@
-const DEFAULT_API_BASE_URL = import.meta.env.DEV
-  ? 'http://localhost:4000/api'
-  : '/api';
+function resolveApiBaseUrl() {
+  if (typeof window === 'undefined') {
+    return '/api';
+  }
 
-const API_BASE_URL = (
-  import.meta.env.VITE_API_URL?.trim() || DEFAULT_API_BASE_URL
-).replace(/\/$/, '');
+  const { hostname, port } = window.location;
+
+  const isLocalHost =
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1';
+
+  const isViteDevServer =
+    isLocalHost &&
+    (port === '5173' || port === '5174');
+
+  if (isViteDevServer) {
+    return `http://${hostname}:4000/api`;
+  }
+
+  return '/api';
+}
+
+const API_BASE_URL = resolveApiBaseUrl().replace(/\/$/, '');
 
 const AUTH_TOKEN_KEY = 'ceo_os_auth_token';
 
@@ -124,7 +140,8 @@ export const httpClient = {
   patch(path, body, options = {}) {
     return request(path, {
       ...options,
-      method: 'PATCH',
+      method: 'PATCH'
+,
       body: JSON.stringify(body)
     });
   },
