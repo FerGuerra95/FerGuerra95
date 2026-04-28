@@ -63,6 +63,10 @@ function normalizeEmail(email) {
   return String(email || '').trim().toLowerCase();
 }
 
+function normalizeText(value) {
+  return String(value || '').trim();
+}
+
 function normalizeRole(role) {
   const normalizedRole = String(role || 'viewer').trim().toLowerCase();
 
@@ -71,6 +75,12 @@ function normalizeRole(role) {
 
 function normalizeWorkspaces(workspaces) {
   return Array.isArray(workspaces) ? workspaces : [];
+}
+
+function normalizeStatus(status) {
+  const normalizedStatus = String(status || 'active').trim().toLowerCase();
+
+  return normalizedStatus === 'inactive' ? 'inactive' : 'active';
 }
 
 function base64url(input) {
@@ -321,7 +331,7 @@ function insertUser(user) {
       role: normalizeRole(user.role),
       organizationId: user.organizationId,
       workspacesJson: JSON.stringify(normalizeWorkspaces(user.workspaces)),
-      status: user.status || 'active',
+      status: normalizeStatus(user.status),
       passwordHash: passwordRecord.passwordHash,
       passwordSalt: passwordRecord.passwordSalt,
       createdAt,
@@ -330,39 +340,173 @@ function insertUser(user) {
   );
 }
 
-function getBootstrapUsers() {
-  if (!isProduction()) {
-    return DEMO_USERS;
-  }
+function validateBootstrapPassword(password, label = 'BOOTSTRAP_PASSWORD') {
+  const normalizedPassword = String(password || '').trim();
 
-  const email = normalizeEmail(process.env.BOOTSTRAP_ADMIN_EMAIL);
-  const password = String(process.env.BOOTSTRAP_ADMIN_PASSWORD || '').trim();
-
-  if (!email || !password) {
-    return [];
-  }
-
-  if (password.length < 12) {
+  if (!normalizedPassword) {
     throw createError(
-      'BOOTSTRAP_ADMIN_PASSWORD debe tener al menos 12 caracteres en producción.',
+      `${label} es obligatorio para crear usuarios bootstrap.`,
+      500,
+      'BOOTSTRAP_PASSWORD_REQUIRED'
+    );
+  }
+
+  if (isProduction() && normalizedPassword.length < 12) {
+    throw createError(
+      `${label} debe tener al menos 12 caracteres en producción.`,
       500,
       'WEAK_BOOTSTRAP_PASSWORD'
     );
   }
 
-  return [
-    {
-      id: process.env.BOOTSTRAP_ADMIN_ID || 'u_bootstrap_admin',
-      name: process.env.BOOTSTRAP_ADMIN_NAME || 'Admin',
-      email,
-      password,
-      role: 'admin',
-      organizationId:
-        process.env.BOOTSTRAP_ORGANIZATION_ID || 'org_bootstrap',
-      workspaces: ['ma', 'compliance'],
-      status: 'active'
-    }
-  ];
+  return normalizedPassword;
+}
+
+function normalizeBootstrapUser(user = {}, index = 0) {
+  const id = normalizeText(user.id);
+  const name = normalizeText(user.name) || `Bootstrap User ${index + 1}`;
+  const email = normalizeEmail(user.email);
+  const password = validateBootstrapPassword(
+    user.password,
+    `BOOTSTRAP_USERS_JSON[${index}].password`
+  );
+  const role = normalizeRole(user.role);
+  const organizationId = normalizeText(user.organizationId);
+  const workspaces = normalizeWorkspaces(user.workspaces);
+  const status = normalizeStatus(user.status);
+
+  if (!id) {
+    throw createError(
+      `BOOTSTRAP_USERS_JSON[${index}].id es obligatorio.`,
+      500,
+      'BOOTSTRAP_USER_ID_REQUIRED'
+    );
+  }
+
+  if (!email) {
+    throw createError(
+      `BOOTSTRAP_USERS_JSON[${index}].email es obligatorio.`,
+      500,
+      'BOOTSTRAP_USER_EMAIL_REQUIRED'
+    );
+  }
+
+  if (!organizationId) {
+    throw createError(
+      `BOOTSTRAP_USERS_JSON[${index}].organizationId es obligatorio.`,
+      500,
+      'BOOTSTRAP_USER_ORGANIZATION_REQUIRED'
+    );
+  }
+
+  return {
+    id,
+    name,
+    email,
+    password,
+    role,
+    organizationId,
+    workspaces:
+      workspaces.length > 0 ? workspaces : ['ma', 'compliance', 'funding'],
+    status
+  };
+}
+
+function parseBootstrapUsersJson() {
+  const raw = String(process.env.BOOTSTRAP_USERS_JSON || '').trim();
+
+  if (!raw) {
+    return [];
+  }
+
+  let parsed;
+
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    throw createError(
+      'BOOTSTRAP_USERS_JSON debe ser un JSON válido.',
+      500,
+      'BOOTSTRAP_USERS_JSON_INVALID'
+    );
+  }
+
+  if (!Array.isArray(parsed)) {
+    throw createError(
+      'BOOTSTRAP_USERS_JSON debe ser un array de usuarios.',
+      500,
+      'BOOTSTRAP_USERS_JSON_NOT_ARRAY'
+    );
+  }
+
+  return parsed.map((user, index) => normalizeBootstrapUser(user, index));
+}
+
+function getLegacyBootstrapAdminUser() {
+  const email = normalizeEmail(process.env.BOOTSTRAP_ADMIN_EMAIL);
+  const rawPassword = String(process.env.BOOTSTRAP_ADMIN_PASSWORD || '').trim();
+
+  if (!email || !rawPassword) {
+    return null;
+  }
+
+  const password = validateBootstrapPassword(
+    rawPassword,
+    'BOOTSTRAP_ADMIN_PASSWORD'
+  );
+
+  return {
+    id: process.env.BOOTSTRAP_ADMIN_ID || 'u_bootstrap_admin',
+    name: process.env.BOOTSTRAP_ADMIN_NAME || 'Admin',
+    email,
+    password,
+    role: 'admin',
+    organizationId:
+      process.env.BOOTSTRAP_ORGANIZATION_ID || 'org_bootstrap',
+    workspaces: ['ma', 'compliance', 'funding'],
+    status: 'active'
+  };
+}
+
+function dedupeBootstrapUsers(users = []) {
+  const seenIds = new Set();
+  const seenEmails = new Set();
+  const result = [];
+
+  for (const user of users) {
+    const normalizedId = normalizeText(user.id);
+    const normalizedEmail = normalizeEmail(user.email);
+
+    if (!normalizedId || !normalizedEmail) continue;
+    if (seenIds.has(normalizedId)) continue;
+    if (seenEmails.has(normalizedEmail)) continue;
+
+    seenIds.add(normalizedId);
+    seenEmails.add(normalizedEmail);
+    result.push(user);
+  }
+
+  return result;
+}
+
+function getBootstrapUsers() {
+  if (!isProduction()) {
+    return DEMO_USERS;
+  }
+
+  const users = [];
+
+  const legacyAdmin = getLegacyBootstrapAdminUser();
+
+  if (legacyAdmin) {
+    users.push(legacyAdmin);
+  }
+
+  const jsonUsers = parseBootstrapUsersJson();
+
+  users.push(...jsonUsers);
+
+  return dedupeBootstrapUsers(users);
 }
 
 function ensureUsersSeeded() {
