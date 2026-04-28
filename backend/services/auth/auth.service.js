@@ -489,11 +489,21 @@ function dedupeBootstrapUsers(users = []) {
   return result;
 }
 
+/**
+ * Bootstrap users strategy:
+ *
+ * - Production:
+ *   Uses only configured bootstrap users:
+ *   BOOTSTRAP_ADMIN_* and/or BOOTSTRAP_USERS_JSON.
+ *
+ * - Development:
+ *   Uses BOOTSTRAP_ADMIN_* and/or BOOTSTRAP_USERS_JSON when configured.
+ *   Falls back to DEMO_USERS only if no bootstrap users are configured.
+ *
+ * This allows local development with real backend users from .env
+ * without re-enabling frontend demo authentication.
+ */
 function getBootstrapUsers() {
-  if (!isProduction()) {
-    return DEMO_USERS;
-  }
-
   const users = [];
 
   const legacyAdmin = getLegacyBootstrapAdminUser();
@@ -506,7 +516,17 @@ function getBootstrapUsers() {
 
   users.push(...jsonUsers);
 
-  return dedupeBootstrapUsers(users);
+  const configuredUsers = dedupeBootstrapUsers(users);
+
+  if (configuredUsers.length > 0) {
+    return configuredUsers;
+  }
+
+  if (!isProduction()) {
+    return DEMO_USERS;
+  }
+
+  return [];
 }
 
 function ensureUsersSeeded() {

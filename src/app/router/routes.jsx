@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from '../layout/AppShell.jsx';
 import { ProtectedRoute } from '../layout/ProtectedRoute.jsx';
+import { LandingPage } from '../pages/LandingPage.jsx';
 import { LoginPage } from '../pages/LoginPage.jsx';
 
 import { MAStoreProvider } from '../../modules/ma/store/maStore.jsx';
@@ -47,11 +48,10 @@ function ProtectedAppShell() {
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
 
       <Route element={<ProtectedAppShell />}>
-        <Route path="/" element={<Navigate to="/ma/dashboard" replace />} />
-
         <Route path="/ma/dashboard" element={<MADashboardPage />} />
         <Route path="/ma/valuation" element={<ValuationPage />} />
         <Route path="/ma/waterfall" element={<WaterfallPage />} />
@@ -114,7 +114,7 @@ export function AppRoutes() {
         />
       </Route>
 
-      <Route path="*" element={<Navigate to="/ma/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

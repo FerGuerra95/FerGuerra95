@@ -11,8 +11,6 @@ const AuthContext = createContext(null);
 
 const AUTH_STORAGE_KEY = 'ceo_os_auth_session';
 
-const IS_DEMO_AUTH_ENABLED = import.meta.env.DEV;
-
 export const PERMISSIONS = {
   READ: 'read',
 
@@ -72,36 +70,6 @@ const ROLE_PERMISSIONS = {
   viewer: [PERMISSIONS.READ]
 };
 
-const DEMO_USERS = [
-  {
-    id: 'u_demo_admin',
-    name: 'Fernando',
-    email: 'admin@ceoos.local',
-    password: 'admin123',
-    role: 'admin',
-    organizationId: 'org_demo',
-    workspaces: ['ma', 'compliance', 'funding']
-  },
-  {
-    id: 'u_demo_user',
-    name: 'Usuario Demo',
-    email: 'user@ceoos.local',
-    password: 'user123',
-    role: 'user',
-    organizationId: 'org_demo_2',
-    workspaces: ['ma', 'compliance', 'funding']
-  },
-  {
-    id: 'u_demo_viewer',
-    name: 'Viewer Demo',
-    email: 'viewer@ceoos.local',
-    password: 'viewer123',
-    role: 'viewer',
-    organizationId: 'org_demo_3',
-    workspaces: ['ma', 'compliance', 'funding']
-  }
-];
-
 function normalizeRole(role) {
   const normalizedRole = String(role || 'viewer').trim().toLowerCase();
 
@@ -160,7 +128,7 @@ function readStoredSession() {
 
     const parsed = JSON.parse(raw);
 
-    if (!parsed?.user) return null;
+    if (!parsed?.user || !parsed?.token) return null;
 
     return parsed;
   } catch {
@@ -168,13 +136,13 @@ function readStoredSession() {
   }
 }
 
-function writeStoredSession(user, mode = 'backend', token = '') {
+function writeStoredSession(user, token = '') {
   try {
     localStorage.setItem(
       AUTH_STORAGE_KEY,
       JSON.stringify({
         user,
-        mode,
+        mode: 'backend',
         token,
         createdAt: new Date().toISOString()
       })
@@ -190,41 +158,6 @@ function clearStoredSession() {
   } catch {
     // Si localStorage falla, no bloqueamos logout.
   }
-}
-
-function loginWithDemoUser({ email, password }) {
-  if (!IS_DEMO_AUTH_ENABLED) {
-    return {
-      ok: false,
-      message: 'El acceso demo/local está desactivado en producción.'
-    };
-  }
-
-  const normalizedEmail = String(email || '').trim().toLowerCase();
-  const normalizedPassword = String(password || '').trim();
-
-  const matchedUser = DEMO_USERS.find((item) => {
-    return (
-      item.email.toLowerCase() === normalizedEmail &&
-      item.password === normalizedPassword
-    );
-  });
-
-  if (!matchedUser) {
-    return {
-      ok: false,
-      message: 'Email o contraseña incorrectos.'
-    };
-  }
-
-  const safeUser = sanitizeUser(matchedUser);
-
-  return {
-    ok: true,
-    user: safeUser,
-    token: '',
-    mode: 'local'
-  };
 }
 
 async function loginWithBackend({ email, password }) {
@@ -248,6 +181,10 @@ async function loginWithBackend({ email, password }) {
 
   const safeUser = sanitizeUser(rawUser);
 
+  if (!safeUser?.organizationId) {
+    throw new Error('Usuario sin organización asignada.');
+  }
+
   httpClient.setAuthToken(token);
 
   return {
@@ -269,21 +206,19 @@ async function fetchCurrentUserFromBackend() {
 
   if (!rawUser?.id) return null;
 
-  return sanitizeUser(rawUser);
+  const safeUser = sanitizeUser(rawUser);
+
+  if (!safeUser?.organizationId) return null;
+
+  return safeUser;
 }
 
 function shouldRestoreStoredSession(storedSession) {
-  if (!storedSession?.user) return false;
-
-  if (storedSession.mode === 'backend' && storedSession.token) {
-    return true;
-  }
-
-  if (IS_DEMO_AUTH_ENABLED && storedSession.mode === 'local') {
-    return true;
-  }
-
-  return false;
+  return Boolean(
+    storedSession?.user &&
+      storedSession?.token &&
+      storedSession?.mode === 'backend'
+  );
 }
 
 export function AuthProvider({ children }) {
@@ -312,60 +247,30 @@ export function AuthProvider({ children }) {
         return;
       }
 
-      if (storedSession?.token) {
-        httpClient.setAuthToken(storedSession.token);
-      }
+      httpClient.setAuthToken(storedSession.token);
 
-      if (storedSession?.mode === 'backend') {
-        try {
-          const backendUser = await fetchCurrentUserFromBackend();
+      try {
+        const backendUser = await fetchCurrentUserFromBackend();
 
-          if (!cancelled && backendUser) {
-            setUser(backendUser);
-            setAuthMode('backend');
-            writeStoredSession(
-              backendUser,
-              'backend',
-              storedSession?.token || httpClient.getAuthToken?.() || ''
-            );
-            setIsLoading(false);
-            return;
-          }
-        } catch {
-          clearStoredSession();
-          httpClient.clearAuthToken();
-
-          if (!cancelled) {
-            setUser(null);
-            setAuthMode('backend');
-            setIsLoading(false);
-          }
-
-          return;
+        if (!backendUser) {
+          throw new Error('Sesión inválida.');
         }
-      }
 
-      if (
-        IS_DEMO_AUTH_ENABLED &&
-        storedSession?.mode === 'local' &&
-        storedSession?.user
-      ) {
         if (!cancelled) {
-          setUser(sanitizeUser(storedSession.user));
-          setAuthMode('local');
+          setUser(backendUser);
+          setAuthMode('backend');
+          writeStoredSession(backendUser, storedSession.token);
           setIsLoading(false);
         }
+      } catch {
+        clearStoredSession();
+        httpClient.clearAuthToken();
 
-        return;
-      }
-
-      clearStoredSession();
-      httpClient.clearAuthToken();
-
-      if (!cancelled) {
-        setUser(null);
-        setAuthMode('backend');
-        setIsLoading(false);
+        if (!cancelled) {
+          setUser(null);
+          setAuthMode('backend');
+          setIsLoading(false);
+        }
       }
     }
 
@@ -379,6 +284,8 @@ export function AuthProvider({ children }) {
   async function login({ email, password }) {
     clearStoredSession();
     httpClient.clearAuthToken();
+    setUser(null);
+    setAuthMode('backend');
 
     try {
       const backendResult = await loginWithBackend({
@@ -388,48 +295,19 @@ export function AuthProvider({ children }) {
 
       setUser(backendResult.user);
       setAuthMode('backend');
-      writeStoredSession(
-        backendResult.user,
-        'backend',
-        backendResult.token || ''
-      );
+      writeStoredSession(backendResult.user, backendResult.token || '');
 
       return backendResult;
     } catch {
-      if (!IS_DEMO_AUTH_ENABLED) {
-        setUser(null);
-        setAuthMode('backend');
-        clearStoredSession();
-        httpClient.clearAuthToken();
+      setUser(null);
+      setAuthMode('backend');
+      clearStoredSession();
+      httpClient.clearAuthToken();
 
-        return {
-          ok: false,
-          message: 'Email o contraseña incorrectos.'
-        };
-      }
-
-      const demoResult = loginWithDemoUser({
-        email,
-        password
-      });
-
-      if (!demoResult.ok) {
-        setUser(null);
-        setAuthMode('local');
-        clearStoredSession();
-        httpClient.clearAuthToken();
-
-        return {
-          ok: false,
-          message: 'Email o contraseña incorrectos.'
-        };
-      }
-
-      setUser(demoResult.user);
-      setAuthMode('local');
-      writeStoredSession(demoResult.user, 'local');
-
-      return demoResult;
+      return {
+        ok: false,
+        message: 'Email o contraseña incorrectos.'
+      };
     }
   }
 
@@ -456,7 +334,7 @@ export function AuthProvider({ children }) {
       isUser: role === 'user',
       isViewer: role === 'viewer',
 
-      isDemoAuthEnabled: IS_DEMO_AUTH_ENABLED,
+      isDemoAuthEnabled: false,
 
       PERMISSIONS,
 
