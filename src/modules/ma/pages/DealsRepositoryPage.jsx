@@ -268,6 +268,11 @@ const dealsRepositoryCss = `
     letter-spacing: -0.055em;
   }
 
+  .deals-score-core strong.is-empty-score {
+    font-size: 30px;
+    color: rgba(226, 232, 240, 0.72);
+  }
+
   .deals-score-copy {
     min-width: 0;
   }
@@ -657,12 +662,13 @@ export function DealsRepositoryPage() {
     ? formatCurrency(latestCase.snapshot?.equityBase ?? 0, latestCurrency)
     : 'N/A';
 
-  const syncSignal = getSyncSignal(backendStatus);
-  const repositoryScore = getRepositoryScore({
+  const repositoryHealth = getRepositoryHealth({
     count: safeSavedCases.length,
     backendStatus
   });
-  const scoreAngle = `${repositoryScore * 3.6}deg`;
+
+  const hasRepositoryScore = repositoryHealth.score !== null;
+  const scoreAngle = `${(repositoryHealth.score ?? 0) * 3.6}deg`;
 
   function handleLoadCase(item) {
     if (!item?.financials) {
@@ -775,8 +781,8 @@ export function DealsRepositoryPage() {
                 />
 
                 <CommandItem
-                  label="Sync posture"
-                  value={syncSignal.posture}
+                  label="Repository posture"
+                  value={repositoryHealth.posture}
                 />
               </div>
             </div>
@@ -785,9 +791,9 @@ export function DealsRepositoryPage() {
               <div className="deals-signal-inner">
                 <div className="deals-signal-top">
                   <div>
-                    <div className="kpi-label">Repository Signal</div>
+                    <div className="kpi-label">Repository Health</div>
                     <div className="deals-signal-title">
-                      {syncSignal.title}
+                      {repositoryHealth.title}
                     </div>
                   </div>
 
@@ -802,15 +808,17 @@ export function DealsRepositoryPage() {
                     style={{ '--score-angle': scoreAngle }}
                   >
                     <div className="deals-score-core">
-                      <strong>{repositoryScore}</strong>
+                      <strong className={hasRepositoryScore ? '' : 'is-empty-score'}>
+                        {hasRepositoryScore ? repositoryHealth.score : '—'}
+                      </strong>
                     </div>
                   </div>
 
                   <div className="deals-score-copy">
-                    <strong>{syncSignal.posture}</strong>
+                    <strong>{repositoryHealth.posture}</strong>
 
                     <p className="muted">
-                      {syncSignal.description}
+                      {repositoryHealth.description}
                     </p>
                   </div>
                 </div>
@@ -1100,18 +1108,30 @@ function StateCard({ children, tone = 'neutral', icon: Icon = Activity }) {
   );
 }
 
-function getSyncSignal(backendStatus) {
+function getRepositoryHealth({ count, backendStatus }) {
+  if (count === 0) {
+    return {
+      score: null,
+      title: 'Repository empty',
+      posture: 'Build archive',
+      description:
+        'Todavía no hay deals guardados. Guarda un primer caso para activar el histórico y medir la salud del repositorio.'
+    };
+  }
+
   if (backendStatus?.error) {
     return {
+      score: getLocalFallbackScore(count),
       title: 'Local repository mode',
       posture: 'Local fallback',
       description:
-        'El repositorio sigue operativo en local, aunque conviene recuperar sincronización backend para persistencia completa.'
+        'El repositorio tiene histórico, pero está operando en modo local. Conviene recuperar sincronización backend para persistencia completa.'
     };
   }
 
   if (backendStatus?.lastSyncAt) {
     return {
+      score: getSyncedRepositoryScore(count),
       title: 'Repository synchronized',
       posture: 'Synced',
       description:
@@ -1120,6 +1140,7 @@ function getSyncSignal(backendStatus) {
   }
 
   return {
+    score: getReadyRepositoryScore(count),
     title: 'Repository ready',
     posture: 'Ready',
     description:
@@ -1127,11 +1148,23 @@ function getSyncSignal(backendStatus) {
   };
 }
 
-function getRepositoryScore({ count, backendStatus }) {
-  if (backendStatus?.error) return count > 0 ? 55 : 35;
+function getSyncedRepositoryScore(count) {
   if (count >= 5) return 92;
   if (count >= 2) return 82;
-  if (count === 1) return 72;
 
-  return 45;
+  return 70;
+}
+
+function getReadyRepositoryScore(count) {
+  if (count >= 5) return 88;
+  if (count >= 2) return 78;
+
+  return 70;
+}
+
+function getLocalFallbackScore(count) {
+  if (count >= 5) return 72;
+  if (count >= 2) return 65;
+
+  return 55;
 }
