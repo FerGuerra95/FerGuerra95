@@ -2,6 +2,10 @@ import { httpClient } from '../../../shared/services/httpClient.js';
 
 const CASES_KEY = 'ma_mvp_cases_v1';
 
+const ALLOW_LOCAL_FALLBACK =
+  import.meta.env.DEV ||
+  import.meta.env.VITE_ENABLE_MA_LOCAL_FALLBACK === 'true';
+
 function safeReadLocal() {
   try {
     if (typeof localStorage === 'undefined') return [];
@@ -21,8 +25,18 @@ function safeWriteLocal(cases = []) {
 
     localStorage.setItem(CASES_KEY, JSON.stringify(cases));
   } catch {
-    // Si localStorage falla, no bloqueamos la app.
+    // En desarrollo no bloqueamos la app si localStorage falla.
   }
+}
+
+function syncLocalFallback(cases = []) {
+  if (!ALLOW_LOCAL_FALLBACK) return;
+
+  safeWriteLocal(cases);
+}
+
+function readLocalFallback() {
+  return ALLOW_LOCAL_FALLBACK ? safeReadLocal() : [];
 }
 
 function extractData(payload) {
@@ -40,17 +54,15 @@ function extractCollection(payload) {
   return [];
 }
 
-async function tryBackend(action, fallback) {
-  try {
-    return await action();
-  } catch {
-    return fallback;
-  }
+function warnLocalFallback(error, context = 'M&A backend unavailable') {
+  if (!ALLOW_LOCAL_FALLBACK) return;
+
+  console.warn(`${context}. Using localStorage fallback.`, error);
 }
 
 export const maCasesApi = {
   list() {
-    return safeReadLocal();
+    return readLocalFallback();
   },
 
   async listRemote() {
@@ -59,39 +71,69 @@ export const maCasesApi = {
   },
 
   async hydrateFromBackend() {
-    return tryBackend(async () => {
+    try {
       const remoteCases = await this.listRemote();
-      safeWriteLocal(remoteCases);
+      syncLocalFallback(remoteCases);
       return remoteCases;
-    }, safeReadLocal());
+    } catch (error) {
+      if (ALLOW_LOCAL_FALLBACK) {
+        warnLocalFallback(error, 'Could not hydrate M&A cases from backend');
+        return safeReadLocal();
+      }
+
+      throw error;
+    }
   },
 
   async getById(id) {
     if (!id) return null;
 
-    const payload = await httpClient.get(`/ma/cases/${id}`);
-    return extractData(payload);
+    try {
+      const payload = await httpClient.get(`/ma/cases/${id}`);
+      return extractData(payload);
+    } catch (error) {
+      if (ALLOW_LOCAL_FALLBACK) {
+        warnLocalFallback(error, 'Could not fetch M&A case from backend');
+
+        return safeReadLocal().find((item) => item.id === id) || null;
+      }
+
+      throw error;
+    }
   },
 
   saveAll(cases = []) {
-    safeWriteLocal(cases);
+    const safeCases = Array.isArray(cases) ? cases.filter(Boolean) : [];
 
-    this.saveAllRemote(cases).catch(() => {
-      // Backend apagado o error de red: mantenemos localStorage.
+    syncLocalFallback(safeCases);
+
+    this.saveAllRemote(safeCases).catch((error) => {
+      if (ALLOW_LOCAL_FALLBACK) {
+        warnLocalFallback(error, 'Could not sync all M&A cases to backend');
+        return;
+      }
+
+      console.error('M&A cases were not saved to backend.', error);
     });
 
-    return cases;
+    return safeCases;
   },
 
   async saveAllRemote(cases = []) {
+    const safeCases = Array.isArray(cases) ? cases.filter(Boolean) : [];
     const results = [];
 
-    for (const item of cases) {
+    for (const item of safeCases) {
       try {
         const saved = await this.saveCase(item);
         if (saved) results.push(saved);
-      } catch {
-        // No bloqueamos por un caso fallido.
+      } catch (error) {
+        if (ALLOW_LOCAL_FALLBACK) {
+          warnLocalFallback(error, `Could not sync M&A case ${item?.id || ''}`);
+          continue;
+        }
+
+        throw error;
       }
     }
 
@@ -101,56 +143,93 @@ export const maCasesApi = {
   async saveCase(caseItem) {
     if (!caseItem) return null;
 
-    let savedCase = null;
-
-    /**
-     * Primero intentamos crear con POST.
-     * En este MVP, aunque el caso ya traiga id desde frontend,
-     * POST debe permitir crearlo en backend.
-     */
     try {
       const createdPayload = await httpClient.post('/ma/cases', caseItem);
-      savedCase = extractData(createdPayload);
-    } catch {
-      /**
-       * Si el backend responde que ya existe, intentamos actualizar con PUT.
-       */
-      if (caseItem.id) {
-        const updatedPayload = await httpClient.put(
+      const savedCase = extractData(createdPayload);
+
+      if (savedCase) {
+        const localCases = safeReadLocal();
+        const exists = localCases.some((item) => item.id === savedCase.id);
+
+        const next = exists
+          ? localCases.map((item) => (item.id === savedCase.id ? savedCase : item))
+          : [savedCase, ...localCases];
+
+        syncLocalFallback(next.filter(Boolean));
+      }
+
+      return savedCase;
+    } catch (createError) {
+      if (!caseItem.id) {
+        if (ALLOW_LOCAL_FALLBACK) {
+          warnLocalFallback(createError, 'Could not create M&A case in backend');
+          syncLocalFallback([caseItem, ...safeReadLocal()]);
+          return caseItem;
+        }
+
+        throw createError;
+      }
+
+      try {
+        const updatedPayload = await httpClient.patch(
           `/ma/cases/${caseItem.id}`,
           caseItem
         );
 
-        savedCase = extractData(updatedPayload);
+        const savedCase = extractData(updatedPayload);
+
+        if (savedCase) {
+          const localCases = safeReadLocal();
+          const exists = localCases.some((item) => item.id === savedCase.id);
+
+          const next = exists
+            ? localCases.map((item) => (item.id === savedCase.id ? savedCase : item))
+            : [savedCase, ...localCases];
+
+          syncLocalFallback(next.filter(Boolean));
+        }
+
+        return savedCase;
+      } catch (updateError) {
+        if (ALLOW_LOCAL_FALLBACK) {
+          warnLocalFallback(updateError, 'Could not update M&A case in backend');
+
+          const localCases = safeReadLocal();
+          const exists = localCases.some((item) => item.id === caseItem.id);
+
+          const next = exists
+            ? localCases.map((item) => (item.id === caseItem.id ? caseItem : item))
+            : [caseItem, ...localCases];
+
+          syncLocalFallback(next.filter(Boolean));
+
+          return caseItem;
+        }
+
+        throw updateError;
       }
     }
-
-    if (!savedCase) {
-      savedCase = caseItem;
-    }
-
-    const localCases = safeReadLocal();
-    const exists = localCases.some((item) => item.id === savedCase.id);
-
-    const next = exists
-      ? localCases.map((item) => (item.id === savedCase.id ? savedCase : item))
-      : [savedCase, ...localCases];
-
-    safeWriteLocal(next.filter(Boolean));
-
-    return savedCase;
   },
 
   async remove(id) {
     if (!id) return { deleted: false, id };
 
-    const localCases = safeReadLocal().filter((item) => item.id !== id);
-    safeWriteLocal(localCases);
+    if (ALLOW_LOCAL_FALLBACK) {
+      const localCases = safeReadLocal().filter((item) => item.id !== id);
+      safeWriteLocal(localCases);
+    }
 
-    return tryBackend(async () => {
+    try {
       const payload = await httpClient.delete(`/ma/cases/${id}`);
       return extractData(payload);
-    }, { deleted: true, id });
+    } catch (error) {
+      if (ALLOW_LOCAL_FALLBACK) {
+        warnLocalFallback(error, 'Could not delete M&A case in backend');
+        return { deleted: true, id };
+      }
+
+      throw error;
+    }
   },
 
   clearLocal() {
