@@ -242,6 +242,11 @@ const maDashboardCss = `
     letter-spacing: -0.055em;
   }
 
+  .ma-score-core strong.is-empty-score {
+    font-size: 30px;
+    color: rgba(226, 232, 240, 0.72);
+  }
+
   .ma-score-copy strong {
     display: block;
     margin-bottom: 8px;
@@ -684,15 +689,10 @@ export function MADashboardPage() {
   const latestCase = safeSavedCases[0] || null;
   const reportCurrency = settings?.reportCurrency || 'EUR';
 
+  const hasDealData = hasSufficientDealData(financials, derived);
   const activeCompanyName = financials?.name?.trim() || 'Sin caso activo';
-
-  const qualityScore = Number.isFinite(derived.qualityScore)
-    ? derived.qualityScore
-    : 0;
-
-  const normalizedScore = Math.max(0, Math.min(100, qualityScore));
-  const scoreAngle = `${normalizedScore * 3.6}deg`;
-
+  const qualityScore = hasDealData ? getSafeQualityScore(derived.qualityScore) : null;
+  const scoreAngle = `${(qualityScore ?? 0) * 3.6}deg`;
   const equityBase = Number.isFinite(derived.equityBase)
     ? derived.equityBase
     : 0;
@@ -795,7 +795,9 @@ export function MADashboardPage() {
                     style={{ '--score-angle': scoreAngle }}
                   >
                     <div className="ma-score-core">
-                      <strong>{normalizedScore}</strong>
+                      <strong className={qualityScore === null ? 'is-empty-score' : ''}>
+                        {qualityScore === null ? '—' : qualityScore}
+                      </strong>
                     </div>
                   </div>
 
@@ -818,7 +820,7 @@ export function MADashboardPage() {
 
                   <SignalRow
                     label="Quality score"
-                    value={`${qualityScore}/100`}
+                    value={qualityScore === null ? 'N/A' : `${qualityScore}/100`}
                   />
 
                   <SignalRow
@@ -856,7 +858,7 @@ export function MADashboardPage() {
 
             <KpiCard
               label="Quality Score"
-              value={`${qualityScore}/100`}
+              value={qualityScore === null ? 'N/A' : `${qualityScore}/100`}
               description="Calidad financiera y transferibilidad"
               icon={Activity}
             />
@@ -1230,7 +1232,32 @@ function SignalRow({ label, value }) {
   );
 }
 
+function hasSufficientDealData(financials, derived) {
+  const hasName = Boolean(financials?.name?.trim());
+  const hasSector = Boolean(financials?.sector);
+  const normalizedEbitda = Number(derived?.normalizedEbitda);
+
+  return hasName && hasSector && Number.isFinite(normalizedEbitda) && normalizedEbitda > 0;
+}
+
+function getSafeQualityScore(score) {
+  const parsed = Number(score);
+
+  if (!Number.isFinite(parsed)) return null;
+
+  return Math.max(0, Math.min(100, Math.round(parsed)));
+}
+
 function getQualitySignal(score) {
+  if (score === null) {
+    return {
+      title: 'Incomplete deal picture',
+      posture: 'Build case',
+      description:
+        'Faltan datos suficientes para una lectura ejecutiva sólida. Completa razón social, sector y EBITDA normalizado antes de presentar conclusiones.'
+    };
+  }
+
   if (score >= 80) {
     return {
       title: 'High-conviction opportunity',
@@ -1267,6 +1294,10 @@ function getQualitySignal(score) {
 }
 
 function getRecommendedAction(score, latestCase) {
+  if (score === null) {
+    return 'Completar los datos mínimos del caso antes de interpretar el score ejecutivo.';
+  }
+
   if (!latestCase) {
     return 'Crear y guardar un primer caso para construir histórico de análisis.';
   }
