@@ -1,5 +1,20 @@
 import React, { useMemo, useState } from 'react';
-import { Download, Eye, FileSearch, Plus, ShieldCheck } from 'lucide-react';
+import {
+  Activity,
+  Archive,
+  CheckCircle2,
+  ClipboardCheck,
+  Download,
+  Eye,
+  FileSearch,
+  FileText,
+  Gauge,
+  Layers3,
+  LockKeyhole,
+  Plus,
+  ShieldCheck,
+  Sparkles
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../../../shared/components/ui/Card.jsx';
 import { EmptyState } from '../../../shared/components/ui/EmptyState.jsx';
@@ -14,6 +29,575 @@ import { useNotifications } from '../../../app/providers/NotificationsProvider.j
 import { useComplianceStore } from '../store/complianceStore.js';
 import { useComplianceEngine } from '../engine/useComplianceEngine.js';
 import { complianceReportsApi } from '../services/complianceReportsApi.js';
+
+const complianceReportCss = `
+  .compliance-report-page {
+    width: min(1540px, 100%);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 38px;
+  }
+
+  .report-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 38px;
+    padding: 38px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background:
+      radial-gradient(circle at 8% 2%, rgba(37, 99, 235, 0.36), transparent 30%),
+      radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.18), transparent 27%),
+      radial-gradient(circle at 60% 110%, rgba(245, 158, 11, 0.10), transparent 30%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97));
+    box-shadow:
+      0 38px 120px rgba(0, 0, 0, 0.42),
+      inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  }
+
+  .report-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 82%);
+    pointer-events: none;
+  }
+
+  .report-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -190px -210px auto;
+    width: 520px;
+    height: 520px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.13), transparent 70%);
+    pointer-events: none;
+  }
+
+  .report-hero-layout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.42fr) minmax(380px, 0.58fr);
+    gap: 36px;
+    align-items: stretch;
+  }
+
+  .report-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 26px;
+  }
+
+  .report-title {
+    margin: 0;
+    max-width: 950px;
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 0.92;
+    letter-spacing: -0.075em;
+  }
+
+  .report-title span {
+    display: block;
+    margin-top: 8px;
+    color: rgba(226, 232, 240, 0.7);
+  }
+
+  .report-copy {
+    max-width: 860px;
+    margin: 26px 0 0;
+    font-size: 17px;
+    line-height: 1.82;
+    color: rgba(203, 213, 225, 0.86);
+  }
+
+  .report-command-bar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 34px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .report-command-item {
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.078);
+    min-width: 0;
+  }
+
+  .report-command-item strong {
+    display: block;
+    margin-top: 8px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .report-signal-card {
+    position: relative;
+    min-height: 100%;
+    border-radius: 32px;
+    padding: 28px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.086), rgba(255,255,255,0.026)),
+      rgba(15, 23, 42, 0.76);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    backdrop-filter: blur(22px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-shadow:
+      0 26px 70px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .report-signal-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 32px;
+    background: radial-gradient(circle at 18% 0%, rgba(96, 165, 250, 0.13), transparent 35%);
+    pointer-events: none;
+  }
+
+  .report-signal-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .report-signal-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  .report-icon-box,
+  .report-card-icon,
+  .report-panel-icon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: rgba(37, 99, 235, 0.16);
+    border: 1px solid rgba(96, 165, 250, 0.24);
+  }
+
+  .report-icon-box {
+    width: 50px;
+    height: 50px;
+  }
+
+  .report-card-icon,
+  .report-panel-icon {
+    width: 46px;
+    height: 46px;
+  }
+
+  .report-signal-title {
+    margin-top: 10px;
+    font-size: 23px;
+    line-height: 1.16;
+    letter-spacing: -0.04em;
+  }
+
+  .report-score-module {
+    display: grid;
+    grid-template-columns: 122px minmax(0, 1fr);
+    gap: 22px;
+    align-items: center;
+    padding: 20px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.047);
+    border: 1px solid rgba(255, 255, 255, 0.085);
+  }
+
+  .report-score-ring {
+    width: 112px;
+    height: 112px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background:
+      conic-gradient(rgba(16, 185, 129, 0.96) var(--score-angle), rgba(255,255,255,0.09) 0deg);
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.28),
+      0 0 34px rgba(16, 185, 129, 0.16);
+  }
+
+  .report-score-core {
+    width: 84px;
+    height: 84px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: rgba(15, 23, 42, 0.97);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .report-score-core strong {
+    font-size: 25px;
+    letter-spacing: -0.055em;
+  }
+
+  .report-score-core strong.is-empty-score {
+    font-size: 30px;
+    color: rgba(226, 232, 240, 0.72);
+  }
+
+  .report-score-copy strong {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .report-score-copy p {
+    margin: 0;
+    line-height: 1.62;
+  }
+
+  .report-signal-table {
+    display: grid;
+    gap: 0;
+  }
+
+  .report-signal-row {
+    display: grid;
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+    gap: 14px;
+    align-items: center;
+    padding: 15px 0;
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
+  }
+
+  .report-signal-row strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .report-section {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .report-section-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 28px;
+    align-items: flex-end;
+  }
+
+  .report-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 11px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.17em;
+    color: rgba(148, 163, 184, 0.96);
+  }
+
+  .report-section-header h2,
+  .report-section-header h3 {
+    margin: 0;
+    letter-spacing: -0.045em;
+  }
+
+  .report-section-header p {
+    max-width: 820px;
+    margin: 11px 0 0;
+    line-height: 1.68;
+  }
+
+  .report-grid {
+    display: grid;
+    gap: 26px;
+    align-items: stretch;
+  }
+
+  .report-grid-kpis {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .report-grid-two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .report-kpi-card,
+  .report-panel,
+  .report-list-card {
+    width: 100%;
+    height: 100%;
+    border-radius: 31px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
+      rgba(15, 23, 42, 0.64);
+    box-shadow:
+      0 24px 70px rgba(0, 0, 0, 0.21),
+      inset 0 1px 0 rgba(255,255,255,0.035);
+  }
+
+  .report-kpi-card {
+    min-height: 188px;
+    padding: 27px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 22px;
+    transition:
+      transform .18s ease,
+      border-color .18s ease,
+      background .18s ease;
+  }
+
+  .report-kpi-card:hover,
+  .report-list-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(96, 165, 250, 0.25);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.078), rgba(255,255,255,0.03)),
+      rgba(15, 23, 42, 0.78);
+  }
+
+  .report-kpi-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  .report-kpi-value {
+    margin-top: 12px;
+    font-size: 25px;
+    font-weight: 790;
+    line-height: 1.12;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+  }
+
+  .report-kpi-card p {
+    margin: 0;
+    line-height: 1.56;
+  }
+
+  .report-panel {
+    padding: 31px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .report-panel-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .report-panel-title {
+    margin: 0;
+    letter-spacing: -0.045em;
+  }
+
+  .report-panel-description {
+    margin: 11px 0 0;
+    line-height: 1.66;
+  }
+
+  .report-builder-stack,
+  .report-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .report-glass-block {
+    padding: 20px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.075);
+  }
+
+  .report-glass-block p {
+    line-height: 1.62;
+  }
+
+  .report-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .report-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .report-mini-metric {
+    min-height: 120px;
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.075);
+  }
+
+  .report-mini-metric strong {
+    display: block;
+    margin-top: 10px;
+    font-size: 23px;
+    line-height: 1.12;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+  }
+
+  .report-list-panel {
+    padding: 31px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .report-list-card {
+    padding: 26px;
+    transition:
+      transform .18s ease,
+      border-color .18s ease,
+      background .18s ease;
+  }
+
+  .report-list-card-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .report-list-card-title {
+    margin: 0;
+    letter-spacing: -0.04em;
+  }
+
+  .report-list-meta {
+    margin: 9px 0 0;
+    line-height: 1.58;
+  }
+
+  .report-summary {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(148, 163, 184, 0.12);
+    line-height: 1.62;
+  }
+
+  .report-chip-row,
+  .report-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .report-empty-wrap {
+    border-radius: 26px;
+    padding: 34px;
+    border: 1px dashed rgba(148, 163, 184, 0.24);
+    background: rgba(255,255,255,0.025);
+  }
+
+  .report-muted-tight {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 1180px) {
+    .report-hero-layout,
+    .report-grid-two {
+      grid-template-columns: 1fr;
+    }
+
+    .report-grid-kpis {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 920px) {
+    .report-command-bar {
+      grid-template-columns: 1fr;
+    }
+
+    .report-section-header,
+    .report-list-card-head {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .compliance-report-page {
+      gap: 28px;
+    }
+
+    .report-hero {
+      padding: 26px;
+      border-radius: 28px;
+    }
+
+    .report-grid-kpis,
+    .report-mini-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .report-kpi-card,
+    .report-panel,
+    .report-list-card,
+    .report-list-panel {
+      border-radius: 24px;
+    }
+
+    .report-score-module {
+      grid-template-columns: 1fr;
+    }
+
+    .report-signal-row {
+      grid-template-columns: 1fr;
+      gap: 7px;
+    }
+
+    .report-signal-row strong {
+      text-align: left;
+    }
+  }
+`;
+
+function getSafeArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function getSafeNumber(value, fallback = 0) {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed)) return fallback;
+
+  return parsed;
+}
+
+function clampScore(value) {
+  return Math.max(0, Math.min(100, Math.round(value)));
+}
 
 function formatDate(value) {
   if (!value) return 'Sin fecha';
@@ -78,6 +662,198 @@ function buildRecommendations({
   return recommendations;
 }
 
+function getReportSignal({ supplier, reportItemsCount, evidenceCount, reviewCount, reportsCount }) {
+  if (!supplier) {
+    return {
+      score: null,
+      title: 'Report base pending',
+      posture: 'Select supplier',
+      description:
+        'Selecciona un proveedor para construir un informe DSS con riesgo, resiliencia, evidencias y revisión humana.'
+    };
+  }
+
+  const riskScore = getSafeNumber(supplier.riskScore);
+  const resilienceScore = getSafeNumber(supplier.resilienceScore);
+  const evidenceBoost = Math.min(18, evidenceCount * 6);
+  const reviewBoost = Math.min(14, reviewCount * 7);
+  const reportBoost = reportsCount > 0 ? 8 : 0;
+
+  const score = clampScore(
+    45 + resilienceScore * 0.22 - riskScore * 0.18 + evidenceBoost + reviewBoost + reportBoost + Math.min(10, reportItemsCount * 2)
+  );
+
+  if (riskScore >= 75) {
+    return {
+      score,
+      title: 'Critical report required',
+      posture: 'Prioritize report',
+      description:
+        'El proveedor presenta riesgo crítico. Genera informe con evidencias, revisiones y recomendaciones defendibles.'
+    };
+  }
+
+  if (evidenceCount === 0) {
+    return {
+      score,
+      title: 'Evidence gap detected',
+      posture: 'Add evidence',
+      description:
+        'El informe puede generarse, pero necesita evidencias para ser defendible ante comité o compliance.'
+    };
+  }
+
+  if (reviewCount === 0) {
+    return {
+      score,
+      title: 'Human review missing',
+      posture: 'Add review trail',
+      description:
+        'Existe base documental, pero conviene añadir revisión humana para reforzar trazabilidad DSS.'
+    };
+  }
+
+  return {
+    score,
+    title: 'Report-ready supplier',
+    posture: 'Generate report',
+    description:
+      'El proveedor cuenta con base suficiente para generar un informe ejecutivo de compliance.'
+  };
+}
+
+function CommandItem({ label, value }) {
+  return (
+    <div className="report-command-item">
+      <div className="kpi-label">{label}</div>
+      <strong>{value}</strong>
+    </div>
+  );
+}
+
+function SignalRow({ label, value }) {
+  return (
+    <div className="report-signal-row">
+      <span className="muted">{label}</span>
+      <strong>{value}</strong>
+    </div>
+  );
+}
+
+function SectionHeader({ kicker, icon: Icon, title, description, right }) {
+  return (
+    <div className="report-section-header">
+      <div>
+        <div className="report-kicker">
+          <Icon size={14} />
+          {kicker}
+        </div>
+
+        <h2>{title}</h2>
+
+        <p className="muted">{description}</p>
+      </div>
+
+      {right ? <div>{right}</div> : null}
+    </div>
+  );
+}
+
+function PanelHeader({ kicker, icon: Icon, title, description }) {
+  return (
+    <div className="report-panel-header">
+      <div>
+        <div className="report-kicker">
+          <Icon size={14} />
+          {kicker}
+        </div>
+
+        <h3 className="report-panel-title">{title}</h3>
+
+        <p className="muted report-panel-description">{description}</p>
+      </div>
+
+      <div className="report-panel-icon">
+        <Icon size={18} />
+      </div>
+    </div>
+  );
+}
+
+function KpiCard({ label, value, description, icon: Icon, tone = '' }) {
+  return (
+    <article className="report-kpi-card">
+      <div className="report-kpi-top">
+        <div>
+          <div className="kpi-label">{label}</div>
+
+          <div className={`report-kpi-value ${tone}`.trim()}>
+            {value}
+          </div>
+        </div>
+
+        <div className="report-card-icon">
+          <Icon size={18} />
+        </div>
+      </div>
+
+      <p className="muted">{description}</p>
+    </article>
+  );
+}
+
+function MiniMetric({ label, value, tone = '' }) {
+  return (
+    <div className="report-mini-metric">
+      <div className="kpi-label">{label}</div>
+      <strong className={tone}>{value}</strong>
+    </div>
+  );
+}
+
+function ReportCard({ report, canCreateReport, onExport, onOpenSupplier }) {
+  return (
+    <article className="report-list-card">
+      <div className="report-list-card-head">
+        <div>
+          <h3 className="report-list-card-title">{report.title}</h3>
+
+          <p className="muted report-list-meta">
+            {formatDate(report.createdAt)} · {report.scope || 'Scope N/A'} ·{' '}
+            {report.status || 'draft'}
+          </p>
+        </div>
+
+        <div className="report-panel-icon">
+          <FileSearch size={18} />
+        </div>
+      </div>
+
+      <p className="muted report-summary">
+        {report.summary || 'Sin resumen registrado.'}
+      </p>
+
+      <div className="report-chip-row">
+        <Badge>{report.status || 'draft'}</Badge>
+        <Badge>{report.items?.length || 0} items</Badge>
+        {!canCreateReport ? <Badge>Solo lectura</Badge> : null}
+      </div>
+
+      <div className="report-card-actions">
+        <Button variant="secondary" onClick={() => onExport(report)}>
+          <Download size={16} />
+          Exportar / Imprimir
+        </Button>
+
+        <Button variant="secondary" onClick={onOpenSupplier}>
+          <Eye size={16} />
+          Ver proveedor
+        </Button>
+      </div>
+    </article>
+  );
+}
+
 export function ComplianceReportPage() {
   const navigate = useNavigate();
   const { pushToast } = useNotifications();
@@ -94,29 +870,51 @@ export function ComplianceReportPage() {
     createReport
   } = useComplianceStore();
 
+  const safeSuppliers = getSafeArray(suppliers);
+  const safeAlerts = getSafeArray(alerts);
+  const safeEvidenceItems = getSafeArray(evidenceItems);
+  const safeReviews = getSafeArray(reviews);
+  const safeReports = getSafeArray(reports);
+
   const canCreateReport = can(PERMISSIONS.CREATE_REPORT);
 
   const [selectedSupplierId, setSelectedSupplierId] = useState(
-    activeSupplierId || suppliers[0]?.id || ''
+    activeSupplierId || safeSuppliers[0]?.id || ''
   );
 
   const engine = useComplianceEngine({
-    suppliers,
-    alerts,
-    evidenceItems,
-    reviews,
+    suppliers: safeSuppliers,
+    alerts: safeAlerts,
+    evidenceItems: safeEvidenceItems,
+    reviews: safeReviews,
     activeSupplierId: selectedSupplierId
   });
 
-  const supplierOptions = suppliers.map((supplier) => ({
+  const supplierOptions = safeSuppliers.map((supplier) => ({
     label: supplier.name,
     value: supplier.id
   }));
 
   const supplierReports = useMemo(() => {
-    if (!selectedSupplierId) return reports;
-    return reports.filter((report) => report.supplierId === selectedSupplierId);
-  }, [reports, selectedSupplierId]);
+    if (!selectedSupplierId) return safeReports;
+
+    return safeReports.filter((report) => report.supplierId === selectedSupplierId);
+  }, [safeReports, selectedSupplierId]);
+
+  const activeSupplierAlerts = getSafeArray(engine.activeSupplierAlerts);
+  const activeSupplierEvidence = getSafeArray(engine.activeSupplierEvidence);
+  const activeSupplierReviews = getSafeArray(engine.activeSupplierReviews);
+  const reportItems = getSafeArray(engine.reportItems);
+
+  const reportSignal = getReportSignal({
+    supplier: engine.activeSupplier,
+    reportItemsCount: reportItems.length,
+    evidenceCount: activeSupplierEvidence.length,
+    reviewCount: activeSupplierReviews.length,
+    reportsCount: supplierReports.length
+  });
+
+  const scoreAngle = `${(reportSignal.score ?? 0) * 3.6}deg`;
 
   function handleSelectSupplier(value) {
     setSelectedSupplierId(value);
@@ -148,7 +946,7 @@ export function ComplianceReportPage() {
       resilienceLevel: engine.activeSupplier.resilienceLevel,
       executiveSummary: engine.executiveSummary,
       evidenceSummary: engine.evidenceSummary,
-      reportItems: engine.reportItems,
+      reportItems,
       recommendations
     });
   }
@@ -202,7 +1000,7 @@ export function ComplianceReportPage() {
 
   function handleExportStoredReport(report) {
     const supplier =
-      suppliers.find((item) => item.id === report.supplierId) ||
+      safeSuppliers.find((item) => item.id === report.supplierId) ||
       engine.activeSupplier;
 
     const enrichedReport = {
@@ -226,138 +1024,206 @@ export function ComplianceReportPage() {
 
   return (
     <div className="page">
-      <Card>
-        <div className="section-title">
-          <div>
-            <h2>Compliance Reports</h2>
-            <p className="muted">
-              Generación de informes ejecutivos DSS con proveedor, alertas,
-              evidencias, revisión humana y recomendaciones defendibles.
-            </p>
-          </div>
+      <style>{complianceReportCss}</style>
 
-          <div className="row wrap">
-            {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-            <Badge>{reports.length} informes</Badge>
-          </div>
-        </div>
-      </Card>
+      <div className="compliance-report-page">
+        <section className="report-hero">
+          <div className="report-hero-layout">
+            <div>
+              <div className="report-badge-row">
+                <Badge>Compliance & Risk</Badge>
+                <Badge>Executive Reports</Badge>
+                {isViewer ? <Badge>Modo solo lectura</Badge> : null}
+                {canCreateReport ? <Badge>Generación permitida</Badge> : null}
+                <Badge>{safeReports.length} informes</Badge>
+              </div>
 
-      <div className="grid-4">
-        <Card>
-          <div className="kpi-label">Proveedor activo</div>
-          <div className="kpi-value" style={{ fontSize: 22 }}>
-            {engine.activeSupplier?.name || 'N/A'}
-          </div>
-          <p className="muted" style={{ marginBottom: 0 }}>
-            Base del informe
-          </p>
-        </Card>
+              <h1 className="report-title">
+                Compliance Reports.
+                <span>Turn evidence into executive decisions.</span>
+              </h1>
 
-        <Card>
-          <div className="kpi-label">Risk Score</div>
-          <div
-            className={`kpi-value ${
-              engine.activeSupplier?.riskLevel?.color || ''
-            }`}
-          >
-            {engine.activeSupplier?.riskScore ?? 0}/100
-          </div>
-          <p className="muted" style={{ marginBottom: 0 }}>
-            {engine.activeSupplier?.riskLevel?.label || 'Sin riesgo'}
-          </p>
-        </Card>
+              <p className="report-copy">
+                Generación de informes ejecutivos DSS con proveedor, alertas,
+                evidencias, revisión humana y recomendaciones defendibles para
+                comité, compliance, legal o dirección.
+              </p>
 
-        <Card>
-          <div className="kpi-label">Resilience</div>
-          <div
-            className={`kpi-value ${
-              engine.activeSupplier?.resilienceLevel?.color || ''
-            }`}
-          >
-            {engine.activeSupplier?.resilienceScore ?? 0}/100
-          </div>
-          <p className="muted" style={{ marginBottom: 0 }}>
-            {engine.activeSupplier?.resilienceLevel?.label || 'Sin datos'}
-          </p>
-        </Card>
+              <div className="report-command-bar">
+                <CommandItem
+                  label="Selected supplier"
+                  value={engine.activeSupplier?.name || 'N/A'}
+                />
 
-        <Card>
-          <div className="kpi-label">Items informe</div>
-          <div className="kpi-value">{engine.reportItems.length}</div>
-          <p className="muted" style={{ marginBottom: 0 }}>
-            Alertas + evidencias + reviews
-          </p>
-        </Card>
-      </div>
+                <CommandItem
+                  label="Generated reports"
+                  value={supplierReports.length}
+                />
 
-      <div className="grid-2">
-        <Card>
-          <h3>Report Builder</h3>
-
-          <div className="stack">
-            <Select
-              label="Proveedor"
-              value={selectedSupplierId}
-              onChange={(e) => handleSelectSupplier(e.target.value)}
-              options={
-                supplierOptions.length > 0
-                  ? supplierOptions
-                  : [{ label: 'Sin proveedores', value: '' }]
-              }
-            />
-
-            <div
-              className="card"
-              style={{ background: 'rgba(255,255,255,0.04)' }}
-            >
-              <div className="row">
-                <ShieldCheck size={18} />
-                <div>
-                  <strong>Resumen ejecutivo</strong>
-                  <p className="muted" style={{ marginBottom: 0 }}>
-                    {engine.executiveSummary}
-                  </p>
-                </div>
+                <CommandItem
+                  label="Report posture"
+                  value={reportSignal.posture}
+                />
               </div>
             </div>
 
-            {canCreateReport ? (
-              <div className="row wrap">
-                <Button
-                  onClick={handleGenerateReport}
-                  disabled={!engine.activeSupplier}
-                >
-                  <Plus size={16} />
-                  Generar informe
-                </Button>
+            <aside className="report-signal-card">
+              <div className="report-signal-inner">
+                <div className="report-signal-top">
+                  <div>
+                    <div className="kpi-label">Report Signal</div>
+                    <div className="report-signal-title">
+                      {reportSignal.title}
+                    </div>
+                  </div>
 
-                <Button
-                  variant="secondary"
-                  onClick={handleExportCurrentReport}
-                  disabled={!engine.activeSupplier}
-                >
-                  <Download size={16} />
-                  Exportar actual
-                </Button>
+                  <div className="report-icon-box">
+                    <FileText size={21} />
+                  </div>
+                </div>
 
-                <Button
-                  variant="secondary"
-                  onClick={handleOpenSupplier}
-                  disabled={!engine.activeSupplier}
-                >
-                  <Eye size={16} />
-                  Ver proveedor
-                </Button>
+                <div className="report-score-module">
+                  <div
+                    className="report-score-ring"
+                    style={{ '--score-angle': scoreAngle }}
+                  >
+                    <div className="report-score-core">
+                      <strong className={reportSignal.score === null ? 'is-empty-score' : ''}>
+                        {reportSignal.score === null ? '—' : reportSignal.score}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="report-score-copy">
+                    <strong>{reportSignal.posture}</strong>
+
+                    <p className="muted">
+                      {reportSignal.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="report-signal-table">
+                  <SignalRow
+                    label="Risk score"
+                    value={`${engine.activeSupplier?.riskScore ?? 0}/100`}
+                  />
+
+                  <SignalRow
+                    label="Resilience"
+                    value={`${engine.activeSupplier?.resilienceScore ?? 0}/100`}
+                  />
+
+                  <SignalRow
+                    label="Report items"
+                    value={reportItems.length}
+                  />
+
+                  <SignalRow
+                    label="Evidence"
+                    value={activeSupplierEvidence.length}
+                  />
+                </div>
               </div>
-            ) : (
-              <>
-                <EmptyState
-                  title="Sin permisos para generar informes"
-                  description="Tu rol actual permite consultar informes, pero no generar nuevos."
-                />
+            </aside>
+          </div>
+        </section>
 
-                <div className="row wrap">
+        <section className="report-section">
+          <SectionHeader
+            kicker="Executive overview"
+            icon={Activity}
+            title="Report readiness at a glance"
+            description="Resumen rápido del proveedor activo, riesgo, resiliencia e items disponibles para construir informe."
+          />
+
+          <div className="report-grid report-grid-kpis">
+            <KpiCard
+              label="Proveedor activo"
+              value={engine.activeSupplier?.name || 'N/A'}
+              description="Base del informe"
+              icon={LockKeyhole}
+            />
+
+            <KpiCard
+              label="Risk Score"
+              value={`${engine.activeSupplier?.riskScore ?? 0}/100`}
+              description={engine.activeSupplier?.riskLevel?.label || 'Sin riesgo'}
+              icon={Gauge}
+              tone={engine.activeSupplier?.riskLevel?.color || ''}
+            />
+
+            <KpiCard
+              label="Resilience"
+              value={`${engine.activeSupplier?.resilienceScore ?? 0}/100`}
+              description={engine.activeSupplier?.resilienceLevel?.label || 'Sin datos'}
+              icon={ShieldCheck}
+              tone={engine.activeSupplier?.resilienceLevel?.color || ''}
+            />
+
+            <KpiCard
+              label="Items informe"
+              value={reportItems.length}
+              description="Alertas + evidencias + reviews"
+              icon={ClipboardCheck}
+            />
+          </div>
+        </section>
+
+        <section className="report-grid report-grid-two">
+          <Card className="report-panel">
+            <PanelHeader
+              kicker="Report builder"
+              icon={Plus}
+              title="Report Builder"
+              description="Selecciona proveedor, revisa el resumen ejecutivo y genera o exporta el informe actual."
+            />
+
+            <div className="report-builder-stack">
+              <Select
+                label="Proveedor"
+                value={selectedSupplierId}
+                onChange={(e) => handleSelectSupplier(e.target.value)}
+                options={
+                  supplierOptions.length > 0
+                    ? supplierOptions
+                    : [{ label: 'Sin proveedores', value: '' }]
+                }
+              />
+
+              <div className="report-glass-block">
+                <div className="row">
+                  <ShieldCheck size={18} />
+
+                  <div>
+                    <strong>Resumen ejecutivo</strong>
+
+                    <p className="muted report-muted-tight" style={{ marginTop: 8 }}>
+                      {engine.executiveSummary}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {canCreateReport ? (
+                <div className="report-action-row">
+                  <Button
+                    onClick={handleGenerateReport}
+                    disabled={!engine.activeSupplier}
+                  >
+                    <Plus size={16} />
+                    Generar informe
+                  </Button>
+
+                  <Button
+                    variant="secondary"
+                    onClick={handleExportCurrentReport}
+                    disabled={!engine.activeSupplier}
+                  >
+                    <Download size={16} />
+                    Exportar actual
+                  </Button>
+
                   <Button
                     variant="secondary"
                     onClick={handleOpenSupplier}
@@ -367,132 +1233,147 @@ export function ComplianceReportPage() {
                     Ver proveedor
                   </Button>
                 </div>
-              </>
-            )}
-          </div>
-        </Card>
-
-        <Card>
-          <h3>Report Content</h3>
-
-          <div className="grid-2">
-            <div
-              className="card"
-              style={{ background: 'rgba(255,255,255,0.04)' }}
-            >
-              <div className="kpi-label">Alertas proveedor</div>
-              <div className="kpi-value">
-                {engine.activeSupplierAlerts.length}
-              </div>
-            </div>
-
-            <div
-              className="card"
-              style={{ background: 'rgba(255,255,255,0.04)' }}
-            >
-              <div className="kpi-label">Evidencias</div>
-              <div className="kpi-value">
-                {engine.activeSupplierEvidence.length}
-              </div>
-            </div>
-
-            <div
-              className="card"
-              style={{ background: 'rgba(255,255,255,0.04)' }}
-            >
-              <div className="kpi-label">Reviews</div>
-              <div className="kpi-value">
-                {engine.activeSupplierReviews.length}
-              </div>
-            </div>
-
-            <div
-              className="card"
-              style={{ background: 'rgba(255,255,255,0.04)' }}
-            >
-              <div className="kpi-label">Cobertura</div>
-              <div className="kpi-value">
-                {engine.evidenceSummary.coverageLabel}
-              </div>
-            </div>
-          </div>
-
-          <p className="muted">
-            El reporte funciona como soporte a la decisión: organiza evidencia,
-            alertas y revisión humana, pero no sustituye el criterio legal o de
-            compliance.
-          </p>
-        </Card>
-      </div>
-
-      <Card>
-        <div className="section-title">
-          <div>
-            <h3>Generated Reports</h3>
-            <p className="muted" style={{ marginBottom: 0 }}>
-              Historial de reportes creados para el proveedor seleccionado.
-            </p>
-          </div>
-
-          <Badge>{supplierReports.length} resultados</Badge>
-        </div>
-
-        {supplierReports.length === 0 ? (
-          <EmptyState
-            title="No hay informes generados"
-            description={
-              canCreateReport
-                ? 'Genera el primer informe de compliance para este proveedor.'
-                : 'No hay informes disponibles para este proveedor.'
-            }
-          />
-        ) : (
-          <div className="stack">
-            {supplierReports.map((report) => (
-              <div
-                key={report.id}
-                className="card"
-                style={{ background: 'rgba(255,255,255,0.04)' }}
-              >
-                <div className="section-title">
-                  <div>
-                    <h3 style={{ marginBottom: 6 }}>{report.title}</h3>
-                    <p className="muted" style={{ marginBottom: 0 }}>
-                      {formatDate(report.createdAt)} · {report.scope} ·{' '}
-                      {report.status}
-                    </p>
+              ) : (
+                <>
+                  <div className="report-empty-wrap">
+                    <EmptyState
+                      title="Sin permisos para generar informes"
+                      description="Tu rol actual permite consultar informes, pero no generar nuevos."
+                    />
                   </div>
 
-                  <FileSearch size={20} />
-                </div>
+                  <div className="report-action-row">
+                    <Button
+                      variant="secondary"
+                      onClick={handleOpenSupplier}
+                      disabled={!engine.activeSupplier}
+                    >
+                      <Eye size={16} />
+                      Ver proveedor
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </Card>
 
-                <p className="muted">{report.summary}</p>
+          <Card className="report-panel">
+            <PanelHeader
+              kicker="Report content"
+              icon={Archive}
+              title="Report Content"
+              description="Elementos que alimentan el informe ejecutivo del proveedor seleccionado."
+            />
 
-                <div className="row wrap">
-                  <Badge>{report.status}</Badge>
-                  <Badge>{report.items?.length || 0} items</Badge>
-                  {!canCreateReport ? <Badge>Solo lectura</Badge> : null}
-                </div>
+            <div className="report-mini-grid">
+              <MiniMetric
+                label="Alertas proveedor"
+                value={activeSupplierAlerts.length}
+              />
 
-                <div className="row wrap" style={{ marginTop: 16 }}>
-                  <Button
-                    variant="secondary"
-                    onClick={() => handleExportStoredReport(report)}
-                  >
-                    <Download size={16} />
-                    Exportar / Imprimir
-                  </Button>
+              <MiniMetric
+                label="Evidencias"
+                value={activeSupplierEvidence.length}
+                tone={activeSupplierEvidence.length > 0 ? 'text-success' : ''}
+              />
 
-                  <Button variant="secondary" onClick={handleOpenSupplier}>
-                    <Eye size={16} />
-                    Ver proveedor
-                  </Button>
-                </div>
+              <MiniMetric
+                label="Reviews"
+                value={activeSupplierReviews.length}
+              />
+
+              <MiniMetric
+                label="Cobertura"
+                value={engine.evidenceSummary?.coverageLabel || 'Sin datos'}
+              />
+            </div>
+
+            <div className="report-glass-block">
+              <p className="muted report-muted-tight">
+                El reporte funciona como soporte a la decisión: organiza
+                evidencia, alertas y revisión humana, pero no sustituye el
+                criterio legal o de compliance.
+              </p>
+            </div>
+          </Card>
+        </section>
+
+        <section className="report-section">
+          <SectionHeader
+            kicker="Generated reports"
+            icon={FileSearch}
+            title="Generated Reports"
+            description="Historial de reportes creados para el proveedor seleccionado."
+            right={<Badge>{supplierReports.length} resultados</Badge>}
+          />
+
+          <Card className="report-list-panel">
+            {supplierReports.length === 0 ? (
+              <div className="report-empty-wrap">
+                <EmptyState
+                  title="No hay informes generados"
+                  description={
+                    canCreateReport
+                      ? 'Genera el primer informe de compliance para este proveedor.'
+                      : 'No hay informes disponibles para este proveedor.'
+                  }
+                />
               </div>
-            ))}
+            ) : (
+              <div className="report-list">
+                {supplierReports.map((report) => (
+                  <ReportCard
+                    key={report.id}
+                    report={report}
+                    canCreateReport={canCreateReport}
+                    onExport={handleExportStoredReport}
+                    onOpenSupplier={handleOpenSupplier}
+                  />
+                ))}
+              </div>
+            )}
+          </Card>
+        </section>
+
+        <section className="report-section">
+          <SectionHeader
+            kicker="Operating loop"
+            icon={Layers3}
+            title="Report operating base"
+            description="El informe conecta proveedor, alertas, evidencias, revisiones y recomendaciones para una decisión defendible."
+          />
+
+          <div className="report-grid report-grid-kpis">
+            <KpiCard
+              label="Proveedores"
+              value={safeSuppliers.length}
+              description="Base monitorizada"
+              icon={ShieldCheck}
+            />
+
+            <KpiCard
+              label="Alertas"
+              value={safeAlerts.length}
+              description="Señales disponibles"
+              icon={FileSearch}
+            />
+
+            <KpiCard
+              label="Evidencias"
+              value={safeEvidenceItems.length}
+              description="Soporte documental"
+              icon={CheckCircle2}
+            />
+
+            <KpiCard
+              label="Estado"
+              value={reportSignal.posture}
+              description="Postura ejecutiva actual"
+              icon={Sparkles}
+            />
           </div>
-        )}
-      </Card>
+        </section>
+      </div>
     </div>
   );
 }
