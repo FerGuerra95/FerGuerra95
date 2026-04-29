@@ -22,7 +22,7 @@ Estado:
 
 Conclusión:
 
-M&A está prácticamente listo como MVP demostrable.  
+M&A está prácticamente listo como MVP demostrable.
 Queda pendiente revisión visual final del informe/CIM exportado y, si procede, pequeños ajustes de presentación/metodología.
 
 
@@ -206,3 +206,146 @@ Commit:
 
 ```text
 981e240 fix: harden ma cases backend persistence
+
+PASADO
+
+---
+
+### Tests roles y multi-tenancy
+
+Archivo:
+
+- `tests/ceos-roles-multitenancy.spec.js`
+
+Contempla:
+
+- Admin Org A crea caso M&A.
+- User Org A puede ver según permisos.
+- Viewer no puede crear/editar/borrar.
+- Org B no ve casos de Org A.
+- Separación por organización.
+
+No repetir estos tests salvo ampliación específica.
+
+---
+
+### Test UI de persistencia M&A
+
+Archivo:
+
+- `tests/ceos-ma-ui-persistence.spec.js`
+
+Valida:
+
+- Login por interfaz.
+- Abrir `/ma/valuation`.
+- Crear/guardar caso M&A desde UI.
+- Ir a `/ma/deals`.
+- Confirmar que aparece.
+- Refrescar.
+- Confirmar que sigue.
+- Limpiar sesión.
+- Volver a iniciar sesión.
+- Confirmar que el deal sigue existiendo.
+
+Resultado local:
+
+```text
+1 passed
+
+cf1818a test: add ma ui persistence qa
+
+---
+
+## QA online validado
+
+Se ejecutaron online contra:
+
+```text
+https://app.theceosos.com
+
+3 passed
+
+---
+
+## Pendiente real para cerrar M&A MVP al 100%
+
+### 1. Revisión visual del informe/CIM
+
+Pendiente revisar manualmente:
+
+- Portada / cabecera.
+- Nombre de empresa.
+- Sector.
+- Equity Value.
+- Quality Score.
+- Risk.
+- Resumen ejecutivo.
+- Waterfall.
+- Métricas financieras.
+- Disclaimer final.
+- Aspecto al guardar como PDF.
+
+Decisión:
+
+- Si se ve profesional: no tocar.
+- Si se ve mejorable: mejorar únicamente `maReportsApi.js`.
+
+---
+
+### 2. Metodología visible
+
+Comprobar si el usuario entiende:
+
+- Quality Score.
+- Risk Level.
+- Adjusted Multiple.
+- EBITDA normalizado.
+- Net Debt.
+- Working Capital Adjustment.
+- Waterfall.
+
+Si ya se entiende visualmente, no tocar.
+Si no, añadir una explicación breve en pantalla o informe.
+
+---
+
+### 3. Datos demo premium
+
+Valorar si los casos demo actuales son suficientemente buenos.
+
+Casos recomendados si se decide mejorar:
+
+- Empresa industrial rentable.
+- SaaS / software con crecimiento.
+- Empresa familiar con dependencia del dueño.
+
+No crear nuevos datos demo si los existentes ya sirven para demo.
+
+---
+
+## Siguiente paso recomendado
+
+FASE 9.5 — Revisión visual del informe/CIM M&A.
+
+Procedimiento:
+
+1. Entrar en `https://app.theceosos.com`.
+2. Ir a `/ma/valuation`.
+3. Crear o cargar un caso M&A.
+4. Exportar reporte / CIM.
+5. Guardar como PDF desde navegador.
+6. Revisar si el resultado es presentable para demo.
+
+---
+
+## Estado de cierre
+
+Estado actual:
+
+```text
+M&A MVP: CASI CERRADO
+
+1. Revisar visualmente informe/PDF.
+2. Confirmar que no requiere mejora urgente.
+3. Si está correcto, marcar M&A MVP como CERRADO.

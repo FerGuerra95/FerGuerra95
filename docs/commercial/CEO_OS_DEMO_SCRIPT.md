@@ -1,260 +1,374 @@
 # CEO’s OS — Guion de Demo Comercial
 
-Estado: Beta ejecutiva privada  
-Duración estimada: 8-12 minutos  
-Objetivo: presentar CEO’s OS como una infraestructura privada de inteligencia corporativa para decisiones de alto impacto.
+Estado: Beta ejecutiva privada
+Duración recomendada: 8-12 minutos
+Objetivo: presentar CEO’s OS como plataforma privada de inteligencia corporativa para decisiones de alto impacto.
 
 ---
 
 ## 1. Objetivo de la demo
 
-El objetivo de esta demo no es enseñar todas las funciones, sino transmitir tres ideas:
+El objetivo de esta demo no es enseñar una herramienta más.
 
-1. CEO’s OS ya es una plataforma real, online y privada.
-2. Resuelve el problema de la información empresarial dispersa.
-3. Tiene una base clara para evolucionar hacia agentes IA operativos sobre datos corporativos privados.
+El objetivo es mostrar cómo CEO’s OS puede convertirse en una infraestructura privada para que empresas, fundadores, inversores y operadores conviertan información dispersa en decisiones ejecutivas más claras.
+
+CEO’s OS ayuda a ordenar, analizar y presentar información crítica relacionada con:
+
+- M&A.
+- Compliance.
+- Funding.
+- Riesgo.
+- Reporting ejecutivo.
+- Documentación estratégica.
+- Decisiones corporativas de alto impacto.
 
 Mensaje central:
 
-> CEO’s OS convierte datos dispersos en inteligencia ejecutiva.
+> CEO’s OS convierte datos dispersos en inteligencia ejecutiva privada.
 
 ---
 
-## 2. Antes de empezar la demo
+## 2. Perfil del interlocutor
 
-Preparar:
+La demo está pensada para:
 
-- Navegador limpio.
-- Landing pública abierta: https://theceosos.com
-- App privada abierta: https://app.theceosos.com/login
-- Usuario demo de producción preparado.
-- No mostrar contraseñas.
-- No abrir Render, GitHub, variables de entorno ni documentación técnica sensible durante la demo.
-
----
-
-## 3. Apertura — 60 segundos
-
-Mensaje recomendado:
-
-“CEO’s OS es un sistema operativo ejecutivo privado para inteligencia corporativa. Está pensado para empresas, fundadores, inversores y operadores que necesitan tomar mejores decisiones sobre crecimiento, financiación, riesgo, compliance y M&A.
-
-El problema que resuelve es muy común: la información crítica de una empresa suele estar repartida en hojas de cálculo, emails, carpetas, documentos y conversaciones. Eso ralentiza decisiones importantes.
-
-CEO’s OS busca centralizar esa inteligencia en una plataforma privada, segura y preparada para operar con IA sobre datos propios.”
+- CEOs.
+- Fundadores.
+- CFOs.
+- Inversores.
+- Search funds.
+- Family offices.
+- Operadores.
+- Consultoras boutique.
+- Equipos de M&A.
+- Empresas en crecimiento.
+- Empresas preparando financiación.
+- Empresas con necesidad de ordenar riesgos, compliance y documentación.
 
 ---
 
-## 4. Landing pública — 2 minutos
+## 3. Mensaje de apertura
+
+“CEO’s OS nace de un problema muy común en empresas en crecimiento: la información importante está repartida entre hojas de cálculo, documentos, emails, carpetas y conversaciones internas.
+
+Eso provoca decisiones lentas, pérdida de contexto, duplicidad de trabajo y dificultad para preparar procesos de financiación, compliance o M&A.
+
+CEO’s OS busca resolver ese problema creando una capa privada de inteligencia ejecutiva.
+
+No sustituye al CEO, al CFO, al equipo legal ni a los asesores externos. Les da una infraestructura para trabajar con más claridad, más control y mejor trazabilidad.”
+
+---
+
+## 4. Recorrido de la demo
+
+---
+
+### 4.1. Landing pública
 
 URL:
 
 https://theceosos.com
 
-### Qué enseñar
+Mensaje a transmitir:
+
+“La landing pública presenta CEO’s OS como una beta ejecutiva privada. La idea no es venderlo todavía como un producto masivo, sino como una plataforma seria, controlada y pensada para decisiones sensibles.”
+
+Puntos a enseñar:
 
 - Hero principal.
-- Mensaje:
-  “The private executive operating system for company intelligence.”
-- CTA:
-  “Solicitar acceso a la Beta Ejecutiva”
-- Sección Attack / Defense.
+- Mensaje central.
+- Ataque / Defensa.
 - AI Operating Agents.
 - Sovereign Intelligence.
+- Acceso beta.
+- Acceso directo para usuarios registrados.
 
-### Qué decir
+Frase sugerida:
 
-“Esta es la capa pública. No vendemos CEO’s OS como una herramienta genérica, sino como una infraestructura ejecutiva.
-
-La idea de Attack / Defense resume el enfoque:
-
-- Ataque: crecimiento, M&A, financiación.
-- Defensa: compliance, riesgo, control, reporting.
-- Capa de IA: agentes operativos que ayudan a analizar, sintetizar y ejecutar.”
-
-Mensaje clave:
-
-> La claridad es la máxima ventaja competitiva.
+“La propuesta es sencilla: deje de gestionar datos dispersos y empiece a dictar la estrategia desde una infraestructura privada.”
 
 ---
 
-## 5. Acceso privado — 1 minuto
+### 4.2. Acceso privado
 
 URL:
 
 https://app.theceosos.com/login
 
-### Qué enseñar
+Mensaje a transmitir:
+
+“El acceso privado ya funciona con login real. No estamos mostrando una maqueta estática ni una presentación. Hay una aplicación desplegada, con autenticación, rutas protegidas y separación de datos por organización.”
+
+Puntos a enseñar:
 
 - Login limpio.
 - Sin credenciales demo visibles.
-- Acceso mediante usuario real.
+- Acceso privado.
+- Rutas protegidas.
+- App desplegada online.
 
-### Qué decir
+Frase sugerida:
 
-“La app privada no es una maqueta pública. Tiene login real, rutas protegidas y separación de datos por organización.
-
-La arquitectura está preparada para que cada organización trabaje en su propio entorno lógico.”
-
-No mencionar contraseñas reales.
+“CEO’s OS está diseñado desde el principio como una plataforma privada, no como una demo pública abierta.”
 
 ---
 
-## 6. Dashboard M&A — 2 minutos
+### 4.3. M&A Intelligence
 
-Ruta:
+Ruta sugerida:
 
+```txt
 /ma/dashboard
 
-### Qué enseñar
+Mensaje a transmitir:
 
-- Dashboard M&A.
-- Repositorio de deals.
-- Valoración.
-- Waterfall.
-- Buyer matching.
-- CIM.
+“El primer workspace prioritario es M&A Intelligence. El objetivo es ayudar a analizar oportunidades de adquisición, estructurar casos, valorar empresas, preparar documentación y construir una visión ejecutiva del deal.”
 
-### Qué decir
+Puntos a enseñar:
 
-“El módulo M&A Intelligence está pensado para analizar oportunidades de adquisición, valoración, sinergias y documentación estratégica.
+Dashboard M&A.
+Valuation.
+Waterfall.
+Buyer Matching.
+CIM / Report.
+Deals Repository.
+Persistencia de casos.
 
-La idea es que un operador, inversor o empresa pueda centralizar el análisis de una operación y tomar decisiones más defendibles.”
+Frase sugerida:
 
-Mensaje clave:
+“En lugar de tener la valoración por un lado, los comparables por otro, las notas en otro documento y el informe en otra carpeta, CEO’s OS centraliza el proceso en un único workspace ejecutivo.”
 
-> Menos hojas sueltas. Más análisis estructurado.
+4.4. Valuation
 
----
+Ruta sugerida:
 
-## 7. Compliance & Risk — 2 minutos
+/ma/valuation
 
-Ruta:
+Mensaje a transmitir:
+
+“La parte de valoración permite trabajar escenarios y convertir inputs financieros en una lectura ejecutiva. No pretende sustituir a un asesor financiero, sino ayudar a ordenar el análisis y acelerar la toma de decisiones.”
+
+Puntos a enseñar:
+
+Inputs financieros.
+Resultado de valoración.
+Sensibilidad.
+Riesgos.
+Señales ejecutivas.
+
+Frase sugerida:
+
+“Lo importante no es solo calcular un número, sino entender qué hipótesis sostienen ese número y qué riesgos pueden alterar la decisión.”
+
+4.5. Waterfall
+
+Ruta sugerida:
+
+/ma/waterfall
+
+Mensaje a transmitir:
+
+“El waterfall ayuda a visualizar cómo se distribuye el valor de una operación y cómo diferentes estructuras pueden afectar al resultado final.”
+
+Puntos a enseñar:
+
+Escenario financiero.
+Estructura de deal.
+Distribución de valor.
+Lectura ejecutiva.
+
+Frase sugerida:
+
+“En una operación, no basta con saber si una empresa parece atractiva. Hay que entender cómo se reparte el valor, dónde están los riesgos y qué estructura tiene más sentido.”
+
+4.6. Buyer Matching
+
+Ruta sugerida:
+
+/ma/matching
+
+Mensaje a transmitir:
+
+“Buyer Matching está pensado para identificar perfiles compradores o estratégicos que podrían tener encaje con una oportunidad.”
+
+Puntos a enseñar:
+
+Tabla/grid de compradores.
+Encaje estratégico.
+Criterios de matching.
+Priorización.
+
+Frase sugerida:
+
+“El objetivo es pasar de una lista desordenada de posibles compradores a una lectura más estratégica: quién encaja, por qué encaja y qué prioridad tiene.”
+
+4.7. CIM / Report
+
+Ruta sugerida:
+
+/ma/cim
+
+Mensaje a transmitir:
+
+“El módulo de CIM y reportes permite convertir el análisis en un documento presentable, con formato más profesional y orientado a decisión.”
+
+Puntos a enseñar:
+
+Report premium.
+Resumen ejecutivo.
+Tesis.
+Riesgos.
+Señales clave.
+Exportación imprimible.
+
+Frase sugerida:
+
+“Una de las claves del producto es transformar análisis interno en materiales que puedan servir para comité, inversores, socios o revisión ejecutiva.”
+
+4.8. Compliance & Risk
+
+Ruta sugerida:
 
 /compliance/dashboard
 
-### Qué enseñar
+Mensaje a transmitir:
 
-- Dashboard compliance.
-- Proveedores.
-- Mapa de riesgos.
-- Alertas.
-- Evidencias.
-- Reviews.
-- Reports.
+“El segundo workspace es Compliance & Risk. Está pensado para empresas que necesitan ordenar proveedores, evidencias, alertas, revisiones y reporting de cumplimiento.”
 
-### Qué decir
+Puntos a enseñar:
 
-“Compliance & Risk representa la parte defensiva del sistema. Muchas empresas tienen riesgo documental y operativo porque no tienen trazabilidad clara de proveedores, evidencias, alertas o revisiones.
+Dashboard Compliance.
+Proveedores.
+Riesgos.
+Evidencias.
+Alerts.
+Reviews.
+Reports.
 
-CEO’s OS permite ordenar esa información y convertirla en una capa de control.”
+Frase sugerida:
 
-Mensaje clave:
+“Muchas empresas no fallan porque no tengan información, sino porque esa información está dispersa, no trazada o no preparada para una revisión interna o externa.”
 
-> La defensa también es ventaja competitiva.
+4.9. Funding Workspace
 
----
-
-## 8. Funding Workspace — 2 minutos
-
-Ruta:
+Ruta sugerida:
 
 /funding/dashboard
 
-### Qué enseñar
+Mensaje a transmitir:
 
-- Funding dashboard.
-- Investor readiness.
-- Capital structure.
-- Fundraising scenarios.
-- Data room.
+“El tercer workspace es Funding. Está pensado para preparar financiación, investor readiness, escenarios, estructura de capital y data room.”
 
-### Qué decir
+Puntos a enseñar:
 
-“El Funding Workspace está orientado a empresas que quieren preparar financiación, ronda, deuda, inversión o conversaciones con socios estratégicos.
+Funding Dashboard.
+Readiness.
+Capital Structure.
+Scenarios.
+Data Room.
+Funding Memo.
+Investor Data Room.
 
-Aquí la plataforma ayuda a ordenar narrativa, escenarios, estructura de capital y documentación clave.”
+Frase sugerida:
 
-Mensaje clave:
+“Antes de hablar con inversores o financiadores, una empresa necesita ordenar su narrativa, sus números, sus riesgos y su documentación. Funding Workspace ayuda a preparar esa base.”
 
-> Una empresa preparada transmite más confianza.
+4.10. Seguridad, privacidad y multi-tenancy
 
----
+Mensaje a transmitir:
 
-## 9. Seguridad y privacidad — 1 minuto
+“La plataforma está pensada desde el inicio con separación por organización. Cada organización trabaja en su propio entorno lógico y los datos de negocio deben filtrarse siempre por organizationId desde backend.”
 
-### Qué decir
+Puntos a explicar sin entrar en exceso técnico:
 
-“CEO’s OS está construido bajo una premisa: la inteligencia de una empresa debe seguir siendo suya.
+Login real.
+Rutas protegidas.
+Separación por organización.
+SQLite persistente en producción.
+Variables sensibles fuera del código.
+Sin credenciales demo en frontend.
+Backups iniciales documentados.
 
-La arquitectura actual ya trabaja con login real, rutas protegidas y separación por organización. Los datos no deben mezclarse entre clientes ni depender del frontend para decidir qué ve cada usuario.”
+Frase sugerida:
 
-Mensaje clave:
+“El principio es claro: sus datos no alimentan modelos públicos. Su inteligencia es suya.”
 
-> Private by design. Secure by architecture.
+5. Qué está funcional actualmente
 
----
+CEO’s OS cuenta actualmente con:
 
-## 10. Cierre — 60 segundos
+Landing pública activa.
+App privada desplegada.
+Login real.
+Dominio profesional.
+M&A Workspace avanzado.
+Compliance Workspace base.
+Funding Workspace base.
+Reports premium imprimibles.
+Persistencia M&A reforzada.
+QA online validado.
+Arquitectura multi-tenant.
+Seguridad inicial para demo privada.
+Backup manual documentado.
+6. Qué no se debe prometer todavía
 
-Mensaje recomendado:
-
-“Hoy CEO’s OS está en beta ejecutiva privada. No lo presentamos como producto final cerrado, sino como una plataforma funcional con base técnica real, dominio profesional, app privada y roadmap claro.
-
-El siguiente paso es trabajar con usuarios seleccionados para validar casos de uso reales: M&A, compliance, funding, reporting y agentes IA operativos.”
-
-Cierre comercial:
-
-“Buscamos empresas, operadores o inversores que quieran convertir información dispersa en inteligencia ejecutiva privada.”
-
----
-
-## 11. Qué NO decir en la demo
+CEO’s OS todavía no debe presentarse como producto final cerrado.
 
 No prometer todavía:
 
-- IA real completa en producción.
-- RAG documental avanzado.
-- Integraciones bancarias reales.
-- Automatizaciones complejas terminadas.
-- Sustitución de abogados, asesores fiscales o financieros.
-- Certificación compliance formal.
-- Reporting financiero auditado.
-- Escalabilidad enterprise definitiva.
+IA real completa en producción.
+RAG documental avanzado.
+Integraciones bancarias reales.
+Automatizaciones complejas.
+Certificación compliance formal.
+Reporting financiero auditado.
+Sustitución de asesores legales, fiscales o financieros.
+Marketplace de inversores.
+Heritage OS.
+PostgreSQL enterprise.
+Seguridad enterprise completa.
 
-Forma correcta de decirlo:
+Mensaje correcto:
 
-“Está en roadmap.”
+“CEO’s OS está en beta ejecutiva privada, con una base técnica real, una aplicación funcional y un roadmap claro de evolución.”
 
-“Está contemplado para siguientes fases.”
+7. Cierre comercial
 
-“La base técnica ya está preparada, pero no se debe vender como cerrado todavía.”
+Mensaje sugerido:
 
----
+“CEO’s OS está diseñado para empresas y operadores que necesitan tomar mejores decisiones con información sensible.
 
-## 12. Estructura rápida de 8 minutos
+La primera fase busca validar el producto con casos reales controlados, especialmente en M&A, compliance y funding.
 
-1. Landing pública — 1:30 min.
-2. Login privado — 1 min.
-3. M&A — 2 min.
-4. Compliance — 1:30 min.
-5. Funding — 1:30 min.
-6. Seguridad y cierre — 1 min.
+No buscamos vender una promesa vacía. Buscamos construir, junto a usuarios beta seleccionados, una infraestructura privada que convierta datos dispersos en inteligencia ejecutiva.”
 
----
+8. Preguntas frecuentes
+¿CEO’s OS sustituye a un CEO, CFO o asesor?
 
-## 13. Estructura completa de 12 minutos
+No. CEO’s OS no sustituye a directivos ni asesores. Les da una infraestructura privada para ordenar información, analizar escenarios y tomar decisiones con más claridad.
 
-1. Contexto del problema — 1 min.
-2. Landing pública — 2 min.
-3. Login privado — 1 min.
-4. M&A Intelligence — 2 min.
-5. Compliance & Risk — 2 min.
-6. Funding Workspace — 2 min.
-7. Seguridad, privacidad y cierre — 2 min.
+¿Ya tiene IA real conectada?
 
----
+La plataforma está preparada conceptualmente para evolucionar hacia agentes IA operativos, pero no debe venderse todavía como una solución de IA completa en producción.
 
-## 14. Frase final recomendada
+¿Los datos alimentan modelos públicos?
 
-CEO’s OS no es solo una app. Es una infraestructura privada para que una empresa pueda ver mejor, decidir antes y operar con más control.
+El posicionamiento del producto es privado por diseño. La promesa central es que la inteligencia de la empresa pertenece a la empresa.
+
+¿Está listo para grandes empresas?
+
+Está en beta ejecutiva privada. Tiene base técnica real, pero antes de vender enterprise completo deben reforzarse seguridad, auditoría, contratos, RGPD, backups automatizados y procedimientos operativos.
+
+¿Cuál es el primer módulo vendible?
+
+M&A Intelligence es el primer módulo prioritario para convertirlo en MVP vendible y repetible.
+
+9. Frase final
+
+CEO’s OS no es un CRM, un gestor documental ni una hoja de cálculo mejorada.
+
+Es una infraestructura privada para decisiones corporativas de alto impacto.
+
+Private by design.
+Secure by architecture.
+Built for high-stakes decisions.
