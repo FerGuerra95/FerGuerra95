@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  ArrowRight,
   BriefcaseBusiness,
   Building2,
   CheckCircle2,
@@ -237,6 +236,11 @@ const buyerMatchingCss = `
   .buyer-score-core strong {
     font-size: 25px;
     letter-spacing: -0.055em;
+  }
+
+  .buyer-score-core strong.is-empty-score {
+    font-size: 30px;
+    color: rgba(226, 232, 240, 0.72);
   }
 
   .buyer-score-copy strong {
@@ -567,9 +571,11 @@ export function BuyerMatchingPage() {
   const buyerMatches = Array.isArray(derived.buyerMatches)
     ? derived.buyerMatches
     : [];
+
   const topBuyer = buyerMatches[0] || null;
-  const topScore = getNumericScore(topBuyer?.fitScore);
-  const scoreAngle = `${Math.max(0, Math.min(100, topScore)) * 3.6}deg`;
+  const hasTopBuyer = Boolean(topBuyer);
+  const topScore = hasTopBuyer ? getBuyerScore(topBuyer) : null;
+  const scoreAngle = `${(topScore ?? 0) * 3.6}deg`;
   const activeCompanyName = financials?.name?.trim() || 'Sin target activo';
   const buyerSignal = getBuyerSignal(topScore, buyerMatches.length);
 
@@ -580,6 +586,9 @@ export function BuyerMatchingPage() {
   const financialBuyers = buyerMatches.filter((buyer) =>
     String(buyer.type || '').toLowerCase().includes('financial')
   );
+
+  const topBuyerLabel = getBuyerLabel(topBuyer);
+  const topBuyerType = topBuyer?.type || 'N/A';
 
   return (
     <div className="page">
@@ -647,7 +656,9 @@ export function BuyerMatchingPage() {
                     style={{ '--score-angle': scoreAngle }}
                   >
                     <div className="buyer-score-core">
-                      <strong>{topBuyer ? topScore : '—'}</strong>
+                      <strong className={hasTopBuyer ? '' : 'is-empty-score'}>
+                        {hasTopBuyer ? topScore : '—'}
+                      </strong>
                     </div>
                   </div>
 
@@ -663,17 +674,17 @@ export function BuyerMatchingPage() {
                 <div className="buyer-signal-table">
                   <SignalRow
                     label="Top match"
-                    value={topBuyer?.name || 'Pendiente'}
+                    value={hasTopBuyer ? topBuyerLabel : 'Pendiente'}
                   />
 
                   <SignalRow
                     label="Buyer type"
-                    value={topBuyer?.type || 'N/A'}
+                    value={hasTopBuyer ? topBuyerType : 'N/A'}
                   />
 
                   <SignalRow
                     label="Fit score"
-                    value={topBuyer ? `${topScore}/100` : 'N/A'}
+                    value={hasTopBuyer ? `${topScore}/100` : 'N/A'}
                   />
 
                   <SignalRow
@@ -718,7 +729,7 @@ export function BuyerMatchingPage() {
 
             <KpiCard
               label="Top Match"
-              value={topBuyer ? `${topScore}/100` : 'N/A'}
+              value={hasTopBuyer ? `${topScore}/100` : 'N/A'}
               description="Mejor encaje estimado"
               icon={Target}
             />
@@ -798,18 +809,20 @@ export function BuyerMatchingPage() {
               description="Lectura ejecutiva del tipo de comprador más adecuado para el activo analizado."
             />
 
-            {topBuyer ? (
+            {hasTopBuyer ? (
               <div className="buyer-glass-block">
-                <strong>{topBuyer.name || 'Comprador prioritario'}</strong>
+                <strong>{topBuyerLabel}</strong>
 
                 <p className="muted" style={{ marginTop: 10 }}>
                   {topBuyer.rationale ||
+                    topBuyer.desc ||
+                    topBuyer.description ||
                     'Perfil con alto encaje según calidad del activo, tamaño de operación y narrativa del deal.'}
                 </p>
 
                 <div className="buyer-chip-row">
                   {topBuyer.type ? <Badge>{topBuyer.type}</Badge> : null}
-                  {topBuyer.fitScore ? <Badge>{topScore}/100 fit</Badge> : null}
+                  <Badge>{topScore}/100 fit</Badge>
                   {isViewer ? <Badge>Solo lectura</Badge> : null}
                 </div>
               </div>
@@ -948,8 +961,17 @@ function RationaleItem({ icon: Icon, title, text }) {
   );
 }
 
-function getNumericScore(value) {
-  const parsed = Number(value);
+function getBuyerLabel(buyer) {
+  if (!buyer) return 'Pendiente';
+
+  return buyer.name || buyer.title || buyer.type || 'Comprador prioritario';
+}
+
+function getBuyerScore(buyer) {
+  if (!buyer) return null;
+
+  const rawScore = buyer.fitScore ?? buyer.fit ?? buyer.score;
+  const parsed = Number(rawScore);
 
   if (!Number.isFinite(parsed)) return 0;
 
@@ -957,7 +979,7 @@ function getNumericScore(value) {
 }
 
 function getBuyerSignal(score, count) {
-  if (count === 0) {
+  if (count === 0 || score === null) {
     return {
       title: 'Buyer universe pending',
       posture: 'Build pipeline',
