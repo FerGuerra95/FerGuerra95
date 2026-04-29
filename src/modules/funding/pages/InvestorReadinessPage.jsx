@@ -11,6 +11,16 @@ function toNumber(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function formatMoney(value, currency = 'EUR') {
+  const safeValue = toNumber(value);
+
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency,
+    maximumFractionDigits: 0
+  }).format(safeValue);
+}
+
 function calculateReadinessScore(fundingInputs) {
   const dataRoom = toNumber(fundingInputs.dataRoomCompletion);
   const founderMarketFit = toNumber(fundingInputs.founderMarketFit);
@@ -46,6 +56,114 @@ function getReadinessLevel(score) {
   };
 }
 
+function getReadinessSignal(score) {
+  if (score >= 80) {
+    return {
+      title: 'Investor-ready profile',
+      posture: 'Start outreach',
+      description:
+        'El caso muestra un nivel alto de preparación para abrir conversaciones con inversores.'
+    };
+  }
+
+  if (score >= 60) {
+    return {
+      title: 'Qualified but improvable',
+      posture: 'Refine materials',
+      description:
+        'La base es suficiente, pero hay margen para reforzar data room, narrativa y señales de mercado.'
+    };
+  }
+
+  if (score >= 40) {
+    return {
+      title: 'Readiness in progress',
+      posture: 'Build proof points',
+      description:
+        'Antes de salir al mercado conviene mejorar documentación, tracción y credibilidad del caso.'
+    };
+  }
+
+  return {
+    title: 'Not ready for market',
+    posture: 'Delay outreach',
+    description:
+      'La compañía necesita preparar mejor la base documental y comercial antes de hablar con inversores.'
+  };
+}
+
+function KpiCard({ label, value, description, color = '' }) {
+  return (
+    <Card>
+      <div className="kpi-label">{label}</div>
+
+      <div className={`kpi-value ${color}`.trim()} style={{ fontSize: 22 }}>
+        {value}
+      </div>
+
+      <p className="muted" style={{ marginBottom: 0 }}>
+        {description}
+      </p>
+    </Card>
+  );
+}
+
+function InfoBlock({ title, text }) {
+  return (
+    <div
+      className="card"
+      style={{
+        background: 'rgba(255,255,255,0.04)'
+      }}
+    >
+      <strong>{title}</strong>
+
+      <p className="muted" style={{ marginBottom: 0, marginTop: 8 }}>
+        {text}
+      </p>
+    </div>
+  );
+}
+
+function ThesisList({ items }) {
+  if (!items || items.length === 0) {
+    return (
+      <p className="muted">
+        Completa los inputs de financiación para generar una tesis de inversión.
+      </p>
+    );
+  }
+
+  return (
+    <ul className="list-compact">
+      {items.map((item, index) => (
+        <li key={index}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
+function InvestorTargetCard({ target }) {
+  return (
+    <div
+      className="card"
+      style={{
+        padding: 14,
+        background: 'rgba(255,255,255,0.04)'
+      }}
+    >
+      <div className="section-title">
+        <strong>{target.type}</strong>
+        <span className="badge">{target.fit}% fit</span>
+      </div>
+
+      <p className="muted" style={{ marginBottom: 0 }}>
+        {target.desc}
+      </p>
+    </div>
+  );
+}
+
 export function InvestorReadinessPage() {
   const { fundingInputs, fundingSettings } = useFundingStore();
 
@@ -54,18 +172,40 @@ export function InvestorReadinessPage() {
     fundingSettings
   });
 
-  const readinessChecklist = derived.readinessChecklist || [];
-  const investorTargets = derived.investorTargets || [];
+  const readinessChecklist = Array.isArray(derived.readinessChecklist)
+    ? derived.readinessChecklist
+    : [];
+
+  const investorTargets = Array.isArray(derived.investorTargets)
+    ? derived.investorTargets
+    : [];
+
+  const thesisItems = Array.isArray(derived.thesis) ? derived.thesis : [];
 
   const readinessScore = calculateReadinessScore(fundingInputs);
   const readinessLevel = getReadinessLevel(readinessScore);
+  const readinessSignal = getReadinessSignal(readinessScore);
+
+  const dataRoomCompletion = toNumber(fundingInputs.dataRoomCompletion);
+  const founderMarketFit = toNumber(fundingInputs.founderMarketFit);
+  const investorInterest = toNumber(fundingInputs.investorInterest);
+  const targetRaise = toNumber(fundingInputs.targetRaise);
+
+  const companyName = fundingInputs?.companyName?.trim() || 'Sin compañía activa';
+  const stage = fundingInputs?.stage || 'Seed';
+  const currency = fundingSettings?.reportCurrency || 'EUR';
 
   return (
     <div className="page">
-      <Card>
+      <Card light>
         <div className="section-title">
           <div>
-            <Badge>Funding Workspace</Badge>
+            <div className="row wrap">
+              <Badge>Funding Workspace</Badge>
+              <Badge>Investor Readiness</Badge>
+              <Badge>{stage}</Badge>
+              <Badge>{readinessLevel.label}</Badge>
+            </div>
 
             <h2 style={{ marginTop: 10 }}>Investor Readiness</h2>
 
@@ -81,45 +221,56 @@ export function InvestorReadinessPage() {
       </Card>
 
       <div className="grid-4">
-        <Card>
-          <div className="kpi-label">Readiness Score</div>
-          <div className={`kpi-value ${readinessLevel.color}`} style={{ fontSize: 22 }}>
-            {readinessScore}/100
-          </div>
-          <p className="muted" style={{ marginBottom: 0 }}>
-            Preparación {readinessLevel.label}
-          </p>
-        </Card>
+        <KpiCard
+          label="Compañía"
+          value={companyName}
+          description="Caso activo"
+        />
 
-        <Card>
-          <div className="kpi-label">Data Room</div>
-          <div className="kpi-value" style={{ fontSize: 22 }}>
-            {toNumber(fundingInputs.dataRoomCompletion)}%
-          </div>
-          <p className="muted" style={{ marginBottom: 0 }}>
-            Documentación preparada
-          </p>
-        </Card>
+        <KpiCard
+          label="Capital objetivo"
+          value={formatMoney(targetRaise, currency)}
+          description="Ronda prevista"
+        />
 
-        <Card>
-          <div className="kpi-label">Founder-Market Fit</div>
-          <div className="kpi-value" style={{ fontSize: 22 }}>
-            {toNumber(fundingInputs.founderMarketFit)}%
-          </div>
-          <p className="muted" style={{ marginBottom: 0 }}>
-            Credibilidad del equipo
-          </p>
-        </Card>
+        <KpiCard
+          label="Readiness Score"
+          value={`${readinessScore}/100`}
+          description={`Preparación ${readinessLevel.label}`}
+          color={readinessLevel.color}
+        />
 
-        <Card>
-          <div className="kpi-label">Investor Interest</div>
-          <div className="kpi-value" style={{ fontSize: 22 }}>
-            {toNumber(fundingInputs.investorInterest)}%
-          </div>
-          <p className="muted" style={{ marginBottom: 0 }}>
-            Señales de mercado
-          </p>
-        </Card>
+        <KpiCard
+          label="Postura"
+          value={readinessSignal.posture}
+          description="Siguiente acción"
+        />
+      </div>
+
+      <div className="grid-4">
+        <KpiCard
+          label="Data Room"
+          value={`${dataRoomCompletion}%`}
+          description="Documentación preparada"
+        />
+
+        <KpiCard
+          label="Founder-Market Fit"
+          value={`${founderMarketFit}%`}
+          description="Credibilidad del equipo"
+        />
+
+        <KpiCard
+          label="Investor Interest"
+          value={`${investorInterest}%`}
+          description="Señales de mercado"
+        />
+
+        <KpiCard
+          label="Investor Targets"
+          value={investorTargets.length}
+          description="Perfiles generados"
+        />
       </div>
 
       <div className="grid-2">
@@ -128,7 +279,8 @@ export function InvestorReadinessPage() {
             <div>
               <h3>Readiness Assessment</h3>
               <p className="muted" style={{ marginBottom: 0 }}>
-                Lectura ejecutiva del estado actual antes de iniciar conversaciones formales.
+                Lectura ejecutiva del estado actual antes de iniciar
+                conversaciones formales.
               </p>
             </div>
 
@@ -138,21 +290,20 @@ export function InvestorReadinessPage() {
           <p>{readinessLevel.description}</p>
 
           <div className="stack">
-            <div className="card" style={{ background: 'rgba(255,255,255,0.04)' }}>
-              <strong>Data room readiness</strong>
-              <p className="muted" style={{ marginBottom: 0 }}>
-                El inversor debe poder revisar métricas, documentación societaria,
-                equipo, finanzas, producto, clientes y plan de uso de fondos sin fricción.
-              </p>
-            </div>
+            <InfoBlock
+              title="Data room readiness"
+              text="El inversor debe poder revisar métricas, documentación societaria, equipo, finanzas, producto, clientes y plan de uso de fondos sin fricción."
+            />
 
-            <div className="card" style={{ background: 'rgba(255,255,255,0.04)' }}>
-              <strong>Market narrative</strong>
-              <p className="muted" style={{ marginBottom: 0 }}>
-                La ronda debe explicarse con una narrativa clara: problema,
-                solución, tracción, equipo, mercado, capital necesario y retorno esperado.
-              </p>
-            </div>
+            <InfoBlock
+              title="Market narrative"
+              text="La ronda debe explicarse con una narrativa clara: problema, solución, tracción, equipo, mercado, capital necesario y retorno esperado."
+            />
+
+            <InfoBlock
+              title="Readiness signal"
+              text={readinessSignal.description}
+            />
           </div>
         </Card>
 
@@ -170,11 +321,7 @@ export function InvestorReadinessPage() {
 
           <p>{derived.summary}</p>
 
-          <ul className="list-compact">
-            {(derived.thesis || []).map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+          <ThesisList items={thesisItems} />
         </Card>
       </div>
 
@@ -199,7 +346,8 @@ export function InvestorReadinessPage() {
             <div>
               <h3>Target Investor Fit</h3>
               <p className="muted" style={{ marginBottom: 0 }}>
-                Perfiles de inversor más adecuados según fase, tracción, capital objetivo y narrativa.
+                Perfiles de inversor más adecuados según fase, tracción,
+                capital objetivo y narrativa.
               </p>
             </div>
 
@@ -208,28 +356,13 @@ export function InvestorReadinessPage() {
 
           {investorTargets.length === 0 ? (
             <p className="muted">
-              Completa los inputs de financiación para generar perfiles de inversor.
+              Completa los inputs de financiación para generar perfiles de
+              inversor.
             </p>
           ) : (
             <div className="stack">
               {investorTargets.map((target) => (
-                <div
-                  key={target.type}
-                  className="card"
-                  style={{
-                    padding: 14,
-                    background: 'rgba(255,255,255,0.04)'
-                  }}
-                >
-                  <div className="section-title">
-                    <strong>{target.type}</strong>
-                    <span className="badge">{target.fit}% fit</span>
-                  </div>
-
-                  <p className="muted" style={{ marginBottom: 0 }}>
-                    {target.desc}
-                  </p>
-                </div>
+                <InvestorTargetCard key={target.type} target={target} />
               ))}
             </div>
           )}
@@ -241,37 +374,29 @@ export function InvestorReadinessPage() {
           <div>
             <h3>Investor Preparation Notes</h3>
             <p className="muted" style={{ marginBottom: 0 }}>
-              Puntos que conviene reforzar antes de enviar materiales o abrir conversaciones.
+              Puntos que conviene reforzar antes de enviar materiales o abrir
+              conversaciones.
             </p>
           </div>
 
-          <Badge>{fundingInputs.stage || 'Seed'}</Badge>
+          <Badge>{stage}</Badge>
         </div>
 
         <div className="grid-3">
-          <div className="card" style={{ background: 'rgba(255,255,255,0.04)' }}>
-            <strong>1. Claridad del uso de fondos</strong>
-            <p className="muted" style={{ marginBottom: 0 }}>
-              Explicar cómo el capital se transforma en crecimiento, producto,
-              ventas, equipo o runway adicional.
-            </p>
-          </div>
+          <InfoBlock
+            title="1. Claridad del uso de fondos"
+            text="Explicar cómo el capital se transforma en crecimiento, producto, ventas, equipo o runway adicional."
+          />
 
-          <div className="card" style={{ background: 'rgba(255,255,255,0.04)' }}>
-            <strong>2. Prueba de tracción</strong>
-            <p className="muted" style={{ marginBottom: 0 }}>
-              Preparar métricas, clientes, pipeline, crecimiento, margen y señales
-              que justifiquen la valoración.
-            </p>
-          </div>
+          <InfoBlock
+            title="2. Prueba de tracción"
+            text="Preparar métricas, clientes, pipeline, crecimiento, margen y señales que justifiquen la valoración."
+          />
 
-          <div className="card" style={{ background: 'rgba(255,255,255,0.04)' }}>
-            <strong>3. Riesgo y mitigación</strong>
-            <p className="muted" style={{ marginBottom: 0 }}>
-              Anticipar objeciones sobre burn, competencia, dependencia de clientes,
-              equipo o ejecución.
-            </p>
-          </div>
+          <InfoBlock
+            title="3. Riesgo y mitigación"
+            text="Anticipar objeciones sobre burn, competencia, dependencia de clientes, equipo o ejecución."
+          />
         </div>
       </Card>
     </div>
