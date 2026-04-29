@@ -92,6 +92,10 @@ const equityHeroCss = `
     color: #f8fafc;
   }
 
+  .ma-equity-value.is-pending {
+    color: rgba(226, 232, 240, 0.72);
+  }
+
   .ma-equity-subcopy {
     max-width: 760px;
     margin: 18px 0 0;
@@ -175,6 +179,11 @@ const equityHeroCss = `
   .ma-equity-score-core strong {
     font-size: 22px;
     letter-spacing: -0.055em;
+  }
+
+  .ma-equity-score-core strong.is-empty-score {
+    font-size: 28px;
+    color: rgba(226, 232, 240, 0.72);
   }
 
   .ma-equity-score-copy strong {
@@ -269,14 +278,41 @@ function getSafeNumber(value, fallback = 0) {
   return parsed;
 }
 
-function getRiskBadgeVariant(label) {
+function hasValuationData(derived) {
+  const normalizedEbitda = Number(derived?.normalizedEbitda);
+  const equityBase = Number(derived?.equityBase);
+  const evBase = Number(derived?.evBase);
+  const adjustedMultiple = Number(derived?.adjustedMultiple);
+
+  return (
+    Number.isFinite(normalizedEbitda) &&
+    normalizedEbitda > 0 &&
+    Number.isFinite(equityBase) &&
+    equityBase > 0 &&
+    Number.isFinite(evBase) &&
+    evBase > 0 &&
+    Number.isFinite(adjustedMultiple) &&
+    adjustedMultiple > 0
+  );
+}
+
+function getRiskBadgeVariant(label, hasData) {
+  if (!hasData) return 'secondary';
   if (label === 'Bajo') return 'success';
   if (label === 'Medio') return 'warning';
 
   return 'danger';
 }
 
-function getRiskSignal(label) {
+function getRiskSignal(label, hasData) {
+  if (!hasData) {
+    return {
+      title: 'Valuation pending',
+      description:
+        'Completa los inputs mínimos para generar una valoración, un score de calidad y una lectura de riesgo defendible.'
+    };
+  }
+
   if (label === 'Bajo') {
     return {
       title: 'Low-risk equity profile',
@@ -298,6 +334,12 @@ function getRiskSignal(label) {
     description:
       'El caso requiere validación adicional antes de usar la valoración como base de decisión ejecutiva.'
   };
+}
+
+function formatMetric(value, formatter, hasData) {
+  if (!hasData) return 'N/A';
+
+  return formatter(value);
 }
 
 function Stat({ label, value, description, icon: Icon, color = '' }) {
@@ -324,18 +366,22 @@ function Stat({ label, value, description, icon: Icon, color = '' }) {
 
 export function EquityHeroCard({ derived, settings }) {
   const reportCurrency = settings?.reportCurrency || 'EUR';
-  const riskLabel = derived?.riskLevel?.label || 'N/A';
-  const riskBadgeVariant = getRiskBadgeVariant(riskLabel);
-  const riskSignal = getRiskSignal(riskLabel);
+  const hasData = hasValuationData(derived);
+
+  const riskLabel = hasData ? derived?.riskLevel?.label || 'N/A' : 'Pendiente';
+  const riskBadgeVariant = getRiskBadgeVariant(riskLabel, hasData);
+  const riskSignal = getRiskSignal(riskLabel, hasData);
 
   const equityBase = getSafeNumber(derived?.equityBase);
   const evBase = getSafeNumber(derived?.evBase);
   const netDebt = getSafeNumber(derived?.netDebt);
   const adjustedMultiple = getSafeNumber(derived?.adjustedMultiple);
-  const qualityScore = Math.round(getSafeNumber(derived?.qualityScore));
 
-  const normalizedScore = Math.max(0, Math.min(100, qualityScore));
-  const scoreAngle = `${normalizedScore * 3.6}deg`;
+  const qualityScore = hasData
+    ? Math.max(0, Math.min(100, Math.round(getSafeNumber(derived?.qualityScore))))
+    : null;
+
+  const scoreAngle = `${(qualityScore ?? 0) * 3.6}deg`;
 
   return (
     <section className="ma-equity-hero-card">
@@ -351,17 +397,19 @@ export function EquityHeroCard({ derived, settings }) {
 
             <div className="ma-equity-title-row">
               <Badge variant={riskBadgeVariant}>
-                {riskLabel} riesgo
+                {riskLabel}
+                {hasData ? ' riesgo' : ''}
               </Badge>
             </div>
 
-            <h2 className="ma-equity-value">
-              {formatCurrency(equityBase, reportCurrency)}
+            <h2 className={`ma-equity-value ${hasData ? '' : 'is-pending'}`.trim()}>
+              {hasData ? formatCurrency(equityBase, reportCurrency) : 'Pendiente'}
             </h2>
 
             <p className="ma-equity-subcopy">
-              Valor atribuible al equity después de aplicar múltiplo ajustado,
-              deuda neta, calidad del activo y señales principales del deal.
+              {hasData
+                ? 'Valor atribuible al equity después de aplicar múltiplo ajustado, deuda neta, calidad del activo y señales principales del deal.'
+                : 'La valoración aparecerá cuando el caso tenga datos suficientes para calcular EBITDA normalizado, múltiplo ajustado, Enterprise Value y Equity Value.'}
             </p>
           </div>
 
@@ -385,12 +433,16 @@ export function EquityHeroCard({ derived, settings }) {
                 style={{ '--score-angle': scoreAngle }}
               >
                 <div className="ma-equity-score-core">
-                  <strong>{normalizedScore}</strong>
+                  <strong className={qualityScore === null ? 'is-empty-score' : ''}>
+                    {qualityScore === null ? '—' : qualityScore}
+                  </strong>
                 </div>
               </div>
 
               <div className="ma-equity-score-copy">
-                <strong>{normalizedScore}/100 quality score</strong>
+                <strong>
+                  {qualityScore === null ? 'Quality score pending' : `${qualityScore}/100 quality score`}
+                </strong>
 
                 <p>{riskSignal.description}</p>
               </div>
@@ -401,32 +453,44 @@ export function EquityHeroCard({ derived, settings }) {
         <div className="ma-equity-stats-grid">
           <Stat
             label="Enterprise Value"
-            value={formatCurrency(evBase, reportCurrency)}
+            value={formatMetric(
+              evBase,
+              (value) => formatCurrency(value, reportCurrency),
+              hasData
+            )}
             description="Valor antes de deuda, caja y ajustes finales."
             icon={BarChart3}
           />
 
           <Stat
             label="Deuda neta"
-            value={formatCurrency(netDebt, reportCurrency)}
+            value={formatMetric(
+              netDebt,
+              (value) => formatCurrency(value, reportCurrency),
+              hasData
+            )}
             description="Impacto de deuda y caja sobre el equity."
             icon={ArrowDownRight}
-            color="text-danger"
+            color={hasData ? 'text-danger' : ''}
           />
 
           <Stat
             label="Múltiplo"
-            value={`x${adjustedMultiple.toFixed(2)}`}
+            value={formatMetric(
+              adjustedMultiple,
+              (value) => `x${value.toFixed(2)}`,
+              hasData
+            )}
             description="Múltiplo ajustado aplicado al EBITDA normalizado."
             icon={Gauge}
           />
 
           <Stat
             label="Score"
-            value={`${normalizedScore}/100`}
+            value={qualityScore === null ? 'N/A' : `${qualityScore}/100`}
             description="Calidad financiera, riesgo y transferibilidad."
             icon={Activity}
-            color={derived?.riskLevel?.color || ''}
+            color={hasData ? derived?.riskLevel?.color || '' : ''}
           />
         </div>
       </div>
