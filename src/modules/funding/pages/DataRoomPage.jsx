@@ -10,7 +10,6 @@ import {
   ShieldCheck,
   Target
 } from 'lucide-react';
-import { Card } from '../../../shared/components/ui/Card.jsx';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { useNotifications } from '../../../app/providers/NotificationsProvider.jsx';
@@ -381,103 +380,6 @@ const dataRoomCss = `
     line-height: 1.62;
   }
 
-  .dataroom-checklist-wrap {
-    width: 100%;
-    min-width: 0;
-    overflow-x: auto;
-    overflow-y: visible;
-    padding-bottom: 6px;
-  }
-
-  .dataroom-checklist-wrap::-webkit-scrollbar {
-    height: 10px;
-  }
-
-  .dataroom-checklist-wrap::-webkit-scrollbar-track {
-    border-radius: 999px;
-    background: rgba(255,255,255,0.04);
-  }
-
-  .dataroom-checklist-wrap::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    background: rgba(148, 163, 184, 0.35);
-  }
-
-  .dataroom-checklist-wrap table,
-  .dataroom-checklist-wrap .table {
-    width: 100%;
-    min-width: 760px;
-    border-collapse: separate;
-    border-spacing: 0 10px;
-    background: transparent !important;
-    color: var(--text);
-  }
-
-  .dataroom-checklist-wrap thead,
-  .dataroom-checklist-wrap tbody,
-  .dataroom-checklist-wrap tr {
-    background: transparent !important;
-  }
-
-  .dataroom-checklist-wrap th {
-    padding: 12px 16px;
-    color: rgba(148, 163, 184, 0.96);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-weight: 800;
-    background: rgba(15, 23, 42, 0.88) !important;
-    border-top: 1px solid rgba(148, 163, 184, 0.16);
-    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
-    white-space: nowrap;
-  }
-
-  .dataroom-checklist-wrap th:first-child {
-    border-left: 1px solid rgba(148, 163, 184, 0.16);
-    border-radius: 18px 0 0 18px;
-  }
-
-  .dataroom-checklist-wrap th:last-child {
-    border-right: 1px solid rgba(148, 163, 184, 0.16);
-    border-radius: 0 18px 18px 0;
-  }
-
-  .dataroom-checklist-wrap td {
-    padding: 16px;
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.022)),
-      rgba(15, 23, 42, 0.72) !important;
-    border-top: 1px solid rgba(148, 163, 184, 0.13);
-    border-bottom: 1px solid rgba(148, 163, 184, 0.13);
-    color: rgba(226, 232, 240, 0.94);
-    vertical-align: middle;
-  }
-
-  .dataroom-checklist-wrap td:first-child {
-    border-left: 1px solid rgba(148, 163, 184, 0.13);
-    border-radius: 20px 0 0 20px;
-  }
-
-  .dataroom-checklist-wrap td:last-child {
-    border-right: 1px solid rgba(148, 163, 184, 0.13);
-    border-radius: 0 20px 20px 0;
-  }
-
-  .dataroom-checklist-wrap .card {
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.022)),
-      rgba(15, 23, 42, 0.72) !important;
-    border: 1px solid rgba(148, 163, 184, 0.14) !important;
-    border-radius: 22px;
-  }
-
-  .dataroom-checklist-wrap .badge,
-  .dataroom-checklist-wrap span.badge {
-    background: rgba(37, 99, 235, 0.16) !important;
-    border: 1px solid rgba(96, 165, 250, 0.24) !important;
-    color: rgba(226, 232, 240, 0.96) !important;
-  }
-
   .dataroom-muted-tight {
     margin-bottom: 0;
   }
@@ -534,11 +436,6 @@ const dataRoomCss = `
 
     .dataroom-signal-row strong {
       text-align: left;
-    }
-
-    .dataroom-checklist-wrap table,
-    .dataroom-checklist-wrap .table {
-      min-width: 680px;
     }
   }
 `;
@@ -920,9 +817,7 @@ export function DataRoomPage() {
             right={<Badge>{stats.completion}% completo</Badge>}
           />
 
-          <div className="dataroom-checklist-wrap">
-            <DataRoomChecklist items={checklistItems} />
-          </div>
+          <DataRoomChecklist items={checklistItems} />
         </section>
 
         <section className="dataroom-section">
