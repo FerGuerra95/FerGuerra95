@@ -9,7 +9,6 @@ import {
   ShieldCheck,
   TrendingUp
 } from 'lucide-react';
-import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 
 const dealStructureCss = `
   .deal-clean-shell {
@@ -495,11 +494,16 @@ function getCurrency(derived, settings) {
   );
 }
 
-function formatFullMoney(value, currency) {
-  return formatCurrency(getSafeNumber(value), currency);
+function formatFullMoney(value, currency = 'EUR') {
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(getSafeNumber(value));
 }
 
-function formatCompactMoney(value, currency) {
+function formatCompactMoney(value, currency = 'EUR') {
   const number = getSafeNumber(value);
   const abs = Math.abs(number);
 
@@ -512,11 +516,19 @@ function formatCompactMoney(value, currency) {
 
   if (abs >= 1000) {
     return `${(number / 1000).toLocaleString('es-ES', {
+      minimumFractionDigits: 0,
       maximumFractionDigits: 0
     })} k€`;
   }
 
-  return formatCurrency(number, currency);
+  return formatFullMoney(number, currency);
+}
+
+function formatMultiple(value) {
+  return getSafeNumber(value).toLocaleString('es-ES', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
 }
 
 function getWorkingCapitalAdjustment(derived) {
@@ -595,7 +607,7 @@ function SupportItem({ label, value, currency, isMultiple = false }) {
 
       <strong>
         {isMultiple
-          ? `x${getSafeNumber(value).toFixed(2)}`
+          ? `${formatMultiple(value)}x`
           : formatCompactMoney(value, currency)}
       </strong>
 
@@ -701,7 +713,7 @@ export function DealStructureCard({ derived, settings }) {
                 title="Enterprise Value"
                 description="Valor de la compañía antes de deuda, caja y ajustes. Es la base económica de la operación."
                 value={enterpriseValue}
-                fullValue={`${formatFullMoney(normalizedEbitda, currency)} × x${adjustedMultiple.toFixed(2)}`}
+                fullValue={`${formatFullMoney(normalizedEbitda, currency)} × ${formatMultiple(adjustedMultiple)}x`}
                 icon={Landmark}
                 currency={currency}
               />

@@ -11,64 +11,56 @@ import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 
 const equityHeroCss = `
-  .ma-equity-hero-card {
+  .ma-equity-safe-card {
     position: relative;
+    width: 100%;
     overflow: hidden;
-    border-radius: 34px;
+    border-radius: 32px;
     padding: 32px;
     border: 1px solid rgba(148, 163, 184, 0.18);
     background:
-      radial-gradient(circle at 8% 0%, rgba(16, 185, 129, 0.18), transparent 30%),
-      radial-gradient(circle at 88% 12%, rgba(37, 99, 235, 0.18), transparent 30%),
+      radial-gradient(circle at 8% 0%, rgba(16, 185, 129, 0.16), transparent 30%),
+      radial-gradient(circle at 90% 8%, rgba(37, 99, 235, 0.16), transparent 30%),
       linear-gradient(135deg, rgba(2, 6, 23, 0.98), rgba(15, 23, 42, 0.96));
     box-shadow:
       0 28px 90px rgba(0, 0, 0, 0.32),
       inset 0 1px 0 rgba(255,255,255,0.055);
   }
 
-  .ma-equity-hero-card::before {
+  .ma-equity-safe-card::before {
     content: "";
     position: absolute;
     inset: 0;
+    border-radius: inherit;
     background:
-      linear-gradient(rgba(255,255,255,0.026) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.026) 1px, transparent 1px);
+      linear-gradient(rgba(255,255,255,0.024) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.024) 1px, transparent 1px);
     background-size: 48px 48px;
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent 82%);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent 84%);
     pointer-events: none;
   }
 
-  .ma-equity-hero-card::after {
-    content: "";
-    position: absolute;
-    inset: auto -130px -160px auto;
-    width: 360px;
-    height: 360px;
-    border-radius: 999px;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.14), transparent 70%);
-    pointer-events: none;
-  }
-
-  .ma-equity-hero-inner {
+  .ma-equity-safe-inner {
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 26px;
+    min-width: 0;
   }
 
-  .ma-equity-hero-top {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
-    gap: 28px;
-    align-items: center;
+  .ma-equity-safe-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
   }
 
-  .ma-equity-kicker {
+  .ma-equity-safe-kicker {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 14px;
+    width: fit-content;
     font-size: 11px;
     line-height: 1;
     text-transform: uppercase;
@@ -76,62 +68,80 @@ const equityHeroCss = `
     color: rgba(148, 163, 184, 0.96);
   }
 
-  .ma-equity-title-row {
+  .ma-equity-safe-badges {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
-    margin-bottom: 16px;
   }
 
-  .ma-equity-value {
+  .ma-equity-safe-value {
     margin: 0;
-    font-size: clamp(42px, 5.8vw, 76px);
-    line-height: 0.92;
-    letter-spacing: -0.075em;
     color: #f8fafc;
+    font-size: clamp(42px, 6.4vw, 78px);
+    line-height: 1.05;
+    font-weight: 850;
+    letter-spacing: -0.06em;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    font-variant-numeric: tabular-nums;
+    text-rendering: geometricPrecision;
   }
 
-  .ma-equity-value.is-pending {
-    color: rgba(226, 232, 240, 0.72);
+  .ma-equity-safe-copy {
+    max-width: 900px;
+    margin: 0;
+    color: rgba(203, 213, 225, 0.84);
+    line-height: 1.68;
+    font-size: 17px;
   }
 
-  .ma-equity-subcopy {
-    max-width: 760px;
-    margin: 18px 0 0;
-    color: rgba(203, 213, 225, 0.82);
-    line-height: 1.7;
-  }
-
-  .ma-equity-signal-card {
-    border-radius: 28px;
-    padding: 22px;
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.075), rgba(255,255,255,0.026)),
-      rgba(15, 23, 42, 0.72);
+  .ma-equity-safe-signal {
+    width: 100%;
+    border-radius: 26px;
+    padding: 24px;
     border: 1px solid rgba(148, 163, 184, 0.18);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.024)),
+      rgba(15, 23, 42, 0.74);
     box-shadow:
       0 22px 60px rgba(0, 0, 0, 0.22),
       inset 0 1px 0 rgba(255,255,255,0.045);
+    min-width: 0;
   }
 
-  .ma-equity-signal-head {
+  .ma-equity-safe-signal-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+    gap: 24px;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .ma-equity-safe-signal-head {
     display: flex;
     justify-content: space-between;
     gap: 18px;
     align-items: flex-start;
-    margin-bottom: 20px;
+    min-width: 0;
   }
 
-  .ma-equity-signal-title {
+  .ma-equity-safe-signal-head > div:first-child {
+    min-width: 0;
+  }
+
+  .ma-equity-safe-signal-title {
     margin-top: 8px;
-    font-size: 20px;
-    line-height: 1.18;
-    letter-spacing: -0.04em;
+    font-size: 24px;
+    line-height: 1.22;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    color: #f8fafc;
+    overflow-wrap: anywhere;
   }
 
-  .ma-equity-icon-box,
-  .ma-equity-stat-icon {
+  .ma-equity-safe-icon,
+  .ma-equity-safe-metric-icon {
     flex: 0 0 auto;
     display: grid;
     place-items: center;
@@ -141,21 +151,22 @@ const equityHeroCss = `
     color: #86efac;
   }
 
-  .ma-equity-icon-box {
+  .ma-equity-safe-icon {
     width: 48px;
     height: 48px;
   }
 
-  .ma-equity-score-row {
+  .ma-equity-safe-score {
     display: grid;
-    grid-template-columns: 96px minmax(0, 1fr);
-    gap: 18px;
+    grid-template-columns: 102px minmax(0, 1fr);
+    gap: 20px;
     align-items: center;
+    min-width: 0;
   }
 
-  .ma-equity-score-ring {
-    width: 94px;
-    height: 94px;
+  .ma-equity-safe-ring {
+    width: 98px;
+    height: 98px;
     border-radius: 999px;
     display: grid;
     place-items: center;
@@ -166,9 +177,9 @@ const equityHeroCss = `
       0 0 34px rgba(16, 185, 129, 0.16);
   }
 
-  .ma-equity-score-core {
-    width: 70px;
-    height: 70px;
+  .ma-equity-safe-ring-core {
+    width: 72px;
+    height: 72px;
     border-radius: 999px;
     display: grid;
     place-items: center;
@@ -176,35 +187,43 @@ const equityHeroCss = `
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .ma-equity-score-core strong {
-    font-size: 22px;
-    letter-spacing: -0.055em;
+  .ma-equity-safe-ring-core strong {
+    color: #f8fafc;
+    font-size: 23px;
+    font-weight: 850;
+    letter-spacing: -0.045em;
+    font-variant-numeric: tabular-nums;
   }
 
-  .ma-equity-score-core strong.is-empty-score {
-    font-size: 28px;
-    color: rgba(226, 232, 240, 0.72);
+  .ma-equity-safe-score-copy {
+    min-width: 0;
   }
 
-  .ma-equity-score-copy strong {
+  .ma-equity-safe-score-copy strong {
     display: block;
     margin-bottom: 8px;
+    color: #f8fafc;
+    line-height: 1.26;
+    overflow-wrap: anywhere;
   }
 
-  .ma-equity-score-copy p {
+  .ma-equity-safe-score-copy p {
     margin: 0;
     color: rgba(203, 213, 225, 0.78);
-    line-height: 1.55;
+    line-height: 1.58;
+    overflow-wrap: anywhere;
   }
 
-  .ma-equity-stats-grid {
+  .ma-equity-safe-metrics {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
     gap: 16px;
+    min-width: 0;
   }
 
-  .ma-equity-stat {
-    min-height: 142px;
+  .ma-equity-safe-metric {
+    min-width: 0;
+    min-height: 158px;
     padding: 20px;
     border-radius: 24px;
     background:
@@ -213,58 +232,75 @@ const equityHeroCss = `
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 18px;
+    gap: 16px;
+    overflow: hidden;
   }
 
-  .ma-equity-stat-head {
+  .ma-equity-safe-metric-head {
     display: flex;
     justify-content: space-between;
     gap: 14px;
     align-items: flex-start;
+    min-width: 0;
   }
 
-  .ma-equity-stat-icon {
+  .ma-equity-safe-metric-head > div:first-child {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .ma-equity-safe-metric-icon {
     width: 40px;
     height: 40px;
     border-radius: 16px;
   }
 
-  .ma-equity-stat-value {
+  .ma-equity-safe-metric-value {
     margin-top: 10px;
-    font-size: 22px;
-    font-weight: 800;
+    color: #f8fafc;
+    font-size: clamp(23px, 2.4vw, 34px);
+    font-weight: 820;
     line-height: 1.12;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.035em;
     overflow-wrap: anywhere;
+    word-break: normal;
+    font-variant-numeric: tabular-nums;
+    text-rendering: geometricPrecision;
   }
 
-  .ma-equity-stat p {
+  .ma-equity-safe-metric-description {
     margin: 0;
     color: rgba(148, 163, 184, 0.84);
-    line-height: 1.5;
+    line-height: 1.52;
   }
 
-  @media (max-width: 1180px) {
-    .ma-equity-hero-top {
+  @media (max-width: 900px) {
+    .ma-equity-safe-signal-grid {
       grid-template-columns: 1fr;
     }
 
-    .ma-equity-stats-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .ma-equity-safe-score {
+      grid-template-columns: 102px minmax(0, 1fr);
     }
   }
 
   @media (max-width: 680px) {
-    .ma-equity-hero-card {
-      border-radius: 26px;
+    .ma-equity-safe-card {
       padding: 24px;
+      border-radius: 26px;
     }
 
-    .ma-equity-stats-grid {
+    .ma-equity-safe-value {
+      font-size: clamp(38px, 13vw, 58px);
+      letter-spacing: -0.05em;
+    }
+
+    .ma-equity-safe-score {
       grid-template-columns: 1fr;
+      justify-items: start;
     }
 
-    .ma-equity-score-row {
+    .ma-equity-safe-metrics {
       grid-template-columns: 1fr;
     }
   }
@@ -278,41 +314,18 @@ function getSafeNumber(value, fallback = 0) {
   return parsed;
 }
 
-function hasValuationData(derived) {
-  const normalizedEbitda = Number(derived?.normalizedEbitda);
-  const equityBase = Number(derived?.equityBase);
-  const evBase = Number(derived?.evBase);
-  const adjustedMultiple = Number(derived?.adjustedMultiple);
-
-  return (
-    Number.isFinite(normalizedEbitda) &&
-    normalizedEbitda > 0 &&
-    Number.isFinite(equityBase) &&
-    equityBase > 0 &&
-    Number.isFinite(evBase) &&
-    evBase > 0 &&
-    Number.isFinite(adjustedMultiple) &&
-    adjustedMultiple > 0
-  );
+function formatCurrencyTight(value, currency) {
+  return formatCurrency(value, currency).replace(/\s(?=\S+$)/, '\u00A0');
 }
 
-function getRiskBadgeVariant(label, hasData) {
-  if (!hasData) return 'secondary';
+function getRiskBadgeVariant(label) {
   if (label === 'Bajo') return 'success';
   if (label === 'Medio') return 'warning';
 
   return 'danger';
 }
 
-function getRiskSignal(label, hasData) {
-  if (!hasData) {
-    return {
-      title: 'Valuation pending',
-      description:
-        'Completa los inputs mínimos para generar una valoración, un score de calidad y una lectura de riesgo defendible.'
-    };
-  }
-
+function getRiskSignal(label) {
   if (label === 'Bajo') {
     return {
       title: 'Low-risk equity profile',
@@ -336,161 +349,133 @@ function getRiskSignal(label, hasData) {
   };
 }
 
-function formatMetric(value, formatter, hasData) {
-  if (!hasData) return 'N/A';
-
-  return formatter(value);
-}
-
-function Stat({ label, value, description, icon: Icon, color = '' }) {
+function MetricCard({ label, value, description, icon: Icon, color = '' }) {
   return (
-    <article className="ma-equity-stat">
-      <div className="ma-equity-stat-head">
+    <article className="ma-equity-safe-metric">
+      <div className="ma-equity-safe-metric-head">
         <div>
           <div className="kpi-label">{label}</div>
 
-          <div className={`ma-equity-stat-value ${color}`.trim()}>
+          <div className={`ma-equity-safe-metric-value ${color}`.trim()}>
             {value}
           </div>
         </div>
 
-        <div className="ma-equity-stat-icon">
+        <div className="ma-equity-safe-metric-icon">
           <Icon size={17} />
         </div>
       </div>
 
-      <p>{description}</p>
+      <p className="ma-equity-safe-metric-description">{description}</p>
     </article>
   );
 }
 
 export function EquityHeroCard({ derived, settings }) {
   const reportCurrency = settings?.reportCurrency || 'EUR';
-  const hasData = hasValuationData(derived);
-
-  const riskLabel = hasData ? derived?.riskLevel?.label || 'N/A' : 'Pendiente';
-  const riskBadgeVariant = getRiskBadgeVariant(riskLabel, hasData);
-  const riskSignal = getRiskSignal(riskLabel, hasData);
+  const riskLabel = derived?.riskLevel?.label || 'N/A';
+  const riskBadgeVariant = getRiskBadgeVariant(riskLabel);
+  const riskSignal = getRiskSignal(riskLabel);
 
   const equityBase = getSafeNumber(derived?.equityBase);
   const evBase = getSafeNumber(derived?.evBase);
   const netDebt = getSafeNumber(derived?.netDebt);
   const adjustedMultiple = getSafeNumber(derived?.adjustedMultiple);
+  const qualityScore = Math.round(getSafeNumber(derived?.qualityScore));
 
-  const qualityScore = hasData
-    ? Math.max(0, Math.min(100, Math.round(getSafeNumber(derived?.qualityScore))))
-    : null;
-
-  const scoreAngle = `${(qualityScore ?? 0) * 3.6}deg`;
+  const normalizedScore = Math.max(0, Math.min(100, qualityScore));
+  const scoreAngle = `${normalizedScore * 3.6}deg`;
 
   return (
-    <section className="ma-equity-hero-card">
+    <section className="ma-equity-safe-card">
       <style>{equityHeroCss}</style>
 
-      <div className="ma-equity-hero-inner">
-        <div className="ma-equity-hero-top">
-          <div>
-            <div className="ma-equity-kicker">
-              <TrendingUp size={14} />
-              Equity base valuation
-            </div>
-
-            <div className="ma-equity-title-row">
-              <Badge variant={riskBadgeVariant}>
-                {riskLabel}
-                {hasData ? ' riesgo' : ''}
-              </Badge>
-            </div>
-
-            <h2 className={`ma-equity-value ${hasData ? '' : 'is-pending'}`.trim()}>
-              {hasData ? formatCurrency(equityBase, reportCurrency) : 'Pendiente'}
-            </h2>
-
-            <p className="ma-equity-subcopy">
-              {hasData
-                ? 'Valor atribuible al equity después de aplicar múltiplo ajustado, deuda neta, calidad del activo y señales principales del deal.'
-                : 'La valoración aparecerá cuando el caso tenga datos suficientes para calcular EBITDA normalizado, múltiplo ajustado, Enterprise Value y Equity Value.'}
-            </p>
+      <div className="ma-equity-safe-inner">
+        <header className="ma-equity-safe-header">
+          <div className="ma-equity-safe-kicker">
+            <TrendingUp size={14} />
+            Equity base valuation
           </div>
 
-          <aside className="ma-equity-signal-card">
-            <div className="ma-equity-signal-head">
+          <div className="ma-equity-safe-badges">
+            <Badge variant={riskBadgeVariant}>
+              {riskLabel} riesgo
+            </Badge>
+          </div>
+
+          <h2 className="ma-equity-safe-value">
+            {formatCurrencyTight(equityBase, reportCurrency)}
+          </h2>
+
+          <p className="ma-equity-safe-copy">
+            Valor atribuible al equity después de aplicar múltiplo ajustado,
+            deuda neta, calidad del activo y señales principales del deal.
+          </p>
+        </header>
+
+        <aside className="ma-equity-safe-signal">
+          <div className="ma-equity-safe-signal-grid">
+            <div className="ma-equity-safe-signal-head">
               <div>
                 <div className="kpi-label">Quality Signal</div>
-                <div className="ma-equity-signal-title">
+                <div className="ma-equity-safe-signal-title">
                   {riskSignal.title}
                 </div>
               </div>
 
-              <div className="ma-equity-icon-box">
+              <div className="ma-equity-safe-icon">
                 <ShieldCheck size={20} />
               </div>
             </div>
 
-            <div className="ma-equity-score-row">
+            <div className="ma-equity-safe-score">
               <div
-                className="ma-equity-score-ring"
+                className="ma-equity-safe-ring"
                 style={{ '--score-angle': scoreAngle }}
               >
-                <div className="ma-equity-score-core">
-                  <strong className={qualityScore === null ? 'is-empty-score' : ''}>
-                    {qualityScore === null ? '—' : qualityScore}
-                  </strong>
+                <div className="ma-equity-safe-ring-core">
+                  <strong>{normalizedScore}</strong>
                 </div>
               </div>
 
-              <div className="ma-equity-score-copy">
-                <strong>
-                  {qualityScore === null ? 'Quality score pending' : `${qualityScore}/100 quality score`}
-                </strong>
+              <div className="ma-equity-safe-score-copy">
+                <strong>{normalizedScore}/100 quality score</strong>
 
                 <p>{riskSignal.description}</p>
               </div>
             </div>
-          </aside>
-        </div>
+          </div>
+        </aside>
 
-        <div className="ma-equity-stats-grid">
-          <Stat
+        <div className="ma-equity-safe-metrics">
+          <MetricCard
             label="Enterprise Value"
-            value={formatMetric(
-              evBase,
-              (value) => formatCurrency(value, reportCurrency),
-              hasData
-            )}
+            value={formatCurrencyTight(evBase, reportCurrency)}
             description="Valor antes de deuda, caja y ajustes finales."
             icon={BarChart3}
           />
 
-          <Stat
+          <MetricCard
             label="Deuda neta"
-            value={formatMetric(
-              netDebt,
-              (value) => formatCurrency(value, reportCurrency),
-              hasData
-            )}
+            value={formatCurrencyTight(netDebt, reportCurrency)}
             description="Impacto de deuda y caja sobre el equity."
             icon={ArrowDownRight}
-            color={hasData ? 'text-danger' : ''}
+            color="text-danger"
           />
 
-          <Stat
+          <MetricCard
             label="Múltiplo"
-            value={formatMetric(
-              adjustedMultiple,
-              (value) => `x${value.toFixed(2)}`,
-              hasData
-            )}
+            value={`x${adjustedMultiple.toFixed(2)}`}
             description="Múltiplo ajustado aplicado al EBITDA normalizado."
             icon={Gauge}
           />
 
-          <Stat
+          <MetricCard
             label="Score"
-            value={qualityScore === null ? 'N/A' : `${qualityScore}/100`}
+            value={`${normalizedScore}/100`}
             description="Calidad financiera, riesgo y transferibilidad."
             icon={Activity}
-            color={hasData ? derived?.riskLevel?.color || '' : ''}
+            color={derived?.riskLevel?.color || ''}
           />
         </div>
       </div>
