@@ -49,9 +49,8 @@ export function AppShell() {
             margin: '18px 24px 0',
             padding: '14px 18px',
             borderRadius: 18,
-            border: '1px solid rgba(16,185,129,0.24)',
-            background:
-              'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(59,130,246,0.08))',
+            border: '1px solid rgba(255,255,255,0.055)',
+            background: '#000000',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',

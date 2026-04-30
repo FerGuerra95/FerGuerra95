@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { BrainCircuit, Calculator, Landmark, ShieldCheck } from 'lucide-react';
+import {
+  BrainCircuit,
+  Calculator,
+  Landmark,
+  ShieldCheck,
+  Sparkles
+} from 'lucide-react';
 import { routeGroups } from '../router/routeConfig.jsx';
+
+const GOLD = '#d4af37';
 
 const workspaceMeta = {
   ma: {
@@ -21,10 +29,597 @@ const workspaceMeta = {
   }
 };
 
+const sidebarCss = `
+  @keyframes ceosRgbRail {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 0% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+
+  .sidebar.ceos-sidebar {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: 1px solid rgba(255,255,255,0.035);
+    background: #000000 !important;
+    box-shadow:
+      inset -1px 0 0 rgba(255,255,255,0.012),
+      34px 0 100px rgba(0,0,0,0.98);
+    backdrop-filter: blur(22px) saturate(125%);
+    -webkit-backdrop-filter: blur(22px) saturate(125%);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .sidebar.ceos-sidebar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  .sidebar.ceos-sidebar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255,255,255,0.010), transparent 30%),
+      linear-gradient(180deg, rgba(255,255,255,0.004), transparent 20%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .ceos-glass-layer {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,0.014),
+        rgba(255,255,255,0.003) 22%,
+        transparent 54%,
+        rgba(255,255,255,0.004) 100%
+      );
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.022),
+      inset 0 -1px 0 rgba(255,255,255,0.008);
+    pointer-events: none;
+  }
+
+  .ceos-glass-shine {
+    position: absolute;
+    top: -18%;
+    left: -58%;
+    z-index: 0;
+    width: 82%;
+    height: 140%;
+    transform: rotate(17deg);
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.004),
+        rgba(255,255,255,0.014),
+        transparent
+      );
+    opacity: 0.14;
+    filter: blur(1px);
+    pointer-events: none;
+  }
+
+  .ceos-sidebar-edge-glow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    background:
+      linear-gradient(
+        to bottom,
+        transparent,
+        rgba(255,255,255,0.040),
+        rgba(212,175,55,0.08),
+        rgba(255,255,255,0.030),
+        transparent
+      );
+    box-shadow:
+      0 0 14px rgba(212,175,55,0.04),
+      0 0 18px rgba(255,255,255,0.015);
+    pointer-events: none;
+  }
+
+  .ceos-sidebar-brand {
+    position: relative;
+    padding: 24px 18px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.026);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255,255,255,0.008),
+        rgba(255,255,255,0.002),
+        transparent
+      );
+  }
+
+  .ceos-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 17px;
+  }
+
+  .ceos-brand-mark {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    border-radius: 17px;
+    display: grid;
+    place-items: center;
+    color: #d4af37;
+    background:
+      radial-gradient(circle at 35% 18%, rgba(255,255,255,0.05), transparent 24%),
+      linear-gradient(135deg, rgba(212,175,55,0.06), rgba(255,255,255,0.008)),
+      rgba(0,0,0,0.92);
+    border: 1px solid rgba(212,175,55,0.12);
+    box-shadow:
+      0 18px 42px rgba(0,0,0,0.88),
+      0 0 20px rgba(212,175,55,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.045),
+      inset 0 -1px 0 rgba(255,255,255,0.008);
+    backdrop-filter: blur(18px) saturate(130%);
+    -webkit-backdrop-filter: blur(18px) saturate(130%);
+  }
+
+  .ceos-brand-mark svg {
+    color: #d4af37 !important;
+    stroke: #d4af37 !important;
+    filter: drop-shadow(0 0 11px rgba(212,175,55,0.24));
+  }
+
+  .ceos-brand-title {
+    font-size: 19px;
+    font-weight: 950;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    color: #ffffff;
+    text-shadow:
+      0 0 12px rgba(255,255,255,0.045),
+      0 0 14px rgba(212,175,55,0.08);
+  }
+
+  .ceos-brand-subtitle {
+    margin-top: 6px;
+    font-size: 10.5px;
+    color: rgba(226,232,240,0.42);
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    line-height: 1.35;
+  }
+
+  .ceos-workspace-card {
+    position: relative;
+    overflow: hidden;
+    padding: 14px;
+    border-radius: 18px;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(255,255,255,0.016), transparent 28%),
+      linear-gradient(135deg, rgba(212,175,55,0.020), rgba(255,255,255,0.006)),
+      rgba(0,0,0,0.90);
+    border: 1px solid rgba(212,175,55,0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.028),
+      inset 0 -1px 0 rgba(255,255,255,0.008),
+      0 18px 44px rgba(0,0,0,0.78);
+    backdrop-filter: blur(22px) saturate(138%);
+    -webkit-backdrop-filter: blur(22px) saturate(138%);
+  }
+
+  .ceos-workspace-title {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #d4af37;
+    font-size: 12.5px;
+    font-weight: 950;
+    margin-bottom: 7px;
+    letter-spacing: -0.01em;
+  }
+
+  .ceos-workspace-title svg {
+    color: #d4af37 !important;
+    stroke: #d4af37 !important;
+    filter: drop-shadow(0 0 10px rgba(212,175,55,0.18));
+  }
+
+  .ceos-workspace-copy {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: rgba(226,232,240,0.52);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .ceos-nav {
+    padding: 19px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .ceos-nav-section-title {
+    position: relative;
+    padding: 0 10px 13px;
+    margin-bottom: 9px;
+    font-size: 13.2px;
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: 0.108em;
+    color: rgba(226,232,240,0.30);
+    transition:
+      color .26s ease,
+      text-shadow .26s ease,
+      transform .26s ease;
+  }
+
+  .ceos-nav-section-title::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    bottom: 0;
+    width: 42px;
+    height: 5px;
+    border-radius: 999px;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255,255,255,0.060),
+        rgba(255,255,255,0.016)
+      );
+    border: 1px solid rgba(255,255,255,0.040);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.07),
+      inset 0 -1px 0 rgba(255,255,255,0.010),
+      0 8px 22px rgba(0,0,0,0.62);
+    transition:
+      width .28s cubic-bezier(.22,.61,.36,1),
+      background .28s ease,
+      border-color .28s ease,
+      box-shadow .28s ease;
+  }
+
+  .ceos-nav-section-title.is-active {
+    color: #f8fafc;
+    transform: translateX(1px);
+    text-shadow:
+      0 0 16px rgba(212,175,55,0.18),
+      0 0 12px rgba(255,255,255,0.05);
+  }
+
+  .ceos-nav-section-title.is-active::after {
+    width: 86px;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255,255,255,0.10),
+        rgba(212,175,55,0.62),
+        rgba(255,255,255,0.06)
+      );
+    border-color: rgba(212,175,55,0.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.14),
+      inset 0 -1px 0 rgba(255,255,255,0.018),
+      0 0 20px rgba(212, 175, 55, 0.18),
+      0 10px 28px rgba(0,0,0,0.64);
+  }
+
+  .ceos-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .ceos-nav-link {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 11px 12px 11px 14px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 850;
+    transition:
+      transform .22s cubic-bezier(.22,.61,.36,1),
+      color .18s ease,
+      background .18s ease,
+      border-color .18s ease,
+      box-shadow .18s ease,
+      filter .18s ease;
+    backdrop-filter: blur(10px) saturate(118%);
+    -webkit-backdrop-filter: blur(10px) saturate(118%);
+  }
+
+  .ceos-nav-link:hover {
+    transform: translateX(5px) scale(1.018);
+  }
+
+  .ceos-nav-link-shine {
+    position: absolute;
+    top: -48%;
+    left: -72%;
+    width: 42%;
+    height: 196%;
+    transform: rotate(18deg);
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.070),
+        rgba(212,175,55,0.12),
+        transparent
+      );
+    opacity: 0;
+    transition:
+      left .62s cubic-bezier(.22,.61,.36,1),
+      opacity .18s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .ceos-nav-link:hover .ceos-nav-link-shine {
+    left: 120%;
+    opacity: 1;
+  }
+
+  .ceos-active-rail {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 4px;
+    border-radius: 999px;
+    background:
+      linear-gradient(
+        180deg,
+        #d4af37 0%,
+        #34d399 45%,
+        #60a5fa 78%,
+        #d4af37 100%
+      );
+    background-size: 100% 220%;
+    animation: ceosRgbRail 3.8s ease infinite;
+    box-shadow:
+      0 0 18px rgba(212,175,55,0.48),
+      0 0 18px rgba(52,211,153,0.24),
+      0 0 16px rgba(96,165,250,0.22);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .ceos-nav-icon {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 25px;
+    height: 25px;
+    transition:
+      color .2s ease,
+      transform .22s cubic-bezier(.22,.61,.36,1),
+      filter .2s ease;
+  }
+
+  .ceos-nav-icon svg,
+  .ceos-nav-svg {
+    color: currentColor !important;
+    stroke: currentColor !important;
+  }
+
+  .ceos-nav-label {
+    position: relative;
+    z-index: 3;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    transition:
+      transform .2s ease,
+      text-shadow .2s ease;
+  }
+
+  .ceos-sidebar-footer {
+    margin-top: auto;
+    padding: 16px;
+    border-top: 1px solid rgba(255,255,255,0.026);
+    background:
+      linear-gradient(180deg, transparent, rgba(255,255,255,0.004));
+  }
+
+  .ceos-build-card {
+    position: relative;
+    overflow: hidden;
+    padding: 13px;
+    border-radius: 17px;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(212,175,55,0.025), transparent 42%),
+      linear-gradient(135deg, rgba(255,255,255,0.014), rgba(255,255,255,0.003)),
+      rgba(0,0,0,0.92);
+    border: 1px solid rgba(212,175,55,0.06);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.026),
+      inset 0 -1px 0 rgba(255,255,255,0.008),
+      0 16px 36px rgba(0,0,0,0.76);
+    backdrop-filter: blur(20px) saturate(132%);
+    -webkit-backdrop-filter: blur(20px) saturate(132%);
+  }
+
+  .ceos-build-title {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 950;
+    color: #ffffff;
+    margin-bottom: 5px;
+  }
+
+  .ceos-build-title svg {
+    color: #d4af37 !important;
+    stroke: #d4af37 !important;
+    filter: drop-shadow(0 0 9px rgba(212,175,55,0.16));
+  }
+
+  .ceos-build-copy {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.48;
+    color: rgba(226,232,240,0.42);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ceos-nav-link,
+    .ceos-nav-icon,
+    .ceos-nav-label,
+    .ceos-nav-link-shine,
+    .ceos-nav-section-title,
+    .ceos-nav-section-title::after,
+    .ceos-active-rail {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .ceos-nav-link:hover {
+      transform: none;
+    }
+  }
+`;
+
 function getActiveWorkspace(pathname) {
   if (pathname.startsWith('/compliance')) return 'compliance';
   if (pathname.startsWith('/funding')) return 'funding';
   return 'ma';
+}
+
+function forceIconColor(icon, isHighlighted) {
+  if (!React.isValidElement(icon)) return icon;
+
+  const color = isHighlighted ? GOLD : 'rgba(226,232,240,0.70)';
+
+  return React.cloneElement(icon, {
+    className: `${icon.props.className || ''} ceos-nav-svg`.trim(),
+    color,
+    stroke: color,
+    style: {
+      ...(icon.props.style || {}),
+      color,
+      stroke: color
+    }
+  });
+}
+
+function SidebarNavItem({ item }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <NavLink
+      to={item.to}
+      className="ceos-nav-link"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={({ isActive }) => {
+        const isHighlighted = isActive || isHovered;
+
+        return {
+          color: isHighlighted ? '#ffffff' : 'rgba(226,232,240,0.64)',
+          border: isActive
+            ? '1px solid rgba(212,175,55,0.24)'
+            : isHovered
+              ? '1px solid rgba(212,175,55,0.16)'
+              : '1px solid transparent',
+          background: isActive
+            ? `
+              linear-gradient(135deg, rgba(255,255,255,0.032), rgba(255,255,255,0.008)),
+              rgba(0,0,0,0.985)
+            `
+            : isHovered
+              ? `
+                linear-gradient(135deg, rgba(212,175,55,0.030), rgba(255,255,255,0.008)),
+                rgba(0,0,0,0.972)
+              `
+              : 'rgba(0,0,0,0.78)',
+          boxShadow: isActive
+            ? `
+              0 18px 50px rgba(0,0,0,0.84),
+              0 0 30px rgba(212,175,55,0.18),
+              inset 0 1px 0 rgba(255,255,255,0.050),
+              inset 0 -1px 0 rgba(255,255,255,0.014)
+            `
+            : isHovered
+              ? `
+                0 16px 38px rgba(0,0,0,0.76),
+                0 0 24px rgba(212,175,55,0.14),
+                inset 0 1px 0 rgba(255,255,255,0.040),
+                inset 0 -1px 0 rgba(255,255,255,0.012)
+              `
+              : 'none',
+          filter: isHovered ? 'brightness(1.05)' : 'none'
+        };
+      }}
+    >
+      {({ isActive }) => {
+        const isHighlighted = isActive || isHovered;
+        const iconColor = isHighlighted ? GOLD : 'rgba(226,232,240,0.70)';
+
+        return (
+          <>
+            {isHighlighted ? <span className="ceos-active-rail" /> : null}
+            <span className="ceos-nav-link-shine" />
+
+            <span
+              className="ceos-nav-icon"
+              style={{
+                color: iconColor,
+                transform: isHighlighted ? 'scale(1.10)' : 'scale(1)',
+                filter: isHighlighted
+                  ? 'drop-shadow(0 0 13px rgba(212,175,55,0.42))'
+                  : 'none'
+              }}
+            >
+              {forceIconColor(item.icon, isHighlighted)}
+            </span>
+
+            <span
+              className="ceos-nav-label"
+              style={{
+                textShadow: isHighlighted
+                  ? '0 0 16px rgba(255,255,255,0.08), 0 0 12px rgba(212,175,55,0.14)'
+                  : 'none'
+              }}
+            >
+              {item.label}
+            </span>
+          </>
+        );
+      }}
+    </NavLink>
+  );
 }
 
 export function Sidebar() {
@@ -34,177 +629,57 @@ export function Sidebar() {
   const activeMeta = workspaceMeta[activeWorkspace];
 
   return (
-    <aside
-      className="sidebar"
-      style={{
-        borderRight: '1px solid rgba(255,255,255,0.10)',
-        background:
-          'linear-gradient(180deg, rgba(15,23,42,0.98), rgba(17,24,39,0.98))'
-      }}
-    >
-      <div
-        style={{
-          padding: '22px 18px 18px',
-          borderBottom: '1px solid rgba(255,255,255,0.08)'
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            marginBottom: 14
-          }}
-        >
-          <div
-            style={{
-              width: 42,
-              height: 42,
-              borderRadius: 14,
-              display: 'grid',
-              placeItems: 'center',
-              background:
-                'linear-gradient(135deg, rgba(16,185,129,0.28), rgba(59,130,246,0.18))',
-              border: '1px solid rgba(16,185,129,0.35)',
-              color: '#34d399'
-            }}
-          >
-            <BrainCircuit size={22} />
+    <aside className="sidebar ceos-sidebar">
+      <style>{sidebarCss}</style>
+
+      <div className="ceos-glass-layer" />
+      <div className="ceos-glass-shine" />
+      <div className="ceos-sidebar-edge-glow" />
+
+      <div className="ceos-sidebar-brand">
+        <div className="ceos-brand-row">
+          <div className="ceos-brand-mark">
+            <BrainCircuit size={23} />
           </div>
 
           <div>
-            <div
-              style={{
-                fontSize: 18,
-                fontWeight: 900,
-                letterSpacing: -0.3,
-                color: '#ffffff'
-              }}
-            >
-              CEO’s OS
-            </div>
+            <div className="ceos-brand-title">CEO’s OS</div>
 
-            <div
-              style={{
-                fontSize: 11,
-                color: 'rgba(255,255,255,0.54)',
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: 0.5
-              }}
-            >
+            <div className="ceos-brand-subtitle">
               Executive Command Center
             </div>
           </div>
         </div>
 
-        <div
-          style={{
-            padding: 12,
-            borderRadius: 16,
-            background: 'rgba(16,185,129,0.10)',
-            border: '1px solid rgba(16,185,129,0.20)'
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              color: '#34d399',
-              fontSize: 12,
-              fontWeight: 900,
-              marginBottom: 6
-            }}
-          >
+        <div className="ceos-workspace-card">
+          <div className="ceos-workspace-title">
             {activeMeta.icon}
             {activeMeta.title}
           </div>
 
-          <p
-            style={{
-              margin: 0,
-              color: 'rgba(255,255,255,0.62)',
-              fontSize: 12,
-              lineHeight: 1.45
-            }}
-          >
+          <p className="ceos-workspace-copy">
             {activeMeta.description}
           </p>
         </div>
       </div>
 
-      <nav
-        style={{
-          padding: '18px 12px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 18
-        }}
-      >
+      <nav className="ceos-nav">
         {Object.entries(routeGroups).map(([groupKey, group]) => {
           const isGroupActive = groupKey === activeWorkspace;
 
           return (
-            <div key={groupKey}>
+            <div className="ceos-nav-section" key={groupKey}>
               <div
-                style={{
-                  padding: '0 8px 8px',
-                  fontSize: 11,
-                  fontWeight: 900,
-                  textTransform: 'uppercase',
-                  letterSpacing: 0.7,
-                  color: isGroupActive ? '#34d399' : 'rgba(255,255,255,0.38)'
-                }}
+                className={`ceos-nav-section-title ${
+                  isGroupActive ? 'is-active' : ''
+                }`.trim()}
               >
                 {group.label}
               </div>
 
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 6
-                }}
-              >
+              <div className="ceos-nav-list">
                 {group.items.map((item) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    style={({ isActive }) => ({
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      padding: '10px 11px',
-                      borderRadius: 13,
-                      textDecoration: 'none',
-                      fontSize: 13,
-                      fontWeight: 800,
-                      color: isActive ? '#ffffff' : 'rgba(255,255,255,0.68)',
-                      background: isActive
-                        ? 'linear-gradient(135deg, rgba(16,185,129,0.24), rgba(59,130,246,0.14))'
-                        : 'transparent',
-                      border: isActive
-                        ? '1px solid rgba(16,185,129,0.28)'
-                        : '1px solid transparent',
-                      boxShadow: isActive
-                        ? '0 10px 30px rgba(0,0,0,0.20)'
-                        : 'none'
-                    })}
-                  >
-                    <span
-                      style={{
-                        display: 'grid',
-                        placeItems: 'center',
-                        width: 24,
-                        height: 24
-                      }}
-                    >
-                      {item.icon}
-                    </span>
-
-                    <span>{item.label}</span>
-                  </NavLink>
+                  <SidebarNavItem key={item.to} item={item} />
                 ))}
               </div>
             </div>
@@ -212,40 +687,14 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div
-        style={{
-          marginTop: 'auto',
-          padding: 16,
-          borderTop: '1px solid rgba(255,255,255,0.08)'
-        }}
-      >
-        <div
-          style={{
-            padding: 12,
-            borderRadius: 16,
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)'
-          }}
-        >
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 900,
-              color: '#ffffff',
-              marginBottom: 4
-            }}
-          >
+      <div className="ceos-sidebar-footer">
+        <div className="ceos-build-card">
+          <div className="ceos-build-title">
+            <Sparkles size={14} />
             Stable Demo Build
           </div>
 
-          <p
-            style={{
-              margin: 0,
-              fontSize: 11,
-              lineHeight: 1.45,
-              color: 'rgba(255,255,255,0.52)'
-            }}
-          >
+          <p className="ceos-build-copy">
             M&A + Compliance conectados a backend JSON. Funding integrado como
             tercera línea estratégica.
           </p>
