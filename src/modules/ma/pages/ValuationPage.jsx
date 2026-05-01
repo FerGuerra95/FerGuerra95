@@ -2,11 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import {
   Activity,
   AlertTriangle,
+  ArrowRight,
+  BarChart3,
   CheckCircle2,
-  Database,
-  Download,
-  FileText,
-  LockKeyhole,
   RotateCcw,
   Save,
   ShieldCheck,
@@ -33,9 +31,8 @@ import {
 import { requiredString } from '../../../shared/utils/validators.js';
 import { FinancialInputPanel } from '../components/FinancialInputPanel.jsx';
 import { EquityHeroCard } from '../components/EquityHeroCard.jsx';
-import { DealStructureCard } from '../components/DealStructureCard.jsx';
 import { ComparablesGrid } from '../components/ComparablesGrid.jsx';
-import { maReportsApi } from '../services/maReportsApi.js';
+import { MAReportExportButton } from '../components/MAReportExportButton.jsx';
 import { DEMO_MA_CASE } from '../../../shared/config/demoData.js';
 import {
   SHOW_DEMO_TOOLS,
@@ -157,6 +154,7 @@ const maValuationCss = `
     display: block;
     margin-top: 8px;
     line-height: 1.25;
+    overflow-wrap: anywhere;
   }
 
   .ma-valuation-status-card {
@@ -277,44 +275,6 @@ const maValuationCss = `
     min-width: 0;
   }
 
-  .ma-action-panel {
-    border-radius: 31px;
-    padding: 26px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    background:
-      radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.13), transparent 32%),
-      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.024)),
-      rgba(15, 23, 42, 0.64);
-    box-shadow:
-      0 24px 70px rgba(0, 0, 0, 0.21),
-      inset 0 1px 0 rgba(255,255,255,0.035);
-  }
-
-  .ma-action-panel-head {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    align-items: flex-start;
-    margin-bottom: 22px;
-  }
-
-  .ma-action-panel h3 {
-    margin: 0;
-    letter-spacing: -0.04em;
-  }
-
-  .ma-action-panel p {
-    margin: 10px 0 0;
-    line-height: 1.64;
-  }
-
-  .ma-action-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    align-items: center;
-  }
-
   .ma-state-card {
     border-radius: 24px;
     padding: 20px;
@@ -345,7 +305,7 @@ const maValuationCss = `
       rgba(15, 23, 42, 0.64);
   }
 
-  .ma-state-card p {
+  .ma-state-card-content {
     margin: 0;
     line-height: 1.6;
   }
@@ -393,15 +353,280 @@ const maValuationCss = `
     line-height: 1.7;
   }
 
-  .ma-analysis-grid {
+  .ma-deal-structure-slot {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .ma-premium-deal-card {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    min-height: 620px;
+    border-radius: 36px;
+    padding: 34px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background:
+      radial-gradient(circle at 8% 4%, rgba(59, 130, 246, 0.2), transparent 30%),
+      radial-gradient(circle at 92% 10%, rgba(16, 185, 129, 0.13), transparent 28%),
+      radial-gradient(circle at 50% 120%, rgba(234, 179, 8, 0.08), transparent 34%),
+      linear-gradient(135deg, rgba(15, 23, 42, 0.94), rgba(2, 6, 23, 0.96));
+    box-shadow:
+      0 30px 90px rgba(0, 0, 0, 0.26),
+      inset 0 1px 0 rgba(255,255,255,0.045);
+  }
+
+  .ma-premium-deal-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.032) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.032) 1px, transparent 1px);
+    background-size: 46px 46px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.82), transparent 86%);
+    pointer-events: none;
+  }
+
+  .ma-premium-deal-card::after {
+    content: "";
+    position: absolute;
+    right: -130px;
+    bottom: -150px;
+    width: 360px;
+    height: 360px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .ma-premium-deal-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .ma-premium-deal-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 26px;
+    align-items: flex-start;
+  }
+
+  .ma-premium-deal-header h3 {
+    margin: 0;
+    font-size: clamp(28px, 3vw, 42px);
+    line-height: 1.02;
+    letter-spacing: -0.06em;
+  }
+
+  .ma-premium-deal-header p {
+    max-width: 820px;
+    margin: 15px 0 0;
+    line-height: 1.7;
+  }
+
+  .ma-premium-deal-icon {
+    flex: 0 0 auto;
+    width: 58px;
+    height: 58px;
+    border-radius: 22px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
-    gap: 28px;
+    place-items: center;
+    background: rgba(37, 99, 235, 0.14);
+    border: 1px solid rgba(96, 165, 250, 0.26);
+    color: #bfdbfe;
+    box-shadow: 0 16px 42px rgba(37, 99, 235, 0.14);
+  }
+
+  .ma-premium-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .ma-premium-metric {
+    min-height: 142px;
+    padding: 20px;
+    border-radius: 26px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025)),
+      rgba(15, 23, 42, 0.54);
+    border: 1px solid rgba(255,255,255,0.085);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .ma-premium-metric span {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: rgba(148, 163, 184, 0.94);
+  }
+
+  .ma-premium-metric strong {
+    display: block;
+    font-size: clamp(21px, 2vw, 30px);
+    line-height: 1.05;
+    letter-spacing: -0.055em;
+    overflow-wrap: anywhere;
+  }
+
+  .ma-premium-metric small {
+    display: block;
+    line-height: 1.45;
+    color: rgba(203, 213, 225, 0.72);
+  }
+
+  .ma-closing-structure-box {
+    border-radius: 32px;
+    padding: 28px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.074), rgba(255,255,255,0.027)),
+      rgba(2, 6, 23, 0.38);
+    border: 1px solid rgba(255,255,255,0.09);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      0 22px 60px rgba(0,0,0,0.18);
+  }
+
+  .ma-closing-structure-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .ma-closing-structure-title h4 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.12;
+    letter-spacing: -0.045em;
+  }
+
+  .ma-closing-structure-title p {
+    max-width: 700px;
+    margin: 9px 0 0;
+    line-height: 1.65;
+  }
+
+  .ma-closing-badge {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 14px;
+    border-radius: 999px;
+    background: rgba(16, 185, 129, 0.11);
+    border: 1px solid rgba(16, 185, 129, 0.22);
+    color: #bbf7d0;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .ma-bridge-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ma-bridge-row {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) minmax(170px, auto);
+    gap: 18px;
+    align-items: center;
+    padding: 20px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.078);
+  }
+
+  .ma-bridge-number {
+    width: 52px;
+    height: 52px;
+    border-radius: 19px;
+    display: grid;
+    place-items: center;
+    background: rgba(37, 99, 235, 0.14);
+    border: 1px solid rgba(96, 165, 250, 0.22);
+    color: #bfdbfe;
+    font-weight: 800;
+  }
+
+  .ma-bridge-copy strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 16px;
+  }
+
+  .ma-bridge-copy p {
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .ma-bridge-value {
+    text-align: right;
+  }
+
+  .ma-bridge-value strong {
+    display: block;
+    font-size: clamp(20px, 2vw, 28px);
+    line-height: 1.05;
+    letter-spacing: -0.055em;
+    overflow-wrap: anywhere;
+  }
+
+  .ma-bridge-value span {
+    display: block;
+    margin-top: 7px;
+    font-size: 12px;
+    color: rgba(148, 163, 184, 0.9);
+  }
+
+  .ma-closing-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 16px;
     align-items: stretch;
+    margin-top: 18px;
+  }
+
+  .ma-closing-footer-card {
+    border-radius: 24px;
+    padding: 20px;
+    background: rgba(255,255,255,0.042);
+    border: 1px solid rgba(255,255,255,0.078);
+  }
+
+  .ma-closing-footer-card strong {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .ma-closing-footer-card p {
+    margin: 0;
+    line-height: 1.58;
+  }
+
+  .ma-closing-arrow {
+    width: 54px;
+    border-radius: 24px;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.075);
+    color: rgba(226, 232, 240, 0.78);
   }
 
   .ma-intelligence-panel {
-    height: 100%;
+    width: 100%;
     border-radius: 31px;
     padding: 30px;
     border: 1px solid rgba(148, 163, 184, 0.16);
@@ -492,25 +717,43 @@ const maValuationCss = `
     line-height: 1.6;
   }
 
-  .ma-muted-tight {
-    margin-bottom: 0;
-  }
-
   @media (max-width: 1180px) {
     .ma-valuation-hero-inner,
-    .ma-valuation-workspace,
-    .ma-analysis-grid {
+    .ma-valuation-workspace {
       grid-template-columns: 1fr;
     }
 
     .ma-valuation-side {
       position: static;
     }
+
+    .ma-premium-metrics-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   @media (max-width: 920px) {
     .ma-valuation-command-bar {
       grid-template-columns: 1fr;
+    }
+
+    .ma-bridge-row {
+      grid-template-columns: 52px minmax(0, 1fr);
+    }
+
+    .ma-bridge-value {
+      grid-column: 1 / -1;
+      text-align: left;
+      padding-left: 70px;
+    }
+
+    .ma-closing-footer {
+      grid-template-columns: 1fr;
+    }
+
+    .ma-closing-arrow {
+      width: 100%;
+      min-height: 52px;
     }
   }
 
@@ -533,7 +776,39 @@ const maValuationCss = `
       text-align: left;
     }
 
-    .ma-action-panel,
+    .ma-premium-deal-card {
+      min-height: auto;
+      border-radius: 26px;
+      padding: 22px;
+    }
+
+    .ma-premium-deal-header,
+    .ma-closing-structure-title {
+      flex-direction: column;
+    }
+
+    .ma-premium-metrics-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ma-closing-structure-box {
+      border-radius: 24px;
+      padding: 20px;
+    }
+
+    .ma-bridge-row {
+      grid-template-columns: 1fr;
+    }
+
+    .ma-bridge-number {
+      width: 46px;
+      height: 46px;
+    }
+
+    .ma-bridge-value {
+      padding-left: 0;
+    }
+
     .ma-intelligence-panel {
       border-radius: 24px;
       padding: 24px;
@@ -784,21 +1059,6 @@ export function ValuationPage() {
     pushToast('Deal guardado y sincronizado');
   }
 
-  function handleExport() {
-    if (!canExportReport) {
-      pushToast('No tienes permisos para exportar reportes M&A');
-      return;
-    }
-
-    maReportsApi.exportExecutiveReport({
-      financials,
-      settings,
-      derived
-    });
-
-    pushToast('Reporte ejecutivo preparado para impresión');
-  }
-
   return (
     <div className="page">
       <style>{maValuationCss}</style>
@@ -851,10 +1111,17 @@ export function ValuationPage() {
                 ) : null}
 
                 {canExportReport ? (
-                  <Button onClick={handleExport} variant="secondary">
-                    <Download size={16} />
-                    Exportar report
-                  </Button>
+                  <MAReportExportButton
+                    financials={financials}
+                    settings={settings}
+                    derived={derived}
+                    disabled={hasValidationErrors}
+                    generatedBy="CEO’s OS"
+                    organizationName="CEO’s OS"
+                    reportStatus="Draft"
+                    showPrintButton
+                    onExportComplete={pushToast}
+                  />
                 ) : null}
 
                 <Button onClick={handleAnalyze} disabled={!canAnalyze}>
@@ -962,63 +1229,6 @@ export function ValuationPage() {
           </aside>
 
           <main className="ma-valuation-main">
-            <section className="ma-action-panel">
-              <div className="ma-action-panel-head">
-                <div>
-                  <div className="ma-kicker">
-                    <Sparkles size={14} />
-                    Analysis controls
-                  </div>
-
-                  <h3>Run, save and export the active deal</h3>
-
-                  <p className="muted">
-                    Usa el panel para ejecutar el análisis, guardar el caso y
-                    preparar un reporte ejecutivo imprimible.
-                  </p>
-                </div>
-
-                <div className="ma-valuation-icon-box">
-                  <FileText size={20} />
-                </div>
-              </div>
-
-              <div className="ma-action-grid">
-                {SHOW_DEMO_TOOLS && canEditCase ? (
-                  <>
-                    <Button onClick={handleLoadDemoCase} variant="secondary">
-                      <Sparkles size={16} />
-                      {DEMO_BUTTON_LABELS.ma}
-                    </Button>
-
-                    <Button onClick={handleResetDemoCase} variant="secondary">
-                      <RotateCcw size={16} />
-                      {DEMO_RESET_LABELS.ma}
-                    </Button>
-                  </>
-                ) : null}
-
-                {canCreateCase ? (
-                  <Button onClick={handleSaveCase} variant="secondary">
-                    <Save size={16} />
-                    Guardar deal
-                  </Button>
-                ) : null}
-
-                {canExportReport ? (
-                  <Button onClick={handleExport} variant="secondary">
-                    <Download size={16} />
-                    Exportar report
-                  </Button>
-                ) : null}
-
-                <Button onClick={handleAnalyze} disabled={!canAnalyze}>
-                  <Zap size={16} />
-                  {analysis.isAnalyzing ? 'Procesando...' : 'Ejecutar análisis'}
-                </Button>
-              </div>
-            </section>
-
             {!canEditCase ? (
               <StateCard>
                 Tu rol actual permite consultar y ejecutar el análisis, pero no
@@ -1090,68 +1300,65 @@ export function ValuationPage() {
 
                 <EquityHeroCard derived={derived} settings={settings} />
 
-                <section className="ma-analysis-grid">
-                  <DealStructureCard derived={derived} />
+                <section className="ma-deal-structure-slot">
+                  <PremiumDealStructureCard derived={derived} settings={settings} />
+                </section>
 
-                  <section className="ma-intelligence-panel">
-                    <div className="ma-panel-header">
-                      <div>
-                        <div className="ma-kicker">
-                          <Sparkles size={14} />
-                          Deal Intelligence
-                        </div>
-
-                        <h3>Signals, risks and executive interpretation</h3>
-
-                        <p className="muted">
-                          Lectura automática de señales relevantes del deal:
-                          calidad del EBITDA, riesgos operativos, concentración,
-                          dependencia del dueño y palancas de ajuste.
-                        </p>
+                <section className="ma-intelligence-panel">
+                  <div className="ma-panel-header">
+                    <div>
+                      <div className="ma-kicker">
+                        <Sparkles size={14} />
+                        Deal Intelligence
                       </div>
 
-                      <div className="ma-panel-icon">
-                        <TrendingUp size={20} />
-                      </div>
+                      <h3>Signals, risks and executive interpretation</h3>
+
+                      <p className="muted">
+                        Lectura automática de señales relevantes del deal:
+                        calidad del EBITDA, riesgos operativos, concentración,
+                        dependencia del dueño y palancas de ajuste.
+                      </p>
                     </div>
 
-                    <div className="ma-inference-list">
-                      {safeInferences.length === 0 ? (
-                        <div className="ma-inference-item">
+                    <div className="ma-panel-icon">
+                      <TrendingUp size={20} />
+                    </div>
+                  </div>
+
+                  <div className="ma-inference-list">
+                    {safeInferences.length === 0 ? (
+                      <div className="ma-inference-item">
+                        <div className="ma-inference-icon">
+                          <CheckCircle2 size={16} />
+                        </div>
+
+                        <div>
+                          <strong>No se han detectado red flags relevantes</strong>
+
+                          <p className="muted">
+                            La lectura actual no muestra señales críticas,
+                            aunque conviene revisar documentación, calidad de
+                            beneficios y dependencia operativa antes de avanzar.
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      safeInferences.map((item, index) => (
+                        <div key={index} className="ma-inference-item">
                           <div className="ma-inference-icon">
-                            <CheckCircle2 size={16} />
+                            <AlertTriangle size={16} />
                           </div>
 
                           <div>
-                            <strong>No se han detectado red flags relevantes</strong>
+                            <strong>{item.type}</strong>
 
-                            <p className="muted">
-                              La lectura actual no muestra señales críticas,
-                              aunque conviene revisar documentación, calidad de
-                              beneficios y dependencia operativa antes de
-                              avanzar.
-                            </p>
+                            <p className="muted">{item.msg}</p>
                           </div>
                         </div>
-                      ) : (
-                        safeInferences.map((item, index) => (
-                          <div key={index} className="ma-inference-item">
-                            <div className="ma-inference-icon">
-                              <AlertTriangle size={16} />
-                            </div>
-
-                            <div>
-                              <strong>{item.type}</strong>
-
-                              <p className="muted">
-                                {item.msg}
-                              </p>
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </section>
+                      ))
+                    )}
+                  </div>
                 </section>
 
                 <ComparablesGrid comparables={derived.comparables} />
@@ -1159,6 +1366,178 @@ export function ValuationPage() {
             )}
           </main>
         </section>
+      </div>
+    </div>
+  );
+}
+
+function PremiumDealStructureCard({ derived, settings }) {
+  const normalizedEbitda = readNumber(derived, ['normalizedEbitda']);
+  const adjustedMultiple = readNumber(derived, ['adjustedMultiple']);
+  const evBase = readNumber(derived, ['evBase', 'enterpriseValue']);
+  const netDebt = readNumber(derived, ['netDebt']);
+  const equityBase = readNumber(derived, ['equityBase', 'equityValue']);
+  const netProceeds = readNumber(derived, ['netProceeds']);
+  const qualityScore = readNumber(derived, ['qualityScore']);
+  const riskLabel = derived?.riskLevel?.label || derived?.riskLevel || 'Moderate';
+
+  return (
+    <section className="ma-premium-deal-card">
+      <div className="ma-premium-deal-inner">
+        <div className="ma-premium-deal-header">
+          <div>
+            <div className="ma-kicker">
+              <BarChart3 size={14} />
+              Deal Structure
+            </div>
+
+            <h3>Estructura de cierre clara, amplia y defendible.</h3>
+
+            <p className="muted">
+              Lectura ejecutiva del puente de valor: desde EBITDA normalizado
+              hasta Enterprise Value, ajuste por deuda neta, Equity Value y
+              caja estimada para el vendedor.
+            </p>
+          </div>
+
+          <div className="ma-premium-deal-icon">
+            <ShieldCheck size={24} />
+          </div>
+        </div>
+
+        <div className="ma-premium-metrics-grid">
+          <MetricBox
+            label="EBITDA normalizado"
+            value={formatCurrencyValue(normalizedEbitda)}
+            hint="Base operativa ajustada"
+          />
+
+          <MetricBox
+            label="Múltiplo ajustado"
+            value={formatMultipleValue(adjustedMultiple)}
+            hint="Riesgo, calidad y sector"
+          />
+
+          <MetricBox
+            label="Quality score"
+            value={formatScoreValue(qualityScore)}
+            hint="Lectura de calidad del activo"
+          />
+
+          <MetricBox
+            label="Risk level"
+            value={String(riskLabel)}
+            hint="Señal ejecutiva de riesgo"
+          />
+        </div>
+
+        <div className="ma-closing-structure-box">
+          <div className="ma-closing-structure-title">
+            <div>
+              <h4>Estructura de cierre</h4>
+
+              <p className="muted">
+                Este cuadro resume el recorrido económico del deal en formato
+                comité: valoración de empresa, ajustes de deuda/caja, valor para
+                accionistas y proceeds estimados.
+              </p>
+            </div>
+
+            <div className="ma-closing-badge">
+              <CheckCircle2 size={14} />
+              Executive view
+            </div>
+          </div>
+
+          <div className="ma-bridge-list">
+            <BridgeRow
+              number="01"
+              title="Enterprise Value"
+              description="Resultado de aplicar el múltiplo ajustado sobre el EBITDA normalizado."
+              value={formatCurrencyValue(evBase)}
+              meta={`${formatCurrencyValue(normalizedEbitda)} × ${formatMultipleValue(adjustedMultiple)}`}
+            />
+
+            <BridgeRow
+              number="02"
+              title="Ajuste de deuda neta"
+              description="Puente entre valor de empresa y valor atribuible al accionista."
+              value={formatCurrencyValue(netDebt)}
+              meta="Deuda financiera neta / caja"
+            />
+
+            <BridgeRow
+              number="03"
+              title="Equity Value"
+              description="Valor estimado de las participaciones después de ajustar deuda y caja."
+              value={formatCurrencyValue(equityBase)}
+              meta="Base de negociación"
+            />
+
+            <BridgeRow
+              number="04"
+              title="Net proceeds estimados"
+              description="Lectura final orientada al vendedor, después de los supuestos económicos del deal."
+              value={formatCurrencyValue(netProceeds)}
+              meta="Vista cierre"
+            />
+          </div>
+
+          <div className="ma-closing-footer">
+            <div className="ma-closing-footer-card">
+              <strong>Uso recomendado</strong>
+
+              <p className="muted">
+                Utilizar como resumen principal para explicar la operación a
+                comité, comprador, vendedor o inversor.
+              </p>
+            </div>
+
+            <div className="ma-closing-arrow">
+              <ArrowRight size={22} />
+            </div>
+
+            <div className="ma-closing-footer-card">
+              <strong>Próximo paso</strong>
+
+              <p className="muted">
+                Validar deuda, caja, ajustes normalizados, concentración de
+                clientes y documentación soporte antes de emitir conclusión.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MetricBox({ label, value, hint }) {
+  return (
+    <div className="ma-premium-metric">
+      <div>
+        <span>{label}</span>
+        <strong>{value}</strong>
+      </div>
+
+      <small>{hint}</small>
+    </div>
+  );
+}
+
+function BridgeRow({ number, title, description, value, meta }) {
+  return (
+    <div className="ma-bridge-row">
+      <div className="ma-bridge-number">{number}</div>
+
+      <div className="ma-bridge-copy">
+        <strong>{title}</strong>
+        <p className="muted">{description}</p>
+      </div>
+
+      <div className="ma-bridge-value">
+        <strong>{value}</strong>
+        <span>{meta}</span>
       </div>
     </div>
   );
@@ -1187,9 +1566,58 @@ function StateCard({ children, tone = 'neutral' }) {
 
   return (
     <div className={`ma-state-card ${toneClass}`.trim()}>
-      <p className="muted ma-muted-tight">{children}</p>
+      <div className="muted ma-state-card-content">{children}</div>
     </div>
   );
+}
+
+function readNumber(source, keys, fallback = 0) {
+  for (const key of keys) {
+    const value = source?.[key];
+    const parsed = Number(value);
+
+    if (Number.isFinite(parsed)) {
+      return parsed;
+    }
+  }
+
+  return fallback;
+}
+
+function formatCurrencyValue(value) {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed)) {
+    return '€0';
+  }
+
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0
+  }).format(parsed);
+}
+
+function formatMultipleValue(value) {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return '0.0x';
+  }
+
+  return `${parsed.toFixed(1)}x`;
+}
+
+function formatScoreValue(value) {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed)) {
+    return '0%';
+  }
+
+  const normalized = parsed <= 1 ? parsed * 100 : parsed;
+
+  return `${Math.round(normalized)}%`;
 }
 
 function getBackendStatusLabel(backendStatus) {
