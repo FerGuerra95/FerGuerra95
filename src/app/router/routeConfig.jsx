@@ -8,6 +8,7 @@ import {
   FolderKanban,
   FolderOpen,
   Landmark,
+  Layers3,
   LineChart,
   Map,
   PieChart,
@@ -29,6 +30,11 @@ export const routeGroups = {
         to: '/ma/valuation',
         label: 'Valuation Engine',
         icon: <BarChart3 size={18} />
+      },
+      {
+        to: '/ma/pipeline',
+        label: 'Deal Pipeline',
+        icon: <Layers3 size={18} />
       },
       {
         to: '/ma/waterfall',
@@ -131,6 +137,12 @@ export const pageMetaMap = {
     title: 'M&A Executive Dashboard',
     description:
       'Vista ejecutiva del deal: valoración, calidad del activo, riesgos principales y señales clave para la toma de decisión.'
+  },
+
+  '/ma/pipeline': {
+    title: 'M&A Deal Pipeline',
+    description:
+      'Vista enterprise del pipeline M&A por fases: screening, NDA, due diligence, comité de inversión, negociación y cierre.'
   },
 
   '/ma/valuation': {

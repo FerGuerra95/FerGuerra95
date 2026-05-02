@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   FileSearch,
   FileText,
+  Layers3,
   LockKeyhole,
   ShieldCheck,
   Sparkles,
@@ -22,9 +23,6 @@ import {
 } from '../../../app/providers/AuthProvider.jsx';
 import { useMAStore } from '../store/maStore.jsx';
 import { useValuationEngine } from '../engine/useValuationEngine.js';
-import { EquityHeroCard } from '../components/EquityHeroCard.jsx';
-import { DealStructureCard } from '../components/DealStructureCard.jsx';
-import { ComparablesGrid } from '../components/ComparablesGrid.jsx';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 
 const maDashboardCss = `
@@ -141,6 +139,7 @@ const maDashboardCss = `
     display: block;
     margin-top: 8px;
     line-height: 1.25;
+    overflow-wrap: anywhere;
   }
 
   .ma-signal-card {
@@ -308,7 +307,7 @@ const maDashboardCss = `
   }
 
   .ma-section-header p {
-    max-width: 800px;
+    max-width: 820px;
     margin: 11px 0 0;
     line-height: 1.68;
   }
@@ -329,7 +328,8 @@ const maDashboardCss = `
 
   .ma-kpi-card,
   .ma-panel,
-  .ma-workflow-card {
+  .ma-workflow-card,
+  .ma-summary-card {
     width: 100%;
     height: 100%;
     border-radius: 31px;
@@ -395,80 +395,117 @@ const maDashboardCss = `
     line-height: 1.56;
   }
 
-  .ma-panel {
-    padding: 31px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .ma-panel-header {
-    display: flex;
-    justify-content: space-between;
-    gap: 24px;
-    align-items: flex-start;
-  }
-
-  .ma-panel-title {
-    margin: 0;
-    letter-spacing: -0.045em;
-  }
-
-  .ma-panel-description {
-    margin: 11px 0 0;
-    line-height: 1.66;
-  }
-
-  .ma-panel-icon {
-    flex: 0 0 auto;
-    width: 46px;
-    height: 46px;
-    border-radius: 18px;
-    display: grid;
-    place-items: center;
-    background: rgba(255, 255, 255, 0.048);
-    border: 1px solid rgba(255, 255, 255, 0.085);
-  }
-
-  .ma-glass-block {
-    border-radius: 25px;
-    padding: 25px;
+  .ma-bridge-panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 32px;
+    padding: 28px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
     background:
-      linear-gradient(135deg, rgba(255,255,255,0.066), rgba(255,255,255,0.026));
-    border: 1px solid rgba(255,255,255,0.092);
+      radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.16), transparent 32%),
+      linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02)),
+      rgba(15, 23, 42, 0.64);
   }
 
-  .ma-thesis-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .ma-thesis-item {
+  .ma-bridge-grid {
     display: grid;
-    grid-template-columns: 32px minmax(0, 1fr);
-    gap: 15px;
-    align-items: flex-start;
-    padding: 19px;
-    border-radius: 21px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  .ma-bridge-step {
+    padding: 18px;
+    border-radius: 22px;
     background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.078);
-    color: var(--muted);
-    line-height: 1.62;
+    border: 1px solid rgba(255,255,255,0.075);
   }
 
-  .ma-thesis-dot {
-    width: 32px;
-    height: 32px;
-    border-radius: 14px;
+  .ma-bridge-step strong {
+    display: block;
+    margin-top: 8px;
+  }
+
+  .ma-pipeline-preview {
+    position: relative;
+    overflow: hidden;
+    border-radius: 34px;
+    padding: 32px;
+    border: 1px solid rgba(148, 163, 184, 0.17);
+    background:
+      radial-gradient(circle at 4% 0%, rgba(37, 99, 235, 0.2), transparent 30%),
+      radial-gradient(circle at 92% 4%, rgba(16, 185, 129, 0.13), transparent 28%),
+      radial-gradient(circle at 50% 120%, rgba(234, 179, 8, 0.07), transparent 34%),
+      linear-gradient(135deg, rgba(15, 23, 42, 0.78), rgba(2, 6, 23, 0.82));
+    box-shadow:
+      0 28px 80px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .ma-pipeline-preview::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.82), transparent 90%);
+    pointer-events: none;
+  }
+
+  .ma-pipeline-preview-inner {
+    position: relative;
+    z-index: 1;
     display: grid;
-    place-items: center;
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.22);
-    color: #86efac;
+    grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+    gap: 28px;
+    align-items: stretch;
+  }
+
+  .ma-pipeline-preview h2 {
+    margin: 0;
+    font-size: clamp(28px, 3vw, 42px);
+    line-height: 1.02;
+    letter-spacing: -0.06em;
+  }
+
+  .ma-pipeline-preview p {
+    max-width: 820px;
+    margin: 15px 0 0;
+    line-height: 1.7;
+  }
+
+  .ma-pipeline-preview-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 26px;
+  }
+
+  .ma-pipeline-preview-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .ma-pipeline-preview-metric {
+    min-height: 132px;
+    border-radius: 24px;
+    padding: 20px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.066), rgba(255,255,255,0.026)),
+      rgba(2, 6, 23, 0.2);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .ma-pipeline-preview-metric strong {
+    display: block;
+    margin-top: 9px;
+    font-size: 24px;
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
   }
 
   .ma-workflow-card {
@@ -534,7 +571,51 @@ const maDashboardCss = `
     background: rgba(255, 255, 255, 0.075);
   }
 
-  .ma-latest-grid {
+  .ma-panel {
+    padding: 31px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .ma-panel-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .ma-panel-title {
+    margin: 0;
+    letter-spacing: -0.045em;
+  }
+
+  .ma-panel-description {
+    margin: 11px 0 0;
+    line-height: 1.66;
+  }
+
+  .ma-panel-icon {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.048);
+    border: 1px solid rgba(255, 255, 255, 0.085);
+  }
+
+  .ma-glass-block {
+    border-radius: 25px;
+    padding: 25px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.066), rgba(255,255,255,0.026));
+    border: 1px solid rgba(255,255,255,0.092);
+  }
+
+  .ma-latest-grid,
+  .ma-summary-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
@@ -551,6 +632,7 @@ const maDashboardCss = `
   .ma-mini-metric strong {
     display: block;
     margin-top: 8px;
+    overflow-wrap: anywhere;
   }
 
   .ma-action-row {
@@ -561,41 +643,18 @@ const maDashboardCss = `
     margin-top: 22px;
   }
 
-  .ma-bridge-panel {
-    position: relative;
-    overflow: hidden;
-    border-radius: 32px;
-    padding: 28px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    background:
-      radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.16), transparent 32%),
-      linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02)),
-      rgba(15, 23, 42, 0.64);
+  .ma-summary-card {
+    padding: 31px;
   }
 
-  .ma-bridge-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-    margin-top: 22px;
+  .ma-summary-card h3 {
+    margin: 0;
+    letter-spacing: -0.045em;
   }
 
-  .ma-bridge-step {
-    padding: 18px;
-    border-radius: 22px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.075);
-  }
-
-  .ma-bridge-step strong {
-    display: block;
-    margin-top: 8px;
-  }
-
-  .ma-external-section {
-    display: flex;
-    flex-direction: column;
-    gap: 26px;
+  .ma-summary-card p {
+    margin: 11px 0 0;
+    line-height: 1.66;
   }
 
   .ma-muted-tight {
@@ -603,7 +662,8 @@ const maDashboardCss = `
   }
 
   @media (max-width: 1180px) {
-    .ma-hero-layout {
+    .ma-hero-layout,
+    .ma-pipeline-preview-inner {
       grid-template-columns: 1fr;
     }
 
@@ -630,19 +690,24 @@ const maDashboardCss = `
       gap: 28px;
     }
 
-    .ma-hero {
+    .ma-hero,
+    .ma-pipeline-preview {
       padding: 26px;
       border-radius: 28px;
     }
 
     .ma-grid-kpis,
-    .ma-bridge-grid {
+    .ma-bridge-grid,
+    .ma-latest-grid,
+    .ma-summary-grid,
+    .ma-pipeline-preview-metrics {
       grid-template-columns: 1fr;
     }
 
     .ma-kpi-card,
     .ma-panel,
-    .ma-workflow-card {
+    .ma-workflow-card,
+    .ma-summary-card {
       border-radius: 24px;
     }
 
@@ -666,10 +731,6 @@ const maDashboardCss = `
     .ma-arrow-link {
       display: none;
     }
-
-    .ma-latest-grid {
-      grid-template-columns: 1fr;
-    }
   }
 `;
 
@@ -687,22 +748,63 @@ export function MADashboardPage() {
 
   const safeSavedCases = Array.isArray(savedCases) ? savedCases : [];
   const latestCase = safeSavedCases[0] || null;
-  const reportCurrency = settings?.reportCurrency || 'EUR';
+  const reportCurrency = settings?.reportCurrency || financials?.currency || 'EUR';
 
   const hasDealData = hasSufficientDealData(financials, derived);
   const activeCompanyName = financials?.name?.trim() || 'Sin caso activo';
   const qualityScore = hasDealData ? getSafeQualityScore(derived.qualityScore) : null;
   const scoreAngle = `${(qualityScore ?? 0) * 3.6}deg`;
-  const equityBase = Number.isFinite(derived.equityBase)
-    ? derived.equityBase
-    : 0;
 
-  const thesisItems = Array.isArray(derived.thesis) ? derived.thesis : [];
-  const comparables = Array.isArray(derived.comparables)
-    ? derived.comparables
-    : [];
+  const equityBase =
+    hasDealData && Number.isFinite(Number(derived.equityBase))
+      ? Number(derived.equityBase)
+      : 0;
+
+  const adjustedMultiple =
+    hasDealData && Number.isFinite(Number(derived.adjustedMultiple))
+      ? Number(derived.adjustedMultiple).toFixed(2)
+      : 'N/A';
+
+  const netDebt =
+    hasDealData && Number.isFinite(Number(derived.netDebt))
+      ? Number(derived.netDebt)
+      : 0;
+
+  const equityLabel = hasDealData
+    ? formatCurrency(equityBase, reportCurrency)
+    : 'N/A';
+
+  const netDebtLabel = hasDealData
+    ? formatCurrency(netDebt, reportCurrency)
+    : 'N/A';
+
+  const latestEquityLabel = latestCase?.snapshot?.equityBase
+    ? formatCurrency(latestCase.snapshot.equityBase, reportCurrency)
+    : 'N/A';
 
   const qualitySignal = getQualitySignal(qualityScore);
+
+  const pipelineDealCount = getPipelineDealCount({
+    hasDealData,
+    savedCases: safeSavedCases
+  });
+
+  const pipelineValueLabel = getPipelineValueLabel({
+    hasDealData,
+    activeEquityValue: equityBase,
+    savedCases: safeSavedCases,
+    currency: reportCurrency
+  });
+
+  const pipelineStatus = pipelineDealCount > 0 ? 'Activo' : 'Pendiente';
+  const pipelinePriority =
+    qualityScore !== null && qualityScore >= 80
+      ? 'High'
+      : qualityScore !== null && qualityScore >= 55
+        ? 'Review'
+        : pipelineDealCount > 0
+          ? 'Watchlist'
+          : 'N/A';
 
   return (
     <div className="page">
@@ -726,9 +828,10 @@ export function MADashboardPage() {
               </h1>
 
               <p className="ma-hero-copy">
-                Centraliza valoración, estructura, tesis de inversión,
-                comparables, continuidad de casos y reporting ejecutivo en un
-                workspace privado diseñado para analizar, defender y decidir.
+                Pantalla de mando para revisar el estado del caso activo,
+                acceder a los módulos principales y mantener continuidad entre
+                valoración, pipeline, waterfall, reporting y repositorio de
+                deals.
               </p>
 
               <div className="ma-hero-actions">
@@ -741,17 +844,24 @@ export function MADashboardPage() {
                   </Button>
                 </Link>
 
+                <Link to="/ma/pipeline">
+                  <Button variant="secondary">
+                    <Layers3 size={16} />
+                    Ver Deal Pipeline
+                  </Button>
+                </Link>
+
+                <Link to="/ma/waterfall">
+                  <Button variant="secondary">
+                    <TrendingUp size={16} />
+                    Ver Waterfall
+                  </Button>
+                </Link>
+
                 <Link to="/ma/cim">
                   <Button variant="secondary">
                     <FileText size={16} />
                     Ver CIM / Report
-                  </Button>
-                </Link>
-
-                <Link to="/ma/deals">
-                  <Button variant="secondary">
-                    <BriefcaseBusiness size={16} />
-                    Deals Repository
                   </Button>
                 </Link>
               </div>
@@ -764,7 +874,7 @@ export function MADashboardPage() {
 
                 <CommandItem
                   label="Operating loop"
-                  value="Analyze · Structure · Report"
+                  value="Analyze · Pipeline · Structure · Report"
                 />
 
                 <CommandItem
@@ -815,7 +925,7 @@ export function MADashboardPage() {
 
                   <SignalRow
                     label="Equity base"
-                    value={formatCurrency(equityBase, reportCurrency)}
+                    value={equityLabel}
                   />
 
                   <SignalRow
@@ -835,24 +945,24 @@ export function MADashboardPage() {
 
         <section className="ma-section">
           <SectionHeader
-            kicker="Live deal overview"
+            kicker="Executive overview"
             icon={Activity}
-            title="Deal intelligence at a glance"
-            description="Una lectura rápida del caso activo para entender valor, calidad, continuidad y estado del análisis antes de entrar en profundidad."
+            title="M&A workspace at a glance"
+            description="Resumen rápido del caso activo y del estado general del workspace sin duplicar las pantallas específicas de valoración, pipeline, waterfall o reporting."
           />
 
           <div className="ma-grid ma-grid-kpis">
             <KpiCard
               label="Empresa activa"
               value={activeCompanyName}
-              description="Caso cargado en el motor"
+              description="Caso cargado en el workspace"
               icon={BriefcaseBusiness}
             />
 
             <KpiCard
               label="Equity Value"
-              value={formatCurrency(equityBase, reportCurrency)}
-              description="Valor base estimado"
+              value={equityLabel}
+              description="Resumen del valor base estimado"
               icon={TrendingUp}
             />
 
@@ -876,130 +986,241 @@ export function MADashboardPage() {
           <SectionHeader
             kicker="Operating system logic"
             icon={Target}
-            title="Analyze, structure, document and decide"
-            description="CEO’s OS organiza el ciclo M&A en una secuencia clara: entender el activo, valorar, diseñar la operación y convertir el análisis en material ejecutivo."
+            title="Analyze, pipeline, structure, document and decide"
+            description="CEO's OS organiza el ciclo M&A en una secuencia clara. Cada módulo tiene una función concreta y evita duplicar información entre pantallas."
           />
 
           <div className="ma-bridge-grid">
             <BridgeStep
               number="01"
               title="Analyze"
-              text="Lectura financiera, calidad del activo y señales críticas."
+              text="Carga inputs, normaliza EBITDA y detecta señales críticas en Valuation Engine."
             />
 
             <BridgeStep
               number="02"
-              title="Value"
-              text="Rango de valoración, múltiplos y sensibilidad del deal."
+              title="Pipeline"
+              text="Ordena operaciones por fase, prioridad, valor potencial, riesgo y responsable."
             />
 
             <BridgeStep
               number="03"
               title="Structure"
-              text="Deuda, caja, proceeds, waterfall y palancas de negociación."
+              text="Revisa deuda, caja, equity value, net proceeds y waterfall económico."
             />
 
             <BridgeStep
               number="04"
               title="Report"
-              text="Narrativa, tesis, riesgos y output para comité o inversores."
+              text="Convierte el análisis en narrativa ejecutiva, CIM y material exportable."
             />
           </div>
         </section>
 
-        <section className="ma-external-section">
-          <SectionHeader
-            kicker="Valuation cockpit"
-            icon={BarChart3}
-            title="From financial inputs to valuation posture"
-            description="El motor de valoración convierte los datos financieros en una lectura ejecutiva del valor, sensibilidad y calidad del deal."
-          />
-
-          <EquityHeroCard derived={derived} settings={settings} />
-        </section>
-
-        <section className="ma-grid ma-grid-two">
-          <div className="ma-external-section">
-            <SectionHeader
-              kicker="Deal structure"
-              icon={Target}
-              title="Deal mechanics"
-              description="Lectura de la estructura económica de la operación y sus principales palancas."
-            />
-
-            <DealStructureCard derived={derived} />
-          </div>
-
-          <section className="ma-panel">
-            <PanelHeader
-              kicker="Investment logic"
-              icon={Sparkles}
-              title="Investment Thesis"
-              description="Narrativa ejecutiva generada a partir de los inputs financieros, scoring de calidad, múltiplo ajustado y señales críticas del deal."
-            />
-
-            {thesisItems.length > 0 ? (
-              <ul className="ma-thesis-list">
-                {thesisItems.map((item, index) => (
-                  <li className="ma-thesis-item" key={index}>
-                    <span className="ma-thesis-dot">
-                      <CheckCircle2 size={14} />
-                    </span>
-
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="ma-glass-block">
-                <strong>Sin tesis suficiente todavía</strong>
-
-                <p className="muted ma-muted-tight" style={{ marginTop: 10 }}>
-                  Completa los principales inputs financieros en Valuation
-                  Engine para generar una lectura ejecutiva más sólida.
-                </p>
+        <section className="ma-pipeline-preview">
+          <div className="ma-pipeline-preview-inner">
+            <div>
+              <div className="ma-kicker">
+                <Layers3 size={14} />
+                Enterprise Deal Pipeline
               </div>
-            )}
-          </section>
+
+              <h2>M&A Deal Pipeline</h2>
+
+              <p className="muted">
+                El pipeline vive ahora en una página propia para mantener el
+                dashboard limpio y permitir una evolución enterprise: fases,
+                owner, prioridad, riesgo, valor potencial, filtros y futuras
+                páginas de detalle por operación.
+              </p>
+
+              <div className="ma-pipeline-preview-actions">
+                <Link to="/ma/pipeline">
+                  <Button>
+                    <Layers3 size={16} />
+                    Abrir pipeline completo
+                  </Button>
+                </Link>
+
+                <Link to="/ma/deals">
+                  <Button variant="secondary">
+                    <BriefcaseBusiness size={16} />
+                    Ver repositorio
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="ma-pipeline-preview-metrics">
+              <PipelinePreviewMetric
+                label="Deals tracked"
+                value={pipelineDealCount}
+              />
+
+              <PipelinePreviewMetric
+                label="Pipeline value"
+                value={pipelineValueLabel}
+              />
+
+              <PipelinePreviewMetric
+                label="Pipeline status"
+                value={pipelineStatus}
+              />
+
+              <PipelinePreviewMetric
+                label="Priority"
+                value={pipelinePriority}
+              />
+            </div>
+          </div>
         </section>
 
         <section className="ma-section">
           <SectionHeader
             kicker="Execution path"
             icon={Target}
-            title="From analysis to board-ready output"
-            description="Un flujo simple para pasar de inputs financieros a valoración, estructura de operación, narrativa ejecutiva y repositorio de casos."
+            title="Open the right module for the next decision"
+            description="Accesos directos a cada parte del flujo M&A. El dashboard resume; los módulos específicos profundizan."
           />
 
           <div className="ma-grid ma-grid-two">
             <WorkflowCard
               number="01"
               title="Valuation Engine"
-              description="Carga inputs, normaliza EBITDA, ajusta múltiplos y ejecuta el análisis base del activo."
+              description="Trabaja los inputs financieros, ejecuta el análisis y revisa el resultado principal de valoración."
               to="/ma/valuation"
             />
 
             <WorkflowCard
               number="02"
-              title="Deal Design"
-              description="Revisa estructura de deuda, caja, net proceeds, waterfall y palancas de negociación."
-              to="/ma/waterfall"
+              title="Deal Pipeline"
+              description="Gestiona operaciones por fase, prioridad, valor, riesgo, owner y siguiente paso."
+              to="/ma/pipeline"
             />
 
             <WorkflowCard
               number="03"
-              title="CIM / Executive Report"
-              description="Convierte la valoración en narrativa ejecutiva y material exportable para inversores o comité."
-              to="/ma/cim"
+              title="Deal Waterfall"
+              description="Analiza Enterprise Value, deuda neta, Equity Value, proceeds y reparto económico."
+              to="/ma/waterfall"
             />
 
             <WorkflowCard
               number="04"
+              title="CIM / Executive Report"
+              description="Prepara narrativa ejecutiva, tesis, riesgos y material para inversores o comité."
+              to="/ma/cim"
+            />
+
+            <WorkflowCard
+              number="05"
+              title="Buyer Matching"
+              description="Revisa encaje de compradores estratégicos, financieros y capital paciente."
+              to="/ma/matching"
+            />
+
+            <WorkflowCard
+              number="06"
               title="Deals Repository"
-              description="Guarda snapshots, recupera casos y conserva continuidad en el análisis de oportunidades."
+              description="Recupera casos guardados, consulta snapshots y conserva el histórico M&A."
               to="/ma/deals"
             />
           </div>
+        </section>
+
+        <section className="ma-grid ma-grid-two">
+          <section className="ma-summary-card">
+            <div className="ma-panel-header">
+              <div>
+                <div className="ma-kicker">
+                  <BarChart3 size={14} />
+                  Active case summary
+                </div>
+
+                <h3>Current deal snapshot</h3>
+
+                <p className="muted">
+                  Lectura compacta del caso activo. Para el análisis completo,
+                  entra en Valuation Engine, Deal Pipeline o Deal Waterfall.
+                </p>
+              </div>
+
+              <div className="ma-panel-icon">
+                <TrendingUp size={18} />
+              </div>
+            </div>
+
+            <div className="ma-summary-grid">
+              <MiniMetric label="Target" value={activeCompanyName} />
+              <MiniMetric label="Equity base" value={equityLabel} />
+              <MiniMetric label="Net debt" value={netDebtLabel} />
+              <MiniMetric label="Multiple" value={adjustedMultiple === 'N/A' ? 'N/A' : `x${adjustedMultiple}`} />
+            </div>
+
+            <div className="ma-action-row">
+              <Link to="/ma/valuation">
+                <Button variant="secondary">
+                  <BarChart3 size={16} />
+                  Revisar valoración
+                </Button>
+              </Link>
+
+              <Link to="/ma/pipeline">
+                <Button variant="secondary">
+                  <Layers3 size={16} />
+                  Revisar pipeline
+                </Button>
+              </Link>
+
+              <Link to="/ma/waterfall">
+                <Button variant="secondary">
+                  <TrendingUp size={16} />
+                  Revisar waterfall
+                </Button>
+              </Link>
+            </div>
+          </section>
+
+          <section className="ma-panel">
+            <PanelHeader
+              kicker="Decision discipline"
+              icon={ShieldCheck}
+              title="Recommended Next Step"
+              description="Siguiente acción sugerida según el estado actual del caso y del repositorio."
+            />
+
+            <div className="ma-glass-block">
+              <strong>{getRecommendedAction(qualityScore, latestCase)}</strong>
+
+              <p className="muted" style={{ marginTop: 10 }}>
+                El objetivo del dashboard no es repetir todo el análisis. Es
+                ayudarte a decidir qué módulo abrir y qué paso dar ahora.
+              </p>
+
+              <div className="ma-action-row">
+                <Link to="/ma/valuation">
+                  <Button variant="secondary">
+                    <BarChart3 size={16} />
+                    Valuation Engine
+                  </Button>
+                </Link>
+
+                <Link to="/ma/pipeline">
+                  <Button variant="secondary">
+                    <Layers3 size={16} />
+                    Deal Pipeline
+                  </Button>
+                </Link>
+
+                <Link to="/ma/cim">
+                  <Button variant="secondary">
+                    <FileText size={16} />
+                    Preparar report
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </section>
         </section>
 
         <section className="ma-grid ma-grid-two">
@@ -1029,20 +1250,8 @@ export function MADashboardPage() {
                   </div>
 
                   <div className="ma-latest-grid">
-                    <div className="ma-mini-metric">
-                      <div className="kpi-label">Equity base</div>
-                      <strong>
-                        {formatCurrency(
-                          latestCase.snapshot?.equityBase || 0,
-                          reportCurrency
-                        )}
-                      </strong>
-                    </div>
-
-                    <div className="ma-mini-metric">
-                      <div className="kpi-label">Repository status</div>
-                      <strong>Disponible</strong>
-                    </div>
+                    <MiniMetric label="Equity base" value={latestEquityLabel} />
+                    <MiniMetric label="Repository status" value="Disponible" />
                   </div>
                 </div>
 
@@ -1051,6 +1260,13 @@ export function MADashboardPage() {
                     <Button variant="secondary">
                       <BriefcaseBusiness size={16} />
                       Abrir repositorio
+                    </Button>
+                  </Link>
+
+                  <Link to="/ma/pipeline">
+                    <Button variant="secondary">
+                      <Layers3 size={16} />
+                      Ver en pipeline
                     </Button>
                   </Link>
                 </div>
@@ -1077,50 +1293,35 @@ export function MADashboardPage() {
             )}
           </section>
 
-          <section className="ma-panel">
-            <PanelHeader
-              kicker="Decision discipline"
-              icon={ShieldCheck}
-              title="Recommended Next Step"
-              description="Siguiente acción sugerida para completar la demo y dejar el caso preparado para presentación."
-            />
+          <section className="ma-summary-card">
+            <div className="ma-panel-header">
+              <div>
+                <div className="ma-kicker">
+                  <Sparkles size={14} />
+                  Workspace focus
+                </div>
 
-            <div className="ma-glass-block">
-              <strong>{getRecommendedAction(qualityScore, latestCase)}</strong>
+                <h3>Clean dashboard mode</h3>
 
-              <p className="muted" style={{ marginTop: 10 }}>
-                El objetivo del workspace no es solo calcular una valoración.
-                Es convertir el análisis en una decisión ejecutiva defendible.
-              </p>
+                <p className="muted">
+                  Esta vista queda reservada para mando ejecutivo. La valoración
+                  detallada, pipeline completo, deal structure y comparables
+                  viven en sus módulos correspondientes.
+                </p>
+              </div>
 
-              <div className="ma-action-row">
-                <Link to="/ma/valuation">
-                  <Button variant="secondary">
-                    <BarChart3 size={16} />
-                    Revisar valoración
-                  </Button>
-                </Link>
-
-                <Link to="/ma/cim">
-                  <Button variant="secondary">
-                    <FileText size={16} />
-                    Preparar report
-                  </Button>
-                </Link>
+              <div className="ma-panel-icon">
+                <ShieldCheck size={18} />
               </div>
             </div>
+
+            <div className="ma-summary-grid">
+              <MiniMetric label="Valuation detail" value="Valuation Engine" />
+              <MiniMetric label="Pipeline detail" value="Deal Pipeline" />
+              <MiniMetric label="Waterfall detail" value="Deal Waterfall" />
+              <MiniMetric label="Report detail" value="CIM / Report" />
+            </div>
           </section>
-        </section>
-
-        <section className="ma-external-section">
-          <SectionHeader
-            kicker="Market context"
-            icon={TrendingUp}
-            title="Comparable intelligence"
-            description="Una lectura comparativa para entender el rango de mercado y reforzar la narrativa de valoración."
-          />
-
-          <ComparablesGrid comparables={comparables} />
         </section>
       </div>
     </div>
@@ -1165,6 +1366,15 @@ function KpiCard({ label, value, description, icon: Icon }) {
 
       <p className="muted">{description}</p>
     </article>
+  );
+}
+
+function PipelinePreviewMetric({ label, value }) {
+  return (
+    <div className="ma-pipeline-preview-metric">
+      <div className="kpi-label">{label}</div>
+      <strong>{value}</strong>
+    </div>
   );
 }
 
@@ -1232,12 +1442,57 @@ function SignalRow({ label, value }) {
   );
 }
 
+function MiniMetric({ label, value }) {
+  return (
+    <div className="ma-mini-metric">
+      <div className="kpi-label">{label}</div>
+      <strong>{value}</strong>
+    </div>
+  );
+}
+
+function getPipelineDealCount({ hasDealData, savedCases }) {
+  const savedCount = Array.isArray(savedCases) ? savedCases.length : 0;
+
+  return savedCount + (hasDealData ? 1 : 0);
+}
+
+function getPipelineValueLabel({
+  hasDealData,
+  activeEquityValue,
+  savedCases,
+  currency
+}) {
+  const activeValue =
+    hasDealData && Number.isFinite(Number(activeEquityValue))
+      ? Number(activeEquityValue)
+      : 0;
+
+  const savedValue = Array.isArray(savedCases)
+    ? savedCases.reduce((sum, item) => {
+        const value = Number(item?.snapshot?.equityBase);
+
+        return Number.isFinite(value) ? sum + value : sum;
+      }, 0)
+    : 0;
+
+  const total = activeValue + savedValue;
+  const hasValue = total !== 0;
+
+  return hasValue ? formatCurrency(total, currency) : 'N/A';
+}
+
 function hasSufficientDealData(financials, derived) {
   const hasName = Boolean(financials?.name?.trim());
   const hasSector = Boolean(financials?.sector);
   const normalizedEbitda = Number(derived?.normalizedEbitda);
 
-  return hasName && hasSector && Number.isFinite(normalizedEbitda) && normalizedEbitda > 0;
+  return (
+    hasName &&
+    hasSector &&
+    Number.isFinite(normalizedEbitda) &&
+    normalizedEbitda > 0
+  );
 }
 
 function getSafeQualityScore(score) {
@@ -1312,3 +1567,5 @@ function getRecommendedAction(score, latestCase) {
 
   return 'Reforzar datos financieros antes de avanzar a valoración o reporte.';
 }
+
+export default MADashboardPage;

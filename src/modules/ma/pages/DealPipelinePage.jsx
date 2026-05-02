@@ -1,0 +1,1363 @@
+import React, { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  AlertTriangle,
+  ArrowRight,
+  BarChart3,
+  BriefcaseBusiness,
+  CheckCircle2,
+  Clock3,
+  Filter,
+  Globe2,
+  Layers3,
+  LockKeyhole,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Users
+} from 'lucide-react';
+import { Badge } from '../../../shared/components/ui/Badge.jsx';
+import { Button } from '../../../shared/components/ui/Button.jsx';
+import {
+  PERMISSIONS,
+  useAuth
+} from '../../../app/providers/AuthProvider.jsx';
+import { useMAStore } from '../store/maStore.jsx';
+import { useValuationEngine } from '../engine/useValuationEngine.js';
+import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
+
+const PIPELINE_STAGES = [
+  {
+    id: 'screening',
+    label: 'Screening',
+    description: 'Initial fit, mandate logic and preliminary target review.'
+  },
+  {
+    id: 'nda',
+    label: 'NDA',
+    description: 'Confidentiality, access control and buyer/seller perimeter.'
+  },
+  {
+    id: 'due-diligence',
+    label: 'Due Diligence',
+    description: 'Financial, legal, commercial and operational diligence.'
+  },
+  {
+    id: 'ic-review',
+    label: 'IC Review',
+    description: 'Investment committee review, memo and decision discipline.'
+  },
+  {
+    id: 'negotiation',
+    label: 'Negotiation',
+    description: 'LOI, SPA perimeter, bridge items and closing conditions.'
+  },
+  {
+    id: 'closing',
+    label: 'Closing',
+    description: 'Final approvals, signing, completion and archive.'
+  }
+];
+
+const PRIORITY_FILTERS = [
+  { value: 'all', label: 'All priorities' },
+  { value: 'high', label: 'High' },
+  { value: 'review', label: 'Review' },
+  { value: 'watch', label: 'Watch' },
+  { value: 'build', label: 'Build' }
+];
+
+const pipelineCss = `
+  .ma-pipeline-page {
+    width: min(1540px, 100%);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+  }
+
+  .ma-pipeline-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 38px;
+    padding: 38px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background:
+      radial-gradient(circle at 8% 2%, rgba(37, 99, 235, 0.38), transparent 30%),
+      radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.18), transparent 27%),
+      radial-gradient(circle at 60% 110%, rgba(234, 179, 8, 0.08), transparent 30%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97));
+    box-shadow:
+      0 38px 120px rgba(0, 0, 0, 0.42),
+      inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  }
+
+  .ma-pipeline-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 82%);
+    pointer-events: none;
+  }
+
+  .ma-pipeline-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -190px -210px auto;
+    width: 520px;
+    height: 520px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.13), transparent 70%);
+    pointer-events: none;
+  }
+
+  .ma-pipeline-hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.65fr);
+    gap: 34px;
+    align-items: stretch;
+  }
+
+  .ma-pipeline-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .ma-pipeline-title {
+    margin: 0;
+    max-width: 930px;
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 0.92;
+    letter-spacing: -0.075em;
+  }
+
+  .ma-pipeline-title span {
+    display: block;
+    margin-top: 8px;
+    color: rgba(226, 232, 240, 0.7);
+  }
+
+  .ma-pipeline-copy {
+    max-width: 860px;
+    margin: 26px 0 0;
+    font-size: 17px;
+    line-height: 1.82;
+    color: rgba(203, 213, 225, 0.86);
+  }
+
+  .ma-pipeline-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 34px;
+  }
+
+  .ma-pipeline-command-bar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 34px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .ma-pipeline-command-item {
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.078);
+  }
+
+  .ma-pipeline-command-item strong {
+    display: block;
+    margin-top: 8px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .ma-pipeline-signal-card {
+    position: relative;
+    min-height: 100%;
+    border-radius: 32px;
+    padding: 28px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.086), rgba(255,255,255,0.026)),
+      rgba(15, 23, 42, 0.76);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    backdrop-filter: blur(22px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-shadow:
+      0 26px 70px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .ma-pipeline-signal-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 32px;
+    background: radial-gradient(circle at 18% 0%, rgba(96, 165, 250, 0.13), transparent 35%);
+    pointer-events: none;
+  }
+
+  .ma-pipeline-signal-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .ma-pipeline-signal-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  .ma-pipeline-icon-box {
+    flex: 0 0 auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 19px;
+    display: grid;
+    place-items: center;
+    background: rgba(37, 99, 235, 0.16);
+    border: 1px solid rgba(96, 165, 250, 0.24);
+  }
+
+  .ma-pipeline-signal-title {
+    margin-top: 10px;
+    font-size: 23px;
+    line-height: 1.16;
+    letter-spacing: -0.04em;
+  }
+
+  .ma-pipeline-signal-box {
+    border-radius: 25px;
+    padding: 20px;
+    background: rgba(255,255,255,0.047);
+    border: 1px solid rgba(255,255,255,0.085);
+  }
+
+  .ma-pipeline-signal-box strong {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .ma-pipeline-signal-box p {
+    margin: 0;
+    line-height: 1.62;
+  }
+
+  .ma-pipeline-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .ma-pipeline-summary-card {
+    min-height: 154px;
+    border-radius: 30px;
+    padding: 24px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
+      rgba(15, 23, 42, 0.64);
+    box-shadow:
+      0 24px 70px rgba(0, 0, 0, 0.21),
+      inset 0 1px 0 rgba(255,255,255,0.035);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .ma-pipeline-summary-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .ma-pipeline-summary-icon {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 17px;
+    display: grid;
+    place-items: center;
+    background: rgba(37, 99, 235, 0.14);
+    border: 1px solid rgba(96, 165, 250, 0.22);
+  }
+
+  .ma-pipeline-summary-card strong {
+    display: block;
+    margin-top: 10px;
+    font-size: 25px;
+    line-height: 1.1;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+  }
+
+  .ma-pipeline-summary-card p {
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .ma-pipeline-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px 220px;
+    gap: 16px;
+    align-items: center;
+    padding: 18px;
+    border-radius: 28px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.058), rgba(255,255,255,0.022)),
+      rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    box-shadow:
+      0 20px 56px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+
+  .ma-pipeline-search,
+  .ma-pipeline-select {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 18px;
+    background: rgba(2, 6, 23, 0.34);
+    color: rgba(248, 250, 252, 0.92);
+    outline: none;
+  }
+
+  .ma-pipeline-search {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    align-items: center;
+    padding: 0 14px;
+  }
+
+  .ma-pipeline-search input {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    outline: none;
+    font: inherit;
+  }
+
+  .ma-pipeline-search input::placeholder {
+    color: rgba(148, 163, 184, 0.76);
+  }
+
+  .ma-pipeline-select {
+    padding: 0 14px;
+  }
+
+  .ma-pipeline-board-shell {
+    position: relative;
+    overflow: hidden;
+    border-radius: 34px;
+    padding: 30px;
+    border: 1px solid rgba(148, 163, 184, 0.17);
+    background:
+      radial-gradient(circle at 4% 0%, rgba(37, 99, 235, 0.18), transparent 30%),
+      radial-gradient(circle at 92% 4%, rgba(16, 185, 129, 0.11), transparent 28%),
+      linear-gradient(135deg, rgba(255,255,255,0.062), rgba(255,255,255,0.024)),
+      rgba(15, 23, 42, 0.68);
+    box-shadow:
+      0 28px 80px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .ma-pipeline-board-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.82), transparent 90%);
+    pointer-events: none;
+  }
+
+  .ma-pipeline-board-shell > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ma-pipeline-board-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-end;
+    margin-bottom: 26px;
+  }
+
+  .ma-pipeline-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 11px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.17em;
+    color: rgba(148, 163, 184, 0.96);
+  }
+
+  .ma-pipeline-board-header h2 {
+    margin: 0;
+    letter-spacing: -0.045em;
+  }
+
+  .ma-pipeline-board-header p {
+    max-width: 820px;
+    margin: 11px 0 0;
+    line-height: 1.68;
+  }
+
+  .ma-pipeline-board {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(240px, 1fr));
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .ma-pipeline-column {
+    min-width: 240px;
+    min-height: 420px;
+    border-radius: 26px;
+    padding: 16px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.026)),
+      rgba(2, 6, 23, 0.25);
+    border: 1px solid rgba(255,255,255,0.082);
+  }
+
+  .ma-pipeline-column-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: flex-start;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  }
+
+  .ma-pipeline-column-header strong {
+    display: block;
+    line-height: 1.2;
+  }
+
+  .ma-pipeline-column-header p {
+    margin: 7px 0 0;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .ma-pipeline-count {
+    flex: 0 0 auto;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    color: #dbeafe;
+    background: rgba(37, 99, 235, 0.17);
+    border: 1px solid rgba(96, 165, 250, 0.24);
+    font-size: 12px;
+    font-weight: 850;
+  }
+
+  .ma-pipeline-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .ma-deal-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 23px;
+    padding: 18px;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(37,99,235,0.11), transparent 34%),
+      linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.027)),
+      rgba(15, 23, 42, 0.64);
+    border: 1px solid rgba(255,255,255,0.092);
+    box-shadow:
+      0 16px 42px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+    transition:
+      transform .18s ease,
+      border-color .18s ease,
+      background .18s ease;
+  }
+
+  .ma-deal-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(96, 165, 250, 0.25);
+    background:
+      radial-gradient(circle at 100% 0%, rgba(37,99,235,0.16), transparent 34%),
+      linear-gradient(135deg, rgba(255,255,255,0.082), rgba(255,255,255,0.035)),
+      rgba(15, 23, 42, 0.78);
+  }
+
+  .ma-deal-card::after {
+    content: "";
+    position: absolute;
+    right: -52px;
+    bottom: -60px;
+    width: 140px;
+    height: 140px;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.08);
+    pointer-events: none;
+  }
+
+  .ma-deal-card-top {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .ma-deal-card h3 {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.18;
+    letter-spacing: -0.035em;
+  }
+
+  .ma-deal-priority {
+    flex: 0 0 auto;
+    padding: 7px 9px;
+    border-radius: 999px;
+    color: #dbeafe;
+    background: rgba(37, 99, 235, 0.16);
+    border: 1px solid rgba(96, 165, 250, 0.22);
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ma-deal-priority.high {
+    color: #bbf7d0;
+    background: rgba(16, 185, 129, 0.13);
+    border-color: rgba(16, 185, 129, 0.24);
+  }
+
+  .ma-deal-priority.review {
+    color: #dbeafe;
+    background: rgba(37, 99, 235, 0.16);
+    border-color: rgba(96, 165, 250, 0.22);
+  }
+
+  .ma-deal-priority.watch,
+  .ma-deal-priority.build {
+    color: #fde68a;
+    background: rgba(234, 179, 8, 0.12);
+    border-color: rgba(234, 179, 8, 0.22);
+  }
+
+  .ma-deal-meta {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 9px;
+    margin-top: 14px;
+  }
+
+  .ma-deal-meta-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    color: rgba(203, 213, 225, 0.82);
+    font-size: 12px;
+  }
+
+  .ma-deal-meta-row span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .ma-deal-meta-row strong {
+    color: rgba(248,250,252,0.94);
+    text-align: right;
+  }
+
+  .ma-deal-footer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(148, 163, 184, 0.13);
+  }
+
+  .ma-deal-owner {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: rgba(203, 213, 225, 0.82);
+    font-size: 12px;
+  }
+
+  .ma-deal-open {
+    width: 34px;
+    height: 34px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    color: inherit;
+    text-decoration: none;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .ma-pipeline-empty {
+    min-height: 190px;
+    border-radius: 21px;
+    padding: 18px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: rgba(203, 213, 225, 0.7);
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed rgba(148, 163, 184, 0.18);
+  }
+
+  .ma-pipeline-empty strong {
+    display: block;
+    margin-bottom: 6px;
+    color: rgba(226, 232, 240, 0.9);
+  }
+
+  .ma-pipeline-empty p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 1400px) {
+    .ma-pipeline-board {
+      grid-template-columns: repeat(6, 260px);
+    }
+  }
+
+  @media (max-width: 1180px) {
+    .ma-pipeline-hero-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .ma-pipeline-summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ma-pipeline-toolbar {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .ma-pipeline-page {
+      gap: 26px;
+    }
+
+    .ma-pipeline-hero,
+    .ma-pipeline-board-shell {
+      padding: 24px;
+      border-radius: 28px;
+    }
+
+    .ma-pipeline-summary-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ma-pipeline-board-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+`;
+
+export function DealPipelinePage() {
+  const { can, isViewer } = useAuth();
+  const { financials, settings, savedCases } = useMAStore();
+
+  const canEditCases = can(PERMISSIONS.UPDATE_MA_CASE);
+  const canExportReports = can(PERMISSIONS.CREATE_MA_REPORT);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [stageFilter, setStageFilter] = useState('all');
+  const [priorityFilter, setPriorityFilter] = useState('all');
+
+  const derived = useValuationEngine({
+    financials,
+    settings
+  });
+
+  const reportCurrency = settings?.reportCurrency || financials?.currency || 'EUR';
+  const safeSavedCases = Array.isArray(savedCases) ? savedCases : [];
+
+  const pipelineDeals = useMemo(
+    () =>
+      buildPipelineDeals({
+        financials,
+        derived,
+        savedCases: safeSavedCases,
+        currency: reportCurrency
+      }),
+    [financials, derived, safeSavedCases, reportCurrency]
+  );
+
+  const filteredDeals = useMemo(
+    () =>
+      filterPipelineDeals({
+        deals: pipelineDeals,
+        searchTerm,
+        stageFilter,
+        priorityFilter
+      }),
+    [pipelineDeals, searchTerm, stageFilter, priorityFilter]
+  );
+
+  const pipelineSummary = getPipelineSummary(filteredDeals, reportCurrency);
+  const totalSummary = getPipelineSummary(pipelineDeals, reportCurrency);
+
+  return (
+    <div className="page">
+      <style>{pipelineCss}</style>
+
+      <div className="ma-pipeline-page">
+        <section className="ma-pipeline-hero">
+          <div className="ma-pipeline-hero-inner">
+            <div>
+              <div className="ma-pipeline-badges">
+                <Badge>M&A Deal Pipeline</Badge>
+                <Badge>Enterprise Board</Badge>
+                {isViewer ? <Badge>Modo solo lectura</Badge> : null}
+                {canEditCases ? <Badge>Edición permitida</Badge> : null}
+                {canExportReports ? <Badge>Reporting permitido</Badge> : null}
+              </div>
+
+              <h1 className="ma-pipeline-title">
+                M&A Deal Pipeline.
+                <span>From screening to closing discipline.</span>
+              </h1>
+
+              <p className="ma-pipeline-copy">
+                Vista enterprise para seguir operaciones por fase, prioridad,
+                valor potencial, riesgo, responsable y siguiente paso. Esta
+                primera versión reutiliza el caso activo y los deals guardados
+                sin romper multi-tenancy ni forzar backend adicional.
+              </p>
+
+              <div className="ma-pipeline-actions">
+                <Link to="/ma/valuation">
+                  <Button>
+                    <BarChart3 size={16} />
+                    Abrir Valuation Engine
+                  </Button>
+                </Link>
+
+                <Link to="/ma/deals">
+                  <Button variant="secondary">
+                    <BriefcaseBusiness size={16} />
+                    Abrir Deal Repository
+                  </Button>
+                </Link>
+
+                <Link to="/ma/cim">
+                  <Button variant="secondary">
+                    <ShieldCheck size={16} />
+                    Preparar report
+                  </Button>
+                </Link>
+              </div>
+
+              <div className="ma-pipeline-command-bar">
+                <CommandItem
+                  label="Pipeline model"
+                  value="Screening · NDA · DD · IC · Negotiation · Closing"
+                />
+
+                <CommandItem
+                  label="Tracked deals"
+                  value={totalSummary.totalDeals}
+                />
+
+                <CommandItem
+                  label="Data posture"
+                  value="Organization-scoped"
+                />
+              </div>
+            </div>
+
+            <aside className="ma-pipeline-signal-card">
+              <div className="ma-pipeline-signal-inner">
+                <div className="ma-pipeline-signal-top">
+                  <div>
+                    <div className="kpi-label">Pipeline Signal</div>
+                    <div className="ma-pipeline-signal-title">
+                      {getPipelineSignal(totalSummary)}
+                    </div>
+                  </div>
+
+                  <div className="ma-pipeline-icon-box">
+                    <Sparkles size={21} />
+                  </div>
+                </div>
+
+                <div className="ma-pipeline-signal-box">
+                  <strong>{getPipelineHeadline(totalSummary)}</strong>
+
+                  <p className="muted">
+                    {getPipelineDescription(totalSummary)}
+                  </p>
+                </div>
+
+                <SignalRow
+                  label="Total pipeline value"
+                  value={totalSummary.totalEquityLabel}
+                />
+
+                <SignalRow
+                  label="Active stages"
+                  value={totalSummary.activeStages}
+                />
+
+                <SignalRow
+                  label="Priority posture"
+                  value={totalSummary.priorityLabel}
+                />
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section className="ma-pipeline-summary-grid">
+          <SummaryCard
+            label="Deals visibles"
+            value={pipelineSummary.totalDeals}
+            description="Operaciones que cumplen los filtros actuales."
+            icon={Layers3}
+          />
+
+          <SummaryCard
+            label="Pipeline value"
+            value={pipelineSummary.totalEquityLabel}
+            description="Valor agregado estimado de los deals visibles."
+            icon={TrendingUp}
+          />
+
+          <SummaryCard
+            label="Fases activas"
+            value={pipelineSummary.activeStages}
+            description="Etapas con al menos una operación asociada."
+            icon={Target}
+          />
+
+          <SummaryCard
+            label="Prioridad"
+            value={pipelineSummary.priorityLabel}
+            description="Señal ejecutiva agregada del pipeline."
+            icon={AlertTriangle}
+          />
+        </section>
+
+        <section className="ma-pipeline-toolbar">
+          <div className="ma-pipeline-search">
+            <Search size={16} />
+            <input
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Buscar por target, sector, mercado o responsable..."
+            />
+          </div>
+
+          <select
+            className="ma-pipeline-select"
+            value={stageFilter}
+            onChange={(event) => setStageFilter(event.target.value)}
+          >
+            <option value="all">All stages</option>
+            {PIPELINE_STAGES.map((stage) => (
+              <option key={stage.id} value={stage.id}>
+                {stage.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            className="ma-pipeline-select"
+            value={priorityFilter}
+            onChange={(event) => setPriorityFilter(event.target.value)}
+          >
+            {PRIORITY_FILTERS.map((item) => (
+              <option key={item.value} value={item.value}>
+                {item.label}
+              </option>
+            ))}
+          </select>
+        </section>
+
+        <section className="ma-pipeline-board-shell">
+          <div className="ma-pipeline-board-header">
+            <div>
+              <div className="ma-pipeline-kicker">
+                <Filter size={14} />
+                Enterprise deal board
+              </div>
+
+              <h2>Pipeline por fases</h2>
+
+              <p className="muted">
+                Board ejecutivo de operaciones. En MVP, las tarjetas se generan
+                desde el caso activo y los snapshots guardados. En fase backend
+                enterprise, cada tarjeta evolucionará a entidad propia con owner,
+                permisos, audit trail, data room e IC memo.
+              </p>
+            </div>
+
+            <Link to="/ma/dashboard">
+              <Button variant="secondary">
+                <ArrowRight size={16} />
+                Volver al dashboard
+              </Button>
+            </Link>
+          </div>
+
+          <div className="ma-pipeline-board">
+            {PIPELINE_STAGES.map((stage) => {
+              const stageDeals = filteredDeals.filter(
+                (deal) => deal.stageId === stage.id
+              );
+
+              return (
+                <PipelineColumn
+                  key={stage.id}
+                  stage={stage}
+                  deals={stageDeals}
+                />
+              );
+            })}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function CommandItem({ label, value }) {
+  return (
+    <div className="ma-pipeline-command-item">
+      <div className="kpi-label">{label}</div>
+      <strong>{value}</strong>
+    </div>
+  );
+}
+
+function SignalRow({ label, value }) {
+  return (
+    <div className="ma-pipeline-command-item">
+      <div className="kpi-label">{label}</div>
+      <strong>{value}</strong>
+    </div>
+  );
+}
+
+function SummaryCard({ label, value, description, icon: Icon }) {
+  return (
+    <article className="ma-pipeline-summary-card">
+      <div className="ma-pipeline-summary-top">
+        <div>
+          <div className="kpi-label">{label}</div>
+          <strong>{value}</strong>
+        </div>
+
+        <div className="ma-pipeline-summary-icon">
+          <Icon size={18} />
+        </div>
+      </div>
+
+      <p className="muted">{description}</p>
+    </article>
+  );
+}
+
+function PipelineColumn({ stage, deals }) {
+  return (
+    <section className="ma-pipeline-column">
+      <div className="ma-pipeline-column-header">
+        <div>
+          <strong>{stage.label}</strong>
+          <p className="muted">{stage.description}</p>
+        </div>
+
+        <div className="ma-pipeline-count">{deals.length}</div>
+      </div>
+
+      <div className="ma-pipeline-card-list">
+        {deals.length > 0 ? (
+          deals.map((deal) => (
+            <PipelineDealCard key={deal.id} deal={deal} />
+          ))
+        ) : (
+          <div className="ma-pipeline-empty">
+            <div>
+              <strong>No active deal</strong>
+              <p>Sin operaciones en esta fase con los filtros actuales.</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function PipelineDealCard({ deal }) {
+  return (
+    <article className="ma-deal-card">
+      <div className="ma-deal-card-top">
+        <div>
+          <h3>{deal.name}</h3>
+          <p className="muted" style={{ marginTop: 8, marginBottom: 0 }}>
+            {deal.sector}
+          </p>
+        </div>
+
+        <span className={`ma-deal-priority ${deal.priorityTone}`}>
+          {deal.priority}
+        </span>
+      </div>
+
+      <div className="ma-deal-meta">
+        <DealMetaRow
+          icon={Globe2}
+          label="Market"
+          value={deal.market}
+        />
+
+        <DealMetaRow
+          icon={TrendingUp}
+          label="Equity"
+          value={deal.equityLabel}
+        />
+
+        <DealMetaRow
+          icon={AlertTriangle}
+          label="Risk"
+          value={deal.riskLabel}
+        />
+
+        <DealMetaRow
+          icon={Clock3}
+          label="Updated"
+          value={deal.updatedLabel}
+        />
+      </div>
+
+      <div className="ma-deal-footer">
+        <div className="ma-deal-owner">
+          <Users size={13} />
+          {deal.owner}
+        </div>
+
+        <Link
+          to={deal.href}
+          className="ma-deal-open"
+          aria-label={`Abrir ${deal.name}`}
+        >
+          <ArrowRight size={15} />
+        </Link>
+      </div>
+    </article>
+  );
+}
+
+function DealMetaRow({ icon: Icon, label, value }) {
+  return (
+    <div className="ma-deal-meta-row">
+      <span>
+        <Icon size={12} /> {label}
+      </span>
+      <strong>{value}</strong>
+    </div>
+  );
+}
+
+function filterPipelineDeals({
+  deals,
+  searchTerm,
+  stageFilter,
+  priorityFilter
+}) {
+  const safeDeals = Array.isArray(deals) ? deals : [];
+  const normalizedSearch = String(searchTerm || '').trim().toLowerCase();
+
+  return safeDeals.filter((deal) => {
+    const matchesStage =
+      stageFilter === 'all' || deal.stageId === stageFilter;
+
+    const matchesPriority =
+      priorityFilter === 'all' || deal.priorityTone === priorityFilter;
+
+    const searchable = [
+      deal.name,
+      deal.sector,
+      deal.market,
+      deal.owner,
+      deal.priority,
+      deal.riskLabel
+    ]
+      .join(' ')
+      .toLowerCase();
+
+    const matchesSearch =
+      !normalizedSearch || searchable.includes(normalizedSearch);
+
+    return matchesStage && matchesPriority && matchesSearch;
+  });
+}
+
+function buildPipelineDeals({ financials, derived, savedCases, currency }) {
+  const deals = [];
+
+  if (hasSufficientDealData(financials, derived)) {
+    const activeScore = getSafeQualityScore(derived?.qualityScore);
+    const equityValue = Number(derived?.equityBase);
+
+    deals.push({
+      id: 'active-deal',
+      name: financials?.name?.trim() || 'Active Target',
+      sector: financials?.sector || 'Sector not specified',
+      market:
+        financials?.country ||
+        financials?.market ||
+        financials?.geography ||
+        'Primary market',
+      stageId: getStageFromScore(activeScore),
+      equityValue: Number.isFinite(equityValue) ? equityValue : 0,
+      equityLabel: Number.isFinite(equityValue)
+        ? formatCurrency(equityValue, currency)
+        : 'N/A',
+      riskLabel:
+        derived?.riskLevel?.label ||
+        derived?.riskLevel ||
+        getRiskLabelFromScore(activeScore),
+      priority: getPriorityLabel(activeScore),
+      priorityTone: getPriorityTone(activeScore),
+      owner: 'CEO workspace',
+      updatedLabel: 'Live case',
+      href: '/ma/valuation'
+    });
+  }
+
+  const savedDealItems = Array.isArray(savedCases) ? savedCases : [];
+
+  savedDealItems.slice(0, 12).forEach((item, index) => {
+    const name = item?.name || `Saved Deal ${index + 1}`;
+    const alreadyExists = deals.some((deal) => deal.name === name);
+
+    if (alreadyExists) return;
+
+    const snapshot = item?.snapshot || {};
+    const score = getSafeQualityScore(snapshot?.qualityScore);
+    const equityValue = Number(snapshot?.equityBase);
+    const createdAt = item?.updatedAt || item?.createdAt;
+
+    deals.push({
+      id: item?.id || `saved-deal-${index + 1}`,
+      name,
+      sector: item?.financials?.sector || 'Saved case',
+      market:
+        item?.financials?.country ||
+        item?.financials?.market ||
+        item?.financials?.geography ||
+        'Repository',
+      stageId: getSavedDealStage(index, score),
+      equityValue: Number.isFinite(equityValue) ? equityValue : 0,
+      equityLabel: Number.isFinite(equityValue)
+        ? formatCurrency(equityValue, currency)
+        : 'N/A',
+      riskLabel: snapshot?.riskLevel || getRiskLabelFromScore(score),
+      priority: getPriorityLabel(score),
+      priorityTone: getPriorityTone(score),
+      owner: 'Repository',
+      updatedLabel: formatShortDate(createdAt),
+      href: '/ma/deals'
+    });
+  });
+
+  return deals;
+}
+
+function getPipelineSummary(deals, currency) {
+  const safeDeals = Array.isArray(deals) ? deals : [];
+  const totalEquity = safeDeals.reduce((sum, deal) => {
+    const value = Number(deal.equityValue);
+    return Number.isFinite(value) ? sum + value : sum;
+  }, 0);
+
+  const activeStages = new Set(safeDeals.map((deal) => deal.stageId)).size;
+  const hasHighPriority = safeDeals.some((deal) => deal.priorityTone === 'high');
+  const hasWatchPriority = safeDeals.some(
+    (deal) => deal.priorityTone === 'watch' || deal.priorityTone === 'build'
+  );
+
+  return {
+    totalDeals: safeDeals.length,
+    totalEquityLabel:
+      safeDeals.length > 0 ? formatCurrency(totalEquity, currency) : 'N/A',
+    activeStages,
+    priorityLabel: hasHighPriority
+      ? 'High'
+      : hasWatchPriority
+        ? 'Watchlist'
+        : safeDeals.length > 0
+          ? 'Review'
+          : 'N/A'
+  };
+}
+
+function getStageFromScore(score) {
+  if (score === null) return 'screening';
+  if (score >= 82) return 'ic-review';
+  if (score >= 68) return 'due-diligence';
+  if (score >= 52) return 'nda';
+
+  return 'screening';
+}
+
+function getSavedDealStage(index, score) {
+  if (score !== null && score >= 82) return 'ic-review';
+  if (score !== null && score >= 68) return 'due-diligence';
+
+  const stages = [
+    'screening',
+    'nda',
+    'due-diligence',
+    'ic-review',
+    'negotiation',
+    'closing'
+  ];
+
+  return stages[index % stages.length];
+}
+
+function getPriorityLabel(score) {
+  if (score === null) return 'Build';
+  if (score >= 80) return 'High';
+  if (score >= 55) return 'Review';
+
+  return 'Watch';
+}
+
+function getPriorityTone(score) {
+  if (score === null) return 'build';
+  if (score >= 80) return 'high';
+  if (score >= 55) return 'review';
+
+  return 'watch';
+}
+
+function getRiskLabelFromScore(score) {
+  if (score === null) return 'To assess';
+  if (score >= 80) return 'Controlled';
+  if (score >= 60) return 'Moderate';
+  if (score >= 40) return 'Elevated';
+
+  return 'High';
+}
+
+function formatShortDate(value) {
+  if (!value) return 'N/A';
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return 'N/A';
+
+  return new Intl.DateTimeFormat('es-ES', {
+    day: '2-digit',
+    month: 'short'
+  }).format(date);
+}
+
+function hasSufficientDealData(financials, derived) {
+  const hasName = Boolean(financials?.name?.trim());
+  const hasSector = Boolean(financials?.sector);
+  const normalizedEbitda = Number(derived?.normalizedEbitda);
+
+  return (
+    hasName &&
+    hasSector &&
+    Number.isFinite(normalizedEbitda) &&
+    normalizedEbitda > 0
+  );
+}
+
+function getSafeQualityScore(score) {
+  const parsed = Number(score);
+
+  if (!Number.isFinite(parsed)) return null;
+
+  return Math.max(0, Math.min(100, Math.round(parsed)));
+}
+
+function getPipelineSignal(summary) {
+  if (!summary || summary.totalDeals === 0) return 'Pipeline not started';
+  if (summary.priorityLabel === 'High') return 'High-priority pipeline';
+  if (summary.activeStages >= 3) return 'Multi-stage active pipeline';
+
+  return 'Pipeline under review';
+}
+
+function getPipelineHeadline(summary) {
+  if (!summary || summary.totalDeals === 0) {
+    return 'Create or save a deal to activate the enterprise pipeline.';
+  }
+
+  if (summary.priorityLabel === 'High') {
+    return 'At least one deal shows high-priority execution signal.';
+  }
+
+  return 'Pipeline visible and ready for executive review.';
+}
+
+function getPipelineDescription(summary) {
+  if (!summary || summary.totalDeals === 0) {
+    return 'El pipeline se alimenta del caso activo y de los deals guardados. Carga un target o guarda un caso para empezar a ver operaciones por fase.';
+  }
+
+  return 'Revisa fase, prioridad, valor estimado, riesgo y responsable antes de avanzar a reporting, IC review o negociación.';
+}
+
+export default DealPipelinePage;
