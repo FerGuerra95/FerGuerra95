@@ -1,6 +1,7 @@
 const DEFAULT_CURRENCY = 'EUR';
+const DEFAULT_COMPANY_NAME = 'Target Company';
 
-function safeText(value, fallback = 'N/A') {
+function safeString(value, fallback = 'N/A') {
   if (value === null || value === undefined) return fallback;
   const text = String(value).trim();
   return text || fallback;
@@ -11,7 +12,10 @@ function firstDefined(...values) {
 }
 
 function toNumber(value, fallback = 0) {
-  if (typeof value === 'number') return Number.isFinite(value) ? value : fallback;
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : fallback;
+  }
+
   if (typeof value !== 'string') return fallback;
 
   const cleaned = value
@@ -73,13 +77,15 @@ export function formatPercent(value) {
 }
 
 export function sanitizeFileName(value, fallback = 'ma-report') {
-  return safeText(value, fallback)
+  const normalized = safeString(value, fallback)
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^\w\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .toLowerCase();
+
+  return normalized || fallback;
 }
 
 function formatDate(value = new Date()) {
@@ -161,10 +167,13 @@ function getDebtMode(financials = {}, derived = {}) {
     derived?.netFinancialDebt
   );
 
+  const hasGrossDebtOrCash = grossDebtInput !== undefined || cashInput !== undefined;
+  const hasNetDebt = netDebtInput !== undefined;
+
   const grossDebt = toNumber(grossDebtInput);
   const cash = toNumber(cashInput);
 
-  if (grossDebtInput !== undefined || cashInput !== undefined) {
+  if (hasGrossDebtOrCash) {
     return {
       mode: 'grossDebtAndCash',
       grossDebt,
@@ -173,7 +182,7 @@ function getDebtMode(financials = {}, derived = {}) {
     };
   }
 
-  if (netDebtInput !== undefined) {
+  if (hasNetDebt) {
     return {
       mode: 'netDebt',
       grossDebt: 0,
@@ -205,22 +214,22 @@ function getEbitdaAdjustments(financials = {}, derived = {}) {
           id: `adjustment-${index + 1}`,
           label: item,
           amount: 0,
-          note: 'Pendiente de cuantificación por revisión humana.'
+          note: 'Pendiente de cuantificaciÃ³n por revisiÃ³n humana.'
         };
       }
 
       if (!item || typeof item !== 'object') return null;
 
       return {
-        id: safeText(item.id, `adjustment-${index + 1}`),
-        label: safeText(
+        id: safeString(item.id, `adjustment-${index + 1}`),
+        label: safeString(
           firstDefined(item.label, item.name, item.concept, item.title),
           `Ajuste EBITDA ${index + 1}`
         ),
         amount: toNumber(firstDefined(item.amount, item.value, item.impact)),
-        note: safeText(
+        note: safeString(
           firstDefined(item.note, item.description, item.rationale),
-          'Ajuste normalizado para análisis preliminar.'
+          'Ajuste normalizado para anÃ¡lisis preliminar.'
         )
       };
     })
@@ -248,20 +257,20 @@ function getBuyerMatching(settings = {}, derived = {}) {
           name: buyer,
           type: 'Strategic / Financial',
           fitScore: null,
-          rationale: 'Comprador potencial pendiente de cualificación.'
+          rationale: 'Comprador potencial pendiente de cualificaciÃ³n.'
         };
       }
 
       if (!buyer || typeof buyer !== 'object') return null;
 
       return {
-        id: safeText(buyer.id, `buyer-${index + 1}`),
-        name: safeText(firstDefined(buyer.name, buyer.buyerName, buyer.title), `Buyer ${index + 1}`),
-        type: safeText(firstDefined(buyer.type, buyer.category, buyer.profile), 'Strategic / Financial'),
+        id: safeString(buyer.id, `buyer-${index + 1}`),
+        name: safeString(firstDefined(buyer.name, buyer.buyerName, buyer.title), `Buyer ${index + 1}`),
+        type: safeString(firstDefined(buyer.type, buyer.category, buyer.profile), 'Strategic / Financial'),
         fitScore: firstDefined(buyer.fitScore, buyer.score, buyer.matchScore, null),
-        rationale: safeText(
+        rationale: safeString(
           firstDefined(buyer.rationale, buyer.description, buyer.notes),
-          'Potencial encaje pendiente de validación comercial y estratégica.'
+          'Potencial encaje pendiente de validaciÃ³n comercial y estratÃ©gica.'
         )
       };
     })
@@ -275,7 +284,7 @@ function getBuyerMatching(settings = {}, derived = {}) {
       name: 'Strategic acquirer',
       type: 'Strategic',
       fitScore: null,
-      rationale: 'Comprador industrial con potencial de sinergias operativas, comerciales o tecnológicas.'
+      rationale: 'Comprador industrial con potencial de sinergias operativas, comerciales o tecnolÃ³gicas.'
     },
     {
       id: 'financial-sponsor',
@@ -289,7 +298,7 @@ function getBuyerMatching(settings = {}, derived = {}) {
       name: 'Family office / Long-term investor',
       type: 'Long-term capital',
       fitScore: null,
-      rationale: 'Capital paciente con foco en estabilidad, caja recurrente y preservación de valor.'
+      rationale: 'Capital paciente con foco en estabilidad, caja recurrente y preservaciÃ³n de valor.'
     }
   ];
 }
@@ -300,7 +309,7 @@ function getTextItems(value, fallback) {
       if (typeof item === 'string') return item;
 
       if (item && typeof item === 'object') {
-        return safeText(firstDefined(item.text, item.label, item.title, item.description), '');
+        return safeString(firstDefined(item.text, item.label, item.title, item.description), '');
       }
 
       return '';
@@ -324,18 +333,18 @@ function getRisks(settings = {}, derived = {}) {
         return {
           id: `risk-${index + 1}`,
           risk: item,
-          mitigant: 'Pendiente de revisión y mitigación específica.'
+          mitigant: 'Pendiente de revisiÃ³n y mitigaciÃ³n especÃ­fica.'
         };
       }
 
       if (!item || typeof item !== 'object') return null;
 
       return {
-        id: safeText(item.id, `risk-${index + 1}`),
-        risk: safeText(firstDefined(item.risk, item.title, item.label), `Riesgo ${index + 1}`),
-        mitigant: safeText(
+        id: safeString(item.id, `risk-${index + 1}`),
+        risk: safeString(firstDefined(item.risk, item.title, item.label), `Riesgo ${index + 1}`),
+        mitigant: safeString(
           firstDefined(item.mitigant, item.mitigation, item.response, item.notes),
-          'Pendiente de revisión y mitigación específica.'
+          'Pendiente de revisiÃ³n y mitigaciÃ³n especÃ­fica.'
         )
       };
     })
@@ -347,7 +356,7 @@ function getRisks(settings = {}, derived = {}) {
     {
       id: 'quality-of-earnings',
       risk: 'Calidad y sostenibilidad del EBITDA normalizado.',
-      mitigant: 'Revisión humana, contraste documental y análisis de recurrencia de ingresos y costes.'
+      mitigant: 'RevisiÃ³n humana, contraste documental y anÃ¡lisis de recurrencia de ingresos y costes.'
     },
     {
       id: 'working-capital',
@@ -356,7 +365,7 @@ function getRisks(settings = {}, derived = {}) {
     },
     {
       id: 'debt-cash',
-      risk: 'Confirmación de deuda, caja y partidas debt-like.',
+      risk: 'ConfirmaciÃ³n de deuda, caja y partidas debt-like.',
       mitigant: 'Validar deuda financiera, caja disponible, pasivos contingentes y partidas equivalentes a deuda.'
     }
   ];
@@ -366,14 +375,14 @@ export function formatMAReportData({
   financials = {},
   settings = {},
   derived = {},
-  generatedBy = 'CEO’s OS',
-  organizationName = 'CEO’s OS',
+  generatedBy = 'CEOâ€™s OS',
+  organizationName = 'CEOâ€™s OS',
   reportStatus = 'Draft'
 } = {}) {
   const generatedAt = new Date();
-  const currency = safeText(firstDefined(financials?.currency, settings?.currency, derived?.currency), DEFAULT_CURRENCY).toUpperCase();
+  const currency = safeString(firstDefined(financials?.currency, settings?.currency, derived?.currency), DEFAULT_CURRENCY).toUpperCase();
 
-  const companyName = safeText(
+  const companyName = safeString(
     firstDefined(
       financials?.name,
       financials?.companyName,
@@ -382,12 +391,12 @@ export function formatMAReportData({
       settings?.targetCompanyName,
       derived?.companyName
     ),
-    'Target Company'
+    DEFAULT_COMPANY_NAME
   );
 
-  const sector = safeText(firstDefined(financials?.sector, settings?.sector, derived?.sector), 'Sector not specified');
-  const geography = safeText(firstDefined(financials?.geography, financials?.country, settings?.geography, derived?.geography), 'Geography not specified');
-  const transactionType = safeText(firstDefined(financials?.transactionType, settings?.transactionType, derived?.transactionType), 'M&A preliminary assessment');
+  const sector = safeString(firstDefined(financials?.sector, settings?.sector, derived?.sector), 'Sector not specified');
+  const geography = safeString(firstDefined(financials?.geography, financials?.country, settings?.geography, derived?.geography), 'Geography not specified');
+  const transactionType = safeString(firstDefined(financials?.transactionType, settings?.transactionType, derived?.transactionType), 'M&A preliminary assessment');
 
   const revenue = firstNumber(financials?.revenue, financials?.sales, financials?.netSales, financials?.ltmRevenue, derived?.revenue, derived?.ltmRevenue);
   const ebitdaAdjustments = getEbitdaAdjustments(financials, derived);
@@ -440,7 +449,7 @@ export function formatMAReportData({
   const waterfall = [
     {
       label: 'Enterprise Value',
-      description: 'Valor de empresa derivado del EBITDA normalizado y rango de múltiplos.',
+      description: 'Valor de empresa derivado del EBITDA normalizado y rango de mÃºltiplos.',
       low: evLow,
       base: evBase,
       high: evHigh,
@@ -458,7 +467,7 @@ export function formatMAReportData({
           },
           {
             label: 'Add: Cash',
-            description: 'Caja y equivalentes añadidos al Equity Value.',
+            description: 'Caja y equivalentes aÃ±adidos al Equity Value.',
             low: debtMode.cash,
             base: debtMode.cash,
             high: debtMode.cash,
@@ -508,15 +517,24 @@ export function formatMAReportData({
 
   return {
     meta: {
-      reportTitle: `${companyName} — M&A Preliminary Valuation Report`,
+      reportTitle: `${companyName} â€” M&A Preliminary Valuation Report`,
       companyName,
-      generatedBy: safeText(generatedBy, 'CEO’s OS'),
-      organizationName: safeText(organizationName, 'CEO’s OS'),
-      reportStatus: safeText(reportStatus, 'Draft'),
+      generatedBy: safeString(generatedBy, 'CEOâ€™s OS'),
+      organizationName: safeString(organizationName, 'CEOâ€™s OS'),
+      reportStatus: safeString(reportStatus, 'Draft'),
       generatedAt: generatedAt.toISOString(),
       generatedDateLabel: formatDate(generatedAt),
       currency,
       fileName
+    },
+    company: {
+      name: companyName,
+      sector,
+      geography
+    },
+    transaction: {
+      type: transactionType,
+      status: safeString(reportStatus, 'Draft')
     },
     summary: {
       revenue,
@@ -546,9 +564,9 @@ export function formatMAReportData({
       ],
       transactionOverview: [
         { label: 'Transaction Type', value: transactionType },
-        { label: 'Report Status', value: safeText(reportStatus, 'Draft') },
-        { label: 'Generated By', value: safeText(generatedBy, 'CEO’s OS') },
-        { label: 'Organization', value: safeText(organizationName, 'CEO’s OS') },
+        { label: 'Report Status', value: safeString(reportStatus, 'Draft') },
+        { label: 'Generated By', value: safeString(generatedBy, 'CEOâ€™s OS') },
+        { label: 'Organization', value: safeString(organizationName, 'CEOâ€™s OS') },
         { label: 'Generated Date', value: formatDate(generatedAt) }
       ],
       financialInputs: [
@@ -594,33 +612,33 @@ export function formatMAReportData({
       waterfall,
       buyerMatching: getBuyerMatching(settings, derived),
       investmentThesis: getTextItems(firstDefined(derived?.investmentThesis, settings?.investmentThesis), [
-        'Plataforma con potencial de creación de valor mediante crecimiento, mejora operativa o consolidación sectorial.',
-        'Valoración preliminar basada en EBITDA normalizado y rango de múltiplos de mercado.',
-        'Oportunidad sujeta a validación documental, revisión humana y contraste con compradores cualificados.'
+        'Plataforma con potencial de creaciÃ³n de valor mediante crecimiento, mejora operativa o consolidaciÃ³n sectorial.',
+        'ValoraciÃ³n preliminar basada en EBITDA normalizado y rango de mÃºltiplos de mercado.',
+        'Oportunidad sujeta a validaciÃ³n documental, revisiÃ³n humana y contraste con compradores cualificados.'
       ]),
       risksAndMitigants: getRisks(settings, derived),
       preliminaryCIM: [
         {
           title: 'Business Overview',
-          content: `${companyName} opera en el sector ${sector}. El análisis preliminar debe completarse con descripción del modelo de negocio, clientes principales, canales, equipo directivo y posición competitiva.`
+          content: `${companyName} opera en el sector ${sector}. El anÃ¡lisis preliminar debe completarse con descripciÃ³n del modelo de negocio, clientes principales, canales, equipo directivo y posiciÃ³n competitiva.`
         },
         {
           title: 'Market Context',
-          content: `El contexto de mercado debe validarse con fuentes externas, comparables sectoriales y dinámica competitiva en ${geography}.`
+          content: `El contexto de mercado debe validarse con fuentes externas, comparables sectoriales y dinÃ¡mica competitiva en ${geography}.`
         },
         {
           title: 'Transaction Rationale',
-          content: `La operación se plantea como ${transactionType}. El racional debe contrastar objetivos del vendedor, perfil de comprador, estructura esperada y principales condiciones de cierre.`
+          content: `La operaciÃ³n se plantea como ${transactionType}. El racional debe contrastar objetivos del vendedor, perfil de comprador, estructura esperada y principales condiciones de cierre.`
         },
         {
           title: 'Financial Overview',
-          content: 'La información financiera incluida es preliminar y debe completarse con estados financieros históricos, detalle de ajustes EBITDA, deuda, caja, working capital y supuestos de crecimiento.'
+          content: 'La informaciÃ³n financiera incluida es preliminar y debe completarse con estados financieros histÃ³ricos, detalle de ajustes EBITDA, deuda, caja, working capital y supuestos de crecimiento.'
         }
       ],
       humanReviewNotes: getTextItems(firstDefined(derived?.humanReviewNotes, settings?.humanReviewNotes), [
-        'Este informe es una versión preliminar y debe ser revisado por un profesional antes de ser compartido externamente.',
-        'Las cifras dependen de la calidad de los datos introducidos y de la documentación financiera disponible.',
-        'La valoración no constituye asesoramiento financiero, legal, fiscal ni una fairness opinion.'
+        'Este informe es una versiÃ³n preliminar y debe ser revisado por un profesional antes de ser compartido externamente.',
+        'Las cifras dependen de la calidad de los datos introducidos y de la documentaciÃ³n financiera disponible.',
+        'La valoraciÃ³n no constituye asesoramiento financiero, legal, fiscal ni una fairness opinion.'
       ]),
       appendix: [
         { label: 'Currency', value: currency },
