@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   Clock3,
   FileText,
+  Download,
   Globe2,
   Layers3,
   LockKeyhole,
@@ -513,6 +514,14 @@ const dealDetailCss = `
     line-height: 1.55;
   }
 
+
+  .ma-export-action-note {
+    width: 100%;
+    margin-top: -22px;
+    color: rgba(203, 213, 225, 0.58);
+    font-size: 12px;
+    line-height: 1.45;
+  }
   @media (max-width: 1180px) {
     .ma-deal-detail-hero-inner,
     .ma-detail-grid,
@@ -656,6 +665,14 @@ export function DealDetailPage() {
                     Preparar report
                   </Button>
                 </Link>
+
+                <ExportDealBriefButton deal={deal} />
+
+                <ExportICMemoButton deal={deal} />
+
+                <div className="ma-export-action-note">
+                  Exporta una ficha ejecutiva completa o un IC Memo especifico para comite.
+                </div>
               </div>
 
               <div className="ma-deal-detail-command-bar">
@@ -840,6 +857,768 @@ export function DealDetailPage() {
   );
 }
 
+function ExportDealBriefButton({ deal }) {
+  function handleExportDealBrief() {
+    const html = buildDealBriefHtml(deal);
+
+    const blob = new Blob([html], {
+      type: 'text/html;charset=utf-8'
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = `${slugifyFileName(deal?.name || 'deal')}-brief.html`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    window.setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
+  return (
+    <Button variant="secondary" onClick={handleExportDealBrief}>
+      <Download size={16} />
+      Export Deal Brief
+    </Button>
+  );
+}
+
+function ExportICMemoButton({ deal }) {
+  function handleExportICMemo() {
+    const html = buildICMemoHtml(deal);
+
+    const blob = new Blob([html], {
+      type: 'text/html;charset=utf-8'
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = `${slugifyFileName(deal?.name || 'deal')}-ic-memo.html`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    window.setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
+  return (
+    <Button variant="secondary" onClick={handleExportICMemo}>
+      <Download size={16} />
+      Export IC Memo
+    </Button>
+  );
+}
+
+function buildICMemoHtml(deal) {
+  const generatedAt = new Intl.DateTimeFormat('es-ES', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(new Date());
+
+  const approvals = [
+    {
+      title: 'Financial validation',
+      description: 'Confirmar EBITDA normalizado, deuda neta, caja, working capital y ajustes no recurrentes.'
+    },
+    {
+      title: 'Legal perimeter',
+      description: 'Validar estructura societaria, contratos clave, contingencias, permisos y capacidad de cierre.'
+    },
+    {
+      title: 'Commercial diligence',
+      description: 'Revisar concentracion de clientes, pipeline comercial, churn, recurrencia e hipotesis de crecimiento.'
+    },
+    {
+      title: 'Committee decision',
+      description: 'Autorizar avance, mantener en revision o bloquear circulacion externa segun evidencias disponibles.'
+    }
+  ];
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>${escapeHtml(deal?.name)} - IC Memo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #0f172a;
+      --muted: #475569;
+      --line: #dbe2ea;
+      --soft: #f8fafc;
+      --blue: #1d4ed8;
+      --green: #047857;
+      --gold: #a16207;
+      --danger: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 34px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 34px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(29,78,216,0.12), transparent 36%),
+        linear-gradient(135deg, #f8fafc, #ffffff);
+      border: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .badge {
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(29,78,216,0.08);
+      border: 1px solid rgba(29,78,216,0.16);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 40px;
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 21px;
+      letter-spacing: -0.035em;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.62;
+      color: var(--muted);
+    }
+
+    .meta {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section {
+      margin-top: 22px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .soft {
+      background: var(--soft);
+    }
+
+    .decision {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 14px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(4,120,87,0.08);
+      border: 1px solid rgba(4,120,87,0.16);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .row,
+    .item {
+      padding: 14px;
+      border-radius: 16px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+    }
+
+    .row span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .row strong {
+      display: block;
+      font-size: 17px;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .item + .item {
+      margin-top: 10px;
+    }
+
+    .red-flag {
+      border-color: rgba(185,28,28,0.18);
+      background: rgba(254,242,242,0.72);
+    }
+
+    .approval {
+      border-color: rgba(29,78,216,0.16);
+      background: rgba(239,246,255,0.74);
+    }
+
+    .footer {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media print {
+      body {
+        padding: 18px;
+      }
+
+      .section,
+      .hero {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">
+        <span class="badge">CEO's OS</span>
+        <span class="badge">Investment Committee Memo</span>
+        <span class="badge">${escapeHtml(deal?.stageLabel)}</span>
+        <span class="badge">${escapeHtml(deal?.priority)}</span>
+      </div>
+
+      <h1>${escapeHtml(deal?.name)}</h1>
+
+      <p class="meta">
+        Generated ${escapeHtml(generatedAt)} · ${escapeHtml(deal?.sourceLabel)} · ${escapeHtml(deal?.owner)}
+      </p>
+    </section>
+
+    <section class="section soft">
+      <h2>Committee Recommendation</h2>
+      <span class="decision">${escapeHtml(deal?.icMemo?.decision)}</span>
+      <h3>${escapeHtml(deal?.icMemo?.title)}</h3>
+      <p>${escapeHtml(deal?.icMemo?.summary)}</p>
+    </section>
+
+    <section class="section">
+      <h2>Deal Snapshot</h2>
+      <div class="grid">
+        ${renderBriefRows([
+          ['Target', deal?.name],
+          ['Sector', deal?.sector],
+          ['Market', deal?.market],
+          ['Owner', deal?.owner],
+          ['Stage', deal?.stageLabel],
+          ['Risk', deal?.riskLabel],
+          ['Enterprise Value', deal?.enterpriseLabel],
+          ['Equity Value', deal?.equityLabel],
+          ['EBITDA normalizado', deal?.ebitdaLabel],
+          ['Multiplo ajustado', deal?.multipleLabel],
+          ['Quality Score', deal?.qualityScoreLabel],
+          ['Updated', deal?.updatedLabel]
+        ])}
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Strategic Rationale, Valuation View & Committee Ask</h2>
+      ${renderMemoItems(deal?.icMemo?.items || [])}
+    </section>
+
+    <section class="section">
+      <h2>Red Flags & Mitigants</h2>
+      ${renderRedFlags(deal?.redFlags || [])}
+    </section>
+
+    <section class="section">
+      <h2>Required Approvals</h2>
+      ${renderApprovalItems(approvals)}
+    </section>
+
+    <div class="footer">
+      Internal use only. This IC Memo is generated from CEO's OS and does not constitute legal advice, tax advice, valuation opinion, fairness opinion or final investment recommendation. Human review and supporting documentation are required before any investment decision.
+    </div>
+  </main>
+</body>
+</html>`;
+}
+
+function renderApprovalItems(items) {
+  return items
+    .map(
+      (item) => `
+        <div class="item approval">
+          <h3>${escapeHtml(item?.title)}</h3>
+          <p>${escapeHtml(item?.description)}</p>
+        </div>
+      `
+    )
+    .join('');
+}
+function buildDealBriefHtml(deal) {
+  const generatedAt = new Intl.DateTimeFormat('es-ES', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(new Date());
+
+  const metrics = [
+    ['Equity Value', deal?.equityLabel],
+    ['Enterprise Value', deal?.enterpriseLabel],
+    ['EBITDA normalizado', deal?.ebitdaLabel],
+    ['Multiplo ajustado', deal?.multipleLabel],
+    ['Quality Score', deal?.qualityScoreLabel],
+    ['Risk', deal?.riskLabel]
+  ];
+
+  const profile = [
+    ['Target', deal?.name],
+    ['Sector', deal?.sector],
+    ['Market', deal?.market],
+    ['Owner', deal?.owner],
+    ['Stage', deal?.stageLabel],
+    ['Priority', deal?.priority],
+    ['Source', deal?.sourceLabel],
+    ['Updated', deal?.updatedLabel]
+  ];
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>${escapeHtml(deal?.name)} - Deal Brief</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #0f172a;
+      --muted: #475569;
+      --line: #dbe2ea;
+      --soft: #f8fafc;
+      --blue: #1d4ed8;
+      --green: #047857;
+      --gold: #a16207;
+      --danger: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 34px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 34px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(29,78,216,0.12), transparent 36%),
+        linear-gradient(135deg, #f8fafc, #ffffff);
+      border: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .badge {
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(29,78,216,0.08);
+      border: 1px solid rgba(29,78,216,0.16);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 42px;
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 21px;
+      letter-spacing: -0.035em;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .meta {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .section {
+      margin-top: 22px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .soft {
+      background: var(--soft);
+    }
+
+    .metric-grid,
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric,
+    .row,
+    .item {
+      padding: 14px;
+      border-radius: 16px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+    }
+
+    .metric span,
+    .row span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .metric strong,
+    .row strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .memo-decision {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 14px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(4,120,87,0.08);
+      border: 1px solid rgba(4,120,87,0.16);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .item + .item {
+      margin-top: 10px;
+    }
+
+    .status {
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      color: var(--blue);
+      background: rgba(29,78,216,0.08);
+      border: 1px solid rgba(29,78,216,0.16);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .red-flag {
+      border-color: rgba(185,28,28,0.18);
+      background: rgba(254,242,242,0.72);
+    }
+
+    .footer {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media print {
+      body {
+        padding: 18px;
+      }
+
+      .section,
+      .hero {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">
+        <span class="badge">CEO's OS</span>
+        <span class="badge">M&A Deal Brief</span>
+        <span class="badge">${escapeHtml(deal?.stageLabel)}</span>
+        <span class="badge">${escapeHtml(deal?.priority)}</span>
+      </div>
+
+      <h1>${escapeHtml(deal?.name)}</h1>
+
+      <p class="meta">
+        Generated ${escapeHtml(generatedAt)} · ${escapeHtml(deal?.sourceLabel)} · ${escapeHtml(deal?.owner)}
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Executive Summary</h2>
+      <p>${escapeHtml(deal?.recommendedAction)}</p>
+    </section>
+
+    <section class="grid">
+      <div class="section">
+        <h2>Target Profile</h2>
+        <div class="profile-grid">
+          ${renderBriefRows(profile)}
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Valuation Snapshot</h2>
+        <div class="metric-grid">
+          ${renderBriefRows(metrics)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section soft">
+      <h2>Investment Committee Memo</h2>
+      <span class="memo-decision">${escapeHtml(deal?.icMemo?.decision)}</span>
+      <h3>${escapeHtml(deal?.icMemo?.title)}</h3>
+      <p>${escapeHtml(deal?.icMemo?.summary)}</p>
+
+      <div style="margin-top: 14px;">
+        ${renderMemoItems(deal?.icMemo?.items || [])}
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="section">
+        <h2>Data Room Readiness</h2>
+        ${renderDataRoomItems(deal?.dataRoom || [])}
+      </div>
+
+      <div class="section">
+        <h2>Red Flags & Mitigants</h2>
+        ${renderRedFlags(deal?.redFlags || [])}
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Next Actions</h2>
+      ${renderActionItems(deal?.nextActions || [])}
+    </section>
+
+    <section class="section">
+      <h2>Deal Timeline</h2>
+      ${renderTimelineItems(deal?.timeline || [])}
+    </section>
+
+    <div class="footer">
+      This document is an internal executive brief generated from CEO's OS. It is not a fairness opinion, legal advice, tax advice or final investment recommendation.
+    </div>
+  </main>
+</body>
+</html>`;
+}
+
+function renderBriefRows(rows) {
+  return rows
+    .map(
+      ([label, value]) => `
+        <div class="row">
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(value || 'N/A')}</strong>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function renderMemoItems(items) {
+  return items
+    .map(
+      (item) => `
+        <div class="item">
+          <h3>${escapeHtml(item?.label)}</h3>
+          <p>${escapeHtml(item?.value)}</p>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function renderDataRoomItems(items) {
+  return items
+    .map(
+      (item) => `
+        <div class="item">
+          <h3>${escapeHtml(item?.title)}</h3>
+          <p>${escapeHtml(item?.description)}</p>
+          <span class="status">${escapeHtml(item?.status)}</span>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function renderRedFlags(items) {
+  return items
+    .map(
+      (item) => `
+        <div class="item red-flag">
+          <h3>${escapeHtml(item?.title)}</h3>
+          <p>${escapeHtml(item?.description)}</p>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function renderActionItems(items) {
+  return items
+    .map(
+      (item) => `
+        <div class="item">
+          <h3>${escapeHtml(item?.title)} · ${escapeHtml(item?.status)}</h3>
+          <p>${escapeHtml(item?.description)}</p>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function renderTimelineItems(items) {
+  return items
+    .map(
+      (item) => `
+        <div class="item">
+          <h3>${escapeHtml(item?.title)}</h3>
+          <p>${escapeHtml(item?.description)}</p>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function slugifyFileName(value) {
+  return String(value || 'deal')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 function CommandItem({ label, value }) {
   return (
     <div className="ma-detail-command-item">
@@ -1425,3 +2204,6 @@ function getSafeQualityScore(score) {
 }
 
 export default DealDetailPage;
+
+
+
