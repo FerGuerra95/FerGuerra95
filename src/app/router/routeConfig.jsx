@@ -142,6 +142,17 @@ export const routeGroups = {
         icon: <FolderKanban size={18} />
       }
     ]
+  },
+
+  pmi: {
+    label: 'PMI',
+    items: [
+      {
+        to: '/pmi/dashboard',
+        label: 'PMI & Synergies',
+        icon: <Activity size={18} />
+      }
+    ]
   }
 };
 
@@ -276,5 +287,11 @@ export const pageMetaMap = {
     title: 'Investor Data Room',
     description:
       'Checklist documental para inversores, bancos o partners financieros con preparación de materiales clave para funding.'
+  },
+
+  '/pmi/dashboard': {
+    title: 'PMI & Synergies Command Center',
+    description:
+      'Capa post-adquisición para controlar integración, sinergias, workstreams, riesgos y ejecución 30-60-90.'
   }
 };

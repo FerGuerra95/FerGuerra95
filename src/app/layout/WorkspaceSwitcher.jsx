@@ -1,22 +1,31 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { routeGroups } from '../router/routeConfig.jsx';
 
 const workspaceSwitcherCss = `
   .ceos-workspace-switcher {
     --visual-index: 0;
+    --workspace-count: 5;
+    --workspace-accent: rgba(212, 175, 55, 0.96);
+    --workspace-accent-soft: rgba(212, 175, 55, 0.22);
+    --workspace-accent-glow: rgba(212, 175, 55, 0.26);
     position: relative;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     align-items: center;
-    min-width: 368px;
+    width: 690px;
+    min-width: 690px;
+    max-width: 690px;
+    flex: 0 0 690px;
+    justify-self: center;
     padding: 6px;
     border-radius: 999px;
     overflow: hidden;
     background:
-      radial-gradient(circle at 0% 0%, rgba(255,255,255,0.050), transparent 34%),
-      linear-gradient(135deg, rgba(255,255,255,0.044), rgba(255,255,255,0.012)),
-      rgba(0,0,0,0.82);
-    border: 1px solid rgba(255,255,255,0.075);
+      radial-gradient(circle at 0% 0%, rgba(255,255,255,0.052), transparent 34%),
+      linear-gradient(135deg, rgba(255,255,255,0.046), rgba(255,255,255,0.012)),
+      rgba(0,0,0,0.84);
+    border: 1px solid rgba(255,255,255,0.078);
     box-shadow:
       0 18px 42px rgba(0,0,0,0.48),
       inset 0 1px 0 rgba(255,255,255,0.055),
@@ -24,12 +33,36 @@ const workspaceSwitcherCss = `
     backdrop-filter: blur(18px) saturate(140%);
     -webkit-backdrop-filter: blur(18px) saturate(140%);
     user-select: none;
-    touch-action: none;
-    cursor: grab;
   }
 
-  .ceos-workspace-switcher.is-dragging {
-    cursor: grabbing;
+  .ceos-workspace-switcher.is-overview {
+    --workspace-accent: rgba(212, 175, 55, 0.96);
+    --workspace-accent-soft: rgba(212, 175, 55, 0.22);
+    --workspace-accent-glow: rgba(212, 175, 55, 0.28);
+  }
+
+  .ceos-workspace-switcher.is-ma {
+    --workspace-accent: rgba(16, 185, 129, 0.96);
+    --workspace-accent-soft: rgba(16, 185, 129, 0.22);
+    --workspace-accent-glow: rgba(16, 185, 129, 0.18);
+  }
+
+  .ceos-workspace-switcher.is-compliance {
+    --workspace-accent: rgba(59, 130, 246, 0.96);
+    --workspace-accent-soft: rgba(59, 130, 246, 0.20);
+    --workspace-accent-glow: rgba(59, 130, 246, 0.18);
+  }
+
+  .ceos-workspace-switcher.is-funding {
+    --workspace-accent: rgba(245, 158, 11, 0.96);
+    --workspace-accent-soft: rgba(245, 158, 11, 0.22);
+    --workspace-accent-glow: rgba(245, 158, 11, 0.26);
+  }
+
+  .ceos-workspace-switcher.is-pmi {
+    --workspace-accent: rgba(168, 85, 247, 0.96);
+    --workspace-accent-soft: rgba(168, 85, 247, 0.27);
+    --workspace-accent-glow: rgba(168, 85, 247, 0.38);
   }
 
   .ceos-workspace-switcher::before {
@@ -40,7 +73,7 @@ const workspaceSwitcherCss = `
     background:
       linear-gradient(
         115deg,
-        rgba(255,255,255,0.050) 0%,
+        rgba(255,255,255,0.052) 0%,
         rgba(255,255,255,0.014) 22%,
         transparent 48%,
         transparent 100%
@@ -49,40 +82,48 @@ const workspaceSwitcherCss = `
     pointer-events: none;
   }
 
+  .ceos-workspace-switcher::after {
+    content: "";
+    position: absolute;
+    top: -45%;
+    bottom: -45%;
+    left: calc((100% / var(--workspace-count)) * var(--visual-index));
+    width: calc(100% / var(--workspace-count));
+    background: radial-gradient(circle, var(--workspace-accent-glow), transparent 68%);
+    opacity: 0.96;
+    filter: blur(12px);
+    transition:
+      left .34s cubic-bezier(.22,.61,.36,1),
+      background .22s ease,
+      opacity .22s ease;
+    pointer-events: none;
+  }
+
   .ceos-workspace-thumb {
     position: absolute;
     left: 6px;
     top: 6px;
-    width: calc((100% - 12px) / 3);
+    width: calc((100% - 12px) / var(--workspace-count));
     height: calc(100% - 12px);
     border-radius: 999px;
     transform: translateX(calc(var(--visual-index) * 100%));
     background:
-      radial-gradient(circle at 18% 50%, rgba(16,185,129,0.24), transparent 42%),
-      radial-gradient(circle at 88% 50%, rgba(96,165,250,0.16), transparent 48%),
-      linear-gradient(135deg, rgba(16,185,129,0.22), rgba(8,14,22,0.97) 70%);
-    border: 1px solid rgba(255,255,255,0.090);
+      radial-gradient(circle at 18% 50%, var(--workspace-accent-soft), transparent 42%),
+      radial-gradient(circle at 88% 50%, rgba(96,165,250,0.14), transparent 48%),
+      linear-gradient(135deg, var(--workspace-accent-soft), rgba(8,14,22,0.98) 70%);
+    border: 1px solid rgba(255,255,255,0.095);
     box-shadow:
       0 14px 30px rgba(0,0,0,0.42),
-      0 0 28px rgba(16,185,129,0.13),
-      inset 0 1px 0 rgba(255,255,255,0.100),
+      0 0 42px var(--workspace-accent-glow),
+      inset 0 1px 0 rgba(255,255,255,0.105),
       inset 0 -1px 0 rgba(255,255,255,0.018);
     transition:
-      transform .42s cubic-bezier(.22,.61,.36,1),
-      box-shadow .24s ease,
-      background .24s ease;
+      transform .34s cubic-bezier(.22,.61,.36,1),
+      box-shadow .22s ease,
+      background .22s ease,
+      border-color .22s ease;
     pointer-events: none;
     z-index: 1;
-  }
-
-  .ceos-workspace-switcher.is-dragging .ceos-workspace-thumb {
-    transition: transform .025s linear;
-    box-shadow:
-      0 16px 34px rgba(0,0,0,0.52),
-      0 0 36px rgba(16,185,129,0.18),
-      0 0 24px rgba(212,175,55,0.10),
-      inset 0 1px 0 rgba(255,255,255,0.120),
-      inset 0 -1px 0 rgba(255,255,255,0.020);
   }
 
   .ceos-workspace-thumb::before {
@@ -93,10 +134,10 @@ const workspaceSwitcherCss = `
     background:
       linear-gradient(
         180deg,
-        rgba(255,255,255,0.090),
-        rgba(255,255,255,0.018) 36%,
+        rgba(255,255,255,0.095),
+        rgba(255,255,255,0.020) 36%,
         transparent 74%,
-        rgba(255,255,255,0.020)
+        rgba(255,255,255,0.022)
       );
     pointer-events: none;
   }
@@ -104,15 +145,17 @@ const workspaceSwitcherCss = `
   .ceos-workspace-option {
     position: relative;
     z-index: 2;
+    min-width: 0;
     min-height: 42px;
-    padding: 0 18px;
+    padding: 0 10px;
+    border: 0;
     border-radius: 999px;
     background: transparent;
-    color: rgba(226,232,240,0.64);
-    cursor: inherit;
-    font-size: 14px;
+    color: rgba(226,232,240,0.62);
+    cursor: pointer;
+    font-size: 12.6px;
     font-weight: 850;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.018em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -131,315 +174,485 @@ const workspaceSwitcherCss = `
       0 0 12px rgba(212,175,55,0.08);
   }
 
-  .ceos-workspace-option.is-active {
-    color: #ffffff;
-    text-shadow:
-      0 0 16px rgba(255,255,255,0.12),
-      0 0 18px rgba(16,185,129,0.12);
-  }
-
   .ceos-workspace-option span {
     position: relative;
     z-index: 2;
+    white-space: nowrap;
+    color: inherit;
+    transition:
+      color .22s ease,
+      text-shadow .22s ease,
+      transform .18s ease;
+  }
+
+  .ceos-workspace-option.is-active {
+    color: #ffffff;
+  }
+
+  .ceos-workspace-option.is-active span {
+    color: #ffffff;
+    text-shadow:
+      0 0 16px rgba(255,255,255,0.18),
+      0 0 22px var(--workspace-accent-glow);
+  }
+
+  .ceos-workspace-option.is-active[data-workspace="overview"] span {
+    text-shadow:
+      0 0 16px rgba(255,255,255,0.20),
+      0 0 28px rgba(212,175,55,0.50);
+  }
+
+  .ceos-workspace-option.is-active[data-workspace="funding"] span {
+    text-shadow:
+      0 0 16px rgba(255,255,255,0.18),
+      0 0 28px rgba(245,158,11,0.58);
+  }
+
+  .ceos-workspace-option.is-active[data-workspace="pmi"] span {
+    text-shadow:
+      0 0 16px rgba(255,255,255,0.20),
+      0 0 30px rgba(168,85,247,0.70),
+      0 0 46px rgba(168,85,247,0.42);
+  }
+        /* PREMIUM EFFECTS — Workspace Switcher final polish */
+
+  @keyframes ceosSwitcherOuterGlow {
+    0%, 100% {
+      box-shadow:
+        0 18px 42px rgba(0,0,0,0.52),
+        0 0 16px color-mix(in srgb, var(--workspace-accent-glow) 68%, transparent),
+        0 0 38px color-mix(in srgb, var(--workspace-accent-glow) 54%, transparent),
+        0 0 72px color-mix(in srgb, var(--workspace-accent-glow) 26%, transparent),
+        inset 0 1px 0 rgba(255,255,255,0.058),
+        inset 0 -1px 0 rgba(255,255,255,0.014);
+      filter: brightness(1) saturate(130%);
+    }
+
+    50% {
+      box-shadow:
+        0 22px 56px rgba(0,0,0,0.62),
+        0 0 24px color-mix(in srgb, var(--workspace-accent-glow) 82%, transparent),
+        0 0 58px color-mix(in srgb, var(--workspace-accent-glow) 66%, transparent),
+        0 0 104px color-mix(in srgb, var(--workspace-accent-glow) 34%, transparent),
+        inset 0 1px 0 rgba(255,255,255,0.082),
+        inset 0 -1px 0 rgba(255,255,255,0.018);
+      filter: brightness(1.04) saturate(160%);
+    }
+  }
+
+  @keyframes ceosSwitcherAmbientHalo {
+    0%, 100% {
+      opacity: 0.76;
+      filter: blur(13px) saturate(140%);
+    }
+
+    50% {
+      opacity: 1;
+      filter: blur(18px) saturate(180%);
+    }
+  }
+
+  @keyframes ceosThumbPremiumBreath {
+    0%, 100% {
+      box-shadow:
+        0 14px 30px rgba(0,0,0,0.42),
+        0 0 40px var(--workspace-accent-glow),
+        inset 0 1px 0 rgba(255,255,255,0.105),
+        inset 0 -1px 0 rgba(255,255,255,0.018);
+      filter: brightness(1) saturate(130%);
+    }
+
+    50% {
+      box-shadow:
+        0 18px 40px rgba(0,0,0,0.55),
+        0 0 60px var(--workspace-accent-glow),
+        0 0 30px var(--workspace-accent-soft),
+        inset 0 1px 0 rgba(255,255,255,0.140),
+        inset 0 -1px 0 rgba(255,255,255,0.022);
+      filter: brightness(1.12) saturate(165%);
+    }
+  }
+
+  @keyframes ceosActiveTextGlow {
+    0%, 100% {
+      filter: brightness(1);
+    }
+
+    50% {
+      filter: brightness(1.13);
+    }
+  }
+
+  .ceos-workspace-switcher {
+    animation: ceosSwitcherOuterGlow 5.2s ease-in-out infinite;
+    overflow: visible;
+  }
+
+  .ceos-workspace-switcher::before,
+  .ceos-workspace-switcher::after,
+  .ceos-workspace-thumb {
     pointer-events: none;
   }
 
-  body.ceos-workspace-dragging,
-  body.ceos-workspace-dragging * {
-    cursor: grabbing !important;
-    user-select: none !important;
+  .ceos-workspace-switcher::after {
+    animation: ceosSwitcherAmbientHalo 3.4s ease-in-out infinite;
+  }
+
+  .ceos-workspace-thumb {
+    animation: ceosThumbPremiumBreath 3.3s ease-in-out infinite;
+  }
+
+  .ceos-workspace-option {
+    overflow: hidden;
+  }
+
+  .ceos-workspace-option::before {
+    content: "";
+    position: absolute;
+    left: 21%;
+    right: 21%;
+    bottom: 7px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--workspace-accent);
+    opacity: 0;
+    transform: scaleX(0.35);
+    transform-origin: center;
+    box-shadow:
+      0 0 14px var(--workspace-accent-glow),
+      0 0 28px var(--workspace-accent-glow);
+    transition:
+      opacity .22s ease,
+      transform .24s cubic-bezier(.22,.61,.36,1);
+    pointer-events: none;
+  }
+
+  .ceos-workspace-option:hover::before {
+    opacity: 0.46;
+    transform: scaleX(0.72);
+  }
+
+  .ceos-workspace-option.is-active::before {
+    opacity: 0.95;
+    transform: scaleX(1);
+  }
+
+  .ceos-workspace-option.is-active span {
+    animation: ceosActiveTextGlow 2.8s ease-in-out infinite;
+  }
+
+  .ceos-workspace-switcher:hover {
+    border-color: rgba(255,255,255,0.14);
+    filter: brightness(1.045);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ceos-workspace-switcher,
+    .ceos-workspace-switcher::after,
+    .ceos-workspace-thumb,
+    .ceos-workspace-option.is-active span {
+      animation: none !important;
+    }
+  }
+
+
+
+  @media (max-width: 1180px) {
+    .ceos-workspace-option {
+      padding: 0 8px;
+      font-size: 11.8px;
+    }
   }
 
   @media (max-width: 860px) {
     .ceos-workspace-switcher {
-      width: 100%;
+      width: min(690px, calc(100vw - 28px));
       min-width: 0;
+      max-width: 690px;
+      flex: 0 1 auto;
     }
 
     .ceos-workspace-option {
       min-height: 40px;
-      padding: 0 12px;
-      font-size: 13px;
+      padding: 0 6px;
+      font-size: 11px;
+      letter-spacing: -0.035em;
     }
   }
 `;
 
-const WORKSPACES = [
-  {
-    key: 'ma',
+const WORKSPACE_ORDER = ['overview', 'ma', 'compliance', 'funding', 'pmi'];
+
+const WORKSPACE_FALLBACKS = {
+  overview: {
+    label: 'Executive',
+    path: '/overview/dashboard',
+    sidebarLabels: ['OVERVIEW', 'EXECUTIVE']
+  },
+  ma: {
     label: 'M&A',
     path: '/ma/dashboard',
-    sidebarLabel: 'M&A'
+    sidebarLabels: ['M&A']
   },
-  {
-    key: 'compliance',
+  compliance: {
     label: 'Compliance',
     path: '/compliance/dashboard',
-    sidebarLabel: 'COMPLIANCE'
+    sidebarLabels: ['COMPLIANCE']
   },
-  {
-    key: 'funding',
+  funding: {
     label: 'Funding',
     path: '/funding/dashboard',
-    sidebarLabel: 'FUNDING'
+    sidebarLabels: ['FUNDING']
+  },
+  pmi: {
+    label: 'PMI',
+    path: '/pmi/dashboard',
+    sidebarLabels: ['PMI']
   }
-];
+};
 
 let sidebarAnimationFrame = null;
-let sidebarTargetScroll = 0;
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
 function getWorkspace(pathname) {
+  if (
+    pathname.startsWith('/overview') ||
+    pathname.startsWith('/ceo/overview') ||
+    pathname.startsWith('/executive')
+  ) {
+    return 'overview';
+  }
+
   if (pathname.startsWith('/compliance')) return 'compliance';
   if (pathname.startsWith('/funding')) return 'funding';
+  if (pathname.startsWith('/pmi')) return 'pmi';
+
   return 'ma';
 }
 
-function getWorkspaceIndex(workspace) {
-  const index = WORKSPACES.findIndex((item) => item.key === workspace);
+function buildWorkspaces() {
+  return WORKSPACE_ORDER.map((key) => {
+    const fallback = WORKSPACE_FALLBACKS[key];
+    const group = routeGroups?.[key];
+    const firstItem = Array.isArray(group?.items) ? group.items[0] : null;
+
+    const labels = [
+      ...(fallback.sidebarLabels || []),
+      String(group?.label || '').toUpperCase()
+    ].filter(Boolean);
+
+    return {
+      key,
+      label: fallback.label,
+      path: firstItem?.to || fallback.path,
+      sidebarLabels: Array.from(new Set(labels))
+    };
+  });
+}
+
+function getWorkspaceIndex(workspaces, workspace) {
+  const index = workspaces.findIndex((item) => item.key === workspace);
+
   return index >= 0 ? index : 0;
 }
 
-function getWorkspaceByIndex(index) {
-  return WORKSPACES[clamp(index, 0, WORKSPACES.length - 1)] || WORKSPACES[0];
+function stopSidebarAnimation() {
+  if (sidebarAnimationFrame) {
+    window.cancelAnimationFrame(sidebarAnimationFrame);
+    sidebarAnimationFrame = null;
+  }
 }
 
-function getVisualIndexFromClientX(clientX, element) {
-  const rect = element.getBoundingClientRect();
-  const usableWidth = Math.max(rect.width - 12, 1);
-  const localX = clamp(clientX - rect.left - 6, 0, usableWidth);
-  const segmentWidth = usableWidth / WORKSPACES.length;
-
-  return clamp(localX / segmentWidth - 0.5, 0, WORKSPACES.length - 1);
+function getSidebar() {
+  return document.querySelector('.ceos-sidebar');
 }
 
-function getSidebarTargetTop(workspaceKey) {
-  const sidebar = document.querySelector('.ceos-sidebar');
+function ensureSidebarCanScroll() {
+  const sidebar = getSidebar();
 
-  if (!sidebar) return 0;
+  if (!sidebar) return null;
 
-  const workspace = WORKSPACES.find((item) => item.key === workspaceKey);
+  sidebar.style.height = '100vh';
+  sidebar.style.maxHeight = '100vh';
+  sidebar.style.overflowY = 'auto';
 
-  if (!workspace) return 0;
+  const nav = sidebar.querySelector('.ceos-nav');
 
-  const sectionTitles = Array.from(
+  if (nav) {
+    nav.style.paddingBottom = '90vh';
+  }
+
+  return sidebar;
+}
+
+function getSidebarTitle(workspace) {
+  const sidebar = ensureSidebarCanScroll();
+
+  if (!sidebar || !workspace) return null;
+
+  const byKey = sidebar.querySelector(
+    `.ceos-nav-section[data-workspace-key="${workspace.key}"] .ceos-nav-section-title`
+  );
+
+  if (byKey) return byKey;
+
+  const titles = Array.from(
     sidebar.querySelectorAll('.ceos-nav-section-title')
   );
 
-  const targetTitle = sectionTitles.find((title) => {
-    return title.textContent?.trim().toUpperCase() === workspace.sidebarLabel;
-  });
+  return titles.find((item) => {
+    const text = item.textContent?.trim().toUpperCase();
 
-  if (!targetTitle) {
-    return workspaceKey === 'ma' ? 0 : sidebar.scrollTop;
-  }
+    return workspace.sidebarLabels.some((label) => label === text);
+  }) || null;
+}
 
+function animateSidebarToWorkspace(workspace) {
+  const sidebar = ensureSidebarCanScroll();
+
+  if (!sidebar || !workspace) return;
+
+  stopSidebarAnimation();
+
+  const title = getSidebarTitle(workspace);
+
+  if (!title) return;
+
+  const targetTop = Math.max(title.offsetTop - 18, 0);
   const maxScroll = Math.max(sidebar.scrollHeight - sidebar.clientHeight, 0);
-
-  return clamp(Math.max(targetTitle.offsetTop - 18, 0), 0, maxScroll);
-}
-
-function getInterpolatedSidebarTop(visualIndex) {
-  const safeIndex = clamp(visualIndex, 0, WORKSPACES.length - 1);
-  const lowerIndex = Math.floor(safeIndex);
-  const upperIndex = Math.ceil(safeIndex);
-  const progress = safeIndex - lowerIndex;
-
-  const lowerTop = getSidebarTargetTop(WORKSPACES[lowerIndex].key);
-  const upperTop = getSidebarTargetTop(WORKSPACES[upperIndex].key);
-
-  return lowerTop + (upperTop - lowerTop) * progress;
-}
-
-function animateSidebarTo(targetTop, intensity = 0.105) {
-  const sidebar = document.querySelector('.ceos-sidebar');
-
-  if (!sidebar) return;
-
-  sidebarTargetScroll = targetTop;
-
-  if (sidebarAnimationFrame) return;
+  const safeTarget = clamp(targetTop, 0, maxScroll);
 
   function step() {
-    const currentSidebar = document.querySelector('.ceos-sidebar');
+    const currentSidebar = ensureSidebarCanScroll();
 
     if (!currentSidebar) {
       sidebarAnimationFrame = null;
       return;
     }
 
-    const currentTop = currentSidebar.scrollTop;
-    const distance = sidebarTargetScroll - currentTop;
+    const distance = safeTarget - currentSidebar.scrollTop;
 
-    if (Math.abs(distance) < 0.35) {
-      currentSidebar.scrollTop = sidebarTargetScroll;
+    if (Math.abs(distance) < 0.5) {
+      currentSidebar.scrollTop = safeTarget;
       sidebarAnimationFrame = null;
       return;
     }
 
-    currentSidebar.scrollTop = currentTop + distance * intensity;
+    currentSidebar.scrollTop += distance * 0.26;
     sidebarAnimationFrame = window.requestAnimationFrame(step);
   }
 
   sidebarAnimationFrame = window.requestAnimationFrame(step);
 }
 
-function scrollSidebarToVisualIndex(visualIndex) {
-  animateSidebarTo(getInterpolatedSidebarTop(visualIndex), 0.115);
-}
 
-function scrollSidebarToWorkspace(workspaceKey) {
-  animateSidebarTo(getSidebarTargetTop(workspaceKey), 0.105);
-}
+function resetMainContentScroll() {
+  const reset = () => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto'
+    });
 
+    if (document.documentElement) {
+      document.documentElement.scrollTop = 0;
+      document.documentElement.scrollLeft = 0;
+    }
+
+    if (document.body) {
+      document.body.scrollTop = 0;
+      document.body.scrollLeft = 0;
+    }
+
+    const selectors = [
+      '.main-area',
+      '.page',
+      '.page-grid'
+    ];
+
+    selectors.forEach((selector) => {
+      document.querySelectorAll(selector).forEach((element) => {
+        if (element && !element.classList.contains('ceos-sidebar')) {
+          element.scrollTop = 0;
+          element.scrollLeft = 0;
+        }
+      });
+    });
+  };
+
+  reset();
+
+  window.requestAnimationFrame(() => {
+    reset();
+
+    window.requestAnimationFrame(() => {
+      reset();
+    });
+  });
+
+  window.setTimeout(reset, 80);
+  window.setTimeout(reset, 180);
+  window.setTimeout(reset, 360);
+}
 export function WorkspaceSwitcher() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const switcherRef = useRef(null);
-  const latestIndexRef = useRef(0);
-
+  const workspaces = useMemo(() => buildWorkspaces(), []);
   const workspace = getWorkspace(pathname);
-  const activeIndex = getWorkspaceIndex(workspace);
+  const activeIndex = getWorkspaceIndex(workspaces, workspace);
 
-  const [isDragging, setIsDragging] = useState(false);
   const [visualIndex, setVisualIndex] = useState(activeIndex);
 
-  const roundedVisualIndex = clamp(Math.round(visualIndex), 0, WORKSPACES.length - 1);
-  const highlightedIndex = isDragging ? roundedVisualIndex : activeIndex;
+  const highlightedWorkspace = workspaces[visualIndex] || workspaces[0];
 
   useEffect(() => {
-    if (!isDragging) {
-      setVisualIndex(activeIndex);
-      latestIndexRef.current = activeIndex;
-    }
-  }, [activeIndex, isDragging]);
+    setVisualIndex(activeIndex);
 
-  useEffect(() => {
-    if (!isDragging) return undefined;
+    window.setTimeout(() => {
+      animateSidebarToWorkspace(workspaces[activeIndex]);
+    }, 120);
+  }, [activeIndex, workspaces]);
 
-    function move(clientX) {
-      const element = switcherRef.current;
+  function handleWorkspaceClick(item) {
+    const nextIndex = getWorkspaceIndex(workspaces, item.key);
 
-      if (!element) return;
-
-      const nextIndex = getVisualIndexFromClientX(clientX, element);
-
-      latestIndexRef.current = nextIndex;
-      setVisualIndex(nextIndex);
-      scrollSidebarToVisualIndex(nextIndex);
-    }
-
-    function handleMouseMove(event) {
-      event.preventDefault();
-      move(event.clientX);
-    }
-
-    function handleTouchMove(event) {
-      const touch = event.touches?.[0];
-
-      if (!touch) return;
-
-      event.preventDefault();
-      move(touch.clientX);
-    }
-
-    function finishDrag() {
-      const nearestIndex = clamp(
-        Math.round(latestIndexRef.current),
-        0,
-        WORKSPACES.length - 1
-      );
-
-      const nextWorkspace = getWorkspaceByIndex(nearestIndex);
-
-      document.body.classList.remove('ceos-workspace-dragging');
-
-      setIsDragging(false);
-      setVisualIndex(nearestIndex);
-
-      scrollSidebarToWorkspace(nextWorkspace.key);
-      navigate(nextWorkspace.path);
-    }
-
-    function cancelDrag() {
-      document.body.classList.remove('ceos-workspace-dragging');
-
-      setIsDragging(false);
-      setVisualIndex(activeIndex);
-      latestIndexRef.current = activeIndex;
-      scrollSidebarToWorkspace(workspace);
-    }
-
-    window.addEventListener('mousemove', handleMouseMove, { passive: false });
-    window.addEventListener('mouseup', finishDrag);
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('touchend', finishDrag);
-    window.addEventListener('touchcancel', cancelDrag);
-    window.addEventListener('blur', cancelDrag);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', finishDrag);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', finishDrag);
-      window.removeEventListener('touchcancel', cancelDrag);
-      window.removeEventListener('blur', cancelDrag);
-      document.body.classList.remove('ceos-workspace-dragging');
-    };
-  }, [activeIndex, isDragging, navigate, workspace]);
-
-  function startDragFromClientX(clientX) {
-    const element = switcherRef.current;
-
-    if (!element) return;
-
-    const nextIndex = getVisualIndexFromClientX(clientX, element);
-
-    latestIndexRef.current = nextIndex;
-
-    document.body.classList.add('ceos-workspace-dragging');
-
-    setIsDragging(true);
     setVisualIndex(nextIndex);
-    scrollSidebarToVisualIndex(nextIndex);
+    animateSidebarToWorkspace(item);
+    resetMainContentScroll();
+
+    window.setTimeout(() => {
+      animateSidebarToWorkspace(item);
+      resetMainContentScroll();
+    }, 120);
+
+    window.setTimeout(() => {
+      animateSidebarToWorkspace(item);
+      resetMainContentScroll();
+    }, 260);
+
+    if (item.key !== workspace) {
+      navigate(item.path);
+    }
   }
 
-  function handleMouseDown(event) {
-    if (event.button !== 0) return;
-
-    event.preventDefault();
-    startDragFromClientX(event.clientX);
-  }
-
-  function handleTouchStart(event) {
-    const touch = event.touches?.[0];
-
-    if (!touch) return;
-
-    event.preventDefault();
-    startDragFromClientX(touch.clientX);
-  }
-
-  function handleKeyboardNavigation(event, targetWorkspace) {
+  function handleKeyboardNavigation(event, item) {
     if (event.key !== 'Enter' && event.key !== ' ') return;
 
     event.preventDefault();
-
-    scrollSidebarToWorkspace(targetWorkspace.key);
-    navigate(targetWorkspace.path);
+    handleWorkspaceClick(item);
   }
 
   return (
     <div
-      ref={switcherRef}
-      className={`workspace-switcher ceos-workspace-switcher ${isDragging ? 'is-dragging' : ''}`.trim()}
-      style={{ '--visual-index': String(isDragging ? visualIndex : activeIndex) }}
-      onMouseDown={handleMouseDown}
-      onTouchStart={handleTouchStart}
+      className={`workspace-switcher ceos-workspace-switcher is-${highlightedWorkspace.key}`.trim()}
+      style={{
+        '--visual-index': String(visualIndex),
+        '--workspace-count': String(workspaces.length)
+      }}
       role="tablist"
       aria-label="Workspace selector"
     >
@@ -447,18 +660,25 @@ export function WorkspaceSwitcher() {
 
       <div className="ceos-workspace-thumb" />
 
-      {WORKSPACES.map((item, index) => (
-        <div
+      {workspaces.map((item, index) => (
+        <button
           key={item.key}
+          type="button"
           role="tab"
-          tabIndex={0}
           aria-selected={workspace === item.key}
-          className={`ceos-workspace-option ${highlightedIndex === index ? 'is-active' : ''}`.trim()}
+          data-workspace={item.key}
+          className={`ceos-workspace-option ${visualIndex === index ? 'is-active' : ''}`.trim()}
+          onClick={() => handleWorkspaceClick(item)}
           onKeyDown={(event) => handleKeyboardNavigation(event, item)}
         >
           <span>{item.label}</span>
-        </div>
+        </button>
       ))}
     </div>
   );
 }
+
+
+
+
+

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   BrainCircuit,
@@ -13,7 +13,14 @@ import { routeGroups } from '../router/routeConfig.jsx';
 const GOLD = '#d4af37';
 const MUTED_ICON = 'rgba(226,232,240,0.68)';
 
+const SIDEBAR_GROUP_ORDER = ['overview', 'ma', 'compliance', 'funding', 'pmi'];
+
 const workspaceMeta = {
+  overview: {
+    icon: <Sparkles size={18} />,
+    title: 'Executive Command Center',
+    description: 'Vista superior de señales ejecutivas, módulos premium y prioridades del MVP.'
+  },
   ma: {
     icon: <Calculator size={18} />,
     title: 'M&A Intelligence',
@@ -28,6 +35,11 @@ const workspaceMeta = {
     icon: <Landmark size={18} />,
     title: 'Funding Studio',
     description: 'Readiness, estructura de capital, escenarios y data room inversor.'
+  },
+  pmi: {
+    icon: <Layers3 size={18} />,
+    title: 'PMI & Synergies',
+    description: 'Integración post-adquisición, sinergias, workstreams, riesgos y plan 30-60-90.'
   }
 };
 
@@ -68,6 +80,8 @@ const sidebarCss = `
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
     border-right: 1px solid rgba(255,255,255,0.040);
@@ -367,7 +381,7 @@ const sidebarCss = `
   }
 
   .ceos-nav {
-    padding: 20px 12px;
+    padding: 20px 12px 90vh;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -626,8 +640,14 @@ const sidebarCss = `
 `;
 
 function getActiveWorkspace(pathname) {
+  if (pathname.startsWith('/overview') || pathname.startsWith('/ceo/overview')) {
+    return 'overview';
+  }
+
   if (pathname.startsWith('/compliance')) return 'compliance';
   if (pathname.startsWith('/funding')) return 'funding';
+  if (pathname.startsWith('/pmi')) return 'pmi';
+
   return 'ma';
 }
 
@@ -832,12 +852,13 @@ export function Sidebar() {
       </div>
 
       <nav className="ceos-nav">
-        {Object.entries(routeGroups).map(([groupKey, group]) => {
+        {SIDEBAR_GROUP_ORDER.filter((groupKey) => routeGroups[groupKey]).map((groupKey) => {
+          const group = routeGroups[groupKey];
           const isGroupActive = groupKey === activeWorkspace;
           const groupItems = buildGroupItems(groupKey, group.items);
 
           return (
-            <div className="ceos-nav-section" key={groupKey}>
+            <div className="ceos-nav-section" data-workspace-key={groupKey} key={groupKey}>
               <div
                 className={`ceos-nav-section-title ${
                   isGroupActive ? 'is-active' : ''
@@ -864,8 +885,7 @@ export function Sidebar() {
           </div>
 
           <p className="ceos-build-copy">
-            M&A + Compliance conectados a backend JSON. Funding integrado como
-            tercera línea estratégica.
+            M&A + Compliance + Funding + PMI integrados como ramas premium del sistema ejecutivo.
           </p>
         </div>
       </div>
@@ -874,3 +894,8 @@ export function Sidebar() {
 }
 
 export default Sidebar;
+
+
+
+
+

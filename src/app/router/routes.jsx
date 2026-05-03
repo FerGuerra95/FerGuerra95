@@ -8,6 +8,7 @@ import { LoginPage } from '../pages/LoginPage.jsx';
 import { MAStoreProvider } from '../../modules/ma/store/maStore.jsx';
 import { ComplianceStoreProvider } from '../../modules/compliance/store/complianceStore.js';
 import { FundingStoreProvider } from '../../modules/funding/store/fundingStore.jsx';
+import { PMIStoreProvider } from '../../modules/pmi/store/pmiStore.jsx';
 
 import { CEOOverviewPage } from '../../modules/ceo-overview/pages/CEOOverviewPage.jsx';
 
@@ -34,6 +35,7 @@ import { InvestorReadinessPage } from '../../modules/funding/pages/InvestorReadi
 import { CapitalStructurePage } from '../../modules/funding/pages/CapitalStructurePage.jsx';
 import { FundraisingScenariosPage } from '../../modules/funding/pages/FundraisingScenariosPage.jsx';
 import { DataRoomPage } from '../../modules/funding/pages/DataRoomPage.jsx';
+import { PMIDashboardPage } from '../../modules/pmi/pages/PMIDashboardPage.jsx';
 
 function ProtectedAppShell() {
   return (
@@ -41,7 +43,9 @@ function ProtectedAppShell() {
       <MAStoreProvider>
         <ComplianceStoreProvider>
           <FundingStoreProvider>
-            <AppShell />
+            <PMIStoreProvider>
+              <AppShell />
+            </PMIStoreProvider>
           </FundingStoreProvider>
         </ComplianceStoreProvider>
       </MAStoreProvider>
@@ -57,7 +61,7 @@ export function AppRoutes() {
 
       <Route element={<ProtectedAppShell />}>
         <Route path="/overview" element={<CEOOverviewPage />} />
-        <Route path="/ceo/overview" element={<CEOOverviewPage />} />
+        <Route path="/ceo/overview" element={<CEOOverviewPage />} />`r`n        <Route path="/pmi/dashboard" element={<PMIDashboardPage />} />
 
         <Route path="/ma/dashboard" element={<MADashboardPage />} />
         <Route path="/ma/valuation" element={<ValuationPage />} />
@@ -127,3 +131,4 @@ export function AppRoutes() {
     </Routes>
   );
 }
+
