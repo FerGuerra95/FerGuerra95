@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   Activity,
   ArrowRight,
@@ -566,6 +566,235 @@ const fundingDashboardCss = `
     margin-bottom: 0;
   }
 
+
+  /* MULTINATIONAL PREMIUM FUNDING */
+  .funding-multinational-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .funding-premium-panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 30px;
+    padding: 29px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background:
+      radial-gradient(circle at 5% 0%, rgba(37, 99, 235, 0.24), transparent 32%),
+      radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.12), transparent 28%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.96), rgba(15, 23, 42, 0.92));
+    box-shadow:
+      0 26px 90px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  }
+
+  .funding-premium-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 46px 46px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent 88%);
+    pointer-events: none;
+  }
+
+  .funding-premium-panel > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .funding-premium-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+  }
+
+  .funding-premium-header h2,
+  .funding-premium-header h3 {
+    margin: 0;
+    letter-spacing: -0.045em;
+  }
+
+  .funding-premium-header p {
+    max-width: 760px;
+    margin: 10px 0 0;
+    line-height: 1.62;
+  }
+
+  .funding-premium-icon {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 auto;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    color: #bfdbfe;
+    background: rgba(37, 99, 235, 0.16);
+    border: 1px solid rgba(96, 165, 250, 0.24);
+  }
+
+  .funding-premium-row-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+  }
+
+  .funding-premium-row {
+    min-width: 0;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.085);
+  }
+
+  .funding-premium-row span {
+    display: block;
+    margin-bottom: 7px;
+    color: rgba(148, 163, 184, 0.96);
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .funding-premium-row strong {
+    display: block;
+    color: rgba(248, 250, 252, 0.96);
+    font-size: 20px;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
+  }
+
+  .funding-premium-memo {
+    padding: 21px;
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.12), transparent 30%),
+      rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.085);
+  }
+
+  .funding-premium-decision {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    color: #bbf7d0;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.24);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .funding-premium-decision.watch {
+    color: #fde68a;
+    background: rgba(234, 179, 8, 0.12);
+    border-color: rgba(234, 179, 8, 0.24);
+  }
+
+  .funding-premium-decision.hold {
+    color: #fecaca;
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.24);
+  }
+
+  .funding-premium-memo h3 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: -0.045em;
+  }
+
+  .funding-premium-memo p {
+    margin: 10px 0 0;
+    line-height: 1.66;
+  }
+
+  .funding-premium-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .funding-premium-item {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 13px;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.085);
+  }
+
+  .funding-premium-item-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    color: #bfdbfe;
+    background: rgba(37, 99, 235, 0.14);
+    border: 1px solid rgba(96, 165, 250, 0.22);
+  }
+
+  .funding-premium-item.is-danger .funding-premium-item-icon {
+    color: #fecaca;
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.22);
+  }
+
+  .funding-premium-item.is-watch .funding-premium-item-icon {
+    color: #fde68a;
+    background: rgba(234, 179, 8, 0.12);
+    border-color: rgba(234, 179, 8, 0.22);
+  }
+
+  .funding-premium-item.is-positive .funding-premium-item-icon {
+    color: #bbf7d0;
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.22);
+  }
+
+  .funding-premium-item strong {
+    display: block;
+    margin-bottom: 6px;
+    line-height: 1.25;
+  }
+
+  .funding-premium-item p {
+    margin: 0;
+    line-height: 1.56;
+  }
+
+  @media (max-width: 1180px) {
+    .funding-multinational-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .funding-premium-panel {
+      padding: 24px;
+      border-radius: 24px;
+    }
+
+    .funding-premium-row-grid,
+    .funding-premium-item {
+      grid-template-columns: 1fr;
+    }
+  }
   @media (max-width: 1180px) {
     .funding-hero-layout {
       grid-template-columns: 1fr;
@@ -659,7 +888,7 @@ function getFundingSignal({
       title: 'Funding case pending',
       posture: 'Build raise case',
       description:
-        'Completa capital objetivo, valoración, burn y readiness para construir una lectura ejecutiva de la ronda.'
+        'Completa capital objetivo, valoraciÃ³n, burn y readiness para construir una lectura ejecutiva de la ronda.'
     };
   }
 
@@ -675,7 +904,7 @@ function getFundingSignal({
       title: 'Investor-ready raise',
       posture: 'Prepare outreach',
       description:
-        'La ronda muestra una combinación sólida de readiness, runway y dilución para preparar narrativa inversora.'
+        'La ronda muestra una combinaciÃ³n sÃ³lida de readiness, runway y diluciÃ³n para preparar narrativa inversora.'
     };
   }
 
@@ -685,7 +914,7 @@ function getFundingSignal({
       title: 'Qualified funding case',
       posture: 'Refine memo',
       description:
-        'La ronda tiene base suficiente, aunque conviene reforzar data room, narrativa y sensibilidad de dilución.'
+        'La ronda tiene base suficiente, aunque conviene reforzar data room, narrativa y sensibilidad de diluciÃ³n.'
     };
   }
 
@@ -695,7 +924,7 @@ function getFundingSignal({
       title: 'Funding case in progress',
       posture: 'Improve readiness',
       description:
-        'El caso requiere mejorar preparación inversora, runway o estructura antes de salir al mercado.'
+        'El caso requiere mejorar preparaciÃ³n inversora, runway o estructura antes de salir al mercado.'
     };
   }
 
@@ -704,7 +933,7 @@ function getFundingSignal({
     title: 'Weak funding signal',
     posture: 'Rework case',
     description:
-      'La ronda necesita una revisión de inputs, valoración, burn y readiness antes de presentarse a inversores.'
+      'La ronda necesita una revisiÃ³n de inputs, valoraciÃ³n, burn y readiness antes de presentarse a inversores.'
   };
 }
 
@@ -805,11 +1034,11 @@ function ThesisList({ items }) {
   if (items.length === 0) {
     return (
       <div className="funding-glass-block">
-        <strong>Sin tesis suficiente todavía</strong>
+        <strong>Sin tesis suficiente todavÃ­a</strong>
 
         <p className="muted funding-muted-tight" style={{ marginTop: 8 }}>
-          Completa los principales datos de financiación para generar una
-          narrativa más sólida para inversores.
+          Completa los principales datos de financiaciÃ³n para generar una
+          narrativa mÃ¡s sÃ³lida para inversores.
         </p>
       </div>
     );
@@ -830,6 +1059,303 @@ function ThesisList({ items }) {
   );
 }
 
+function formatPercentValue(value) {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed)) return 'N/A';
+
+  const normalized = Math.abs(parsed) > 0 && Math.abs(parsed) <= 1
+    ? parsed * 100
+    : parsed;
+
+  return `${Math.round(normalized)}%`;
+}
+
+function formatMonthsValue(value) {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed) || parsed <= 0) return 'N/A';
+
+  return `${Math.round(parsed)} meses`;
+}
+
+function getFundingDecisionMemo({ fundingSignal, readinessScore, runwayAfterRaise, impliedDilution }) {
+  const score = fundingSignal?.score;
+
+  if (score === null || score === undefined) {
+    return {
+      decision: 'Build funding case',
+      tone: 'watch',
+      title: 'Funding case not ready yet',
+      summary:
+        'La ronda todavía necesita inputs completos de capital objetivo, valoración, burn, runway y readiness antes de poder presentarse como caso inversor defendible.'
+    };
+  }
+
+  if (score >= 82) {
+    return {
+      decision: 'Prepare investor outreach',
+      tone: '',
+      title: 'Investor-ready funding case',
+      summary:
+        'La ronda muestra una combinación sólida de readiness, runway y dilución. El siguiente paso es preparar outreach, investor memo, data room y pipeline de inversores cualificados.'
+    };
+  }
+
+  if (score >= 62) {
+    return {
+      decision: 'Proceed with validation',
+      tone: 'watch',
+      title: 'Qualified case with validation points',
+      summary:
+        'El caso de financiación es presentable como borrador ejecutivo, pero conviene reforzar data room, narrativa, comparables y sensibilidad de dilución antes de circularlo ampliamente.'
+    };
+  }
+
+  if (readinessScore < 50 || runwayAfterRaise < 12 || impliedDilution > 30) {
+    return {
+      decision: 'Hold market outreach',
+      tone: 'hold',
+      title: 'Funding case needs rework',
+      summary:
+        'La ronda no debería salir todavía al mercado. Hay que revisar readiness, runway, dilución y narrativa para evitar conversaciones débiles con inversores.'
+    };
+  }
+
+  return {
+    decision: 'Improve readiness',
+    tone: 'watch',
+    title: 'Funding case in progress',
+    summary:
+      'Existe una base inicial, pero el caso necesita mejorar preparación inversora, claridad de uso de fondos y solidez de la tesis antes de activar outreach.'
+  };
+}
+
+function buildFundingRiskItems({
+  readinessScore,
+  runwayAfterRaise,
+  impliedDilution,
+  dataRoomCompletion,
+  investorInterest,
+  founderOwnership,
+  targetRaise
+}) {
+  const items = [];
+
+  if (targetRaise <= 0) {
+    items.push({
+      title: 'Capital target missing',
+      description:
+        'No hay capital objetivo definido. La ronda necesita una cifra clara antes de construir memo o escenarios.',
+      tone: 'watch'
+    });
+  }
+
+  if (runwayAfterRaise > 0 && runwayAfterRaise < 18) {
+    items.push({
+      title: 'Runway below investor comfort',
+      description:
+        'El runway post-ronda queda por debajo de 18 meses. Conviene revisar burn, capital objetivo o plan operativo.',
+      tone: 'watch'
+    });
+  }
+
+  if (impliedDilution > 25) {
+    items.push({
+      title: 'Dilution pressure',
+      description:
+        'La dilución estimada supera el 25%. Revisar valoración, tamaño de ronda, tramos o estructura alternativa.',
+      tone: impliedDilution > 35 ? 'danger' : 'watch'
+    });
+  }
+
+  if (dataRoomCompletion < 70) {
+    items.push({
+      title: 'Data room not ready',
+      description:
+        'El data room necesita más documentación antes de conversaciones serias con inversores institucionales.',
+      tone: 'watch'
+    });
+  }
+
+  if (investorInterest < 50) {
+    items.push({
+      title: 'Investor demand not validated',
+      description:
+        'La señal de interés inversor todavía es débil. Conviene validar narrativa y target list antes de abrir ronda.',
+      tone: 'watch'
+    });
+  }
+
+  if (founderOwnership > 0 && founderOwnership < 50) {
+    items.push({
+      title: 'Founder ownership sensitivity',
+      description:
+        'La propiedad fundadora queda en una zona sensible. Revisar cap table, option pool y estructura de la ronda.',
+      tone: 'danger'
+    });
+  }
+
+  if (readinessScore >= 75 && runwayAfterRaise >= 18 && impliedDilution <= 25 && items.length === 0) {
+    items.push({
+      title: 'Institutional-ready posture',
+      description:
+        'La ronda presenta una postura razonablemente sólida para preparar memo, data room y pipeline inversor.',
+      tone: 'positive'
+    });
+  }
+
+  if (items.length === 0) {
+    items.push({
+      title: 'No critical funding red flags',
+      description:
+        'No se detectan alertas críticas con los inputs actuales. Mantener revisión de escenarios y narrativa.',
+      tone: 'positive'
+    });
+  }
+
+  return items;
+}
+
+function buildMultinationalFundingPack({
+  fundingInputs,
+  fundingSettings,
+  reportCurrency,
+  companyName,
+  stage,
+  targetRaise,
+  currentCash,
+  monthlyBurn,
+  preMoneyValuation,
+  postMoneyValuation,
+  runwayAfterRaise,
+  impliedDilution,
+  readinessScore,
+  fundingSignal
+}) {
+  const dataRoomCompletion = toNumber(fundingInputs.dataRoomCompletion);
+  const founderMarketFit = toNumber(fundingInputs.founderMarketFit);
+  const investorInterest = toNumber(fundingInputs.investorInterest);
+  const currentRevenue = toNumber(fundingInputs.currentRevenue);
+  const annualGrowthRate = toNumber(fundingInputs.annualGrowthRate);
+  const grossMargin = toNumber(fundingInputs.grossMargin);
+  const debtCapacity = toNumber(fundingInputs.debtCapacity);
+  const founderOwnership = toNumber(fundingInputs.founderOwnership);
+  const existingInvestorOwnership = toNumber(fundingInputs.existingInvestorOwnership);
+  const optionPool = toNumber(fundingInputs.optionPool);
+  const teamSize = toNumber(fundingInputs.teamSize);
+  const hiringPlan = toNumber(fundingInputs.hiringPlan);
+
+  return {
+    capitalRows: [
+      ['Company', companyName],
+      ['Stage', stage],
+      ['Currency', reportCurrency],
+      ['Scenario', fundingSettings?.scenarioMode || 'balanced'],
+      ['Target raise', formatCurrency(targetRaise, reportCurrency)],
+      ['Pre-money valuation', formatCurrency(preMoneyValuation, reportCurrency)],
+      ['Post-money valuation', formatCurrency(postMoneyValuation, reportCurrency)],
+      ['Current cash', formatCurrency(currentCash, reportCurrency)]
+    ],
+    readinessRows: [
+      ['Investor readiness', `${readinessScore}/100`],
+      ['Data room', formatPercentValue(dataRoomCompletion)],
+      ['Founder-market fit', `${founderMarketFit}/100`],
+      ['Investor interest', `${investorInterest}/100`],
+      ['Current revenue', formatCurrency(currentRevenue, reportCurrency)],
+      ['Annual growth', formatPercentValue(annualGrowthRate)],
+      ['Gross margin', formatPercentValue(grossMargin)],
+      ['Debt capacity', formatCurrency(debtCapacity, reportCurrency)]
+    ],
+    capTableRows: [
+      ['Founder ownership', formatPercentValue(founderOwnership)],
+      ['Existing investors', formatPercentValue(existingInvestorOwnership)],
+      ['Option pool', formatPercentValue(optionPool)],
+      ['Implied dilution', `${impliedDilution}%`],
+      ['Monthly burn', formatCurrency(monthlyBurn, reportCurrency)],
+      ['Runway post-raise', formatMonthsValue(runwayAfterRaise)],
+      ['Team size', teamSize > 0 ? teamSize : 'N/A'],
+      ['Hiring plan', hiringPlan > 0 ? hiringPlan : 'N/A']
+    ],
+    memo: getFundingDecisionMemo({
+      fundingSignal,
+      readinessScore,
+      runwayAfterRaise,
+      impliedDilution
+    }),
+    riskItems: buildFundingRiskItems({
+      readinessScore,
+      runwayAfterRaise,
+      impliedDilution,
+      dataRoomCompletion,
+      investorInterest,
+      founderOwnership,
+      targetRaise
+    })
+  };
+}
+
+function FundingPremiumPanel({ kicker, icon: Icon, title, description, children }) {
+  return (
+    <section className="funding-premium-panel">
+      <div className="funding-premium-header">
+        <div>
+          <div className="funding-kicker">
+            <Icon size={14} />
+            {kicker}
+          </div>
+
+          <h2>{title}</h2>
+          <p className="muted">{description}</p>
+        </div>
+
+        <div className="funding-premium-icon">
+          <Icon size={18} />
+        </div>
+      </div>
+
+      {children}
+    </section>
+  );
+}
+
+function FundingPremiumRow({ label, value }) {
+  return (
+    <div className="funding-premium-row">
+      <span>{label}</span>
+      <strong>{value === 0 ? 0 : value || 'N/A'}</strong>
+    </div>
+  );
+}
+
+function FundingPremiumMemo({ memo }) {
+  return (
+    <div className="funding-premium-memo">
+      <span className={`funding-premium-decision ${memo.tone}`.trim()}>
+        <ShieldCheck size={13} />
+        {memo.decision}
+      </span>
+
+      <h3>{memo.title}</h3>
+      <p className="muted">{memo.summary}</p>
+    </div>
+  );
+}
+
+function FundingPremiumItem({ title, description, tone = '' }) {
+  return (
+    <div className={`funding-premium-item ${tone ? `is-${tone}` : ''}`.trim()}>
+      <div className="funding-premium-item-icon">
+        <ArrowRight size={15} />
+      </div>
+
+      <div>
+        <strong>{title}</strong>
+        <p className="muted">{description}</p>
+      </div>
+    </div>
+  );
+}
 export function FundingDashboardPage() {
   const {
     fundingInputs,
@@ -846,7 +1372,7 @@ export function FundingDashboardPage() {
   });
 
   const reportCurrency = fundingSettings?.reportCurrency || 'EUR';
-  const companyName = fundingInputs?.companyName?.trim() || 'Sin compañía activa';
+  const companyName = fundingInputs?.companyName?.trim() || 'Sin compaÃ±Ã­a activa';
   const stage = fundingInputs?.stage || 'Seed';
   const scenarioMode = fundingSettings?.scenarioMode || 'balanced';
 
@@ -877,6 +1403,23 @@ export function FundingDashboardPage() {
   });
 
   const scoreAngle = `${(fundingSignal.score ?? 0) * 3.6}deg`;
+
+  const fundingMultinationalPack = buildMultinationalFundingPack({
+    fundingInputs,
+    fundingSettings,
+    reportCurrency,
+    companyName,
+    stage,
+    targetRaise,
+    currentCash,
+    monthlyBurn,
+    preMoneyValuation,
+    postMoneyValuation,
+    runwayAfterRaise,
+    impliedDilution,
+    readinessScore,
+    fundingSignal
+  });
 
   function updateField(key, value) {
     setFundingInputs((prev) => ({
@@ -927,7 +1470,7 @@ export function FundingDashboardPage() {
 
     pushToast(
       ok
-        ? 'Funding memo preparado para impresión'
+        ? 'Funding memo preparado para impresiÃ³n'
         : 'El navegador ha bloqueado la ventana emergente'
     );
   }
@@ -961,9 +1504,9 @@ export function FundingDashboardPage() {
                 </h1>
 
                 <p className="funding-copy">
-                  Vista ejecutiva del proceso de financiación: capital objetivo,
-                  runway, dilución estimada, uso de fondos, readiness inversor y
-                  memo exportable para preparar una ronda más defendible.
+                  Vista ejecutiva del proceso de financiaciÃ³n: capital objetivo,
+                  runway, diluciÃ³n estimada, uso de fondos, readiness inversor y
+                  memo exportable para preparar una ronda mÃ¡s defendible.
                 </p>
 
                 <div className="funding-actions">
@@ -1022,7 +1565,7 @@ export function FundingDashboardPage() {
                     >
                       <div className="funding-score-core">
                         <strong className={fundingSignal.score === null ? 'is-empty-score' : ''}>
-                          {fundingSignal.score === null ? '—' : fundingSignal.score}
+                          {fundingSignal.score === null ? 'â€”' : fundingSignal.score}
                         </strong>
                       </div>
                     </div>
@@ -1043,7 +1586,7 @@ export function FundingDashboardPage() {
                     />
 
                     <SignalRow
-                      label="Dilución estimada"
+                      label="DiluciÃ³n estimada"
                       value={`${impliedDilution}%`}
                     />
 
@@ -1067,7 +1610,7 @@ export function FundingDashboardPage() {
               kicker="Raise overview"
               icon={Activity}
               title="Funding metrics at a glance"
-              description="Una lectura rápida de capital objetivo, runway, dilución y readiness antes de preparar memo o conversación con inversores."
+              description="Una lectura rÃ¡pida de capital objetivo, runway, diluciÃ³n y readiness antes de preparar memo o conversaciÃ³n con inversores."
             />
 
             <div className="funding-grid funding-grid-kpis">
@@ -1086,7 +1629,7 @@ export function FundingDashboardPage() {
               />
 
               <KpiCard
-                label="Dilución estimada"
+                label="DiluciÃ³n estimada"
                 value={`${impliedDilution}%`}
                 description="Sobre post-money"
                 icon={PieChart}
@@ -1096,32 +1639,130 @@ export function FundingDashboardPage() {
               <KpiCard
                 label="Investor Readiness"
                 value={`${readinessScore}/100`}
-                description="Preparación comercial"
+                description="PreparaciÃ³n comercial"
                 icon={Target}
                 tone="text-success"
               />
             </div>
           </section>
 
+          <section className="funding-multinational-grid">
+            <FundingPremiumPanel
+              kicker="Multinational funding"
+              icon={BriefcaseBusiness}
+              title="International Capital Stack"
+              description="Vista ejecutiva de capital, valoración, moneda, escenario y runway para presentar la ronda como caso de financiación institucional."
+            >
+              <div className="funding-premium-row-grid">
+                {fundingMultinationalPack.capitalRows.map(([label, value]) => (
+                  <FundingPremiumRow key={label} label={label} value={value} />
+                ))}
+              </div>
+            </FundingPremiumPanel>
+
+            <FundingPremiumPanel
+              kicker="Investor committee"
+              icon={Sparkles}
+              title="Investor Committee Memo"
+              description="Lectura tipo comité sobre si la ronda está lista para outreach, requiere validación o debe rehacerse antes de salir al mercado."
+            >
+              <FundingPremiumMemo memo={fundingMultinationalPack.memo} />
+            </FundingPremiumPanel>
+          </section>
+
+          <section className="funding-multinational-grid">
+            <FundingPremiumPanel
+              kicker="Readiness pack"
+              icon={Target}
+              title="Investor Readiness Pack"
+              description="Resumen de tracción, data room, growth, margen, interés inversor y capacidad de financiación alternativa."
+            >
+              <div className="funding-premium-row-grid">
+                {fundingMultinationalPack.readinessRows.map(([label, value]) => (
+                  <FundingPremiumRow key={label} label={label} value={value} />
+                ))}
+              </div>
+            </FundingPremiumPanel>
+
+            <FundingPremiumPanel
+              kicker="Red flags"
+              icon={ShieldCheck}
+              title="Funding Red Flags & Mitigants"
+              description="Riesgos principales de la ronda y acciones recomendadas antes de presentar el caso a inversores."
+            >
+              <div className="funding-premium-list">
+                {fundingMultinationalPack.riskItems.map((item, index) => (
+                  <FundingPremiumItem
+                    key={`${item.title}-${index}`}
+                    title={item.title}
+                    description={item.description}
+                    tone={item.tone}
+                  />
+                ))}
+              </div>
+            </FundingPremiumPanel>
+          </section>
+
+          <section className="funding-multinational-grid">
+            <FundingPremiumPanel
+              kicker="Capital structure"
+              icon={PieChart}
+              title="Cap Table & Dilution View"
+              description="Lectura ejecutiva de dilución, propiedad fundadora, option pool, burn, runway y equipo asociado al plan de financiación."
+            >
+              <div className="funding-premium-row-grid">
+                {fundingMultinationalPack.capTableRows.map(([label, value]) => (
+                  <FundingPremiumRow key={label} label={label} value={value} />
+                ))}
+              </div>
+            </FundingPremiumPanel>
+
+            <FundingPremiumPanel
+              kicker="Board narrative"
+              icon={FileText}
+              title="Funding Board Narrative"
+              description="Resumen para dirección, comité o inversores sobre cómo la ronda se transforma en crecimiento, runway y control de dilución."
+            >
+              <div className="funding-premium-list">
+                <FundingPremiumItem
+                  title="Capital objective"
+                  description={`La compañía plantea una ronda de ${formatCurrency(targetRaise, reportCurrency)} con una valoración post-money estimada de ${formatCurrency(postMoneyValuation, reportCurrency)}.`}
+                  tone="positive"
+                />
+
+                <FundingPremiumItem
+                  title="Runway impact"
+                  description={`La financiación dejaría aproximadamente ${runwayAfterRaise} meses de runway post-ronda con el burn mensual actual.`}
+                  tone={runwayAfterRaise >= 18 ? 'positive' : 'watch'}
+                />
+
+                <FundingPremiumItem
+                  title="Dilution control"
+                  description={`La dilución estimada es del ${impliedDilution}%, una señal clave para founders, inversores existentes y comité.`}
+                  tone={impliedDilution > 25 ? 'watch' : 'positive'}
+                />
+              </div>
+            </FundingPremiumPanel>
+          </section>
           <section className="funding-flow-panel">
             <SectionHeader
               kicker="Operating logic"
               icon={Layers3}
               title="From inputs to investor-ready memo"
-              description="CEO’s OS convierte los datos de financiación en una estructura clara: capital, runway, dilución, uso de fondos y narrativa de inversión."
+              description="CEOâ€™s OS convierte los datos de financiaciÃ³n en una estructura clara: capital, runway, diluciÃ³n, uso de fondos y narrativa de inversiÃ³n."
             />
 
             <div className="funding-flow-grid">
               <FlowStep
                 number="01"
                 title="Define round"
-                text="Capital objetivo, valoración, burn, caja y escenario de ronda."
+                text="Capital objetivo, valoraciÃ³n, burn, caja y escenario de ronda."
               />
 
               <FlowStep
                 number="02"
                 title="Model runway"
-                text="Cuántos meses compra la ronda y qué margen operativo deja."
+                text="CuÃ¡ntos meses compra la ronda y quÃ© margen operativo deja."
               />
 
               <FlowStep
@@ -1143,7 +1784,7 @@ export function FundingDashboardPage() {
               kicker="Capital cockpit"
               icon={BarChart3}
               title="Funding economics and runway posture"
-              description="Resumen visual del caso de financiación y de sus principales señales económicas."
+              description="Resumen visual del caso de financiaciÃ³n y de sus principales seÃ±ales econÃ³micas."
             />
 
             <FundingHeroCard derived={derived} settings={fundingSettings} />
@@ -1155,7 +1796,7 @@ export function FundingDashboardPage() {
                 kicker="Use of funds"
                 icon={WalletCards}
                 title="Capital allocation"
-                description="Distribución del capital para explicar cómo la ronda se transforma en crecimiento operativo."
+                description="DistribuciÃ³n del capital para explicar cÃ³mo la ronda se transforma en crecimiento operativo."
               />
 
               <UseOfFundsCard
@@ -1188,7 +1829,7 @@ export function FundingDashboardPage() {
                 kicker="Funding memo"
                 icon={FileText}
                 title="Funding Memo"
-                description="Lectura preparada para convertir los datos de financiación en una narrativa clara de inversión."
+                description="Lectura preparada para convertir los datos de financiaciÃ³n en una narrativa clara de inversiÃ³n."
               />
 
               <div className="funding-mini-stack">
@@ -1205,7 +1846,7 @@ export function FundingDashboardPage() {
                   <strong>Use of funds</strong>
 
                   <p className="muted funding-muted-tight">
-                    Distribución del capital hacia crecimiento, equipo,
+                    DistribuciÃ³n del capital hacia crecimiento, equipo,
                     producto, ventas y reserva operativa.
                   </p>
                 </div>
@@ -1214,8 +1855,8 @@ export function FundingDashboardPage() {
                   <strong>Exportable memo</strong>
 
                   <p className="muted funding-muted-tight">
-                    El memo permite preparar una vista imprimible para revisión
-                    interna o conversación con inversores.
+                    El memo permite preparar una vista imprimible para revisiÃ³n
+                    interna o conversaciÃ³n con inversores.
                   </p>
                 </div>
               </div>
@@ -1226,7 +1867,7 @@ export function FundingDashboardPage() {
                 kicker="Investor readiness"
                 icon={ShieldCheck}
                 title="Investor Readiness"
-                description="Checklist de preparación para salir al mercado con data room, narrativa y señales de tracción."
+                description="Checklist de preparaciÃ³n para salir al mercado con data room, narrativa y seÃ±ales de tracciÃ³n."
               />
 
               <ReadinessChecklistCard
@@ -1239,7 +1880,7 @@ export function FundingDashboardPage() {
                 <p className="muted funding-muted-tight" style={{ marginTop: 8 }}>
                   {readinessScore >= 75
                     ? 'Preparar outreach, materiales y pipeline de inversores.'
-                    : 'Reforzar data room, tesis y señales de tracción antes de iniciar conversaciones.'}
+                    : 'Reforzar data room, tesis y seÃ±ales de tracciÃ³n antes de iniciar conversaciones.'}
                 </p>
               </div>
             </Card>

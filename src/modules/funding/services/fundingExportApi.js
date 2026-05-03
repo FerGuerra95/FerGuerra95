@@ -1,4 +1,4 @@
-function escapeHtml(value = '') {
+﻿function escapeHtml(value = '') {
   return String(value ?? '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -12,21 +12,47 @@ function toNumber(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function clampScore(value) {
+  return Math.max(0, Math.min(100, Math.round(value)));
+}
+
 function formatCurrency(value, currency = 'EUR') {
   const safeValue = toNumber(value);
   const symbol = currency === 'USD' ? '$' : '€';
 
   return `${new Intl.NumberFormat('es-ES', {
     maximumFractionDigits: 0
-  }).format(safeValue)}${symbol}`;
+  }).format(safeValue)} ${symbol}`;
 }
 
 function formatPercent(value) {
-  return `${toNumber(value).toFixed(1)}%`;
+  const parsed = toNumber(value);
+  const normalized = Math.abs(parsed) > 0 && Math.abs(parsed) <= 1
+    ? parsed * 100
+    : parsed;
+
+  return `${normalized.toFixed(1)}%`;
+}
+
+function formatPercentRounded(value) {
+  const parsed = toNumber(value);
+  const normalized = Math.abs(parsed) > 0 && Math.abs(parsed) <= 1
+    ? parsed * 100
+    : parsed;
+
+  return `${Math.round(normalized)}%`;
 }
 
 function formatMonths(value) {
   return `${toNumber(value).toFixed(1)} meses`;
+}
+
+function formatMonthsRounded(value) {
+  const parsed = toNumber(value);
+
+  if (parsed <= 0) return 'N/A';
+
+  return `${Math.round(parsed)} meses`;
 }
 
 function buildReportId(companyName = '', prefix = 'FUND') {
@@ -40,34 +66,83 @@ function buildReportId(companyName = '', prefix = 'FUND') {
   return `${prefix}-${datePart}-${safeName || 'COMPANY'}`;
 }
 
-function buildFundingDecisionSignal({ readinessScore, runway, dilution }) {
+function calculateReadinessScore(fundingInputs = {}, derived = {}) {
+  const derivedScore = Number(derived.readinessScore);
+
+  if (Number.isFinite(derivedScore) && derivedScore > 0) {
+    return clampScore(derivedScore);
+  }
+
+  const dataRoom = toNumber(fundingInputs.dataRoomCompletion);
+  const founderMarketFit = toNumber(fundingInputs.founderMarketFit);
+  const investorInterest = toNumber(fundingInputs.investorInterest);
+
+  return clampScore((dataRoom + founderMarketFit + investorInterest) / 3);
+}
+
+function buildFundingDecisionSignal({
+  readinessScore,
+  runway,
+  dilution,
+  dataRoomCompletion,
+  investorInterest,
+  targetRaise
+}) {
   const readiness = toNumber(readinessScore);
   const runwayMonths = toNumber(runway);
   const dilutionPct = toNumber(dilution);
+  const dataRoom = toNumber(dataRoomCompletion);
+  const investorDemand = toNumber(investorInterest);
+  const raise = toNumber(targetRaise);
 
-  if (readiness >= 75 && runwayMonths >= 12 && dilutionPct <= 25) {
+  if (raise <= 0) {
     return {
-      signal: 'Investor ready',
-      tone: 'positive',
+      signal: 'Build funding case',
+      boardDecision: 'Do not circulate',
+      tone: 'watch',
+      executiveLabel: 'Funding case incomplete',
       nextStep:
-        'Preparar outreach a inversores, data room final y narrativa de ronda.'
+        'Definir capital objetivo, valoración, burn, runway y narrativa antes de preparar conversación inversora.',
+      memo:
+        'La ronda todavía no tiene capital objetivo suficiente para presentarse como caso inversor. La prioridad es completar inputs base y estructurar la tesis de financiación.'
     };
   }
 
-  if (readiness >= 55 || runwayMonths >= 6) {
+  if (readiness >= 78 && runwayMonths >= 18 && dilutionPct <= 25 && dataRoom >= 70) {
     return {
-      signal: 'Prepare before launch',
-      tone: 'watch',
+      signal: 'Investor ready',
+      boardDecision: 'Prepare investor outreach',
+      tone: 'positive',
+      executiveLabel: 'Institutional-ready posture',
       nextStep:
-        'Reforzar data room, narrativa financiera y validación de métricas antes de lanzar ronda.'
+        'Preparar outreach a inversores, data room final, narrativa de ronda y pipeline cualificado.',
+      memo:
+        'La ronda muestra una combinación sólida de readiness, runway, dilución y data room. Puede prepararse como paquete ejecutivo para comité interno e inversores cualificados.'
+    };
+  }
+
+  if (readiness >= 58 || runwayMonths >= 12 || investorDemand >= 55) {
+    return {
+      signal: 'Proceed with validation',
+      boardDecision: 'Validate before broad circulation',
+      tone: 'watch',
+      executiveLabel: 'Qualified funding case',
+      nextStep:
+        'Reforzar data room, narrativa financiera, comparables, validación de métricas y sensibilidad de dilución antes de circular ampliamente.',
+      memo:
+        'El caso de financiación es presentable como borrador ejecutivo, pero requiere validación adicional antes de activar conversaciones amplias con inversores.'
     };
   }
 
   return {
     signal: 'Not ready',
+    boardDecision: 'Hold market outreach',
     tone: 'caution',
+    executiveLabel: 'Funding case needs rework',
     nextStep:
-      'Mejorar runway, documentación, métricas y claridad del uso de fondos antes de abrir conversaciones.'
+      'Mejorar runway, documentación, métricas, data room y claridad del uso de fondos antes de abrir conversaciones.',
+    memo:
+      'La ronda no debería salir todavía al mercado. Hay que revisar capital objetivo, preparación inversora, burn, runway, dilución y narrativa para evitar conversaciones débiles.'
   };
 }
 
@@ -77,6 +152,7 @@ function buildDataRoomDecisionSignal({ completion }) {
   if (safeCompletion >= 80) {
     return {
       signal: 'Data room ready',
+      boardDecision: 'Ready for controlled sharing',
       tone: 'positive',
       nextStep:
         'Revisar confidencialidad final y preparar versión compartible con inversores.'
@@ -86,6 +162,7 @@ function buildDataRoomDecisionSignal({ completion }) {
   if (safeCompletion >= 50) {
     return {
       signal: 'Needs completion',
+      boardDecision: 'Share selectively',
       tone: 'watch',
       nextStep:
         'Completar documentos clave, validar coherencia financiera y revisar permisos antes de compartir.'
@@ -94,6 +171,7 @@ function buildDataRoomDecisionSignal({ completion }) {
 
   return {
     signal: 'Not ready',
+    boardDecision: 'Do not share broadly',
     tone: 'caution',
     nextStep:
       'Priorizar documentación financiera, societaria, legal y comercial antes de iniciar conversaciones.'
@@ -204,6 +282,134 @@ function buildChecklistCards(items = []) {
     .join('');
 }
 
+function buildFundingRedFlags({
+  targetRaise,
+  runway,
+  dilution,
+  readinessScore,
+  dataRoomCompletion,
+  investorInterest,
+  founderOwnership
+}) {
+  const flags = [];
+
+  if (toNumber(targetRaise) <= 0) {
+    flags.push({
+      title: 'Capital target missing',
+      tone: 'watch',
+      text:
+        'No hay capital objetivo definido. La ronda necesita una cifra clara antes de construir memo, escenarios o pipeline inversor.'
+    });
+  }
+
+  if (toNumber(runway) > 0 && toNumber(runway) < 18) {
+    flags.push({
+      title: 'Runway below investor comfort',
+      tone: 'watch',
+      text:
+        'El runway post-ronda queda por debajo de 18 meses. Conviene revisar burn, capital objetivo o plan operativo.'
+    });
+  }
+
+  if (toNumber(dilution) > 25) {
+    flags.push({
+      title: 'Dilution pressure',
+      tone: toNumber(dilution) > 35 ? 'danger' : 'watch',
+      text:
+        'La dilución estimada supera el umbral cómodo. Revisar valoración, tamaño de ronda, tramos o instrumentos alternativos.'
+    });
+  }
+
+  if (toNumber(readinessScore) < 60) {
+    flags.push({
+      title: 'Investor readiness below threshold',
+      tone: 'watch',
+      text:
+        'La preparación inversora todavía necesita refuerzo en narrativa, data room, señales de tracción o validación externa.'
+    });
+  }
+
+  if (toNumber(dataRoomCompletion) < 70) {
+    flags.push({
+      title: 'Data room not ready',
+      tone: 'watch',
+      text:
+        'El data room no está suficientemente preparado para conversaciones institucionales o due diligence avanzada.'
+    });
+  }
+
+  if (toNumber(investorInterest) < 50) {
+    flags.push({
+      title: 'Investor demand not validated',
+      tone: 'watch',
+      text:
+        'La señal de interés inversor es limitada. Conviene validar target list, narrativa y timing antes de abrir ronda.'
+    });
+  }
+
+  if (toNumber(founderOwnership) > 0 && toNumber(founderOwnership) < 50) {
+    flags.push({
+      title: 'Founder ownership sensitivity',
+      tone: 'danger',
+      text:
+        'La propiedad fundadora queda en una zona sensible. Revisar cap table, option pool y estructura de la ronda.'
+    });
+  }
+
+  if (flags.length === 0) {
+    flags.push({
+      title: 'No critical funding red flags',
+      tone: 'positive',
+      text:
+        'No se detectan alertas críticas con los inputs actuales. Mantener revisión de escenarios, documentación y narrativa.'
+    });
+  }
+
+  return flags;
+}
+
+function buildRedFlagCards(flags = []) {
+  return flags
+    .map(
+      (flag) => `
+        <div class="red-flag-card ${escapeHtml(flag.tone)} avoid-break">
+          <div class="red-flag-dot"></div>
+          <div>
+            <div class="red-flag-title">${escapeHtml(flag.title)}</div>
+            <p>${escapeHtml(flag.text)}</p>
+          </div>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function buildBoardRows(rows = []) {
+  return rows
+    .map(
+      ([label, value]) => `
+        <div class="summary-card">
+          <div class="summary-label">${escapeHtml(label)}</div>
+          <div class="summary-value">${escapeHtml(value)}</div>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function buildPreparedRows(rows = []) {
+  return rows
+    .map(
+      ([label, value]) => `
+        <div class="prepared-item">
+          <div class="prepared-label">${escapeHtml(label)}</div>
+          <div class="prepared-value">${escapeHtml(value)}</div>
+        </div>
+      `
+    )
+    .join('');
+}
+
 function openPrintableWindow(html) {
   const printWindow = window.open('', '_blank', 'width=1400,height=1000');
 
@@ -285,7 +491,7 @@ function buildPremiumStyles({ accent = '#2563eb', accentSoft = '#dbeafe', accent
         left: 0;
         right: 0;
         height: 6px;
-        background: linear-gradient(90deg, #020617, ${accent}, ${accentSoft});
+        background: linear-gradient(90deg, #020617, ${accent}, #10b981, ${accentSoft});
       }
 
       .report-page:not(.last) {
@@ -315,7 +521,8 @@ function buildPremiumStyles({ accent = '#2563eb', accentSoft = '#dbeafe', accent
       .item-card,
       .closing-panel,
       .disclaimer,
-      .notice {
+      .notice,
+      .red-flag-card {
         break-inside: avoid;
         page-break-inside: avoid;
       }
@@ -413,7 +620,7 @@ function buildPremiumStyles({ accent = '#2563eb', accentSoft = '#dbeafe', accent
       }
 
       h1 {
-        font-size: 35px;
+        font-size: 34px;
         margin: 0 0 8px 0;
         letter-spacing: -0.055em;
         line-height: 1;
@@ -436,7 +643,7 @@ function buildPremiumStyles({ accent = '#2563eb', accentSoft = '#dbeafe', accent
         width: 4px;
         height: 16px;
         border-radius: 999px;
-        background: linear-gradient(180deg, ${accent}, ${accentSoft});
+        background: linear-gradient(180deg, ${accent}, #10b981);
       }
 
       h3 {
@@ -493,9 +700,10 @@ function buildPremiumStyles({ accent = '#2563eb', accentSoft = '#dbeafe', accent
       }
 
       .summary-grid,
-      .decision-grid {
+      .decision-grid,
+      .board-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr) !important;
+        grid-template-columns: repeat(3, 1fr) !important;
         gap: 8px;
         margin: 12px 0 14px;
       }
@@ -688,6 +896,67 @@ function buildPremiumStyles({ accent = '#2563eb', accentSoft = '#dbeafe', accent
         box-shadow: 0 10px 22px rgba(15, 23, 42, 0.035);
       }
 
+      .red-flag-list {
+        display: grid;
+        gap: 9px;
+      }
+
+      .red-flag-card {
+        display: grid;
+        grid-template-columns: 12px minmax(0, 1fr);
+        gap: 10px;
+        padding: 12px;
+        border-radius: 15px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+      }
+
+      .red-flag-card p {
+        margin: 4px 0 0;
+        font-size: 10.5px;
+      }
+
+      .red-flag-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        margin-top: 2px;
+        background: ${accent};
+      }
+
+      .red-flag-title {
+        font-size: 11px;
+        font-weight: 950;
+        color: #020617;
+      }
+
+      .red-flag-card.danger {
+        border-color: #fecaca;
+        background: #fef2f2;
+      }
+
+      .red-flag-card.danger .red-flag-dot {
+        background: #ef4444;
+      }
+
+      .red-flag-card.watch {
+        border-color: #fde68a;
+        background: #fffbeb;
+      }
+
+      .red-flag-card.watch .red-flag-dot {
+        background: #f59e0b;
+      }
+
+      .red-flag-card.positive {
+        border-color: #bbf7d0;
+        background: #f0fdf4;
+      }
+
+      .red-flag-card.positive .red-flag-dot {
+        background: #10b981;
+      }
+
       .fund-value {
         font-size: 20px;
         font-weight: 950;
@@ -835,13 +1104,11 @@ function buildPremiumStyles({ accent = '#2563eb', accentSoft = '#dbeafe', accent
 
         .prepared-panel,
         .grid,
-        .fund-grid {
-          grid-template-columns: repeat(3, 1fr) !important;
-        }
-
+        .fund-grid,
         .summary-grid,
-        .decision-grid {
-          grid-template-columns: repeat(4, 1fr) !important;
+        .decision-grid,
+        .board-grid {
+          grid-template-columns: repeat(3, 1fr) !important;
         }
 
         .items-grid {
@@ -865,6 +1132,18 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
   const postMoney = toNumber(derived.postMoneyValuation || preMoney + targetRaise);
   const monthlyBurn = toNumber(fundingInputs.monthlyBurn);
   const currentCash = toNumber(fundingInputs.currentCash);
+  const currentRevenue = toNumber(fundingInputs.currentRevenue);
+  const annualGrowthRate = toNumber(fundingInputs.annualGrowthRate);
+  const grossMargin = toNumber(fundingInputs.grossMargin);
+  const debtCapacity = toNumber(fundingInputs.debtCapacity);
+  const dataRoomCompletion = toNumber(fundingInputs.dataRoomCompletion);
+  const founderMarketFit = toNumber(fundingInputs.founderMarketFit);
+  const investorInterest = toNumber(fundingInputs.investorInterest);
+  const founderOwnership = toNumber(fundingInputs.founderOwnership);
+  const existingInvestorOwnership = toNumber(fundingInputs.existingInvestorOwnership);
+  const optionPool = toNumber(fundingInputs.optionPool);
+  const teamSize = toNumber(fundingInputs.teamSize);
+  const hiringPlan = toNumber(fundingInputs.hiringPlan);
 
   const runway =
     monthlyBurn > 0
@@ -876,17 +1155,64 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
       ? (targetRaise / postMoney) * 100
       : toNumber(derived.dilutionPct);
 
-  const readinessScore = toNumber(derived.readinessScore);
+  const readinessScore = calculateReadinessScore(fundingInputs, derived);
+
   const decision = buildFundingDecisionSignal({
     readinessScore,
     runway,
-    dilution
+    dilution,
+    dataRoomCompletion,
+    investorInterest,
+    targetRaise
   });
+
+  const redFlags = buildFundingRedFlags({
+    targetRaise,
+    runway,
+    dilution,
+    readinessScore,
+    dataRoomCompletion,
+    investorInterest,
+    founderOwnership
+  });
+
+  const capitalRows = [
+    ['Company', companyName],
+    ['Stage', fundingInputs.stage || 'N/A'],
+    ['Currency', currency],
+    ['Scenario', fundingSettings.scenarioMode || 'balanced'],
+    ['Target raise', formatCurrency(targetRaise, currency)],
+    ['Pre-money valuation', formatCurrency(preMoney, currency)],
+    ['Post-money valuation', formatCurrency(postMoney, currency)],
+    ['Current cash', formatCurrency(currentCash, currency)],
+    ['Monthly burn', formatCurrency(monthlyBurn, currency)]
+  ];
+
+  const readinessRows = [
+    ['Investor readiness', `${Math.round(readinessScore)}/100`],
+    ['Data room', formatPercentRounded(dataRoomCompletion)],
+    ['Founder-market fit', `${Math.round(founderMarketFit)}/100`],
+    ['Investor interest', `${Math.round(investorInterest)}/100`],
+    ['Current revenue', formatCurrency(currentRevenue, currency)],
+    ['Annual growth', formatPercentRounded(annualGrowthRate)],
+    ['Gross margin', formatPercentRounded(grossMargin)],
+    ['Debt capacity', formatCurrency(debtCapacity, currency)],
+    ['Runway post-raise', formatMonthsRounded(runway)]
+  ];
+
+  const capTableRows = [
+    ['Founder ownership', formatPercentRounded(founderOwnership)],
+    ['Existing investors', formatPercentRounded(existingInvestorOwnership)],
+    ['Option pool', formatPercentRounded(optionPool)],
+    ['Implied dilution', formatPercent(dilution)],
+    ['Team size', teamSize > 0 ? teamSize : 'N/A'],
+    ['Hiring plan', hiringPlan > 0 ? hiringPlan : 'N/A']
+  ];
 
   return `
     <html>
       <head>
-        <title>CEO's OS - Funding Memo - ${escapeHtml(companyName)}</title>
+        <title>CEO's OS - Funding Board Memo - ${escapeHtml(companyName)}</title>
         ${buildPremiumStyles({
           accent: '#2563eb',
           accentSoft: '#dbeafe',
@@ -904,7 +1230,7 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
                     <div class="brand-mark">OS</div>
                     <div>
                       <div class="brand">CEO's <span>OS</span></div>
-                      <div class="subline">Funding Memo</div>
+                      <div class="subline">Multinational Funding Board Memo</div>
                     </div>
                   </div>
                 </div>
@@ -916,7 +1242,7 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
                 </div>
               </div>
 
-              <div class="module-badge">Funding Memo</div>
+              <div class="module-badge">Funding Board Memo</div>
 
               <h1>${escapeHtml(companyName)}</h1>
 
@@ -930,7 +1256,7 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
               <div class="prepared-panel avoid-break">
                 <div class="prepared-item">
                   <div class="prepared-label">Prepared for</div>
-                  <div class="prepared-value">Investor Review</div>
+                  <div class="prepared-value">Board / Investor Committee</div>
                 </div>
 
                 <div class="prepared-item">
@@ -952,49 +1278,44 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
                 <div class="hero-title">Target Raise</div>
                 <div class="hero-value">${escapeHtml(formatCurrency(targetRaise, currency))}</div>
                 <div class="hero-caption">
-                  Capital objetivo para extender runway, ejecutar crecimiento y preparar próximos hitos.
+                  ${escapeHtml(decision.executiveLabel)} · ${escapeHtml(decision.boardDecision)}
                 </div>
               </div>
 
-              <div class="grid avoid-break">
-                <div class="kpi">
-                  <div class="kpi-label">Pre-money</div>
-                  <div class="kpi-value">${escapeHtml(formatCurrency(preMoney, currency))}</div>
-                  <div class="kpi-note">Valoración previa a la ronda.</div>
+              <div class="board-grid avoid-break">
+                <div class="summary-card">
+                  <div class="summary-label">Pre-money</div>
+                  <div class="summary-value">${escapeHtml(formatCurrency(preMoney, currency))}</div>
                 </div>
 
-                <div class="kpi">
-                  <div class="kpi-label">Post-money</div>
-                  <div class="kpi-value green">${escapeHtml(formatCurrency(postMoney, currency))}</div>
-                  <div class="kpi-note">Valoración estimada después de la ronda.</div>
+                <div class="summary-card">
+                  <div class="summary-label">Post-money</div>
+                  <div class="summary-value">${escapeHtml(formatCurrency(postMoney, currency))}</div>
                 </div>
 
-                <div class="kpi">
-                  <div class="kpi-label">Dilución estimada</div>
-                  <div class="kpi-value red">${escapeHtml(formatPercent(dilution))}</div>
-                  <div class="kpi-note">Participación estimada cedida en la ronda.</div>
-                </div>
-              </div>
-
-              <div class="grid avoid-break">
-                <div class="kpi">
-                  <div class="kpi-label">Current Cash</div>
-                  <div class="kpi-value">${escapeHtml(formatCurrency(currentCash, currency))}</div>
+                <div class="summary-card">
+                  <div class="summary-label">Dilution</div>
+                  <div class="summary-value">${escapeHtml(formatPercent(dilution))}</div>
                 </div>
 
-                <div class="kpi">
-                  <div class="kpi-label">Monthly Burn</div>
-                  <div class="kpi-value">${escapeHtml(formatCurrency(monthlyBurn, currency))}</div>
+                <div class="summary-card">
+                  <div class="summary-label">Runway</div>
+                  <div class="summary-value">${escapeHtml(formatMonthsRounded(runway))}</div>
                 </div>
 
-                <div class="kpi">
-                  <div class="kpi-label">Runway post-raise</div>
-                  <div class="kpi-value blue">${escapeHtml(formatMonths(runway))}</div>
+                <div class="summary-card">
+                  <div class="summary-label">Readiness</div>
+                  <div class="summary-value">${escapeHtml(`${Math.round(readinessScore)}/100`)}</div>
+                </div>
+
+                <div class="summary-card">
+                  <div class="summary-label">Board decision</div>
+                  <div class="summary-value">${escapeHtml(decision.boardDecision)}</div>
                 </div>
               </div>
 
               <div class="decision-panel">
-                <h3>Executive Decision Signal</h3>
+                <h3>Investor Committee Memo</h3>
 
                 <div class="decision-grid">
                   <div class="decision-item">
@@ -1005,28 +1326,64 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
                   </div>
 
                   <div class="decision-item">
-                    <div class="decision-label">Readiness</div>
-                    <div class="decision-value">${escapeHtml(`${Math.round(readinessScore)}/100`)}</div>
+                    <div class="decision-label">Board posture</div>
+                    <div class="decision-value">${escapeHtml(decision.boardDecision)}</div>
                   </div>
 
                   <div class="decision-item">
-                    <div class="decision-label">Runway</div>
-                    <div class="decision-value">${escapeHtml(formatMonths(runway))}</div>
-                  </div>
-
-                  <div class="decision-item">
-                    <div class="decision-label">Next Step</div>
+                    <div class="decision-label">Next step</div>
                     <div class="decision-value">Investor Prep</div>
                   </div>
                 </div>
 
-                <p>${escapeHtml(decision.nextStep)}</p>
+                <p>${escapeHtml(decision.memo)}</p>
               </div>
             </div>
 
             <div class="report-footer">
               <span><strong>CEO's OS</strong> · Private Executive Intelligence</span>
-              <span>Page 1 of 3 · ${escapeHtml(reportId)}</span>
+              <span>Page 1 of 4 · ${escapeHtml(reportId)}</span>
+            </div>
+          </section>
+
+          <section class="report-page">
+            <div class="page-body">
+              <div class="section">
+                <h2>International Capital Stack</h2>
+
+                <div class="prepared-panel avoid-break">
+                  ${buildPreparedRows(capitalRows)}
+                </div>
+              </div>
+
+              <div class="section">
+                <h2>Investor Readiness Pack</h2>
+
+                <div class="prepared-panel avoid-break">
+                  ${buildPreparedRows(readinessRows)}
+                </div>
+              </div>
+
+              <div class="section">
+                <h2>Cap Table & Dilution View</h2>
+
+                <div class="prepared-panel avoid-break">
+                  ${buildPreparedRows(capTableRows)}
+                </div>
+              </div>
+
+              <div class="section">
+                <h2>Funding Red Flags & Mitigants</h2>
+
+                <div class="red-flag-list">
+                  ${buildRedFlagCards(redFlags)}
+                </div>
+              </div>
+            </div>
+
+            <div class="report-footer">
+              <span><strong>CEO's OS</strong> · Capital Stack, Readiness & Dilution</span>
+              <span>Page 2 of 4 · ${escapeHtml(reportId)}</span>
             </div>
           </section>
 
@@ -1057,32 +1414,11 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
                   ${buildScenarioCards(derived.scenarioRows, currency)}
                 </div>
               </div>
-
-              <div class="section">
-                <h2>Investor Readiness</h2>
-
-                <div class="grid">
-                  <div class="kpi">
-                    <div class="kpi-label">Readiness Score</div>
-                    <div class="kpi-value blue">${escapeHtml(`${Math.round(readinessScore)}/100`)}</div>
-                  </div>
-
-                  <div class="kpi">
-                    <div class="kpi-label">Data Room</div>
-                    <div class="kpi-value">${escapeHtml(`${toNumber(fundingInputs.dataRoomCompletion)}%`)}</div>
-                  </div>
-
-                  <div class="kpi">
-                    <div class="kpi-label">Investor Interest</div>
-                    <div class="kpi-value">${escapeHtml(`${toNumber(fundingInputs.investorInterest)}%`)}</div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div class="report-footer">
-              <span><strong>CEO's OS</strong> · Funding Thesis & Scenarios</span>
-              <span>Page 2 of 3 · ${escapeHtml(reportId)}</span>
+              <span><strong>CEO's OS</strong> · Investment Thesis, Use of Funds & Scenarios</span>
+              <span>Page 3 of 4 · ${escapeHtml(reportId)}</span>
             </div>
           </section>
 
@@ -1107,7 +1443,7 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
 
                   <div class="summary-card">
                     <div class="summary-label">Data Room</div>
-                    <div class="summary-value">${escapeHtml(`${toNumber(fundingInputs.dataRoomCompletion)}%`)}</div>
+                    <div class="summary-value">${escapeHtml(formatPercentRounded(dataRoomCompletion))}</div>
                   </div>
 
                   <div class="summary-card">
@@ -1119,15 +1455,35 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
                     <div class="summary-label">Investor Targeting</div>
                     <div class="summary-value">Recommended</div>
                   </div>
+
+                  <div class="summary-card">
+                    <div class="summary-label">Cap Table</div>
+                    <div class="summary-value">Review dilution</div>
+                  </div>
+
+                  <div class="summary-card">
+                    <div class="summary-label">Board Circulation</div>
+                    <div class="summary-value">${escapeHtml(decision.boardDecision)}</div>
+                  </div>
                 </div>
               </div>
 
               <div class="closing-panel">
                 <h3>Executive closing note</h3>
                 <p>
-                  This memo is designed as an executive funding preparation layer.
-                  It should be used to structure capital needs, investor narrative,
-                  runway planning and readiness before opening fundraising conversations.
+                  This Funding Board Memo is designed as an executive capital strategy layer.
+                  It structures raise size, valuation, dilution, runway, readiness, use of funds,
+                  investor narrative and red flags before opening fundraising conversations.
+                </p>
+              </div>
+
+              <div class="notice">
+                <h3>Decision Support System</h3>
+                <p>
+                  Este memo funciona como DSS —Decision Support System—. Sirve para preparar
+                  la decisión de financiación, priorizar documentación, ordenar escenarios y
+                  mejorar conversaciones con inversores, pero no sustituye asesoramiento financiero,
+                  legal, fiscal o de inversión.
                 </p>
               </div>
 
@@ -1142,7 +1498,7 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
 
             <div class="report-footer">
               <span><strong>Strictly Confidential</strong> · Generated by CEO's OS Funding Workspace</span>
-              <span>Page 3 of 3 · ${escapeHtml(reportId)}</span>
+              <span>Page 4 of 4 · ${escapeHtml(reportId)}</span>
             </div>
           </section>
         </div>
@@ -1189,7 +1545,7 @@ function buildDataRoomHtml({ fundingInputs = {}, fundingSettings = {}, derived =
                     <div class="brand-mark">OS</div>
                     <div>
                       <div class="brand">CEO's <span>OS</span></div>
-                      <div class="subline">Investor Data Room</div>
+                      <div class="subline">International Investor Data Room</div>
                     </div>
                   </div>
                 </div>
@@ -1240,7 +1596,7 @@ function buildDataRoomHtml({ fundingInputs = {}, fundingSettings = {}, derived =
                 <div class="hero-title">Data Room Readiness</div>
                 <div class="hero-value">${escapeHtml(`${completion}%`)}</div>
                 <div class="hero-caption">
-                  ${escapeHtml(completed)} documentos completados · ${escapeHtml(pending)} pendientes · ${escapeHtml(total)} items totales.
+                  ${escapeHtml(decision.signal)} · ${escapeHtml(decision.boardDecision)}
                 </div>
               </div>
 
@@ -1262,7 +1618,7 @@ function buildDataRoomHtml({ fundingInputs = {}, fundingSettings = {}, derived =
               </div>
 
               <div class="decision-panel">
-                <h3>Executive Decision Signal</h3>
+                <h3>Data Room Decision Signal</h3>
 
                 <div class="decision-grid">
                   <div class="decision-item">
@@ -1273,13 +1629,8 @@ function buildDataRoomHtml({ fundingInputs = {}, fundingSettings = {}, derived =
                   </div>
 
                   <div class="decision-item">
-                    <div class="decision-label">Completion</div>
-                    <div class="decision-value">${escapeHtml(`${completion}%`)}</div>
-                  </div>
-
-                  <div class="decision-item">
-                    <div class="decision-label">Pending</div>
-                    <div class="decision-value">${escapeHtml(pending)}</div>
+                    <div class="decision-label">Board posture</div>
+                    <div class="decision-value">${escapeHtml(decision.boardDecision)}</div>
                   </div>
 
                   <div class="decision-item">
@@ -1352,6 +1703,16 @@ function buildDataRoomHtml({ fundingInputs = {}, fundingSettings = {}, derived =
                     <div class="summary-label">Investor Access</div>
                     <div class="summary-value">Controlled</div>
                   </div>
+
+                  <div class="summary-card">
+                    <div class="summary-label">Board Circulation</div>
+                    <div class="summary-value">${escapeHtml(decision.boardDecision)}</div>
+                  </div>
+
+                  <div class="summary-card">
+                    <div class="summary-label">External Sharing</div>
+                    <div class="summary-value">Controlled only</div>
+                  </div>
                 </div>
               </div>
 
@@ -1359,8 +1720,8 @@ function buildDataRoomHtml({ fundingInputs = {}, fundingSettings = {}, derived =
                 <h3>Executive closing note</h3>
                 <p>
                   This package should be reviewed before external sharing.
-                  Confirm confidentiality, document permissions, financial consistency
-                  and investor access controls before opening the data room.
+                  Confirm confidentiality, document permissions, financial consistency,
+                  legal scope and investor access controls before opening the data room.
                 </p>
               </div>
 
