@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'compliance_reports_api_v1';
+﻿const STORAGE_KEY = 'compliance_reports_api_v1';
 
 function safeRead(fallback = []) {
   try {
@@ -59,6 +59,18 @@ function formatScore(value) {
   return Number.isFinite(parsed) ? `${Math.round(parsed)}/100` : String(value);
 }
 
+function formatMoney(value) {
+  const parsed = Number(value || 0);
+
+  if (!Number.isFinite(parsed) || parsed <= 0) return 'N/A';
+
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0
+  }).format(parsed);
+}
+
 function buildReportId(supplierName = '') {
   const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, '');
   const safeName = String(supplierName || 'supplier')
@@ -74,9 +86,11 @@ function normalizeRiskText(value = '') {
   return String(value || '').trim().toLowerCase();
 }
 
-function buildDecisionSignal({ riskScore, resilienceScore, riskLevel }) {
+function buildDecisionSignal({ riskScore, resilienceScore, riskLevel, totalEvidence, pendingReviews }) {
   const risk = toNumber(riskScore, 0);
   const resilience = toNumber(resilienceScore, 0);
+  const evidence = toNumber(totalEvidence, 0);
+  const pending = toNumber(pendingReviews, 0);
   const riskText = normalizeRiskText(riskLevel);
 
   const isHighRisk =
@@ -96,26 +110,64 @@ function buildDecisionSignal({ riskScore, resilienceScore, riskLevel }) {
   if (isHighRisk) {
     return {
       signal: 'Immediate review',
+      boardDecision: 'Hold external circulation',
       tone: 'caution',
+      executiveLabel: 'High exposure',
       nextStep:
-        'Priorizar revisión humana, evidencias críticas y plan de mitigación antes de avanzar.'
+        'Priorizar revisión humana, evidencias críticas y plan de mitigación antes de avanzar.',
+      memo:
+        'El proveedor presenta una exposición elevada. Antes de circular conclusiones fuera del equipo interno, conviene cerrar evidencias críticas, documentar mitigantes y validar la decisión con compliance/legal.'
+    };
+  }
+
+  if (evidence === 0) {
+    return {
+      signal: 'Evidence gap',
+      boardDecision: 'Do not circulate',
+      tone: 'watch',
+      executiveLabel: 'Evidence required',
+      nextStep:
+        'Registrar evidencia mínima y vincularla al expediente antes de considerar el informe defendible.',
+      memo:
+        'El proveedor puede analizarse, pero la ausencia de evidencias limita la defendibilidad del informe. La prioridad es reforzar el soporte documental.'
+    };
+  }
+
+  if (pending > 0) {
+    return {
+      signal: 'Review pending',
+      boardDecision: 'Proceed with validation',
+      tone: 'watch',
+      executiveLabel: 'Human review required',
+      nextStep:
+        'Cerrar revisiones humanas pendientes y dejar trazabilidad antes de elevar el informe a comité.',
+      memo:
+        'Existe base documental, pero quedan revisiones pendientes. El informe debe circular como borrador ejecutivo hasta cerrar la validación humana.'
     };
   }
 
   if (isMediumRisk || resilience < 60) {
     return {
       signal: 'Monitor & validate',
+      boardDecision: 'Proceed with controls',
       tone: 'watch',
+      executiveLabel: 'Controlled with follow-up',
       nextStep:
-        'Completar evidencias pendientes, validar alertas abiertas y mantener seguimiento operativo.'
+        'Completar evidencias pendientes, validar alertas abiertas y mantener seguimiento operativo.',
+      memo:
+        'El proveedor no requiere bloqueo inmediato, pero sí seguimiento reforzado y controles periódicos para mantener una postura defendible.'
     };
   }
 
   return {
     signal: 'Controlled',
+    boardDecision: 'Controlled reporting posture',
     tone: 'positive',
+    executiveLabel: 'Report-ready',
     nextStep:
-      'Mantener trazabilidad, revisar cambios relevantes y actualizar scoring ante nuevas evidencias.'
+      'Mantener trazabilidad, revisar cambios relevantes y actualizar scoring ante nuevas evidencias.',
+    memo:
+      'El proveedor muestra una postura razonablemente controlada para reporte ejecutivo, manteniendo revisión humana y soporte documental antes de decisiones formales.'
   };
 }
 
@@ -125,10 +177,27 @@ function buildRecommendations(recommendations = []) {
       <li>Revisar evidencias disponibles y completar documentación pendiente.</li>
       <li>Mantener trazabilidad de decisiones humanas y cambios de estado.</li>
       <li>Actualizar scoring cuando existan nuevas alertas o evidencias.</li>
+      <li>Validar conclusiones con el responsable interno antes de circular el informe.</li>
     `;
   }
 
   return recommendations.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+}
+
+function getItemType(item = {}) {
+  const raw = String(item.type || item.category || '').toLowerCase();
+
+  if (raw.includes('alert')) return 'Alert';
+  if (raw.includes('evidence') || raw.includes('evidencia')) return 'Evidence';
+  if (raw.includes('review') || raw.includes('revisión')) return 'Review';
+
+  return item.type || 'Item';
+}
+
+function countItemsByType(items = [], type) {
+  if (!Array.isArray(items)) return 0;
+
+  return items.filter((item) => getItemType(item).toLowerCase() === type.toLowerCase()).length;
 }
 
 function buildItemsCards(items = []) {
@@ -141,12 +210,14 @@ function buildItemsCards(items = []) {
   }
 
   return items
-    .slice(0, 8)
-    .map(
-      (item) => `
+    .slice(0, 12)
+    .map((item) => {
+      const itemType = getItemType(item);
+
+      return `
         <div class="item-card avoid-break">
           <div class="item-top">
-            <span class="item-type">${escapeHtml(item.type || 'Item')}</span>
+            <span class="item-type">${escapeHtml(itemType)}</span>
             <span class="item-status">${escapeHtml(item.status || 'N/A')}</span>
           </div>
 
@@ -157,6 +228,138 @@ function buildItemsCards(items = []) {
           <div class="item-desc">
             ${escapeHtml(item.description || item.summary || 'Sin descripción')}
           </div>
+        </div>
+      `;
+    })
+    .join('');
+}
+
+function buildRedFlags({
+  riskScore,
+  riskLevel,
+  totalEvidence,
+  pendingReviews,
+  totalItems,
+  criticality,
+  supplierCountry
+}) {
+  const risk = toNumber(riskScore, 0);
+  const evidence = toNumber(totalEvidence, 0);
+  const pending = toNumber(pendingReviews, 0);
+  const items = toNumber(totalItems, 0);
+  const riskText = normalizeRiskText(riskLevel);
+  const criticalityText = normalizeRiskText(criticality);
+
+  const flags = [];
+
+  if (
+    risk >= 70 ||
+    riskText.includes('alto') ||
+    riskText.includes('high') ||
+    riskText.includes('critical') ||
+    riskText.includes('crítico')
+  ) {
+    flags.push({
+      title: 'High-risk supplier exposure',
+      tone: 'danger',
+      text:
+        'El proveedor supera el umbral de riesgo alto. Requiere revisión prioritaria, mitigantes y validación antes de circular conclusiones.'
+    });
+  }
+
+  if (evidence === 0) {
+    flags.push({
+      title: 'Evidence gap',
+      tone: 'watch',
+      text:
+        'No existen evidencias suficientes asociadas al informe. La defendibilidad documental es limitada.'
+    });
+  }
+
+  if (pending > 0) {
+    flags.push({
+      title: 'Human review pending',
+      tone: 'watch',
+      text:
+        'Existen revisiones pendientes. El informe debe mantenerse como borrador ejecutivo hasta cerrar trazabilidad humana.'
+    });
+  }
+
+  if (items === 0) {
+    flags.push({
+      title: 'No linked report items',
+      tone: 'watch',
+      text:
+        'No hay alertas, evidencias o revisiones vinculadas. Conviene enriquecer el expediente antes de elevarlo a comité.'
+    });
+  }
+
+  if (criticalityText.includes('alta') || criticalityText.includes('crítica') || criticalityText.includes('critical')) {
+    flags.push({
+      title: 'Critical supplier dependency',
+      tone: 'danger',
+      text:
+        'La criticidad del proveedor exige plan de continuidad, alternativa operativa y seguimiento reforzado.'
+    });
+  }
+
+  if (!supplierCountry || supplierCountry === 'N/A' || supplierCountry === 'Sin país') {
+    flags.push({
+      title: 'Jurisdiction not classified',
+      tone: 'watch',
+      text:
+        'El país o jurisdicción del proveedor no está correctamente clasificado. Esto limita la lectura multinacional.'
+    });
+  }
+
+  if (flags.length === 0) {
+    flags.push({
+      title: 'No critical red flags detected',
+      tone: 'positive',
+      text:
+        'No se detectan señales críticas inmediatas con la información disponible. Mantener controles periódicos.'
+    });
+  }
+
+  return flags;
+}
+
+function buildRedFlagCards(flags = []) {
+  return flags
+    .map(
+      (flag) => `
+        <div class="red-flag-card ${escapeHtml(flag.tone)} avoid-break">
+          <div class="red-flag-dot"></div>
+          <div>
+            <div class="red-flag-title">${escapeHtml(flag.title)}</div>
+            <p>${escapeHtml(flag.text)}</p>
+          </div>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function buildPreparedRows(rows = []) {
+  return rows
+    .map(
+      ([label, value]) => `
+        <div class="prepared-item">
+          <div class="prepared-label">${escapeHtml(label)}</div>
+          <div class="prepared-value">${escapeHtml(value)}</div>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function buildBoardRows(rows = []) {
+  return rows
+    .map(
+      ([label, value]) => `
+        <div class="summary-card">
+          <div class="summary-label">${escapeHtml(label)}</div>
+          <div class="summary-value">${escapeHtml(value)}</div>
         </div>
       `
     )
@@ -194,6 +397,11 @@ export const complianceReportsApi = {
       title: payload.title || 'Compliance Report',
       supplierId: payload.supplierId || '',
       supplierName: payload.supplierName || '',
+      supplierCountry: payload.supplierCountry || payload.country || '',
+      supplierRegion: payload.supplierRegion || payload.region || '',
+      supplierTier: payload.supplierTier || payload.tier || '',
+      supplierCriticality: payload.supplierCriticality || payload.criticality || '',
+      supplierSpend: payload.supplierSpend || payload.spend || 0,
       scope: payload.scope || 'supplier',
       status: payload.status || 'generated',
       riskScore: payload.riskScore ?? null,
@@ -202,6 +410,7 @@ export const complianceReportsApi = {
       resilienceLevel: payload.resilienceLevel || '',
       summary: payload.summary || '',
       recommendations: payload.recommendations || [],
+      evidenceSummary: payload.evidenceSummary || null,
       items: payload.items || [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -277,10 +486,15 @@ export const complianceReportsApi = {
 
     return {
       id: createId('report'),
-      title: `Compliance Report · ${supplier.name}`,
+      title: `Compliance Board Pack · ${supplier.name}`,
       supplierId: supplier.id,
       supplierName: supplier.name,
-      scope: 'supplier',
+      supplierCountry: supplier.country || supplier.jurisdiction || '',
+      supplierRegion: supplier.region || '',
+      supplierTier: supplier.tier || '',
+      supplierCriticality: supplier.criticality || '',
+      supplierSpend: supplier.spend || supplier.annualSpend || 0,
+      scope: 'Third-party supplier compliance',
       status: 'generated',
       riskScore,
       resilienceScore,
@@ -297,7 +511,8 @@ export const complianceReportsApi = {
           : [
               'Revisar evidencias disponibles y completar documentación pendiente.',
               'Mantener trazabilidad de decisiones humanas y cambios de estado.',
-              'Actualizar scoring cuando existan nuevas alertas o evidencias.'
+              'Actualizar scoring cuando existan nuevas alertas o evidencias.',
+              'Validar conclusiones con responsable interno antes de circulación externa.'
             ],
       evidenceSummary: evidenceSummary || null,
       items: reportItems,
@@ -313,6 +528,13 @@ export const complianceReportsApi = {
     const supplierName = report.supplierName || 'Sin proveedor';
     const reportId = buildReportId(supplierName);
 
+    const supplierCountry = report.supplierCountry || report.country || 'Sin país';
+    const supplierRegion = report.supplierRegion || report.region || 'Sin región';
+    const supplierTier = report.supplierTier || report.tier || 'Tier N/A';
+    const supplierCriticality =
+      report.supplierCriticality || report.criticality || 'N/A';
+    const supplierSpend = formatMoney(report.supplierSpend || report.spend || 0);
+
     const riskScore = formatScore(report.riskScore);
     const resilienceScore = formatScore(report.resilienceScore);
     const riskLevel = report.riskLevel || 'N/A';
@@ -325,18 +547,61 @@ export const complianceReportsApi = {
     const coverageLabel =
       evidenceSummary.coverageLabel || evidenceSummary.coverage || 'N/A';
 
-    const totalItems = Array.isArray(report.items) ? report.items.length : 0;
+    const safeItems = Array.isArray(report.items) ? report.items : [];
+    const totalItems = safeItems.length;
+    const alertItems = countItemsByType(safeItems, 'Alert');
+    const evidenceItems = countItemsByType(safeItems, 'Evidence');
+    const reviewItems = countItemsByType(safeItems, 'Review');
 
     const decision = buildDecisionSignal({
       riskScore: report.riskScore,
       resilienceScore: report.resilienceScore,
-      riskLevel
+      riskLevel,
+      totalEvidence,
+      pendingReviews
     });
+
+    const redFlags = buildRedFlags({
+      riskScore: report.riskScore,
+      riskLevel,
+      totalEvidence,
+      pendingReviews,
+      totalItems,
+      criticality: supplierCriticality,
+      supplierCountry
+    });
+
+    const jurisdictionRows = [
+      ['Supplier', supplierName],
+      ['Country / Jurisdiction', supplierCountry],
+      ['Region', supplierRegion],
+      ['Tier', supplierTier],
+      ['Criticality', supplierCriticality],
+      ['Annual Spend', supplierSpend]
+    ];
+
+    const boardRows = [
+      ['Risk Score', riskScore],
+      ['Risk Level', riskLevel],
+      ['Resilience', resilienceScore],
+      ['Resilience Level', resilienceLevel],
+      ['Evidence Coverage', coverageLabel],
+      ['Board Decision', decision.boardDecision]
+    ];
+
+    const evidenceRows = [
+      ['Linked Items', totalItems],
+      ['Alerts', alertItems],
+      ['Evidence', evidenceItems],
+      ['Human Reviews', reviewItems],
+      ['Pending Reviews', pendingReviews],
+      ['Coverage', coverageLabel]
+    ];
 
     const html = `
       <html>
         <head>
-          <title>CEO's OS - Compliance Report - ${escapeHtml(supplierName)}</title>
+          <title>CEO's OS - Compliance Board Pack - ${escapeHtml(supplierName)}</title>
 
           <style>
             @page {
@@ -400,7 +665,7 @@ export const complianceReportsApi = {
               left: 0;
               right: 0;
               height: 6px;
-              background: linear-gradient(90deg, #020617, #ef4444, #f97316);
+              background: linear-gradient(90deg, #020617, #2563eb, #10b981, #f59e0b);
             }
 
             .report-page:not(.last) {
@@ -429,7 +694,8 @@ export const complianceReportsApi = {
             .item-card,
             .closing-panel,
             .disclaimer,
-            .notice {
+            .notice,
+            .red-flag-card {
               break-inside: avoid;
               page-break-inside: avoid;
             }
@@ -463,11 +729,11 @@ export const complianceReportsApi = {
               border-radius: 12px;
               display: grid;
               place-items: center;
-              background: linear-gradient(135deg, #020617, #ef4444);
+              background: linear-gradient(135deg, #020617, #2563eb);
               color: #ffffff;
               font-weight: 950;
               font-size: 13px;
-              box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);
+              box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
             }
 
             .brand {
@@ -478,7 +744,7 @@ export const complianceReportsApi = {
             }
 
             .brand span {
-              color: #ef4444;
+              color: #2563eb;
             }
 
             .subline {
@@ -505,9 +771,9 @@ export const complianceReportsApi = {
               display: inline-flex;
               align-items: center;
               gap: 8px;
-              background: #fef2f2;
-              color: #b91c1c;
-              border: 1px solid #fecaca;
+              background: #eff6ff;
+              color: #1d4ed8;
+              border: 1px solid #bfdbfe;
               border-radius: 999px;
               padding: 6px 10px;
               font-size: 9.5px;
@@ -522,8 +788,8 @@ export const complianceReportsApi = {
               width: 7px;
               height: 7px;
               border-radius: 999px;
-              background: #ef4444;
-              box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+              background: #2563eb;
+              box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
             }
 
             h1 {
@@ -550,7 +816,7 @@ export const complianceReportsApi = {
               width: 4px;
               height: 16px;
               border-radius: 999px;
-              background: linear-gradient(180deg, #ef4444, #f97316);
+              background: linear-gradient(180deg, #2563eb, #10b981);
             }
 
             h3 {
@@ -609,7 +875,14 @@ export const complianceReportsApi = {
             .summary-grid,
             .decision-grid {
               display: grid;
-              grid-template-columns: repeat(4, 1fr) !important;
+              grid-template-columns: repeat(3, 1fr) !important;
+              gap: 8px;
+              margin: 12px 0 14px;
+            }
+
+            .board-grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr) !important;
               gap: 8px;
               margin: 12px 0 14px;
             }
@@ -678,8 +951,8 @@ export const complianceReportsApi = {
               padding: 13px 15px;
               border-radius: 16px;
               background:
-                linear-gradient(135deg, rgba(248, 250, 252, 0.95), rgba(254, 242, 242, 0.68));
-              border: 1px solid #fee2e2;
+                linear-gradient(135deg, rgba(248, 250, 252, 0.95), rgba(239, 246, 255, 0.76));
+              border: 1px solid #dbeafe;
             }
 
             .executive-summary p {
@@ -688,21 +961,21 @@ export const complianceReportsApi = {
 
             .hero {
               background:
-                radial-gradient(circle at 20% 20%, rgba(239, 68, 68, 0.22), transparent 28%),
-                linear-gradient(135deg, #020617, #111827 48%, #7f1d1d);
+                radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.22), transparent 28%),
+                linear-gradient(135deg, #020617, #111827 48%, #1e3a8a);
               color: #ffffff;
               border-radius: 22px;
               padding: 25px 26px;
               margin: 18px 0 18px;
               text-align: center;
-              border: 1px solid rgba(239, 68, 68, 0.28);
+              border: 1px solid rgba(37, 99, 235, 0.28);
               box-shadow:
                 0 20px 42px rgba(15, 23, 42, 0.22),
                 inset 0 1px 0 rgba(255, 255, 255, 0.08);
             }
 
             .hero-title {
-              color: #fecaca;
+              color: #bfdbfe;
               font-size: 10px;
               text-transform: uppercase;
               font-weight: 950;
@@ -719,7 +992,7 @@ export const complianceReportsApi = {
 
             .hero-caption {
               margin-top: 8px;
-              color: #fee2e2;
+              color: #dbeafe;
               font-size: 11px;
             }
 
@@ -729,7 +1002,7 @@ export const complianceReportsApi = {
               border-radius: 18px;
               background: linear-gradient(135deg, #020617, #111827);
               color: #ffffff;
-              border: 1px solid rgba(239, 68, 68, 0.28);
+              border: 1px solid rgba(37, 99, 235, 0.28);
             }
 
             .decision-item {
@@ -742,7 +1015,7 @@ export const complianceReportsApi = {
             .decision-label {
               font-size: 8px;
               font-weight: 950;
-              color: #fecaca;
+              color: #bfdbfe;
               letter-spacing: 0.09em;
               text-transform: uppercase;
               margin-bottom: 5px;
@@ -780,6 +1053,67 @@ export const complianceReportsApi = {
               box-shadow: 0 10px 22px rgba(15, 23, 42, 0.035);
             }
 
+            .red-flag-list {
+              display: grid;
+              gap: 9px;
+            }
+
+            .red-flag-card {
+              display: grid;
+              grid-template-columns: 12px minmax(0, 1fr);
+              gap: 10px;
+              padding: 12px;
+              border-radius: 15px;
+              border: 1px solid #e2e8f0;
+              background: #f8fafc;
+            }
+
+            .red-flag-card p {
+              margin: 4px 0 0;
+              font-size: 10.5px;
+            }
+
+            .red-flag-dot {
+              width: 10px;
+              height: 10px;
+              border-radius: 999px;
+              margin-top: 2px;
+              background: #2563eb;
+            }
+
+            .red-flag-title {
+              font-size: 11px;
+              font-weight: 950;
+              color: #020617;
+            }
+
+            .red-flag-card.danger {
+              border-color: #fecaca;
+              background: #fef2f2;
+            }
+
+            .red-flag-card.danger .red-flag-dot {
+              background: #ef4444;
+            }
+
+            .red-flag-card.watch {
+              border-color: #fde68a;
+              background: #fffbeb;
+            }
+
+            .red-flag-card.watch .red-flag-dot {
+              background: #f59e0b;
+            }
+
+            .red-flag-card.positive {
+              border-color: #bbf7d0;
+              background: #f0fdf4;
+            }
+
+            .red-flag-card.positive .red-flag-dot {
+              background: #10b981;
+            }
+
             .item-top {
               display: flex;
               justify-content: space-between;
@@ -797,7 +1131,7 @@ export const complianceReportsApi = {
             }
 
             .item-status {
-              color: #b91c1c;
+              color: #1d4ed8;
             }
 
             .item-title {
@@ -836,9 +1170,9 @@ export const complianceReportsApi = {
               padding: 16px;
               border-radius: 18px;
               background:
-                linear-gradient(135deg, #020617, #111827 55%, #7f1d1d);
+                linear-gradient(135deg, #020617, #111827 55%, #1e3a8a);
               color: #ffffff;
-              border: 1px solid rgba(239, 68, 68, 0.26);
+              border: 1px solid rgba(37, 99, 235, 0.26);
             }
 
             .closing-panel h3,
@@ -918,13 +1252,11 @@ export const complianceReportsApi = {
               }
 
               .prepared-panel,
-              .grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-              }
-
+              .grid,
               .summary-grid,
-              .decision-grid {
-                grid-template-columns: repeat(4, 1fr) !important;
+              .decision-grid,
+              .board-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
               }
 
               .items-grid {
@@ -944,7 +1276,7 @@ export const complianceReportsApi = {
                       <div class="brand-mark">OS</div>
                       <div>
                         <div class="brand">CEO's <span>OS</span></div>
-                        <div class="subline">Supply Chain Compliance Report</div>
+                        <div class="subline">Multinational Third-Party Compliance Board Pack</div>
                       </div>
                     </div>
                   </div>
@@ -956,21 +1288,21 @@ export const complianceReportsApi = {
                   </div>
                 </div>
 
-                <div class="module-badge">Compliance DSS Report</div>
+                <div class="module-badge">Compliance Board Pack</div>
 
-                <h1>${escapeHtml(report.title || 'Compliance Report')}</h1>
+                <h1>${escapeHtml(report.title || 'Compliance Board Pack')}</h1>
 
                 <div class="deal-meta avoid-break">
                   <span class="deal-pill">Supplier: ${escapeHtml(supplierName)}</span>
+                  <span class="deal-pill">Jurisdiction: ${escapeHtml(supplierCountry)}</span>
                   <span class="deal-pill">Scope: ${escapeHtml(report.scope || 'supplier')}</span>
-                  <span class="deal-pill">Status: ${escapeHtml(report.status || 'generated')}</span>
                   <span class="deal-pill">Risk: ${escapeHtml(riskLevel)}</span>
                 </div>
 
                 <div class="prepared-panel avoid-break">
                   <div class="prepared-item">
                     <div class="prepared-label">Prepared for</div>
-                    <div class="prepared-value">Compliance Review</div>
+                    <div class="prepared-value">Board / Compliance Committee</div>
                   </div>
 
                   <div class="prepared-item">
@@ -989,35 +1321,19 @@ export const complianceReportsApi = {
                 </div>
 
                 <div class="hero">
-                  <div class="hero-title">Supplier Risk Score</div>
+                  <div class="hero-title">Third-Party Risk Signal</div>
                   <div class="hero-value">${escapeHtml(riskScore)}</div>
                   <div class="hero-caption">
-                    Nivel de riesgo: ${escapeHtml(riskLevel)} · Resiliencia: ${escapeHtml(resilienceLevel)}
+                    ${escapeHtml(decision.executiveLabel)} · ${escapeHtml(decision.boardDecision)}
                   </div>
                 </div>
 
-                <div class="grid avoid-break">
-                  <div class="kpi">
-                    <div class="kpi-label">Risk Score</div>
-                    <div class="kpi-value risk">${escapeHtml(riskScore)}</div>
-                    <div class="kpi-note">Indicador ejecutivo de exposición.</div>
-                  </div>
-
-                  <div class="kpi">
-                    <div class="kpi-label">Risk Level</div>
-                    <div class="kpi-value risk">${escapeHtml(riskLevel)}</div>
-                    <div class="kpi-note">Clasificación del nivel de riesgo.</div>
-                  </div>
-
-                  <div class="kpi">
-                    <div class="kpi-label">Resilience</div>
-                    <div class="kpi-value resilience">${escapeHtml(resilienceScore)}</div>
-                    <div class="kpi-note">Capacidad de respuesta y continuidad.</div>
-                  </div>
+                <div class="board-grid avoid-break">
+                  ${buildBoardRows(boardRows)}
                 </div>
 
                 <div class="decision-panel">
-                  <h3>Executive Decision Signal</h3>
+                  <h3>Executive Decision Memo</h3>
 
                   <div class="decision-grid">
                     <div class="decision-item">
@@ -1028,22 +1344,17 @@ export const complianceReportsApi = {
                     </div>
 
                     <div class="decision-item">
-                      <div class="decision-label">Risk Level</div>
-                      <div class="decision-value">${escapeHtml(riskLevel)}</div>
+                      <div class="decision-label">Board posture</div>
+                      <div class="decision-value">${escapeHtml(decision.boardDecision)}</div>
                     </div>
 
                     <div class="decision-item">
-                      <div class="decision-label">Evidence</div>
-                      <div class="decision-value">${escapeHtml(totalEvidence)}</div>
-                    </div>
-
-                    <div class="decision-item">
-                      <div class="decision-label">Next Step</div>
+                      <div class="decision-label">Next step</div>
                       <div class="decision-value">Human Review</div>
                     </div>
                   </div>
 
-                  <p>${escapeHtml(decision.nextStep)}</p>
+                  <p>${escapeHtml(decision.memo)}</p>
                 </div>
               </div>
 
@@ -1056,28 +1367,31 @@ export const complianceReportsApi = {
             <section class="report-page">
               <div class="page-body">
                 <div class="section">
-                  <h2>Evidence Coverage</h2>
+                  <h2>Jurisdiction & Supplier Exposure</h2>
 
-                  <div class="grid">
-                    <div class="kpi">
-                      <div class="kpi-label">Evidencias</div>
-                      <div class="kpi-value">${escapeHtml(totalEvidence)}</div>
-                    </div>
-
-                    <div class="kpi">
-                      <div class="kpi-label">Revisiones pendientes</div>
-                      <div class="kpi-value">${escapeHtml(pendingReviews)}</div>
-                    </div>
-
-                    <div class="kpi">
-                      <div class="kpi-label">Cobertura</div>
-                      <div class="kpi-value">${escapeHtml(coverageLabel)}</div>
-                    </div>
+                  <div class="prepared-panel avoid-break">
+                    ${buildPreparedRows(jurisdictionRows)}
                   </div>
                 </div>
 
                 <div class="section">
-                  <h2>Recommendations</h2>
+                  <h2>Evidence Pack</h2>
+
+                  <div class="board-grid">
+                    ${buildBoardRows(evidenceRows)}
+                  </div>
+                </div>
+
+                <div class="section">
+                  <h2>Red Flags & Mitigants</h2>
+
+                  <div class="red-flag-list">
+                    ${buildRedFlagCards(redFlags)}
+                  </div>
+                </div>
+
+                <div class="section">
+                  <h2>Executive Recommendations</h2>
 
                   <div class="panel">
                     <ul>
@@ -1085,45 +1399,10 @@ export const complianceReportsApi = {
                     </ul>
                   </div>
                 </div>
-
-                <div class="section">
-                  <h2>Compliance Summary</h2>
-
-                  <div class="summary-grid">
-                    <div class="summary-card">
-                      <div class="summary-label">Items</div>
-                      <div class="summary-value">${escapeHtml(totalItems)}</div>
-                    </div>
-
-                    <div class="summary-card">
-                      <div class="summary-label">Risk</div>
-                      <div class="summary-value">${escapeHtml(riskLevel)}</div>
-                    </div>
-
-                    <div class="summary-card">
-                      <div class="summary-label">Resilience</div>
-                      <div class="summary-value">${escapeHtml(resilienceLevel)}</div>
-                    </div>
-
-                    <div class="summary-card">
-                      <div class="summary-label">Decision</div>
-                      <div class="summary-value">${escapeHtml(decision.signal)}</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="notice">
-                  <h3>Decision Support System</h3>
-                  <p>
-                    Este informe funciona como DSS —Decision Support System—.
-                    Sirve para priorizar revisión, evidencias y acciones, pero no sustituye
-                    revisión humana, legal, contractual o de compliance.
-                  </p>
-                </div>
               </div>
 
               <div class="report-footer">
-                <span><strong>CEO's OS</strong> · Evidence Coverage & Recommendations</span>
+                <span><strong>CEO's OS</strong> · Jurisdiction Exposure, Evidence Pack & Mitigants</span>
                 <span>Page 2 of 3 · ${escapeHtml(reportId)}</span>
               </div>
             </section>
@@ -1131,10 +1410,10 @@ export const complianceReportsApi = {
             <section class="report-page last">
               <div class="page-body">
                 <div class="section">
-                  <h2>Alerts, Evidence & Reviews</h2>
+                  <h2>Alerts, Evidence & Human Review Trail</h2>
 
                   <div class="items-grid">
-                    ${buildItemsCards(report.items)}
+                    ${buildItemsCards(safeItems)}
                   </div>
                 </div>
 
@@ -1144,7 +1423,7 @@ export const complianceReportsApi = {
                   <div class="summary-grid">
                     <div class="summary-card">
                       <div class="summary-label">Human Review</div>
-                      <div class="summary-value">Required</div>
+                      <div class="summary-value">Required before formal reliance</div>
                     </div>
 
                     <div class="summary-card">
@@ -1161,15 +1440,34 @@ export const complianceReportsApi = {
                       <div class="summary-label">Monitoring</div>
                       <div class="summary-value">Active</div>
                     </div>
+
+                    <div class="summary-card">
+                      <div class="summary-label">Jurisdiction Check</div>
+                      <div class="summary-value">Required for cross-border suppliers</div>
+                    </div>
+
+                    <div class="summary-card">
+                      <div class="summary-label">Board Circulation</div>
+                      <div class="summary-value">${escapeHtml(decision.boardDecision)}</div>
+                    </div>
                   </div>
                 </div>
 
                 <div class="closing-panel">
                   <h3>Executive closing note</h3>
                   <p>
-                    This report is designed as an executive compliance layer. It should be used
-                    to structure supplier review, validate evidence, prioritize risks and decide
-                    whether escalation, mitigation or continued monitoring is required.
+                    This Compliance Board Pack is designed as an executive third-party risk layer.
+                    It structures supplier exposure, jurisdiction context, evidence coverage, red flags,
+                    mitigants and human review signals to support defendable decisions.
+                  </p>
+                </div>
+
+                <div class="notice">
+                  <h3>Decision Support System</h3>
+                  <p>
+                    Este informe funciona como DSS —Decision Support System—.
+                    Sirve para priorizar revisión, evidencias y acciones, pero no sustituye
+                    revisión humana, legal, contractual, regulatoria o de compliance.
                   </p>
                 </div>
 

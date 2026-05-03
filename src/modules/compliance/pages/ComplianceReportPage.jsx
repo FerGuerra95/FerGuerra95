@@ -1261,6 +1261,53 @@ function buildMultinationalCompliancePack({
   };
 }
 
+function buildDynamicSupplierSummary(supplier, riskLevelLabel, resilienceLevelLabel) {
+  if (!supplier) return 'Sin resumen ejecutivo.';
+
+  const riskScore = supplier?.riskScore ?? 0;
+  const resilienceScore = supplier?.resilienceScore ?? 0;
+  const riskLabel = riskLevelLabel || supplier?.riskLevel?.label || 'no clasificado';
+  const resilienceLabel =
+    resilienceLevelLabel || supplier?.resilienceLevel?.label || 'no clasificada';
+
+  return `${supplier.name} presenta un nivel de riesgo ${String(riskLabel).toLowerCase()} con un score de ${riskScore}/100 y una resiliencia ${String(resilienceLabel).toLowerCase()} de ${resilienceScore}/100.`;
+}
+
+function buildFallbackReportItems(supplier) {
+  if (!supplier) return [];
+
+  const now = new Date().toISOString();
+  const supplierName = supplier?.name || 'Proveedor';
+  const country = supplier?.country || supplier?.jurisdiction || 'jurisdicción pendiente';
+  const criticality = supplier?.criticality || 'criticidad pendiente';
+
+  return [
+    {
+      id: `demo_alert_${supplier?.id || 'supplier'}`,
+      type: 'Alert',
+      status: 'Open',
+      title: 'Jurisdiction and documentation review required',
+      date: now,
+      description: `${supplierName} requiere validación de jurisdicción, documentación mínima y controles asociados antes de circulación externa.`
+    },
+    {
+      id: `demo_evidence_${supplier?.id || 'supplier'}`,
+      type: 'Evidence',
+      status: 'Required',
+      title: 'Supplier compliance evidence pack',
+      date: now,
+      description: `Solicitar y vincular evidencias de cumplimiento para ${supplierName}: contratos, certificaciones, políticas, sanciones, país (${country}) y controles documentales.`
+    },
+    {
+      id: `demo_review_${supplier?.id || 'supplier'}`,
+      type: 'Review',
+      status: 'Pending',
+      title: 'Human compliance review',
+      date: now,
+      description: `Revisión humana pendiente para validar riesgo, criticidad (${criticality}), mitigantes y recomendación ejecutiva.`
+    }
+  ];
+}
 export function ComplianceReportPage() {
   const navigate = useNavigate();
   const { pushToast } = useNotifications();
@@ -1338,6 +1385,22 @@ export function ComplianceReportPage() {
   function buildCurrentReport() {
     if (!engine.activeSupplier) return null;
 
+    const fallbackItems = buildFallbackReportItems(engine.activeSupplier);
+    const enrichedReportItems =
+      Array.isArray(reportItems) && reportItems.length > 0
+        ? reportItems
+        : fallbackItems;
+
+    const riskLevelLabel =
+      engine.activeSupplier?.riskLevel?.label ||
+      engine.activeSupplier?.riskLevel ||
+      'no clasificado';
+
+    const resilienceLevelLabel =
+      engine.activeSupplier?.resilienceLevel?.label ||
+      engine.activeSupplier?.resilienceLevel ||
+      'no clasificada';
+
     const recommendations = buildRecommendations({
       supplier: engine.activeSupplier,
       riskScore: engine.activeSupplier.riskScore,
@@ -1351,9 +1414,30 @@ export function ComplianceReportPage() {
       resilienceScore: engine.activeSupplier.resilienceScore,
       riskLevel: engine.activeSupplier.riskLevel,
       resilienceLevel: engine.activeSupplier.resilienceLevel,
-      executiveSummary: engine.executiveSummary,
-      evidenceSummary: engine.evidenceSummary,
-      reportItems,
+      executiveSummary: buildDynamicSupplierSummary(
+        engine.activeSupplier,
+        riskLevelLabel,
+        resilienceLevelLabel
+      ),
+      evidenceSummary: {
+        ...(engine.evidenceSummary || {}),
+        totalEvidence:
+          engine.evidenceSummary?.totalEvidence ??
+          engine.evidenceSummary?.total ??
+          activeSupplierEvidence.length,
+        pendingReviews:
+          engine.evidenceSummary?.pendingReviews ??
+          engine.evidenceSummary?.pending ??
+          activeSupplierReviews.filter((review) => {
+            const status = String(review?.status || '').toLowerCase();
+            return !status || status.includes('pending') || status.includes('open');
+          }).length,
+        coverageLabel:
+          engine.evidenceSummary?.coverageLabel ||
+          engine.evidenceSummary?.coverage ||
+          (enrichedReportItems.length > 0 ? 'Media' : 'Baja')
+      },
+      reportItems: enrichedReportItems,
       recommendations
     });
   }
@@ -1375,6 +1459,11 @@ export function ComplianceReportPage() {
       title: report.title,
       supplierId: report.supplierId,
       supplierName: report.supplierName,
+      supplierCountry: report.supplierCountry,
+      supplierRegion: report.supplierRegion,
+      supplierTier: report.supplierTier,
+      supplierCriticality: report.supplierCriticality,
+      supplierSpend: report.supplierSpend,
       scope: report.scope,
       summary: report.summary,
       items: report.items,
@@ -1410,19 +1499,98 @@ export function ComplianceReportPage() {
       safeSuppliers.find((item) => item.id === report.supplierId) ||
       engine.activeSupplier;
 
+    const riskLevelLabel =
+      supplier?.riskLevel?.label ||
+      report.riskLevel ||
+      'N/A';
+
+    const resilienceLevelLabel =
+      supplier?.resilienceLevel?.label ||
+      report.resilienceLevel ||
+      'N/A';
+
+    const fallbackItems = buildFallbackReportItems(supplier);
+    const enrichedItems =
+      Array.isArray(report.items) && report.items.length > 0
+        ? report.items
+        : fallbackItems;
+
+    const supplierEvidence = safeEvidenceItems.filter(
+      (item) => item.supplierId === report.supplierId
+    );
+
+    const supplierReviews = safeReviews.filter(
+      (item) => item.supplierId === report.supplierId
+    );
+
+    const pendingReviews = supplierReviews.filter((review) => {
+      const status = String(review?.status || '').toLowerCase();
+      return !status || status.includes('pending') || status.includes('open');
+    }).length;
+
     const enrichedReport = {
       ...report,
       supplierName: supplier?.name || report.supplierName || 'Sin proveedor',
+      supplierCountry:
+        supplier?.country ||
+        supplier?.jurisdiction ||
+        report.supplierCountry ||
+        report.country ||
+        'Sin país',
+      supplierRegion:
+        supplier?.region ||
+        report.supplierRegion ||
+        report.region ||
+        'Sin región',
+      supplierTier:
+        supplier?.tier ||
+        report.supplierTier ||
+        report.tier ||
+        'Tier N/A',
+      supplierCriticality:
+        supplier?.criticality ||
+        report.supplierCriticality ||
+        report.criticality ||
+        'N/A',
+      supplierSpend:
+        supplier?.spend ||
+        supplier?.annualSpend ||
+        report.supplierSpend ||
+        report.spend ||
+        0,
       riskScore: supplier?.riskScore ?? report.riskScore ?? 'N/A',
       resilienceScore:
         supplier?.resilienceScore ?? report.resilienceScore ?? 'N/A',
-      riskLevel: supplier?.riskLevel?.label || report.riskLevel || 'N/A',
-      resilienceLevel:
-        supplier?.resilienceLevel?.label || report.resilienceLevel || 'N/A',
+      riskLevel: riskLevelLabel,
+      resilienceLevel: resilienceLevelLabel,
+      summary: supplier
+        ? buildDynamicSupplierSummary(
+            supplier,
+            riskLevelLabel,
+            resilienceLevelLabel
+          )
+        : report.summary || 'Sin resumen ejecutivo.',
+      evidenceSummary: {
+        ...(report.evidenceSummary || {}),
+        totalEvidence:
+          report.evidenceSummary?.totalEvidence ??
+          report.evidenceSummary?.total ??
+          supplierEvidence.length,
+        pendingReviews:
+          report.evidenceSummary?.pendingReviews ??
+          report.evidenceSummary?.pending ??
+          pendingReviews,
+        coverageLabel:
+          report.evidenceSummary?.coverageLabel ||
+          report.evidenceSummary?.coverage ||
+          (enrichedItems.length > 0 ? 'Media' : 'Baja')
+      },
+      items: enrichedItems,
       recommendations: report.recommendations || [
         'Revisar evidencias disponibles y completar documentación pendiente.',
         'Mantener trazabilidad de decisiones humanas y cambios de estado.',
-        'Actualizar scoring cuando existan nuevas alertas o evidencias.'
+        'Actualizar scoring cuando existan nuevas alertas o evidencias.',
+        'Validar conclusiones con responsable interno antes de circulación externa.'
       ]
     };
 
@@ -1848,3 +2016,4 @@ export function ComplianceReportPage() {
     </div>
   );
 }
+
