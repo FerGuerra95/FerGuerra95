@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import {
   AlertTriangle,
   Building2,
@@ -46,16 +46,16 @@ import {
 } from '../../../shared/config/demoMode.js';
 
 const TIER_OPTIONS = ['Tier 1', 'Tier 2', 'Tier 3'];
-const CRITICALITY_OPTIONS = ['Baja', 'Media', 'Alta', 'Crítica'];
+const CRITICALITY_OPTIONS = ['Baja', 'Media', 'Alta', 'CrÃ­tica'];
 
 const REGION_OPTIONS = [
   'Europa',
-  'África Norte',
-  'África',
+  'Ãfrica Norte',
+  'Ãfrica',
   'Asia',
-  'América',
+  'AmÃ©rica',
   'Global',
-  'Sin región'
+  'Sin regiÃ³n'
 ];
 
 const STATUS_OPTIONS = ['active', 'watchlist', 'inactive'];
@@ -630,7 +630,7 @@ const suppliersPageCss = `
     }
   }
 
-  /* FINAL POLISH — Supplier Portfolio Overview */
+  /* FINAL POLISH â€” Supplier Portfolio Overview */
   .suppliers-grid-two {
     align-items: start !important;
   }
@@ -688,6 +688,121 @@ const suppliersPageCss = `
 
 `;
 
+const MULTINATIONAL_COMPLIANCE_SUPPLIERS = [
+  {
+    ...DEMO_COMPLIANCE_SUPPLIER,
+    id: 'demo-compliance-nordic-cloud',
+    name: 'Nordic Cloud Infrastructure',
+    country: 'Sweden',
+    region: 'Nordics',
+    tier: 'Tier 1',
+    sector: 'Cloud Infrastructure',
+    criticality: 'Critical',
+    spend: 1850000,
+    status: 'active',
+    riskScore: 38,
+    resilienceScore: 86,
+    lastReviewAt: new Date().toISOString()
+  },
+  {
+    ...DEMO_COMPLIANCE_SUPPLIER,
+    id: 'demo-compliance-latam-logistics',
+    name: 'LATAM Logistics Partner',
+    country: 'Mexico',
+    region: 'LATAM',
+    tier: 'Tier 1',
+    sector: 'Logistics',
+    criticality: 'High',
+    spend: 1260000,
+    status: 'under_review',
+    riskScore: 74,
+    resilienceScore: 54,
+    lastReviewAt: new Date().toISOString()
+  },
+  {
+    ...DEMO_COMPLIANCE_SUPPLIER,
+    id: 'demo-compliance-dach-manufacturing',
+    name: 'DACH Manufacturing Supplier',
+    country: 'Germany',
+    region: 'DACH',
+    tier: 'Tier 2',
+    sector: 'Advanced Manufacturing',
+    criticality: 'High',
+    spend: 940000,
+    status: 'active',
+    riskScore: 46,
+    resilienceScore: 78,
+    lastReviewAt: new Date().toISOString()
+  },
+  {
+    ...DEMO_COMPLIANCE_SUPPLIER,
+    id: 'demo-compliance-uk-healthcare',
+    name: 'UK Healthcare Vendor',
+    country: 'United Kingdom',
+    region: 'UK / Ireland',
+    tier: 'Tier 1',
+    sector: 'Healthcare Services',
+    criticality: 'Critical',
+    spend: 2200000,
+    status: 'active',
+    riskScore: 52,
+    resilienceScore: 73,
+    lastReviewAt: new Date().toISOString()
+  },
+  {
+    ...DEMO_COMPLIANCE_SUPPLIER,
+    id: 'demo-compliance-france-energy',
+    name: 'France Energy Contractor',
+    country: 'France',
+    region: 'France / Benelux',
+    tier: 'Tier 2',
+    sector: 'Energy Services',
+    criticality: 'High',
+    spend: 1575000,
+    status: 'under_review',
+    riskScore: 68,
+    resilienceScore: 61,
+    lastReviewAt: new Date().toISOString()
+  },
+  {
+    ...DEMO_COMPLIANCE_SUPPLIER,
+    id: 'demo-compliance-apac-data',
+    name: 'APAC Data Processing Partner',
+    country: 'Singapore',
+    region: 'APAC',
+    tier: 'Tier 1',
+    sector: 'Data Processing',
+    criticality: 'Critical',
+    spend: 2450000,
+    status: 'critical_review',
+    riskScore: 82,
+    resilienceScore: 49,
+    lastReviewAt: new Date().toISOString()
+  }
+];
+
+function getDemoAlertTitle(supplier) {
+  return `${supplier.region} compliance review required`;
+}
+
+function getDemoEvidenceTitle(supplier) {
+  return `${supplier.name} evidence pack`;
+}
+
+function getDemoReviewTitle(supplier) {
+  return `${supplier.name} quarterly compliance review`;
+}
+
+function getDemoSeverity(score) {
+  const parsedScore = Number(score);
+
+  if (!Number.isFinite(parsedScore)) return 'medium';
+  if (parsedScore >= 80) return 'critical';
+  if (parsedScore >= 65) return 'high';
+  if (parsedScore >= 45) return 'medium';
+
+  return 'low';
+}
 function getEmptySupplierForm() {
   return {
     name: '',
@@ -740,7 +855,7 @@ function clampScore(value) {
 }
 
 function formatSpend(value) {
-  return `${Number(value || 0).toLocaleString('es-ES')} € spend`;
+  return `${Number(value || 0).toLocaleString('es-ES')} â‚¬ spend`;
 }
 
 function getRegistrySignal({
@@ -756,7 +871,7 @@ function getRegistrySignal({
       title: 'Supplier registry pending',
       posture: 'Build supplier base',
       description:
-        'Crea el primer proveedor para activar scoring de riesgo, resiliencia, evidencia y priorización ejecutiva.'
+        'Crea el primer proveedor para activar scoring de riesgo, resiliencia, evidencia y priorizaciÃ³n ejecutiva.'
     };
   }
 
@@ -774,7 +889,7 @@ function getRegistrySignal({
       title: 'High-risk suppliers detected',
       posture: 'Prioritize review',
       description:
-        'Hay proveedores de alto riesgo. Conviene activar revisión, evidencias y seguimiento antes de considerar la base controlada.'
+        'Hay proveedores de alto riesgo. Conviene activar revisiÃ³n, evidencias y seguimiento antes de considerar la base controlada.'
     };
   }
 
@@ -803,7 +918,7 @@ function getRegistrySignal({
     title: 'Supplier base needs attention',
     posture: 'Strengthen controls',
     description:
-      'La base existe, pero necesita mayor control documental, revisión de criticidad y mejora de resiliencia.'
+      'La base existe, pero necesita mayor control documental, revisiÃ³n de criticidad y mejora de resiliencia.'
   };
 }
 
@@ -907,8 +1022,8 @@ function SupplierCard({
           <h3 className="suppliers-list-card-title">{supplier.name}</h3>
 
           <p className="muted suppliers-list-meta">
-            {supplier.country || 'Sin país'} · {supplier.region || 'Sin región'} ·{' '}
-            {supplier.tier || 'Tier N/A'} · {supplier.criticality || 'Media'}
+            {supplier.country || 'Sin paÃ­s'} Â· {supplier.region || 'Sin regiÃ³n'} Â·{' '}
+            {supplier.tier || 'Tier N/A'} Â· {supplier.criticality || 'Media'}
           </p>
         </div>
 
@@ -1092,7 +1207,7 @@ export function SuppliersPage() {
     const spendValue = parseSpend(newSupplier.spend);
 
     if (spendValue === null) {
-      pushToast('El spend anual debe ser un número válido');
+      pushToast('El spend anual debe ser un nÃºmero vÃ¡lido');
       return;
     }
 
@@ -1106,8 +1221,8 @@ export function SuppliersPage() {
         createSupplier({
           ...newSupplier,
           name: supplierName,
-          country: normalizeText(newSupplier.country) || 'Sin país',
-          region: newSupplier.region || 'Sin región',
+          country: normalizeText(newSupplier.country) || 'Sin paÃ­s',
+          region: newSupplier.region || 'Sin regiÃ³n',
           tier: newSupplier.tier || 'Tier 1',
           sector: normalizeText(newSupplier.sector) || 'General',
           criticality: newSupplier.criticality || 'Media',
@@ -1137,71 +1252,55 @@ export function SuppliersPage() {
       return;
     }
 
-    const existingSupplier = safeSuppliers.find(
-      (supplier) => supplier.id === DEMO_COMPLIANCE_SUPPLIER.id
-    );
+    MULTINATIONAL_COMPLIANCE_SUPPLIERS.forEach((demoSupplier) => {
+      const existingSupplier = safeSuppliers.find(
+        (supplier) => supplier.id === demoSupplier.id
+      );
 
-    const supplier = existingSupplier || createSupplier(DEMO_COMPLIANCE_SUPPLIER);
+      if (!existingSupplier) {
+        createSupplier(demoSupplier);
+      }
+    });
 
-    const existingAlert = safeAlerts.find(
-      (alert) => alert.id === DEMO_COMPLIANCE_ALERT.id
-    );
+    setQuery('');
+    setActiveSupplierId(MULTINATIONAL_COMPLIANCE_SUPPLIERS[0]?.id || '');
 
-    if (!existingAlert) {
-      createAlert(DEMO_COMPLIANCE_ALERT);
-    }
+    pushToast('Demo Compliance multinacional preparada: 6 proveedores globales');
 
-    const existingEvidence = safeEvidenceItems.find(
-      (evidence) => evidence.id === DEMO_COMPLIANCE_EVIDENCE.id
-    );
-
-    if (!existingEvidence) {
-      addEvidence(DEMO_COMPLIANCE_EVIDENCE);
-    }
-
-    const existingReview = safeReviews.find(
-      (review) => review.id === DEMO_COMPLIANCE_REVIEW.id
-    );
-
-    if (!existingReview) {
-      createReview(DEMO_COMPLIANCE_REVIEW);
-    }
-
-    setActiveSupplierId(supplier.id);
-
-    pushToast('Demo Compliance preparada: Atlas Components Morocco');
-
-    navigate(`/compliance/suppliers/${supplier.id}`);
+    navigate('/compliance/suppliers');
   }
-
   function handleResetDemoCompliance() {
     if (!canResetDemo) {
       pushToast('No tienes permisos para resetear la demo Compliance');
       return;
     }
 
-    const demoExists = safeSuppliers.some(
-      (supplier) => supplier.id === DEMO_COMPLIANCE_SUPPLIER.id
+    const demoSupplierIds = MULTINATIONAL_COMPLIANCE_SUPPLIERS.map(
+      (supplier) => supplier.id
     );
 
-    if (demoExists) {
-      deleteSupplier(DEMO_COMPLIANCE_SUPPLIER.id);
-    }
+    demoSupplierIds.forEach((supplierId) => {
+      const demoExists = safeSuppliers.some(
+        (supplier) => supplier.id === supplierId
+      );
 
-    setQuery('');
+      if (demoExists) {
+        deleteSupplier(supplierId);
+      }
+    });
+
     setNewSupplier(getEmptySupplierForm());
 
     const nextActiveSupplier = safeSuppliers.find(
-      (supplier) => supplier.id !== DEMO_COMPLIANCE_SUPPLIER.id
+      (supplier) => !demoSupplierIds.includes(supplier.id)
     );
 
     setActiveSupplierId(nextActiveSupplier?.id || '');
 
-    pushToast('Compliance demo limpiado');
+    pushToast('Compliance demo multinacional limpiada');
 
     navigate('/compliance/suppliers');
   }
-
   function handleOpenSupplier(supplierId) {
     setActiveSupplierId(supplierId);
     navigate(`/compliance/suppliers/${supplierId}`);
@@ -1244,19 +1343,19 @@ export function SuppliersPage() {
             <div>
               <div className="suppliers-badge-row">
                 <Badge>Compliance & Risk</Badge>
-                <Badge>Supplier Registry</Badge>
+                <Badge>Global Third-Party Registry</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                {canCreateSupplier ? <Badge>Creación permitida</Badge> : null}
-                {canDeleteSupplier ? <Badge>Eliminación permitida</Badge> : null}
+                {canCreateSupplier ? <Badge>CreaciÃ³n permitida</Badge> : null}
+                {canDeleteSupplier ? <Badge>EliminaciÃ³n permitida</Badge> : null}
               </div>
 
               <h1 className="suppliers-title">
-                Supplier Registry.
-                <span>Map risk across your vendor base.</span>
+                Global Compliance Control.
+                <span>Map cross-border supplier risk.</span>
               </h1>
 
               <p className="suppliers-copy">
-                Registro centralizado de proveedores con segmentación, criticidad,
+                Registro centralizado de proveedores con segmentaciÃ³n, criticidad,
                 spend, scoring de riesgo, resiliencia operativa y continuidad
                 hacia alertas, evidencias y revisiones humanas.
               </p>
@@ -1317,7 +1416,7 @@ export function SuppliersPage() {
                   >
                     <div className="suppliers-score-core">
                       <strong className={registrySignal.score === null ? 'is-empty-score' : ''}>
-                        {registrySignal.score === null ? '—' : registrySignal.score}
+                        {registrySignal.score === null ? 'â€”' : registrySignal.score}
                       </strong>
                     </div>
                   </div>
@@ -1348,7 +1447,7 @@ export function SuppliersPage() {
               kicker="Create supplier"
               icon={Plus}
               title="Nuevo proveedor"
-              description="Añade un proveedor al registro para activar scoring, evidencias, alertas y revisiones."
+              description="AÃ±ade un proveedor al registro para activar scoring, evidencias, alertas y revisiones."
             />
 
             {canCreateSupplier ? (
@@ -1361,7 +1460,7 @@ export function SuppliersPage() {
 
                 <div className="grid-2">
                   <Input
-                    label="País"
+                    label="PaÃ­s"
                     value={newSupplier.country}
                     onChange={(e) =>
                       updateNewSupplierField('country', e.target.value)
@@ -1369,7 +1468,7 @@ export function SuppliersPage() {
                   />
 
                   <Select
-                    label="Región"
+                    label="RegiÃ³n"
                     value={newSupplier.region}
                     onChange={(e) =>
                       updateNewSupplierField('region', e.target.value)
@@ -1406,7 +1505,7 @@ export function SuppliersPage() {
                   />
 
                   <Input
-                    label="Spend anual (€)"
+                    label="Spend anual (â‚¬)"
                     inputMode="decimal"
                     value={newSupplier.spend}
                     onChange={(e) =>
@@ -1432,7 +1531,7 @@ export function SuppliersPage() {
             ) : (
               <div className="suppliers-empty-wrap">
                 <EmptyState
-                  title="Sin permisos de creación"
+                  title="Sin permisos de creaciÃ³n"
                   description="Tu rol actual solo permite consultar proveedores."
                 />
               </div>
@@ -1444,7 +1543,7 @@ export function SuppliersPage() {
               kicker="Portfolio overview"
               icon={Gauge}
               title="Portfolio Overview"
-              description="Lectura rápida del riesgo agregado, resiliencia, proveedores críticos y cobertura documental."
+              description="Lectura rÃ¡pida del riesgo agregado, resiliencia, proveedores crÃ­ticos y cobertura documental."
             />
 
             <div className="suppliers-grid suppliers-grid-kpis">
@@ -1466,7 +1565,7 @@ export function SuppliersPage() {
               <KpiCard
                 label="Alto riesgo"
                 value={highRiskSuppliers.length}
-                description="Proveedores que requieren revisión"
+                description="Proveedores que requieren revisiÃ³n"
                 icon={AlertTriangle}
                 tone={highRiskSuppliers.length > 0 ? 'text-danger' : ''}
               />
@@ -1480,8 +1579,8 @@ export function SuppliersPage() {
             </div>
 
             <p className="muted suppliers-muted-tight">
-              Esta vista permite controlar qué proveedores requieren revisión
-              prioritaria antes de pasar al módulo de evidencias, alertas y
+              Esta vista permite controlar quÃ© proveedores requieren revisiÃ³n
+              prioritaria antes de pasar al mÃ³dulo de evidencias, alertas y
               reportes.
             </p>
           </Card>
@@ -1491,8 +1590,8 @@ export function SuppliersPage() {
           <SectionHeader
             kicker="Supplier list"
             icon={Layers3}
-            title="Supplier List"
-            description="Selecciona un proveedor para revisar su ficha, alertas, evidencias y scoring."
+            title="Global Supplier List"
+            description="Selecciona un proveedor global para revisar jurisdicción, riesgo, alertas, evidencias y scoring."
             right={
               <div className="suppliers-search-shell">
                 <Input
@@ -1509,7 +1608,7 @@ export function SuppliersPage() {
               <div className="suppliers-empty-wrap">
                 <EmptyState
                   title="No hay proveedores"
-                  description="Crea un proveedor o cambia el filtro de búsqueda."
+                  description="Crea un proveedor o cambia el filtro de bÃºsqueda."
                 />
               </div>
             ) : (
@@ -1546,7 +1645,7 @@ export function SuppliersPage() {
             <KpiCard
               label="Alertas"
               value={safeAlerts.length}
-              description="Señales asociadas al portfolio"
+              description="SeÃ±ales asociadas al portfolio"
               icon={AlertTriangle}
             />
 
@@ -1581,3 +1680,4 @@ export function SuppliersPage() {
     </div>
   );
 }
+
