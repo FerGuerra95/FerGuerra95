@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -622,6 +622,79 @@ const complianceDashboardCss = `
       text-align: left;
     }
   }
+
+  /* FINAL FIX — Compliance Dashboard right signal card clipping */
+  .compliance-hero,
+  .compliance-dashboard-hero,
+  .compliance-hero-layout,
+  .compliance-dashboard-hero-layout {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .compliance-hero,
+  .compliance-dashboard-hero {
+    padding-bottom: 46px !important;
+  }
+
+  .compliance-hero-layout,
+  .compliance-dashboard-hero-layout {
+    align-items: stretch !important;
+  }
+
+  .compliance-signal-card,
+  .compliance-dashboard-signal-card,
+  .compliance-signal-inner,
+  .compliance-dashboard-signal-inner {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .compliance-signal-card,
+  .compliance-dashboard-signal-card {
+    align-self: stretch !important;
+    padding-bottom: 28px !important;
+  }
+
+  .compliance-signal-inner,
+  .compliance-dashboard-signal-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    justify-content: flex-start !important;
+  }
+
+  .compliance-signal-table,
+  .compliance-dashboard-signal-table {
+    display: grid !important;
+    gap: 12px !important;
+    margin-top: 4px !important;
+    overflow: visible !important;
+  }
+
+  .compliance-signal-row,
+  .compliance-dashboard-signal-row {
+    min-height: 34px !important;
+    overflow: visible !important;
+  }
+
+  .compliance-signal-row strong,
+  .compliance-dashboard-signal-row strong {
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  @media (max-width: 1180px) {
+    .compliance-hero-layout,
+    .compliance-dashboard-hero-layout {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
 `;
 
 function getDashboardValue(cards, index, fallback) {
@@ -648,7 +721,7 @@ function getComplianceSignal({ suppliers, riskScore, openAlerts, evidenceCoverag
       title: 'Compliance workspace pending',
       posture: 'Build supplier base',
       description:
-        'Añade proveedores, evidencias y revisiones para activar una lectura ejecutiva de riesgo de cadena de suministro.'
+        'AÃ±ade proveedores, evidencias y revisiones para activar una lectura ejecutiva de riesgo de cadena de suministro.'
     };
   }
 
@@ -658,7 +731,7 @@ function getComplianceSignal({ suppliers, riskScore, openAlerts, evidenceCoverag
       title: 'High-risk compliance exposure',
       posture: 'Prioritize remediation',
       description:
-        'Hay señales relevantes de riesgo y alertas abiertas. Conviene priorizar revisión humana, evidencias y plan de mitigación.'
+        'Hay seÃ±ales relevantes de riesgo y alertas abiertas. Conviene priorizar revisiÃ³n humana, evidencias y plan de mitigaciÃ³n.'
     };
   }
 
@@ -687,7 +760,7 @@ function getComplianceSignal({ suppliers, riskScore, openAlerts, evidenceCoverag
     title: 'Compliance baseline established',
     posture: 'Improve evidence',
     description:
-      'Existe una base de proveedores, pero conviene reforzar cobertura documental y revisiones periódicas.'
+      'Existe una base de proveedores, pero conviene reforzar cobertura documental y revisiones periÃ³dicas.'
   };
 }
 
@@ -822,7 +895,7 @@ function SupplierRiskCard({ supplier }) {
           <h3 className="compliance-list-card-title">{supplier.name}</h3>
 
           <p className="muted compliance-muted-tight" style={{ marginTop: 8 }}>
-            {supplier.country || 'País N/A'} · {supplier.tier || 'Tier N/A'} ·{' '}
+            {supplier.country || 'PaÃ­s N/A'} Â· {supplier.tier || 'Tier N/A'} Â·{' '}
             {supplier.criticality || 'Criticality N/A'}
           </p>
         </div>
@@ -844,7 +917,7 @@ function AlertCard({ alert }) {
           <h3 className="compliance-list-card-title">{alert.title}</h3>
 
           <p className="muted compliance-muted-tight" style={{ marginTop: 8 }}>
-            {alert.category || 'Categoría N/A'} · {alert.source || 'Fuente N/A'}
+            {alert.category || 'CategorÃ­a N/A'} Â· {alert.source || 'Fuente N/A'}
           </p>
         </div>
 
@@ -853,7 +926,7 @@ function AlertCard({ alert }) {
 
       <div className="compliance-alert-body">
         <p className="muted compliance-muted-tight">
-          {alert.description || 'Sin descripción registrada.'}
+          {alert.description || 'Sin descripciÃ³n registrada.'}
         </p>
       </div>
     </article>
@@ -980,7 +1053,7 @@ export function ComplianceDashboardPage() {
                   >
                     <div className="compliance-score-core">
                       <strong className={complianceSignal.score === null ? 'is-empty-score' : ''}>
-                        {complianceSignal.score === null ? '—' : complianceSignal.score}
+                        {complianceSignal.score === null ? 'â€”' : complianceSignal.score}
                       </strong>
                     </div>
                   </div>
@@ -1049,14 +1122,14 @@ export function ComplianceDashboardPage() {
             kicker="Control loop"
             icon={ClipboardCheck}
             title="Monitor, evidence, review and remediate"
-            description="CEO’s OS organiza el control de compliance en una secuencia clara para detectar riesgo, documentar evidencias y activar revisión humana."
+            description="CEOâ€™s OS organiza el control de compliance en una secuencia clara para detectar riesgo, documentar evidencias y activar revisiÃ³n humana."
           />
 
           <div className="compliance-bridge-grid">
             <BridgeStep
               number="01"
               title="Monitor"
-              text="Centraliza proveedores, criticidad, país, tier y señales principales."
+              text="Centraliza proveedores, criticidad, paÃ­s, tier y seÃ±ales principales."
             />
 
             <BridgeStep
@@ -1074,7 +1147,7 @@ export function ComplianceDashboardPage() {
             <BridgeStep
               number="04"
               title="Review"
-              text="Activa revisión humana para cerrar riesgos y mantener trazabilidad."
+              text="Activa revisiÃ³n humana para cerrar riesgos y mantener trazabilidad."
             />
           </div>
         </section>
@@ -1085,7 +1158,7 @@ export function ComplianceDashboardPage() {
               kicker="Risk ranking"
               icon={Gauge}
               title="Top proveedores por riesgo"
-              description="Proveedores priorizados por exposición, criticidad y score agregado."
+              description="Proveedores priorizados por exposiciÃ³n, criticidad y score agregado."
             />
 
             <div className="compliance-list">
@@ -1093,7 +1166,7 @@ export function ComplianceDashboardPage() {
                 <EmptyBlock
                   icon={Globe2}
                   title="No hay proveedores registrados"
-                  description="Añade proveedores para generar ranking de riesgo y priorización ejecutiva."
+                  description="AÃ±ade proveedores para generar ranking de riesgo y priorizaciÃ³n ejecutiva."
                 />
               ) : (
                 topRiskSuppliers.map((supplier) => (
@@ -1107,8 +1180,8 @@ export function ComplianceDashboardPage() {
             <PanelHeader
               kicker="Alert stream"
               icon={ShieldAlert}
-              title="Últimas alertas"
-              description="Alertas recientes para revisión, mitigación o seguimiento documental."
+              title="Ãšltimas alertas"
+              description="Alertas recientes para revisiÃ³n, mitigaciÃ³n o seguimiento documental."
             />
 
             <div className="compliance-list">
@@ -1116,7 +1189,7 @@ export function ComplianceDashboardPage() {
                 <EmptyBlock
                   icon={CheckCircle2}
                   title="No hay alertas registradas"
-                  description="Cuando existan alertas, aparecerán aquí ordenadas para revisión ejecutiva."
+                  description="Cuando existan alertas, aparecerÃ¡n aquÃ­ ordenadas para revisiÃ³n ejecutiva."
                 />
               ) : (
                 latestAlerts.map((alert) => (
@@ -1154,7 +1227,7 @@ export function ComplianceDashboardPage() {
               icon={AlertTriangle}
               label="Alertas totales"
               value={safeAlerts.length}
-              helper="Histórico de señales"
+              helper="HistÃ³rico de seÃ±ales"
             />
 
             <DashboardMetric

@@ -686,6 +686,38 @@ const suppliersPageCss = `
     }
   }
 
+
+  /* FINAL FIX - suppliers overflow protection */
+  .suppliers-page,
+  .suppliers-list-panel,
+  .suppliers-list,
+  .suppliers-grid,
+  .suppliers-grid-kpis {
+    overflow: visible !important;
+    align-items: start !important;
+  }
+
+  .suppliers-list-card,
+  .suppliers-kpi-card,
+  .suppliers-panel {
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: hidden !important;
+  }
+
+  .suppliers-list-meta,
+  .suppliers-score-box strong,
+  .suppliers-kpi-value,
+  .suppliers-chip-row,
+  .suppliers-panel-description {
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  .suppliers-actions {
+    flex-wrap: wrap !important;
+  }
 `;
 
 const MULTINATIONAL_COMPLIANCE_SUPPLIERS = [
@@ -855,9 +887,49 @@ function clampScore(value) {
 }
 
 function formatSpend(value) {
-  return `${Number(value || 0).toLocaleString('es-ES')} â‚¬ spend`;
-}
+  if (value === null || value === undefined || value === '') {
+    return 'N/A';
+  }
 
+  if (typeof value === 'function') {
+    return 'N/A';
+  }
+
+  if (typeof value === 'object') {
+    return 'N/A';
+  }
+
+  const raw = String(value).trim();
+
+  if (
+    raw.length > 60 ||
+    raw.includes('function ') ||
+    raw.includes('=>') ||
+    raw.includes('const ') ||
+    raw.includes('return ') ||
+    raw.includes('[object Object]')
+  ) {
+    return 'N/A';
+  }
+
+  const normalized = raw
+    .replace(/\s/g, '')
+    .replace(/\./g, '')
+    .replace(/,/g, '.')
+    .replace(/[^\d.-]/g, '');
+
+  const parsed = Number(normalized);
+
+  if (!Number.isFinite(parsed)) {
+    return 'N/A';
+  }
+
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0
+  }).format(parsed);
+}
 function getRegistrySignal({
   supplierCount,
   averageRiskScore,
@@ -1680,4 +1752,5 @@ export function SuppliersPage() {
     </div>
   );
 }
+
 
