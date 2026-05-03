@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Eye, EyeOff, Lock, LogIn, ShieldCheck } from 'lucide-react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../../shared/components/ui/Button.jsx';
@@ -22,7 +22,7 @@ function resolveRedirectPath(location) {
   const from = location.state?.from?.pathname;
 
   if (!from || from === '/login') {
-    return '/ma/dashboard';
+    return '/overview';
   }
 
   return from;
@@ -65,7 +65,7 @@ export function LoginPage() {
     const password = String(form.password || '').trim();
 
     if (!email || !password) {
-      setError('Introduce email y contraseña.');
+      setError('Introduce email y contraseÃ±a.');
       return;
     }
 
@@ -79,13 +79,13 @@ export function LoginPage() {
       });
 
       if (!result?.ok) {
-        setError(result?.message || 'Email o contraseña incorrectos.');
+        setError(result?.message || 'Email o contraseÃ±a incorrectos.');
         return;
       }
 
       navigate(from, { replace: true });
     } catch {
-      setError('No se pudo iniciar sesión.');
+      setError('No se pudo iniciar sesiÃ³n.');
     } finally {
       setIsSubmitting(false);
     }
@@ -106,7 +106,7 @@ export function LoginPage() {
           color: '#e8edf7'
         }}
       >
-        Cargando sesión...
+        Cargando sesiÃ³n...
       </div>
     );
   }
@@ -158,7 +158,7 @@ export function LoginPage() {
           </h1>
 
           <p className="muted" style={{ marginTop: 10 }}>
-            Inicia sesión para acceder al workspace de M&A, Compliance y Funding.
+            Inicia sesiÃ³n para acceder al workspace de M&A, Compliance y Funding.
           </p>
         </div>
 
@@ -176,7 +176,7 @@ export function LoginPage() {
           </div>
 
           <div className="field">
-            <label>Contraseña</label>
+            <label>ContraseÃ±a</label>
 
             <div
               style={{
@@ -201,10 +201,10 @@ export function LoginPage() {
                 type="button"
                 onClick={togglePasswordVisibility}
                 aria-label={
-                  showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
+                  showPassword ? 'Ocultar contraseÃ±a' : 'Mostrar contraseÃ±a'
                 }
                 title={
-                  showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
+                  showPassword ? 'Ocultar contraseÃ±a' : 'Mostrar contraseÃ±a'
                 }
                 disabled={isSubmitting}
                 style={{
@@ -261,7 +261,7 @@ export function LoginPage() {
               <div>
                 <strong>Credenciales demo</strong>
                 <p className="muted" style={{ marginBottom: 0 }}>
-                  admin@ceoos.local · admin123
+                  admin@ceoos.local Â· admin123
                 </p>
               </div>
             </div>
