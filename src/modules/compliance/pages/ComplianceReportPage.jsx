@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import {
   Activity,
   Archive,
@@ -523,6 +523,229 @@ const complianceReportCss = `
     margin-bottom: 0;
   }
 
+
+  /* MULTINATIONAL PREMIUM REPORTING */
+  .report-multinational-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .report-premium-panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 30px;
+    padding: 29px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background:
+      radial-gradient(circle at 5% 0%, rgba(37, 99, 235, 0.24), transparent 32%),
+      radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.12), transparent 28%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.96), rgba(15, 23, 42, 0.92));
+    box-shadow:
+      0 26px 90px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  }
+
+  .report-premium-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 46px 46px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent 88%);
+    pointer-events: none;
+  }
+
+  .report-premium-panel > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .report-premium-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 22px;
+  }
+
+  .report-premium-header h2,
+  .report-premium-header h3 {
+    margin: 0;
+    letter-spacing: -0.045em;
+  }
+
+  .report-premium-header p {
+    max-width: 760px;
+    margin: 10px 0 0;
+    line-height: 1.62;
+  }
+
+  .report-premium-icon {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 auto;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    color: #bfdbfe;
+    background: rgba(37, 99, 235, 0.16);
+    border: 1px solid rgba(96, 165, 250, 0.24);
+  }
+
+  .report-premium-row-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+  }
+
+  .report-premium-row {
+    min-width: 0;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.085);
+  }
+
+  .report-premium-row span {
+    display: block;
+    margin-bottom: 7px;
+    color: rgba(148, 163, 184, 0.96);
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .report-premium-row strong {
+    display: block;
+    color: rgba(248, 250, 252, 0.96);
+    font-size: 20px;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
+  }
+
+  .report-premium-memo {
+    padding: 21px;
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.12), transparent 30%),
+      rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.085);
+  }
+
+  .report-premium-decision {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    color: #bbf7d0;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.24);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .report-premium-decision.watch {
+    color: #fde68a;
+    background: rgba(234, 179, 8, 0.12);
+    border-color: rgba(234, 179, 8, 0.24);
+  }
+
+  .report-premium-decision.hold {
+    color: #fecaca;
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.24);
+  }
+
+  .report-premium-memo h3 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: -0.045em;
+  }
+
+  .report-premium-memo p {
+    margin: 10px 0 0;
+    line-height: 1.66;
+  }
+
+  .report-premium-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .report-premium-item {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 13px;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.085);
+  }
+
+  .report-premium-item-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    color: #bfdbfe;
+    background: rgba(37, 99, 235, 0.14);
+    border: 1px solid rgba(96, 165, 250, 0.22);
+  }
+
+  .report-premium-item.is-danger .report-premium-item-icon {
+    color: #fecaca;
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.22);
+  }
+
+  .report-premium-item.is-watch .report-premium-item-icon {
+    color: #fde68a;
+    background: rgba(234, 179, 8, 0.12);
+    border-color: rgba(234, 179, 8, 0.22);
+  }
+
+  .report-premium-item strong {
+    display: block;
+    margin-bottom: 6px;
+    line-height: 1.25;
+  }
+
+  .report-premium-item p {
+    margin: 0;
+    line-height: 1.56;
+  }
+
+  @media (max-width: 1180px) {
+    .report-multinational-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .report-premium-panel {
+      padding: 24px;
+      border-radius: 24px;
+    }
+
+    .report-premium-row-grid,
+    .report-premium-item {
+      grid-template-columns: 1fr;
+    }
+  }
   @media (max-width: 1180px) {
     .report-hero-layout,
     .report-grid-two {
@@ -854,6 +1077,190 @@ function ReportCard({ report, canCreateReport, onExport, onOpenSupplier }) {
   );
 }
 
+
+function ReportPremiumPanel({ kicker, icon: Icon, title, description, children }) {
+  return (
+    <section className="report-premium-panel">
+      <div className="report-premium-header">
+        <div>
+          <div className="report-kicker">
+            <Icon size={14} />
+            {kicker}
+          </div>
+
+          <h2>{title}</h2>
+          <p className="muted">{description}</p>
+        </div>
+
+        <div className="report-premium-icon">
+          <Icon size={18} />
+        </div>
+      </div>
+
+      {children}
+    </section>
+  );
+}
+
+function PremiumReportRow({ label, value }) {
+  return (
+    <div className="report-premium-row">
+      <span>{label}</span>
+      <strong>{value || 'N/A'}</strong>
+    </div>
+  );
+}
+
+function PremiumReportMemo({ memo }) {
+  return (
+    <div className="report-premium-memo">
+      <span className={`report-premium-decision ${memo.tone}`.trim()}>
+        <ShieldCheck size={13} />
+        {memo.decision}
+      </span>
+
+      <h3>{memo.title}</h3>
+      <p className="muted">{memo.summary}</p>
+    </div>
+  );
+}
+
+function PremiumReportItem({ title, description, tone = '' }) {
+  return (
+    <div className={`report-premium-item ${tone ? `is-${tone}` : ''}`.trim()}>
+      <div className="report-premium-item-icon">
+        <ClipboardCheck size={15} />
+      </div>
+
+      <div>
+        <strong>{title}</strong>
+        <p className="muted">{description}</p>
+      </div>
+    </div>
+  );
+}
+
+function formatPremiumReportSpend(value) {
+  const parsed = Number(value || 0);
+
+  if (!Number.isFinite(parsed)) return 'N/A';
+
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0
+  }).format(parsed);
+}
+
+function buildMultinationalCompliancePack({
+  activeSupplier,
+  suppliers,
+  reports,
+  reportItems,
+  supplierReports,
+  reportSignal
+}) {
+  const safeSuppliers = Array.isArray(suppliers) ? suppliers : [];
+  const safeReports = Array.isArray(reports) ? reports : [];
+  const safeReportItems = Array.isArray(reportItems) ? reportItems : [];
+  const safeSupplierReports = Array.isArray(supplierReports) ? supplierReports : [];
+
+  const highRiskSuppliers = safeSuppliers.filter((supplier) => {
+    const score = Number(supplier?.riskScore || 0);
+    return score >= 70;
+  });
+
+  const crossBorderSuppliers = safeSuppliers.filter((supplier) => {
+    return Boolean(supplier?.country && supplier.country !== 'Sin pais');
+  });
+
+  const totalSpend = safeSuppliers.reduce((total, supplier) => {
+    return total + Number(supplier?.spend || 0);
+  }, 0);
+
+  const activeRiskScore = Number(activeSupplier?.riskScore || 0);
+  const activeResilienceScore = Number(activeSupplier?.resilienceScore || 0);
+
+  const decisionTone =
+    activeRiskScore >= 75 ? 'hold' : activeRiskScore >= 55 ? 'watch' : '';
+
+  const decision =
+    activeRiskScore >= 75
+      ? 'Hold external circulation'
+      : activeRiskScore >= 55
+        ? 'Proceed with validation'
+        : 'Controlled reporting posture';
+
+  const memoTitle =
+    activeRiskScore >= 75
+      ? 'High-exposure supplier report'
+      : activeRiskScore >= 55
+        ? 'Supplier report requires validation'
+        : 'Supplier report ready for executive review';
+
+  const memoSummary =
+    activeRiskScore >= 75
+      ? 'El proveedor activo presenta exposicion elevada. Antes de circular conclusiones, exige revision humana, evidencias suficientes, mitigantes y validacion documental.'
+      : activeRiskScore >= 55
+        ? 'El proveedor puede incorporarse a un reporte ejecutivo, pero requiere validacion de evidencias, alertas abiertas y trazabilidad de revision antes de elevarlo a comite.'
+        : 'El proveedor muestra una postura razonablemente controlada para reporte ejecutivo, manteniendo revision humana y soporte documental antes de decisiones formales.';
+
+  const redFlags = [
+    {
+      title: highRiskSuppliers.length > 0 ? 'High-risk supplier exposure' : 'Risk concentration monitored',
+      description:
+        highRiskSuppliers.length > 0
+          ? `${highRiskSuppliers.length} proveedor(es) superan el umbral de riesgo alto. Prioriza revision humana y mitigantes.`
+          : 'No se detecta una concentracion critica de proveedores de alto riesgo en la cartera actual.',
+      tone: highRiskSuppliers.length > 0 ? 'danger' : ''
+    },
+    {
+      title: safeReportItems.length === 0 ? 'Evidence gap' : 'Evidence coverage available',
+      description:
+        safeReportItems.length === 0
+          ? 'El informe necesita alertas, evidencias o revisiones vinculadas para ser defendible.'
+          : `${safeReportItems.length} elemento(s) alimentan el informe actual entre alertas, evidencias y revisiones.`,
+      tone: safeReportItems.length === 0 ? 'watch' : ''
+    },
+    {
+      title: safeSupplierReports.length === 0 ? 'No stored report history' : 'Report history retained',
+      description:
+        safeSupplierReports.length === 0
+          ? 'Todavia no existe historial de informes generados para el proveedor activo.'
+          : `${safeSupplierReports.length} informe(s) generados para el proveedor activo.`,
+      tone: safeSupplierReports.length === 0 ? 'watch' : ''
+    }
+  ];
+
+  return {
+    jurisdictionRows: [
+      ['Active supplier', activeSupplier?.name || 'Sin proveedor'],
+      ['Country', activeSupplier?.country || 'Sin pais'],
+      ['Region', activeSupplier?.region || 'Sin region'],
+      ['Tier', activeSupplier?.tier || 'Tier N/A'],
+      ['Criticality', activeSupplier?.criticality || 'Media'],
+      ['Portfolio suppliers', safeSuppliers.length],
+      ['Cross-border suppliers', crossBorderSuppliers.length],
+      ['Annual spend base', formatPremiumReportSpend(totalSpend)]
+    ],
+    controlRows: [
+      ['Risk score', activeSupplier ? `${activeRiskScore}/100` : 'N/A'],
+      ['Resilience score', activeSupplier ? `${activeResilienceScore}/100` : 'N/A'],
+      ['Report posture', reportSignal?.posture || 'N/A'],
+      ['Generated reports', safeReports.length],
+      ['Supplier reports', safeSupplierReports.length],
+      ['Report items', safeReportItems.length]
+    ],
+    memo: {
+      decision,
+      tone: decisionTone,
+      title: memoTitle,
+      summary: memoSummary
+    },
+    redFlags
+  };
+}
+
 export function ComplianceReportPage() {
   const navigate = useNavigate();
   const { pushToast } = useNotifications();
@@ -1022,6 +1429,14 @@ export function ComplianceReportPage() {
     complianceReportsApi.exportReport(enrichedReport);
   }
 
+  const multinationalPack = buildMultinationalCompliancePack({
+    activeSupplier: engine.activeSupplier,
+    suppliers: safeSuppliers,
+    reports: safeReports,
+    reportItems,
+    supplierReports,
+    reportSignal
+  });
   return (
     <div className="page">
       <style>{complianceReportCss}</style>
@@ -1170,6 +1585,62 @@ export function ComplianceReportPage() {
           </div>
         </section>
 
+        <section className="report-multinational-grid">
+          <ReportPremiumPanel
+            kicker="Multinational reporting"
+            icon={FileText}
+            title="Board Compliance Pack"
+            description="Vista ejecutiva multinacional para convertir riesgo, evidencias y revisiones humanas en una decision defendible."
+          >
+            <div className="report-premium-row-grid">
+              {multinationalPack.controlRows.map(([label, value]) => (
+                <PremiumReportRow key={label} label={label} value={value} />
+              ))}
+            </div>
+          </ReportPremiumPanel>
+
+          <ReportPremiumPanel
+            kicker="Committee posture"
+            icon={Sparkles}
+            title="Executive Decision Memo"
+            description="Lectura tipo comite sobre si el informe puede circular, requiere validacion o debe quedar bloqueado."
+          >
+            <PremiumReportMemo memo={multinationalPack.memo} />
+          </ReportPremiumPanel>
+        </section>
+
+        <section className="report-multinational-grid">
+          <ReportPremiumPanel
+            kicker="Jurisdiction exposure"
+            icon={Archive}
+            title="Jurisdiction & Supplier Exposure"
+            description="Resumen del proveedor activo y de la cartera para contexto multinacional."
+          >
+            <div className="report-premium-row-grid">
+              {multinationalPack.jurisdictionRows.map(([label, value]) => (
+                <PremiumReportRow key={label} label={label} value={value} />
+              ))}
+            </div>
+          </ReportPremiumPanel>
+
+          <ReportPremiumPanel
+            kicker="Red flags"
+            icon={ClipboardCheck}
+            title="Red Flags & Mitigants"
+            description="Riesgos principales del informe y acciones previas antes de circular conclusiones."
+          >
+            <div className="report-premium-list">
+              {multinationalPack.redFlags.map((item, index) => (
+                <PremiumReportItem
+                  key={`${item.title}-${index}`}
+                  title={item.title}
+                  description={item.description}
+                  tone={item.tone}
+                />
+              ))}
+            </div>
+          </ReportPremiumPanel>
+        </section>
         <section className="report-grid report-grid-two">
           <Card className="report-panel">
             <PanelHeader

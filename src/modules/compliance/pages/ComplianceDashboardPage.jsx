@@ -18,20 +18,31 @@ import { useComplianceStore } from '../store/complianceStore.js';
 import { useComplianceEngine } from '../engine/useComplianceEngine.js';
 
 const complianceDashboardCss = `
+  .compliance-page,
+  .compliance-page * {
+    box-sizing: border-box;
+  }
+
   .compliance-page {
-    width: min(1540px, 100%);
+    width: min(1360px, 100%);
+    max-width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 38px;
+    gap: 34px;
+    overflow: visible;
   }
 
   .compliance-hero {
     position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 580px;
     overflow: hidden;
-    min-height: 520px;
-    border-radius: 38px;
-    padding: 44px;
+    border-radius: 34px;
+    padding: 42px 56px 72px 42px;
+    margin-bottom: 34px;
     border: 1px solid rgba(148, 163, 184, 0.18);
     background:
       radial-gradient(circle at 8% 2%, rgba(37, 99, 235, 0.36), transparent 30%),
@@ -39,7 +50,7 @@ const complianceDashboardCss = `
       radial-gradient(circle at 60% 110%, rgba(245, 158, 11, 0.10), transparent 30%),
       linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97));
     box-shadow:
-      0 38px 120px rgba(0, 0, 0, 0.42),
+      0 34px 100px rgba(0, 0, 0, 0.38),
       inset 0 1px 0 rgba(255, 255, 255, 0.055);
   }
 
@@ -48,8 +59,8 @@ const complianceDashboardCss = `
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      linear-gradient(rgba(255,255,255,0.033) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.033) 1px, transparent 1px);
     background-size: 50px 50px;
     mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 82%);
     pointer-events: none;
@@ -58,9 +69,10 @@ const complianceDashboardCss = `
   .compliance-hero::after {
     content: "";
     position: absolute;
-    inset: auto -190px -210px auto;
-    width: 520px;
-    height: 520px;
+    right: -160px;
+    bottom: -210px;
+    width: 500px;
+    height: 500px;
     border-radius: 999px;
     background: radial-gradient(circle, rgba(16, 185, 129, 0.13), transparent 70%);
     pointer-events: none;
@@ -69,15 +81,21 @@ const complianceDashboardCss = `
   .compliance-hero-layout {
     position: relative;
     z-index: 1;
-    min-height: 430px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 490px;
     display: grid;
-    grid-template-columns: minmax(0, 1.08fr) minmax(390px, 0.92fr);
-    gap: 38px;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+    gap: 42px;
     align-items: center;
   }
 
   .compliance-hero-main {
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .compliance-badge-row {
@@ -85,15 +103,16 @@ const complianceDashboardCss = `
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
-    margin-bottom: 26px;
+    margin-bottom: 24px;
   }
 
   .compliance-title {
     margin: 0;
-    max-width: 980px;
-    font-size: clamp(40px, 4.6vw, 66px);
-    line-height: 0.94;
-    letter-spacing: -0.072em;
+    max-width: 720px;
+    font-size: clamp(36px, 3.55vw, 56px);
+    line-height: 1.02;
+    letter-spacing: -0.06em;
+    overflow-wrap: normal;
   }
 
   .compliance-title span {
@@ -103,28 +122,30 @@ const complianceDashboardCss = `
   }
 
   .compliance-copy {
-    max-width: 850px;
-    margin: 28px 0 0;
-    font-size: 17px;
-    line-height: 1.82;
+    max-width: 720px;
+    margin: 24px 0 0;
+    font-size: 16px;
+    line-height: 1.72;
     color: rgba(203, 213, 225, 0.86);
   }
 
   .compliance-command-bar {
+    width: min(720px, 100%);
+    max-width: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
-    margin-top: 34px;
-    padding-top: 28px;
+    margin-top: 30px;
+    padding-top: 24px;
     border-top: 1px solid rgba(148, 163, 184, 0.16);
   }
 
   .compliance-command-item {
-    padding: 18px;
+    min-width: 0;
+    padding: 17px;
     border-radius: 22px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.078);
-    min-width: 0;
   }
 
   .compliance-command-item strong {
@@ -137,26 +158,30 @@ const complianceDashboardCss = `
   .compliance-signal-card {
     position: relative;
     width: 100%;
-    max-width: 460px;
+    max-width: 360px;
+    min-width: 0;
     justify-self: end;
     align-self: center;
-    border-radius: 32px;
-    padding: 26px;
+    margin-right: 18px;
+    margin-top: 0;
+    border-radius: 30px;
+    padding: 24px;
     background:
       linear-gradient(135deg, rgba(255,255,255,0.086), rgba(255,255,255,0.026)),
       rgba(15, 23, 42, 0.76);
     border: 1px solid rgba(148, 163, 184, 0.2);
     backdrop-filter: blur(22px);
     box-shadow:
-      0 26px 70px rgba(0, 0, 0, 0.24),
+      0 24px 64px rgba(0, 0, 0, 0.24),
       inset 0 1px 0 rgba(255,255,255,0.05);
+    overflow: hidden;
   }
 
   .compliance-signal-card::before {
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: 32px;
+    border-radius: 30px;
     background: radial-gradient(circle at 18% 0%, rgba(96, 165, 250, 0.13), transparent 35%);
     pointer-events: none;
   }
@@ -164,10 +189,12 @@ const complianceDashboardCss = `
   .compliance-signal-inner {
     position: relative;
     z-index: 1;
+    min-width: 0;
+    height: auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    min-width: 0;
+    gap: 19px;
+    justify-content: flex-start;
   }
 
   .compliance-signal-top {
@@ -201,25 +228,25 @@ const complianceDashboardCss = `
 
   .compliance-signal-title {
     margin-top: 10px;
-    font-size: 23px;
+    font-size: 22px;
     line-height: 1.16;
     letter-spacing: -0.04em;
   }
 
   .compliance-score-module {
     display: grid;
-    grid-template-columns: 104px minmax(0, 1fr);
-    gap: 18px;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 16px;
     align-items: center;
-    padding: 18px;
-    border-radius: 26px;
+    padding: 17px;
+    border-radius: 25px;
     background: rgba(255, 255, 255, 0.047);
     border: 1px solid rgba(255, 255, 255, 0.085);
   }
 
   .compliance-score-ring {
-    width: 96px;
-    height: 96px;
+    width: 88px;
+    height: 88px;
     border-radius: 999px;
     display: grid;
     place-items: center;
@@ -231,8 +258,8 @@ const complianceDashboardCss = `
   }
 
   .compliance-score-core {
-    width: 72px;
-    height: 72px;
+    width: 64px;
+    height: 64px;
     border-radius: 999px;
     display: grid;
     place-items: center;
@@ -241,36 +268,42 @@ const complianceDashboardCss = `
   }
 
   .compliance-score-core strong {
-    font-size: 23px;
+    font-size: 22px;
     letter-spacing: -0.055em;
   }
 
   .compliance-score-core strong.is-empty-score {
-    font-size: 30px;
+    font-size: 28px;
     color: rgba(226, 232, 240, 0.72);
+  }
+
+  .compliance-score-copy {
+    min-width: 0;
   }
 
   .compliance-score-copy strong {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
+    font-size: 15px;
+    line-height: 1.25;
   }
 
   .compliance-score-copy p {
     margin: 0;
-    line-height: 1.58;
+    font-size: 13px;
+    line-height: 1.55;
   }
 
   .compliance-signal-table {
     display: grid;
-    gap: 0;
   }
 
   .compliance-signal-row {
     display: grid;
-    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 14px;
     align-items: center;
-    padding: 12px 0;
+    padding: 11px 0;
     border-top: 1px solid rgba(148, 163, 184, 0.14);
   }
 
@@ -282,7 +315,7 @@ const complianceDashboardCss = `
   .compliance-section {
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 24px;
   }
 
   .compliance-section-header {
@@ -318,8 +351,9 @@ const complianceDashboardCss = `
 
   .compliance-grid {
     display: grid;
-    gap: 26px;
+    gap: 24px;
     align-items: stretch;
+    min-width: 0;
   }
 
   .compliance-grid-kpis {
@@ -335,24 +369,25 @@ const complianceDashboardCss = `
   .compliance-list-card,
   .compliance-bridge-panel {
     width: 100%;
+    min-width: 0;
     height: 100%;
-    border-radius: 31px;
+    border-radius: 29px;
     border: 1px solid rgba(148, 163, 184, 0.16);
     background:
       linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
       rgba(15, 23, 42, 0.64);
     box-shadow:
-      0 24px 70px rgba(0, 0, 0, 0.21),
+      0 22px 62px rgba(0, 0, 0, 0.19),
       inset 0 1px 0 rgba(255,255,255,0.035);
   }
 
   .compliance-kpi-card {
-    min-height: 188px;
-    padding: 27px;
+    min-height: 178px;
+    padding: 25px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 22px;
+    gap: 20px;
     transition:
       transform .18s ease,
       border-color .18s ease,
@@ -372,11 +407,12 @@ const complianceDashboardCss = `
     justify-content: space-between;
     gap: 18px;
     align-items: flex-start;
+    min-width: 0;
   }
 
   .compliance-kpi-value {
     margin-top: 12px;
-    font-size: 25px;
+    font-size: 24px;
     font-weight: 790;
     line-height: 1.12;
     letter-spacing: -0.045em;
@@ -406,6 +442,7 @@ const complianceDashboardCss = `
   }
 
   .compliance-bridge-step {
+    min-width: 0;
     padding: 18px;
     border-radius: 22px;
     background: rgba(255,255,255,0.04);
@@ -418,7 +455,7 @@ const complianceDashboardCss = `
   }
 
   .compliance-panel {
-    padding: 31px;
+    padding: 29px;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -429,6 +466,7 @@ const complianceDashboardCss = `
     justify-content: space-between;
     gap: 24px;
     align-items: flex-start;
+    min-width: 0;
   }
 
   .compliance-panel-title {
@@ -468,6 +506,7 @@ const complianceDashboardCss = `
     justify-content: space-between;
     gap: 18px;
     align-items: flex-start;
+    min-width: 0;
   }
 
   .compliance-list-card-title {
@@ -531,39 +570,77 @@ const complianceDashboardCss = `
     margin-bottom: 0;
   }
 
-  @media (max-width: 1180px) {
+  @media (max-width: 1240px) {
     .compliance-hero {
-      min-height: auto;
-      padding: 34px;
+      min-height: 580px;
+      padding: 38px 46px 70px 38px;
+      margin-bottom: 32px;
     }
 
     .compliance-hero-layout {
-      min-height: auto;
-      grid-template-columns: 1fr;
-      align-items: stretch;
+      min-height: 490px;
+      grid-template-columns: minmax(0, 1fr) minmax(290px, 340px);
+      gap: 32px;
+    }
+
+    .compliance-title {
+      font-size: clamp(36px, 3.45vw, 52px);
+      max-width: 660px;
+    }
+
+    .compliance-copy {
+      max-width: 650px;
+      font-size: 15.5px;
     }
 
     .compliance-signal-card {
-      max-width: none;
-      justify-self: stretch;
+      max-width: 340px;
+      padding: 22px;
+      margin-right: 10px;
     }
 
-    .compliance-grid-kpis,
-    .compliance-bridge-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .compliance-score-module {
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 14px;
+      padding: 15px;
     }
+
+    .compliance-score-ring {
+      width: 82px;
+      height: 82px;
+    }
+
+    .compliance-score-core {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  @media (max-width: 1080px) {
+    .compliance-hero-layout {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 490px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+    gap: 42px;
+    align-items: center;
   }
 
   @media (max-width: 920px) {
     .compliance-grid-two,
     .compliance-command-bar {
-      grid-template-columns: 1fr;
-    }
-
-    .compliance-section-header {
-      align-items: flex-start;
-      flex-direction: column;
-    }
+    width: min(720px, 100%);
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(148, 163, 184, 0.16);
   }
 
   @media (max-width: 680px) {
@@ -572,129 +649,25 @@ const complianceDashboardCss = `
     }
 
     .compliance-hero {
-      padding: 26px;
-      border-radius: 28px;
-    }
-
-    .compliance-title {
-      font-size: clamp(36px, 12vw, 48px);
-      line-height: 0.96;
-    }
-
-    .compliance-grid-kpis,
-    .compliance-bridge-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .compliance-kpi-card,
-    .compliance-panel,
-    .compliance-list-card,
-    .compliance-bridge-panel {
-      border-radius: 24px;
-    }
-
-    .compliance-score-module {
-      grid-template-columns: 1fr;
-    }
-
-    .compliance-score-ring {
-      width: 104px;
-      height: 104px;
-    }
-
-    .compliance-score-core {
-      width: 78px;
-      height: 78px;
-    }
-
-    .compliance-signal-row,
-    .compliance-list-card-head {
-      grid-template-columns: 1fr;
-      gap: 7px;
-    }
-
-    .compliance-list-card-head {
-      flex-direction: column;
-    }
-
-    .compliance-signal-row strong,
-    .compliance-risk-score {
-      text-align: left;
-    }
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 580px;
+    overflow: hidden;
+    border-radius: 34px;
+    padding: 42px 56px 72px 42px;
+    margin-bottom: 34px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background:
+      radial-gradient(circle at 8% 2%, rgba(37, 99, 235, 0.36), transparent 30%),
+      radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.18), transparent 27%),
+      radial-gradient(circle at 60% 110%, rgba(245, 158, 11, 0.10), transparent 30%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97));
+    box-shadow:
+      0 34px 100px rgba(0, 0, 0, 0.38),
+      inset 0 1px 0 rgba(255, 255, 255, 0.055);
   }
-
-  /* FINAL FIX — Compliance Dashboard right signal card clipping */
-  .compliance-hero,
-  .compliance-dashboard-hero,
-  .compliance-hero-layout,
-  .compliance-dashboard-hero-layout {
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
-  }
-
-  .compliance-hero,
-  .compliance-dashboard-hero {
-    padding-bottom: 46px !important;
-  }
-
-  .compliance-hero-layout,
-  .compliance-dashboard-hero-layout {
-    align-items: stretch !important;
-  }
-
-  .compliance-signal-card,
-  .compliance-dashboard-signal-card,
-  .compliance-signal-inner,
-  .compliance-dashboard-signal-inner {
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
-  }
-
-  .compliance-signal-card,
-  .compliance-dashboard-signal-card {
-    align-self: stretch !important;
-    padding-bottom: 28px !important;
-  }
-
-  .compliance-signal-inner,
-  .compliance-dashboard-signal-inner {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 20px !important;
-    justify-content: flex-start !important;
-  }
-
-  .compliance-signal-table,
-  .compliance-dashboard-signal-table {
-    display: grid !important;
-    gap: 12px !important;
-    margin-top: 4px !important;
-    overflow: visible !important;
-  }
-
-  .compliance-signal-row,
-  .compliance-dashboard-signal-row {
-    min-height: 34px !important;
-    overflow: visible !important;
-  }
-
-  .compliance-signal-row strong,
-  .compliance-dashboard-signal-row strong {
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
-  }
-
-  @media (max-width: 1180px) {
-    .compliance-hero-layout,
-    .compliance-dashboard-hero-layout {
-      grid-template-columns: 1fr !important;
-    }
-  }
-
 `;
 
 function getDashboardValue(cards, index, fallback) {
@@ -721,7 +694,7 @@ function getComplianceSignal({ suppliers, riskScore, openAlerts, evidenceCoverag
       title: 'Compliance workspace pending',
       posture: 'Build supplier base',
       description:
-        'AÃ±ade proveedores, evidencias y revisiones para activar una lectura ejecutiva de riesgo de cadena de suministro.'
+        'Añade proveedores, evidencias y revisiones para activar una lectura ejecutiva de riesgo de cadena de suministro.'
     };
   }
 
@@ -731,7 +704,7 @@ function getComplianceSignal({ suppliers, riskScore, openAlerts, evidenceCoverag
       title: 'High-risk compliance exposure',
       posture: 'Prioritize remediation',
       description:
-        'Hay seÃ±ales relevantes de riesgo y alertas abiertas. Conviene priorizar revisiÃ³n humana, evidencias y plan de mitigaciÃ³n.'
+        'Hay señales relevantes de riesgo y alertas abiertas. Conviene priorizar revisión humana, evidencias y plan de mitigación.'
     };
   }
 
@@ -760,7 +733,7 @@ function getComplianceSignal({ suppliers, riskScore, openAlerts, evidenceCoverag
     title: 'Compliance baseline established',
     posture: 'Improve evidence',
     description:
-      'Existe una base de proveedores, pero conviene reforzar cobertura documental y revisiones periÃ³dicas.'
+      'Existe una base de proveedores, pero conviene reforzar cobertura documental y revisiones periódicas.'
   };
 }
 
@@ -895,7 +868,7 @@ function SupplierRiskCard({ supplier }) {
           <h3 className="compliance-list-card-title">{supplier.name}</h3>
 
           <p className="muted compliance-muted-tight" style={{ marginTop: 8 }}>
-            {supplier.country || 'PaÃ­s N/A'} Â· {supplier.tier || 'Tier N/A'} Â·{' '}
+            {supplier.country || 'País N/A'} · {supplier.tier || 'Tier N/A'} ·{' '}
             {supplier.criticality || 'Criticality N/A'}
           </p>
         </div>
@@ -917,7 +890,7 @@ function AlertCard({ alert }) {
           <h3 className="compliance-list-card-title">{alert.title}</h3>
 
           <p className="muted compliance-muted-tight" style={{ marginTop: 8 }}>
-            {alert.category || 'CategorÃ­a N/A'} Â· {alert.source || 'Fuente N/A'}
+            {alert.category || 'Categoría N/A'} · {alert.source || 'Fuente N/A'}
           </p>
         </div>
 
@@ -926,7 +899,7 @@ function AlertCard({ alert }) {
 
       <div className="compliance-alert-body">
         <p className="muted compliance-muted-tight">
-          {alert.description || 'Sin descripciÃ³n registrada.'}
+          {alert.description || 'Sin descripción registrada.'}
         </p>
       </div>
     </article>
@@ -1053,7 +1026,7 @@ export function ComplianceDashboardPage() {
                   >
                     <div className="compliance-score-core">
                       <strong className={complianceSignal.score === null ? 'is-empty-score' : ''}>
-                        {complianceSignal.score === null ? 'â€”' : complianceSignal.score}
+                        {complianceSignal.score === null ? '—' : complianceSignal.score}
                       </strong>
                     </div>
                   </div>
@@ -1122,14 +1095,14 @@ export function ComplianceDashboardPage() {
             kicker="Control loop"
             icon={ClipboardCheck}
             title="Monitor, evidence, review and remediate"
-            description="CEOâ€™s OS organiza el control de compliance en una secuencia clara para detectar riesgo, documentar evidencias y activar revisiÃ³n humana."
+            description="CEO’s OS organiza el control de compliance en una secuencia clara para detectar riesgo, documentar evidencias y activar revisión humana."
           />
 
           <div className="compliance-bridge-grid">
             <BridgeStep
               number="01"
               title="Monitor"
-              text="Centraliza proveedores, criticidad, paÃ­s, tier y seÃ±ales principales."
+              text="Centraliza proveedores, criticidad, país, tier y señales principales."
             />
 
             <BridgeStep
@@ -1147,7 +1120,7 @@ export function ComplianceDashboardPage() {
             <BridgeStep
               number="04"
               title="Review"
-              text="Activa revisiÃ³n humana para cerrar riesgos y mantener trazabilidad."
+              text="Activa revisión humana para cerrar riesgos y mantener trazabilidad."
             />
           </div>
         </section>
@@ -1158,7 +1131,7 @@ export function ComplianceDashboardPage() {
               kicker="Risk ranking"
               icon={Gauge}
               title="Top proveedores por riesgo"
-              description="Proveedores priorizados por exposiciÃ³n, criticidad y score agregado."
+              description="Proveedores priorizados por exposición, criticidad y score agregado."
             />
 
             <div className="compliance-list">
@@ -1166,7 +1139,7 @@ export function ComplianceDashboardPage() {
                 <EmptyBlock
                   icon={Globe2}
                   title="No hay proveedores registrados"
-                  description="AÃ±ade proveedores para generar ranking de riesgo y priorizaciÃ³n ejecutiva."
+                  description="Añade proveedores para generar ranking de riesgo y priorización ejecutiva."
                 />
               ) : (
                 topRiskSuppliers.map((supplier) => (
@@ -1180,8 +1153,8 @@ export function ComplianceDashboardPage() {
             <PanelHeader
               kicker="Alert stream"
               icon={ShieldAlert}
-              title="Ãšltimas alertas"
-              description="Alertas recientes para revisiÃ³n, mitigaciÃ³n o seguimiento documental."
+              title="Últimas alertas"
+              description="Alertas recientes para revisión, mitigación o seguimiento documental."
             />
 
             <div className="compliance-list">
@@ -1189,7 +1162,7 @@ export function ComplianceDashboardPage() {
                 <EmptyBlock
                   icon={CheckCircle2}
                   title="No hay alertas registradas"
-                  description="Cuando existan alertas, aparecerÃ¡n aquÃ­ ordenadas para revisiÃ³n ejecutiva."
+                  description="Cuando existan alertas, aparecerán aquí ordenadas para revisión ejecutiva."
                 />
               ) : (
                 latestAlerts.map((alert) => (
@@ -1227,7 +1200,7 @@ export function ComplianceDashboardPage() {
               icon={AlertTriangle}
               label="Alertas totales"
               value={safeAlerts.length}
-              helper="HistÃ³rico de seÃ±ales"
+              helper="Histórico de señales"
             />
 
             <DashboardMetric
@@ -1242,3 +1215,5 @@ export function ComplianceDashboardPage() {
     </div>
   );
 }
+
+
