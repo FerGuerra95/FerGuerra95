@@ -670,8 +670,10 @@ export function DealDetailPage() {
 
                 <ExportICMemoButton deal={deal} />
 
+                <ExportDataRoomButton deal={deal} />
+
                 <div className="ma-export-action-note">
-                  Exporta una ficha ejecutiva completa o un IC Memo especifico para comite.
+                  Exporta una ficha ejecutiva completa, un IC Memo especifico o un Data Room Checklist.
                 </div>
               </div>
 
@@ -919,6 +921,336 @@ function ExportICMemoButton({ deal }) {
   );
 }
 
+function ExportDataRoomButton({ deal }) {
+  function handleExportDataRoom() {
+    const html = buildDataRoomHtml(deal);
+
+    const blob = new Blob([html], {
+      type: 'text/html;charset=utf-8'
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = `${slugifyFileName(deal?.name || 'deal')}-data-room.html`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    window.setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
+  return (
+    <Button variant="secondary" onClick={handleExportDataRoom}>
+      <Download size={16} />
+      Export Data Room
+    </Button>
+  );
+}
+
+function buildDataRoomHtml(deal) {
+  const generatedAt = new Intl.DateTimeFormat('es-ES', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(new Date());
+
+  const dataRoomItems = Array.isArray(deal?.dataRoom) ? deal.dataRoom : [];
+  const missingItems = dataRoomItems.filter(
+    (item) => String(item?.status || '').toLowerCase() !== 'ready'
+  );
+
+  const readinessSummary =
+    missingItems.length === 0
+      ? 'Data room ready for controlled sharing'
+      : `${missingItems.length} item(s) require review before sharing`;
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>${escapeHtml(deal?.name)} - Data Room Checklist</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #0f172a;
+      --muted: #475569;
+      --line: #dbe2ea;
+      --soft: #f8fafc;
+      --blue: #1d4ed8;
+      --green: #047857;
+      --gold: #a16207;
+      --danger: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 34px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 34px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(29,78,216,0.12), transparent 36%),
+        linear-gradient(135deg, #f8fafc, #ffffff);
+      border: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .badge {
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(29,78,216,0.08);
+      border: 1px solid rgba(29,78,216,0.16);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 40px;
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 21px;
+      letter-spacing: -0.035em;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.62;
+      color: var(--muted);
+    }
+
+    .meta {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section {
+      margin-top: 22px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .soft {
+      background: var(--soft);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .row,
+    .item {
+      padding: 14px;
+      border-radius: 16px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+    }
+
+    .row span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .row strong {
+      display: block;
+      font-size: 17px;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .item + .item {
+      margin-top: 10px;
+    }
+
+    .status {
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      color: var(--blue);
+      background: rgba(29,78,216,0.08);
+      border: 1px solid rgba(29,78,216,0.16);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .ready {
+      color: var(--green);
+      background: rgba(4,120,87,0.08);
+      border-color: rgba(4,120,87,0.16);
+    }
+
+    .required {
+      color: var(--danger);
+      background: rgba(254,242,242,0.82);
+      border-color: rgba(185,28,28,0.18);
+    }
+
+    .review {
+      color: var(--gold);
+      background: rgba(254,252,232,0.86);
+      border-color: rgba(161,98,7,0.18);
+    }
+
+    .footer {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media print {
+      body {
+        padding: 18px;
+      }
+
+      .section,
+      .hero {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">
+        <span class="badge">CEO's OS</span>
+        <span class="badge">Data Room Checklist</span>
+        <span class="badge">${escapeHtml(deal?.stageLabel)}</span>
+        <span class="badge">${escapeHtml(deal?.priority)}</span>
+      </div>
+
+      <h1>${escapeHtml(deal?.name)}</h1>
+
+      <p class="meta">
+        Generated ${escapeHtml(generatedAt)} · ${escapeHtml(deal?.sourceLabel)} · ${escapeHtml(deal?.owner)}
+      </p>
+    </section>
+
+    <section class="section soft">
+      <h2>Data Room Readiness</h2>
+      <p>${escapeHtml(readinessSummary)}</p>
+    </section>
+
+    <section class="section">
+      <h2>Deal Context</h2>
+      <div class="grid">
+        ${renderBriefRows([
+          ['Target', deal?.name],
+          ['Sector', deal?.sector],
+          ['Market', deal?.market],
+          ['Owner', deal?.owner],
+          ['Stage', deal?.stageLabel],
+          ['Risk', deal?.riskLabel],
+          ['Quality Score', deal?.qualityScoreLabel],
+          ['Updated', deal?.updatedLabel]
+        ])}
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Checklist</h2>
+      ${renderDataRoomChecklistRows(dataRoomItems)}
+    </section>
+
+    <section class="section">
+      <h2>Required / Review Items</h2>
+      ${
+        missingItems.length > 0
+          ? renderDataRoomChecklistRows(missingItems)
+          : '<p>All checklist items are currently marked as Ready.</p>'
+      }
+    </section>
+
+    <section class="section">
+      <h2>Sharing Control Notes</h2>
+      <div class="item">
+        <h3>Before external sharing</h3>
+        <p>Validate permissions, confidentiality perimeter, human review, document source and latest available financial information.</p>
+      </div>
+      <div class="item">
+        <h3>Enterprise extension</h3>
+        <p>Future version should include signed links, access expiry, revocation, document versioning and audit trail by organization.</p>
+      </div>
+    </section>
+
+    <div class="footer">
+      Internal use only. This Data Room Checklist is generated from CEO's OS and does not replace legal, financial, tax or operational due diligence. Human review is required before external circulation.
+    </div>
+  </main>
+</body>
+</html>`;
+}
+
+function renderDataRoomChecklistRows(items) {
+  return items
+    .map((item) => {
+      const status = String(item?.status || 'Review');
+      const tone = status.toLowerCase();
+
+      return `
+        <div class="item">
+          <h3>${escapeHtml(item?.title)}</h3>
+          <p>${escapeHtml(item?.description)}</p>
+          <span class="status ${escapeHtml(tone)}">${escapeHtml(status)}</span>
+        </div>
+      `;
+    })
+    .join('');
+}
 function buildICMemoHtml(deal) {
   const generatedAt = new Intl.DateTimeFormat('es-ES', {
     day: '2-digit',
@@ -2204,6 +2536,7 @@ function getSafeQualityScore(score) {
 }
 
 export default DealDetailPage;
+
 
 
 
