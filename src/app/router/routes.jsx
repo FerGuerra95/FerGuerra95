@@ -9,6 +9,8 @@ import { MAStoreProvider } from '../../modules/ma/store/maStore.jsx';
 import { ComplianceStoreProvider } from '../../modules/compliance/store/complianceStore.js';
 import { FundingStoreProvider } from '../../modules/funding/store/fundingStore.jsx';
 
+import { CEOOverviewPage } from '../../modules/ceo-overview/pages/CEOOverviewPage.jsx';
+
 import { MADashboardPage } from '../../modules/ma/pages/MADashboardPage.jsx';
 import { ValuationPage } from '../../modules/ma/pages/ValuationPage.jsx';
 import { DealPipelinePage } from '../../modules/ma/pages/DealPipelinePage.jsx';
@@ -54,6 +56,9 @@ export function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
 
       <Route element={<ProtectedAppShell />}>
+        <Route path="/overview" element={<CEOOverviewPage />} />
+        <Route path="/ceo/overview" element={<CEOOverviewPage />} />
+
         <Route path="/ma/dashboard" element={<MADashboardPage />} />
         <Route path="/ma/valuation" element={<ValuationPage />} />
         <Route path="/ma/pipeline" element={<DealPipelinePage />} />
@@ -122,4 +127,3 @@ export function AppRoutes() {
     </Routes>
   );
 }
-

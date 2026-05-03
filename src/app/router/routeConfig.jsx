@@ -1,5 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import {
+  Activity,
   BarChart3,
   Calculator,
   CheckCheck,
@@ -14,10 +15,22 @@ import {
   PieChart,
   Rocket,
   ShieldAlert,
+  Sparkles,
   Users
 } from 'lucide-react';
 
 export const routeGroups = {
+  overview: {
+    label: 'Executive OS',
+    items: [
+      {
+        to: '/overview',
+        label: 'Executive Overview',
+        icon: <Sparkles size={18} />
+      }
+    ]
+  },
+
   ma: {
     label: 'M&A',
     items: [
@@ -133,6 +146,18 @@ export const routeGroups = {
 };
 
 export const pageMetaMap = {
+  '/overview': {
+    title: 'Executive Command Center',
+    description:
+      'Capa ejecutiva superior de CEO’s OS: señales clave de M&A, Compliance y Funding en una única vista de decisión.'
+  },
+
+  '/ceo/overview': {
+    title: 'Executive Command Center',
+    description:
+      'Capa ejecutiva superior de CEO’s OS: señales clave de M&A, Compliance y Funding en una única vista de decisión.'
+  },
+
   '/ma/dashboard': {
     title: 'M&A Executive Dashboard',
     description:
