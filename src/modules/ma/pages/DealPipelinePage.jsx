@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AlertTriangle,
@@ -69,6 +69,86 @@ const PRIORITY_FILTERS = [
   { value: 'build', label: 'Build' }
 ];
 
+const DEMO_PIPELINE_DEALS = [
+  {
+    id: 'demo-iberia-industrial',
+    name: 'Iberia Industrial Services',
+    sector: 'Industrial Services',
+    market: 'Spain / Portugal',
+    stageId: 'screening',
+    equityValue: 18500000,
+    riskLabel: 'Moderate',
+    priority: 'Review',
+    priorityTone: 'review',
+    owner: 'Southern Europe Desk',
+    updatedLabel: 'Demo case'
+  },
+  {
+    id: 'demo-nordic-saas',
+    name: 'Nordic SaaS Platform',
+    sector: 'Software / SaaS',
+    market: 'Nordics',
+    stageId: 'nda',
+    equityValue: 42000000,
+    riskLabel: 'Controlled',
+    priority: 'High',
+    priorityTone: 'high',
+    owner: 'Technology M&A',
+    updatedLabel: 'Demo case'
+  },
+  {
+    id: 'demo-latam-logistics',
+    name: 'LATAM Logistics Group',
+    sector: 'Logistics',
+    market: 'LATAM',
+    stageId: 'due-diligence',
+    equityValue: 31500000,
+    riskLabel: 'Elevated',
+    priority: 'Watch',
+    priorityTone: 'watch',
+    owner: 'Cross-border Desk',
+    updatedLabel: 'Demo case'
+  },
+  {
+    id: 'demo-dach-manufacturing',
+    name: 'DACH Manufacturing Target',
+    sector: 'Advanced Manufacturing',
+    market: 'Germany / Austria / Switzerland',
+    stageId: 'ic-review',
+    equityValue: 76000000,
+    riskLabel: 'Moderate',
+    priority: 'High',
+    priorityTone: 'high',
+    owner: 'Industrial M&A',
+    updatedLabel: 'Demo case'
+  },
+  {
+    id: 'demo-uk-healthcare',
+    name: 'UK Healthcare Assets',
+    sector: 'Healthcare Services',
+    market: 'United Kingdom',
+    stageId: 'negotiation',
+    equityValue: 54000000,
+    riskLabel: 'Controlled',
+    priority: 'Review',
+    priorityTone: 'review',
+    owner: 'Healthcare Desk',
+    updatedLabel: 'Demo case'
+  },
+  {
+    id: 'demo-france-energy',
+    name: 'France Energy Services',
+    sector: 'Energy Services',
+    market: 'France / Benelux',
+    stageId: 'closing',
+    equityValue: 68000000,
+    riskLabel: 'Controlled',
+    priority: 'High',
+    priorityTone: 'high',
+    owner: 'Infrastructure Desk',
+    updatedLabel: 'Demo case'
+  }
+];
 const pipelineCss = `
   .ma-pipeline-page {
     width: min(1540px, 100%);
@@ -1149,7 +1229,11 @@ function filterPipelineDeals({
 }
 
 function buildPipelineDeals({ financials, derived, savedCases, currency }) {
-  const deals = [];
+  const deals = DEMO_PIPELINE_DEALS.map((demoDeal) => ({
+    ...demoDeal,
+    equityLabel: formatCurrency(demoDeal.equityValue, currency),
+    href: `/ma/deal/${demoDeal.id}`
+  }));
 
   if (hasSufficientDealData(financials, derived)) {
     const activeScore = getSafeQualityScore(derived?.qualityScore);
@@ -1177,7 +1261,7 @@ function buildPipelineDeals({ financials, derived, savedCases, currency }) {
       priorityTone: getPriorityTone(activeScore),
       owner: 'CEO workspace',
       updatedLabel: 'Live case',
-      href: '/ma/valuation'
+      href: '/ma/deal/active-deal'
     });
   }
 
@@ -1195,7 +1279,7 @@ function buildPipelineDeals({ financials, derived, savedCases, currency }) {
     const createdAt = item?.updatedAt || item?.createdAt;
 
     deals.push({
-      id: item?.id || `saved-deal-${index + 1}`,
+      id: dealId,
       name,
       sector: item?.financials?.sector || 'Saved case',
       market:
@@ -1213,7 +1297,20 @@ function buildPipelineDeals({ financials, derived, savedCases, currency }) {
       priorityTone: getPriorityTone(score),
       owner: 'Repository',
       updatedLabel: formatShortDate(createdAt),
-      href: '/ma/deals'
+      href: `/ma/deal/${dealId}`
+    });
+  });
+  DEMO_PIPELINE_DEALS.forEach((demoDeal) => {
+    const alreadyExists = deals.some(
+      (deal) => deal.id === demoDeal.id || deal.name === demoDeal.name
+    );
+
+    if (alreadyExists) return;
+
+    deals.push({
+      ...demoDeal,
+      equityLabel: formatCurrency(demoDeal.equityValue, currency),
+      href: `/ma/deal/${demoDeal.id}`
     });
   });
 
@@ -1361,3 +1458,13 @@ function getPipelineDescription(summary) {
 }
 
 export default DealPipelinePage;
+
+
+
+
+
+
+
+
+
+

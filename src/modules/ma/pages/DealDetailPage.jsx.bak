@@ -1,0 +1,1278 @@
+﻿import React, { useMemo } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import {
+  AlertTriangle,
+  ArrowLeft,
+  BarChart3,
+  BriefcaseBusiness,
+  CheckCircle2,
+  Clock3,
+  FileCheck2,
+  FileText,
+  FolderKanban,
+  Globe2,
+  Layers3,
+  LockKeyhole,
+  Scale,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Users
+} from 'lucide-react';
+import { Badge } from '../../../shared/components/ui/Badge.jsx';
+import { Button } from '../../../shared/components/ui/Button.jsx';
+import { useMAStore } from '../store/maStore.jsx';
+import { useValuationEngine } from '../engine/useValuationEngine.js';
+import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
+
+const DEMO_DEAL_DETAILS = [
+  {
+    id: 'demo-iberia-industrial',
+    name: 'Iberia Industrial Services',
+    sourceLabel: 'Demo multinational',
+    sector: 'Industrial Services',
+    market: 'Spain / Portugal',
+    owner: 'Southern Europe Desk',
+    stageId: 'screening',
+    equityValue: 18500000,
+    enterpriseValue: 21200000,
+    ebitda: 3100000,
+    multiple: 6.8,
+    qualityScore: 58,
+    riskLabel: 'Moderate',
+    updatedLabel: 'Demo case'
+  },
+  {
+    id: 'demo-nordic-saas',
+    name: 'Nordic SaaS Platform',
+    sourceLabel: 'Demo multinational',
+    sector: 'Software / SaaS',
+    market: 'Nordics',
+    owner: 'Technology M&A',
+    stageId: 'nda',
+    equityValue: 42000000,
+    enterpriseValue: 45500000,
+    ebitda: 5200000,
+    multiple: 8.8,
+    qualityScore: 86,
+    riskLabel: 'Controlled',
+    updatedLabel: 'Demo case'
+  },
+  {
+    id: 'demo-latam-logistics',
+    name: 'LATAM Logistics Group',
+    sourceLabel: 'Demo multinational',
+    sector: 'Logistics',
+    market: 'LATAM',
+    owner: 'Cross-border Desk',
+    stageId: 'due-diligence',
+    equityValue: 31500000,
+    enterpriseValue: 36800000,
+    ebitda: 6100000,
+    multiple: 6.0,
+    qualityScore: 48,
+    riskLabel: 'Elevated',
+    updatedLabel: 'Demo case'
+  },
+  {
+    id: 'demo-dach-manufacturing',
+    name: 'DACH Manufacturing Target',
+    sourceLabel: 'Demo multinational',
+    sector: 'Advanced Manufacturing',
+    market: 'Germany / Austria / Switzerland',
+    owner: 'Industrial M&A',
+    stageId: 'ic-review',
+    equityValue: 76000000,
+    enterpriseValue: 84500000,
+    ebitda: 11800000,
+    multiple: 7.2,
+    qualityScore: 88,
+    riskLabel: 'Moderate',
+    updatedLabel: 'Demo case'
+  },
+  {
+    id: 'demo-uk-healthcare',
+    name: 'UK Healthcare Assets',
+    sourceLabel: 'Demo multinational',
+    sector: 'Healthcare Services',
+    market: 'United Kingdom',
+    owner: 'Healthcare Desk',
+    stageId: 'negotiation',
+    equityValue: 54000000,
+    enterpriseValue: 59700000,
+    ebitda: 7800000,
+    multiple: 7.7,
+    qualityScore: 72,
+    riskLabel: 'Controlled',
+    updatedLabel: 'Demo case'
+  },
+  {
+    id: 'demo-france-energy',
+    name: 'France Energy Services',
+    sourceLabel: 'Demo multinational',
+    sector: 'Energy Services',
+    market: 'France / Benelux',
+    owner: 'Infrastructure Desk',
+    stageId: 'closing',
+    equityValue: 68000000,
+    enterpriseValue: 74200000,
+    ebitda: 9200000,
+    multiple: 8.1,
+    qualityScore: 84,
+    riskLabel: 'Controlled',
+    updatedLabel: 'Demo case'
+  }
+];
+const dealDetailCss = `
+  .ma-deal-detail-page {
+    width: min(1540px, 100%);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+  }
+
+  .ma-deal-detail-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 38px;
+    padding: 38px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background:
+      radial-gradient(circle at 8% 2%, rgba(37, 99, 235, 0.38), transparent 30%),
+      radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.18), transparent 27%),
+      radial-gradient(circle at 60% 110%, rgba(234, 179, 8, 0.08), transparent 30%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97));
+    box-shadow:
+      0 38px 120px rgba(0, 0, 0, 0.42),
+      inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  }
+
+  .ma-deal-detail-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 82%);
+    pointer-events: none;
+  }
+
+  .ma-deal-detail-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -190px -210px auto;
+    width: 520px;
+    height: 520px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.13), transparent 70%);
+    pointer-events: none;
+  }
+
+  .ma-deal-detail-hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.65fr);
+    gap: 34px;
+    align-items: stretch;
+  }
+
+  .ma-deal-detail-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .ma-deal-detail-title {
+    margin: 0;
+    max-width: 930px;
+    font-size: clamp(40px, 4.8vw, 68px);
+    line-height: 0.92;
+    letter-spacing: -0.075em;
+  }
+
+  .ma-deal-detail-title span {
+    display: block;
+    margin-top: 8px;
+    color: rgba(226, 232, 240, 0.7);
+  }
+
+  .ma-deal-detail-copy {
+    max-width: 860px;
+    margin: 26px 0 0;
+    font-size: 17px;
+    line-height: 1.82;
+    color: rgba(203, 213, 225, 0.86);
+  }
+
+  .ma-deal-detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 34px;
+  }
+
+  .ma-deal-detail-command-bar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 34px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .ma-deal-detail-command-item {
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.078);
+  }
+
+  .ma-deal-detail-command-item strong {
+    display: block;
+    margin-top: 8px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .ma-deal-detail-status-card {
+    position: relative;
+    min-height: 100%;
+    border-radius: 32px;
+    padding: 28px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.086), rgba(255,255,255,0.026)),
+      rgba(15, 23, 42, 0.76);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    backdrop-filter: blur(22px);
+    box-shadow:
+      0 26px 70px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .ma-deal-detail-status-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 32px;
+    background: radial-gradient(circle at 18% 0%, rgba(96, 165, 250, 0.13), transparent 35%);
+    pointer-events: none;
+  }
+
+  .ma-deal-detail-status-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .ma-deal-detail-status-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  .ma-deal-detail-icon-box {
+    flex: 0 0 auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 19px;
+    display: grid;
+    place-items: center;
+    background: rgba(37, 99, 235, 0.16);
+    border: 1px solid rgba(96, 165, 250, 0.24);
+  }
+
+  .ma-deal-detail-status-title {
+    margin-top: 10px;
+    font-size: 23px;
+    line-height: 1.16;
+    letter-spacing: -0.04em;
+  }
+
+  .ma-deal-detail-status-box {
+    border-radius: 25px;
+    padding: 20px;
+    background: rgba(255,255,255,0.047);
+    border: 1px solid rgba(255,255,255,0.085);
+  }
+
+  .ma-deal-detail-status-box strong {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .ma-deal-detail-status-box p {
+    margin: 0;
+    line-height: 1.62;
+  }
+
+  .ma-deal-detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .ma-detail-panel,
+  .ma-detail-card,
+  .ma-detail-empty {
+    border-radius: 31px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
+      rgba(15, 23, 42, 0.64);
+    box-shadow:
+      0 24px 70px rgba(0, 0, 0, 0.21),
+      inset 0 1px 0 rgba(255,255,255,0.035);
+  }
+
+  .ma-detail-panel {
+    padding: 31px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .ma-detail-card {
+    padding: 26px;
+  }
+
+  .ma-detail-empty {
+    padding: 34px;
+    text-align: center;
+  }
+
+  .ma-detail-panel-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .ma-detail-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 11px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.17em;
+    color: rgba(148, 163, 184, 0.96);
+  }
+
+  .ma-detail-panel-header h2,
+  .ma-detail-panel-header h3 {
+    margin: 0;
+    letter-spacing: -0.045em;
+  }
+
+  .ma-detail-panel-header p {
+    margin: 11px 0 0;
+    line-height: 1.66;
+  }
+
+  .ma-detail-panel-icon {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.048);
+    border: 1px solid rgba(255, 255, 255, 0.085);
+  }
+
+  .ma-detail-metric-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .ma-detail-metric {
+    min-height: 134px;
+    padding: 20px;
+    border-radius: 23px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.058), rgba(255,255,255,0.022)),
+      rgba(2, 6, 23, 0.22);
+    border: 1px solid rgba(255,255,255,0.078);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .ma-detail-metric strong {
+    display: block;
+    margin-top: 9px;
+    font-size: 24px;
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+  }
+
+  .ma-detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .ma-detail-row {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) minmax(140px, auto);
+    gap: 15px;
+    align-items: center;
+    padding: 17px;
+    border-radius: 21px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.075);
+  }
+
+  .ma-detail-row-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    background: rgba(37, 99, 235, 0.14);
+    border: 1px solid rgba(96, 165, 250, 0.22);
+  }
+
+  .ma-detail-row strong {
+    display: block;
+    line-height: 1.25;
+  }
+
+  .ma-detail-row p {
+    margin: 6px 0 0;
+    line-height: 1.5;
+  }
+
+  .ma-detail-row-value {
+    text-align: right;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+  }
+
+  .ma-detail-note {
+    padding: 20px;
+    border-radius: 23px;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(234, 179, 8, 0.12), transparent 30%),
+      linear-gradient(135deg, rgba(255,255,255,0.058), rgba(255,255,255,0.022));
+    border: 1px solid rgba(234, 179, 8, 0.18);
+  }
+
+  .ma-detail-note strong {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .ma-detail-note p {
+    margin: 0;
+    line-height: 1.62;
+  }
+
+  .ma-detail-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ma-detail-timeline-item {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .ma-detail-timeline-dot {
+    width: 38px;
+    height: 38px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.22);
+    color: #86efac;
+  }
+
+  .ma-detail-timeline-item strong {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .ma-detail-timeline-item p {
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 1180px) {
+    .ma-deal-detail-hero-inner,
+    .ma-deal-detail-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .ma-deal-detail-hero {
+      padding: 26px;
+      border-radius: 28px;
+    }
+
+    .ma-deal-detail-command-bar,
+    .ma-detail-metric-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ma-detail-row {
+      grid-template-columns: 1fr;
+    }
+
+    .ma-detail-row-value {
+      text-align: left;
+    }
+  }
+`;
+
+export function DealDetailPage() {
+  const { dealId } = useParams();
+  const navigate = useNavigate();
+  const { financials, settings, savedCases } = useMAStore();
+
+  const derived = useValuationEngine({
+    financials,
+    settings
+  });
+
+  const reportCurrency = settings?.reportCurrency || financials?.currency || 'EUR';
+  const safeSavedCases = Array.isArray(savedCases) ? savedCases : [];
+
+  const deal = useMemo(
+    () =>
+      resolveDealDetail({
+        dealId,
+        financials,
+        settings,
+        derived,
+        savedCases: safeSavedCases,
+        currency: reportCurrency
+      }),
+    [dealId, financials, settings, derived, safeSavedCases, reportCurrency]
+  );
+
+  if (!deal) {
+    return (
+      <div className="page">
+        <style>{dealDetailCss}</style>
+
+        <div className="ma-deal-detail-page">
+          <section className="ma-detail-empty">
+            <div className="ma-detail-kicker">
+              <AlertTriangle size={14} />
+              Deal not found
+            </div>
+
+            <h2>No se ha encontrado esta operación</h2>
+
+            <p className="muted">
+              Puede que el caso no exista todavía, que el identificador haya
+              cambiado o que el deal no esté guardado en el repositorio.
+            </p>
+
+            <div className="ma-deal-detail-actions" style={{ justifyContent: 'center' }}>
+              <Button variant="secondary" onClick={() => navigate(-1)}>
+                <ArrowLeft size={16} />
+                Volver
+              </Button>
+
+              <Link to="/ma/pipeline">
+                <Button>
+                  <Layers3 size={16} />
+                  Abrir Deal Pipeline
+                </Button>
+              </Link>
+            </div>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="page">
+      <style>{dealDetailCss}</style>
+
+      <div className="ma-deal-detail-page">
+        <section className="ma-deal-detail-hero">
+          <div className="ma-deal-detail-hero-inner">
+            <div>
+              <div className="ma-deal-detail-badges">
+                <Badge>M&A Deal Detail</Badge>
+                <Badge>{resolvedDeal.sourceLabel}</Badge>
+                <Badge>{resolvedDeal.stageLabel}</Badge>
+                <Badge>{resolvedDeal.priority}</Badge>
+              </div>
+
+              <h1 className="ma-deal-detail-title">
+                {resolvedDeal.name}
+                <span>Single deal intelligence file.</span>
+              </h1>
+
+              <p className="ma-deal-detail-copy">
+                Ficha ejecutiva de operación con valoraciÃ³n, fase, prioridad,
+                riesgo, tesis, documentaciÃ³n pendiente y disciplina de siguiente
+                paso. DiseÃ±ada como base para una versiÃ³n multinacional con
+                deal detail, IC memo, data room y audit trail.
+              </p>
+
+              <div className="ma-deal-detail-actions">
+                <Link to="/ma/pipeline">
+                  <Button>
+                    <Layers3 size={16} />
+                    Volver al pipeline
+                  </Button>
+                </Link>
+
+                <Link to="/ma/valuation">
+                  <Button variant="secondary">
+                    <BarChart3 size={16} />
+                    Valuation Engine
+                  </Button>
+                </Link>
+
+                <Link to="/ma/cim">
+                  <Button variant="secondary">
+                    <FileText size={16} />
+                    Preparar report
+                  </Button>
+                </Link>
+              </div>
+
+              <div className="ma-deal-detail-command-bar">
+                <CommandItem label="Stage" value={resolvedDeal.stageLabel} />
+                <CommandItem label="Owner" value={resolvedDeal.owner} />
+                <CommandItem label="Updated" value={resolvedDeal.updatedLabel} />
+              </div>
+            </div>
+
+            <aside className="ma-deal-detail-status-card">
+              <div className="ma-deal-detail-status-inner">
+                <div className="ma-deal-detail-status-top">
+                  <div>
+                    <div className="kpi-label">Deal Signal</div>
+                    <div className="ma-deal-detail-status-title">
+                      {resolvedDeal.signalTitle}
+                    </div>
+                  </div>
+
+                  <div className="ma-deal-detail-icon-box">
+                    <Sparkles size={21} />
+                  </div>
+                </div>
+
+                <div className="ma-deal-detail-status-box">
+                  <strong>{resolvedDeal.recommendedAction}</strong>
+
+                  <p className="muted">
+                    RevisiÃ³n generada desde los datos actuales del caso. Antes de
+                    circular conclusiones, valida documentaciÃ³n financiera,
+                    deuda, caja, working capital, concentraciÃ³n y soporte legal.
+                  </p>
+                </div>
+
+                <CommandItem label="Risk" value={resolvedDeal.riskLabel} />
+                <CommandItem label="Quality score" value={resolvedDeal.qualityScoreLabel} />
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section className="ma-deal-detail-grid">
+          <section className="ma-detail-panel">
+            <PanelHeader
+              kicker="Valuation snapshot"
+              icon={TrendingUp}
+              title="Deal economics"
+              description="Resumen econÃ³mico principal de la operación."
+            />
+
+            <div className="ma-detail-metric-grid">
+              <Metric label="Equity Value" value={resolvedDeal.equityLabel} />
+              <Metric label="Enterprise Value" value={resolvedDeal.enterpriseLabel} />
+              <Metric label="EBITDA normalizado" value={resolvedDeal.ebitdaLabel} />
+              <Metric label="Múltiplo ajustado" value={resolvedDeal.multipleLabel} />
+            </div>
+
+            <div className="ma-detail-note">
+              <strong>Executive interpretation</strong>
+              <p className="muted">
+                La valoraciÃ³n debe tratarse como una lectura preliminar. La
+                decisión real depende de calidad de beneficios, deuda/caja,
+                working capital, concentraciÃ³n, dependencias operativas y
+                comparables externos.
+              </p>
+            </div>
+          </section>
+
+          <section className="ma-detail-panel">
+            <PanelHeader
+              kicker="Deal profile"
+              icon={BriefcaseBusiness}
+              title="Target profile"
+              description="Identidad bÃ¡sica, mercado y contexto de la operación."
+            />
+
+            <div className="ma-detail-list">
+              <DetailRow
+                icon={BriefcaseBusiness}
+                title="Company"
+                description="Target activo o caso guardado."
+                value={resolvedDeal.name}
+              />
+
+              <DetailRow
+                icon={Globe2}
+                title="Market"
+                description="GeografÃ­a o mercado principal."
+                value={resolvedDeal.market}
+              />
+
+              <DetailRow
+                icon={Target}
+                title="Sector"
+                description="Sector de referencia para mÃºltiplo y riesgo."
+                value={resolvedDeal.sector}
+              />
+
+              <DetailRow
+                icon={Users}
+                title="Owner"
+                description="Responsable operativo del deal."
+                value={resolvedDeal.owner}
+              />
+            </div>
+          </section>
+        </section>
+
+        <section className="ma-deal-detail-grid">
+          <section className="ma-detail-panel">
+            <PanelHeader
+              kicker="Execution discipline"
+              icon={FileCheck2}
+              title="Next actions"
+              description="Checklist operativo para avanzar con control."
+            />
+
+            <div className="ma-detail-list">
+              {resolvedDeal.nextActions.map((item, index) => (
+                <DetailRow
+                  key={item.title}
+                  icon={index === 0 ? AlertTriangle : CheckCircle2}
+                  title={item.title}
+                  description={item.description}
+                  value={item.status}
+                />
+              ))}
+            </div>
+          </section>
+
+          <section className="ma-detail-panel">
+            <PanelHeader
+              kicker="Enterprise modules"
+              icon={FolderKanban}
+              title="Future enterprise readiness"
+              description="Bloques preparados para fase multinacional posterior."
+            />
+
+            <div className="ma-detail-list">
+              <DetailRow
+                icon={FolderKanban}
+                title="Data Room"
+                description="Checklist documental por operación."
+                value="Backlog"
+              />
+
+              <DetailRow
+                icon={Scale}
+                title="IC Memo"
+                description="Investment Committee memo para decisión interna."
+                value="Backlog"
+              />
+
+              <DetailRow
+                icon={LockKeyhole}
+                title="Secure sharing"
+                description="Enlaces firmados, expiraciÃ³n, revocaciÃ³n y permisos."
+                value="Backend required"
+              />
+
+              <DetailRow
+                icon={ShieldCheck}
+                title="Audit trail"
+                description="Registro de cambios, usuario, fecha y organizaciÃ³n."
+                value="Backend required"
+              />
+            </div>
+          </section>
+        </section>
+
+        <section className="ma-detail-panel">
+          <PanelHeader
+            kicker="Activity timeline"
+            icon={Clock3}
+            title="Deal timeline"
+            description="Trazabilidad preliminar del caso. En backend enterprise serÃ¡ un audit trail real."
+          />
+
+          <div className="ma-detail-timeline">
+            {resolvedDeal.timeline.map((item) => (
+              <div className="ma-detail-timeline-item" key={item.title}>
+                <div className="ma-detail-timeline-dot">
+                  <CheckCircle2 size={15} />
+                </div>
+
+                <div>
+                  <strong>{item.title}</strong>
+                  <p className="muted">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function CommandItem({ label, value }) {
+  return (
+    <div className="ma-deal-detail-command-item">
+      <div className="kpi-label">{label}</div>
+      <strong>{value}</strong>
+    </div>
+  );
+}
+
+function PanelHeader({ kicker, icon: Icon, title, description }) {
+  return (
+    <div className="ma-detail-panel-header">
+      <div>
+        <div className="ma-detail-kicker">
+          <Icon size={14} />
+          {kicker}
+        </div>
+
+        <h2>{title}</h2>
+
+        <p className="muted">{description}</p>
+      </div>
+
+      <div className="ma-detail-panel-icon">
+        <Icon size={18} />
+      </div>
+    </div>
+  );
+}
+
+function Metric({ label, value }) {
+  return (
+    <div className="ma-detail-metric">
+      <div>
+        <div className="kpi-label">{label}</div>
+        <strong>{value}</strong>
+      </div>
+    </div>
+  );
+}
+
+function DetailRow({ icon: Icon, title, description, value }) {
+  return (
+    <div className="ma-detail-row">
+      <div className="ma-detail-row-icon">
+        <Icon size={16} />
+      </div>
+
+      <div>
+        <strong>{title}</strong>
+        <p className="muted">{description}</p>
+      </div>
+
+      <div className="ma-detail-row-value">{value}</div>
+    </div>
+  );
+}
+
+function resolveDealDetail({
+  dealId,
+  financials,
+  settings,
+  derived,
+  savedCases,
+  currency
+}) {
+  if (!dealId) return null;
+
+  const normalizedDealId = String(dealId || '').trim();
+
+  const demoDeal = DEMO_DEAL_DETAILS.find(
+    (item) => item.id === normalizedDealId
+  );
+
+  if (demoDeal) {
+    return buildDeal({
+      ...demoDeal,
+      currency
+    });
+  }
+
+  if (normalizedDealId === 'active-deal') {
+    if (!hasSufficientDealData(financials, derived)) return null;
+
+    const qualityScore = getSafeQualityScore(derived?.qualityScore);
+    const equityValue = Number(derived?.equityBase);
+    const enterpriseValue = Number(derived?.evBase || derived?.enterpriseValue);
+    const ebitda = Number(derived?.normalizedEbitda);
+    const multiple = Number(derived?.adjustedMultiple);
+
+    return buildDeal({
+      id: 'active-deal',
+      name: financials?.name?.trim() || 'Active Target',
+      sourceLabel: 'Live workspace',
+      sector: financials?.sector || 'Sector not specified',
+      market:
+        financials?.country ||
+        financials?.market ||
+        financials?.geography ||
+        'Primary market',
+      owner: 'CEO workspace',
+      stageId: getStageFromScore(qualityScore),
+      equityValue,
+      enterpriseValue,
+      ebitda,
+      multiple,
+      qualityScore,
+      riskLabel:
+        derived?.riskLevel?.label ||
+        derived?.riskLevel ||
+        getRiskLabelFromScore(qualityScore),
+      updatedLabel: 'Live case',
+      currency
+    });
+  }
+
+  const safeSavedCases = Array.isArray(savedCases) ? savedCases : [];
+  const savedCase = safeSavedCases.find(
+    (item) => item?.id === normalizedDealId
+  );
+
+  if (!savedCase) return null;
+
+  const snapshot = savedCase?.snapshot || {};
+  const qualityScore = getSafeQualityScore(snapshot?.qualityScore);
+  const equityValue = Number(snapshot?.equityBase);
+  const enterpriseValue = Number(snapshot?.evBase);
+  const ebitda = Number(snapshot?.normalizedEbitda);
+  const multiple = Number(snapshot?.adjustedMultiple);
+
+  return buildDeal({
+    id: savedCase?.id,
+    name: savedCase?.name || 'Saved Deal',
+    sourceLabel: 'Repository snapshot',
+    sector: savedCase?.financials?.sector || 'Saved case',
+    market:
+      savedCase?.financials?.country ||
+      savedCase?.financials?.market ||
+      savedCase?.financials?.geography ||
+      'Repository',
+    owner: 'Repository',
+    stageId: getSavedDealStage(0, qualityScore),
+    equityValue,
+    enterpriseValue,
+    ebitda,
+    multiple,
+    qualityScore,
+    riskLabel: snapshot?.riskLevel || getRiskLabelFromScore(qualityScore),
+    updatedLabel: formatShortDate(savedCase?.updatedAt || savedCase?.createdAt),
+    currency
+  });
+}
+
+function buildDeal({
+  id,
+  name,
+  sourceLabel,
+  sector,
+  market,
+  owner,
+  stageId,
+  equityValue,
+  enterpriseValue,
+  ebitda,
+  multiple,
+  qualityScore,
+  riskLabel,
+  updatedLabel,
+  currency
+}) {
+  const stageLabel = getStageLabel(stageId);
+  const priority = getPriorityLabel(qualityScore);
+  const signalTitle = getSignalTitle(qualityScore);
+
+  return {
+    id,
+    name,
+    sourceLabel,
+    sector,
+    market,
+    owner,
+    stageId,
+    stageLabel,
+    priority,
+    riskLabel,
+    updatedLabel,
+    signalTitle,
+    qualityScoreLabel: qualityScore === null ? 'N/A' : `${qualityScore}/100`,
+    equityLabel: Number.isFinite(equityValue)
+      ? formatCurrency(equityValue, currency)
+      : 'N/A',
+    enterpriseLabel: Number.isFinite(enterpriseValue)
+      ? formatCurrency(enterpriseValue, currency)
+      : 'N/A',
+    ebitdaLabel: Number.isFinite(ebitda)
+      ? formatCurrency(ebitda, currency)
+      : 'N/A',
+    multipleLabel: Number.isFinite(multiple) ? `${multiple.toFixed(1)}x` : 'N/A',
+    recommendedAction: getRecommendedAction(qualityScore),
+    nextActions: getNextActions(qualityScore),
+    timeline: [
+      {
+        title: 'Deal file generated',
+        description:
+          'Ficha ejecutiva creada desde el caso activo o desde un snapshot guardado.'
+      },
+      {
+        title: 'Valuation context attached',
+        description:
+          'Se han consolidado seÃ±ales de valoraciÃ³n, equity value, EBITDA y mÃºltiplo ajustado.'
+      },
+      {
+        title: 'Human review required',
+        description:
+          'Antes de circular conclusiones, el caso requiere revisiÃ³n humana y soporte documental.'
+      }
+    ]
+  };
+}
+
+function getNextActions(score) {
+  if (score === null) {
+    return [
+      {
+        title: 'Completar inputs mÃ­nimos',
+        description: 'RazÃ³n social, sector, EBITDA normalizado y deuda/caja.',
+        status: 'Required'
+      },
+      {
+        title: 'Ejecutar valoraciÃ³n',
+        description: 'Generar score, mÃºltiplo ajustado y lectura ejecutiva.',
+        status: 'Pending'
+      },
+      {
+        title: 'Guardar snapshot',
+        description: 'Crear continuidad en Deal Repository y Pipeline.',
+        status: 'Pending'
+      }
+    ];
+  }
+
+  if (score >= 80) {
+    return [
+      {
+        title: 'Preparar IC memo',
+        description: 'Convertir la oportunidad en material de decisión interna.',
+        status: 'Next'
+      },
+      {
+        title: 'Validar documentaciÃ³n',
+        description: 'Revisar deuda, caja, working capital, concentraciÃ³n y contratos.',
+        status: 'Required'
+      },
+      {
+        title: 'Preparar report',
+        description: 'Exportar informe ejecutivo y narrativa CIM preliminar.',
+        status: 'Ready'
+      }
+    ];
+  }
+
+  if (score >= 55) {
+    return [
+      {
+        title: 'Profundizar due diligence',
+        description: 'Revisar calidad de beneficios, dependencias y riesgos principales.',
+        status: 'Next'
+      },
+      {
+        title: 'Revisar valuation bridge',
+        description: 'Validar Enterprise Value, deuda neta y Equity Value.',
+        status: 'Required'
+      },
+      {
+        title: 'Actualizar pipeline',
+        description: 'Mantener fase, prioridad y owner alineados.',
+        status: 'Open'
+      }
+    ];
+  }
+
+  return [
+    {
+      title: 'Reforzar calidad de datos',
+      description: 'Completar documentaciÃ³n y validar supuestos antes de avanzar.',
+      status: 'Required'
+    },
+    {
+      title: 'Revisar riesgos crÃ­ticos',
+      description: 'Analizar concentraciÃ³n, owner dependency y estabilidad financiera.',
+      status: 'Required'
+    },
+    {
+      title: 'Evitar circulaciÃ³n externa',
+      description: 'No compartir conclusiones hasta completar revisiÃ³n humana.',
+      status: 'Hold'
+    }
+  ];
+}
+
+function getStageFromScore(score) {
+  if (score === null) return 'screening';
+  if (score >= 82) return 'ic-review';
+  if (score >= 68) return 'due-diligence';
+  if (score >= 52) return 'nda';
+
+  return 'screening';
+}
+
+function getSavedDealStage(index, score) {
+  if (score !== null && score >= 82) return 'ic-review';
+  if (score !== null && score >= 68) return 'due-diligence';
+
+  const stages = [
+    'screening',
+    'nda',
+    'due-diligence',
+    'ic-review',
+    'negotiation',
+    'closing'
+  ];
+
+  return stages[index % stages.length];
+}
+
+function getStageLabel(stageId) {
+  const map = {
+    screening: 'Screening',
+    nda: 'NDA',
+    'due-diligence': 'Due Diligence',
+    'ic-review': 'IC Review',
+    negotiation: 'Negotiation',
+    closing: 'Closing'
+  };
+
+  return map[stageId] || 'Screening';
+}
+
+function getPriorityLabel(score) {
+  if (score === null) return 'Build';
+  if (score >= 80) return 'High';
+  if (score >= 55) return 'Review';
+
+  return 'Watch';
+}
+
+function getRiskLabelFromScore(score) {
+  if (score === null) return 'To assess';
+  if (score >= 80) return 'Controlled';
+  if (score >= 60) return 'Moderate';
+  if (score >= 40) return 'Elevated';
+
+  return 'High';
+}
+
+function getSignalTitle(score) {
+  if (score === null) return 'Incomplete deal picture';
+  if (score >= 80) return 'High-conviction opportunity';
+  if (score >= 60) return 'Qualified opportunity';
+  if (score >= 40) return 'Watchlist opportunity';
+
+  return 'Needs validation';
+}
+
+function getRecommendedAction(score) {
+  if (score === null) {
+    return 'Completar los datos mÃ­nimos antes de interpretar esta operación.';
+  }
+
+  if (score >= 80) {
+    return 'Avanzar a revisiÃ³n profunda, IC memo y preparaciÃ³n de reporte ejecutivo.';
+  }
+
+  if (score >= 55) {
+    return 'Validar riesgos, calidad de beneficios y documentaciÃ³n soporte antes de avanzar.';
+  }
+
+  return 'Mantener en watchlist hasta reforzar informaciÃ³n financiera y mitigantes.';
+}
+
+function formatShortDate(value) {
+  if (!value) return 'N/A';
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return 'N/A';
+
+  return new Intl.DateTimeFormat('es-ES', {
+    day: '2-digit',
+    month: 'short'
+  }).format(date);
+}
+
+function hasSufficientDealData(financials, derived) {
+  const hasName = Boolean(financials?.name?.trim());
+  const hasSector = Boolean(financials?.sector);
+  const normalizedEbitda = Number(derived?.normalizedEbitda);
+
+  return (
+    hasName &&
+    hasSector &&
+    Number.isFinite(normalizedEbitda) &&
+    normalizedEbitda > 0
+  );
+}
+
+function getSafeQualityScore(score) {
+  const parsed = Number(score);
+
+  if (!Number.isFinite(parsed)) return null;
+
+  return Math.max(0, Math.min(100, Math.round(parsed)));
+}
+
+export default DealDetailPage;
+
+
+
+
+
+

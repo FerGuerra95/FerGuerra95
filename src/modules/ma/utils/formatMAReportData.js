@@ -1,5 +1,6 @@
 const DEFAULT_CURRENCY = 'EUR';
 const DEFAULT_COMPANY_NAME = 'Target Company';
+const DEFAULT_BRAND_NAME = "CEO's OS";
 
 function safeString(value, fallback = 'N/A') {
   if (value === null || value === undefined) return fallback;
@@ -24,14 +25,19 @@ function toNumber(value, fallback = 0) {
     .replace(',', '.');
 
   const parsed = Number(cleaned);
+
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
 function firstNumber(...values) {
   for (const value of values) {
     if (value === null || value === undefined || value === '') continue;
+
     const parsed = toNumber(value, Number.NaN);
-    if (Number.isFinite(parsed)) return parsed;
+
+    if (Number.isFinite(parsed)) {
+      return parsed;
+    }
   }
 
   return 0;
@@ -49,6 +55,14 @@ function toArray(value) {
   }
 
   return [];
+}
+
+function normalizeBrandText(value, fallback = DEFAULT_BRAND_NAME) {
+  return safeString(value, fallback)
+    .replace(/CEO’s OS/g, DEFAULT_BRAND_NAME)
+    .replace(/CEO\u2019s OS/g, DEFAULT_BRAND_NAME)
+    .replace(/[“”]/g, '"')
+    .replace(/[’]/g, "'");
 }
 
 export function formatCurrency(value, currency = DEFAULT_CURRENCY) {
@@ -90,20 +104,13 @@ export function sanitizeFileName(value, fallback = 'ma-report') {
 
 function formatDate(value = new Date()) {
   const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return new Intl.DateTimeFormat('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: '2-digit'
-    }).format(new Date());
-  }
+  const safeDate = Number.isNaN(date.getTime()) ? new Date() : date;
 
   return new Intl.DateTimeFormat('es-ES', {
     year: 'numeric',
     month: 'long',
     day: '2-digit'
-  }).format(date);
+  }).format(safeDate);
 }
 
 function getMultiples(settings = {}, derived = {}) {
@@ -147,17 +154,21 @@ function getDebtMode(financials = {}, derived = {}) {
     financials?.grossDebt,
     financials?.debt,
     financials?.totalDebt,
+    financials?.financialDebt,
     derived?.grossDebt,
     derived?.debt,
-    derived?.totalDebt
+    derived?.totalDebt,
+    derived?.financialDebt
   );
 
   const cashInput = firstDefined(
     financials?.cash,
     financials?.cashAndEquivalents,
     financials?.cashBalance,
+    financials?.cashOnBalanceSheet,
     derived?.cash,
-    derived?.cashAndEquivalents
+    derived?.cashAndEquivalents,
+    derived?.cashBalance
   );
 
   const netDebtInput = firstDefined(
@@ -176,6 +187,7 @@ function getDebtMode(financials = {}, derived = {}) {
   if (hasGrossDebtOrCash) {
     return {
       mode: 'grossDebtAndCash',
+      label: 'Gross debt and cash',
       grossDebt,
       cash,
       netDebt: grossDebt - cash
@@ -185,6 +197,7 @@ function getDebtMode(financials = {}, derived = {}) {
   if (hasNetDebt) {
     return {
       mode: 'netDebt',
+      label: 'Net debt',
       grossDebt: 0,
       cash: 0,
       netDebt: toNumber(netDebtInput)
@@ -193,6 +206,7 @@ function getDebtMode(financials = {}, derived = {}) {
 
   return {
     mode: 'none',
+    label: 'No debt adjustment',
     grossDebt: 0,
     cash: 0,
     netDebt: 0
@@ -214,7 +228,7 @@ function getEbitdaAdjustments(financials = {}, derived = {}) {
           id: `adjustment-${index + 1}`,
           label: item,
           amount: 0,
-          note: 'Pendiente de cuantificación por revisión humana.'
+          note: 'Pending quantification by human review.'
         };
       }
 
@@ -224,12 +238,12 @@ function getEbitdaAdjustments(financials = {}, derived = {}) {
         id: safeString(item.id, `adjustment-${index + 1}`),
         label: safeString(
           firstDefined(item.label, item.name, item.concept, item.title),
-          `Ajuste EBITDA ${index + 1}`
+          `EBITDA Adjustment ${index + 1}`
         ),
         amount: toNumber(firstDefined(item.amount, item.value, item.impact)),
         note: safeString(
           firstDefined(item.note, item.description, item.rationale),
-          'Ajuste normalizado para análisis preliminar.'
+          'Normalized adjustment for preliminary analysis.'
         )
       };
     })
@@ -257,20 +271,24 @@ function getBuyerMatching(settings = {}, derived = {}) {
           name: buyer,
           type: 'Strategic / Financial',
           fitScore: null,
-          rationale: 'Comprador potencial pendiente de cualificación.'
+          fit: 'To qualify',
+          rationale: 'Potential buyer pending commercial and strategic qualification.'
         };
       }
 
       if (!buyer || typeof buyer !== 'object') return null;
 
+      const fitScore = firstDefined(buyer.fitScore, buyer.score, buyer.matchScore, null);
+
       return {
         id: safeString(buyer.id, `buyer-${index + 1}`),
         name: safeString(firstDefined(buyer.name, buyer.buyerName, buyer.title), `Buyer ${index + 1}`),
         type: safeString(firstDefined(buyer.type, buyer.category, buyer.profile), 'Strategic / Financial'),
-        fitScore: firstDefined(buyer.fitScore, buyer.score, buyer.matchScore, null),
+        fitScore,
+        fit: fitScore !== null ? String(fitScore) : safeString(firstDefined(buyer.fit, buyer.match), 'To qualify'),
         rationale: safeString(
           firstDefined(buyer.rationale, buyer.description, buyer.notes),
-          'Potencial encaje pendiente de validación comercial y estratégica.'
+          'Strategic fit pending validation with buyer appetite, ticket size and acquisition criteria.'
         )
       };
     })
@@ -284,21 +302,24 @@ function getBuyerMatching(settings = {}, derived = {}) {
       name: 'Strategic acquirer',
       type: 'Strategic',
       fitScore: null,
-      rationale: 'Comprador industrial con potencial de sinergias operativas, comerciales o tecnológicas.'
+      fit: 'High potential',
+      rationale: 'Industrial buyer with potential operating, commercial or technology synergies.'
     },
     {
       id: 'financial-sponsor',
       name: 'Financial sponsor',
       type: 'Private Equity / Financial',
       fitScore: null,
-      rationale: 'Inversor financiero orientado a crecimiento, mejora operativa y salida futura.'
+      fit: 'Selective',
+      rationale: 'Financial investor focused on growth, operational improvement and future exit optionality.'
     },
     {
       id: 'family-office',
       name: 'Family office / Long-term investor',
       type: 'Long-term capital',
       fitScore: null,
-      rationale: 'Capital paciente con foco en estabilidad, caja recurrente y preservación de valor.'
+      fit: 'Stable profile',
+      rationale: 'Patient capital profile with focus on recurring cash flow, stability and value preservation.'
     }
   ];
 }
@@ -333,7 +354,8 @@ function getRisks(settings = {}, derived = {}) {
         return {
           id: `risk-${index + 1}`,
           risk: item,
-          mitigant: 'Pendiente de revisión y mitigación específica.'
+          severity: 'To assess',
+          mitigant: 'Pending specific review and mitigation plan.'
         };
       }
 
@@ -341,10 +363,11 @@ function getRisks(settings = {}, derived = {}) {
 
       return {
         id: safeString(item.id, `risk-${index + 1}`),
-        risk: safeString(firstDefined(item.risk, item.title, item.label), `Riesgo ${index + 1}`),
+        risk: safeString(firstDefined(item.risk, item.title, item.label), `Risk ${index + 1}`),
+        severity: safeString(firstDefined(item.severity, item.level, item.priority), 'To assess'),
         mitigant: safeString(
           firstDefined(item.mitigant, item.mitigation, item.response, item.notes),
-          'Pendiente de revisión y mitigación específica.'
+          'Pending specific review and mitigation plan.'
         )
       };
     })
@@ -355,19 +378,53 @@ function getRisks(settings = {}, derived = {}) {
   return [
     {
       id: 'quality-of-earnings',
-      risk: 'Calidad y sostenibilidad del EBITDA normalizado.',
-      mitigant: 'Revisión humana, contraste documental y análisis de recurrencia de ingresos y costes.'
+      risk: 'Quality and sustainability of normalized EBITDA.',
+      severity: 'High',
+      mitigant: 'Perform human review, source validation and quality of earnings analysis.'
     },
     {
       id: 'working-capital',
-      risk: 'Necesidad de ajuste de capital circulante en cierre.',
-      mitigant: 'Definir peg de working capital, revisar estacionalidad y documentar mecanismo de ajuste.'
+      risk: 'Potential working capital adjustment at closing.',
+      severity: 'Medium',
+      mitigant: 'Define working capital peg, review seasonality and document the closing adjustment mechanism.'
     },
     {
       id: 'debt-cash',
-      risk: 'Confirmación de deuda, caja y partidas debt-like.',
-      mitigant: 'Validar deuda financiera, caja disponible, pasivos contingentes y partidas equivalentes a deuda.'
+      risk: 'Confirmation of debt, cash and debt-like items.',
+      severity: 'High',
+      mitigant: 'Validate financial debt, cash availability, contingent liabilities and debt-like items.'
     }
+  ];
+}
+
+function getWaterfallTone(type) {
+  if (type === 'addition') return 'positive';
+  if (type === 'deduction') return 'negative';
+  if (type === 'total') return 'highlight';
+
+  return 'neutral';
+}
+
+function buildExecutiveSummary({
+  companyName,
+  sector,
+  geography,
+  transactionType,
+  revenue,
+  adjustedEbitda,
+  ebitdaMargin,
+  multiples,
+  evBase,
+  equityBase,
+  debtMode,
+  currency
+}) {
+  return [
+    `${companyName} has been reviewed under a preliminary ${transactionType} framework in the ${sector} sector.`,
+    `The current valuation view uses adjusted EBITDA of ${formatCurrency(adjustedEbitda, currency)} and a base multiple of ${formatMultiple(multiples.base)}.`,
+    `The base case Enterprise Value is ${formatCurrency(evBase, currency)}, with a base case Equity Value of ${formatCurrency(equityBase, currency)} after the selected debt and equity bridge treatment.`,
+    `Revenue is currently shown at ${formatCurrency(revenue, currency)}, with an adjusted EBITDA margin of ${formatPercent(ebitdaMargin)}.`,
+    `Debt treatment used in the bridge: ${debtMode.label}. Human review is required before external circulation.`
   ];
 }
 
@@ -375,12 +432,18 @@ export function formatMAReportData({
   financials = {},
   settings = {},
   derived = {},
-  generatedBy = 'CEO’s OS',
-  organizationName = 'CEO’s OS',
+  generatedBy = DEFAULT_BRAND_NAME,
+  organizationName = DEFAULT_BRAND_NAME,
   reportStatus = 'Draft'
 } = {}) {
   const generatedAt = new Date();
-  const currency = safeString(firstDefined(financials?.currency, settings?.currency, derived?.currency), DEFAULT_CURRENCY).toUpperCase();
+  const safeGeneratedBy = normalizeBrandText(generatedBy, DEFAULT_BRAND_NAME);
+  const safeOrganizationName = normalizeBrandText(organizationName, DEFAULT_BRAND_NAME);
+
+  const currency = safeString(
+    firstDefined(financials?.currency, settings?.currency, derived?.currency),
+    DEFAULT_CURRENCY
+  ).toUpperCase();
 
   const companyName = safeString(
     firstDefined(
@@ -394,14 +457,44 @@ export function formatMAReportData({
     DEFAULT_COMPANY_NAME
   );
 
-  const sector = safeString(firstDefined(financials?.sector, settings?.sector, derived?.sector), 'Sector not specified');
-  const geography = safeString(firstDefined(financials?.geography, financials?.country, settings?.geography, derived?.geography), 'Geography not specified');
-  const transactionType = safeString(firstDefined(financials?.transactionType, settings?.transactionType, derived?.transactionType), 'M&A preliminary assessment');
+  const sector = safeString(
+    firstDefined(financials?.sector, settings?.sector, derived?.sector),
+    'Sector not specified'
+  );
 
-  const revenue = firstNumber(financials?.revenue, financials?.sales, financials?.netSales, financials?.ltmRevenue, derived?.revenue, derived?.ltmRevenue);
+  const geography = safeString(
+    firstDefined(
+      financials?.geography,
+      financials?.country,
+      settings?.geography,
+      derived?.geography
+    ),
+    'Geography not specified'
+  );
+
+  const transactionType = safeString(
+    firstDefined(financials?.transactionType, settings?.transactionType, derived?.transactionType),
+    'M&A preliminary assessment'
+  );
+
+  const revenue = firstNumber(
+    financials?.revenue,
+    financials?.sales,
+    financials?.netSales,
+    financials?.ltmRevenue,
+    derived?.revenue,
+    derived?.ltmRevenue
+  );
+
   const ebitdaAdjustments = getEbitdaAdjustments(financials, derived);
 
-  const rawEbitda = firstNumber(financials?.ebitda, financials?.reportedEbitda, financials?.ltmEbitda, derived?.reportedEbitda);
+  const rawEbitda = firstNumber(
+    financials?.ebitda,
+    financials?.reportedEbitda,
+    financials?.ltmEbitda,
+    derived?.reportedEbitda
+  );
+
   const adjustedEbitda = firstNumber(
     derived?.normalizedEbitda,
     derived?.adjustedEbitda,
@@ -414,12 +507,37 @@ export function formatMAReportData({
   const multiples = getMultiples(settings, derived);
   const debtMode = getDebtMode(financials, derived);
 
-  const workingCapitalAdjustment = firstNumber(financials?.workingCapitalAdjustment, financials?.nwcAdjustment, derived?.workingCapitalAdjustment, derived?.nwcAdjustment);
-  const otherAdjustments = firstNumber(financials?.otherAdjustments, financials?.equityBridgeAdjustments, derived?.otherAdjustments);
+  const workingCapitalAdjustment = firstNumber(
+    financials?.workingCapitalAdjustment,
+    financials?.nwcAdjustment,
+    derived?.workingCapitalAdjustment,
+    derived?.nwcAdjustment
+  );
 
-  const evLow = firstNumber(derived?.enterpriseValueLow, derived?.evLow, adjustedEbitda * multiples.low);
-  const evBase = firstNumber(derived?.enterpriseValue, derived?.enterpriseValueBase, derived?.evBase, adjustedEbitda * multiples.base);
-  const evHigh = firstNumber(derived?.enterpriseValueHigh, derived?.evHigh, adjustedEbitda * multiples.high);
+  const otherAdjustments = firstNumber(
+    financials?.otherAdjustments,
+    financials?.equityBridgeAdjustments,
+    derived?.otherAdjustments
+  );
+
+  const evLow = firstNumber(
+    derived?.enterpriseValueLow,
+    derived?.evLow,
+    adjustedEbitda * multiples.low
+  );
+
+  const evBase = firstNumber(
+    derived?.enterpriseValue,
+    derived?.enterpriseValueBase,
+    derived?.evBase,
+    adjustedEbitda * multiples.base
+  );
+
+  const evHigh = firstNumber(
+    derived?.enterpriseValueHigh,
+    derived?.evHigh,
+    adjustedEbitda * multiples.high
+  );
 
   const calculateEquity = (enterpriseValue) => {
     if (debtMode.mode === 'grossDebtAndCash') {
@@ -433,11 +551,38 @@ export function formatMAReportData({
     return enterpriseValue + workingCapitalAdjustment + otherAdjustments;
   };
 
-  const equityLow = firstNumber(derived?.equityValueLow, calculateEquity(evLow));
-  const equityBase = firstNumber(derived?.equityValue, derived?.equityValueBase, derived?.equityBase, calculateEquity(evBase));
-  const equityHigh = firstNumber(derived?.equityValueHigh, calculateEquity(evHigh));
+  const equityLow = firstNumber(
+    derived?.equityValueLow,
+    calculateEquity(evLow)
+  );
 
-  const ebitdaMargin = revenue !== 0 ? adjustedEbitda / revenue : firstNumber(derived?.ebitdaMargin);
+  const equityBase = firstNumber(
+    derived?.equityValue,
+    derived?.equityValueBase,
+    derived?.equityBase,
+    calculateEquity(evBase)
+  );
+
+  const equityHigh = firstNumber(
+    derived?.equityValueHigh,
+    calculateEquity(evHigh)
+  );
+
+  const netProceeds = firstNumber(
+    derived?.netProceeds,
+    derived?.sellerProceeds,
+    equityBase
+  );
+
+  const qualityScore = firstNumber(
+    derived?.qualityScore,
+    derived?.score,
+    0
+  );
+
+  const ebitdaMargin = revenue !== 0
+    ? adjustedEbitda / revenue
+    : firstNumber(derived?.ebitdaMargin);
 
   const bridgeLogic =
     debtMode.mode === 'grossDebtAndCash'
@@ -449,29 +594,35 @@ export function formatMAReportData({
   const waterfall = [
     {
       label: 'Enterprise Value',
-      description: 'Valor de empresa derivado del EBITDA normalizado y rango de múltiplos.',
+      description: 'Enterprise value derived from normalized EBITDA and the selected multiple range.',
       low: evLow,
       base: evBase,
       high: evHigh,
-      type: 'base'
+      value: formatCurrency(evBase, currency),
+      type: 'base',
+      tone: 'neutral'
     },
     ...(debtMode.mode === 'grossDebtAndCash'
       ? [
           {
             label: 'Less: Gross Debt',
-            description: 'Deuda financiera bruta deducida del Enterprise Value.',
+            description: 'Gross financial debt deducted from Enterprise Value.',
             low: -Math.abs(debtMode.grossDebt),
             base: -Math.abs(debtMode.grossDebt),
             high: -Math.abs(debtMode.grossDebt),
-            type: 'deduction'
+            value: formatCurrency(-Math.abs(debtMode.grossDebt), currency),
+            type: 'deduction',
+            tone: 'negative'
           },
           {
             label: 'Add: Cash',
-            description: 'Caja y equivalentes añadidos al Equity Value.',
+            description: 'Cash and cash equivalents added to Equity Value.',
             low: debtMode.cash,
             base: debtMode.cash,
             high: debtMode.cash,
-            type: 'addition'
+            value: formatCurrency(debtMode.cash, currency),
+            type: 'addition',
+            tone: 'positive'
           }
         ]
       : []),
@@ -479,48 +630,231 @@ export function formatMAReportData({
       ? [
           {
             label: 'Less: Net Debt',
-            description: 'Deuda financiera neta deducida del Enterprise Value. No se suma caja adicional para evitar duplicidad.',
+            description: 'Net financial debt deducted from Enterprise Value. No additional cash is added to avoid double counting.',
             low: -Math.abs(debtMode.netDebt),
             base: -Math.abs(debtMode.netDebt),
             high: -Math.abs(debtMode.netDebt),
-            type: 'deduction'
+            value: formatCurrency(-Math.abs(debtMode.netDebt), currency),
+            type: 'deduction',
+            tone: 'negative'
           }
         ]
       : []),
     {
       label: 'Working Capital Adjustment',
-      description: 'Ajuste preliminar de capital circulante.',
+      description: 'Preliminary working capital adjustment.',
       low: workingCapitalAdjustment,
       base: workingCapitalAdjustment,
       high: workingCapitalAdjustment,
-      type: workingCapitalAdjustment >= 0 ? 'addition' : 'deduction'
+      value: formatCurrency(workingCapitalAdjustment, currency),
+      type: workingCapitalAdjustment >= 0 ? 'addition' : 'deduction',
+      tone: getWaterfallTone(workingCapitalAdjustment >= 0 ? 'addition' : 'deduction')
     },
     {
       label: 'Other Equity Adjustments',
-      description: 'Otros ajustes de puente hacia Equity Value.',
+      description: 'Other adjustments bridging Enterprise Value to Equity Value.',
       low: otherAdjustments,
       base: otherAdjustments,
       high: otherAdjustments,
-      type: otherAdjustments >= 0 ? 'addition' : 'deduction'
+      value: formatCurrency(otherAdjustments, currency),
+      type: otherAdjustments >= 0 ? 'addition' : 'deduction',
+      tone: getWaterfallTone(otherAdjustments >= 0 ? 'addition' : 'deduction')
     },
     {
       label: 'Equity Value',
-      description: 'Valor estimado para el accionista tras ajustes de deuda, caja y circulante.',
+      description: 'Estimated shareholder value after debt, cash, working capital and other adjustments.',
       low: equityLow,
       base: equityBase,
       high: equityHigh,
-      type: 'total'
+      value: formatCurrency(equityBase, currency),
+      type: 'total',
+      tone: 'highlight'
     }
   ];
 
+  const buyerMatching = getBuyerMatching(settings, derived);
+  const risksAndMitigants = getRisks(settings, derived);
+
+  const investmentThesis = getTextItems(
+    firstDefined(derived?.investmentThesis, settings?.investmentThesis),
+    [
+      'Potential value creation platform through growth, operational improvement or sector consolidation.',
+      'Preliminary valuation supported by normalized EBITDA and selected market multiple range.',
+      'Opportunity remains subject to document validation, human review and qualified buyer feedback.'
+    ]
+  );
+
+  const humanReviewNotes = getTextItems(
+    firstDefined(derived?.humanReviewNotes, settings?.humanReviewNotes),
+    [
+      'This report is preliminary and must be reviewed by a professional before external circulation.',
+      'Figures depend on the quality of user-provided financial inputs and supporting documentation.',
+      'This report does not constitute financial, legal, tax or investment advice, nor a fairness opinion.'
+    ]
+  );
+
+  const preliminaryCIM = [
+    {
+      title: 'Business Overview',
+      content: `${companyName} operates in the ${sector} sector. The preliminary narrative should be completed with business model, customer base, channels, management team and competitive positioning.`
+    },
+    {
+      title: 'Market Context',
+      content: `Market context should be validated with external sources, sector comparables and competitive dynamics in ${geography}.`
+    },
+    {
+      title: 'Transaction Rationale',
+      content: `The transaction is currently framed as ${transactionType}. Rationale should be validated against seller objectives, buyer universe, expected structure and closing conditions.`
+    },
+    {
+      title: 'Financial Overview',
+      content: 'Financial information is preliminary and should be completed with historical financial statements, EBITDA adjustments, debt, cash, working capital and growth assumptions.'
+    }
+  ];
+
+  const companySnapshot = [
+    { label: 'Company', value: companyName },
+    { label: 'Sector', value: sector },
+    { label: 'Geography', value: geography },
+    { label: 'Currency', value: currency },
+    { label: 'Revenue', value: formatCurrency(revenue, currency) },
+    { label: 'Adjusted EBITDA', value: formatCurrency(adjustedEbitda, currency) },
+    { label: 'Adjusted EBITDA Margin', value: formatPercent(ebitdaMargin) }
+  ];
+
+  const transactionOverview = [
+    { label: 'Transaction Type', value: transactionType },
+    { label: 'Report Status', value: safeString(reportStatus, 'Draft') },
+    { label: 'Generated By', value: safeGeneratedBy },
+    { label: 'Organization', value: safeOrganizationName },
+    { label: 'Generated Date', value: formatDate(generatedAt) }
+  ];
+
+  const financialInputs = [
+    { label: 'Revenue', value: revenue, formattedValue: formatCurrency(revenue, currency) },
+    { label: 'Reported EBITDA', value: rawEbitda, formattedValue: formatCurrency(rawEbitda, currency) },
+    { label: 'EBITDA Adjustments', value: ebitdaAdjustments.total, formattedValue: formatCurrency(ebitdaAdjustments.total, currency) },
+    { label: 'Adjusted EBITDA', value: adjustedEbitda, formattedValue: formatCurrency(adjustedEbitda, currency) },
+    { label: 'Gross Debt', value: debtMode.grossDebt, formattedValue: formatCurrency(debtMode.grossDebt, currency) },
+    { label: 'Cash', value: debtMode.cash, formattedValue: formatCurrency(debtMode.cash, currency) },
+    { label: 'Net Debt', value: debtMode.netDebt, formattedValue: formatCurrency(debtMode.netDebt, currency) },
+    { label: 'Working Capital Adjustment', value: workingCapitalAdjustment, formattedValue: formatCurrency(workingCapitalAdjustment, currency) },
+    { label: 'Other Adjustments', value: otherAdjustments, formattedValue: formatCurrency(otherAdjustments, currency) }
+  ];
+
+  const valuationRangeArray = [
+    {
+      scenario: 'Low Case',
+      label: 'Low Case',
+      multiple: formatMultiple(multiples.low),
+      enterpriseValue: formatCurrency(evLow, currency),
+      equityValue: formatCurrency(equityLow, currency),
+      value: formatCurrency(evLow, currency)
+    },
+    {
+      scenario: 'Base Case',
+      label: 'Base Case',
+      multiple: formatMultiple(multiples.base),
+      enterpriseValue: formatCurrency(evBase, currency),
+      equityValue: formatCurrency(equityBase, currency),
+      value: formatCurrency(evBase, currency)
+    },
+    {
+      scenario: 'High Case',
+      label: 'High Case',
+      multiple: formatMultiple(multiples.high),
+      enterpriseValue: formatCurrency(evHigh, currency),
+      equityValue: formatCurrency(equityHigh, currency),
+      value: formatCurrency(evHigh, currency)
+    }
+  ];
+
+  const appendix = [
+    { label: 'Currency', value: currency },
+    { label: 'Valuation methodology', value: 'Adjusted EBITDA Multiple' },
+    { label: 'Multiple range', value: `${formatMultiple(multiples.low)} / ${formatMultiple(multiples.base)} / ${formatMultiple(multiples.high)}` },
+    { label: 'Debt treatment', value: bridgeLogic },
+    { label: 'Data source', value: 'User-provided financial inputs' },
+    { label: 'Review status', value: 'Human review required' }
+  ];
+
   const fileName = `${sanitizeFileName(companyName)}-ma-report-${generatedAt.toISOString().slice(0, 10)}.html`;
+  const reportTitle = `${companyName} - M&A Preliminary Valuation Report`;
+  const valuationRangeHeadline = `${formatCurrency(evLow, currency)} - ${formatCurrency(evHigh, currency)}`;
 
   return {
-    meta: {
-      reportTitle: `${companyName} — M&A Preliminary Valuation Report`,
+    title: 'M&A Professional Report',
+    subtitle: 'Strategic valuation and transaction review prepared for internal decision-making.',
+    companyName,
+    targetName: companyName,
+    organizationName: safeOrganizationName,
+    generatedBy: safeGeneratedBy,
+    reportStatus: safeString(reportStatus, 'Draft'),
+    reportDate: formatDate(generatedAt),
+    valuationRangeHeadline,
+    valuationHeadline: valuationRangeHeadline,
+    riskSignal: safeString(derived?.riskLevel?.label || derived?.riskLevel, 'Moderate'),
+    executiveSummary: buildExecutiveSummary({
       companyName,
-      generatedBy: safeString(generatedBy, 'CEO’s OS'),
-      organizationName: safeString(organizationName, 'CEO’s OS'),
+      sector,
+      geography,
+      transactionType,
+      revenue,
+      adjustedEbitda,
+      ebitdaMargin,
+      multiples,
+      evBase,
+      equityBase,
+      debtMode,
+      currency
+    }),
+    companySnapshot,
+    transactionOverview,
+    financialInputs,
+    ebitdaAdjustments: ebitdaAdjustments.items.map((item) => ({
+      ...item,
+      value: formatCurrency(item.amount, currency),
+      impact: formatCurrency(item.amount, currency),
+      comment: item.note
+    })),
+    valuationRange: valuationRangeArray,
+    enterpriseValue: {
+      low: evLow,
+      base: evBase,
+      high: evHigh,
+      value: formatCurrency(evBase, currency),
+      headline: formatCurrency(evBase, currency),
+      method: 'Adjusted EBITDA Multiple',
+      ebitda: formatCurrency(adjustedEbitda, currency),
+      multiple: formatMultiple(multiples.base)
+    },
+    equityValue: {
+      low: equityLow,
+      base: equityBase,
+      high: equityHigh,
+      value: formatCurrency(equityBase, currency),
+      headline: formatCurrency(equityBase, currency),
+      debtBasis: debtMode.label,
+      workingCapitalAdjustment: formatCurrency(workingCapitalAdjustment, currency),
+      otherAdjustments: formatCurrency(otherAdjustments, currency),
+      bridgeLogic
+    },
+    waterfall,
+    buyerMatching,
+    investmentThesis,
+    risksMitigants: risksAndMitigants,
+    risksAndMitigants,
+    preliminaryCim: preliminaryCIM,
+    preliminaryCIM,
+    humanReviewNotes,
+    appendix,
+    disclaimer:
+      "DSS Disclaimer: This document is a preliminary decision-support output generated within CEO's OS for internal strategic use only. It does not constitute legal, tax, audit, accounting or investment advice. All conclusions remain subject to human review, source validation, confirmatory due diligence and final approval.",
+    meta: {
+      reportTitle,
+      companyName,
+      generatedBy: safeGeneratedBy,
+      organizationName: safeOrganizationName,
       reportStatus: safeString(reportStatus, 'Draft'),
       generatedAt: generatedAt.toISOString(),
       generatedDateLabel: formatDate(generatedAt),
@@ -550,36 +884,14 @@ export function formatMAReportData({
       equityValueLow: equityLow,
       equityValueBase: equityBase,
       equityValueHigh: equityHigh,
+      netProceeds,
+      qualityScore,
       debtMode: debtMode.mode
     },
     sections: {
-      companySnapshot: [
-        { label: 'Company', value: companyName },
-        { label: 'Sector', value: sector },
-        { label: 'Geography', value: geography },
-        { label: 'Currency', value: currency },
-        { label: 'Revenue', value: formatCurrency(revenue, currency) },
-        { label: 'Adjusted EBITDA', value: formatCurrency(adjustedEbitda, currency) },
-        { label: 'Adjusted EBITDA Margin', value: formatPercent(ebitdaMargin) }
-      ],
-      transactionOverview: [
-        { label: 'Transaction Type', value: transactionType },
-        { label: 'Report Status', value: safeString(reportStatus, 'Draft') },
-        { label: 'Generated By', value: safeString(generatedBy, 'CEO’s OS') },
-        { label: 'Organization', value: safeString(organizationName, 'CEO’s OS') },
-        { label: 'Generated Date', value: formatDate(generatedAt) }
-      ],
-      financialInputs: [
-        { label: 'Revenue', value: revenue, formattedValue: formatCurrency(revenue, currency) },
-        { label: 'Reported EBITDA', value: rawEbitda, formattedValue: formatCurrency(rawEbitda, currency) },
-        { label: 'EBITDA Adjustments', value: ebitdaAdjustments.total, formattedValue: formatCurrency(ebitdaAdjustments.total, currency) },
-        { label: 'Adjusted EBITDA', value: adjustedEbitda, formattedValue: formatCurrency(adjustedEbitda, currency) },
-        { label: 'Gross Debt', value: debtMode.grossDebt, formattedValue: formatCurrency(debtMode.grossDebt, currency) },
-        { label: 'Cash', value: debtMode.cash, formattedValue: formatCurrency(debtMode.cash, currency) },
-        { label: 'Net Debt', value: debtMode.netDebt, formattedValue: formatCurrency(debtMode.netDebt, currency) },
-        { label: 'Working Capital Adjustment', value: workingCapitalAdjustment, formattedValue: formatCurrency(workingCapitalAdjustment, currency) },
-        { label: 'Other Adjustments', value: otherAdjustments, formattedValue: formatCurrency(otherAdjustments, currency) }
-      ],
+      companySnapshot,
+      transactionOverview,
+      financialInputs,
       ebitdaAdjustments: {
         items: ebitdaAdjustments.items,
         total: ebitdaAdjustments.total,
@@ -610,44 +922,12 @@ export function formatMAReportData({
         bridgeLogic
       },
       waterfall,
-      buyerMatching: getBuyerMatching(settings, derived),
-      investmentThesis: getTextItems(firstDefined(derived?.investmentThesis, settings?.investmentThesis), [
-        'Plataforma con potencial de creación de valor mediante crecimiento, mejora operativa o consolidación sectorial.',
-        'Valoración preliminar basada en EBITDA normalizado y rango de múltiplos de mercado.',
-        'Oportunidad sujeta a validación documental, revisión humana y contraste con compradores cualificados.'
-      ]),
-      risksAndMitigants: getRisks(settings, derived),
-      preliminaryCIM: [
-        {
-          title: 'Business Overview',
-          content: `${companyName} opera en el sector ${sector}. El análisis preliminar debe completarse con descripción del modelo de negocio, clientes principales, canales, equipo directivo y posición competitiva.`
-        },
-        {
-          title: 'Market Context',
-          content: `El contexto de mercado debe validarse con fuentes externas, comparables sectoriales y dinámica competitiva en ${geography}.`
-        },
-        {
-          title: 'Transaction Rationale',
-          content: `La operación se plantea como ${transactionType}. El racional debe contrastar objetivos del vendedor, perfil de comprador, estructura esperada y principales condiciones de cierre.`
-        },
-        {
-          title: 'Financial Overview',
-          content: 'La información financiera incluida es preliminar y debe completarse con estados financieros históricos, detalle de ajustes EBITDA, deuda, caja, working capital y supuestos de crecimiento.'
-        }
-      ],
-      humanReviewNotes: getTextItems(firstDefined(derived?.humanReviewNotes, settings?.humanReviewNotes), [
-        'Este informe es una versión preliminar y debe ser revisado por un profesional antes de ser compartido externamente.',
-        'Las cifras dependen de la calidad de los datos introducidos y de la documentación financiera disponible.',
-        'La valoración no constituye asesoramiento financiero, legal, fiscal ni una fairness opinion.'
-      ]),
-      appendix: [
-        { label: 'Currency', value: currency },
-        { label: 'Valuation methodology', value: 'Adjusted EBITDA Multiple' },
-        { label: 'Multiple range', value: `${formatMultiple(multiples.low)} / ${formatMultiple(multiples.base)} / ${formatMultiple(multiples.high)}` },
-        { label: 'Debt treatment', value: bridgeLogic },
-        { label: 'Data source', value: 'User-provided financial inputs' },
-        { label: 'Review status', value: 'Human review required' }
-      ]
+      buyerMatching,
+      investmentThesis,
+      risksAndMitigants,
+      preliminaryCIM,
+      humanReviewNotes,
+      appendix
     }
   };
 }

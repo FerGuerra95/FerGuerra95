@@ -29,8 +29,9 @@ const complianceDashboardCss = `
   .compliance-hero {
     position: relative;
     overflow: hidden;
+    min-height: 520px;
     border-radius: 38px;
-    padding: 38px;
+    padding: 44px;
     border: 1px solid rgba(148, 163, 184, 0.18);
     background:
       radial-gradient(circle at 8% 2%, rgba(37, 99, 235, 0.36), transparent 30%),
@@ -68,10 +69,15 @@ const complianceDashboardCss = `
   .compliance-hero-layout {
     position: relative;
     z-index: 1;
+    min-height: 430px;
     display: grid;
-    grid-template-columns: minmax(0, 1.42fr) minmax(380px, 0.58fr);
-    gap: 36px;
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1.08fr) minmax(390px, 0.92fr);
+    gap: 38px;
+    align-items: center;
+  }
+
+  .compliance-hero-main {
+    min-width: 0;
   }
 
   .compliance-badge-row {
@@ -84,21 +90,21 @@ const complianceDashboardCss = `
 
   .compliance-title {
     margin: 0;
-    max-width: 950px;
-    font-size: clamp(42px, 5vw, 72px);
-    line-height: 0.92;
-    letter-spacing: -0.075em;
+    max-width: 980px;
+    font-size: clamp(40px, 4.6vw, 66px);
+    line-height: 0.94;
+    letter-spacing: -0.072em;
   }
 
   .compliance-title span {
     display: block;
-    margin-top: 8px;
+    margin-top: 9px;
     color: rgba(226, 232, 240, 0.7);
   }
 
   .compliance-copy {
-    max-width: 860px;
-    margin: 26px 0 0;
+    max-width: 850px;
+    margin: 28px 0 0;
     font-size: 17px;
     line-height: 1.82;
     color: rgba(203, 213, 225, 0.86);
@@ -130,17 +136,17 @@ const complianceDashboardCss = `
 
   .compliance-signal-card {
     position: relative;
-    min-height: 100%;
+    width: 100%;
+    max-width: 460px;
+    justify-self: end;
+    align-self: center;
     border-radius: 32px;
-    padding: 28px;
+    padding: 26px;
     background:
       linear-gradient(135deg, rgba(255,255,255,0.086), rgba(255,255,255,0.026)),
       rgba(15, 23, 42, 0.76);
     border: 1px solid rgba(148, 163, 184, 0.2);
     backdrop-filter: blur(22px);
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
     box-shadow:
       0 26px 70px rgba(0, 0, 0, 0.24),
       inset 0 1px 0 rgba(255,255,255,0.05);
@@ -160,7 +166,8 @@ const complianceDashboardCss = `
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
+    min-width: 0;
   }
 
   .compliance-signal-top {
@@ -201,18 +208,18 @@ const complianceDashboardCss = `
 
   .compliance-score-module {
     display: grid;
-    grid-template-columns: 122px minmax(0, 1fr);
-    gap: 22px;
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 18px;
     align-items: center;
-    padding: 20px;
+    padding: 18px;
     border-radius: 26px;
     background: rgba(255, 255, 255, 0.047);
     border: 1px solid rgba(255, 255, 255, 0.085);
   }
 
   .compliance-score-ring {
-    width: 112px;
-    height: 112px;
+    width: 96px;
+    height: 96px;
     border-radius: 999px;
     display: grid;
     place-items: center;
@@ -224,8 +231,8 @@ const complianceDashboardCss = `
   }
 
   .compliance-score-core {
-    width: 84px;
-    height: 84px;
+    width: 72px;
+    height: 72px;
     border-radius: 999px;
     display: grid;
     place-items: center;
@@ -234,7 +241,7 @@ const complianceDashboardCss = `
   }
 
   .compliance-score-core strong {
-    font-size: 25px;
+    font-size: 23px;
     letter-spacing: -0.055em;
   }
 
@@ -250,7 +257,7 @@ const complianceDashboardCss = `
 
   .compliance-score-copy p {
     margin: 0;
-    line-height: 1.62;
+    line-height: 1.58;
   }
 
   .compliance-signal-table {
@@ -263,7 +270,7 @@ const complianceDashboardCss = `
     grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
     gap: 14px;
     align-items: center;
-    padding: 15px 0;
+    padding: 12px 0;
     border-top: 1px solid rgba(148, 163, 184, 0.14);
   }
 
@@ -525,8 +532,20 @@ const complianceDashboardCss = `
   }
 
   @media (max-width: 1180px) {
+    .compliance-hero {
+      min-height: auto;
+      padding: 34px;
+    }
+
     .compliance-hero-layout {
+      min-height: auto;
       grid-template-columns: 1fr;
+      align-items: stretch;
+    }
+
+    .compliance-signal-card {
+      max-width: none;
+      justify-self: stretch;
     }
 
     .compliance-grid-kpis,
@@ -557,6 +576,11 @@ const complianceDashboardCss = `
       border-radius: 28px;
     }
 
+    .compliance-title {
+      font-size: clamp(36px, 12vw, 48px);
+      line-height: 0.96;
+    }
+
     .compliance-grid-kpis,
     .compliance-bridge-grid {
       grid-template-columns: 1fr;
@@ -571,6 +595,16 @@ const complianceDashboardCss = `
 
     .compliance-score-module {
       grid-template-columns: 1fr;
+    }
+
+    .compliance-score-ring {
+      width: 104px;
+      height: 104px;
+    }
+
+    .compliance-score-core {
+      width: 78px;
+      height: 78px;
     }
 
     .compliance-signal-row,
@@ -888,7 +922,7 @@ export function ComplianceDashboardPage() {
       <div className="compliance-page">
         <section className="compliance-hero">
           <div className="compliance-hero-layout">
-            <div>
+            <div className="compliance-hero-main">
               <div className="compliance-badge-row">
                 <Badge>Compliance & Risk</Badge>
                 <Badge>Supply Chain Intelligence</Badge>

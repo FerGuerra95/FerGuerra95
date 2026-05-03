@@ -629,6 +629,63 @@ const suppliersPageCss = `
       text-align: left;
     }
   }
+
+  /* FINAL POLISH — Supplier Portfolio Overview */
+  .suppliers-grid-two {
+    align-items: start !important;
+  }
+
+  .suppliers-portfolio-panel {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .suppliers-portfolio-panel .suppliers-grid-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+
+  .suppliers-portfolio-panel .suppliers-kpi-card {
+    min-height: 122px !important;
+    padding: 18px !important;
+    gap: 14px !important;
+    border-radius: 24px !important;
+  }
+
+  .suppliers-portfolio-panel .suppliers-kpi-top {
+    gap: 14px !important;
+  }
+
+  .suppliers-portfolio-panel .suppliers-kpi-value {
+    margin-top: 9px !important;
+    font-size: 28px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+  }
+
+  .suppliers-portfolio-panel .suppliers-kpi-card p {
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+  }
+
+  .suppliers-portfolio-panel .suppliers-card-icon {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 16px !important;
+  }
+
+  .suppliers-portfolio-panel > .muted {
+    margin-top: 4px !important;
+    line-height: 1.6 !important;
+  }
+
+  @media (max-width: 680px) {
+    .suppliers-portfolio-panel .suppliers-grid-kpis {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
 `;
 
 function getEmptySupplierForm() {
@@ -1382,7 +1439,7 @@ export function SuppliersPage() {
             )}
           </Card>
 
-          <Card className="suppliers-panel">
+          <Card className="suppliers-panel suppliers-portfolio-panel">
             <PanelHeader
               kicker="Portfolio overview"
               icon={Gauge}

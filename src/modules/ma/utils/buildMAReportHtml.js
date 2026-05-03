@@ -1,12 +1,28 @@
-function escapeHtml(value) {
-  if (value === null || value === undefined) return '';
+const BRAND_NAME = "CEO's OS";
+
+function normalizeText(value, fallback = '') {
+  if (value === null || value === undefined) return fallback;
 
   return String(value)
+    .replace(/CEO’s OS/g, BRAND_NAME)
+    .replace(/CEO\u2019s OS/g, BRAND_NAME)
+    .replace(/[“”]/g, '"')
+    .replace(/[’]/g, "'")
+    .trim() || fallback;
+}
+
+function escapeHtml(value) {
+  return normalizeText(value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/'/g, '&#39;');
+}
+
+function safeText(value, fallback = 'N/A') {
+  const text = normalizeText(value, '');
+  return text || fallback;
 }
 
 function safeArray(value) {
@@ -36,53 +52,119 @@ function formatMultiple(value) {
   return `${safeNumber(value).toFixed(1)}x`;
 }
 
-function formatPercent(value) {
-  const parsed = safeNumber(value);
-  const normalized = Math.abs(parsed) <= 1 ? parsed * 100 : parsed;
+function readFormattedMetric(item) {
+  if (!item || typeof item !== 'object') return 'N/A';
 
-  return `${normalized.toFixed(1)}%`;
+  return safeText(
+    item.formattedValue ||
+      item.value ||
+      item.amount ||
+      item.impact ||
+      item.enterpriseValue ||
+      item.equityValue,
+    'N/A'
+  );
 }
 
-function getBarWidth(value, maxValue) {
-  const safeValue = Math.abs(safeNumber(value));
-  const safeMax = Math.max(Math.abs(safeNumber(maxValue)), 1);
-  const width = Math.min(Math.max((safeValue / safeMax) * 100, 8), 100);
+function getReportMeta(report = {}) {
+  const meta = report.meta || {};
 
-  return `${width.toFixed(0)}%`;
+  return {
+    title: safeText(meta.reportTitle || report.title, 'M&A Professional Report'),
+    subtitle: safeText(
+      report.subtitle,
+      'Strategic valuation and transaction review prepared for internal decision-making.'
+    ),
+    companyName: safeText(meta.companyName || report.companyName || report.targetName, 'Target Company'),
+    organizationName: safeText(meta.organizationName || report.organizationName, BRAND_NAME),
+    generatedBy: safeText(meta.generatedBy || report.generatedBy, BRAND_NAME),
+    reportStatus: safeText(meta.reportStatus || report.reportStatus, 'Draft'),
+    generatedDateLabel: safeText(meta.generatedDateLabel || report.reportDate, new Date().toLocaleDateString('es-ES')),
+    currency: safeText(meta.currency, 'EUR'),
+    fileName: safeText(meta.fileName, 'ma-report.html')
+  };
 }
 
-function renderSection(number, title, subtitle, content, options = {}) {
-  const classes = [
-    'report-section',
-    options.featured ? 'featured-section' : '',
-    options.compact ? 'compact-section' : ''
-  ]
-    .filter(Boolean)
-    .join(' ');
+function getTopKpis(report = {}, meta = {}) {
+  const summary = report.summary || {};
+  const enterpriseValue = report.enterpriseValue || {};
+  const equityValue = report.equityValue || {};
+  const sections = report.sections || {};
 
+  const evBase =
+    enterpriseValue.headline ||
+    enterpriseValue.value ||
+    sections.enterpriseValue?.base ||
+    summary.enterpriseValueBase;
+
+  const equityBase =
+    equityValue.headline ||
+    equityValue.value ||
+    sections.equityValue?.base ||
+    summary.equityValueBase;
+
+  const valuationRange =
+    report.valuationRangeHeadline ||
+    report.valuationHeadline ||
+    (summary.enterpriseValueLow || summary.enterpriseValueHigh
+      ? `${formatCurrency(summary.enterpriseValueLow, meta.currency)} - ${formatCurrency(summary.enterpriseValueHigh, meta.currency)}`
+      : 'N/A');
+
+  const adjustedEbitda =
+    summary.adjustedEbitda !== undefined
+      ? formatCurrency(summary.adjustedEbitda, meta.currency)
+      : 'N/A';
+
+  return [
+    {
+      label: 'Valuation range',
+      value: valuationRange,
+      hint: 'Indicative enterprise value range'
+    },
+    {
+      label: 'Enterprise Value',
+      value: typeof evBase === 'number' ? formatCurrency(evBase, meta.currency) : safeText(evBase, 'N/A'),
+      hint: 'Base case valuation output'
+    },
+    {
+      label: 'Equity Value',
+      value: typeof equityBase === 'number' ? formatCurrency(equityBase, meta.currency) : safeText(equityBase, 'N/A'),
+      hint: 'After debt, cash and bridge adjustments'
+    },
+    {
+      label: 'Adjusted EBITDA',
+      value: adjustedEbitda,
+      hint: 'Normalized valuation earnings base'
+    }
+  ];
+}
+
+function renderKpiCards(items = []) {
   return `
-    <section class="${classes}">
-      <div class="section-heading">
-        <div class="section-number">${escapeHtml(number)}</div>
-        <div class="section-title-block">
-          <p class="section-kicker">${escapeHtml(options.kicker || 'M&A INTELLIGENCE')}</p>
-          <h2>${escapeHtml(title)}</h2>
-          <p>${escapeHtml(subtitle)}</p>
-        </div>
-      </div>
-      ${content}
-    </section>
-  `;
-}
-
-function renderKeyValueGrid(items = []) {
-  return `
-    <div class="kv-grid">
+    <div class="cover-kpi-grid">
       ${safeArray(items)
         .map(
           (item, index) => `
-            <article class="kv-card accent-${(index % 5) + 1}">
-              <div class="card-orb"></div>
+            <article class="cover-kpi-card tone-${(index % 4) + 1}">
+              <div class="card-light"></div>
+              <span>${escapeHtml(item.label)}</span>
+              <strong>${escapeHtml(item.value)}</strong>
+              <small>${escapeHtml(item.hint)}</small>
+            </article>
+          `
+        )
+        .join('')}
+    </div>
+  `;
+}
+
+function renderMetaCards(items = []) {
+  return `
+    <div class="cover-meta-grid">
+      ${safeArray(items)
+        .map(
+          (item) => `
+            <article class="cover-meta-card">
               <span>${escapeHtml(item.label)}</span>
               <strong>${escapeHtml(item.value)}</strong>
             </article>
@@ -93,23 +175,175 @@ function renderKeyValueGrid(items = []) {
   `;
 }
 
-function renderFinancialInputs(items = []) {
+function renderSecondPageOpening(topKpis = [], meta = {}) {
   return `
-    <div class="premium-table-shell">
+    <div class="content-opening">
+      <div class="content-opening-inner">
+        <div>
+          <div class="content-opening-kicker">Executive Workpaper</div>
+
+          <h2>
+            Valuation review prepared for executive decision-making.
+          </h2>
+
+          <p>
+            This second page consolidates the professional workpaper: valuation base,
+            key outputs, transaction context and review areas before moving into the
+            detailed sections of the M&A report.
+          </p>
+        </div>
+
+        <div class="content-opening-metrics">
+          ${safeArray(topKpis)
+            .slice(0, 3)
+            .map(
+              (item) => `
+                <article class="content-opening-metric">
+                  <span>${escapeHtml(item.label)}</span>
+                  <strong>${escapeHtml(item.value)}</strong>
+                  <small>${escapeHtml(item.hint)}</small>
+                </article>
+              `
+            )
+            .join('')}
+
+          <article class="content-opening-metric">
+            <span>Target</span>
+            <strong>${escapeHtml(meta.companyName)}</strong>
+            <small>Current report subject and active valuation case.</small>
+          </article>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSection(number, title, subtitle, content, options = {}) {
+  const classes = [
+    'report-section',
+    options.featured ? 'featured-section' : '',
+    options.dark ? 'dark-section' : ''
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  return `
+    <section class="${classes}">
+      <header class="section-header">
+        <div class="section-number">${escapeHtml(String(number).padStart(2, '0'))}</div>
+        <div>
+          <p>${escapeHtml(options.kicker || 'M&A INTELLIGENCE')}</p>
+          <h2>${escapeHtml(title)}</h2>
+          <span>${escapeHtml(subtitle)}</span>
+        </div>
+      </header>
+      <div class="section-body">
+        ${content}
+      </div>
+    </section>
+  `;
+}
+
+function renderDefinitionGrid(items = [], emptyText = 'No data available.') {
+  const safeItems = safeArray(items).filter(Boolean);
+
+  if (!safeItems.length) {
+    return `<div class="empty-state">${escapeHtml(emptyText)}</div>`;
+  }
+
+  return `
+    <div class="definition-grid">
+      ${safeItems
+        .map(
+          (item, index) => `
+            <article class="definition-card accent-${(index % 5) + 1}">
+              <div class="definition-glow"></div>
+              <span>${escapeHtml(item.label || item.title || 'Item')}</span>
+              <strong>${escapeHtml(readFormattedMetric(item))}</strong>
+            </article>
+          `
+        )
+        .join('')}
+    </div>
+  `;
+}
+
+function renderBulletList(items = [], emptyText = 'No data available.') {
+  const safeItems = safeArray(items).filter(Boolean);
+
+  if (!safeItems.length) {
+    return `<div class="empty-state">${escapeHtml(emptyText)}</div>`;
+  }
+
+  return `
+    <ul class="premium-list">
+      ${safeItems
+        .map((item) => {
+          const text =
+            typeof item === 'string'
+              ? item
+              : item.text || item.label || item.title || item.description || item.value;
+
+          return `<li>${escapeHtml(text)}</li>`;
+        })
+        .join('')}
+    </ul>
+  `;
+}
+
+function renderNumberedCards(items = [], emptyText = 'No data available.') {
+  const safeItems = safeArray(items).filter(Boolean);
+
+  if (!safeItems.length) {
+    return `<div class="empty-state">${escapeHtml(emptyText)}</div>`;
+  }
+
+  return `
+    <div class="numbered-card-list">
+      ${safeItems
+        .map((item, index) => {
+          const title = safeText(item.title || item.label || `Item ${index + 1}`);
+          const body = safeText(item.content || item.description || item.text || item.value, 'Pending further detail.');
+
+          return `
+            <article class="numbered-card">
+              <div class="number-pill">${String(index + 1).padStart(2, '0')}</div>
+              <div>
+                <h3>${escapeHtml(title)}</h3>
+                <p>${escapeHtml(body)}</p>
+              </div>
+            </article>
+          `;
+        })
+        .join('')}
+    </div>
+  `;
+}
+
+function renderTable(columns = [], rows = [], emptyText = 'No data available.') {
+  const safeColumns = safeArray(columns);
+  const safeRows = safeArray(rows);
+
+  if (!safeColumns.length || !safeRows.length) {
+    return `<div class="empty-state">${escapeHtml(emptyText)}</div>`;
+  }
+
+  return `
+    <div class="table-shell">
       <table>
         <thead>
           <tr>
-            <th>Metric</th>
-            <th class="right">Value</th>
+            ${safeColumns.map((column) => `<th>${escapeHtml(column)}</th>`).join('')}
           </tr>
         </thead>
         <tbody>
-          ${safeArray(items)
+          ${safeRows
             .map(
-              (item) => `
+              (row) => `
                 <tr>
-                  <td>${escapeHtml(item.label)}</td>
-                  <td class="right strong">${escapeHtml(item.formattedValue)}</td>
+                  ${safeArray(row)
+                    .map((cell) => `<td>${escapeHtml(cell)}</td>`)
+                    .join('')}
                 </tr>
               `
             )
@@ -120,13 +354,29 @@ function renderFinancialInputs(items = []) {
   `;
 }
 
-function renderEbitdaAdjustments(report) {
-  const currency = report?.meta?.currency || 'EUR';
-  const items = safeArray(report?.sections?.ebitdaAdjustments?.items);
+function renderFinancialInputs(report = {}) {
+  const inputs = safeArray(report.financialInputs || report.sections?.financialInputs);
 
-  if (items.length === 0) {
+  return renderTable(
+    ['Metric', 'Value'],
+    inputs.map((item) => [
+      safeText(item.label, 'Metric'),
+      safeText(item.formattedValue || item.value, 'N/A')
+    ]),
+    'No financial inputs available.'
+  );
+}
+
+function renderEbitdaAdjustments(report = {}) {
+  const adjustments = safeArray(report.ebitdaAdjustments || report.sections?.ebitdaAdjustments?.items);
+  const total =
+    report.sections?.ebitdaAdjustments?.total !== undefined
+      ? formatCurrency(report.sections.ebitdaAdjustments.total, report.meta?.currency || 'EUR')
+      : 'N/A';
+
+  if (!adjustments.length) {
     return `
-      <div class="premium-note warning-note">
+      <div class="premium-note amber-note">
         <div class="note-icon">!</div>
         <div>
           <strong>No EBITDA adjustments provided</strong>
@@ -137,246 +387,164 @@ function renderEbitdaAdjustments(report) {
   }
 
   return `
-    <div class="premium-table-shell">
-      <table>
-        <thead>
-          <tr>
-            <th>Adjustment</th>
-            <th>Rationale</th>
-            <th class="right">Impact</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${items
-            .map(
-              (item) => `
-                <tr>
-                  <td class="strong">${escapeHtml(item.label)}</td>
-                  <td>${escapeHtml(item.note)}</td>
-                  <td class="right strong">${escapeHtml(formatCurrency(item.amount, currency))}</td>
-                </tr>
-              `
-            )
-            .join('')}
-          <tr class="total-row">
-            <td colspan="2">Total EBITDA Adjustments</td>
-            <td class="right">${escapeHtml(
-              formatCurrency(report?.sections?.ebitdaAdjustments?.total, currency)
-            )}</td>
-          </tr>
-        </tbody>
-      </table>
+    ${renderTable(
+      ['Adjustment', 'Impact', 'Comment'],
+      adjustments.map((item) => [
+        safeText(item.label || item.title, 'Adjustment'),
+        safeText(item.value || item.impact || formatCurrency(item.amount, report.meta?.currency || 'EUR'), 'N/A'),
+        safeText(item.comment || item.note || item.description, 'N/A')
+      ])
+    )}
+    <div class="total-strip">
+      <span>Total EBITDA adjustments</span>
+      <strong>${escapeHtml(total)}</strong>
     </div>
   `;
 }
 
-function renderValuationRange(report) {
-  const currency = report?.meta?.currency || 'EUR';
-  const multiples = report?.sections?.valuationRange?.multiples || {};
-  const enterpriseValue = report?.sections?.valuationRange?.enterpriseValue || {};
-  const equityValue = report?.sections?.valuationRange?.equityValue || {};
-  const maxEquity = Math.max(
-    Math.abs(safeNumber(equityValue.low)),
-    Math.abs(safeNumber(equityValue.base)),
-    Math.abs(safeNumber(equityValue.high)),
-    1
-  );
+function renderValuationRange(report = {}) {
+  const range = safeArray(report.valuationRange);
+  const valuation = report.sections?.valuationRange || {};
+  const currency = report.meta?.currency || 'EUR';
+
+  const rows =
+    range.length > 0
+      ? range
+      : [
+          {
+            scenario: 'Low Case',
+            multiple: formatMultiple(valuation.multiples?.low),
+            enterpriseValue: formatCurrency(valuation.enterpriseValue?.low, currency),
+            equityValue: formatCurrency(valuation.equityValue?.low, currency)
+          },
+          {
+            scenario: 'Base Case',
+            multiple: formatMultiple(valuation.multiples?.base),
+            enterpriseValue: formatCurrency(valuation.enterpriseValue?.base, currency),
+            equityValue: formatCurrency(valuation.equityValue?.base, currency)
+          },
+          {
+            scenario: 'High Case',
+            multiple: formatMultiple(valuation.multiples?.high),
+            enterpriseValue: formatCurrency(valuation.enterpriseValue?.high, currency),
+            equityValue: formatCurrency(valuation.equityValue?.high, currency)
+          }
+        ];
 
   return `
     <div class="scenario-grid">
-      <article class="scenario-card scenario-low">
-        <div class="scenario-top">
-          <span>Low Case</span>
-          <small>${escapeHtml(formatMultiple(multiples.low))}</small>
-        </div>
-        <strong>${escapeHtml(formatCurrency(equityValue.low, currency))}</strong>
-        <div class="scenario-bar">
-          <div style="width:${getBarWidth(equityValue.low, maxEquity)}"></div>
-        </div>
-        <p>Conservative case based on lower multiple assumptions.</p>
-      </article>
-
-      <article class="scenario-card scenario-base">
-        <div class="scenario-top">
-          <span>Base Case</span>
-          <small>${escapeHtml(formatMultiple(multiples.base))}</small>
-        </div>
-        <strong>${escapeHtml(formatCurrency(equityValue.base, currency))}</strong>
-        <div class="scenario-bar">
-          <div style="width:${getBarWidth(equityValue.base, maxEquity)}"></div>
-        </div>
-        <p>Main committee reference case for valuation discussion.</p>
-      </article>
-
-      <article class="scenario-card scenario-high">
-        <div class="scenario-top">
-          <span>High Case</span>
-          <small>${escapeHtml(formatMultiple(multiples.high))}</small>
-        </div>
-        <strong>${escapeHtml(formatCurrency(equityValue.high, currency))}</strong>
-        <div class="scenario-bar">
-          <div style="width:${getBarWidth(equityValue.high, maxEquity)}"></div>
-        </div>
-        <p>Upside case reflecting stronger valuation assumptions.</p>
-      </article>
+      ${rows
+        .map(
+          (item, index) => `
+            <article class="scenario-card scenario-${index + 1}">
+              <div class="scenario-top">
+                <span>${escapeHtml(item.scenario || item.label || `Scenario ${index + 1}`)}</span>
+                <small>${escapeHtml(item.multiple || 'N/A')}</small>
+              </div>
+              <strong>${escapeHtml(item.equityValue || item.enterpriseValue || item.value || 'N/A')}</strong>
+              <p>${index === 0 ? 'Conservative case' : index === 1 ? 'Main committee case' : 'Upside case'}</p>
+              <div class="scenario-line"><div></div></div>
+            </article>
+          `
+        )
+        .join('')}
     </div>
 
-    <div class="premium-table-shell">
-      <table>
-        <thead>
-          <tr>
-            <th>Scenario</th>
-            <th class="right">Multiple</th>
-            <th class="right">Enterprise Value</th>
-            <th class="right">Equity Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Low Case</td>
-            <td class="right">${escapeHtml(formatMultiple(multiples.low))}</td>
-            <td class="right strong">${escapeHtml(formatCurrency(enterpriseValue.low, currency))}</td>
-            <td class="right strong">${escapeHtml(formatCurrency(equityValue.low, currency))}</td>
-          </tr>
-          <tr class="highlight-row">
-            <td>Base Case</td>
-            <td class="right">${escapeHtml(formatMultiple(multiples.base))}</td>
-            <td class="right strong">${escapeHtml(formatCurrency(enterpriseValue.base, currency))}</td>
-            <td class="right strong">${escapeHtml(formatCurrency(equityValue.base, currency))}</td>
-          </tr>
-          <tr>
-            <td>High Case</td>
-            <td class="right">${escapeHtml(formatMultiple(multiples.high))}</td>
-            <td class="right strong">${escapeHtml(formatCurrency(enterpriseValue.high, currency))}</td>
-            <td class="right strong">${escapeHtml(formatCurrency(equityValue.high, currency))}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    ${renderTable(
+      ['Scenario', 'Multiple', 'Enterprise Value', 'Equity Value'],
+      rows.map((item) => [
+        safeText(item.scenario || item.label, 'Scenario'),
+        safeText(item.multiple, 'N/A'),
+        safeText(item.enterpriseValue || item.value, 'N/A'),
+        safeText(item.equityValue, 'N/A')
+      ])
+    )}
   `;
 }
 
-function renderWaterfall(report) {
-  const currency = report?.meta?.currency || 'EUR';
-  const rows = safeArray(report?.sections?.waterfall);
+function renderEnterpriseEquityGrid(report = {}) {
+  const enterprise = report.enterpriseValue || {};
+  const equity = report.equityValue || {};
+  const currency = report.meta?.currency || 'EUR';
+
+  const items = [
+    {
+      label: 'Enterprise Value',
+      value: enterprise.value || enterprise.headline || formatCurrency(report.sections?.enterpriseValue?.base, currency)
+    },
+    {
+      label: 'Method',
+      value: enterprise.method || 'Adjusted EBITDA Multiple'
+    },
+    {
+      label: 'Equity Value',
+      value: equity.value || equity.headline || formatCurrency(report.sections?.equityValue?.base, currency)
+    },
+    {
+      label: 'Debt basis',
+      value: equity.debtBasis || report.summary?.debtMode || 'N/A'
+    },
+    {
+      label: 'Working Capital Adjustment',
+      value: equity.workingCapitalAdjustment || 'N/A'
+    },
+    {
+      label: 'Other Adjustments',
+      value: equity.otherAdjustments || 'N/A'
+    }
+  ];
+
+  return renderDefinitionGrid(items);
+}
+
+function renderWaterfall(report = {}) {
+  const waterfall = safeArray(report.waterfall || report.sections?.waterfall);
+
+  if (!waterfall.length) {
+    return `<div class="empty-state">No waterfall available.</div>`;
+  }
 
   return `
     <div class="waterfall-board">
-      ${rows
-        .slice(0, 6)
-        .map(
-          (row, index) => `
-            <article class="waterfall-node ${row.type === 'total' ? 'waterfall-total' : ''}">
-              <span>${String(index + 1).padStart(2, '0')}</span>
-              <h3>${escapeHtml(row.label)}</h3>
-              <strong>${escapeHtml(formatCurrency(row.base, currency))}</strong>
-            </article>
-          `
-        )
-        .join('')}
-    </div>
+      ${waterfall
+        .map((item, index) => {
+          const tone = item.tone || (item.type === 'deduction' ? 'negative' : item.type === 'addition' ? 'positive' : item.type === 'total' ? 'highlight' : 'neutral');
 
-    <div class="premium-table-shell">
-      <table>
-        <thead>
-          <tr>
-            <th>Bridge Item</th>
-            <th>Description</th>
-            <th class="right">Low</th>
-            <th class="right">Base</th>
-            <th class="right">High</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows
-            .map(
-              (row) => `
-                <tr class="${row.type === 'total' ? 'total-row' : ''}">
-                  <td class="strong">${escapeHtml(row.label)}</td>
-                  <td>${escapeHtml(row.description)}</td>
-                  <td class="right">${escapeHtml(formatCurrency(row.low, currency))}</td>
-                  <td class="right">${escapeHtml(formatCurrency(row.base, currency))}</td>
-                  <td class="right">${escapeHtml(formatCurrency(row.high, currency))}</td>
-                </tr>
-              `
-            )
-            .join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-function renderBuyerMatching(items = []) {
-  return `
-    <div class="card-grid three">
-      ${safeArray(items)
-        .map(
-          (item, index) => `
-            <article class="buyer-card buyer-${(index % 3) + 1}">
-              <div class="buyer-top">
-                <span>${escapeHtml(item.type)}</span>
-                <div class="buyer-badge">
-                  ${item.fitScore !== null && item.fitScore !== undefined ? escapeHtml(item.fitScore) : 'FIT'}
-                </div>
+          return `
+            <article class="waterfall-card tone-${escapeHtml(tone)}">
+              <div class="waterfall-index">${String(index + 1).padStart(2, '0')}</div>
+              <div class="waterfall-copy">
+                <h3>${escapeHtml(item.label || item.title || 'Step')}</h3>
+                <p>${escapeHtml(item.description || item.meta || '')}</p>
               </div>
-              <h3>${escapeHtml(item.name)}</h3>
-              <p>${escapeHtml(item.rationale)}</p>
+              <strong>${escapeHtml(item.value || 'N/A')}</strong>
             </article>
-          `
-        )
+          `;
+        })
         .join('')}
     </div>
   `;
 }
 
-function renderBulletList(items = []) {
-  return `
-    <ul class="premium-list">
-      ${safeArray(items)
-        .map((item) => `<li>${escapeHtml(item)}</li>`)
-        .join('')}
-    </ul>
-  `;
-}
+function renderBuyerMatching(report = {}) {
+  const buyers = safeArray(report.buyerMatching || report.sections?.buyerMatching);
 
-function renderRisks(items = []) {
-  return `
-    <div class="premium-table-shell">
-      <table>
-        <thead>
-          <tr>
-            <th>Risk</th>
-            <th>Mitigant</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${safeArray(items)
-            .map(
-              (item) => `
-                <tr>
-                  <td class="strong risk-cell">${escapeHtml(item.risk)}</td>
-                  <td>${escapeHtml(item.mitigant)}</td>
-                </tr>
-              `
-            )
-            .join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
+  if (!buyers.length) {
+    return `<div class="empty-state">No buyer matching analysis available.</div>`;
+  }
 
-function renderPreliminaryCIM(items = []) {
   return `
-    <div class="card-grid two">
-      ${safeArray(items)
+    <div class="buyer-grid">
+      ${buyers
         .map(
-          (item, index) => `
-            <article class="cim-card module-${(index % 4) + 1}">
-              <span>CIM MODULE</span>
-              <h3>${escapeHtml(item.title)}</h3>
-              <p>${escapeHtml(item.content)}</p>
+          (buyer, index) => `
+            <article class="buyer-card buyer-${(index % 3) + 1}">
+              <div class="buyer-header">
+                <span>${escapeHtml(buyer.type || 'Buyer')}</span>
+                <small>${escapeHtml(buyer.fit || buyer.fitScore || 'Fit')}</small>
+              </div>
+              <h3>${escapeHtml(buyer.name || `Buyer ${index + 1}`)}</h3>
+              <p>${escapeHtml(buyer.rationale || 'Strategic rationale pending validation.')}</p>
             </article>
           `
         )
@@ -385,111 +553,128 @@ function renderPreliminaryCIM(items = []) {
   `;
 }
 
-function renderAppendix(items = []) {
-  return `
-    <div class="premium-table-shell">
-      <table>
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Detail</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${safeArray(items)
-            .map(
-              (item) => `
-                <tr>
-                  <td class="strong">${escapeHtml(item.label)}</td>
-                  <td>${escapeHtml(item.value)}</td>
-                </tr>
-              `
-            )
-            .join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
+function renderRisks(report = {}) {
+  const risks = safeArray(report.risksMitigants || report.risksAndMitigants || report.sections?.risksAndMitigants);
+
+  return renderTable(
+    ['Risk', 'Severity', 'Mitigant'],
+    risks.map((item) => [
+      safeText(item.risk || item.title || item.label, 'Risk'),
+      safeText(item.severity || item.level, 'To assess'),
+      safeText(item.mitigant || item.mitigation || item.description, 'Pending mitigation.')
+    ]),
+    'No risks and mitigants available.'
+  );
 }
 
-export function buildMAReportHtml(report) {
-  const meta = report?.meta || {};
-  const summary = report?.summary || {};
-  const sections = report?.sections || {};
-  const currency = meta.currency || 'EUR';
-  const safeCompanyName = meta.companyName || 'Target Company';
+function renderAppendix(report = {}) {
+  const appendix = safeArray(report.appendix || report.sections?.appendix);
+
+  return renderTable(
+    ['Item', 'Value'],
+    appendix.map((item) => [
+      safeText(item.label || item.title, 'Item'),
+      safeText(item.value || item.text || item.description, 'N/A')
+    ]),
+    'No appendix data available.'
+  );
+}
+
+export function buildMAReportHtml(report = {}) {
+  const meta = getReportMeta(report);
+  const topKpis = getTopKpis(report, meta);
+
+  const coverMeta = [
+    { label: 'Target', value: meta.companyName },
+    { label: 'Status', value: meta.reportStatus },
+    { label: 'Prepared for', value: meta.organizationName },
+    { label: 'Generated by', value: meta.generatedBy },
+    { label: 'Date', value: meta.generatedDateLabel },
+    { label: 'Framework', value: 'M&A / Decision Support' }
+  ];
+
+  const executiveSummary = safeArray(report.executiveSummary);
+  const companySnapshot = safeArray(report.companySnapshot || report.sections?.companySnapshot);
+  const transactionOverview = safeArray(report.transactionOverview || report.sections?.transactionOverview);
+  const investmentThesis = safeArray(report.investmentThesis || report.sections?.investmentThesis);
+  const preliminaryCim = safeArray(report.preliminaryCim || report.preliminaryCIM || report.sections?.preliminaryCIM);
+  const humanReviewNotes = safeArray(report.humanReviewNotes || report.sections?.humanReviewNotes);
 
   return `<!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>${escapeHtml(meta.reportTitle || 'M&A Preliminary Valuation Report')}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(meta.title)}</title>
   <style>
     :root {
-      --ink: #0f172a;
-      --graphite: #243044;
+      --ink: #e5eefc;
+      --ink-dark: #0f172a;
+      --graphite: #334155;
       --muted: #64748b;
       --line: #dbe4f0;
-      --paper: #ffffff;
-      --soft: #f5f7fb;
-      --navy: #030712;
+      --line-soft: rgba(148, 163, 184, 0.2);
+      --white: #ffffff;
+      --paper: #f8fafc;
+      --navy: #020617;
       --navy-2: #0f172a;
-      --blue: #172554;
-      --blue-2: #2563eb;
-      --cyan: #06b6d4;
+      --blue: #2563eb;
+      --blue-2: #60a5fa;
+      --blue-soft: #dbeafe;
       --emerald: #10b981;
+      --emerald-soft: #d1fae5;
+      --gold: #d4a017;
+      --gold-soft: #fef3c7;
+      --danger: #dc2626;
+      --danger-soft: #fee2e2;
       --violet: #7c3aed;
-      --rose: #e11d48;
-      --amber: #f59e0b;
-      --gold: #b88a44;
-      --gold-2: #e2b76d;
-      --gold-soft: #f7ead3;
-      --danger: #9f1239;
-      --danger-soft: #fff1f2;
-      --shadow-xl: 0 32px 120px rgba(15, 23, 42, 0.22);
-      --shadow-card: 0 18px 48px rgba(15, 23, 42, 0.075);
+      --shadow-xl: 0 34px 120px rgba(15, 23, 42, 0.22);
+      --shadow-card: 0 18px 48px rgba(15, 23, 42, 0.09);
     }
 
     * {
       box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
 
     html,
     body {
       margin: 0;
-      color: var(--ink);
       background:
-        radial-gradient(circle at 8% 0%, rgba(37, 99, 235, 0.22), transparent 26%),
-        radial-gradient(circle at 94% 5%, rgba(226, 183, 109, 0.25), transparent 25%),
-        radial-gradient(circle at 50% 100%, rgba(16, 185, 129, 0.12), transparent 26%),
-        #e4e9f2;
+        radial-gradient(circle at 8% 0%, rgba(37, 99, 235, 0.18), transparent 28%),
+        radial-gradient(circle at 92% 4%, rgba(16, 185, 129, 0.12), transparent 26%),
+        linear-gradient(180deg, #eef4fb 0%, #e5edf7 100%);
+      color: var(--ink-dark);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-size: 14px;
-      line-height: 1.58;
+      line-height: 1.6;
     }
 
     .report-shell {
-      width: min(1180px, 100%);
-      margin: 34px auto;
-      overflow: hidden;
-      background: var(--paper);
-      border: 1px solid rgba(255, 255, 255, 0.78);
+      width: min(1120px, 100%);
+      margin: 32px auto;
+      padding: 0;
+      background: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.8);
       border-radius: 34px;
+      overflow: hidden;
       box-shadow: var(--shadow-xl);
     }
 
     .cover {
       position: relative;
-      min-height: 810px;
-      padding: 76px;
+      min-height: 760px;
       overflow: hidden;
-      color: #ffffff;
+      padding: 62px;
+      color: #f8fafc;
       background:
-        radial-gradient(circle at 78% 12%, rgba(226, 183, 109, 0.55), transparent 28%),
-        radial-gradient(circle at 6% 4%, rgba(37, 99, 235, 0.48), transparent 34%),
-        radial-gradient(circle at 40% 112%, rgba(16, 185, 129, 0.22), transparent 34%),
-        linear-gradient(135deg, #020617 0%, #0f172a 48%, #172554 100%);
+        radial-gradient(circle at 8% 6%, rgba(37, 99, 235, 0.48), transparent 32%),
+        radial-gradient(circle at 88% 10%, rgba(16, 185, 129, 0.22), transparent 30%),
+        radial-gradient(circle at 54% 112%, rgba(212, 160, 23, 0.18), transparent 34%),
+        linear-gradient(135deg, #020617 0%, #0f172a 52%, #172554 100%);
+      page-break-after: always;
     }
 
     .cover::before {
@@ -497,45 +682,32 @@ export function buildMAReportHtml(report) {
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
-      background-size: 56px 56px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.92), transparent 88%);
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 88%);
       pointer-events: none;
     }
 
     .cover::after {
       content: "";
       position: absolute;
-      right: -190px;
-      bottom: -210px;
-      width: 560px;
-      height: 560px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      right: -170px;
+      bottom: -190px;
+      width: 520px;
+      height: 520px;
       border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
       box-shadow:
-        inset 0 0 0 48px rgba(255, 255, 255, 0.028),
-        inset 0 0 0 108px rgba(226, 183, 109, 0.04),
-        0 0 100px rgba(37, 99, 235, 0.18);
-    }
-
-    .cover-side-label {
-      position: absolute;
-      right: 34px;
-      top: 50%;
-      transform: translateY(-50%) rotate(90deg);
-      transform-origin: center;
-      color: rgba(255, 255, 255, 0.16);
-      font-size: 13px;
-      font-weight: 950;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      z-index: 1;
+        inset 0 0 0 46px rgba(255,255,255,0.025),
+        inset 0 0 0 112px rgba(37,99,235,0.045),
+        0 0 110px rgba(37,99,235,0.18);
+      pointer-events: none;
     }
 
     .cover-top,
-    .cover-content,
-    .cover-dashboard {
+    .cover-main,
+    .cover-bottom {
       position: relative;
       z-index: 2;
     }
@@ -543,233 +715,357 @@ export function buildMAReportHtml(report) {
     .cover-top {
       display: flex;
       justify-content: space-between;
-      gap: 24px;
+      gap: 20px;
       align-items: flex-start;
-      margin-bottom: 98px;
+      margin-bottom: 94px;
     }
 
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 13px;
-      font-size: 13px;
-      font-weight: 950;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .brand-mark {
-      width: 48px;
-      height: 48px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 18px;
-      display: grid;
-      place-items: center;
-      color: var(--gold-2);
-      background:
-        radial-gradient(circle at 24% 0%, rgba(255,255,255,0.24), transparent 38%),
-        rgba(255,255,255,0.09);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.16),
-        0 22px 48px rgba(0,0,0,0.28);
-    }
-
+    .brand-pill,
     .status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 9px;
-      padding: 10px 17px;
-      border: 1px solid rgba(255, 255, 255, 0.24);
+      gap: 10px;
+      padding: 11px 15px;
       border-radius: 999px;
-      color: rgba(255, 255, 255, 0.92);
-      background: rgba(255, 255, 255, 0.095);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(248,250,252,0.92);
       font-size: 12px;
-      font-weight: 900;
+      font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       backdrop-filter: blur(16px);
     }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
+    .brand-dot {
+      width: 10px;
+      height: 10px;
       border-radius: 999px;
-      background: var(--emerald);
-      box-shadow: 0 0 0 5px rgba(16,185,129,0.14);
+      background: linear-gradient(135deg, var(--blue-2), var(--emerald));
+      box-shadow: 0 0 0 5px rgba(96, 165, 250, 0.12);
     }
 
-    .eyebrow {
-      margin: 0 0 18px;
-      color: #f8ddb0;
+    .cover-kicker {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(37,99,235,0.18);
+      border: 1px solid rgba(147,197,253,0.22);
+      color: #dbeafe;
       font-size: 12px;
-      font-weight: 950;
-      letter-spacing: 0.14em;
+      font-weight: 800;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
 
     .cover h1 {
       max-width: 870px;
       margin: 0;
-      font-size: 70px;
+      font-size: 68px;
       line-height: 0.9;
       letter-spacing: -0.075em;
+      color: #ffffff;
+    }
+
+    .cover h1 span {
+      display: block;
+      margin-top: 13px;
+      color: rgba(226,232,240,0.74);
+      font-weight: 500;
     }
 
     .cover-subtitle {
       max-width: 760px;
-      margin: 32px 0 0;
-      color: rgba(255, 255, 255, 0.78);
-      font-size: 18px;
-      line-height: 1.74;
+      margin: 30px 0 0;
+      color: rgba(226,232,240,0.82);
+      font-size: 17px;
+      line-height: 1.76;
     }
 
-    .cover-executive-line {
-      width: min(620px, 100%);
+    .cover-rule {
+      width: min(640px, 100%);
       height: 1px;
       margin-top: 34px;
-      background: linear-gradient(90deg, var(--gold-2), rgba(255,255,255,0.32), transparent);
+      background: linear-gradient(90deg, var(--gold), rgba(255,255,255,0.34), transparent);
     }
 
-    .cover-dashboard {
-      position: absolute;
-      left: 76px;
-      right: 76px;
-      bottom: 72px;
+    .cover-kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 15px;
+      margin-top: 52px;
     }
 
-    .cover-card {
-      min-height: 112px;
-      padding: 19px;
-      border: 1px solid rgba(255, 255, 255, 0.155);
-      border-radius: 24px;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.13), rgba(255,255,255,0.045));
-      backdrop-filter: blur(18px);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.1),
-        0 20px 46px rgba(0,0,0,0.16);
-    }
-
-    .cover-card span {
-      display: block;
-      margin-bottom: 11px;
-      color: rgba(255, 255, 255, 0.56);
-      font-size: 11px;
-      font-weight: 950;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .cover-card strong {
-      color: #ffffff;
-      font-size: 14px;
-      line-height: 1.36;
-    }
-
-    .page {
+    .cover-kpi-card {
       position: relative;
-      padding: 60px 76px;
+      overflow: hidden;
+      min-height: 150px;
+      padding: 20px;
+      border-radius: 25px;
       background:
-        radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.09), transparent 28%),
-        radial-gradient(circle at 0% 14%, rgba(226, 183, 109, 0.075), transparent 22%),
-        linear-gradient(180deg, rgba(248,250,252,0.84), rgba(255,255,255,0.99) 280px),
-        var(--paper);
+        linear-gradient(135deg, rgba(255,255,255,0.13), rgba(255,255,255,0.045)),
+        rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.13);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 18px 48px rgba(0,0,0,0.17);
     }
 
-    .page::before {
-      content: "M&A";
+    .cover-kpi-card .card-light {
       position: absolute;
-      top: 22px;
-      right: 54px;
-      color: rgba(15, 23, 42, 0.035);
-      font-size: 120px;
-      font-weight: 950;
-      letter-spacing: -0.1em;
+      right: -44px;
+      bottom: -58px;
+      width: 140px;
+      height: 140px;
+      border-radius: 999px;
+      opacity: 0.24;
       pointer-events: none;
     }
 
-    .executive-index {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 44px;
+    .tone-1 .card-light { background: var(--blue-2); }
+    .tone-2 .card-light { background: var(--emerald); }
+    .tone-3 .card-light { background: var(--gold); }
+    .tone-4 .card-light { background: var(--violet); }
+
+    .cover-kpi-card span,
+    .cover-meta-card span {
+      position: relative;
+      display: block;
+      margin-bottom: 12px;
+      color: rgba(191,219,254,0.82);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
-    .index-card {
+    .cover-kpi-card strong {
+      position: relative;
+      display: block;
+      color: #ffffff;
+      font-size: 24px;
+      line-height: 1.05;
+      letter-spacing: -0.045em;
+    }
+
+    .cover-kpi-card small {
+      position: relative;
+      display: block;
+      margin-top: 10px;
+      color: rgba(226,232,240,0.72);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .cover-bottom {
+      margin-top: 36px;
+    }
+
+    .cover-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .cover-meta-card {
+      min-height: 86px;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .cover-meta-card strong {
+      color: #ffffff;
+      line-height: 1.35;
+    }
+
+    .content {
+      position: relative;
+      padding: 42px 52px 54px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(37,99,235,0.07), transparent 26%),
+        radial-gradient(circle at 0% 12%, rgba(16,185,129,0.045), transparent 24%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    .content-opening {
       position: relative;
       overflow: hidden;
-      min-height: 112px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
+      margin-bottom: 28px;
+      padding: 30px;
+      border-radius: 30px;
+      color: #ffffff;
       background:
-        radial-gradient(circle at 100% 0%, rgba(37,99,235,0.11), transparent 32%),
-        #ffffff;
-      box-shadow: var(--shadow-card);
+        radial-gradient(circle at 8% 0%, rgba(37,99,235,0.42), transparent 32%),
+        radial-gradient(circle at 92% 10%, rgba(16,185,129,0.18), transparent 28%),
+        radial-gradient(circle at 58% 120%, rgba(212,160,23,0.14), transparent 32%),
+        linear-gradient(135deg, #020617, #0f172a 62%, #172554);
+      border: 1px solid rgba(148,163,184,0.24);
+      box-shadow:
+        0 24px 70px rgba(15,23,42,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.07);
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
 
-    .index-card:nth-child(2) {
+    .content-opening::before {
+      content: "";
+      position: absolute;
+      inset: 0;
       background:
-        radial-gradient(circle at 100% 0%, rgba(16,185,129,0.13), transparent 32%),
-        #ffffff;
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent 88%);
+      pointer-events: none;
     }
 
-    .index-card:nth-child(3) {
-      background:
-        radial-gradient(circle at 100% 0%, rgba(184,138,68,0.16), transparent 32%),
-        #ffffff;
+    .content-opening::after {
+      content: "";
+      position: absolute;
+      right: -86px;
+      bottom: -112px;
+      width: 260px;
+      height: 260px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.13);
+      box-shadow: inset 0 0 0 34px rgba(255,255,255,0.028);
+      pointer-events: none;
     }
 
-    .index-card:nth-child(4) {
-      background:
-        radial-gradient(circle at 100% 0%, rgba(124,58,237,0.13), transparent 32%),
-        #ffffff;
+    .content-opening-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+      gap: 24px;
+      align-items: stretch;
     }
 
-    .index-card span {
-      display: block;
-      color: var(--gold);
+    .content-opening-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(37,99,235,0.2);
+      border: 1px solid rgba(147,197,253,0.22);
+      color: #dbeafe;
       font-size: 10px;
-      font-weight: 950;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .content-opening h2 {
+      margin: 0;
+      max-width: 620px;
+      color: #ffffff;
+      font-size: 34px;
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+    }
+
+    .content-opening p {
+      margin: 16px 0 0;
+      max-width: 680px;
+      color: rgba(226,232,240,0.78);
+      line-height: 1.72;
+    }
+
+    .content-opening-metrics {
+      display: grid;
+      gap: 12px;
+    }
+
+    .content-opening-metric {
+      position: relative;
+      overflow: hidden;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.075);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .content-opening-metric span {
+      display: block;
+      margin-bottom: 8px;
+      color: rgba(191,219,254,0.82);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .content-opening-metric strong {
+      display: block;
+      color: #ffffff;
+      font-size: 19px;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      overflow-wrap: anywhere;
+    }
+
+    .content-opening-metric small {
+      display: block;
+      margin-top: 7px;
+      color: rgba(226,232,240,0.68);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .disclaimer-banner {
+      margin-bottom: 28px;
+      padding: 18px 20px;
+      border-radius: 24px;
+      border: 1px solid rgba(212,160,23,0.33);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(212,160,23,0.14), transparent 30%),
+        linear-gradient(135deg, #fffbeb, #ffffff);
+      color: #5b4300;
+      box-shadow: 0 16px 38px rgba(212,160,23,0.08);
+    }
+
+    .disclaimer-banner strong {
+      display: block;
+      margin-bottom: 7px;
+      color: #7c5800;
+      font-size: 12px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .index-card strong {
-      display: block;
-      margin-top: 12px;
-      color: var(--navy-2);
-      font-size: 17px;
-      line-height: 1.2;
-    }
-
     .report-section {
-      position: relative;
-      margin-bottom: 48px;
+      margin-bottom: 34px;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      box-shadow: var(--shadow-card);
+      page-break-inside: avoid;
       break-inside: avoid;
     }
 
     .featured-section {
-      padding: 26px;
-      border: 1px solid rgba(219, 228, 240, 0.95);
-      border-radius: 32px;
-      background:
-        radial-gradient(circle at 100% 0%, rgba(37,99,235,0.08), transparent 26%),
-        linear-gradient(135deg, rgba(255,255,255,0.96), rgba(248,250,252,0.96)),
-        #ffffff;
-      box-shadow: 0 22px 64px rgba(15, 23, 42, 0.075);
+      border-color: rgba(37,99,235,0.22);
+      box-shadow: 0 24px 70px rgba(37,99,235,0.11);
     }
 
-    .section-heading {
+    .section-header {
       display: grid;
-      grid-template-columns: 50px minmax(0, 1fr);
+      grid-template-columns: 58px minmax(0, 1fr);
       gap: 18px;
       align-items: flex-start;
-      margin-bottom: 24px;
-      padding-bottom: 18px;
+      padding: 24px 26px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(37,99,235,0.08), transparent 34%),
+        linear-gradient(180deg, #ffffff, #f4f8ff);
       border-bottom: 1px solid var(--line);
     }
 
@@ -777,282 +1073,261 @@ export function buildMAReportHtml(report) {
       width: 50px;
       height: 50px;
       border-radius: 18px;
-      color: var(--blue);
-      background:
-        radial-gradient(circle at 30% 0%, #ffffff, transparent 56%),
-        linear-gradient(135deg, #fff7ed, var(--gold-soft));
       display: grid;
       place-items: center;
-      font-weight: 950;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.78),
-        0 14px 30px rgba(184, 138, 68, 0.16);
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--blue), #1d4ed8);
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      box-shadow: 0 14px 32px rgba(37,99,235,0.22);
     }
 
-    .section-kicker {
-      margin: 0 0 6px;
+    .section-header p {
+      margin: 0 0 7px;
       color: var(--gold);
       font-size: 10px;
-      font-weight: 950;
-      letter-spacing: 0.08em;
+      font-weight: 900;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
     }
 
-    .section-heading h2 {
+    .section-header h2 {
       margin: 0;
-      color: var(--navy-2);
+      color: var(--ink-dark);
       font-size: 25px;
-      line-height: 1.08;
+      line-height: 1.1;
       letter-spacing: -0.045em;
     }
 
-    .section-heading p:not(.section-kicker) {
-      margin: 8px 0 0;
+    .section-header span {
+      display: block;
+      margin-top: 8px;
       color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
     }
 
-    .disclaimer {
-      padding: 23px;
-      border: 1px solid rgba(225, 29, 72, 0.22);
-      border-radius: 25px;
-      color: var(--danger);
-      background:
-        radial-gradient(circle at 100% 0%, rgba(225,29,72,0.12), transparent 30%),
-        linear-gradient(135deg, var(--danger-soft), #ffffff);
-      box-shadow: 0 16px 38px rgba(159, 18, 57, 0.065);
+    .section-body {
+      padding: 26px;
     }
 
-    .disclaimer strong {
-      display: block;
-      margin-bottom: 8px;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-    }
-
-    .executive-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.17fr) minmax(290px, 0.83fr);
-      gap: 18px;
-    }
-
-    .hero-metric {
-      position: relative;
-      overflow: hidden;
-      min-height: 268px;
-      padding: 32px;
-      border-radius: 32px;
-      color: #ffffff;
-      background:
-        radial-gradient(circle at 90% 12%, rgba(226,183,109,0.46), transparent 30%),
-        radial-gradient(circle at 0% 100%, rgba(6,182,212,0.28), transparent 32%),
-        linear-gradient(135deg, var(--navy), var(--blue));
-      box-shadow:
-        0 28px 72px rgba(23, 37, 84, 0.26),
-        inset 0 1px 0 rgba(255,255,255,0.11);
-    }
-
-    .hero-metric::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent 84%);
-    }
-
-    .hero-metric::after {
-      content: "";
-      position: absolute;
-      right: -80px;
-      bottom: -100px;
-      width: 270px;
-      height: 270px;
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 999px;
-      box-shadow: inset 0 0 0 46px rgba(255,255,255,0.032);
-    }
-
-    .hero-metric span,
-    .mini-metric span,
-    .kv-card span,
-    .info-card span,
-    .buyer-card span,
-    .cim-card span {
-      position: relative;
-      z-index: 1;
-      display: block;
-      margin-bottom: 9px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 950;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .hero-metric span {
-      color: rgba(255,255,255,0.68);
-    }
-
-    .hero-metric strong {
-      position: relative;
-      z-index: 1;
-      display: block;
-      margin-top: 18px;
-      font-size: 44px;
-      line-height: 0.94;
-      letter-spacing: -0.065em;
-    }
-
-    .hero-metric p {
-      position: relative;
-      z-index: 1;
-      max-width: 560px;
-      margin: 20px 0 0;
-      color: rgba(255,255,255,0.76);
-      font-size: 14px;
-    }
-
-    .mini-metrics {
-      display: grid;
-      gap: 14px;
-    }
-
-    .mini-metric,
-    .kv-card,
-    .info-card,
-    .buyer-card,
-    .cim-card,
-    .premium-note {
-      position: relative;
-      overflow: hidden;
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: #ffffff;
-      box-shadow: var(--shadow-card);
-    }
-
-    .mini-metric {
-      background:
-        radial-gradient(circle at 100% 0%, rgba(37,99,235,0.12), transparent 31%),
-        linear-gradient(135deg, var(--soft), #ffffff);
-    }
-
-    .mini-metric strong,
-    .kv-card strong,
-    .info-card h3,
-    .info-card strong,
-    .buyer-card h3,
-    .cim-card h3 {
-      position: relative;
-      z-index: 1;
-      display: block;
-      color: var(--navy-2);
-      font-size: 18px;
-      line-height: 1.22;
-      letter-spacing: -0.025em;
-    }
-
-    .kv-grid,
-    .card-grid.three {
+    .definition-grid,
+    .buyer-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 15px;
     }
 
-    .card-grid.two {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 15px;
+    .definition-card,
+    .buyer-card,
+    .numbered-card,
+    .premium-note {
+      position: relative;
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(37,99,235,0.07), transparent 30%),
+        linear-gradient(180deg, #ffffff, #f8fafc);
+      box-shadow: 0 12px 30px rgba(15,23,42,0.045);
     }
 
-    .card-orb {
+    .definition-card {
+      min-height: 126px;
+      padding: 19px;
+      border-top-width: 4px;
+    }
+
+    .definition-glow {
       position: absolute;
-      inset: auto -46px -64px auto;
-      width: 150px;
-      height: 150px;
+      right: -44px;
+      bottom: -58px;
+      width: 130px;
+      height: 130px;
       border-radius: 999px;
-      opacity: 0.2;
+      opacity: 0.12;
       pointer-events: none;
     }
 
-    .accent-1 .card-orb { background: var(--blue-2); }
-    .accent-2 .card-orb { background: var(--emerald); }
-    .accent-3 .card-orb { background: var(--gold); }
-    .accent-4 .card-orb { background: var(--violet); }
-    .accent-5 .card-orb { background: var(--cyan); }
+    .accent-1 { border-top-color: var(--blue); }
+    .accent-2 { border-top-color: var(--emerald); }
+    .accent-3 { border-top-color: var(--gold); }
+    .accent-4 { border-top-color: var(--violet); }
+    .accent-5 { border-top-color: var(--blue-2); }
 
-    .accent-1 { border-top: 4px solid var(--blue-2); }
-    .accent-2 { border-top: 4px solid var(--emerald); }
-    .accent-3 { border-top: 4px solid var(--gold); }
-    .accent-4 { border-top: 4px solid var(--violet); }
-    .accent-5 { border-top: 4px solid var(--cyan); }
+    .accent-1 .definition-glow { background: var(--blue); }
+    .accent-2 .definition-glow { background: var(--emerald); }
+    .accent-3 .definition-glow { background: var(--gold); }
+    .accent-4 .definition-glow { background: var(--violet); }
+    .accent-5 .definition-glow { background: var(--blue-2); }
 
-    .info-card p,
-    .buyer-card p,
-    .cim-card p,
-    .premium-note p {
+    .definition-card span,
+    .buyer-card span {
       position: relative;
-      z-index: 1;
-      margin: 11px 0 0;
+      display: block;
+      margin-bottom: 10px;
       color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .definition-card strong {
+      position: relative;
+      display: block;
+      color: var(--ink-dark);
+      font-size: 19px;
+      line-height: 1.16;
+      letter-spacing: -0.03em;
+      overflow-wrap: anywhere;
+    }
+
+    .premium-list {
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 13px;
+      list-style: none;
+    }
+
+    .premium-list li {
+      position: relative;
+      padding: 17px 18px 17px 48px;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+      color: var(--graphite);
+      line-height: 1.68;
+    }
+
+    .premium-list li::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 24px;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--blue), var(--emerald));
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.10);
+    }
+
+    .table-shell {
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 34px rgba(15,23,42,0.04);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+    }
+
+    th {
+      padding: 15px 16px;
+      text-align: left;
+      color: #475569;
+      background: linear-gradient(180deg, #f8fbff, #f1f5f9);
+      border-bottom: 1px solid var(--line);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 15px 16px;
+      color: var(--graphite);
+      border-bottom: 1px solid #edf2f7;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #fbfdff;
+    }
+
+    .total-strip {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-top: 14px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--gold-soft), #ffffff);
+      border: 1px solid rgba(212,160,23,0.26);
+    }
+
+    .total-strip span {
+      color: #7c5800;
+      font-weight: 800;
+    }
+
+    .total-strip strong {
+      color: var(--ink-dark);
+      font-size: 18px;
     }
 
     .scenario-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 15px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .scenario-card {
       position: relative;
       overflow: hidden;
-      padding: 24px;
-      border-radius: 26px;
+      min-height: 166px;
+      padding: 23px;
+      border-radius: 25px;
       color: #ffffff;
-      min-height: 168px;
-      box-shadow: 0 24px 58px rgba(15, 23, 42, 0.13);
+      box-shadow: 0 22px 58px rgba(15,23,42,0.13);
     }
 
     .scenario-card::after {
       content: "";
       position: absolute;
-      right: -58px;
-      bottom: -76px;
-      width: 184px;
-      height: 184px;
+      right: -62px;
+      bottom: -72px;
+      width: 180px;
+      height: 180px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.2);
-      box-shadow: inset 0 0 0 28px rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: inset 0 0 0 32px rgba(255,255,255,0.035);
+      pointer-events: none;
     }
 
-    .scenario-low {
-      background:
-        radial-gradient(circle at 90% 8%, rgba(148,163,184,0.28), transparent 30%),
-        linear-gradient(135deg, #334155, #0f172a);
+    .scenario-1 {
+      background: linear-gradient(135deg, #334155, #0f172a);
     }
 
-    .scenario-base {
+    .scenario-2 {
       background:
-        radial-gradient(circle at 90% 8%, rgba(226,183,109,0.42), transparent 31%),
+        radial-gradient(circle at 100% 0%, rgba(212,160,23,0.34), transparent 30%),
         linear-gradient(135deg, #172554, #2563eb);
     }
 
-    .scenario-high {
+    .scenario-3 {
       background:
-        radial-gradient(circle at 90% 8%, rgba(16,185,129,0.34), transparent 31%),
+        radial-gradient(circle at 100% 0%, rgba(16,185,129,0.32), transparent 30%),
         linear-gradient(135deg, #064e3b, #059669);
     }
 
     .scenario-top {
       position: relative;
-      z-index: 1;
       display: flex;
       justify-content: space-between;
-      gap: 12px;
+      gap: 14px;
       align-items: flex-start;
       margin-bottom: 18px;
     }
@@ -1060,8 +1335,8 @@ export function buildMAReportHtml(report) {
     .scenario-top span {
       color: rgba(255,255,255,0.72);
       font-size: 11px;
-      font-weight: 950;
-      letter-spacing: 0.08em;
+      font-weight: 900;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
 
@@ -1075,24 +1350,21 @@ export function buildMAReportHtml(report) {
 
     .scenario-card strong {
       position: relative;
-      z-index: 1;
       display: block;
-      font-size: 29px;
+      font-size: 28px;
       line-height: 1;
       letter-spacing: -0.045em;
     }
 
     .scenario-card p {
       position: relative;
-      z-index: 1;
       margin: 11px 0 0;
       color: rgba(255,255,255,0.74);
       font-size: 13px;
     }
 
-    .scenario-bar {
+    .scenario-line {
       position: relative;
-      z-index: 1;
       height: 8px;
       margin-top: 18px;
       overflow: hidden;
@@ -1100,264 +1372,235 @@ export function buildMAReportHtml(report) {
       background: rgba(255,255,255,0.18);
     }
 
-    .scenario-bar div {
+    .scenario-line div {
+      width: 72%;
       height: 100%;
       border-radius: inherit;
       background: linear-gradient(90deg, #ffffff, rgba(255,255,255,0.55));
     }
 
-    .premium-table-shell {
-      overflow: hidden;
-      border-radius: 24px;
-      box-shadow: 0 16px 42px rgba(15, 23, 42, 0.052);
-    }
-
-    table {
-      width: 100%;
-      overflow: hidden;
-      border-collapse: separate;
-      border-spacing: 0;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: #ffffff;
-    }
-
-    th {
-      padding: 15px 16px;
-      color: #475467;
-      background:
-        linear-gradient(180deg, #ffffff, #f8fafc);
-      border-bottom: 1px solid var(--line);
-      font-size: 11px;
-      font-weight: 950;
-      letter-spacing: 0.08em;
-      text-align: left;
-      text-transform: uppercase;
-    }
-
-    td {
-      padding: 15px 16px;
-      border-bottom: 1px solid var(--line);
-      color: #344054;
-      vertical-align: top;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    tbody tr:nth-child(even):not(.total-row):not(.highlight-row) td {
-      background: #fbfdff;
-    }
-
-    .right {
-      text-align: right;
-    }
-
-    .strong {
-      font-weight: 850;
-      color: var(--navy-2);
-    }
-
-    .highlight-row td {
-      background: #eef5ff;
-    }
-
-    .total-row td {
-      color: var(--navy-2);
-      background:
-        linear-gradient(135deg, var(--gold-soft), #fff7ed);
-      font-weight: 950;
-    }
-
-    .risk-cell {
-      color: var(--danger);
-    }
-
-    .premium-note {
-      display: grid;
-      grid-template-columns: 44px 1fr;
-      gap: 15px;
-      align-items: flex-start;
-      border-left: 5px solid var(--gold);
-      background:
-        radial-gradient(circle at 100% 0%, rgba(184,138,68,0.13), transparent 31%),
-        linear-gradient(135deg, #fffbf4, #ffffff);
-    }
-
-    .warning-note {
-      border-left-color: var(--amber);
-    }
-
-    .note-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      display: grid;
-      place-items: center;
-      color: #92400e;
-      background: #fef3c7;
-      font-weight: 950;
-    }
-
     .waterfall-board {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 13px;
     }
 
-    .waterfall-node {
-      position: relative;
-      min-height: 144px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background:
-        radial-gradient(circle at 100% 0%, rgba(37,99,235,0.11), transparent 31%),
-        #ffffff;
-      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.048);
-    }
-
-    .waterfall-node span {
-      display: inline-grid;
-      width: 31px;
-      height: 31px;
-      place-items: center;
-      border-radius: 12px;
-      color: var(--blue);
-      background: #eef4ff;
-      font-size: 11px;
-      font-weight: 950;
-    }
-
-    .waterfall-node h3 {
-      margin: 14px 0 0;
-      color: var(--navy-2);
-      font-size: 14px;
-      line-height: 1.16;
-      letter-spacing: -0.02em;
-    }
-
-    .waterfall-node strong {
-      display: block;
-      margin-top: 9px;
-      color: var(--gold);
-      font-size: 13px;
-      line-height: 1.15;
-    }
-
-    .waterfall-total {
-      color: #ffffff;
-      background:
-        radial-gradient(circle at 100% 0%, rgba(226,183,109,0.36), transparent 31%),
-        linear-gradient(135deg, var(--navy-2), var(--blue));
-    }
-
-    .waterfall-total h3,
-    .waterfall-total strong {
-      color: #ffffff;
-    }
-
-    .waterfall-total span {
-      color: #fff;
-      background: rgba(255,255,255,0.16);
-    }
-
-    .buyer-card {
-      min-height: 225px;
-      background:
-        radial-gradient(circle at 100% 0%, rgba(37,99,235,0.11), transparent 32%),
-        #ffffff;
-    }
-
-    .buyer-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: flex-start;
-      margin-bottom: 12px;
-    }
-
-    .buyer-badge {
-      display: inline-flex;
+    .waterfall-card {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr) minmax(150px, auto);
+      gap: 16px;
       align-items: center;
-      justify-content: center;
-      min-width: 48px;
-      padding: 6px 10px;
-      border-radius: 999px;
+      padding: 17px;
+      border-radius: 21px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+    }
+
+    .waterfall-index {
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
       color: var(--blue);
-      background: #eef4ff;
+      background: var(--blue-soft);
+      border: 1px solid #bfdbfe;
       font-size: 12px;
       font-weight: 900;
     }
 
-    .buyer-1 { border-top: 4px solid var(--blue-2); }
-    .buyer-2 { border-top: 4px solid var(--emerald); }
-    .buyer-3 { border-top: 4px solid var(--gold); }
-
-    .cim-card {
-      min-height: 190px;
-      background:
-        radial-gradient(circle at 100% 0%, rgba(124,58,237,0.11), transparent 31%),
-        #ffffff;
+    .waterfall-copy h3 {
+      margin: 0 0 5px;
+      color: var(--ink-dark);
+      font-size: 15px;
+      line-height: 1.2;
     }
 
-    .module-1 { border-left: 5px solid var(--blue-2); }
-    .module-2 { border-left: 5px solid var(--emerald); }
-    .module-3 { border-left: 5px solid var(--gold); }
-    .module-4 { border-left: 5px solid var(--violet); }
-
-    .premium-list {
+    .waterfall-copy p {
       margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 12px;
-      list-style: none;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
     }
 
-    .premium-list li {
-      position: relative;
-      padding: 17px 18px 17px 47px;
-      border: 1px solid var(--line);
-      border-radius: 19px;
+    .waterfall-card strong {
+      text-align: right;
+      color: var(--ink-dark);
+      font-size: 17px;
+      white-space: nowrap;
+    }
+
+    .waterfall-card.tone-positive {
+      background: linear-gradient(180deg, #ffffff, var(--emerald-soft));
+      border-color: #a7f3d0;
+    }
+
+    .waterfall-card.tone-negative {
+      background: linear-gradient(180deg, #ffffff, var(--danger-soft));
+      border-color: #fecaca;
+    }
+
+    .waterfall-card.tone-highlight {
+      color: #ffffff;
       background:
-        linear-gradient(135deg, #ffffff, #f8fafc);
-      color: var(--graphite);
-      box-shadow: 0 11px 28px rgba(15, 23, 42, 0.038);
+        radial-gradient(circle at 100% 0%, rgba(212,160,23,0.24), transparent 30%),
+        linear-gradient(135deg, #0f172a, #172554);
+      border-color: rgba(37,99,235,0.28);
     }
 
-    .premium-list li::before {
-      content: "";
-      position: absolute;
-      left: 19px;
-      top: 24px;
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: var(--gold);
-      box-shadow: 0 0 0 4px var(--gold-soft);
+    .waterfall-card.tone-highlight .waterfall-index {
+      color: #ffffff;
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.16);
     }
 
-    .footer {
+    .waterfall-card.tone-highlight h3,
+    .waterfall-card.tone-highlight p,
+    .waterfall-card.tone-highlight strong {
+      color: #ffffff;
+    }
+
+    .buyer-card {
+      min-height: 215px;
+      padding: 20px;
+      border-top-width: 4px;
+    }
+
+    .buyer-1 { border-top-color: var(--blue); }
+    .buyer-2 { border-top-color: var(--emerald); }
+    .buyer-3 { border-top-color: var(--gold); }
+
+    .buyer-header {
       display: flex;
       justify-content: space-between;
-      gap: 24px;
-      padding: 30px 76px;
-      color: #667085;
-      background:
-        linear-gradient(180deg, #ffffff, #f8fafc);
-      border-top: 1px solid var(--line);
-      font-size: 12px;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
     }
 
-    .footer strong {
-      color: var(--navy-2);
+    .buyer-header small {
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .buyer-card h3 {
+      margin: 0;
+      color: var(--ink-dark);
+      font-size: 19px;
+      line-height: 1.18;
+      letter-spacing: -0.03em;
+    }
+
+    .buyer-card p {
+      margin: 12px 0 0;
+      color: var(--graphite);
+      line-height: 1.65;
+    }
+
+    .numbered-card-list {
+      display: grid;
+      gap: 13px;
+    }
+
+    .numbered-card {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 15px;
+      padding: 18px;
+    }
+
+    .number-pill {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border: 1px solid #bfdbfe;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .numbered-card h3 {
+      margin: 0 0 7px;
+      color: var(--ink-dark);
+      font-size: 17px;
+      letter-spacing: -0.025em;
+    }
+
+    .numbered-card p {
+      margin: 0;
+      color: var(--graphite);
+      line-height: 1.67;
+    }
+
+    .premium-note {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 15px;
+      padding: 19px;
+    }
+
+    .note-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: #7c5800;
+      background: var(--gold-soft);
+      font-weight: 900;
+    }
+
+    .premium-note strong {
+      display: block;
+      color: var(--ink-dark);
+      margin-bottom: 7px;
+    }
+
+    .premium-note p {
+      margin: 0;
+      color: var(--graphite);
+      line-height: 1.65;
+    }
+
+    .empty-state {
+      padding: 17px 18px;
+      border-radius: 18px;
+      border: 1px dashed #cbd5e1;
+      background: #fbfdff;
+      color: var(--muted);
+    }
+
+    .report-footer {
+      padding: 28px 56px;
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+      border-top: 1px solid var(--line);
+    }
+
+    .report-footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .footer-brand {
+      color: var(--ink-dark);
+      font-weight: 900;
     }
 
     @page {
       size: A4;
-      margin: 10mm;
+      margin: 11mm;
     }
 
     @media print {
@@ -1380,82 +1623,112 @@ export function buildMAReportHtml(report) {
         page-break-after: always;
       }
 
-      .page {
-        padding: 20px 0;
+      .content {
+        padding: 16px 0 28px;
         background: #ffffff;
       }
 
-      .page::before {
-        display: none;
+      .content-opening {
+        margin-bottom: 22px;
+        padding: 24px;
+        box-shadow: none;
+      }
+
+      .content-opening h2 {
+        font-size: 29px;
+      }
+
+      .content-opening-inner {
+        grid-template-columns: minmax(0, 1.08fr) minmax(230px, 0.92fr);
+        gap: 20px;
+      }
+
+      .disclaimer-banner {
+        margin-bottom: 22px;
+      }
+
+      .report-section {
+        margin-bottom: 26px;
+      }
+
+      .report-footer {
+        padding: 18px 0 0;
       }
 
       .report-section,
-      table,
-      .kv-card,
-      .info-card,
+      .definition-card,
       .buyer-card,
-      .cim-card,
+      .numbered-card,
       .premium-note,
       .premium-list li,
-      .hero-metric,
-      .mini-metric,
-      .disclaimer,
+      .waterfall-card,
       .scenario-card,
-      .waterfall-node,
-      .index-card {
+      .content-opening,
+      table {
         break-inside: avoid;
         page-break-inside: avoid;
       }
+    }
 
-      .footer {
-        padding: 16px 0 0;
-        background: #ffffff;
+    @media (max-width: 980px) {
+      .cover-kpi-grid,
+      .cover-meta-grid,
+      .definition-grid,
+      .buyer-grid,
+      .scenario-grid {
+        grid-template-columns: 1fr 1fr;
       }
 
-      body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+      .content-opening-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .cover h1 {
+        font-size: 48px;
       }
     }
 
-    @media (max-width: 920px) {
+    @media (max-width: 680px) {
       .report-shell {
         margin: 0;
         border-radius: 0;
       }
 
       .cover,
-      .page,
-      .footer {
-        padding-left: 28px;
-        padding-right: 28px;
+      .content,
+      .report-footer {
+        padding-left: 24px;
+        padding-right: 24px;
       }
 
-      .cover-dashboard,
-      .executive-grid,
-      .kv-grid,
-      .card-grid.three,
-      .card-grid.two,
-      .scenario-grid,
-      .waterfall-board,
-      .executive-index {
+      .cover-kpi-grid,
+      .cover-meta-grid,
+      .definition-grid,
+      .buyer-grid,
+      .scenario-grid {
         grid-template-columns: 1fr;
       }
 
-      .cover-dashboard {
-        position: relative;
-        left: auto;
-        right: auto;
-        bottom: auto;
-        margin-top: 60px;
-      }
-
       .cover h1 {
-        font-size: 42px;
+        font-size: 38px;
       }
 
-      .cover-side-label {
-        display: none;
+      .content-opening h2 {
+        font-size: 28px;
+      }
+
+      .section-header,
+      .waterfall-card {
+        grid-template-columns: 1fr;
+      }
+
+      .waterfall-card strong {
+        text-align: left;
+      }
+
+      .report-footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
@@ -1463,106 +1736,174 @@ export function buildMAReportHtml(report) {
 <body>
   <main class="report-shell">
     <section class="cover">
-      <div class="cover-side-label">Strictly Confidential</div>
-
       <div class="cover-top">
-        <div class="brand">
-          <div class="brand-mark">C</div>
-          <div>CEO's OS</div>
+        <div class="brand-pill">
+          <span class="brand-dot"></span>
+          ${escapeHtml(meta.generatedBy)}
         </div>
 
-        <div class="status-pill">
-          <span class="status-dot"></span>
-          ${escapeHtml(meta.reportStatus || 'Draft')}
-        </div>
+        <div class="status-pill">${escapeHtml(meta.reportStatus)}</div>
       </div>
 
-      <div class="cover-content">
-        <p class="eyebrow">M&amp;A Professional Report</p>
-        <h1>${escapeHtml(safeCompanyName)}</h1>
+      <div class="cover-main">
+        <div class="cover-kicker">M&amp;A Professional Export</div>
+
+        <h1>
+          ${escapeHtml(meta.companyName)}
+          <span>Preliminary Valuation Report</span>
+        </h1>
+
         <p class="cover-subtitle">
           Premium valuation, equity bridge, buyer readiness and risk review prepared as a decision-support workpaper for executive discussion.
         </p>
-        <div class="cover-executive-line"></div>
+
+        <div class="cover-rule"></div>
       </div>
 
-      <div class="cover-dashboard">
-        <div class="cover-card"><span>Report Date</span><strong>${escapeHtml(meta.generatedDateLabel)}</strong></div>
-        <div class="cover-card"><span>Currency</span><strong>${escapeHtml(currency)}</strong></div>
-        <div class="cover-card"><span>Generated By</span><strong>${escapeHtml(meta.generatedBy || "CEO's OS")}</strong></div>
-        <div class="cover-card"><span>Document Status</span><strong>${escapeHtml(meta.reportStatus || 'Draft')}</strong></div>
+      ${renderKpiCards(topKpis)}
+
+      <div class="cover-bottom">
+        ${renderMetaCards(coverMeta)}
       </div>
     </section>
 
-    <section class="page">
-      <div class="executive-index">
-        <article class="index-card">
-          <span>01</span>
-          <strong>Valuation and Equity Bridge</strong>
-        </article>
-        <article class="index-card">
-          <span>02</span>
-          <strong>Buyer Readiness</strong>
-        </article>
-        <article class="index-card">
-          <span>03</span>
-          <strong>Risks and Mitigants</strong>
-        </article>
-        <article class="index-card">
-          <span>04</span>
-          <strong>Human Review Required</strong>
-        </article>
+    <section class="content">
+      ${renderSecondPageOpening(topKpis, meta)}
+
+      <div class="disclaimer-banner">
+        <strong>DSS Disclaimer</strong>
+        ${escapeHtml(
+          report.disclaimer ||
+            "This document is a preliminary decision-support output generated within CEO's OS for internal strategic use only. It does not constitute legal, tax, audit, accounting or investment advice. All conclusions remain subject to human review, source validation, confirmatory due diligence and final approval."
+        )}
       </div>
 
-      ${renderSection('01', 'Decision Support Disclaimer', 'Professional review notice and reliance limitation.', `
-        <div class="disclaimer">
-          <strong>Decision Support System Notice.</strong>
-          This report is a preliminary decision-support document. It is not legal, tax, financial or investment advice, does not constitute a fairness opinion, and should not be relied upon as a final valuation without independent human review, documentary verification and professional judgement.
-        </div>
-      `, { kicker: 'Governance' })}
+      ${renderSection(
+        1,
+        'Executive Summary',
+        'High-level strategic takeaways for internal review and decision support.',
+        renderBulletList(
+          executiveSummary,
+          `Preliminary review prepared for ${meta.companyName}. This report consolidates the valuation view, transaction perimeter, capital structure bridge and strategic fit considerations.`
+        ),
+        { featured: true, kicker: 'Executive view' }
+      )}
 
-      ${renderSection('02', 'Executive Summary', 'Core valuation outputs and preliminary transaction view.', `
-        <div class="executive-grid">
-          <div class="hero-metric">
-            <span>Base Case Equity Value</span>
-            <strong>${escapeHtml(formatCurrency(summary.equityValueBase, currency))}</strong>
-            <p>Derived from adjusted EBITDA, selected valuation multiple and equity bridge adjustments. This figure should be validated against diligence findings before external use.</p>
-          </div>
+      ${renderSection(
+        2,
+        'Company Snapshot',
+        'Core business profile and target overview.',
+        renderDefinitionGrid(companySnapshot, 'No company snapshot data available.'),
+        { kicker: 'Target profile' }
+      )}
 
-          <div class="mini-metrics">
-            <div class="mini-metric"><span>Adjusted EBITDA</span><strong>${escapeHtml(formatCurrency(summary.adjustedEbitda, currency))}</strong></div>
-            <div class="mini-metric"><span>Base Multiple</span><strong>${escapeHtml(formatMultiple(summary.multipleBase))}</strong></div>
-            <div class="mini-metric"><span>EBITDA Margin</span><strong>${escapeHtml(formatPercent(summary.ebitdaMargin))}</strong></div>
-          </div>
-        </div>
-      `, { kicker: 'Executive View', featured: true })}
+      ${renderSection(
+        3,
+        'Transaction Overview',
+        'Current deal framing, mandate context and perimeter.',
+        renderDefinitionGrid(transactionOverview, 'No transaction overview available.'),
+        { kicker: 'Transaction context' }
+      )}
 
-      ${renderSection('03', 'Company Snapshot', 'High-level company and operating profile.', renderKeyValueGrid(sections.companySnapshot), { kicker: 'Target Profile' })}
-      ${renderSection('04', 'Transaction Overview', 'Preliminary transaction context and report metadata.', renderKeyValueGrid(sections.transactionOverview), { kicker: 'Transaction Context' })}
-      ${renderSection('05', 'Financial Inputs', 'Primary financial data used for the valuation model.', renderFinancialInputs(sections.financialInputs), { kicker: 'Financial Base' })}
-      ${renderSection('06', 'EBITDA Adjustments', 'Normalization adjustments applied to reported EBITDA.', renderEbitdaAdjustments(report), { kicker: 'Quality of Earnings' })}
-      ${renderSection('07', 'Valuation Range', 'Low, base and high case valuation outputs.', renderValuationRange(report), { kicker: 'Valuation Output', featured: true })}
+      ${renderSection(
+        4,
+        'Financial Inputs',
+        'Base financial assumptions used for this preliminary valuation.',
+        renderFinancialInputs(report),
+        { kicker: 'Financial base' }
+      )}
 
-      ${renderSection('08', 'Enterprise Value', 'Enterprise valuation based on normalized EBITDA and selected multiples.', `
-        <div class="premium-note"><div class="note-icon">EV</div><div><strong>Enterprise Value base case</strong><p>${escapeHtml(formatCurrency(sections.enterpriseValue?.base, currency))}</p></div></div>
-      `, { kicker: 'EV Bridge' })}
+      ${renderSection(
+        5,
+        'EBITDA Adjustments',
+        'Normalization items applied to derive a cleaner earnings base.',
+        renderEbitdaAdjustments(report),
+        { kicker: 'Quality of earnings' }
+      )}
 
-      ${renderSection('09', 'Equity Value', 'Equity bridge logic avoiding duplicate debt and cash treatment.', `
-        <div class="premium-note"><div class="note-icon">EQ</div><div><strong>Equity bridge logic</strong><p>${escapeHtml(sections.equityValue?.bridgeLogic)}</p></div></div>
-      `, { kicker: 'Shareholder Value' })}
+      ${renderSection(
+        6,
+        'Valuation Range',
+        'Indicative low, base and high case valuation outputs.',
+        renderValuationRange(report),
+        { featured: true, kicker: 'Valuation output' }
+      )}
 
-      ${renderSection('10', 'Waterfall', 'Enterprise Value to Equity Value bridge.', renderWaterfall(report), { kicker: 'Waterfall', featured: true })}
-      ${renderSection('11', 'Buyer Matching', 'Indicative buyer universe and strategic fit rationale.', renderBuyerMatching(sections.buyerMatching), { kicker: 'Buyer Universe' })}
-      ${renderSection('12', 'Investment Thesis', 'Preliminary value creation arguments.', renderBulletList(sections.investmentThesis), { kicker: 'Thesis' })}
-      ${renderSection('13', 'Risks and Mitigants', 'Key diligence areas and preliminary mitigants.', renderRisks(sections.risksAndMitigants), { kicker: 'Risk Review' })}
-      ${renderSection('14', 'Preliminary CIM', 'Initial buyer-facing narrative blocks for a future CIM.', renderPreliminaryCIM(sections.preliminaryCIM), { kicker: 'CIM Draft' })}
-      ${renderSection('15', 'Human Review Notes', 'Required human validation before external use.', renderBulletList(sections.humanReviewNotes), { kicker: 'Human Oversight' })}
-      ${renderSection('16', 'Appendix', 'Assumptions, methodology and supporting notes.', renderAppendix(sections.appendix), { kicker: 'Appendix' })}
+      ${renderSection(
+        7,
+        'Enterprise Value & Equity Value',
+        'Enterprise value framing and equity bridge after capital structure adjustments.',
+        renderEnterpriseEquityGrid(report),
+        { kicker: 'Value bridge' }
+      )}
+
+      ${renderSection(
+        8,
+        'Waterfall',
+        'Bridge from Enterprise Value to Equity Value and seller proceeds.',
+        renderWaterfall(report),
+        { featured: true, kicker: 'Waterfall' }
+      )}
+
+      ${renderSection(
+        9,
+        'Buyer Matching',
+        'Indicative buyer universe and preliminary strategic fit view.',
+        renderBuyerMatching(report),
+        { kicker: 'Buyer universe' }
+      )}
+
+      ${renderSection(
+        10,
+        'Investment Thesis',
+        'Core reasons why the transaction may be strategically attractive.',
+        renderNumberedCards(investmentThesis, 'No investment thesis available.'),
+        { kicker: 'Thesis' }
+      )}
+
+      ${renderSection(
+        11,
+        'Risks & Mitigants',
+        'Main risks identified at this stage and preliminary mitigation angles.',
+        renderRisks(report),
+        { kicker: 'Risk review' }
+      )}
+
+      ${renderSection(
+        12,
+        'Preliminary CIM',
+        'Initial buyer-facing narrative and key positioning points.',
+        renderNumberedCards(preliminaryCim, 'No preliminary CIM content available.'),
+        { kicker: 'CIM draft' }
+      )}
+
+      ${renderSection(
+        13,
+        'Human Review Notes',
+        'Items requiring explicit human validation before circulation or use.',
+        renderBulletList(humanReviewNotes, 'No human review notes available.'),
+        { kicker: 'Human oversight' }
+      )}
+
+      ${renderSection(
+        14,
+        'Appendix',
+        'Supporting assumptions and complementary reference notes.',
+        renderAppendix(report),
+        { kicker: 'Appendix' }
+      )}
     </section>
 
-    <footer class="footer">
-      <div><strong>CEO's OS</strong><br />Private corporate intelligence platform.</div>
-      <div>${escapeHtml(meta.reportStatus || 'Draft')} - ${escapeHtml(meta.generatedDateLabel)}</div>
+    <footer class="report-footer">
+      <div class="report-footer-inner">
+        <div>
+          <span class="footer-brand">${escapeHtml(meta.generatedBy)}</span>
+          · M&amp;A Professional Export · ${escapeHtml(meta.generatedDateLabel)}
+        </div>
+        <div>
+          Internal decision-support document · Subject to human review and confirmatory diligence
+        </div>
+      </div>
     </footer>
   </main>
 </body>

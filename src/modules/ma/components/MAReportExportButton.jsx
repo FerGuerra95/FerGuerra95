@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Download, Printer, Share2 } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import formatMAReportData from '../utils/formatMAReportData.js';
@@ -18,10 +18,6 @@ const exportButtonCss = `
     box-shadow:
       0 12px 30px rgba(15, 23, 42, 0.16),
       inset 0 1px 0 rgba(255,255,255,0.08);
-  }
-
-  .ma-report-export-secure-share {
-    position: relative;
   }
 
   .ma-report-export-hint {
@@ -400,7 +396,6 @@ export function MAReportExportButton({
           onClick={handleShareSecureLink}
           variant="secondary"
           disabled={disabled || isBusy}
-          className="ma-report-export-secure-share"
           title={
             disabled
               ? 'Completa los inputs obligatorios antes de compartir'

@@ -3,11 +3,9 @@ import {
   AlertTriangle,
   CheckCircle2,
   Clock3,
-  FileCheck2,
   FileText,
   ShieldCheck
 } from 'lucide-react';
-import { Badge } from '../../../shared/components/ui/Badge.jsx';
 
 const dataRoomChecklistCss = `
   .funding-dataroom-checklist {
@@ -32,7 +30,7 @@ const dataRoomChecklistCss = `
     width: 100%;
     min-width: 0;
     display: grid;
-    grid-template-columns: 46px minmax(0, 1fr) minmax(160px, 220px);
+    grid-template-columns: 46px minmax(0, 1fr) minmax(150px, 220px);
     gap: 18px;
     align-items: center;
     padding: 19px;

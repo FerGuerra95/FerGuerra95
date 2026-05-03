@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from '../layout/AppShell.jsx';
 import { ProtectedRoute } from '../layout/ProtectedRoute.jsx';
@@ -12,6 +12,7 @@ import { FundingStoreProvider } from '../../modules/funding/store/fundingStore.j
 import { MADashboardPage } from '../../modules/ma/pages/MADashboardPage.jsx';
 import { ValuationPage } from '../../modules/ma/pages/ValuationPage.jsx';
 import { DealPipelinePage } from '../../modules/ma/pages/DealPipelinePage.jsx';
+import { DealDetailPage } from '../../modules/ma/pages/DealDetailPage.jsx';
 import { WaterfallPage } from '../../modules/ma/pages/WaterfallPage.jsx';
 import { BuyerMatchingPage } from '../../modules/ma/pages/BuyerMatchingPage.jsx';
 import { CIMPage } from '../../modules/ma/pages/CIMPage.jsx';
@@ -56,6 +57,7 @@ export function AppRoutes() {
         <Route path="/ma/dashboard" element={<MADashboardPage />} />
         <Route path="/ma/valuation" element={<ValuationPage />} />
         <Route path="/ma/pipeline" element={<DealPipelinePage />} />
+        <Route path="/ma/deal/:dealId" element={<DealDetailPage />} />
         <Route path="/ma/waterfall" element={<WaterfallPage />} />
         <Route path="/ma/matching" element={<BuyerMatchingPage />} />
         <Route path="/ma/cim" element={<CIMPage />} />
@@ -120,3 +122,4 @@ export function AppRoutes() {
     </Routes>
   );
 }
+

@@ -24,7 +24,7 @@ const dataRoomCss = `
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 30px;
     min-width: 0;
   }
 
@@ -34,9 +34,9 @@ const dataRoomCss = `
 
   .dataroom-hero {
     position: relative;
-    overflow: hidden;
-    border-radius: 34px;
-    padding: 34px;
+    overflow: visible;
+    border-radius: 36px;
+    padding: 40px;
     border: 1px solid rgba(148, 163, 184, 0.18);
     background:
       radial-gradient(circle at 8% 2%, rgba(37, 99, 235, 0.34), transparent 30%),
@@ -51,6 +51,7 @@ const dataRoomCss = `
     content: "";
     position: absolute;
     inset: 0;
+    border-radius: inherit;
     background:
       linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
@@ -63,9 +64,13 @@ const dataRoomCss = `
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
-    gap: 28px;
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+    gap: 34px;
+    align-items: start;
+    min-width: 0;
+  }
+
+  .dataroom-main-copy {
     min-width: 0;
   }
 
@@ -73,21 +78,25 @@ const dataRoomCss = `
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
   }
 
   .dataroom-title {
     margin: 0;
     max-width: 920px;
-    font-size: clamp(38px, 4.8vw, 66px);
-    line-height: 0.94;
-    letter-spacing: -0.07em;
+    font-size: clamp(34px, 4.1vw, 58px);
+    line-height: 1.1;
+    letter-spacing: -0.052em;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    padding-bottom: 6px;
   }
 
   .dataroom-title span {
     display: block;
     margin-top: 8px;
-    color: rgba(226, 232, 240, 0.7);
+    color: rgba(226, 232, 240, 0.72);
+    line-height: 1.12;
   }
 
   .dataroom-copy {
@@ -125,12 +134,13 @@ const dataRoomCss = `
   .dataroom-command-item strong {
     display: block;
     margin-top: 8px;
-    line-height: 1.25;
+    line-height: 1.28;
     overflow-wrap: anywhere;
   }
 
   .dataroom-signal-card {
     position: relative;
+    width: 100%;
     border-radius: 30px;
     padding: 24px;
     background:
@@ -149,6 +159,7 @@ const dataRoomCss = `
     gap: 18px;
     align-items: flex-start;
     margin-bottom: 22px;
+    min-width: 0;
   }
 
   .dataroom-icon-box,
@@ -174,8 +185,9 @@ const dataRoomCss = `
   .dataroom-signal-title {
     margin-top: 10px;
     font-size: 23px;
-    line-height: 1.16;
-    letter-spacing: -0.04em;
+    line-height: 1.2;
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
   }
 
   .dataroom-score-box {
@@ -239,7 +251,8 @@ const dataRoomCss = `
   .dataroom-section-header h2,
   .dataroom-section-header h3 {
     margin: 0;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.035em;
+    line-height: 1.16;
   }
 
   .dataroom-section-header p {
@@ -321,8 +334,8 @@ const dataRoomCss = `
     margin-top: 11px;
     font-size: 24px;
     font-weight: 790;
-    line-height: 1.12;
-    letter-spacing: -0.045em;
+    line-height: 1.16;
+    letter-spacing: -0.035em;
     overflow-wrap: anywhere;
   }
 
@@ -344,11 +357,13 @@ const dataRoomCss = `
     justify-content: space-between;
     gap: 22px;
     align-items: flex-start;
+    min-width: 0;
   }
 
   .dataroom-panel-head h3 {
     margin: 0;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.035em;
+    line-height: 1.18;
   }
 
   .dataroom-panel-head p {
@@ -408,34 +423,14 @@ const dataRoomCss = `
   }
 
   @media (max-width: 680px) {
-    .dataroom-page {
-      gap: 24px;
-    }
-
-    .dataroom-hero {
-      padding: 24px;
-      border-radius: 26px;
-    }
-
     .dataroom-grid-kpis,
     .dataroom-grid-three {
       grid-template-columns: 1fr;
     }
 
-    .dataroom-kpi-card,
-    .dataroom-panel,
-    .dataroom-mini-card,
-    .dataroom-checklist-panel {
-      border-radius: 23px;
-    }
-
-    .dataroom-signal-row {
-      grid-template-columns: 1fr;
-      gap: 6px;
-    }
-
-    .dataroom-signal-row strong {
-      text-align: left;
+    .dataroom-hero {
+      padding: 24px;
+      border-radius: 26px;
     }
   }
 `;
@@ -636,7 +631,7 @@ export function DataRoomPage() {
       <div className="dataroom-page">
         <section className="dataroom-hero">
           <div className="dataroom-hero-inner">
-            <div>
+            <div className="dataroom-main-copy">
               <div className="dataroom-badges">
                 <Badge>Funding Workspace</Badge>
                 <Badge>Investor Data Room</Badge>

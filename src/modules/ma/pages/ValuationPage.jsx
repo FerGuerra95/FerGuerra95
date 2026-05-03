@@ -1116,10 +1116,11 @@ export function ValuationPage() {
                     settings={settings}
                     derived={derived}
                     disabled={hasValidationErrors}
-                    generatedBy="CEO’s OS"
-                    organizationName="CEO’s OS"
+                    generatedBy="CEO's OS"
+                    organizationName="CEO's OS"
                     reportStatus="Draft"
                     showPrintButton
+                    showSecureShareButton
                     onExportComplete={pushToast}
                   />
                 ) : null}
@@ -1653,7 +1654,7 @@ function getReadinessHeadline({ canAnalyze, isAnalyzing, hasValidationErrors }) 
 
 function getReadinessDescription({ canAnalyze, isAnalyzing, hasValidationErrors }) {
   if (isAnalyzing) {
-    return 'CEO’s OS está consolidando métricas, riesgo, múltiplo ajustado y estructura del deal.';
+    return "CEO's OS está consolidando métricas, riesgo, múltiplo ajustado y estructura del deal.";
   }
 
   if (hasValidationErrors) {
