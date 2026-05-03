@@ -516,8 +516,10 @@ const dealDetailCss = `
 
 
   .ma-export-action-note {
+    flex: 0 0 100%;
     width: 100%;
-    margin-top: -22px;
+    margin: 6px 0 0;
+    padding-left: 2px;
     color: rgba(203, 213, 225, 0.58);
     font-size: 12px;
     line-height: 1.45;
@@ -673,7 +675,7 @@ export function DealDetailPage() {
                 <ExportDataRoomButton deal={deal} />
 
                 <div className="ma-export-action-note">
-                  Exporta una ficha ejecutiva completa, un IC Memo especifico o un Data Room Checklist.
+                  Abre documentos HTML premium y desde cada documento puedes guardar como PDF.
                 </div>
               </div>
 
@@ -861,334 +863,246 @@ export function DealDetailPage() {
 
 function ExportDealBriefButton({ deal }) {
   function handleExportDealBrief() {
-    const html = buildDealBriefHtml(deal);
-
-    const blob = new Blob([html], {
-      type: 'text/html;charset=utf-8'
+    openPremiumHtmlExport({
+      html: addHtmlPrintToolbar({
+        html: buildDealBriefHtml(deal),
+        title: 'M&A Deal Brief'
+      }),
+      fileName: `${slugifyFileName(deal?.name || 'deal')}-brief.html`
     });
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-
-    link.href = url;
-    link.download = `${slugifyFileName(deal?.name || 'deal')}-brief.html`;
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    window.setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
   }
 
   return (
     <Button variant="secondary" onClick={handleExportDealBrief}>
       <Download size={16} />
-      Export Deal Brief
+      Deal Brief
     </Button>
   );
 }
 
 function ExportICMemoButton({ deal }) {
   function handleExportICMemo() {
-    const html = buildICMemoHtml(deal);
-
-    const blob = new Blob([html], {
-      type: 'text/html;charset=utf-8'
+    openPremiumHtmlExport({
+      html: addHtmlPrintToolbar({
+        html: buildICMemoHtml(deal),
+        title: 'Investment Committee Memo'
+      }),
+      fileName: `${slugifyFileName(deal?.name || 'deal')}-ic-memo.html`
     });
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-
-    link.href = url;
-    link.download = `${slugifyFileName(deal?.name || 'deal')}-ic-memo.html`;
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    window.setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
   }
 
   return (
     <Button variant="secondary" onClick={handleExportICMemo}>
       <Download size={16} />
-      Export IC Memo
+      IC Memo
     </Button>
   );
 }
 
 function ExportDataRoomButton({ deal }) {
   function handleExportDataRoom() {
-    const html = buildDataRoomHtml(deal);
-
-    const blob = new Blob([html], {
-      type: 'text/html;charset=utf-8'
+    openPremiumHtmlExport({
+      html: addHtmlPrintToolbar({
+        html: buildDataRoomHtml(deal),
+        title: 'Data Room Checklist'
+      }),
+      fileName: `${slugifyFileName(deal?.name || 'deal')}-data-room.html`
     });
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-
-    link.href = url;
-    link.download = `${slugifyFileName(deal?.name || 'deal')}-data-room.html`;
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    window.setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
   }
 
   return (
     <Button variant="secondary" onClick={handleExportDataRoom}>
       <Download size={16} />
-      Export Data Room
+      Data Room
     </Button>
   );
 }
 
+function openPremiumHtmlExport({ html, fileName }) {
+  const blob = new Blob([html], {
+    type: 'text/html;charset=utf-8'
+  });
+
+  const url = URL.createObjectURL(blob);
+  const openedWindow = window.open(url, '_blank', 'noopener,noreferrer');
+
+  if (!openedWindow) {
+    downloadHtmlExport({ html, fileName });
+  }
+
+  window.setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 60000);
+}
+
+function downloadHtmlExport({ html, fileName }) {
+  const blob = new Blob([html], {
+    type: 'text/html;charset=utf-8'
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.href = url;
+  link.download = fileName;
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  window.setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 1000);
+}
+
+function addHtmlPrintToolbar({ html, title }) {
+  const safeTitle = escapeHtml(title || 'CEO OS Export');
+
+  const toolbarCss = `
+  <style>
+    .ceos-export-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 99999;
+      max-width: 1180px;
+      margin: 0 auto 18px;
+      padding: 12px 14px;
+      border-radius: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      color: #0f172a;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(29,78,216,0.10), transparent 34%),
+        rgba(255,255,255,0.96);
+      border: 1px solid #d8e0eb;
+      box-shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
+      backdrop-filter: blur(16px);
+    }
+
+    .ceos-export-toolbar strong {
+      display: block;
+      font-size: 14px;
+      letter-spacing: -0.03em;
+    }
+
+    .ceos-export-toolbar span {
+      display: block;
+      margin-top: 3px;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .ceos-export-toolbar-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+
+    .ceos-export-toolbar button {
+      cursor: pointer;
+      min-height: 38px;
+      padding: 0 15px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #1d4ed8, #0f172a);
+      border: 1px solid rgba(29,78,216,0.24);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      box-shadow: 0 12px 28px rgba(29, 78, 216, 0.22);
+    }
+
+    .ceos-export-toolbar button:hover {
+      transform: translateY(-1px);
+    }
+
+    @media print {
+      .ceos-export-toolbar {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .ceos-export-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .ceos-export-toolbar-actions,
+      .ceos-export-toolbar button {
+        width: 100%;
+      }
+    }
+  </style>`;
+
+  const toolbarHtml = `
+  <div class="ceos-export-toolbar">
+    <div>
+      <strong>CEO's OS · ${safeTitle}</strong>
+      <span>Documento HTML premium. Usa el boton para imprimir o guardar como PDF.</span>
+    </div>
+
+    <div class="ceos-export-toolbar-actions">
+      <button type="button" onclick="window.print()">Guardar como PDF / Imprimir</button>
+    </div>
+  </div>`;
+
+  let output = String(html || '');
+
+  if (output.includes('</head>')) {
+    output = output.replace('</head>', `${toolbarCss}</head>`);
+  }
+
+  if (output.includes('<body>')) {
+    output = output.replace('<body>', `<body>${toolbarHtml}`);
+  }
+
+  return output;
+}
 function buildDataRoomHtml(deal) {
-  const generatedAt = new Intl.DateTimeFormat('es-ES', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(new Date());
+  const generatedAt = getExportGeneratedAt();
 
   const dataRoomItems = Array.isArray(deal?.dataRoom) ? deal.dataRoom : [];
   const missingItems = dataRoomItems.filter(
     (item) => String(item?.status || '').toLowerCase() !== 'ready'
   );
 
+  const readyItems = dataRoomItems.length - missingItems.length;
+
   const readinessSummary =
     missingItems.length === 0
-      ? 'Data room ready for controlled sharing'
-      : `${missingItems.length} item(s) require review before sharing`;
+      ? 'Data room ready for controlled sharing.'
+      : `${missingItems.length} item(s) require review before controlled sharing.`;
 
-  return `<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>${escapeHtml(deal?.name)} - Data Room Checklist</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --ink: #0f172a;
-      --muted: #475569;
-      --line: #dbe2ea;
-      --soft: #f8fafc;
-      --blue: #1d4ed8;
-      --green: #047857;
-      --gold: #a16207;
-      --danger: #b91c1c;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 34px;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background: #ffffff;
-    }
-
-    .page {
-      max-width: 980px;
-      margin: 0 auto;
-    }
-
-    .hero {
-      padding: 34px;
-      border-radius: 28px;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(29,78,216,0.12), transparent 36%),
-        linear-gradient(135deg, #f8fafc, #ffffff);
-      border: 1px solid var(--line);
-    }
-
-    .eyebrow {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-    .badge {
-      padding: 8px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--blue);
-      background: rgba(29,78,216,0.08);
-      border: 1px solid rgba(29,78,216,0.16);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 40px;
-      line-height: 0.98;
-      letter-spacing: -0.055em;
-    }
-
-    h2 {
-      margin: 0 0 16px;
-      font-size: 21px;
-      letter-spacing: -0.035em;
-    }
-
-    h3 {
-      margin: 0 0 8px;
-      font-size: 15px;
-    }
-
-    p {
-      margin: 0;
-      line-height: 1.62;
-      color: var(--muted);
-    }
-
-    .meta {
-      margin-top: 20px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .section {
-      margin-top: 22px;
-      padding: 24px;
-      border-radius: 24px;
-      border: 1px solid var(--line);
-      background: #ffffff;
-    }
-
-    .soft {
-      background: var(--soft);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .row,
-    .item {
-      padding: 14px;
-      border-radius: 16px;
-      background: var(--soft);
-      border: 1px solid var(--line);
-    }
-
-    .row span {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .row strong {
-      display: block;
-      font-size: 17px;
-      line-height: 1.2;
-      overflow-wrap: anywhere;
-    }
-
-    .item + .item {
-      margin-top: 10px;
-    }
-
-    .status {
-      display: inline-flex;
-      margin-top: 8px;
-      padding: 6px 8px;
-      border-radius: 999px;
-      color: var(--blue);
-      background: rgba(29,78,216,0.08);
-      border: 1px solid rgba(29,78,216,0.16);
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .ready {
-      color: var(--green);
-      background: rgba(4,120,87,0.08);
-      border-color: rgba(4,120,87,0.16);
-    }
-
-    .required {
-      color: var(--danger);
-      background: rgba(254,242,242,0.82);
-      border-color: rgba(185,28,28,0.18);
-    }
-
-    .review {
-      color: var(--gold);
-      background: rgba(254,252,232,0.86);
-      border-color: rgba(161,98,7,0.18);
-    }
-
-    .footer {
-      margin-top: 24px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    @media print {
-      body {
-        padding: 18px;
-      }
-
-      .section,
-      .hero {
-        break-inside: avoid;
-      }
-    }
-  </style>
-</head>
-<body>
-  <main class="page">
-    <section class="hero">
-      <div class="eyebrow">
-        <span class="badge">CEO's OS</span>
-        <span class="badge">Data Room Checklist</span>
-        <span class="badge">${escapeHtml(deal?.stageLabel)}</span>
-        <span class="badge">${escapeHtml(deal?.priority)}</span>
-      </div>
-
-      <h1>${escapeHtml(deal?.name)}</h1>
-
-      <p class="meta">
-        Generated ${escapeHtml(generatedAt)} · ${escapeHtml(deal?.sourceLabel)} · ${escapeHtml(deal?.owner)}
-      </p>
-    </section>
-
-    <section class="section soft">
-      <h2>Data Room Readiness</h2>
-      <p>${escapeHtml(readinessSummary)}</p>
-    </section>
-
-    <section class="section">
-      <h2>Deal Context</h2>
-      <div class="grid">
-        ${renderBriefRows([
+  return buildPremiumExportHtml({
+    fileTitle: `${deal?.name || 'Deal'} - Data Room Checklist`,
+    reportType: 'Data Room Checklist',
+    documentLabel: 'Diligence Control Pack',
+    title: deal?.name,
+    subtitle:
+      'Controlled documentary readiness pack for diligence preparation, secure sharing governance and execution discipline.',
+    generatedAt,
+    badges: ["CEO's OS", 'Data Room', deal?.stageLabel, deal?.priority],
+    heroStats: [
+      ['Readiness', readinessSummary],
+      ['Ready items', `${readyItems}/${dataRoomItems.length}`],
+      ['Risk', deal?.riskLabel],
+      ['Owner', deal?.owner]
+    ],
+    summaryTitle: 'Data Room Readiness',
+    summaryCopy: readinessSummary,
+    sections: [
+      {
+        eyebrow: '01 · Deal context',
+        title: 'Target control panel',
+        layout: 'two',
+        body: renderBriefRows([
           ['Target', deal?.name],
           ['Sector', deal?.sector],
           ['Market', deal?.market],
@@ -1197,301 +1111,97 @@ function buildDataRoomHtml(deal) {
           ['Risk', deal?.riskLabel],
           ['Quality Score', deal?.qualityScoreLabel],
           ['Updated', deal?.updatedLabel]
-        ])}
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Checklist</h2>
-      ${renderDataRoomChecklistRows(dataRoomItems)}
-    </section>
-
-    <section class="section">
-      <h2>Required / Review Items</h2>
-      ${
-        missingItems.length > 0
-          ? renderDataRoomChecklistRows(missingItems)
-          : '<p>All checklist items are currently marked as Ready.</p>'
+        ])
+      },
+      {
+        eyebrow: '02 · Document readiness',
+        title: 'Checklist',
+        body: renderDataRoomChecklistRows(dataRoomItems)
+      },
+      {
+        eyebrow: '03 · Exceptions',
+        title: 'Required / Review items',
+        body:
+          missingItems.length > 0
+            ? renderDataRoomChecklistRows(missingItems)
+            : '<p class="empty-note">All checklist items are currently marked as Ready.</p>'
+      },
+      {
+        eyebrow: '04 · Governance',
+        title: 'Sharing control notes',
+        body: `
+          <div class="item governance">
+            <div class="item-marker">A</div>
+            <div>
+              <h3>Before external sharing</h3>
+              <p>Validate permissions, confidentiality perimeter, human review, document source and latest available financial information.</p>
+            </div>
+          </div>
+          <div class="item governance">
+            <div class="item-marker">B</div>
+            <div>
+              <h3>Enterprise extension</h3>
+              <p>Future version should include signed links, access expiry, revocation, document versioning and audit trail by organization.</p>
+            </div>
+          </div>
+        `
       }
-    </section>
-
-    <section class="section">
-      <h2>Sharing Control Notes</h2>
-      <div class="item">
-        <h3>Before external sharing</h3>
-        <p>Validate permissions, confidentiality perimeter, human review, document source and latest available financial information.</p>
-      </div>
-      <div class="item">
-        <h3>Enterprise extension</h3>
-        <p>Future version should include signed links, access expiry, revocation, document versioning and audit trail by organization.</p>
-      </div>
-    </section>
-
-    <div class="footer">
-      Internal use only. This Data Room Checklist is generated from CEO's OS and does not replace legal, financial, tax or operational due diligence. Human review is required before external circulation.
-    </div>
-  </main>
-</body>
-</html>`;
+    ],
+    footer:
+      "Internal use only. This Data Room Checklist is generated from CEO's OS and does not replace legal, financial, tax or operational due diligence. Human review is required before external circulation."
+  });
 }
 
-function renderDataRoomChecklistRows(items) {
-  return items
-    .map((item) => {
-      const status = String(item?.status || 'Review');
-      const tone = status.toLowerCase();
-
-      return `
-        <div class="item">
-          <h3>${escapeHtml(item?.title)}</h3>
-          <p>${escapeHtml(item?.description)}</p>
-          <span class="status ${escapeHtml(tone)}">${escapeHtml(status)}</span>
-        </div>
-      `;
-    })
-    .join('');
-}
 function buildICMemoHtml(deal) {
-  const generatedAt = new Intl.DateTimeFormat('es-ES', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(new Date());
+  const generatedAt = getExportGeneratedAt();
 
   const approvals = [
     {
       title: 'Financial validation',
-      description: 'Confirmar EBITDA normalizado, deuda neta, caja, working capital y ajustes no recurrentes.'
+      description:
+        'Confirm normalized EBITDA, net debt, cash, working capital and non-recurring adjustments.'
     },
     {
       title: 'Legal perimeter',
-      description: 'Validar estructura societaria, contratos clave, contingencias, permisos y capacidad de cierre.'
+      description:
+        'Validate corporate structure, key contracts, contingencies, permits and closing capacity.'
     },
     {
       title: 'Commercial diligence',
-      description: 'Revisar concentracion de clientes, pipeline comercial, churn, recurrencia e hipotesis de crecimiento.'
+      description:
+        'Review customer concentration, commercial pipeline, churn, recurrence and growth assumptions.'
     },
     {
       title: 'Committee decision',
-      description: 'Autorizar avance, mantener en revision o bloquear circulacion externa segun evidencias disponibles.'
+      description:
+        'Authorize advance, keep under review or block external circulation based on available evidence.'
     }
   ];
 
-  return `<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>${escapeHtml(deal?.name)} - IC Memo</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --ink: #0f172a;
-      --muted: #475569;
-      --line: #dbe2ea;
-      --soft: #f8fafc;
-      --blue: #1d4ed8;
-      --green: #047857;
-      --gold: #a16207;
-      --danger: #b91c1c;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 34px;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background: #ffffff;
-    }
-
-    .page {
-      max-width: 980px;
-      margin: 0 auto;
-    }
-
-    .hero {
-      padding: 34px;
-      border-radius: 28px;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(29,78,216,0.12), transparent 36%),
-        linear-gradient(135deg, #f8fafc, #ffffff);
-      border: 1px solid var(--line);
-    }
-
-    .eyebrow {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-    .badge {
-      padding: 8px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--blue);
-      background: rgba(29,78,216,0.08);
-      border: 1px solid rgba(29,78,216,0.16);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 40px;
-      line-height: 0.98;
-      letter-spacing: -0.055em;
-    }
-
-    h2 {
-      margin: 0 0 16px;
-      font-size: 21px;
-      letter-spacing: -0.035em;
-    }
-
-    h3 {
-      margin: 0 0 8px;
-      font-size: 15px;
-    }
-
-    p {
-      margin: 0;
-      line-height: 1.62;
-      color: var(--muted);
-    }
-
-    .meta {
-      margin-top: 20px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .section {
-      margin-top: 22px;
-      padding: 24px;
-      border-radius: 24px;
-      border: 1px solid var(--line);
-      background: #ffffff;
-    }
-
-    .soft {
-      background: var(--soft);
-    }
-
-    .decision {
-      display: inline-flex;
-      width: fit-content;
-      margin-bottom: 14px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      color: var(--green);
-      background: rgba(4,120,87,0.08);
-      border: 1px solid rgba(4,120,87,0.16);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .row,
-    .item {
-      padding: 14px;
-      border-radius: 16px;
-      background: var(--soft);
-      border: 1px solid var(--line);
-    }
-
-    .row span {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .row strong {
-      display: block;
-      font-size: 17px;
-      line-height: 1.2;
-      overflow-wrap: anywhere;
-    }
-
-    .item + .item {
-      margin-top: 10px;
-    }
-
-    .red-flag {
-      border-color: rgba(185,28,28,0.18);
-      background: rgba(254,242,242,0.72);
-    }
-
-    .approval {
-      border-color: rgba(29,78,216,0.16);
-      background: rgba(239,246,255,0.74);
-    }
-
-    .footer {
-      margin-top: 24px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    @media print {
-      body {
-        padding: 18px;
-      }
-
-      .section,
-      .hero {
-        break-inside: avoid;
-      }
-    }
-  </style>
-</head>
-<body>
-  <main class="page">
-    <section class="hero">
-      <div class="eyebrow">
-        <span class="badge">CEO's OS</span>
-        <span class="badge">Investment Committee Memo</span>
-        <span class="badge">${escapeHtml(deal?.stageLabel)}</span>
-        <span class="badge">${escapeHtml(deal?.priority)}</span>
-      </div>
-
-      <h1>${escapeHtml(deal?.name)}</h1>
-
-      <p class="meta">
-        Generated ${escapeHtml(generatedAt)} · ${escapeHtml(deal?.sourceLabel)} · ${escapeHtml(deal?.owner)}
-      </p>
-    </section>
-
-    <section class="section soft">
-      <h2>Committee Recommendation</h2>
-      <span class="decision">${escapeHtml(deal?.icMemo?.decision)}</span>
-      <h3>${escapeHtml(deal?.icMemo?.title)}</h3>
-      <p>${escapeHtml(deal?.icMemo?.summary)}</p>
-    </section>
-
-    <section class="section">
-      <h2>Deal Snapshot</h2>
-      <div class="grid">
-        ${renderBriefRows([
+  return buildPremiumExportHtml({
+    fileTitle: `${deal?.name || 'Deal'} - IC Memo`,
+    reportType: 'Investment Committee Memo',
+    documentLabel: 'Board Decision Pack',
+    title: deal?.name,
+    subtitle:
+      'Committee-ready decision memo with recommendation, valuation view, execution posture and required approvals.',
+    generatedAt,
+    badges: ["CEO's OS", 'IC Memo', deal?.stageLabel, deal?.priority],
+    heroStats: [
+      ['Recommendation', deal?.icMemo?.decision],
+      ['Quality Score', deal?.qualityScoreLabel],
+      ['Risk', deal?.riskLabel],
+      ['Enterprise Value', deal?.enterpriseLabel]
+    ],
+    summaryTitle: 'Committee Recommendation',
+    summaryCopy: deal?.icMemo?.summary,
+    decision: deal?.icMemo?.decision,
+    sections: [
+      {
+        eyebrow: '01 · Investment snapshot',
+        title: 'Deal snapshot',
+        layout: 'two',
+        body: renderBriefRows([
           ['Target', deal?.name],
           ['Sector', deal?.sector],
           ['Market', deal?.market],
@@ -1504,53 +1214,31 @@ function buildICMemoHtml(deal) {
           ['Multiplo ajustado', deal?.multipleLabel],
           ['Quality Score', deal?.qualityScoreLabel],
           ['Updated', deal?.updatedLabel]
-        ])}
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Strategic Rationale, Valuation View & Committee Ask</h2>
-      ${renderMemoItems(deal?.icMemo?.items || [])}
-    </section>
-
-    <section class="section">
-      <h2>Red Flags & Mitigants</h2>
-      ${renderRedFlags(deal?.redFlags || [])}
-    </section>
-
-    <section class="section">
-      <h2>Required Approvals</h2>
-      ${renderApprovalItems(approvals)}
-    </section>
-
-    <div class="footer">
-      Internal use only. This IC Memo is generated from CEO's OS and does not constitute legal advice, tax advice, valuation opinion, fairness opinion or final investment recommendation. Human review and supporting documentation are required before any investment decision.
-    </div>
-  </main>
-</body>
-</html>`;
+        ])
+      },
+      {
+        eyebrow: '02 · Committee logic',
+        title: 'Strategic rationale, valuation view & committee ask',
+        body: renderMemoItems(deal?.icMemo?.items || [])
+      },
+      {
+        eyebrow: '03 · Risk review',
+        title: 'Red flags & mitigants',
+        body: renderRedFlags(deal?.redFlags || [])
+      },
+      {
+        eyebrow: '04 · Approvals',
+        title: 'Required approvals',
+        body: renderApprovalItems(approvals)
+      }
+    ],
+    footer:
+      "Internal use only. This IC Memo is generated from CEO's OS and does not constitute legal advice, tax advice, valuation opinion, fairness opinion or final investment recommendation. Human review and supporting documentation are required before any investment decision."
+  });
 }
 
-function renderApprovalItems(items) {
-  return items
-    .map(
-      (item) => `
-        <div class="item approval">
-          <h3>${escapeHtml(item?.title)}</h3>
-          <p>${escapeHtml(item?.description)}</p>
-        </div>
-      `
-    )
-    .join('');
-}
 function buildDealBriefHtml(deal) {
-  const generatedAt = new Intl.DateTimeFormat('es-ES', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(new Date());
+  const generatedAt = getExportGeneratedAt();
 
   const metrics = [
     ['Equity Value', deal?.equityLabel],
@@ -1572,288 +1260,827 @@ function buildDealBriefHtml(deal) {
     ['Updated', deal?.updatedLabel]
   ];
 
+  return buildPremiumExportHtml({
+    fileTitle: `${deal?.name || 'Deal'} - Deal Brief`,
+    reportType: 'M&A Deal Brief',
+    documentLabel: 'Executive Deal Dossier',
+    title: deal?.name,
+    subtitle:
+      'Executive deal intelligence package for internal review, investor preparation, IC discussion and controlled decision-making.',
+    generatedAt,
+    badges: ["CEO's OS", 'M&A Deal Brief', deal?.stageLabel, deal?.priority],
+    heroStats: [
+      ['Equity Value', deal?.equityLabel],
+      ['Enterprise Value', deal?.enterpriseLabel],
+      ['Quality Score', deal?.qualityScoreLabel],
+      ['Risk', deal?.riskLabel]
+    ],
+    summaryTitle: 'Executive Summary',
+    summaryCopy: deal?.recommendedAction,
+    sections: [
+      {
+        eyebrow: '01 · Target intelligence',
+        title: 'Target profile',
+        layout: 'two',
+        body: renderBriefRows(profile)
+      },
+      {
+        eyebrow: '02 · Valuation',
+        title: 'Valuation snapshot',
+        layout: 'two',
+        body: renderBriefRows(metrics)
+      },
+      {
+        eyebrow: '03 · Investment committee',
+        title: 'IC memo snapshot',
+        body: `
+          <div class="featured-memo">
+            <span class="decision">${escapeHtml(deal?.icMemo?.decision)}</span>
+            <h3 class="lead-title">${escapeHtml(deal?.icMemo?.title)}</h3>
+            <p>${escapeHtml(deal?.icMemo?.summary)}</p>
+          </div>
+          <div class="stack">${renderMemoItems(deal?.icMemo?.items || [])}</div>
+        `
+      },
+      {
+        eyebrow: '04 · Data room',
+        title: 'Data room readiness',
+        body: renderDataRoomItems(deal?.dataRoom || [])
+      },
+      {
+        eyebrow: '05 · Risks',
+        title: 'Red flags & mitigants',
+        body: renderRedFlags(deal?.redFlags || [])
+      },
+      {
+        eyebrow: '06 · Execution',
+        title: 'Next actions',
+        body: renderActionItems(deal?.nextActions || [])
+      },
+      {
+        eyebrow: '07 · Timeline',
+        title: 'Deal timeline',
+        body: renderTimelineItems(deal?.timeline || [])
+      }
+    ],
+    footer:
+      "This document is an internal executive brief generated from CEO's OS. It is not a fairness opinion, legal advice, tax advice or final investment recommendation."
+  });
+}
+
+function buildPremiumExportHtml({
+  fileTitle,
+  reportType,
+  documentLabel,
+  title,
+  subtitle,
+  generatedAt,
+  badges,
+  heroStats,
+  summaryTitle,
+  summaryCopy,
+  decision,
+  sections,
+  footer
+}) {
+  const safeBadges = Array.isArray(badges) ? badges.filter(Boolean) : [];
+  const safeHeroStats = Array.isArray(heroStats) ? heroStats : [];
+  const safeSections = Array.isArray(sections) ? sections : [];
+
   return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>${escapeHtml(deal?.name)} - Deal Brief</title>
+  <title>${escapeHtml(fileTitle)}</title>
   <style>
+    ${getPremiumExportCss()}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="cover">
+      <div class="noise"></div>
+      <div class="watermark">CEO</div>
+
+      <div class="cover-top">
+        <div class="brand">
+          <div class="brand-symbol">OS</div>
+          <div>
+            <div class="brand-mark">CEO's OS</div>
+            <div class="brand-subtitle">Sovereign Executive Intelligence</div>
+          </div>
+        </div>
+
+        <div class="classification">
+          <span>Strictly confidential</span>
+          <strong>${escapeHtml(reportType)}</strong>
+        </div>
+      </div>
+
+      <div class="document-label">${escapeHtml(documentLabel || reportType)}</div>
+
+      <div class="eyebrow">
+        ${renderExportBadges(safeBadges)}
+      </div>
+
+      <h1>${escapeHtml(title)}</h1>
+
+      <p class="hero-copy">${escapeHtml(subtitle)}</p>
+
+      <div class="hero-stats">
+        ${renderHeroStats(safeHeroStats)}
+      </div>
+
+      <div class="cover-footer">
+        <div>
+          <span>Generated</span>
+          <strong>${escapeHtml(generatedAt)}</strong>
+        </div>
+
+        <div>
+          <span>Prepared by</span>
+          <strong>CEO's OS</strong>
+        </div>
+
+        <div>
+          <span>Use</span>
+          <strong>Internal decision support</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="section executive-summary">
+      <div class="section-header">
+        <div>
+          <div class="section-label">Executive summary</div>
+          <h2>${escapeHtml(summaryTitle)}</h2>
+        </div>
+        ${
+          decision
+            ? `<span class="decision">${escapeHtml(decision)}</span>`
+            : ''
+        }
+      </div>
+
+      <p>${escapeHtml(summaryCopy)}</p>
+    </section>
+
+    ${renderExportSections(safeSections)}
+
+    <div class="footer">
+      <strong>CEO's OS</strong>
+      <span>${escapeHtml(footer)}</span>
+    </div>
+  </main>
+</body>
+</html>`;
+}
+
+function getPremiumExportCss() {
+  return `
     :root {
       color-scheme: light;
-      --ink: #0f172a;
-      --muted: #475569;
-      --line: #dbe2ea;
+      --ink: #0b1220;
+      --muted: #526174;
+      --muted-2: #64748b;
+      --line: #d8e0eb;
+      --line-soft: #edf2f7;
       --soft: #f8fafc;
       --blue: #1d4ed8;
+      --navy: #020617;
       --green: #047857;
       --gold: #a16207;
+      --gold-2: #f59e0b;
       --danger: #b91c1c;
+      --shadow: 0 30px 90px rgba(15, 23, 42, 0.14);
     }
 
     * {
       box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    html,
+    body {
+      background: #ffffff !important;
+    }
+
+    html {
+      background: #f8fafc;
     }
 
     body {
       margin: 0;
-      padding: 34px;
+      padding: 38px;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--ink);
-      background: #ffffff;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(29, 78, 216, 0.10), transparent 26%),
+        radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.07), transparent 28%),
+        linear-gradient(180deg, #ffffff, #f8fafc 64%, #eef4fb);
     }
 
     .page {
-      max-width: 1080px;
+      background: linear-gradient(180deg, #f3f7fb 0%, #ffffff 26%, #ffffff 100%);
+      padding: 14px;
+      border-radius: 30px;
+      box-shadow: 0 22px 70px rgba(15, 23, 42, 0.08);
+      max-width: 1160px;
       margin: 0 auto;
     }
 
-    .hero {
-      padding: 34px;
-      border-radius: 28px;
+    .cover {
+      position: relative;
+      overflow: hidden;
+      min-height: 590px;
+      padding: 44px;
+      border-radius: 38px;
+      color: #ffffff;
       background:
-        radial-gradient(circle at 0% 0%, rgba(29,78,216,0.12), transparent 36%),
-        linear-gradient(135deg, #f8fafc, #ffffff);
-      border: 1px solid var(--line);
+        radial-gradient(circle at 9% 0%, rgba(96, 165, 250, 0.45), transparent 33%),
+        radial-gradient(circle at 94% 8%, rgba(16, 185, 129, 0.26), transparent 30%),
+        radial-gradient(circle at 58% 118%, rgba(245, 158, 11, 0.16), transparent 32%),
+        linear-gradient(135deg, #020617 0%, #0f172a 54%, #111827 100%);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.13);
+    }
+
+    .cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.95), transparent 88%);
+      pointer-events: none;
+    }
+
+    .cover::after {
+      content: "";
+      position: absolute;
+      right: -150px;
+      bottom: -190px;
+      width: 520px;
+      height: 520px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle, rgba(59, 130, 246, 0.20), transparent 67%);
+      pointer-events: none;
+    }
+
+    .noise {
+      position: absolute;
+      inset: 0;
+      opacity: 0.12;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.75) 1px, transparent 0);
+      background-size: 18px 18px;
+      mask-image: linear-gradient(to bottom right, rgba(0,0,0,0.9), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cover > *:not(.watermark):not(.noise) {
+      position: relative;
+      z-index: 2;
+    }
+
+    .watermark {
+      position: absolute;
+      right: 30px;
+      bottom: -8px;
+      z-index: 1;
+      font-size: 205px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -0.10em;
+      color: rgba(255,255,255,0.035);
+      pointer-events: none;
+    }
+
+    .cover-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      margin-bottom: 42px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-symbol {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      color: #bfdbfe;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(147,197,253,0.34), transparent 48%),
+        rgba(255,255,255,0.065);
+      border: 1px solid rgba(147,197,253,0.20);
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: -0.08em;
+    }
+
+    .brand-mark {
+      font-size: 24px;
+      font-weight: 950;
+      letter-spacing: -0.065em;
+    }
+
+    .brand-subtitle,
+    .classification span,
+    .section-label,
+    .metric span,
+    .row span,
+    .cover-footer span,
+    .document-label {
+      font-size: 10px;
+      font-weight: 875;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .brand-subtitle {
+      margin-top: 7px;
+      color: rgba(226, 232, 240, 0.62);
+    }
+
+    .classification {
+      min-width: 250px;
+      padding: 16px 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.068);
+      border: 1px solid rgba(255,255,255,0.14);
+      text-align: right;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .classification span {
+      display: block;
+      margin-bottom: 8px;
+      color: #fde68a;
+    }
+
+    .classification strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.22;
+    }
+
+    .document-label {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 18px;
+      padding: 10px 13px;
+      border-radius: 999px;
+      color: #0f172a;
+      background: linear-gradient(135deg, #f8fafc, #bfdbfe);
+      border: 1px solid rgba(255,255,255,0.35);
     }
 
     .eyebrow {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 18px;
+      margin-bottom: 24px;
     }
 
     .badge {
       padding: 8px 10px;
       border-radius: 999px;
-      font-size: 11px;
-      font-weight: 800;
+      font-size: 10px;
+      font-weight: 875;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--blue);
-      background: rgba(29,78,216,0.08);
-      border: 1px solid rgba(29,78,216,0.16);
+      color: rgba(219, 234, 254, 0.96);
+      background: rgba(96, 165, 250, 0.14);
+      border: 1px solid rgba(147, 197, 253, 0.22);
     }
 
     h1 {
+      max-width: 930px;
       margin: 0;
-      font-size: 42px;
-      line-height: 0.98;
-      letter-spacing: -0.055em;
+      font-size: 64px;
+      line-height: 0.89;
+      letter-spacing: -0.085em;
     }
 
     h2 {
-      margin: 0 0 16px;
-      font-size: 21px;
-      letter-spacing: -0.035em;
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.08;
+      letter-spacing: -0.058em;
     }
 
     h3 {
       margin: 0 0 8px;
       font-size: 15px;
+      letter-spacing: -0.018em;
+    }
+
+    .lead-title {
+      font-size: 20px;
+      margin-bottom: 10px;
     }
 
     p {
       margin: 0;
-      line-height: 1.6;
+      line-height: 1.66;
       color: var(--muted);
     }
 
-    .meta {
-      margin-top: 20px;
-      color: var(--muted);
-      font-size: 13px;
+    .hero-copy {
+      max-width: 810px;
+      margin-top: 24px;
+      color: rgba(226, 232, 240, 0.80);
+      font-size: 17px;
+      line-height: 1.72;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 38px;
+    }
+
+    .metric {
+      min-height: 118px;
+      padding: 18px;
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.035));
+      border: 1px solid rgba(255,255,255,0.13);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .metric span {
+      display: block;
+      color: rgba(226, 232, 240, 0.58);
+    }
+
+    .metric strong {
+      display: block;
+      color: #ffffff;
+      font-size: 22px;
+      line-height: 1.08;
+      letter-spacing: -0.047em;
+      overflow-wrap: anywhere;
+    }
+
+    .cover-footer {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 38px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(226, 232, 240, 0.15);
+    }
+
+    .cover-footer div {
+      padding: 12px 0 0;
+    }
+
+    .cover-footer span {
+      display: block;
+      color: rgba(226, 232, 240, 0.50);
+      margin-bottom: 7px;
+    }
+
+    .cover-footer strong {
+      display: block;
+      color: #ffffff;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .section {
+      position: relative;
+      overflow: hidden;
+      margin-top: 26px;
+      padding: 30px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(29, 78, 216, 0.045), transparent 28%),
+        rgba(255,255,255,0.96);
+      box-shadow: 0 20px 55px rgba(15, 23, 42, 0.075);
+      break-inside: avoid;
+    }
+
+    .section::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 28px;
+      bottom: 28px;
+      width: 4px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #2563eb, #10b981);
+    }
+
+    .executive-summary {
+      background:
+        radial-gradient(circle at 100% 0%, rgba(29, 78, 216, 0.10), transparent 32%),
+        linear-gradient(135deg, #ffffff, #f8fafc);
+      border-color: rgba(29, 78, 216, 0.14);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .section-label {
+      margin-bottom: 11px;
+      color: var(--blue);
     }
 
     .grid {
       display: grid;
+      gap: 13px;
+    }
+
+    .grid.two {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 22px;
     }
 
-    .section {
-      margin-top: 22px;
-      padding: 24px;
-      border-radius: 24px;
-      border: 1px solid var(--line);
-      background: #ffffff;
+    .stack {
+      margin-top: 18px;
     }
 
-    .soft {
-      background: var(--soft);
-    }
-
-    .metric-grid,
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .metric,
     .row,
     .item {
-      padding: 14px;
-      border-radius: 16px;
-      background: var(--soft);
-      border: 1px solid var(--line);
+      position: relative;
+      padding: 17px;
+      border-radius: 20px;
+      background:
+        linear-gradient(135deg, #ffffff, var(--soft));
+      border: 1px solid var(--line-soft);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.045);
     }
 
-    .metric span,
     .row span {
       display: block;
-      margin-bottom: 6px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--muted-2);
     }
 
-    .metric strong,
     .row strong {
       display: block;
-      font-size: 18px;
-      line-height: 1.2;
+      font-size: 19px;
+      line-height: 1.17;
+      letter-spacing: -0.04em;
       overflow-wrap: anywhere;
     }
 
-    .memo-decision {
+    .item + .item {
+      margin-top: 13px;
+    }
+
+    .item p {
+      color: var(--muted);
+    }
+
+    .featured-memo {
+      padding: 20px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(4,120,87,0.10), transparent 30%),
+        linear-gradient(135deg, #ffffff, #f8fafc);
+      border: 1px solid rgba(4,120,87,0.14);
+      margin-bottom: 18px;
+    }
+
+    .decision {
       display: inline-flex;
       width: fit-content;
-      margin-bottom: 14px;
-      padding: 8px 10px;
+      padding: 9px 12px;
       border-radius: 999px;
       color: var(--green);
       background: rgba(4,120,87,0.08);
       border: 1px solid rgba(4,120,87,0.16);
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 950;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-    }
-
-    .item + .item {
-      margin-top: 10px;
+      white-space: nowrap;
     }
 
     .status {
       display: inline-flex;
-      margin-top: 8px;
-      padding: 6px 8px;
+      margin-top: 11px;
+      padding: 7px 9px;
       border-radius: 999px;
       color: var(--blue);
       background: rgba(29,78,216,0.08);
       border: 1px solid rgba(29,78,216,0.16);
       font-size: 11px;
-      font-weight: 800;
+      font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
 
+    .ready {
+      color: var(--green);
+      background: rgba(4,120,87,0.08);
+      border-color: rgba(4,120,87,0.16);
+    }
+
+    .required,
     .red-flag {
+      color: var(--danger);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(185,28,28,0.08), transparent 35%),
+        rgba(254,242,242,0.82);
       border-color: rgba(185,28,28,0.18);
-      background: rgba(254,242,242,0.72);
+    }
+
+    .review,
+    .watch {
+      color: var(--gold);
+      background: rgba(254,252,232,0.90);
+      border-color: rgba(161,98,7,0.18);
+    }
+
+    .red-flag p {
+      color: #7f1d1d;
+    }
+
+    .governance {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      border-color: rgba(29, 78, 216, 0.14);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(29,78,216,0.08), transparent 32%),
+        linear-gradient(135deg, #ffffff, var(--soft));
+    }
+
+    .item-marker {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #1d4ed8;
+      background: rgba(29,78,216,0.08);
+      border: 1px solid rgba(29,78,216,0.15);
+      font-weight: 950;
+    }
+
+    .empty-note {
+      padding: 17px;
+      border-radius: 20px;
+      color: var(--green);
+      background: rgba(4,120,87,0.08);
+      border: 1px solid rgba(4,120,87,0.16);
     }
 
     .footer {
-      margin-top: 24px;
-      padding-top: 18px;
+      margin-top: 30px;
+      padding: 22px 0 4px;
       border-top: 1px solid var(--line);
+      display: grid;
+      gap: 8px;
       color: var(--muted);
       font-size: 12px;
     }
 
-    @media print {
+    .footer strong {
+      color: var(--ink);
+      letter-spacing: -0.025em;
+    }
+
+    @media (max-width: 900px) {
       body {
         padding: 18px;
       }
 
-      .section,
-      .hero {
+      .cover,
+      .section {
+        padding: 24px;
+        border-radius: 24px;
+      }
+
+      .cover-top,
+      .section-header,
+      .cover-footer,
+      .hero-stats,
+      .grid.two {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+
+      .classification {
+        text-align: left;
+      }
+
+      h1 {
+        font-size: 40px;
+      }
+    }
+
+    @media print {
+      @page {
+        margin: 12mm;
+        size: A4;
+      }
+
+      body {
+        padding: 0;
+        background: #ffffff;
+      }
+
+      .page {
+        max-width: 100%;
+      }
+
+      .cover {
+        min-height: 440px;
+        box-shadow: none;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .section {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      .footer {
         break-inside: avoid;
       }
     }
-  </style>
-</head>
-<body>
-  <main class="page">
-    <section class="hero">
-      <div class="eyebrow">
-        <span class="badge">CEO's OS</span>
-        <span class="badge">M&A Deal Brief</span>
-        <span class="badge">${escapeHtml(deal?.stageLabel)}</span>
-        <span class="badge">${escapeHtml(deal?.priority)}</span>
-      </div>
+  `;
+}
 
-      <h1>${escapeHtml(deal?.name)}</h1>
+function getExportGeneratedAt() {
+  return new Intl.DateTimeFormat('es-ES', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(new Date());
+}
 
-      <p class="meta">
-        Generated ${escapeHtml(generatedAt)} · ${escapeHtml(deal?.sourceLabel)} · ${escapeHtml(deal?.owner)}
-      </p>
-    </section>
-
-    <section class="section">
-      <h2>Executive Summary</h2>
-      <p>${escapeHtml(deal?.recommendedAction)}</p>
-    </section>
-
-    <section class="grid">
-      <div class="section">
-        <h2>Target Profile</h2>
-        <div class="profile-grid">
-          ${renderBriefRows(profile)}
+function renderHeroStats(items) {
+  return items
+    .map(
+      ([label, value]) => `
+        <div class="metric">
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(value || 'N/A')}</strong>
         </div>
-      </div>
+      `
+    )
+    .join('');
+}
 
-      <div class="section">
-        <h2>Valuation Snapshot</h2>
-        <div class="metric-grid">
-          ${renderBriefRows(metrics)}
-        </div>
-      </div>
-    </section>
+function renderExportBadges(items) {
+  return items
+    .map((item) => `<span class="badge">${escapeHtml(item)}</span>`)
+    .join('');
+}
 
-    <section class="section soft">
-      <h2>Investment Committee Memo</h2>
-      <span class="memo-decision">${escapeHtml(deal?.icMemo?.decision)}</span>
-      <h3>${escapeHtml(deal?.icMemo?.title)}</h3>
-      <p>${escapeHtml(deal?.icMemo?.summary)}</p>
+function renderExportSections(sections) {
+  return sections
+    .map((section) => {
+      const layoutClass = section?.layout === 'two' ? ' grid two' : '';
 
-      <div style="margin-top: 14px;">
-        ${renderMemoItems(deal?.icMemo?.items || [])}
-      </div>
-    </section>
+      return `
+        <section class="section">
+          <div class="section-header">
+            <div>
+              <div class="section-label">${escapeHtml(section?.eyebrow || 'Section')}</div>
+              <h2>${escapeHtml(section?.title)}</h2>
+            </div>
+          </div>
 
-    <section class="grid">
-      <div class="section">
-        <h2>Data Room Readiness</h2>
-        ${renderDataRoomItems(deal?.dataRoom || [])}
-      </div>
-
-      <div class="section">
-        <h2>Red Flags & Mitigants</h2>
-        ${renderRedFlags(deal?.redFlags || [])}
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Next Actions</h2>
-      ${renderActionItems(deal?.nextActions || [])}
-    </section>
-
-    <section class="section">
-      <h2>Deal Timeline</h2>
-      ${renderTimelineItems(deal?.timeline || [])}
-    </section>
-
-    <div class="footer">
-      This document is an internal executive brief generated from CEO's OS. It is not a fairness opinion, legal advice, tax advice or final investment recommendation.
-    </div>
-  </main>
-</body>
-</html>`;
+          <div class="${layoutClass.trim()}">
+            ${section?.body || ''}
+          </div>
+        </section>
+      `;
+    })
+    .join('');
 }
 
 function renderBriefRows(rows) {
@@ -1884,16 +2111,23 @@ function renderMemoItems(items) {
 
 function renderDataRoomItems(items) {
   return items
-    .map(
-      (item) => `
+    .map((item) => {
+      const status = String(item?.status || 'Review');
+      const tone = getStatusTone(status);
+
+      return `
         <div class="item">
           <h3>${escapeHtml(item?.title)}</h3>
           <p>${escapeHtml(item?.description)}</p>
-          <span class="status">${escapeHtml(item?.status)}</span>
+          <span class="status ${escapeHtml(tone)}">${escapeHtml(status)}</span>
         </div>
-      `
-    )
+      `;
+    })
     .join('');
+}
+
+function renderDataRoomChecklistRows(items) {
+  return renderDataRoomItems(items);
 }
 
 function renderRedFlags(items) {
@@ -1933,6 +2167,33 @@ function renderTimelineItems(items) {
       `
     )
     .join('');
+}
+
+function renderApprovalItems(items) {
+  return items
+    .map(
+      (item) => `
+        <div class="item governance">
+          <div class="item-marker">✓</div>
+          <div>
+            <h3>${escapeHtml(item?.title)}</h3>
+            <p>${escapeHtml(item?.description)}</p>
+          </div>
+        </div>
+      `
+    )
+    .join('');
+}
+
+function getStatusTone(status) {
+  const normalized = String(status || '').toLowerCase();
+
+  if (normalized.includes('ready')) return 'ready';
+  if (normalized.includes('required')) return 'required';
+  if (normalized.includes('review')) return 'review';
+  if (normalized.includes('watch')) return 'watch';
+
+  return '';
 }
 
 function escapeHtml(value) {
@@ -2536,6 +2797,17 @@ function getSafeQualityScore(score) {
 }
 
 export default DealDetailPage;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
