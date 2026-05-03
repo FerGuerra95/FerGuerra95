@@ -35,6 +35,7 @@ import { InvestorReadinessPage } from '../../modules/funding/pages/InvestorReadi
 import { CapitalStructurePage } from '../../modules/funding/pages/CapitalStructurePage.jsx';
 import { FundraisingScenariosPage } from '../../modules/funding/pages/FundraisingScenariosPage.jsx';
 import { DataRoomPage } from '../../modules/funding/pages/DataRoomPage.jsx';
+
 import { PMIDashboardPage } from '../../modules/pmi/pages/PMIDashboardPage.jsx';
 
 function ProtectedAppShell() {
@@ -61,7 +62,7 @@ export function AppRoutes() {
 
       <Route element={<ProtectedAppShell />}>
         <Route path="/overview" element={<CEOOverviewPage />} />
-        <Route path="/ceo/overview" element={<CEOOverviewPage />} />`r`n        <Route path="/pmi/dashboard" element={<PMIDashboardPage />} />
+        <Route path="/ceo/overview" element={<CEOOverviewPage />} />
 
         <Route path="/ma/dashboard" element={<MADashboardPage />} />
         <Route path="/ma/valuation" element={<ValuationPage />} />
@@ -125,10 +126,14 @@ export function AppRoutes() {
           path="/funding/data-room"
           element={<DataRoomPage />}
         />
+
+        <Route
+          path="/pmi/dashboard"
+          element={<PMIDashboardPage />}
+        />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
-
