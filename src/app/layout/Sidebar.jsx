@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   BrainCircuit,
@@ -620,6 +620,22 @@ const sidebarCss = `
     color: rgba(226,232,240,0.42);
   }
 
+  /* STABLE SIDEBAR BEHAVIOR */
+  .sidebar.ceos-sidebar {
+    position: sticky !important;
+    top: 0 !important;
+    align-self: flex-start !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .ceos-nav {
+    padding-bottom: 120vh !important;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .ceos-nav-link,
     .ceos-nav-icon,
@@ -651,6 +667,49 @@ function getActiveWorkspace(pathname) {
   return 'ma';
 }
 
+
+const STABLE_SIDEBAR_SECTION_LABELS = {
+  overview: 'EXECUTIVE OS',
+  ma: 'M&A',
+  compliance: 'COMPLIANCE',
+  funding: 'FUNDING',
+  pmi: 'PMI'
+};
+
+function stableScrollSidebarToWorkspace(workspaceKey) {
+  const sidebar = document.querySelector('.ceos-sidebar');
+
+  if (!sidebar) return;
+
+  const targetLabel = STABLE_SIDEBAR_SECTION_LABELS[workspaceKey];
+
+  if (!targetLabel || workspaceKey === 'overview') {
+    sidebar.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    return;
+  }
+
+  const sectionTitles = Array.from(
+    sidebar.querySelectorAll('.ceos-nav-section-title')
+  );
+
+  const targetTitle = sectionTitles.find((title) => {
+    return title.textContent?.trim().toUpperCase() === targetLabel;
+  });
+
+  if (!targetTitle) return;
+
+  const maxScroll = Math.max(sidebar.scrollHeight - sidebar.clientHeight, 0);
+  const targetTop = Math.max(targetTitle.offsetTop - 16, 0);
+
+  sidebar.scrollTo({
+    top: Math.min(targetTop, maxScroll),
+    behavior: 'smooth'
+  });
+}
+// STABLE SIDEBAR SECTION JUMP
 function forceIconColor(icon, isHighlighted) {
   if (!React.isValidElement(icon)) return icon;
 
@@ -894,6 +953,7 @@ export function Sidebar() {
 }
 
 export default Sidebar;
+
 
 
 
