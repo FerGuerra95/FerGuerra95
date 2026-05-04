@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -561,6 +561,302 @@ const dealsRepositoryCss = `
     margin-bottom: 0;
   }
 
+
+  /* DEALS REPOSITORY · PREMIUM EXECUTIVE POLISH */
+  .deals-hero,
+  .deals-signal-card,
+  .deals-kpi-card,
+  .deals-panel,
+  .deals-case-card,
+  .deals-case-metric,
+  .deals-state-card,
+  .deals-command-item,
+  .deals-empty-wrap {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .deals-hero {
+    border-color: rgba(16, 185, 129, 0.20);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.21), transparent 30%),
+      radial-gradient(circle at 96% 6%, rgba(37, 99, 235, 0.26), transparent 31%),
+      radial-gradient(circle at 58% 112%, rgba(212, 175, 55, 0.10), transparent 32%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.96));
+    box-shadow:
+      0 42px 130px rgba(0, 0, 0, 0.46),
+      0 0 54px rgba(16, 185, 129, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.065);
+  }
+
+  .deals-title {
+    text-shadow:
+      0 0 32px rgba(255,255,255,0.05),
+      0 18px 54px rgba(0,0,0,0.28);
+  }
+
+  .deals-title span {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(226, 232, 240, 0.80),
+        rgba(110, 231, 183, 0.76),
+        rgba(191, 219, 254, 0.70)
+      );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .deals-badge-row .badge,
+  .deals-chip-row .badge {
+    border-color: rgba(16, 185, 129, 0.22) !important;
+    background:
+      linear-gradient(90deg, rgba(16,185,129,0.13), rgba(37,99,235,0.08)) !important;
+    box-shadow:
+      0 0 18px rgba(16,185,129,0.09),
+      inset 0 1px 0 rgba(255,255,255,0.060) !important;
+  }
+
+  .deals-signal-card,
+  .deals-kpi-card,
+  .deals-panel,
+  .deals-case-card,
+  .deals-case-metric,
+  .deals-state-card,
+  .deals-command-item,
+  .deals-empty-wrap {
+    overflow: hidden;
+    border-color: rgba(16, 185, 129, 0.15);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.105), transparent 36%),
+      radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.085), transparent 42%),
+      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
+      rgba(15, 23, 42, 0.62);
+    box-shadow:
+      0 26px 78px rgba(0, 0, 0, 0.22),
+      0 0 34px rgba(16, 185, 129, 0.055),
+      inset 0 1px 0 rgba(255,255,255,0.050);
+    backdrop-filter: blur(18px) saturate(125%);
+    -webkit-backdrop-filter: blur(18px) saturate(125%);
+  }
+
+  .deals-signal-card::after,
+  .deals-kpi-card::after,
+  .deals-panel::after,
+  .deals-case-card::after,
+  .deals-case-metric::after,
+  .deals-state-card::after,
+  .deals-command-item::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,0.050),
+        transparent 36%,
+        rgba(16,185,129,0.025) 100%
+      );
+    opacity: 0.8;
+  }
+
+  .deals-signal-card,
+  .deals-kpi-card,
+  .deals-panel,
+  .deals-case-card,
+  .deals-case-metric,
+  .deals-command-item {
+    transition:
+      transform .18s ease,
+      border-color .18s ease,
+      box-shadow .18s ease,
+      background .18s ease;
+  }
+
+  .deals-signal-card:hover,
+  .deals-kpi-card:hover,
+  .deals-case-card:hover,
+  .deals-command-item:hover {
+    transform: translateY(-3px);
+    border-color: rgba(110, 231, 183, 0.24);
+    box-shadow:
+      0 34px 96px rgba(0, 0, 0, 0.28),
+      0 0 44px rgba(16, 185, 129, 0.085),
+      inset 0 1px 0 rgba(255,255,255,0.070);
+  }
+
+  .deals-icon-box,
+  .deals-card-icon,
+  .deals-panel-icon,
+  .deals-state-icon {
+    background:
+      linear-gradient(135deg, rgba(16,185,129,0.16), rgba(37,99,235,0.09));
+    border-color: rgba(16,185,129,0.24);
+    color: #bbf7d0;
+    box-shadow:
+      0 0 20px rgba(16,185,129,0.13),
+      inset 0 1px 0 rgba(255,255,255,0.065);
+  }
+
+  .deals-score-module {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16,185,129,0.12), transparent 42%),
+      linear-gradient(135deg, rgba(255,255,255,0.060), rgba(255,255,255,0.022)),
+      rgba(2, 6, 23, 0.34);
+    border-color: rgba(16,185,129,0.14);
+    box-shadow:
+      0 18px 48px rgba(0,0,0,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.050);
+  }
+
+  .deals-score-ring {
+    background:
+      conic-gradient(
+        rgba(16, 185, 129, 0.98) var(--score-angle),
+        rgba(37, 99, 235, 0.22) var(--score-angle),
+        rgba(255,255,255,0.08) 360deg
+      );
+    box-shadow:
+      0 18px 44px rgba(0, 0, 0, 0.32),
+      0 0 38px rgba(16, 185, 129, 0.18);
+  }
+
+  .deals-score-core {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(16,185,129,0.08), transparent 48%),
+      rgba(15, 23, 42, 0.98);
+    border-color: rgba(255,255,255,0.10);
+  }
+
+  .deals-score-core strong {
+    color: #bbf7d0;
+    text-shadow: 0 0 18px rgba(16,185,129,0.18);
+  }
+
+  .deals-score-core strong.is-empty-score {
+    color: rgba(226, 232, 240, 0.72);
+    text-shadow: none;
+  }
+
+  .deals-signal-row {
+    padding: 14px 0;
+    border-top-color: rgba(148, 163, 184, 0.11);
+  }
+
+  .deals-signal-row strong {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background:
+      linear-gradient(90deg, rgba(16,185,129,0.10), rgba(37,99,235,0.065));
+    border: 1px solid rgba(16,185,129,0.15);
+    color: rgba(226, 232, 240, 0.96);
+    box-shadow: 0 0 16px rgba(16,185,129,0.055);
+  }
+
+  .deals-command-item strong,
+  .deals-kpi-value,
+  .deals-case-title,
+  .deals-case-metric strong {
+    color: rgba(248, 250, 252, 0.96);
+  }
+
+  .deals-kpi-value.text-success {
+    color: #6ee7b7;
+    text-shadow: 0 0 16px rgba(110,231,183,0.16);
+  }
+
+  .deals-command-item .kpi-label,
+  .deals-kpi-card .kpi-label,
+  .deals-case-metric .kpi-label {
+    color: rgba(187, 247, 208, 0.92);
+    text-shadow: 0 0 12px rgba(16,185,129,0.12);
+  }
+
+  .deals-panel {
+    border-color: rgba(212, 175, 55, 0.16);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.105), transparent 32%),
+      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.10), transparent 34%),
+      linear-gradient(135deg, rgba(255,255,255,0.058), rgba(255,255,255,0.020)),
+      rgba(15, 23, 42, 0.64);
+  }
+
+  .deals-case-card {
+    border-left: 3px solid rgba(16,185,129,0.62);
+  }
+
+  .deals-case-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 24px;
+    bottom: 24px;
+    width: 3px;
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(16,185,129,0.96), rgba(37,99,235,0.72));
+    box-shadow: 0 0 16px rgba(16,185,129,0.20);
+    pointer-events: none;
+  }
+
+  .deals-case-meta {
+    color: rgba(203, 213, 225, 0.78);
+  }
+
+  .deals-case-metrics {
+    margin-top: 24px;
+  }
+
+  .deals-case-metric {
+    min-height: 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .deals-case-metric strong {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+
+  .deals-state-card.warning {
+    border-color: rgba(245, 158, 11, 0.24);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(245,158,11,0.13), transparent 38%),
+      linear-gradient(135deg, rgba(245,158,11,0.090), rgba(255,255,255,0.020)),
+      rgba(15, 23, 42, 0.64);
+  }
+
+  .deals-state-card.success {
+    border-color: rgba(16, 185, 129, 0.24);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16,185,129,0.13), transparent 38%),
+      linear-gradient(135deg, rgba(16,185,129,0.090), rgba(255,255,255,0.020)),
+      rgba(15, 23, 42, 0.64);
+  }
+
+  .deals-empty-wrap {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(16,185,129,0.10), transparent 42%),
+      linear-gradient(135deg, rgba(255,255,255,0.045), rgba(255,255,255,0.014)),
+      rgba(15, 23, 42, 0.48);
+    border-color: rgba(16,185,129,0.18);
+    box-shadow:
+      0 24px 70px rgba(0,0,0,0.20),
+      inset 0 1px 0 rgba(255,255,255,0.045);
+  }
+
+  .deals-case-actions .button,
+  .deals-actions .button {
+    box-shadow:
+      0 14px 34px rgba(0,0,0,0.22),
+      inset 0 1px 0 rgba(255,255,255,0.055);
+  }
+
   @media (max-width: 1280px) {
     .deals-hero {
       overflow: hidden;
@@ -739,9 +1035,9 @@ export function DealsRepositoryPage() {
                 <Badge>Private Deal Archive</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
                 {canDeleteCase ? (
-                  <Badge>Eliminación permitida</Badge>
+                  <Badge>EliminaciÃ³n permitida</Badge>
                 ) : (
-                  <Badge>Sin permiso de eliminación</Badge>
+                  <Badge>Sin permiso de eliminaciÃ³n</Badge>
                 )}
               </div>
 
@@ -751,9 +1047,9 @@ export function DealsRepositoryPage() {
               </h1>
 
               <p className="deals-copy">
-                Histórico operativo de deals guardados con snapshot de
-                valoración, score de calidad, múltiplo ajustado, sincronización
-                backend/local y continuidad de análisis por organización.
+                HistÃ³rico operativo de deals guardados con snapshot de
+                valoraciÃ³n, score de calidad, mÃºltiplo ajustado, sincronizaciÃ³n
+                backend/local y continuidad de anÃ¡lisis por organizaciÃ³n.
               </p>
 
               <div className="deals-actions">
@@ -809,7 +1105,7 @@ export function DealsRepositoryPage() {
                   >
                     <div className="deals-score-core">
                       <strong className={hasRepositoryScore ? '' : 'is-empty-score'}>
-                        {hasRepositoryScore ? repositoryHealth.score : '—'}
+                        {hasRepositoryScore ? repositoryHealth.score : 'â€”'}
                       </strong>
                     </div>
                   </div>
@@ -854,26 +1150,26 @@ export function DealsRepositoryPage() {
             kicker="Repository overview"
             icon={Database}
             title="Deal archive at a glance"
-            description="Resumen rápido del histórico M&A disponible, último caso guardado, snapshot económico y estado de sincronización."
+            description="Resumen rÃ¡pido del histÃ³rico M&A disponible, Ãºltimo caso guardado, snapshot econÃ³mico y estado de sincronizaciÃ³n."
           />
 
           <div className="deals-grid deals-grid-kpis">
             <KpiCard
               label="Deals guardados"
               value={safeSavedCases.length}
-              description="Histórico disponible"
+              description="HistÃ³rico disponible"
               icon={BriefcaseBusiness}
             />
 
             <KpiCard
-              label="Último deal"
+              label="Ãšltimo deal"
               value={latestCase?.name || 'N/A'}
-              description="Caso más reciente"
+              description="Caso mÃ¡s reciente"
               icon={FileSearch}
             />
 
             <KpiCard
-              label="Último Equity Value"
+              label="Ãšltimo Equity Value"
               value={latestEquityValue}
               description="Snapshot guardado"
               icon={TrendingUp}
@@ -881,7 +1177,7 @@ export function DealsRepositoryPage() {
             />
 
             <KpiCard
-              label="Sincronización"
+              label="SincronizaciÃ³n"
               value={backendStatus?.error ? 'Local' : 'OK'}
               description="Estado backend/local"
               icon={ShieldCheck}
@@ -898,7 +1194,7 @@ export function DealsRepositoryPage() {
 
         {backendStatus?.lastSyncAt ? (
           <StateCard tone="success" icon={CheckCircle2}>
-            Última sincronización:{' '}
+            Ãšltima sincronizaciÃ³n:{' '}
             {new Date(backendStatus.lastSyncAt).toLocaleString('es-ES')}
           </StateCard>
         ) : null}
@@ -914,8 +1210,8 @@ export function DealsRepositoryPage() {
               <h2 className="deals-panel-title">Deal Archive</h2>
 
               <p className="muted deals-panel-description">
-                Carga un deal guardado para continuar el análisis, revisar la
-                valoración o exportar el reporte ejecutivo.
+                Carga un deal guardado para continuar el anÃ¡lisis, revisar la
+                valoraciÃ³n o exportar el reporte ejecutivo.
               </p>
             </div>
 
@@ -928,7 +1224,7 @@ export function DealsRepositoryPage() {
             <div className="deals-empty-wrap">
               <EmptyState
                 title="No hay deals guardados"
-                description="Guarda un deal desde Valuation Engine para empezar a construir histórico."
+                description="Guarda un deal desde Valuation Engine para empezar a construir histÃ³rico."
               />
             </div>
           ) : (
@@ -965,11 +1261,11 @@ export function DealsRepositoryPage() {
                         <h3 className="deals-case-title">{item.name}</h3>
 
                         <p className="muted deals-case-meta">
-                          {formatDate(item.createdAt)} · Equity Value {equityValue}
+                          {formatDate(item.createdAt)} Â· Equity Value {equityValue}
                         </p>
 
                         <p className="muted deals-case-meta">
-                          Quality Score {qualityScore}/100 · Múltiplo x
+                          Quality Score {qualityScore}/100 Â· MÃºltiplo x
                           {adjustedMultiple}
                         </p>
                       </div>
@@ -1014,7 +1310,7 @@ export function DealsRepositoryPage() {
                       <Badge>{currency}</Badge>
 
                       {!canDeleteCase ? (
-                        <Badge>Sin permiso de eliminación</Badge>
+                        <Badge>Sin permiso de eliminaciÃ³n</Badge>
                       ) : null}
                     </div>
                   </article>
@@ -1115,7 +1411,7 @@ function getRepositoryHealth({ count, backendStatus }) {
       title: 'Repository empty',
       posture: 'Build archive',
       description:
-        'Todavía no hay deals guardados. Guarda un primer caso para activar el histórico y medir la salud del repositorio.'
+        'TodavÃ­a no hay deals guardados. Guarda un primer caso para activar el histÃ³rico y medir la salud del repositorio.'
     };
   }
 
@@ -1125,7 +1421,7 @@ function getRepositoryHealth({ count, backendStatus }) {
       title: 'Local repository mode',
       posture: 'Local fallback',
       description:
-        'El repositorio tiene histórico, pero está operando en modo local. Conviene recuperar sincronización backend para persistencia completa.'
+        'El repositorio tiene histÃ³rico, pero estÃ¡ operando en modo local. Conviene recuperar sincronizaciÃ³n backend para persistencia completa.'
     };
   }
 
@@ -1135,7 +1431,7 @@ function getRepositoryHealth({ count, backendStatus }) {
       title: 'Repository synchronized',
       posture: 'Synced',
       description:
-        'Los deals guardados están sincronizados y disponibles para continuidad de análisis.'
+        'Los deals guardados estÃ¡n sincronizados y disponibles para continuidad de anÃ¡lisis.'
     };
   }
 
@@ -1144,7 +1440,7 @@ function getRepositoryHealth({ count, backendStatus }) {
     title: 'Repository ready',
     posture: 'Ready',
     description:
-      'El repositorio está preparado para cargar, consultar y mantener continuidad entre casos M&A.'
+      'El repositorio estÃ¡ preparado para cargar, consultar y mantener continuidad entre casos M&A.'
   };
 }
 
