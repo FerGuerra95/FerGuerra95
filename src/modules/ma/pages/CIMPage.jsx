@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   ArrowRight,
   BarChart3,
@@ -535,6 +535,307 @@ const cimPageCss = `
     margin-bottom: 0;
   }
 
+
+  /* CIM PAGE · PREMIUM EXECUTIVE POLISH */
+  .cim-hero,
+  .cim-export-card,
+  .cim-kpi-card,
+  .cim-panel,
+  .cim-bridge-panel,
+  .cim-workflow-card {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .cim-hero {
+    border-color: rgba(16, 185, 129, 0.20);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.20), transparent 28%),
+      radial-gradient(circle at 96% 6%, rgba(37, 99, 235, 0.26), transparent 30%),
+      radial-gradient(circle at 60% 112%, rgba(212, 175, 55, 0.11), transparent 32%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.96));
+    box-shadow:
+      0 42px 130px rgba(0, 0, 0, 0.46),
+      0 0 54px rgba(16, 185, 129, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.065);
+  }
+
+  .cim-hero::before {
+    opacity: 0.72;
+  }
+
+  .cim-hero::after {
+    background:
+      radial-gradient(circle, rgba(16, 185, 129, 0.16), transparent 68%);
+  }
+
+  .cim-title {
+    text-shadow:
+      0 0 32px rgba(255,255,255,0.05),
+      0 18px 54px rgba(0,0,0,0.28);
+  }
+
+  .cim-title span {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(226, 232, 240, 0.78),
+        rgba(110, 231, 183, 0.76),
+        rgba(191, 219, 254, 0.70)
+      );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .cim-badge-row .badge,
+  .cim-actions .badge {
+    border-color: rgba(16, 185, 129, 0.22) !important;
+    background:
+      linear-gradient(90deg, rgba(16,185,129,0.13), rgba(37,99,235,0.08)) !important;
+    box-shadow:
+      0 0 18px rgba(16,185,129,0.09),
+      inset 0 1px 0 rgba(255,255,255,0.060) !important;
+  }
+
+  .cim-command-item,
+  .cim-bridge-step,
+  .cim-thesis-item,
+  .cim-memo-body {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.10), transparent 38%),
+      radial-gradient(circle at 100% 4%, rgba(37, 99, 235, 0.08), transparent 40%),
+      linear-gradient(135deg, rgba(255,255,255,0.060), rgba(255,255,255,0.020)),
+      rgba(15, 23, 42, 0.54);
+    border-color: rgba(255,255,255,0.080);
+    box-shadow:
+      0 16px 42px rgba(0,0,0,0.14),
+      inset 0 1px 0 rgba(255,255,255,0.045);
+  }
+
+  .cim-command-item strong,
+  .cim-bridge-step strong,
+  .cim-workflow-card strong,
+  .cim-thesis-item span:last-child {
+    color: rgba(248, 250, 252, 0.94);
+  }
+
+  .cim-export-card,
+  .cim-kpi-card,
+  .cim-panel,
+  .cim-bridge-panel,
+  .cim-workflow-card {
+    overflow: hidden;
+    border-color: rgba(16, 185, 129, 0.15);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.105), transparent 36%),
+      radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.085), transparent 42%),
+      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
+      rgba(15, 23, 42, 0.62);
+    box-shadow:
+      0 26px 78px rgba(0, 0, 0, 0.22),
+      0 0 34px rgba(16, 185, 129, 0.055),
+      inset 0 1px 0 rgba(255,255,255,0.050);
+    backdrop-filter: blur(18px) saturate(125%);
+    -webkit-backdrop-filter: blur(18px) saturate(125%);
+  }
+
+  .cim-export-card::after,
+  .cim-kpi-card::after,
+  .cim-panel::after,
+  .cim-bridge-panel::after,
+  .cim-workflow-card::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,0.050),
+        transparent 36%,
+        rgba(16,185,129,0.025) 100%
+      );
+    opacity: 0.8;
+  }
+
+  .cim-export-card:hover,
+  .cim-kpi-card:hover,
+  .cim-panel:hover,
+  .cim-workflow-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(110, 231, 183, 0.24);
+    box-shadow:
+      0 34px 96px rgba(0, 0, 0, 0.28),
+      0 0 44px rgba(16, 185, 129, 0.085),
+      inset 0 1px 0 rgba(255,255,255,0.070);
+  }
+
+  .cim-export-card,
+  .cim-kpi-card,
+  .cim-panel,
+  .cim-workflow-card {
+    transition:
+      transform .18s ease,
+      border-color .18s ease,
+      box-shadow .18s ease,
+      background .18s ease;
+  }
+
+  .cim-icon-box,
+  .cim-card-icon,
+  .cim-panel-icon,
+  .cim-step-number,
+  .cim-arrow-icon,
+  .cim-thesis-dot {
+    background:
+      linear-gradient(135deg, rgba(16,185,129,0.16), rgba(37,99,235,0.09));
+    border-color: rgba(16,185,129,0.24);
+    color: #bbf7d0;
+    box-shadow:
+      0 0 20px rgba(16,185,129,0.13),
+      inset 0 1px 0 rgba(255,255,255,0.065);
+  }
+
+  .cim-score-module {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16,185,129,0.12), transparent 42%),
+      linear-gradient(135deg, rgba(255,255,255,0.060), rgba(255,255,255,0.022)),
+      rgba(2, 6, 23, 0.34);
+    border-color: rgba(16,185,129,0.14);
+    box-shadow:
+      0 18px 48px rgba(0,0,0,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.050);
+  }
+
+  .cim-score-ring {
+    background:
+      conic-gradient(
+        rgba(16, 185, 129, 0.98) var(--score-angle),
+        rgba(37, 99, 235, 0.22) var(--score-angle),
+        rgba(255,255,255,0.08) 360deg
+      );
+    box-shadow:
+      0 18px 44px rgba(0, 0, 0, 0.32),
+      0 0 38px rgba(16, 185, 129, 0.18);
+  }
+
+  .cim-score-core {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(16,185,129,0.08), transparent 48%),
+      rgba(15, 23, 42, 0.98);
+    border-color: rgba(255,255,255,0.10);
+  }
+
+  .cim-score-core strong {
+    color: #bbf7d0;
+    text-shadow: 0 0 18px rgba(16,185,129,0.18);
+  }
+
+  .cim-export-row {
+    padding: 16px 0;
+    border-top-color: rgba(148, 163, 184, 0.11);
+  }
+
+  .cim-export-row strong {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background:
+      linear-gradient(90deg, rgba(16,185,129,0.10), rgba(37,99,235,0.065));
+    border: 1px solid rgba(16,185,129,0.15);
+    color: rgba(226, 232, 240, 0.96);
+    box-shadow: 0 0 16px rgba(16,185,129,0.055);
+  }
+
+  .cim-kpi-value {
+    color: rgba(248,250,252,0.96);
+  }
+
+  .cim-kpi-value.text-success {
+    color: #6ee7b7;
+    text-shadow: 0 0 16px rgba(110,231,183,0.16);
+  }
+
+  .cim-memo-body {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cim-memo-body::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 18px;
+    bottom: 18px;
+    width: 3px;
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(16,185,129,0.95), rgba(37,99,235,0.70));
+    box-shadow: 0 0 16px rgba(16,185,129,0.18);
+  }
+
+  .cim-memo-body p {
+    padding-left: 10px;
+  }
+
+  .cim-thesis-list {
+    counter-reset: thesis-counter;
+  }
+
+  .cim-thesis-item {
+    counter-increment: thesis-counter;
+  }
+
+  .cim-thesis-dot::after {
+    content: counter(thesis-counter);
+    font-size: 11px;
+    font-weight: 900;
+    color: #bbf7d0;
+  }
+
+  .cim-thesis-dot svg {
+    display: none;
+  }
+
+  .cim-bridge-panel {
+    border-color: rgba(212, 175, 55, 0.18);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.12), transparent 32%),
+      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.10), transparent 34%),
+      linear-gradient(135deg, rgba(255,255,255,0.058), rgba(255,255,255,0.020)),
+      rgba(15, 23, 42, 0.64);
+  }
+
+  .cim-bridge-step {
+    min-height: 156px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cim-bridge-step .kpi-label {
+    width: fit-content;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(212,175,55,0.10);
+    border: 1px solid rgba(212,175,55,0.18);
+    color: rgba(254, 240, 138, 0.94);
+  }
+
+  .cim-workflow-card {
+    min-height: 158px;
+  }
+
+  .cim-workflow-card p {
+    color: rgba(203, 213, 225, 0.82);
+  }
+
+  .cim-arrow-icon {
+    color: rgba(226,232,240,0.84);
+  }
+
   @media (max-width: 1180px) {
     .cim-hero-layout {
       grid-template-columns: 1fr;
@@ -628,7 +929,7 @@ export function CIMPage() {
     : [];
   const execSummary =
     derived.execSummary ||
-    'El memorando ejecutivo se completará cuando existan inputs financieros suficientes para construir una lectura defendible del activo.';
+    'El memorando ejecutivo se completarÃ¡ cuando existan inputs financieros suficientes para construir una lectura defendible del activo.';
 
   function handleExport() {
     if (!canExportReport) {
@@ -664,9 +965,9 @@ export function CIMPage() {
                 <Badge>CIM Executive</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
                 {canExportReport ? (
-                  <Badge>Exportación permitida</Badge>
+                  <Badge>ExportaciÃ³n permitida</Badge>
                 ) : (
-                  <Badge>Sin permiso de exportación</Badge>
+                  <Badge>Sin permiso de exportaciÃ³n</Badge>
                 )}
               </div>
 
@@ -676,9 +977,9 @@ export function CIMPage() {
               </h1>
 
               <p className="cim-hero-copy">
-                Convierte la valoración del activo en una narrativa ejecutiva:
-                resumen de inversión, tesis, múltiplos, comparables, riesgos y
-                señales clave preparadas para comité, inversores o revisión
+                Convierte la valoraciÃ³n del activo en una narrativa ejecutiva:
+                resumen de inversiÃ³n, tesis, mÃºltiplos, comparables, riesgos y
+                seÃ±ales clave preparadas para comitÃ©, inversores o revisiÃ³n
                 interna.
               </p>
 
@@ -689,7 +990,7 @@ export function CIMPage() {
                     Imprimir / Guardar PDF
                   </Button>
                 ) : (
-                  <Badge>Exportación bloqueada por permisos</Badge>
+                  <Badge>ExportaciÃ³n bloqueada por permisos</Badge>
                 )}
               </div>
 
@@ -762,12 +1063,12 @@ export function CIMPage() {
             kicker="Memo snapshot"
             icon={BarChart3}
             title="Investment memo at a glance"
-            description="Resumen de las principales métricas del activo para entender valoración, calidad del deal y posición del documento antes de exportar."
+            description="Resumen de las principales mÃ©tricas del activo para entender valoraciÃ³n, calidad del deal y posiciÃ³n del documento antes de exportar."
           />
 
           <div className="cim-grid cim-grid-kpis">
             <KpiCard
-              label="Compañía"
+              label="CompaÃ±Ã­a"
               value={activeCompanyName}
               description="Activo analizado"
               icon={FileSearch}
@@ -784,7 +1085,7 @@ export function CIMPage() {
             <KpiCard
               label="Adjusted Multiple"
               value={`${derived.adjustedMultiple}x`}
-              description="Múltiplo ajustado"
+              description="MÃºltiplo ajustado"
               icon={Sparkles}
             />
 
@@ -803,7 +1104,7 @@ export function CIMPage() {
               kicker="Executive memo"
               icon={FileSearch}
               title="Executive Memo"
-              description="Resumen de alto nivel para explicar el activo, la lógica de valoración y el encaje del deal."
+              description="Resumen de alto nivel para explicar el activo, la lÃ³gica de valoraciÃ³n y el encaje del deal."
             />
 
             <div className="cim-memo-body">
@@ -816,7 +1117,7 @@ export function CIMPage() {
               kicker="Investment logic"
               icon={Sparkles}
               title="Investment Highlights"
-              description="Puntos principales que sostienen la tesis de inversión."
+              description="Puntos principales que sostienen la tesis de inversiÃ³n."
             />
 
             {thesisItems.length > 0 ? (
@@ -834,8 +1135,8 @@ export function CIMPage() {
             ) : (
               <div className="cim-memo-body">
                 <p>
-                  Todavía no hay suficientes señales para construir una tesis de
-                  inversión completa. Completa el caso desde Valuation Engine.
+                  TodavÃ­a no hay suficientes seÃ±ales para construir una tesis de
+                  inversiÃ³n completa. Completa el caso desde Valuation Engine.
                 </p>
               </div>
             )}
@@ -847,32 +1148,32 @@ export function CIMPage() {
             kicker="Deal narrative"
             icon={ShieldCheck}
             title="From valuation to investment narrative"
-            description="El CIM no solo muestra números. Convierte el análisis en un argumento defendible para tomar decisiones, presentar el activo y preparar una conversación ejecutiva."
+            description="El CIM no solo muestra nÃºmeros. Convierte el anÃ¡lisis en un argumento defendible para tomar decisiones, presentar el activo y preparar una conversaciÃ³n ejecutiva."
           />
 
           <div className="cim-bridge-grid">
             <BridgeStep
               number="01"
               title="Defensible valuation"
-              text="EBITDA normalizado, múltiplo sectorial, ajustes de calidad, deuda neta y sensibilidad."
+              text="EBITDA normalizado, mÃºltiplo sectorial, ajustes de calidad, deuda neta y sensibilidad."
             />
 
             <BridgeStep
               number="02"
               title="Investment thesis"
-              text="Lectura de crecimiento, transferibilidad, riesgos y lógica estratégica del deal."
+              text="Lectura de crecimiento, transferibilidad, riesgos y lÃ³gica estratÃ©gica del deal."
             />
 
             <BridgeStep
               number="03"
               title="Market context"
-              text="Comparables y señales de mercado para reforzar el rango de valoración."
+              text="Comparables y seÃ±ales de mercado para reforzar el rango de valoraciÃ³n."
             />
 
             <BridgeStep
               number="04"
               title="Board-ready output"
-              text="Vista imprimible para comité, inversores, socios o revisión interna."
+              text="Vista imprimible para comitÃ©, inversores, socios o revisiÃ³n interna."
             />
           </div>
         </section>
@@ -882,32 +1183,32 @@ export function CIMPage() {
             kicker="Export logic"
             icon={LockKeyhole}
             title="Prepared for controlled distribution"
-            description="El documento se genera como una vista imprimible. Desde el navegador puede imprimirse o guardarse como PDF, manteniendo control sobre el flujo de distribución."
+            description="El documento se genera como una vista imprimible. Desde el navegador puede imprimirse o guardarse como PDF, manteniendo control sobre el flujo de distribuciÃ³n."
           />
 
           <div className="cim-grid cim-grid-two">
             <WorkflowCard
               number="01"
               title="Review the active case"
-              description="Comprueba que los inputs financieros, la tesis y la valoración son coherentes antes de exportar."
+              description="Comprueba que los inputs financieros, la tesis y la valoraciÃ³n son coherentes antes de exportar."
             />
 
             <WorkflowCard
               number="02"
               title="Generate the executive report"
-              description="Abre la vista imprimible del CIM para revisión interna o preparación de entrega."
+              description="Abre la vista imprimible del CIM para revisiÃ³n interna o preparaciÃ³n de entrega."
             />
 
             <WorkflowCard
               number="03"
               title="Print or save as PDF"
-              description="Desde el navegador, selecciona imprimir o guardar como PDF según el flujo de trabajo."
+              description="Desde el navegador, selecciona imprimir o guardar como PDF segÃºn el flujo de trabajo."
             />
 
             <WorkflowCard
               number="04"
               title="Share under control"
-              description="Distribuye el documento solo bajo NDA, revisión interna o permisos definidos por la organización."
+              description="Distribuye el documento solo bajo NDA, revisiÃ³n interna o permisos definidos por la organizaciÃ³n."
             />
           </div>
         </section>
@@ -917,7 +1218,7 @@ export function CIMPage() {
             kicker="Market context"
             icon={TrendingUp}
             title="Comparable intelligence"
-            description="Una lectura comparativa para entender el rango de mercado y reforzar la narrativa de valoración."
+            description="Una lectura comparativa para entender el rango de mercado y reforzar la narrativa de valoraciÃ³n."
           />
 
           <ComparablesGrid comparables={comparables} />
@@ -1053,16 +1354,16 @@ function getReadinessPosture(score) {
 
 function getReadinessDescription(score) {
   if (score >= 75) {
-    return 'El documento tiene una base sólida para revisión ejecutiva, comité o distribución controlada.';
+    return 'El documento tiene una base sÃ³lida para revisiÃ³n ejecutiva, comitÃ© o distribuciÃ³n controlada.';
   }
 
   if (score >= 55) {
-    return 'El memorando puede revisarse internamente, aunque conviene reforzar riesgos, tesis y documentación antes de compartir.';
+    return 'El memorando puede revisarse internamente, aunque conviene reforzar riesgos, tesis y documentaciÃ³n antes de compartir.';
   }
 
   if (score >= 35) {
-    return 'El documento necesita más validación antes de presentarse como output ejecutivo.';
+    return 'El documento necesita mÃ¡s validaciÃ³n antes de presentarse como output ejecutivo.';
   }
 
-  return 'Completa los principales datos financieros y ejecuta el análisis antes de generar conclusiones.';
+  return 'Completa los principales datos financieros y ejecuta el anÃ¡lisis antes de generar conclusiones.';
 }
