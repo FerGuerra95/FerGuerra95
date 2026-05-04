@@ -243,14 +243,9 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
         <title>CEO's OS - PMI Board Integration Memo</title>
 
         <style>
-          @page {
-            size: A4;
-            margin: 0;
-          }
+          @page { size: A4; margin: 0; }
 
-          * {
-            box-sizing: border-box;
-          }
+          * { box-sizing: border-box; }
 
           html,
           body {
@@ -308,9 +303,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
             page-break-after: auto;
           }
 
-          .page-body {
-            flex: 1;
-          }
+          .page-body { flex: 1; }
 
           .avoid-break,
           .section,
@@ -364,9 +357,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
             color: #020617;
           }
 
-          .brand span {
-            color: #7c3aed;
-          }
+          .brand span { color: #7c3aed; }
 
           .subline {
             color: #64748b;
@@ -384,9 +375,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
             letter-spacing: 0.08em;
           }
 
-          .meta strong {
-            color: #020617;
-          }
+          .meta strong { color: #020617; }
 
           .module-badge {
             display: inline-flex;
@@ -449,9 +438,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
             margin: 0;
           }
 
-          li {
-            margin-bottom: 3px;
-          }
+          li { margin-bottom: 3px; }
 
           .deal-meta {
             display: flex;
@@ -532,21 +519,10 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
             letter-spacing: -0.04em;
           }
 
-          .green {
-            color: #059669;
-          }
-
-          .purple {
-            color: #7c3aed;
-          }
-
-          .orange {
-            color: #d97706;
-          }
-
-          .red {
-            color: #dc2626;
-          }
+          .green { color: #059669; }
+          .purple { color: #7c3aed; }
+          .orange { color: #d97706; }
+          .red { color: #dc2626; }
 
           .kpi-note {
             font-size: 9.6px;
@@ -563,9 +539,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
             border: 1px solid #ddd6fe;
           }
 
-          .executive-summary p {
-            margin: 0;
-          }
+          .executive-summary p { margin: 0; }
 
           .hero {
             background:
@@ -647,17 +621,9 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
             line-height: 1.3;
           }
 
-          .signal-positive {
-            color: #86efac;
-          }
-
-          .signal-watch {
-            color: #fde68a;
-          }
-
-          .signal-caution {
-            color: #fca5a5;
-          }
+          .signal-positive { color: #86efac; }
+          .signal-watch { color: #fde68a; }
+          .signal-caution { color: #fca5a5; }
 
           .item-top {
             display: flex;
@@ -675,9 +641,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
             color: #64748b;
           }
 
-          .item-top strong {
-            color: #6d28d9;
-          }
+          .item-top strong { color: #6d28d9; }
 
           .item-meta {
             font-size: 9.2px;
@@ -739,9 +703,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
             line-height: 1.3;
           }
 
-          .report-footer strong {
-            color: #64748b;
-          }
+          .report-footer strong { color: #64748b; }
 
           @media print {
             html,
