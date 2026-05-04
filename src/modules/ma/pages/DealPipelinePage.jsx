@@ -746,6 +746,289 @@ const pipelineCss = `
     line-height: 1.45;
   }
 
+
+  /* M&A PIPELINE · PREMIUM DEAL GLASS SYSTEM */
+  .ma-pipeline-page {
+    --ma-branch-a: 16, 185, 129;
+    --ma-branch-b: 37, 99, 235;
+    --ma-branch-c: 167, 243, 208;
+    --ma-branch-glow: 16, 185, 129;
+  }
+
+  .ma-pipeline-hero,
+  .ma-pipeline-signal-card,
+  .ma-pipeline-command-item,
+  .ma-pipeline-signal-box,
+  .ma-pipeline-summary-card,
+  .ma-pipeline-toolbar,
+  .ma-pipeline-search,
+  .ma-pipeline-board-shell,
+  .ma-pipeline-column,
+  .ma-deal-card,
+  .ma-pipeline-empty,
+  .ma-pipeline-count,
+  .ma-deal-open {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-color: rgba(255,255,255,0.026) !important;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(var(--ma-branch-a), 0.148), transparent 36%),
+      radial-gradient(circle at 100% 8%, rgba(var(--ma-branch-b), 0.104), transparent 42%),
+      linear-gradient(
+        115deg,
+        rgba(var(--ma-branch-a), 0.088) 0%,
+        rgba(255,255,255,0.016) 44%,
+        rgba(var(--ma-branch-b), 0.064) 100%
+      ),
+      rgba(15, 23, 42, 0.58) !important;
+    box-shadow:
+      0 28px 82px rgba(0, 0, 0, 0.30),
+      0 0 42px rgba(var(--ma-branch-glow), 0.120),
+      inset 0 1px 0 rgba(255,255,255,0.065),
+      inset 1px 0 0 rgba(var(--ma-branch-a), 0.085),
+      inset -1px 0 0 rgba(var(--ma-branch-b), 0.070) !important;
+    backdrop-filter: blur(22px) saturate(138%);
+    -webkit-backdrop-filter: blur(22px) saturate(138%);
+  }
+
+  .ma-pipeline-select {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(var(--ma-branch-a), 0.055),
+        rgba(var(--ma-branch-b), 0.032)
+      ),
+      rgba(2, 6, 23, 0.58) !important;
+    border-color: rgba(var(--ma-branch-a), 0.135) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.045),
+      0 0 18px rgba(var(--ma-branch-glow), 0.050) !important;
+  }
+
+  .ma-pipeline-hero::before,
+  .ma-pipeline-signal-card::before,
+  .ma-pipeline-command-item::before,
+  .ma-pipeline-signal-box::before,
+  .ma-pipeline-summary-card::before,
+  .ma-pipeline-toolbar::before,
+  .ma-pipeline-search::before,
+  .ma-pipeline-board-shell::before,
+  .ma-pipeline-column::before,
+  .ma-deal-card::before,
+  .ma-pipeline-empty::before,
+  .ma-pipeline-count::before,
+  .ma-deal-open::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 0% 10%, rgba(var(--ma-branch-a), 0.145), transparent 34%),
+      radial-gradient(circle at 100% 8%, rgba(var(--ma-branch-b), 0.120), transparent 38%),
+      radial-gradient(circle at 54% 120%, rgba(255,255,255,0.040), transparent 42%);
+    filter: blur(28px);
+    opacity: 0.68;
+    mix-blend-mode: screen;
+  }
+
+  .ma-pipeline-hero::after,
+  .ma-pipeline-signal-card::after,
+  .ma-pipeline-command-item::after,
+  .ma-pipeline-signal-box::after,
+  .ma-pipeline-summary-card::after,
+  .ma-pipeline-toolbar::after,
+  .ma-pipeline-search::after,
+  .ma-pipeline-board-shell::after,
+  .ma-pipeline-column::after,
+  .ma-deal-card::after,
+  .ma-pipeline-empty::after,
+  .ma-pipeline-count::after,
+  .ma-deal-open::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,0.080),
+        rgba(255,255,255,0.014) 32%,
+        transparent 58%,
+        rgba(255,255,255,0.024) 100%
+      );
+    opacity: 0.36;
+  }
+
+  .ma-pipeline-hero > *,
+  .ma-pipeline-signal-card > *,
+  .ma-pipeline-command-item > *,
+  .ma-pipeline-signal-box > *,
+  .ma-pipeline-summary-card > *,
+  .ma-pipeline-toolbar > *,
+  .ma-pipeline-search > *,
+  .ma-pipeline-board-shell > *,
+  .ma-pipeline-column > *,
+  .ma-deal-card > *,
+  .ma-pipeline-empty > *,
+  .ma-pipeline-count > *,
+  .ma-deal-open > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ma-pipeline-command-item:hover,
+  .ma-pipeline-summary-card:hover,
+  .ma-pipeline-signal-box:hover,
+  .ma-pipeline-column:hover,
+  .ma-deal-card:hover,
+  .ma-pipeline-empty:hover,
+  .ma-deal-open:hover {
+    transform: translateY(-3px);
+    border-color: rgba(var(--ma-branch-c), 0.18) !important;
+    box-shadow:
+      0 34px 96px rgba(0, 0, 0, 0.36),
+      0 0 54px rgba(var(--ma-branch-glow), 0.165),
+      inset 0 1px 0 rgba(255,255,255,0.080),
+      inset 1px 0 0 rgba(var(--ma-branch-a), 0.105),
+      inset -1px 0 0 rgba(var(--ma-branch-b), 0.085) !important;
+  }
+
+  .ma-pipeline-summary-grid {
+    gap: clamp(22px, 1.7vw, 30px);
+  }
+
+  .ma-pipeline-board {
+    gap: 20px;
+  }
+
+  .ma-pipeline-card-list {
+    gap: 16px;
+  }
+
+  .ma-pipeline-column {
+    padding: 18px;
+    min-height: 440px;
+  }
+
+  .ma-pipeline-column-header {
+    border-bottom-color: rgba(var(--ma-branch-a), 0.110) !important;
+  }
+
+  .ma-pipeline-summary-icon,
+  .ma-pipeline-icon-box,
+  .ma-pipeline-count,
+  .ma-deal-open {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(var(--ma-branch-a), 0.16),
+        rgba(var(--ma-branch-b), 0.09)
+      ) !important;
+    border-color: rgba(var(--ma-branch-a), 0.22) !important;
+    box-shadow:
+      0 0 18px rgba(var(--ma-branch-glow), 0.14),
+      inset 0 1px 0 rgba(255,255,255,0.070) !important;
+  }
+
+  .ma-deal-priority {
+    border-color: rgba(var(--ma-branch-a), 0.24) !important;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(var(--ma-branch-a), 0.145),
+        rgba(var(--ma-branch-b), 0.080)
+      ) !important;
+    box-shadow: 0 0 16px rgba(var(--ma-branch-glow), 0.10);
+  }
+
+  .ma-deal-priority.high {
+    color: #bbf7d0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(16, 185, 129, 0.18),
+        rgba(37, 99, 235, 0.075)
+      ) !important;
+    border-color: rgba(16, 185, 129, 0.26) !important;
+  }
+
+  .ma-deal-priority.review {
+    color: #dbeafe;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(37, 99, 235, 0.17),
+        rgba(16, 185, 129, 0.070)
+      ) !important;
+    border-color: rgba(96, 165, 250, 0.24) !important;
+  }
+
+  .ma-deal-priority.watch,
+  .ma-deal-priority.build {
+    color: #fde68a;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(234, 179, 8, 0.14),
+        rgba(16, 185, 129, 0.060)
+      ) !important;
+    border-color: rgba(234, 179, 8, 0.24) !important;
+  }
+
+  .ma-pipeline-search input,
+  .ma-pipeline-select {
+    color: rgba(248, 250, 252, 0.94) !important;
+  }
+
+  .ma-pipeline-search svg,
+  .ma-pipeline-kicker svg,
+  .ma-deal-meta-row svg,
+  .ma-deal-owner svg {
+    filter: drop-shadow(0 0 8px rgba(var(--ma-branch-glow), 0.14));
+  }
+
+  .ma-pipeline-title,
+  .ma-pipeline-signal-title,
+  .ma-pipeline-summary-card strong,
+  .ma-pipeline-board-header h2,
+  .ma-deal-card h3,
+  .ma-deal-meta-row strong {
+    text-shadow:
+      0 0 14px rgba(var(--ma-branch-glow), 0.115);
+  }
+
+  .ma-deal-footer {
+    border-top-color: rgba(var(--ma-branch-a), 0.110) !important;
+  }
+
+  .ma-pipeline-empty {
+    border-style: solid !important;
+    color: rgba(203, 213, 225, 0.78);
+  }
+
+  .ma-pipeline-board::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  .ma-pipeline-board::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.035);
+    border-radius: 999px;
+  }
+
+  .ma-pipeline-board::-webkit-scrollbar-thumb {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(var(--ma-branch-a), 0.55),
+        rgba(var(--ma-branch-b), 0.42)
+      );
+    border-radius: 999px;
+  }
+
   @media (max-width: 1400px) {
     .ma-pipeline-board {
       grid-template-columns: repeat(6, 260px);
@@ -1269,6 +1552,7 @@ function buildPipelineDeals({ financials, derived, savedCases, currency }) {
 
   savedDealItems.slice(0, 12).forEach((item, index) => {
     const name = item?.name || `Saved Deal ${index + 1}`;
+    const dealId = item?.id || `saved-deal-${index + 1}`;
     const alreadyExists = deals.some((deal) => deal.name === name);
 
     if (alreadyExists) return;
@@ -1458,6 +1742,7 @@ function getPipelineDescription(summary) {
 }
 
 export default DealPipelinePage;
+
 
 
 
