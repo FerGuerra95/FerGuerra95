@@ -469,6 +469,170 @@ const ceoOverviewCss = `
     margin-bottom: 0;
   }
 
+
+  /* CEO OVERVIEW · PER-BRANCH GLASS COLOR SYSTEM */
+  .ceo-branch-surface {
+    --ceo-branch-a: 212, 175, 55;
+    --ceo-branch-b: 16, 185, 129;
+    --ceo-branch-c: 255, 245, 203;
+    --ceo-branch-glow: 212, 175, 55;
+  }
+
+  .ceo-branch-surface.ceo-branch-overview {
+    --ceo-branch-a: 212, 175, 55;
+    --ceo-branch-b: 16, 185, 129;
+    --ceo-branch-c: 255, 245, 203;
+    --ceo-branch-glow: 212, 175, 55;
+  }
+
+  .ceo-branch-surface.ceo-branch-ma {
+    --ceo-branch-a: 16, 185, 129;
+    --ceo-branch-b: 37, 99, 235;
+    --ceo-branch-c: 167, 243, 208;
+    --ceo-branch-glow: 16, 185, 129;
+  }
+
+  .ceo-branch-surface.ceo-branch-compliance {
+    --ceo-branch-a: 59, 130, 246;
+    --ceo-branch-b: 34, 211, 238;
+    --ceo-branch-c: 191, 219, 254;
+    --ceo-branch-glow: 59, 130, 246;
+  }
+
+  .ceo-branch-surface.ceo-branch-funding {
+    --ceo-branch-a: 245, 158, 11;
+    --ceo-branch-b: 34, 197, 94;
+    --ceo-branch-c: 253, 230, 138;
+    --ceo-branch-glow: 245, 158, 11;
+  }
+
+  .ceo-branch-surface.ceo-branch-pmi {
+    --ceo-branch-a: 168, 85, 247;
+    --ceo-branch-b: 16, 185, 129;
+    --ceo-branch-c: 221, 214, 254;
+    --ceo-branch-glow: 168, 85, 247;
+  }
+
+  .ceo-branch-surface.ceo-branch-governance {
+    --ceo-branch-a: 14, 165, 233;
+    --ceo-branch-b: 99, 102, 241;
+    --ceo-branch-c: 186, 230, 253;
+    --ceo-branch-glow: 14, 165, 233;
+  }
+
+  .ceo-branch-surface.ceo-branch-heritage {
+    --ceo-branch-a: 212, 175, 55;
+    --ceo-branch-b: 190, 88, 117;
+    --ceo-branch-c: 254, 240, 138;
+    --ceo-branch-glow: 212, 175, 55;
+  }
+
+  .ceo-branch-surface.ceo-branch-bridge {
+    --ceo-branch-a: 34, 197, 94;
+    --ceo-branch-b: 34, 211, 238;
+    --ceo-branch-c: 187, 247, 208;
+    --ceo-branch-glow: 34, 197, 94;
+  }
+
+  .ceo-glass-branch {
+    position: relative !important;
+    isolation: isolate !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(255,255,255,0.024) !important;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(var(--ceo-branch-a), 0.155), transparent 36%),
+      radial-gradient(circle at 100% 8%, rgba(var(--ceo-branch-b), 0.105), transparent 42%),
+      linear-gradient(
+        115deg,
+        rgba(var(--ceo-branch-a), 0.090) 0%,
+        rgba(255,255,255,0.016) 44%,
+        rgba(var(--ceo-branch-b), 0.066) 100%
+      ),
+      rgba(15, 23, 42, 0.56) !important;
+    box-shadow:
+      0 28px 82px rgba(0, 0, 0, 0.30),
+      0 0 42px rgba(var(--ceo-branch-glow), 0.130),
+      inset 0 1px 0 rgba(255,255,255,0.065),
+      inset 1px 0 0 rgba(var(--ceo-branch-a), 0.085),
+      inset -1px 0 0 rgba(var(--ceo-branch-b), 0.070) !important;
+    backdrop-filter: blur(22px) saturate(138%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(138%) !important;
+  }
+
+  .ceo-glass-branch::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 0% 10%, rgba(var(--ceo-branch-a), 0.145), transparent 34%),
+      radial-gradient(circle at 100% 8%, rgba(var(--ceo-branch-b), 0.120), transparent 38%),
+      radial-gradient(circle at 54% 120%, rgba(255,255,255,0.040), transparent 42%);
+    filter: blur(28px);
+    opacity: 0.72;
+    mix-blend-mode: screen;
+  }
+
+  .ceo-glass-branch::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,0.080),
+        rgba(255,255,255,0.014) 32%,
+        transparent 58%,
+        rgba(255,255,255,0.024) 100%
+      );
+    opacity: 0.40;
+  }
+
+  .ceo-glass-branch > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ceo-glass-branch:hover {
+    border-color: rgba(var(--ceo-branch-c), 0.18) !important;
+    box-shadow:
+      0 34px 96px rgba(0, 0, 0, 0.36),
+      0 0 54px rgba(var(--ceo-branch-glow), 0.170),
+      inset 0 1px 0 rgba(255,255,255,0.080),
+      inset 1px 0 0 rgba(var(--ceo-branch-a), 0.105),
+      inset -1px 0 0 rgba(var(--ceo-branch-b), 0.085) !important;
+  }
+
+  .ceo-glass-branch .ceo-card-icon,
+  .ceo-glass-branch .ceo-panel-icon,
+  .ceo-glass-branch .ceo-icon-box {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(var(--ceo-branch-a), 0.16),
+        rgba(var(--ceo-branch-b), 0.09)
+      ) !important;
+    border-color: rgba(var(--ceo-branch-a), 0.22) !important;
+    box-shadow:
+      0 0 18px rgba(var(--ceo-branch-glow), 0.14),
+      inset 0 1px 0 rgba(255,255,255,0.070) !important;
+  }
+
+  .ceo-glass-branch .ceo-link {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(var(--ceo-branch-a), 0.145),
+        rgba(var(--ceo-branch-b), 0.080)
+      ) !important;
+    border-color: rgba(var(--ceo-branch-a), 0.24) !important;
+    box-shadow: 0 0 18px rgba(var(--ceo-branch-glow), 0.11) !important;
+  }
+
   @media (max-width: 1180px) {
     .ceo-hero {
       min-height: auto;
@@ -692,9 +856,9 @@ function getExecutiveSignal({ maScore, complianceScore, fundingScore }) {
   };
 }
 
-function CommandItem({ label, value }) {
+function CommandItem({ label, value, branch = 'overview' }) {
   return (
-    <div className="ceo-command-item">
+    <div className={`ceo-command-item ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}>
       <div className="kpi-label">{label}</div>
       <strong>{value}</strong>
     </div>
@@ -727,9 +891,9 @@ function SectionHeader({ kicker, icon: Icon, title, description }) {
   );
 }
 
-function KpiCard({ label, value, description, icon: Icon, tone = '' }) {
+function KpiCard({ label, value, description, icon: Icon, tone = '', branch = 'overview' }) {
   return (
-    <article className="ceo-kpi-card">
+    <article className={`ceo-kpi-card ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}>
       <div className="ceo-kpi-top">
         <div>
           <div className="kpi-label">{label}</div>
@@ -760,6 +924,7 @@ function MiniRow({ label, value }) {
 
 function ModuleCard({
   icon: Icon,
+  branch = 'overview',
   kicker,
   title,
   description,
@@ -770,7 +935,7 @@ function ModuleCard({
   secondaryLink
 }) {
   return (
-    <Card className="ceo-module-card">
+    <Card className={`ceo-module-card ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}>
       <div className="ceo-module-head">
         <div>
           <div className="ceo-kicker">
@@ -813,9 +978,9 @@ function ModuleCard({
   );
 }
 
-function ActionCard({ icon: Icon, title, description, to, label }) {
+function ActionCard({ icon: Icon, branch = 'overview', title, description, to, label }) {
   return (
-    <article className="ceo-action-card">
+    <article className={`ceo-action-card ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}>
       <div className="ceo-action-head">
         <div>
           <h3 className="ceo-action-title">{title}</h3>
@@ -902,7 +1067,7 @@ export function CEOOverviewPage() {
       <style>{ceoOverviewCss}</style>
 
       <div className="ceo-overview-page">
-        <section className="ceo-hero">
+        <section className="ceo-hero ceo-branch-surface ceo-glass-branch ceo-branch-overview">
           <div className="ceo-hero-layout">
             <div>
               <div className="ceo-badge-row">
@@ -924,13 +1089,13 @@ export function CEOOverviewPage() {
               </p>
 
               <div className="ceo-command-bar">
-                <CommandItem label="M&A posture" value={maOverview.posture} />
-                <CommandItem label="Compliance posture" value={complianceOverview.posture} />
-                <CommandItem label="Funding posture" value={fundingOverview.posture} />
+                <CommandItem branch="ma" label="M&A posture" value={maOverview.posture} />
+                <CommandItem branch="compliance" label="Compliance posture" value={complianceOverview.posture} />
+                <CommandItem branch="funding" label="Funding posture" value={fundingOverview.posture} />
               </div>
             </div>
 
-            <aside className="ceo-signal-card">
+            <aside className="ceo-signal-card ceo-branch-surface ceo-glass-branch ceo-branch-overview">
               <div className="ceo-signal-inner">
                 <div className="ceo-signal-top">
                   <div>
@@ -985,6 +1150,7 @@ export function CEOOverviewPage() {
 
           <div className="ceo-grid ceo-grid-kpis">
             <KpiCard
+              branch="overview"
               label="MVP status"
               value="Closing"
               description="Producto entrando en cierre vendible."
@@ -993,6 +1159,7 @@ export function CEOOverviewPage() {
             />
 
             <KpiCard
+              branch="ma"
               label="Premium modules"
               value="3 + Overview"
               description="M&A, Compliance, Funding y capa ejecutiva."
@@ -1000,6 +1167,7 @@ export function CEOOverviewPage() {
             />
 
             <KpiCard
+              branch="compliance"
               label="Board packs"
               value={availablePacks.length}
               description="Exportaciones premium imprimibles."
@@ -1007,6 +1175,7 @@ export function CEOOverviewPage() {
             />
 
             <KpiCard
+              branch="funding"
               label="Next milestone"
               value="QA + Logo"
               description="Validación final e integración visual."
@@ -1079,7 +1248,7 @@ export function CEOOverviewPage() {
         </section>
 
         <section className="ceo-grid ceo-grid-two">
-          <Card className="ceo-panel">
+          <Card className="ceo-panel ceo-branch-surface ceo-glass-branch ceo-branch-overview">
             <div className="ceo-panel-head">
               <div>
                 <div className="ceo-kicker">
@@ -1109,7 +1278,7 @@ export function CEOOverviewPage() {
             </div>
           </Card>
 
-          <Card className="ceo-panel">
+          <Card className="ceo-panel ceo-branch-surface ceo-glass-branch ceo-branch-overview">
             <div className="ceo-panel-head">
               <div>
                 <div className="ceo-kicker">
@@ -1176,3 +1345,5 @@ export function CEOOverviewPage() {
     </div>
   );
 }
+
+
