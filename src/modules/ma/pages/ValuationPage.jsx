@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+﻿import React, { useEffect, useRef } from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -717,6 +717,279 @@ const maValuationCss = `
     line-height: 1.6;
   }
 
+
+  /* M&A VALUATION · PREMIUM DEAL GLASS SYSTEM */
+  .ma-valuation-page {
+    --ma-branch-a: 16, 185, 129;
+    --ma-branch-b: 37, 99, 235;
+    --ma-branch-c: 167, 243, 208;
+    --ma-branch-glow: 16, 185, 129;
+  }
+
+  .ma-valuation-hero,
+  .ma-valuation-status-card,
+  .ma-valuation-command-item,
+  .ma-valuation-status-box,
+  .ma-score-module,
+  .ma-state-card,
+  .ma-empty-engine,
+  .ma-premium-deal-card,
+  .ma-premium-metric,
+  .ma-closing-structure-box,
+  .ma-bridge-row,
+  .ma-closing-footer-card,
+  .ma-closing-arrow,
+  .ma-intelligence-panel,
+  .ma-inference-item,
+  .ma-valuation-side :is(
+    .card,
+    .panel,
+    [class*="card"],
+    [class*="panel"],
+    [class*="input"],
+    [class*="form"]
+  ),
+  .ma-valuation-main :is(
+    .card,
+    .panel,
+    [class*="card"],
+    [class*="panel"],
+    [class*="grid"]
+  ) {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-color: rgba(255,255,255,0.026) !important;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(var(--ma-branch-a), 0.148), transparent 36%),
+      radial-gradient(circle at 100% 8%, rgba(var(--ma-branch-b), 0.104), transparent 42%),
+      linear-gradient(
+        115deg,
+        rgba(var(--ma-branch-a), 0.088) 0%,
+        rgba(255,255,255,0.016) 44%,
+        rgba(var(--ma-branch-b), 0.064) 100%
+      ),
+      rgba(15, 23, 42, 0.58) !important;
+    box-shadow:
+      0 28px 82px rgba(0, 0, 0, 0.30),
+      0 0 42px rgba(var(--ma-branch-glow), 0.120),
+      inset 0 1px 0 rgba(255,255,255,0.065),
+      inset 1px 0 0 rgba(var(--ma-branch-a), 0.085),
+      inset -1px 0 0 rgba(var(--ma-branch-b), 0.070) !important;
+    backdrop-filter: blur(22px) saturate(138%);
+    -webkit-backdrop-filter: blur(22px) saturate(138%);
+  }
+
+  .ma-valuation-hero::before,
+  .ma-valuation-status-card::before,
+  .ma-valuation-command-item::before,
+  .ma-valuation-status-box::before,
+  .ma-score-module::before,
+  .ma-state-card::before,
+  .ma-empty-engine::before,
+  .ma-premium-deal-card::before,
+  .ma-premium-metric::before,
+  .ma-closing-structure-box::before,
+  .ma-bridge-row::before,
+  .ma-closing-footer-card::before,
+  .ma-closing-arrow::before,
+  .ma-intelligence-panel::before,
+  .ma-inference-item::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 0% 10%, rgba(var(--ma-branch-a), 0.145), transparent 34%),
+      radial-gradient(circle at 100% 8%, rgba(var(--ma-branch-b), 0.120), transparent 38%),
+      radial-gradient(circle at 54% 120%, rgba(255,255,255,0.040), transparent 42%);
+    filter: blur(28px);
+    opacity: 0.68;
+    mix-blend-mode: screen;
+  }
+
+  .ma-valuation-hero::after,
+  .ma-valuation-status-card::after,
+  .ma-valuation-command-item::after,
+  .ma-valuation-status-box::after,
+  .ma-score-module::after,
+  .ma-state-card::after,
+  .ma-empty-engine::after,
+  .ma-premium-deal-card::after,
+  .ma-premium-metric::after,
+  .ma-closing-structure-box::after,
+  .ma-bridge-row::after,
+  .ma-closing-footer-card::after,
+  .ma-closing-arrow::after,
+  .ma-intelligence-panel::after,
+  .ma-inference-item::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,0.080),
+        rgba(255,255,255,0.014) 32%,
+        transparent 58%,
+        rgba(255,255,255,0.024) 100%
+      );
+    opacity: 0.36;
+  }
+
+  .ma-valuation-hero > *,
+  .ma-valuation-status-card > *,
+  .ma-valuation-command-item > *,
+  .ma-valuation-status-box > *,
+  .ma-score-module > *,
+  .ma-state-card > *,
+  .ma-empty-engine > *,
+  .ma-premium-deal-card > *,
+  .ma-premium-metric > *,
+  .ma-closing-structure-box > *,
+  .ma-bridge-row > *,
+  .ma-closing-footer-card > *,
+  .ma-closing-arrow > *,
+  .ma-intelligence-panel > *,
+  .ma-inference-item > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ma-valuation-command-item:hover,
+  .ma-state-card:hover,
+  .ma-premium-metric:hover,
+  .ma-bridge-row:hover,
+  .ma-closing-footer-card:hover,
+  .ma-inference-item:hover,
+  .ma-valuation-status-box:hover {
+    transform: translateY(-3px);
+    border-color: rgba(var(--ma-branch-c), 0.18) !important;
+    box-shadow:
+      0 34px 96px rgba(0, 0, 0, 0.36),
+      0 0 54px rgba(var(--ma-branch-glow), 0.165),
+      inset 0 1px 0 rgba(255,255,255,0.080),
+      inset 1px 0 0 rgba(var(--ma-branch-a), 0.105),
+      inset -1px 0 0 rgba(var(--ma-branch-b), 0.085) !important;
+  }
+
+  .ma-valuation-workspace {
+    gap: clamp(30px, 2.2vw, 42px);
+  }
+
+  .ma-valuation-main {
+    gap: clamp(30px, 2vw, 38px);
+  }
+
+  .ma-valuation-side {
+    gap: 26px;
+  }
+
+  .ma-valuation-icon-box,
+  .ma-empty-icon,
+  .ma-premium-deal-icon,
+  .ma-panel-icon,
+  .ma-inference-icon,
+  .ma-bridge-number,
+  .ma-closing-badge,
+  .ma-closing-arrow {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(var(--ma-branch-a), 0.16),
+        rgba(var(--ma-branch-b), 0.09)
+      ) !important;
+    border-color: rgba(var(--ma-branch-a), 0.22) !important;
+    box-shadow:
+      0 0 18px rgba(var(--ma-branch-glow), 0.14),
+      inset 0 1px 0 rgba(255,255,255,0.070) !important;
+  }
+
+  .ma-score-ring {
+    background:
+      conic-gradient(
+        rgba(var(--ma-branch-a), 0.98) var(--score-angle),
+        rgba(255,255,255,0.09) 0deg
+      ) !important;
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.28),
+      0 0 34px rgba(var(--ma-branch-glow), 0.18) !important;
+  }
+
+  .ma-valuation-status-row,
+  .ma-bridge-row,
+  .ma-closing-footer-card,
+  .ma-premium-metric,
+  .ma-inference-item {
+    border-color: rgba(255,255,255,0.070) !important;
+  }
+
+  .ma-valuation-status-row {
+    border-top-color: rgba(var(--ma-branch-a), 0.110) !important;
+  }
+
+  .ma-bridge-list {
+    gap: 18px;
+  }
+
+  .ma-premium-metrics-grid {
+    gap: 20px;
+  }
+
+  .ma-inference-list {
+    gap: 18px;
+  }
+
+  .ma-kicker,
+  .ma-valuation-title,
+  .ma-premium-deal-header h3,
+  .ma-premium-metric strong,
+  .ma-bridge-value strong,
+  .ma-panel-header h3 {
+    text-shadow:
+      0 0 14px rgba(var(--ma-branch-glow), 0.115);
+  }
+
+  .ma-valuation-side input,
+  .ma-valuation-side select,
+  .ma-valuation-side textarea,
+  .ma-valuation-main input,
+  .ma-valuation-main select,
+  .ma-valuation-main textarea {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(var(--ma-branch-a), 0.055),
+        rgba(var(--ma-branch-b), 0.032)
+      ),
+      rgba(2, 6, 23, 0.56) !important;
+    border-color: rgba(var(--ma-branch-a), 0.130) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.045),
+      0 0 18px rgba(var(--ma-branch-glow), 0.045) !important;
+  }
+
+  .ma-valuation-actions a,
+  .ma-valuation-actions button,
+  .ma-closing-footer-card,
+  .ma-bridge-row,
+  .ma-inference-item {
+    transition:
+      transform .18s ease,
+      box-shadow .22s ease,
+      border-color .22s ease,
+      filter .22s ease;
+  }
+
+  .ma-valuation-actions a:hover,
+  .ma-valuation-actions button:hover {
+    filter: brightness(1.035) saturate(1.04);
+  }
+
   @media (max-width: 1180px) {
     .ma-valuation-hero-inner,
     .ma-valuation-workspace {
@@ -868,7 +1141,7 @@ export function ValuationPage() {
   const validationErrors = [];
 
   if (!requiredString(financials.name)) {
-    validationErrors.push('La razón social es obligatoria.');
+    validationErrors.push('La razÃ³n social es obligatoria.');
   }
 
   if (derived.normalizedEbitda <= 0) {
@@ -876,7 +1149,7 @@ export function ValuationPage() {
   }
 
   if (!financials.sector) {
-    validationErrors.push('Selecciona un sector válido.');
+    validationErrors.push('Selecciona un sector vÃ¡lido.');
   }
 
   const canAnalyze = validationErrors.length === 0 && !analysis.isAnalyzing;
@@ -921,7 +1194,7 @@ export function ValuationPage() {
 
   function updateSetting(key, value) {
     if (!canEditCase) {
-      pushToast('No tienes permisos para editar la configuración M&A');
+      pushToast('No tienes permisos para editar la configuraciÃ³n M&A');
       return;
     }
 
@@ -1006,11 +1279,11 @@ export function ValuationPage() {
         setAnalysis({
           isAnalyzing: false,
           progress: 100,
-          label: 'Análisis completado',
+          label: 'AnÃ¡lisis completado',
           showResults: true
         });
 
-        pushToast('Análisis M&A completado');
+        pushToast('AnÃ¡lisis M&A completado');
         return;
       }
 
@@ -1071,9 +1344,9 @@ export function ValuationPage() {
                 <Badge>M&A Valuation</Badge>
                 <Badge>Private Workspace</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                {canEditCase ? <Badge>Edición permitida</Badge> : null}
+                {canEditCase ? <Badge>EdiciÃ³n permitida</Badge> : null}
                 {canCreateCase ? <Badge>Guardado permitido</Badge> : null}
-                {canExportReport ? <Badge>Exportación permitida</Badge> : null}
+                {canExportReport ? <Badge>ExportaciÃ³n permitida</Badge> : null}
               </div>
 
               <h1 className="ma-valuation-title">
@@ -1083,9 +1356,9 @@ export function ValuationPage() {
 
               <p className="ma-valuation-copy">
                 Ordena los datos financieros del target, normaliza EBITDA,
-                ajusta múltiplos, detecta señales críticas y convierte el
-                análisis en una lectura defendible para comité, inversores o
-                decisión interna.
+                ajusta mÃºltiplos, detecta seÃ±ales crÃ­ticas y convierte el
+                anÃ¡lisis en una lectura defendible para comitÃ©, inversores o
+                decisiÃ³n interna.
               </p>
 
               <div className="ma-valuation-actions">
@@ -1127,7 +1400,7 @@ export function ValuationPage() {
 
                 <Button onClick={handleAnalyze} disabled={!canAnalyze}>
                   <Zap size={16} />
-                  {analysis.isAnalyzing ? 'Procesando...' : 'Ejecutar análisis'}
+                  {analysis.isAnalyzing ? 'Procesando...' : 'Ejecutar anÃ¡lisis'}
                 </Button>
               </div>
 
@@ -1232,7 +1505,7 @@ export function ValuationPage() {
           <main className="ma-valuation-main">
             {!canEditCase ? (
               <StateCard>
-                Tu rol actual permite consultar y ejecutar el análisis, pero no
+                Tu rol actual permite consultar y ejecutar el anÃ¡lisis, pero no
                 modificar inputs ni guardar cambios.
               </StateCard>
             ) : null}
@@ -1273,8 +1546,8 @@ export function ValuationPage() {
 
                   <p className="muted">
                     {analysis.isAnalyzing
-                      ? 'El motor está consolidando métricas, riesgo, múltiplo ajustado y estructura del deal.'
-                      : 'Completa los inputs financieros y ejecuta el análisis para generar una lectura ejecutiva del activo.'}
+                      ? 'El motor estÃ¡ consolidando mÃ©tricas, riesgo, mÃºltiplo ajustado y estructura del deal.'
+                      : 'Completa los inputs financieros y ejecuta el anÃ¡lisis para generar una lectura ejecutiva del activo.'}
                   </p>
 
                   {analysis.isAnalyzing ? (
@@ -1292,7 +1565,7 @@ export function ValuationPage() {
                     <strong>{analysis.label}</strong>
                     <div style={{ marginTop: 14 }}>
                       <ProgressBar
-                        label="Progreso del análisis"
+                        label="Progreso del anÃ¡lisis"
                         value={analysis.progress}
                       />
                     </div>
@@ -1316,9 +1589,9 @@ export function ValuationPage() {
                       <h3>Signals, risks and executive interpretation</h3>
 
                       <p className="muted">
-                        Lectura automática de señales relevantes del deal:
-                        calidad del EBITDA, riesgos operativos, concentración,
-                        dependencia del dueño y palancas de ajuste.
+                        Lectura automÃ¡tica de seÃ±ales relevantes del deal:
+                        calidad del EBITDA, riesgos operativos, concentraciÃ³n,
+                        dependencia del dueÃ±o y palancas de ajuste.
                       </p>
                     </div>
 
@@ -1338,8 +1611,8 @@ export function ValuationPage() {
                           <strong>No se han detectado red flags relevantes</strong>
 
                           <p className="muted">
-                            La lectura actual no muestra señales críticas,
-                            aunque conviene revisar documentación, calidad de
+                            La lectura actual no muestra seÃ±ales crÃ­ticas,
+                            aunque conviene revisar documentaciÃ³n, calidad de
                             beneficios y dependencia operativa antes de avanzar.
                           </p>
                         </div>
@@ -1414,7 +1687,7 @@ function PremiumDealStructureCard({ derived, settings }) {
           />
 
           <MetricBox
-            label="Múltiplo ajustado"
+            label="MÃºltiplo ajustado"
             value={formatMultipleValue(adjustedMultiple)}
             hint="Riesgo, calidad y sector"
           />
@@ -1428,7 +1701,7 @@ function PremiumDealStructureCard({ derived, settings }) {
           <MetricBox
             label="Risk level"
             value={String(riskLabel)}
-            hint="Señal ejecutiva de riesgo"
+            hint="SeÃ±al ejecutiva de riesgo"
           />
         </div>
 
@@ -1438,8 +1711,8 @@ function PremiumDealStructureCard({ derived, settings }) {
               <h4>Estructura de cierre</h4>
 
               <p className="muted">
-                Este cuadro resume el recorrido económico del deal en formato
-                comité: valoración de empresa, ajustes de deuda/caja, valor para
+                Este cuadro resume el recorrido econÃ³mico del deal en formato
+                comitÃ©: valoraciÃ³n de empresa, ajustes de deuda/caja, valor para
                 accionistas y proceeds estimados.
               </p>
             </div>
@@ -1454,9 +1727,9 @@ function PremiumDealStructureCard({ derived, settings }) {
             <BridgeRow
               number="01"
               title="Enterprise Value"
-              description="Resultado de aplicar el múltiplo ajustado sobre el EBITDA normalizado."
+              description="Resultado de aplicar el mÃºltiplo ajustado sobre el EBITDA normalizado."
               value={formatCurrencyValue(evBase)}
-              meta={`${formatCurrencyValue(normalizedEbitda)} × ${formatMultipleValue(adjustedMultiple)}`}
+              meta={`${formatCurrencyValue(normalizedEbitda)} Ã— ${formatMultipleValue(adjustedMultiple)}`}
             />
 
             <BridgeRow
@@ -1470,15 +1743,15 @@ function PremiumDealStructureCard({ derived, settings }) {
             <BridgeRow
               number="03"
               title="Equity Value"
-              description="Valor estimado de las participaciones después de ajustar deuda y caja."
+              description="Valor estimado de las participaciones despuÃ©s de ajustar deuda y caja."
               value={formatCurrencyValue(equityBase)}
-              meta="Base de negociación"
+              meta="Base de negociaciÃ³n"
             />
 
             <BridgeRow
               number="04"
               title="Net proceeds estimados"
-              description="Lectura final orientada al vendedor, después de los supuestos económicos del deal."
+              description="Lectura final orientada al vendedor, despuÃ©s de los supuestos econÃ³micos del deal."
               value={formatCurrencyValue(netProceeds)}
               meta="Vista cierre"
             />
@@ -1489,8 +1762,8 @@ function PremiumDealStructureCard({ derived, settings }) {
               <strong>Uso recomendado</strong>
 
               <p className="muted">
-                Utilizar como resumen principal para explicar la operación a
-                comité, comprador, vendedor o inversor.
+                Utilizar como resumen principal para explicar la operaciÃ³n a
+                comitÃ©, comprador, vendedor o inversor.
               </p>
             </div>
 
@@ -1499,11 +1772,11 @@ function PremiumDealStructureCard({ derived, settings }) {
             </div>
 
             <div className="ma-closing-footer-card">
-              <strong>Próximo paso</strong>
+              <strong>PrÃ³ximo paso</strong>
 
               <p className="muted">
-                Validar deuda, caja, ajustes normalizados, concentración de
-                clientes y documentación soporte antes de emitir conclusión.
+                Validar deuda, caja, ajustes normalizados, concentraciÃ³n de
+                clientes y documentaciÃ³n soporte antes de emitir conclusiÃ³n.
               </p>
             </div>
           </div>
@@ -1589,7 +1862,7 @@ function formatCurrencyValue(value) {
   const parsed = Number(value);
 
   if (!Number.isFinite(parsed)) {
-    return '€0';
+    return 'â‚¬0';
   }
 
   return new Intl.NumberFormat('es-ES', {
@@ -1654,16 +1927,16 @@ function getReadinessHeadline({ canAnalyze, isAnalyzing, hasValidationErrors }) 
 
 function getReadinessDescription({ canAnalyze, isAnalyzing, hasValidationErrors }) {
   if (isAnalyzing) {
-    return "CEO's OS está consolidando métricas, riesgo, múltiplo ajustado y estructura del deal.";
+    return "CEO's OS estÃ¡ consolidando mÃ©tricas, riesgo, mÃºltiplo ajustado y estructura del deal.";
   }
 
   if (hasValidationErrors) {
-    return 'El análisis necesita razón social, sector y EBITDA normalizado positivo para generar una lectura ejecutiva sólida.';
+    return 'El anÃ¡lisis necesita razÃ³n social, sector y EBITDA normalizado positivo para generar una lectura ejecutiva sÃ³lida.';
   }
 
   if (canAnalyze) {
-    return 'Puedes ejecutar el análisis para convertir los inputs financieros en valoración, señales de riesgo y lectura ejecutiva.';
+    return 'Puedes ejecutar el anÃ¡lisis para convertir los inputs financieros en valoraciÃ³n, seÃ±ales de riesgo y lectura ejecutiva.';
   }
 
-  return 'Carga los datos financieros del target para activar el motor de valoración.';
+  return 'Carga los datos financieros del target para activar el motor de valoraciÃ³n.';
 }
