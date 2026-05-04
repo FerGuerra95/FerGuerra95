@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   BriefcaseBusiness,
   Building2,
@@ -498,6 +498,336 @@ const buyerMatchingCss = `
     margin-bottom: 0;
   }
 
+
+  /* BUYER MATCHING · PREMIUM EXECUTIVE POLISH */
+  .buyer-hero,
+  .buyer-signal-card,
+  .buyer-kpi-card,
+  .buyer-panel,
+  .buyer-bridge-panel,
+  .buyer-bridge-step,
+  .buyer-rationale-item,
+  .buyer-glass-block,
+  .buyer-command-item,
+  .buyer-grid-frame :is(.card, [class*="card"], [class*="buyer"], [class*="match"]) {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .buyer-hero {
+    border-color: rgba(16, 185, 129, 0.20);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.22), transparent 30%),
+      radial-gradient(circle at 96% 6%, rgba(37, 99, 235, 0.26), transparent 31%),
+      radial-gradient(circle at 58% 112%, rgba(212, 175, 55, 0.10), transparent 32%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.96));
+    box-shadow:
+      0 42px 130px rgba(0, 0, 0, 0.46),
+      0 0 54px rgba(16, 185, 129, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.065);
+  }
+
+  .buyer-hero::before {
+    opacity: 0.70;
+  }
+
+  .buyer-title {
+    text-shadow:
+      0 0 32px rgba(255,255,255,0.05),
+      0 18px 54px rgba(0,0,0,0.28);
+  }
+
+  .buyer-title span {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(226, 232, 240, 0.80),
+        rgba(110, 231, 183, 0.76),
+        rgba(191, 219, 254, 0.70)
+      );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .buyer-badge-row .badge,
+  .buyer-chip-row .badge {
+    border-color: rgba(16, 185, 129, 0.22) !important;
+    background:
+      linear-gradient(90deg, rgba(16,185,129,0.13), rgba(37,99,235,0.08)) !important;
+    box-shadow:
+      0 0 18px rgba(16,185,129,0.09),
+      inset 0 1px 0 rgba(255,255,255,0.060) !important;
+  }
+
+  .buyer-signal-card,
+  .buyer-kpi-card,
+  .buyer-panel,
+  .buyer-bridge-panel,
+  .buyer-bridge-step,
+  .buyer-rationale-item,
+  .buyer-glass-block,
+  .buyer-command-item,
+  .buyer-grid-frame :is(.card, [class*="card"], [class*="buyer"], [class*="match"]) {
+    overflow: hidden;
+    border-color: rgba(16, 185, 129, 0.15);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.105), transparent 36%),
+      radial-gradient(circle at 100% 0%, rgba(37, 99, 235, 0.085), transparent 42%),
+      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
+      rgba(15, 23, 42, 0.62);
+    box-shadow:
+      0 26px 78px rgba(0, 0, 0, 0.22),
+      0 0 34px rgba(16, 185, 129, 0.055),
+      inset 0 1px 0 rgba(255,255,255,0.050);
+    backdrop-filter: blur(18px) saturate(125%);
+    -webkit-backdrop-filter: blur(18px) saturate(125%);
+  }
+
+  .buyer-signal-card::after,
+  .buyer-kpi-card::after,
+  .buyer-panel::after,
+  .buyer-bridge-panel::after,
+  .buyer-bridge-step::after,
+  .buyer-rationale-item::after,
+  .buyer-glass-block::after,
+  .buyer-command-item::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,0.050),
+        transparent 36%,
+        rgba(16,185,129,0.025) 100%
+      );
+    opacity: 0.8;
+  }
+
+  .buyer-signal-card,
+  .buyer-kpi-card,
+  .buyer-panel,
+  .buyer-bridge-step,
+  .buyer-rationale-item,
+  .buyer-glass-block,
+  .buyer-command-item {
+    transition:
+      transform .18s ease,
+      border-color .18s ease,
+      box-shadow .18s ease,
+      background .18s ease;
+  }
+
+  .buyer-signal-card:hover,
+  .buyer-kpi-card:hover,
+  .buyer-panel:hover,
+  .buyer-bridge-step:hover,
+  .buyer-rationale-item:hover,
+  .buyer-command-item:hover {
+    transform: translateY(-3px);
+    border-color: rgba(110, 231, 183, 0.24);
+    box-shadow:
+      0 34px 96px rgba(0, 0, 0, 0.28),
+      0 0 44px rgba(16, 185, 129, 0.085),
+      inset 0 1px 0 rgba(255,255,255,0.070);
+  }
+
+  .buyer-icon-box,
+  .buyer-card-icon,
+  .buyer-panel-icon,
+  .buyer-rationale-icon {
+    background:
+      linear-gradient(135deg, rgba(16,185,129,0.16), rgba(37,99,235,0.09));
+    border-color: rgba(16,185,129,0.24);
+    color: #bbf7d0;
+    box-shadow:
+      0 0 20px rgba(16,185,129,0.13),
+      inset 0 1px 0 rgba(255,255,255,0.065);
+  }
+
+  .buyer-score-module {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16,185,129,0.12), transparent 42%),
+      linear-gradient(135deg, rgba(255,255,255,0.060), rgba(255,255,255,0.022)),
+      rgba(2, 6, 23, 0.34);
+    border-color: rgba(16,185,129,0.14);
+    box-shadow:
+      0 18px 48px rgba(0,0,0,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.050);
+  }
+
+  .buyer-score-ring {
+    background:
+      conic-gradient(
+        rgba(16, 185, 129, 0.98) var(--score-angle),
+        rgba(37, 99, 235, 0.22) var(--score-angle),
+        rgba(255,255,255,0.08) 360deg
+      );
+    box-shadow:
+      0 18px 44px rgba(0, 0, 0, 0.32),
+      0 0 38px rgba(16, 185, 129, 0.18);
+  }
+
+  .buyer-score-core {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(16,185,129,0.08), transparent 48%),
+      rgba(15, 23, 42, 0.98);
+    border-color: rgba(255,255,255,0.10);
+  }
+
+  .buyer-score-core strong {
+    color: #bbf7d0;
+    text-shadow: 0 0 18px rgba(16,185,129,0.18);
+  }
+
+  .buyer-score-core strong.is-empty-score {
+    color: rgba(226, 232, 240, 0.72);
+    text-shadow: none;
+  }
+
+  .buyer-signal-row {
+    padding: 16px 0;
+    border-top-color: rgba(148, 163, 184, 0.11);
+  }
+
+  .buyer-signal-row strong {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background:
+      linear-gradient(90deg, rgba(16,185,129,0.10), rgba(37,99,235,0.065));
+    border: 1px solid rgba(16,185,129,0.15);
+    color: rgba(226, 232, 240, 0.96);
+    box-shadow: 0 0 16px rgba(16,185,129,0.055);
+  }
+
+  .buyer-kpi-value {
+    color: rgba(248,250,252,0.96);
+  }
+
+  .buyer-command-item strong,
+  .buyer-bridge-step strong,
+  .buyer-rationale-item strong,
+  .buyer-glass-block strong {
+    color: rgba(248, 250, 252, 0.94);
+  }
+
+  .buyer-command-item .kpi-label,
+  .buyer-bridge-step .kpi-label,
+  .buyer-kpi-card .kpi-label {
+    color: rgba(187, 247, 208, 0.92);
+    text-shadow: 0 0 12px rgba(16,185,129,0.12);
+  }
+
+  .buyer-bridge-panel {
+    border-color: rgba(212, 175, 55, 0.18);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.12), transparent 32%),
+      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.10), transparent 34%),
+      linear-gradient(135deg, rgba(255,255,255,0.058), rgba(255,255,255,0.020)),
+      rgba(15, 23, 42, 0.64);
+  }
+
+  .buyer-bridge-step {
+    min-height: 156px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .buyer-bridge-step .kpi-label {
+    width: fit-content;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(212,175,55,0.10);
+    border: 1px solid rgba(212,175,55,0.18);
+    color: rgba(254, 240, 138, 0.94);
+  }
+
+  .buyer-rationale-list {
+    gap: 16px;
+  }
+
+  .buyer-rationale-item {
+    min-height: 116px;
+  }
+
+  .buyer-rationale-item p,
+  .buyer-glass-block p,
+  .buyer-bridge-step p {
+    color: rgba(203, 213, 225, 0.82);
+  }
+
+  .buyer-glass-block {
+    min-height: 218px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .buyer-glass-block::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 22px;
+    bottom: 22px;
+    width: 3px;
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(16,185,129,0.95), rgba(37,99,235,0.70));
+    box-shadow: 0 0 16px rgba(16,185,129,0.18);
+  }
+
+  .buyer-chip-row {
+    padding-top: 4px;
+  }
+
+  .buyer-grid-frame {
+    position: relative;
+    padding: 30px;
+    border-radius: 34px;
+    border: 1px solid rgba(16,185,129,0.13);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16,185,129,0.10), transparent 34%),
+      radial-gradient(circle at 100% 0%, rgba(37,99,235,0.08), transparent 38%),
+      linear-gradient(135deg, rgba(255,255,255,0.052), rgba(255,255,255,0.018)),
+      rgba(15,23,42,0.50);
+    box-shadow:
+      0 28px 82px rgba(0,0,0,0.22),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .buyer-grid-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      linear-gradient(rgba(255,255,255,0.020) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.020) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.78), transparent 88%);
+  }
+
+  .buyer-grid-frame > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .buyer-grid-frame :is(.card, [class*="card"], [class*="buyer"], [class*="match"]) {
+    border-color: rgba(16,185,129,0.14) !important;
+  }
+
+  .buyer-grid-frame :is(.badge, [class*="badge"]) {
+    border-color: rgba(16,185,129,0.20) !important;
+    background:
+      linear-gradient(90deg, rgba(16,185,129,0.12), rgba(37,99,235,0.07)) !important;
+  }
+
   @media (max-width: 1180px) {
     .buyer-hero-layout {
       grid-template-columns: 1fr;
@@ -602,8 +932,8 @@ export function BuyerMatchingPage() {
                 <Badge>M&A Workspace</Badge>
                 <Badge>Buyer Intelligence</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                {canEditCase ? <Badge>Edición M&A permitida</Badge> : null}
-                {canExportReport ? <Badge>Exportación permitida</Badge> : null}
+                {canEditCase ? <Badge>EdiciÃ³n M&A permitida</Badge> : null}
+                {canExportReport ? <Badge>ExportaciÃ³n permitida</Badge> : null}
               </div>
 
               <h1 className="buyer-title">
@@ -657,7 +987,7 @@ export function BuyerMatchingPage() {
                   >
                     <div className="buyer-score-core">
                       <strong className={hasTopBuyer ? '' : 'is-empty-score'}>
-                        {hasTopBuyer ? topScore : '—'}
+                        {hasTopBuyer ? topScore : 'â€”'}
                       </strong>
                     </div>
                   </div>
@@ -702,7 +1032,7 @@ export function BuyerMatchingPage() {
             kicker="Buyer universe"
             icon={Network}
             title="Buyer landscape at a glance"
-            description="Resumen rápido del universo de compradores estimado para entender profundidad de mercado, perfiles estratégicos, financieros y mejor encaje actual."
+            description="Resumen rÃ¡pido del universo de compradores estimado para entender profundidad de mercado, perfiles estratÃ©gicos, financieros y mejor encaje actual."
           />
 
           <div className="buyer-grid buyer-grid-kpis">
@@ -741,14 +1071,14 @@ export function BuyerMatchingPage() {
             kicker="Matching logic"
             icon={Target}
             title="From company profile to buyer prioritization"
-            description="El matching no busca una lista larga. Busca identificar qué perfiles pueden pagar, ejecutar y aportar valor después de la adquisición."
+            description="El matching no busca una lista larga. Busca identificar quÃ© perfiles pueden pagar, ejecutar y aportar valor despuÃ©s de la adquisiciÃ³n."
           />
 
           <div className="buyer-bridge-grid">
             <BridgeStep
               number="01"
               title="Strategic fit"
-              text="Sinergias, acceso a clientes, tecnología, equipo o expansión geográfica."
+              text="Sinergias, acceso a clientes, tecnologÃ­a, equipo o expansiÃ³n geogrÃ¡fica."
             />
 
             <BridgeStep
@@ -760,13 +1090,13 @@ export function BuyerMatchingPage() {
             <BridgeStep
               number="03"
               title="Execution fit"
-              text="Capacidad real de cerrar la operación y absorber el activo."
+              text="Capacidad real de cerrar la operaciÃ³n y absorber el activo."
             />
 
             <BridgeStep
               number="04"
               title="Priority"
-              text="Ordenar conversaciones según encaje, probabilidad y valor esperado."
+              text="Ordenar conversaciones segÃºn encaje, probabilidad y valor esperado."
             />
           </div>
         </section>
@@ -777,14 +1107,14 @@ export function BuyerMatchingPage() {
               kicker="Fit model"
               icon={Target}
               title="Buyer Fit Score"
-              description="El matching prioriza compradores según tamaño del deal, estabilidad del EBITDA, calidad del activo, riesgo de ejecución y capacidad de aportar valor después de la compra."
+              description="El matching prioriza compradores segÃºn tamaÃ±o del deal, estabilidad del EBITDA, calidad del activo, riesgo de ejecuciÃ³n y capacidad de aportar valor despuÃ©s de la compra."
             />
 
             <div className="buyer-rationale-list">
               <RationaleItem
                 icon={Building2}
                 title="Strategic rationale"
-                text="Compradores industriales pueden pagar mejor si existen sinergias, acceso a clientes, tecnología, equipo o expansión geográfica."
+                text="Compradores industriales pueden pagar mejor si existen sinergias, acceso a clientes, tecnologÃ­a, equipo o expansiÃ³n geogrÃ¡fica."
               />
 
               <RationaleItem
@@ -796,7 +1126,7 @@ export function BuyerMatchingPage() {
               <RationaleItem
                 icon={ShieldCheck}
                 title="Execution discipline"
-                text="El perfil prioritario no solo debe tener interés. Debe poder ejecutar, financiar, integrar y defender la adquisición internamente."
+                text="El perfil prioritario no solo debe tener interÃ©s. Debe poder ejecutar, financiar, integrar y defender la adquisiciÃ³n internamente."
               />
             </div>
           </section>
@@ -806,7 +1136,7 @@ export function BuyerMatchingPage() {
               kicker="Priority match"
               icon={BriefcaseBusiness}
               title="Match Rationale"
-              description="Lectura ejecutiva del tipo de comprador más adecuado para el activo analizado."
+              description="Lectura ejecutiva del tipo de comprador mÃ¡s adecuado para el activo analizado."
             />
 
             {hasTopBuyer ? (
@@ -817,7 +1147,7 @@ export function BuyerMatchingPage() {
                   {topBuyer.rationale ||
                     topBuyer.desc ||
                     topBuyer.description ||
-                    'Perfil con alto encaje según calidad del activo, tamaño de operación y narrativa del deal.'}
+                    'Perfil con alto encaje segÃºn calidad del activo, tamaÃ±o de operaciÃ³n y narrativa del deal.'}
                 </p>
 
                 <div className="buyer-chip-row">
@@ -828,10 +1158,10 @@ export function BuyerMatchingPage() {
               </div>
             ) : (
               <div className="buyer-glass-block">
-                <strong>Sin comprador prioritario todavía</strong>
+                <strong>Sin comprador prioritario todavÃ­a</strong>
 
                 <p className="muted buyer-muted-tight" style={{ marginTop: 10 }}>
-                  Completa la valoración para generar perfiles de comprador
+                  Completa la valoraciÃ³n para generar perfiles de comprador
                   accionables y priorizar el universo de potenciales
                   adquirentes.
                 </p>
@@ -845,7 +1175,7 @@ export function BuyerMatchingPage() {
             kicker="Buyer pipeline"
             icon={Users}
             title="Prioritized buyer universe"
-            description="Lista de compradores potenciales priorizados por encaje estratégico, capacidad financiera y lógica de adquisición."
+            description="Lista de compradores potenciales priorizados por encaje estratÃ©gico, capacidad financiera y lÃ³gica de adquisiciÃ³n."
           />
 
           <BuyerMatchGrid buyers={buyerMatches} />
@@ -984,7 +1314,7 @@ function getBuyerSignal(score, count) {
       title: 'Buyer universe pending',
       posture: 'Build pipeline',
       description:
-        'Completa la valoración para generar perfiles accionables y priorizar potenciales compradores.'
+        'Completa la valoraciÃ³n para generar perfiles accionables y priorizar potenciales compradores.'
     };
   }
 
@@ -993,7 +1323,7 @@ function getBuyerSignal(score, count) {
       title: 'High-fit buyer identified',
       posture: 'Prioritize outreach',
       description:
-        'Existe un perfil comprador con encaje fuerte para avanzar en una conversación prioritaria.'
+        'Existe un perfil comprador con encaje fuerte para avanzar en una conversaciÃ³n prioritaria.'
     };
   }
 
@@ -1002,7 +1332,7 @@ function getBuyerSignal(score, count) {
       title: 'Qualified buyer universe',
       posture: 'Review shortlist',
       description:
-        'El activo muestra compradores cualificados, aunque conviene validar tesis, capacidad y probabilidad de ejecución.'
+        'El activo muestra compradores cualificados, aunque conviene validar tesis, capacidad y probabilidad de ejecuciÃ³n.'
     };
   }
 
@@ -1011,7 +1341,7 @@ function getBuyerSignal(score, count) {
       title: 'Moderate buyer fit',
       posture: 'Refine positioning',
       description:
-        'Hay perfiles potenciales, pero la narrativa del activo necesita más claridad para mejorar el encaje.'
+        'Hay perfiles potenciales, pero la narrativa del activo necesita mÃ¡s claridad para mejorar el encaje.'
     };
   }
 
