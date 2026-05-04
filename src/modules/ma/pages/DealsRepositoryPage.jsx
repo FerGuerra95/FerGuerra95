@@ -1464,3 +1464,4 @@ function getLocalFallbackScore(count) {
 
   return 55;
 }
+
