@@ -8,12 +8,15 @@ import {
   FileSearch,
   FolderKanban,
   FolderOpen,
+  Gem,
   Landmark,
   Layers3,
   LineChart,
   Map,
+  Network,
   PieChart,
   Rocket,
+  Scale,
   ShieldAlert,
   Sparkles,
   Users
@@ -153,6 +156,39 @@ export const routeGroups = {
         icon: <Activity size={18} />
       }
     ]
+  },
+
+  governance: {
+    label: 'Governance & ESG',
+    items: [
+      {
+        to: '/governance/dashboard',
+        label: 'Governance & ESG',
+        icon: <Scale size={18} />
+      }
+    ]
+  },
+
+  heritage: {
+    label: 'Heritage & Legacy',
+    items: [
+      {
+        to: '/heritage/dashboard',
+        label: 'Heritage & Legacy OS',
+        icon: <Gem size={18} />
+      }
+    ]
+  },
+
+  bridge: {
+    label: 'The Bridge',
+    items: [
+      {
+        to: '/bridge/dashboard',
+        label: 'Bridge Marketplace',
+        icon: <Network size={18} />
+      }
+    ]
   }
 };
 
@@ -160,13 +196,13 @@ export const pageMetaMap = {
   '/overview': {
     title: 'Executive Command Center',
     description:
-      'Capa ejecutiva superior de CEO’s OS: señales clave de M&A, Compliance y Funding en una única vista de decisión.'
+      'Capa ejecutiva superior de CEO’s OS: señales clave de M&A, Compliance, Funding, PMI y ramas enterprise en una única vista de decisión.'
   },
 
   '/ceo/overview': {
     title: 'Executive Command Center',
     description:
-      'Capa ejecutiva superior de CEO’s OS: señales clave de M&A, Compliance y Funding en una única vista de decisión.'
+      'Capa ejecutiva superior de CEO’s OS: señales clave de M&A, Compliance, Funding, PMI y ramas enterprise en una única vista de decisión.'
   },
 
   '/ma/dashboard': {
@@ -293,5 +329,23 @@ export const pageMetaMap = {
     title: 'PMI & Synergies Command Center',
     description:
       'Capa post-adquisición para controlar integración, sinergias, workstreams, riesgos y ejecución 30-60-90.'
+  },
+
+  '/governance/dashboard': {
+    title: 'Governance & ESG Strategy',
+    description:
+      'Rama enterprise para gobernanza, sostenibilidad, reporting ESG, actas de consejo y cumplimiento estratégico.'
+  },
+
+  '/heritage/dashboard': {
+    title: 'Heritage & Legacy OS',
+    description:
+      'Rama futura para patrimonio, family office, protocolos familiares, sucesión, protección de activos y legado.'
+  },
+
+  '/bridge/dashboard': {
+    title: 'The Bridge Marketplace',
+    description:
+      'Capa futura de red para conectar oportunidades M&A y Funding con inversores, compradores y capital verificado.'
   }
 };

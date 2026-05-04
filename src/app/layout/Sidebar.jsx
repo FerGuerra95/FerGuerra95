@@ -4,7 +4,10 @@ import {
   BrainCircuit,
   Calculator,
   Landmark,
+  Gem,
   Layers3,
+  Network,
+  Scale,
   ShieldCheck,
   Sparkles
 } from 'lucide-react';
@@ -13,7 +16,16 @@ import { routeGroups } from '../router/routeConfig.jsx';
 const GOLD = '#d4af37';
 const MUTED_ICON = 'rgba(226,232,240,0.68)';
 
-const SIDEBAR_GROUP_ORDER = ['overview', 'ma', 'compliance', 'funding', 'pmi'];
+const SIDEBAR_GROUP_ORDER = [
+  'overview',
+  'ma',
+  'compliance',
+  'funding',
+  'pmi',
+  'governance',
+  'heritage',
+  'bridge'
+];
 
 const workspaceMeta = {
   overview: {
@@ -40,6 +52,21 @@ const workspaceMeta = {
     icon: <Layers3 size={18} />,
     title: 'PMI & Synergies',
     description: 'Integración post-adquisición, sinergias, workstreams, riesgos y plan 30-60-90.'
+  },
+  governance: {
+    icon: <Scale size={18} />,
+    title: 'Governance & ESG Strategy',
+    description: 'Gobernanza, sostenibilidad, actas de consejo, decisiones estratégicas y reporting ESG.'
+  },
+  heritage: {
+    icon: <Gem size={18} />,
+    title: 'Heritage & Legacy OS',
+    description: 'Patrimonio, family office, sucesión, protección de activos y legado familiar.'
+  },
+  bridge: {
+    icon: <Network size={18} />,
+    title: 'The Bridge',
+    description: 'Red de liquidez, inversores, compradores verificados y oportunidades transaccionales.'
   }
 };
 
@@ -633,7 +660,7 @@ const sidebarCss = `
   }
 
   .ceos-nav {
-    padding-bottom: 120vh !important;
+    padding-bottom: 190vh !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -663,6 +690,9 @@ function getActiveWorkspace(pathname) {
   if (pathname.startsWith('/compliance')) return 'compliance';
   if (pathname.startsWith('/funding')) return 'funding';
   if (pathname.startsWith('/pmi')) return 'pmi';
+  if (pathname.startsWith('/governance')) return 'governance';
+  if (pathname.startsWith('/heritage')) return 'heritage';
+  if (pathname.startsWith('/bridge')) return 'bridge';
 
   return 'ma';
 }
@@ -673,7 +703,10 @@ const STABLE_SIDEBAR_SECTION_LABELS = {
   ma: 'M&A',
   compliance: 'COMPLIANCE',
   funding: 'FUNDING',
-  pmi: 'PMI'
+  pmi: 'PMI',
+  governance: 'GOVERNANCE & ESG',
+  heritage: 'HERITAGE & LEGACY',
+  bridge: 'THE BRIDGE'
 };
 
 function stableScrollSidebarToWorkspace(workspaceKey) {
@@ -953,6 +986,9 @@ export function Sidebar() {
 }
 
 export default Sidebar;
+
+
+
 
 
 

@@ -37,6 +37,9 @@ import { FundraisingScenariosPage } from '../../modules/funding/pages/Fundraisin
 import { DataRoomPage } from '../../modules/funding/pages/DataRoomPage.jsx';
 
 import { PMIDashboardPage } from '../../modules/pmi/pages/PMIDashboardPage.jsx';
+import { GovernanceESGPage } from '../../modules/ecosystem/pages/GovernanceESGPage.jsx';
+import { HeritageLegacyPage } from '../../modules/ecosystem/pages/HeritageLegacyPage.jsx';
+import { BridgeMarketplacePage } from '../../modules/ecosystem/pages/BridgeMarketplacePage.jsx';
 
 function ProtectedAppShell() {
   return (
@@ -131,9 +134,25 @@ export function AppRoutes() {
           path="/pmi/dashboard"
           element={<PMIDashboardPage />}
         />
+
+        <Route
+          path="/governance/dashboard"
+          element={<GovernanceESGPage />}
+        />
+
+        <Route
+          path="/heritage/dashboard"
+          element={<HeritageLegacyPage />}
+        />
+
+        <Route
+          path="/bridge/dashboard"
+          element={<BridgeMarketplacePage />}
+        />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
+
