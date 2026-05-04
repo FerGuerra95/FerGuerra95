@@ -6,6 +6,7 @@ import {
   BriefcaseBusiness,
   CalendarDays,
   CheckCircle2,
+  Download,
   ClipboardCheck,
   FileText,
   Gauge,
@@ -20,9 +21,11 @@ import {
 import { Link } from 'react-router-dom';
 import { Card } from '../../../shared/components/ui/Card.jsx';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
+import { Button } from '../../../shared/components/ui/Button.jsx';
 import { usePMIStore } from '../store/pmiStore.jsx';
 import { usePMIEngine } from '../engine/usePMIEngine.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
+import { pmiExportApi } from '../services/pmiExportApi.js';
 
 const pmiDashboardCss = `
   .pmi-page {
@@ -111,6 +114,13 @@ const pmiDashboardCss = `
     font-size: 17px;
     line-height: 1.82;
     color: rgba(203, 213, 225, 0.86);
+  }
+
+  .pmi-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 30px;
   }
 
   .pmi-command-bar {
@@ -658,6 +668,13 @@ export function PMIDashboardPage() {
 
   const scoreAngle = `${engine.integrationScore * 3.6}deg`;
 
+  function handleExportBoardMemo() {
+    pmiExportApi.exportBoardMemo({
+      pmiCase,
+      engine
+    });
+  }
+
   return (
     <div className="page">
       <style>{pmiDashboardCss}</style>
@@ -683,6 +700,12 @@ export function PMIDashboardPage() {
                 plan 30-60-90, workstreams, sinergias, riesgos, owners,
                 presupuesto y memo ejecutivo para comité.
               </p>
+              <div className="pmi-actions">
+                <Button onClick={handleExportBoardMemo} variant="secondary">
+                  <Download size={16} />
+                  Export Board Memo
+                </Button>
+              </div>
 
               <div className="pmi-command-bar">
                 <CommandItem label="Deal" value={pmiCase.dealName} />
@@ -946,5 +969,7 @@ export function PMIDashboardPage() {
     </div>
   );
 }
+
+
 
 
