@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   Activity,
   ArrowDownUp,
@@ -529,6 +529,371 @@ const waterfallCss = `
     margin-bottom: 0;
   }
 
+
+  /* M&A WATERFALL · PREMIUM DEAL GLASS SYSTEM */
+  .waterfall-page {
+    --ma-branch-a: 16, 185, 129;
+    --ma-branch-b: 37, 99, 235;
+    --ma-branch-c: 167, 243, 208;
+    --ma-branch-glow: 16, 185, 129;
+  }
+
+  .waterfall-hero,
+  .waterfall-signal-card,
+  .waterfall-command-item,
+  .waterfall-score-module,
+  .waterfall-kpi-card,
+  .waterfall-panel,
+  .waterfall-glass-block,
+  .waterfall-distribution-card,
+  .waterfall-adjustment-item,
+  .waterfall-bridge-panel,
+  .waterfall-bridge-step,
+  .waterfall-sensitivity-panel,
+  .waterfall-external-section :is(
+    .card,
+    .panel,
+    [class*="card"],
+    [class*="panel"],
+    [class*="waterfall"],
+    [class*="matrix"],
+    table
+  ),
+  .waterfall-sensitivity-panel :is(
+    .card,
+    .panel,
+    [class*="card"],
+    [class*="panel"],
+    [class*="matrix"],
+    table
+  ) {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-color: rgba(255,255,255,0.026) !important;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(var(--ma-branch-a), 0.148), transparent 36%),
+      radial-gradient(circle at 100% 8%, rgba(var(--ma-branch-b), 0.104), transparent 42%),
+      linear-gradient(
+        115deg,
+        rgba(var(--ma-branch-a), 0.088) 0%,
+        rgba(255,255,255,0.016) 44%,
+        rgba(var(--ma-branch-b), 0.064) 100%
+      ),
+      rgba(15, 23, 42, 0.58) !important;
+    box-shadow:
+      0 28px 82px rgba(0, 0, 0, 0.30),
+      0 0 42px rgba(var(--ma-branch-glow), 0.120),
+      inset 0 1px 0 rgba(255,255,255,0.065),
+      inset 1px 0 0 rgba(var(--ma-branch-a), 0.085),
+      inset -1px 0 0 rgba(var(--ma-branch-b), 0.070) !important;
+    backdrop-filter: blur(22px) saturate(138%);
+    -webkit-backdrop-filter: blur(22px) saturate(138%);
+  }
+
+  .waterfall-hero::before,
+  .waterfall-signal-card::before,
+  .waterfall-command-item::before,
+  .waterfall-score-module::before,
+  .waterfall-kpi-card::before,
+  .waterfall-panel::before,
+  .waterfall-glass-block::before,
+  .waterfall-distribution-card::before,
+  .waterfall-adjustment-item::before,
+  .waterfall-bridge-panel::before,
+  .waterfall-bridge-step::before,
+  .waterfall-sensitivity-panel::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 0% 10%, rgba(var(--ma-branch-a), 0.145), transparent 34%),
+      radial-gradient(circle at 100% 8%, rgba(var(--ma-branch-b), 0.120), transparent 38%),
+      radial-gradient(circle at 54% 120%, rgba(255,255,255,0.040), transparent 42%);
+    filter: blur(28px);
+    opacity: 0.68;
+    mix-blend-mode: screen;
+  }
+
+  .waterfall-hero::after,
+  .waterfall-signal-card::after,
+  .waterfall-command-item::after,
+  .waterfall-score-module::after,
+  .waterfall-kpi-card::after,
+  .waterfall-panel::after,
+  .waterfall-glass-block::after,
+  .waterfall-distribution-card::after,
+  .waterfall-adjustment-item::after,
+  .waterfall-bridge-panel::after,
+  .waterfall-bridge-step::after,
+  .waterfall-sensitivity-panel::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,0.080),
+        rgba(255,255,255,0.014) 32%,
+        transparent 58%,
+        rgba(255,255,255,0.024) 100%
+      );
+    opacity: 0.36;
+  }
+
+  .waterfall-hero > *,
+  .waterfall-signal-card > *,
+  .waterfall-command-item > *,
+  .waterfall-score-module > *,
+  .waterfall-kpi-card > *,
+  .waterfall-panel > *,
+  .waterfall-glass-block > *,
+  .waterfall-distribution-card > *,
+  .waterfall-adjustment-item > *,
+  .waterfall-bridge-panel > *,
+  .waterfall-bridge-step > *,
+  .waterfall-sensitivity-panel > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .waterfall-command-item:hover,
+  .waterfall-kpi-card:hover,
+  .waterfall-panel:hover,
+  .waterfall-glass-block:hover,
+  .waterfall-distribution-card:hover,
+  .waterfall-adjustment-item:hover,
+  .waterfall-bridge-step:hover,
+  .waterfall-sensitivity-panel:hover {
+    transform: translateY(-3px);
+    border-color: rgba(var(--ma-branch-c), 0.18) !important;
+    box-shadow:
+      0 34px 96px rgba(0, 0, 0, 0.36),
+      0 0 54px rgba(var(--ma-branch-glow), 0.165),
+      inset 0 1px 0 rgba(255,255,255,0.080),
+      inset 1px 0 0 rgba(var(--ma-branch-a), 0.105),
+      inset -1px 0 0 rgba(var(--ma-branch-b), 0.085) !important;
+  }
+
+  .waterfall-grid {
+    gap: clamp(28px, 2vw, 36px);
+  }
+
+  .waterfall-section {
+    gap: 30px;
+  }
+
+  .waterfall-bridge-grid,
+  .waterfall-distribution-grid,
+  .waterfall-adjustment-list {
+    gap: 18px;
+  }
+
+  .waterfall-icon-box,
+  .waterfall-card-icon,
+  .waterfall-panel-icon,
+  .waterfall-adjustment-icon,
+  .waterfall-score-core,
+  .waterfall-score-ring,
+  .waterfall-count,
+  .waterfall-bridge-step .kpi-label {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(var(--ma-branch-a), 0.16),
+        rgba(var(--ma-branch-b), 0.09)
+      ) !important;
+    border-color: rgba(var(--ma-branch-a), 0.22) !important;
+    box-shadow:
+      0 0 18px rgba(var(--ma-branch-glow), 0.14),
+      inset 0 1px 0 rgba(255,255,255,0.070) !important;
+  }
+
+  .waterfall-score-ring {
+    background:
+      conic-gradient(
+        rgba(var(--ma-branch-a), 0.98) var(--score-angle),
+        rgba(255,255,255,0.09) 0deg
+      ) !important;
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.28),
+      0 0 34px rgba(var(--ma-branch-glow), 0.18) !important;
+  }
+
+  .waterfall-signal-row,
+  .waterfall-distribution-card,
+  .waterfall-adjustment-item,
+  .waterfall-bridge-step,
+  .waterfall-glass-block {
+    border-color: rgba(255,255,255,0.070) !important;
+  }
+
+  .waterfall-signal-row {
+    border-top-color: rgba(var(--ma-branch-a), 0.110) !important;
+  }
+
+  .waterfall-kicker,
+  .waterfall-title,
+  .waterfall-signal-title,
+  .waterfall-kpi-value,
+  .waterfall-distribution-card strong,
+  .waterfall-panel-title,
+  .waterfall-section-header h2,
+  .waterfall-section-header h3 {
+    text-shadow:
+      0 0 14px rgba(var(--ma-branch-glow), 0.115);
+  }
+
+  .waterfall-page table {
+    border-color: rgba(var(--ma-branch-a), 0.120) !important;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(var(--ma-branch-a), 0.095), transparent 34%),
+      radial-gradient(circle at 100% 0%, rgba(var(--ma-branch-b), 0.070), transparent 38%),
+      rgba(15, 23, 42, 0.46) !important;
+    box-shadow:
+      0 18px 48px rgba(0,0,0,0.18),
+      0 0 28px rgba(var(--ma-branch-glow), 0.080),
+      inset 0 1px 0 rgba(255,255,255,0.040) !important;
+  }
+
+  .waterfall-page th,
+  .waterfall-page td {
+    border-color: rgba(var(--ma-branch-a), 0.080) !important;
+  }
+
+  .waterfall-page th {
+    color: rgba(167, 243, 208, 0.96) !important;
+    text-shadow: 0 0 12px rgba(var(--ma-branch-glow), 0.120);
+  }
+
+  .waterfall-page tr:hover {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(var(--ma-branch-a), 0.080),
+        rgba(var(--ma-branch-b), 0.045)
+      ) !important;
+  }
+
+  .waterfall-page .badge,
+  .waterfall-page [class*="badge"] {
+    border-color: rgba(var(--ma-branch-a), 0.28) !important;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(var(--ma-branch-a), 0.145),
+        rgba(var(--ma-branch-b), 0.080)
+      ) !important;
+    box-shadow:
+      0 0 18px rgba(var(--ma-branch-glow), 0.10),
+      inset 0 1px 0 rgba(255,255,255,0.060) !important;
+  }
+
+  .waterfall-bridge-step,
+  .waterfall-distribution-card,
+  .waterfall-adjustment-item {
+    transition:
+      transform .18s ease,
+      box-shadow .22s ease,
+      border-color .22s ease,
+      filter .22s ease;
+  }
+
+  .waterfall-bridge-step:hover,
+  .waterfall-distribution-card:hover,
+  .waterfall-adjustment-item:hover {
+    filter: brightness(1.035) saturate(1.04);
+  }
+
+
+
+  /* WATERFALL SIGNAL · SCORE RING LIKE OTHER PAGES */
+  .waterfall-score-module {
+    display: grid;
+    grid-template-columns: 122px minmax(0, 1fr);
+    gap: 22px;
+    align-items: center;
+    padding: 20px;
+    border-radius: 26px;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.10), transparent 38%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.050), rgba(255, 255, 255, 0.020)),
+      rgba(255, 255, 255, 0.030) !important;
+    border: 1px solid rgba(255, 255, 255, 0.085) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.040),
+      0 18px 40px rgba(0, 0, 0, 0.120) !important;
+  }
+
+  .waterfall-score-ring {
+    position: relative;
+    width: 112px;
+    height: 112px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background:
+      conic-gradient(
+        rgba(16, 185, 129, 0.96) 0deg,
+        rgba(16, 185, 129, 0.96) var(--score-angle),
+        rgba(51, 65, 85, 0.65) var(--score-angle),
+        rgba(51, 65, 85, 0.65) 360deg
+      ) !important;
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.28),
+      0 0 34px rgba(16, 185, 129, 0.16) !important;
+  }
+
+  .waterfall-score-ring::before {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border-radius: 999px;
+    background:
+      radial-gradient(circle at 30% 25%, rgba(255,255,255,0.060), transparent 36%),
+      rgba(15, 23, 42, 0.96);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.060),
+      inset 0 0 0 1px rgba(255,255,255,0.030);
+    pointer-events: none;
+  }
+
+  .waterfall-score-core {
+    position: relative;
+    z-index: 1;
+    width: 78px;
+    height: 78px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 30% 25%, rgba(255,255,255,0.050), transparent 38%),
+      rgba(15, 23, 42, 0.98) !important;
+    border: 1px solid rgba(255, 255, 255, 0.060) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.040),
+      0 8px 18px rgba(0, 0, 0, 0.22) !important;
+  }
+
+  .waterfall-score-core strong {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    color: #f8fafc !important;
+    text-shadow: 0 0 14px rgba(16, 185, 129, 0.18);
+  }
+
+  .waterfall-score-core strong.is-empty-score {
+    font-size: 30px;
+    color: rgba(226, 232, 240, 0.72) !important;
+    text-shadow: none;
+  }
+
   @media (max-width: 1180px) {
     .waterfall-hero-layout {
       grid-template-columns: 1fr;
@@ -629,7 +994,7 @@ export function WaterfallPage() {
                 <Badge>M&A Workspace</Badge>
                 <Badge>Deal Economics</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                {canEditCase ? <Badge>Edición M&A permitida</Badge> : null}
+                {canEditCase ? <Badge>EdiciÃ³n M&A permitida</Badge> : null}
               </div>
 
               <h1 className="waterfall-title">
@@ -639,8 +1004,8 @@ export function WaterfallPage() {
 
               <p className="waterfall-copy">
                 Bridge ejecutivo desde Enterprise Value hasta Equity Value y Net
-                Proceeds, incorporando deuda, caja, ajustes de operación y reparto
-                económico entre accionistas.
+                Proceeds, incorporando deuda, caja, ajustes de operaciÃ³n y reparto
+                econÃ³mico entre accionistas.
               </p>
 
               <div className="waterfall-command-bar">
@@ -683,7 +1048,7 @@ export function WaterfallPage() {
                   >
                     <div className="waterfall-score-core">
                       <strong className={hasWaterfallScore ? '' : 'is-empty-score'}>
-                        {hasWaterfallScore ? waterfallSignal.score : '—'}
+                        {hasWaterfallScore ? waterfallSignal.score : 'â€”'}
                       </strong>
                     </div>
                   </div>
@@ -728,7 +1093,7 @@ export function WaterfallPage() {
             kicker="Economic bridge"
             icon={TrendingUp}
             title="Deal economics at a glance"
-            description="Resumen de las principales métricas que explican cómo se transforma el valor bruto del activo en caja final para las partes."
+            description="Resumen de las principales mÃ©tricas que explican cÃ³mo se transforma el valor bruto del activo en caja final para las partes."
           />
 
           <div className="waterfall-grid waterfall-grid-kpis">
@@ -768,32 +1133,32 @@ export function WaterfallPage() {
             kicker="Transaction logic"
             icon={ArrowDownUp}
             title="From headline valuation to distributable cash"
-            description="El waterfall ayuda a explicar cómo cada ajuste transforma la valoración inicial en proceeds finales y en reparto económico real."
+            description="El waterfall ayuda a explicar cÃ³mo cada ajuste transforma la valoraciÃ³n inicial en proceeds finales y en reparto econÃ³mico real."
           />
 
           <div className="waterfall-bridge-grid">
             <BridgeStep
               number="01"
               title="Enterprise Value"
-              text="Valor económico inicial del activo antes de aplicar deuda, caja y ajustes."
+              text="Valor econÃ³mico inicial del activo antes de aplicar deuda, caja y ajustes."
             />
 
             <BridgeStep
               number="02"
               title="Net debt bridge"
-              text="Impacto de deuda financiera, caja disponible y posición neta sobre el equity."
+              text="Impacto de deuda financiera, caja disponible y posiciÃ³n neta sobre el equity."
             />
 
             <BridgeStep
               number="03"
               title="Equity Value"
-              text="Valor atribuible a los accionistas después de ajustar el valor empresa."
+              text="Valor atribuible a los accionistas despuÃ©s de ajustar el valor empresa."
             />
 
             <BridgeStep
               number="04"
               title="Net Proceeds"
-              text="Caja final estimada tras ajustes de operación, estructura y reparto."
+              text="Caja final estimada tras ajustes de operaciÃ³n, estructura y reparto."
             />
           </div>
         </section>
@@ -804,7 +1169,7 @@ export function WaterfallPage() {
               kicker="Waterfall model"
               icon={Activity}
               title="Enterprise value to equity bridge"
-              description="Vista operativa del puente de valor y de los principales ajustes económicos de la operación."
+              description="Vista operativa del puente de valor y de los principales ajustes econÃ³micos de la operaciÃ³n."
             />
 
             <WaterfallPanel
@@ -819,7 +1184,7 @@ export function WaterfallPage() {
               kicker="Cap table"
               icon={PieChart}
               title="Cap Table Distribution"
-              description="Reparto estimado de proceeds entre fundadores e inversores según la estructura de equity indicada."
+              description="Reparto estimado de proceeds entre fundadores e inversores segÃºn la estructura de equity indicada."
             />
 
             <div className="waterfall-distribution-grid">
@@ -839,13 +1204,13 @@ export function WaterfallPage() {
               <AdjustmentItem
                 icon={Calculator}
                 title="Transaction Adjustments"
-                text="El waterfall explica cómo cada ajuste transforma la valoración bruta en caja final recibida por las partes."
+                text="El waterfall explica cÃ³mo cada ajuste transforma la valoraciÃ³n bruta en caja final recibida por las partes."
               />
 
               <AdjustmentItem
                 icon={CheckCircle2}
                 title="Decision clarity"
-                text="El objetivo no es solo calcular proceeds, sino entender qué palancas afectan al resultado y dónde puede negociarse mejor."
+                text="El objetivo no es solo calcular proceeds, sino entender quÃ© palancas afectan al resultado y dÃ³nde puede negociarse mejor."
               />
             </div>
           </section>
@@ -856,11 +1221,11 @@ export function WaterfallPage() {
             kicker="Sensitivity"
             icon={Sparkles}
             title="Sensitivity Analysis"
-            description="Lectura de sensibilidad del valor ante cambios de múltiplo y EBITDA normalizado."
+            description="Lectura de sensibilidad del valor ante cambios de mÃºltiplo y EBITDA normalizado."
           />
 
           <div style={{ marginBottom: 22 }}>
-            <Badge>{derived.adjustedMultiple}x múltiplo ajustado</Badge>
+            <Badge>{derived.adjustedMultiple}x mÃºltiplo ajustado</Badge>
           </div>
 
           <SensitivityMatrix
@@ -1074,7 +1439,7 @@ function getWaterfallSignal({
       title: 'Incomplete economics',
       posture: 'Build bridge',
       description:
-        'Completa la valoración para generar un puente económico defendible desde Enterprise Value hasta proceeds.'
+        'Completa la valoraciÃ³n para generar un puente econÃ³mico defendible desde Enterprise Value hasta proceeds.'
     };
   }
 
@@ -1084,7 +1449,7 @@ function getWaterfallSignal({
       title: 'Clean proceeds bridge',
       posture: 'Proceed with structure',
       description:
-        'La estructura muestra un puente sólido entre valor empresa, deuda neta, equity y caja final estimada.'
+        'La estructura muestra un puente sÃ³lido entre valor empresa, deuda neta, equity y caja final estimada.'
     };
   }
 
@@ -1113,6 +1478,9 @@ function getWaterfallSignal({
     title: 'Weak proceeds bridge',
     posture: 'Rebuild economics',
     description:
-      'La estructura actual no genera una lectura económica suficientemente sólida. Revisa supuestos antes de avanzar.'
+      'La estructura actual no genera una lectura econÃ³mica suficientemente sÃ³lida. Revisa supuestos antes de avanzar.'
   };
 }
+
+
+
