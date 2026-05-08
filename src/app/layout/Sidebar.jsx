@@ -683,7 +683,11 @@ const sidebarCss = `
 `;
 
 function getActiveWorkspace(pathname) {
-  if (pathname.startsWith('/overview') || pathname.startsWith('/ceo/overview')) {
+  if (
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/overview') ||
+    pathname.startsWith('/ceo/overview')
+  ) {
     return 'overview';
   }
 
@@ -760,58 +764,8 @@ function forceIconColor(icon, isHighlighted) {
   });
 }
 
-function scrollToDealPipeline() {
-  window.setTimeout(() => {
-    const target = document.querySelector('.ma-pipeline-shell');
-
-    if (target) {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  }, 250);
-
-  window.setTimeout(() => {
-    const target = document.querySelector('.ma-pipeline-shell');
-
-    if (target) {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  }, 700);
-}
-
 function buildGroupItems(groupKey, items = []) {
-  if (groupKey !== 'ma') return items;
-
-  const alreadyHasDealPipeline = items.some(
-    (item) =>
-      item?.label === 'Deal Pipeline' ||
-      item?.to === '/ma/dashboard#deal-pipeline'
-  );
-
-  if (alreadyHasDealPipeline) return items;
-
-  const dealPipelineItem = {
-    to: '/ma/dashboard#deal-pipeline',
-    label: 'Deal Pipeline',
-    icon: <Layers3 size={18} />
-  };
-
-  const valuationIndex = items.findIndex((item) => item?.to === '/ma/valuation');
-
-  if (valuationIndex === -1) {
-    return [dealPipelineItem, ...items];
-  }
-
-  return [
-    ...items.slice(0, valuationIndex + 1),
-    dealPipelineItem,
-    ...items.slice(valuationIndex + 1)
-  ];
+  return items;
 }
 
 function SidebarNavItem({ item }) {
@@ -821,34 +775,24 @@ function SidebarNavItem({ item }) {
     <NavLink
       to={item.to}
       className="ceos-nav-link"
-      onClick={() => {
-        if (item.to?.includes('#deal-pipeline')) {
-          scrollToDealPipeline();
-        }
-      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={({ isActive }) => {
-        const isHashActive =
-          item.to?.includes('#deal-pipeline') &&
-          window.location.pathname === '/ma/dashboard' &&
-          window.location.hash === '#deal-pipeline';
-
-        const isHighlighted = isActive || isHashActive || isHovered;
+        const isHighlighted = isActive || isHovered;
 
         return {
           color: isHighlighted ? '#ffffff' : 'rgba(226,232,240,0.64)',
-          border: isActive || isHashActive
+          border: isActive
             ? '1px solid rgba(212,175,55,0.24)'
             : isHovered
               ? '1px solid rgba(212,175,55,0.16)'
               : '1px solid transparent',
-          background: isActive || isHashActive
+          background: isActive
             ? 'linear-gradient(135deg, rgba(255,255,255,0.034), rgba(255,255,255,0.008)), rgba(0,0,0,0.988)'
             : isHovered
               ? 'linear-gradient(135deg, rgba(212,175,55,0.032), rgba(255,255,255,0.008)), rgba(0,0,0,0.978)'
               : 'rgba(0,0,0,0.80)',
-          boxShadow: isActive || isHashActive
+          boxShadow: isActive
             ? '0 18px 50px rgba(0,0,0,0.86), 0 0 30px rgba(212,175,55,0.18), inset 0 1px 0 rgba(255,255,255,0.052), inset 0 -1px 0 rgba(255,255,255,0.014)'
             : isHovered
               ? '0 16px 38px rgba(0,0,0,0.78), 0 0 24px rgba(212,175,55,0.14), inset 0 1px 0 rgba(255,255,255,0.042), inset 0 -1px 0 rgba(255,255,255,0.012)'
@@ -858,12 +802,7 @@ function SidebarNavItem({ item }) {
       }}
     >
       {({ isActive }) => {
-        const isHashActive =
-          item.to?.includes('#deal-pipeline') &&
-          window.location.pathname === '/ma/dashboard' &&
-          window.location.hash === '#deal-pipeline';
-
-        const isHighlighted = isActive || isHashActive || isHovered;
+        const isHighlighted = isActive || isHovered;
         const iconColor = isHighlighted ? GOLD : MUTED_ICON;
 
         return (
@@ -973,11 +912,11 @@ export function Sidebar() {
         <div className="ceos-build-card">
           <div className="ceos-build-title">
             <Sparkles size={14} />
-            Stable Demo Build
+            Executive Workspace
           </div>
 
           <p className="ceos-build-copy">
-            M&A + Compliance + Funding + PMI integrados como ramas premium del sistema ejecutivo.
+            M&A, Compliance, Funding y PMI integrados como sistema ejecutivo privado.
           </p>
         </div>
       </div>

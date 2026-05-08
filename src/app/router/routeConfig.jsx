@@ -7,6 +7,7 @@ import {
   FileBadge,
   FileSearch,
   FolderKanban,
+  FolderLock,
   FolderOpen,
   Gem,
   Landmark,
@@ -27,7 +28,7 @@ export const routeGroups = {
     label: 'Executive OS',
     items: [
       {
-        to: '/overview',
+        to: '/dashboard',
         label: 'Executive Overview',
         icon: <Sparkles size={18} />
       }
@@ -71,6 +72,11 @@ export const routeGroups = {
         to: '/ma/deals',
         label: 'Deal Repository',
         icon: <FolderOpen size={18} />
+      },
+      {
+        to: '/ma/data-room',
+        label: 'Data Room',
+        icon: <FolderLock size={18} />
       }
     ]
   },
@@ -82,6 +88,11 @@ export const routeGroups = {
         to: '/compliance/dashboard',
         label: 'Risk Dashboard',
         icon: <ShieldAlert size={18} />
+      },
+      {
+        to: '/compliance/audit-runs',
+        label: 'Audit Ledger',
+        icon: <FileBadge size={18} />
       },
       {
         to: '/compliance/suppliers',
@@ -193,6 +204,12 @@ export const routeGroups = {
 };
 
 export const pageMetaMap = {
+  '/dashboard': {
+    title: 'Executive Command Center',
+    description:
+      'Capa ejecutiva superior de CEO’s OS: señales clave de M&A, Compliance, Funding, PMI y ramas enterprise en una única vista de decisión.'
+  },
+
   '/overview': {
     title: 'Executive Command Center',
     description:
@@ -247,10 +264,22 @@ export const pageMetaMap = {
       'Repositorio de casos M&A guardados, con persistencia backend, recuperación de escenarios y continuidad del análisis.'
   },
 
+  '/ma/data-room': {
+    title: 'M&A Data Room',
+    description:
+      'Capa enterprise de distribucion controlada para documentos M&A, secure shares, clasificacion, revocacion y trazabilidad.'
+  },
+
   '/compliance/dashboard': {
     title: 'Supply Chain Compliance Dashboard',
     description:
       'Vista ejecutiva de proveedores, alertas, evidencias, revisiones humanas y exposición general de la cadena de suministro.'
+  },
+
+  '/compliance/audit-runs': {
+    title: 'Compliance Audit Ledger',
+    description:
+      'Historial enterprise de auditorías deterministas, evidencias citadas y exportación JSON firmada para auditores externos.'
   },
 
   '/compliance/suppliers': {

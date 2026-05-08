@@ -3,6 +3,7 @@ import { LogOut, UserCircle } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Sidebar } from './Sidebar.jsx';
 import { Topbar } from './Topbar.jsx';
+import { ExecutivePremiumStyle } from './ExecutivePremiumStyle.jsx';
 import { pageMetaMap } from '../router/routeConfig.jsx';
 import { Button } from '../../shared/components/ui/Button.jsx';
 import { useAuth } from '../providers/AuthProvider.jsx';
@@ -118,6 +119,14 @@ function getPageMeta(pathname) {
     };
   }
 
+  if (pathname.startsWith('/compliance/audit-runs')) {
+    return pageMetaMap['/compliance/audit-runs'] || {
+      title: 'Compliance Audit Ledger',
+      description:
+        'Historial enterprise de auditorías deterministas, evidencias citadas y exportación JSON firmada para auditores externos.'
+    };
+  }
+
   return {
     title: 'CEO’s OS',
     description:
@@ -193,7 +202,7 @@ export function AppShell() {
                   '0 0 14px rgba(52,211,153,0.16), 0 0 10px rgba(212,175,55,0.06)'
               }}
             >
-              CEO’s OS · Stable Demo Build
+              CEO's OS · Secure Executive Workspace
             </div>
 
             <div
@@ -203,8 +212,8 @@ export function AppShell() {
                 fontWeight: 600
               }}
             >
-              M&A + Compliance conectados a backend JSON · Funding integrado
-              como tercera línea estratégica
+              M&A, Compliance, Funding y PMI consolidados en una capa privada
+              de decision ejecutiva
             </div>
           </div>
 
@@ -265,6 +274,8 @@ export function AppShell() {
         <Topbar title={meta.title} description={meta.description} />
 
         <Outlet />
+
+        <ExecutivePremiumStyle />
       </div>
     </div>
   );

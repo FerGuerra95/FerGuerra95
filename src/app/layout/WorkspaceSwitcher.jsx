@@ -255,7 +255,7 @@ const WORKSPACES = [
   {
     key: 'overview',
     label: 'Executive',
-    path: '/overview',
+    path: '/dashboard',
     sidebarLabel: 'EXECUTIVE OS'
   },
   {
@@ -303,7 +303,11 @@ const WORKSPACES = [
 ];
 
 function getWorkspace(pathname) {
-  if (pathname.startsWith('/overview') || pathname.startsWith('/ceo/overview')) return 'overview';
+  if (
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/overview') ||
+    pathname.startsWith('/ceo/overview')
+  ) return 'overview';
   if (pathname.startsWith('/compliance')) return 'compliance';
   if (pathname.startsWith('/funding')) return 'funding';
   if (pathname.startsWith('/pmi')) return 'pmi';

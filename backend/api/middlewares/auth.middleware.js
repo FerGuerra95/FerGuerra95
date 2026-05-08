@@ -1,4 +1,7 @@
-import { getUserFromToken } from '../../services/auth/auth.service.js';
+import {
+  getTokenPayload,
+  getUserFromToken
+} from '../../services/auth/auth.service.js';
 
 export const PERMISSIONS = Object.freeze({
   READ: 'read',
@@ -14,6 +17,7 @@ export const PERMISSIONS = Object.freeze({
   CREATE_EVIDENCE: 'create:evidence',
   UPDATE_EVIDENCE: 'update:evidence',
   DELETE_EVIDENCE: 'delete:evidence',
+  RUN_COMPLIANCE_AUDIT: 'run:compliance_audit',
 
   CREATE_REVIEW: 'create:review',
   UPDATE_REVIEW: 'update:review',
@@ -27,7 +31,16 @@ export const PERMISSIONS = Object.freeze({
   CREATE_MA_CASE: 'create:ma_case',
   UPDATE_MA_CASE: 'update:ma_case',
   DELETE_MA_CASE: 'delete:ma_case',
-  CREATE_MA_REPORT: 'create:ma_report'
+  CREATE_MA_REPORT: 'create:ma_report',
+  CREATE_MA_SHARE: 'create:ma_share',
+  REVOKE_MA_SHARE: 'revoke:ma_share',
+  MANAGE_MA_DATA_ROOM: 'manage:ma_data_room',
+  CREATE_MA_DEAL: 'create:ma_deal',
+  UPDATE_MA_DEAL: 'update:ma_deal',
+  DELETE_MA_DEAL: 'delete:ma_deal',
+  READ_AUDIT_LOG: 'read:audit_log',
+
+  CREATE_FUNDING_SNAPSHOT: 'create:funding_snapshot'
 });
 
 const ROLE_PERMISSIONS = Object.freeze({
@@ -44,6 +57,7 @@ const ROLE_PERMISSIONS = Object.freeze({
 
     PERMISSIONS.CREATE_EVIDENCE,
     PERMISSIONS.UPDATE_EVIDENCE,
+    PERMISSIONS.RUN_COMPLIANCE_AUDIT,
 
     PERMISSIONS.CREATE_REVIEW,
     PERMISSIONS.UPDATE_REVIEW,
@@ -53,7 +67,15 @@ const ROLE_PERMISSIONS = Object.freeze({
 
     PERMISSIONS.CREATE_MA_CASE,
     PERMISSIONS.UPDATE_MA_CASE,
-    PERMISSIONS.CREATE_MA_REPORT
+    PERMISSIONS.CREATE_MA_REPORT,
+    PERMISSIONS.CREATE_MA_SHARE,
+    PERMISSIONS.REVOKE_MA_SHARE,
+    PERMISSIONS.MANAGE_MA_DATA_ROOM,
+    PERMISSIONS.CREATE_MA_DEAL,
+    PERMISSIONS.UPDATE_MA_DEAL,
+    PERMISSIONS.READ_AUDIT_LOG,
+
+    PERMISSIONS.CREATE_FUNDING_SNAPSHOT
   ]),
 
   viewer: Object.freeze([
@@ -90,6 +112,7 @@ function unauthorized(res, message = 'No autorizado.') {
   return res.status(401).json({
     data: null,
     meta: {
+      requestId: res.req?.requestId,
       timestamp: new Date().toISOString()
     },
     error: {
@@ -103,6 +126,7 @@ function forbidden(res, message = 'No tienes permisos para realizar esta acción
   return res.status(403).json({
     data: null,
     meta: {
+      requestId: res.req?.requestId,
       timestamp: new Date().toISOString()
     },
     error: {
@@ -121,6 +145,7 @@ export const requireAuth = async (req, res, next) => {
     }
 
     const user = await getUserFromToken(token);
+    const tokenPayload = getTokenPayload(token);
 
     if (!user?.id) {
       return unauthorized(res, 'Sesión no válida.');
@@ -133,12 +158,15 @@ export const requireAuth = async (req, res, next) => {
     req.user = user;
     req.organizationId = user.organizationId;
     req.role = getRole(user);
+    req.authToken = token;
+    req.authSessionId = tokenPayload?.jti || '';
 
     return next();
   } catch (error) {
     return res.status(error?.status || 401).json({
       data: null,
       meta: {
+        requestId: req.requestId,
         timestamp: new Date().toISOString()
       },
       error: {

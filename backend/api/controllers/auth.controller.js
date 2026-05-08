@@ -1,4 +1,7 @@
-import { loginUser } from '../../services/auth/auth.service.js';
+import {
+  loginUser,
+  logoutUser
+} from '../../services/auth/auth.service.js';
 
 function buildMeta(extra = {}) {
   return {
@@ -43,7 +46,8 @@ export const login = async (req, res) => {
     return res.json({
       data: {
         user: result.user,
-        token: result.token
+        token: result.token,
+        session: result.session
       },
       meta: buildMeta({
         mode: 'json-auth'
@@ -55,11 +59,11 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (_req, res) => {
+export const logout = async (req, res) => {
+  const result = await logoutUser(req.authToken || '');
+
   return res.json({
-    data: {
-      loggedOut: true
-    },
+    data: result,
     meta: buildMeta({
       mode: 'json-auth'
     }),
