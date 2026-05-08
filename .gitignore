@@ -69,3 +69,8 @@ temp/
 # Local exports / generated reports
 exports/
 reports/
+
+# Local toolchain / Playwright scratch / compliance export noise (not versioned)
+.tools/
+.pw-artifacts*/
+ceos_os_compliance_enterprise_*.txt
