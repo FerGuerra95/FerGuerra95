@@ -1,9 +1,14 @@
 # env/
 
-Contiene la configuración base del proyecto:
+Contiene la referencia de configuracion del proyecto.
 
-- `.env.example`: plantilla de variables necesarias.
-- `env.schema.js`: referencia de tipos y valores esperados.
-- `loadEnv.js`: cargador simple para entornos locales.
+- `.env.example`: plantilla local y de despliegue.
+- `env.schema.js`: contrato de variables esperadas.
+- `loadEnv.js`: cargador simple para herramientas locales.
 
-En producción conviene sustituir esto por un sistema robusto de validación y secretos.
+Notas enterprise:
+
+- `AUTH_SECRET` debe tener al menos 32 caracteres en produccion.
+- `DB_PATH` debe apuntar a almacenamiento persistente en produccion.
+- `VITE_PUBLIC_DEMO_MODE` debe estar apagado salvo demo privada.
+- `VITE_ENABLE_MA_LOCAL_FALLBACK` no debe estar activo en produccion.

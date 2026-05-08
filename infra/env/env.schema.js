@@ -1,22 +1,26 @@
 export const envSchema = {
   NODE_ENV: ['development', 'test', 'staging', 'production'],
   PORT: 'number',
-  APP_URL: 'string',
-  API_URL: 'string',
-  JWT_SECRET: 'string',
-  JWT_EXPIRES_IN: 'string',
-  SESSION_SECRET: 'string',
-  DATABASE_URL: 'string',
-  STORAGE_DRIVER: 'string',
-  STORAGE_PATH: 'string',
-  SMTP_HOST: 'string',
-  SMTP_PORT: 'number',
-  EMAIL_FROM: 'string',
-  TRANSLATION_PROVIDER: 'string',
-  NEWS_PROVIDER: 'string',
-  OCR_PROVIDER: 'string',
-  RAG_PROVIDER: 'string',
-  GEODATA_PROVIDER: 'string',
-  ENABLE_METRICS: 'boolean',
+
+  AUTH_SECRET: 'string:min:32',
+  DB_PATH: 'string',
+  SQLITE_PATH: 'string:optional',
+  SQLITE_DB_PATH: 'string:optional',
+
+  PUBLIC_APP_URL: 'url',
+  FRONTEND_URL: 'url',
+  CORS_ORIGIN: 'csv:url',
+  CORS_ORIGINS: 'csv:url',
+
+  BOOTSTRAP_ADMIN_EMAIL: 'email:optional',
+  BOOTSTRAP_ADMIN_PASSWORD: 'string:optional',
+  BOOTSTRAP_ADMIN_ID: 'string:optional',
+  BOOTSTRAP_ADMIN_NAME: 'string:optional',
+  BOOTSTRAP_ORGANIZATION_ID: 'string:optional',
+  BOOTSTRAP_USERS_JSON: 'json:array:optional',
+
+  VITE_PUBLIC_DEMO_MODE: 'boolean:optional',
+  VITE_ENABLE_MA_LOCAL_FALLBACK: 'boolean:optional',
+
   LOG_LEVEL: ['debug', 'info', 'warn', 'error']
 };
