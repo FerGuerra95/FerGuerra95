@@ -129,9 +129,12 @@ async function assertSupplierBelongsToOrganization(supplierId, organizationId) {
     );
   }
 
-  const supplier = await suppliersStore.getById(normalizedSupplierId);
+  const supplier = await suppliersStore.getByIdForOrganization(
+    normalizedSupplierId,
+    organizationId
+  );
 
-  if (!belongsToOrganization(supplier, organizationId)) {
+  if (!supplier) {
     throw createNotFoundError(
       'Proveedor no encontrado para esta organización.',
       'SUPPLIER_NOT_FOUND'
@@ -190,11 +193,11 @@ function normalizeAlertPayload(payload = {}, options = {}) {
   return next;
 }
 
-async function removeMany(store, items = []) {
+async function removeMany(store, items = [], organizationId = '') {
   const results = [];
 
   for (const item of items) {
-    const result = await store.remove(item.id);
+    const result = await store.removeForOrganization(item.id, organizationId);
     results.push(result);
   }
 
@@ -204,23 +207,13 @@ async function removeMany(store, items = []) {
 export const listAlerts = async (scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const items = await alertsStore.list();
-
-  return items.filter((item) =>
-    belongsToOrganization(item, scope.organizationId)
-  );
+  return alertsStore.listByOrganization(scope.organizationId);
 };
 
 export const getAlertById = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const item = await alertsStore.getById(id);
-
-  if (!belongsToOrganization(item, scope.organizationId)) {
-    return null;
-  }
-
-  return item;
+  return alertsStore.getByIdForOrganization(id, scope.organizationId);
 };
 
 export const createAlert = async (payload = {}) => {
@@ -251,11 +244,12 @@ export const createAlert = async (payload = {}) => {
 export const updateAlert = async (id, patch = {}, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await alertsStore.getById(id);
+  const existing = await alertsStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
-    return null;
-  }
+  if (!existing) return null;
 
   const normalizedPatch = normalizeAlertPayload(patch, {
     isPatch: true
@@ -279,15 +273,18 @@ export const updateAlert = async (id, patch = {}, scope = {}) => {
     }
   );
 
-  return alertsStore.update(id, safePatch);
+  return alertsStore.updateForOrganization(id, safePatch, scope.organizationId);
 };
 
 export const deleteAlert = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await alertsStore.getById(id);
+  const existing = await alertsStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
+  if (!existing) {
     return {
       deleted: false,
       id,
@@ -295,28 +292,25 @@ export const deleteAlert = async (id, scope = {}) => {
     };
   }
 
-  const allEvidence = await evidenceStore.list();
+  const allEvidence = await evidenceStore.listByOrganization(scope.organizationId);
 
   const removedEvidence = allEvidence.filter((item) => {
-    return (
-      belongsToOrganization(item, scope.organizationId) &&
-      item.alertId === id
-    );
+    return item.alertId === id;
   });
 
-  const allReviews = await reviewsStore.list();
+  const allReviews = await reviewsStore.listByOrganization(scope.organizationId);
 
   const removedReviews = allReviews.filter((review) => {
-    return (
-      belongsToOrganization(review, scope.organizationId) &&
-      review.alertId === id
-    );
+    return review.alertId === id;
   });
 
-  await removeMany(evidenceStore, removedEvidence);
-  await removeMany(reviewsStore, removedReviews);
+  await removeMany(evidenceStore, removedEvidence, scope.organizationId);
+  await removeMany(reviewsStore, removedReviews, scope.organizationId);
 
-  const alertResult = await alertsStore.remove(id);
+  const alertResult = await alertsStore.removeForOrganization(
+    id,
+    scope.organizationId
+  );
 
   return {
     deleted: alertResult.deleted,

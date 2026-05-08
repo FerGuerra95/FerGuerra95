@@ -20,6 +20,7 @@ const reportsStore = createSqliteEntityStore('compliance_reports', 'compliance_r
   resilienceLevel: '',
   recommendations: [],
   evidenceSummary: null,
+  executiveSummary: null,
   items: []
 });
 
@@ -74,6 +75,89 @@ function normalizeScore(value) {
   return Number.isFinite(number) ? number : null;
 }
 
+function normalizeRecommendations(value) {
+  return Array.isArray(value)
+    ? value.map((item) => normalizeText(item)).filter(Boolean)
+    : [];
+}
+
+function buildPosture({ riskScore, resilienceScore, riskLevel }) {
+  const risk = Number(riskScore);
+  const resilience = Number(resilienceScore);
+
+  if (Number.isFinite(risk) && risk >= 76) return 'Critical legal risk';
+  if (normalizeText(riskLevel).toLowerCase().includes('critical')) {
+    return 'Critical legal risk';
+  }
+  if (Number.isFinite(risk) && risk >= 56) return 'High risk under review';
+  if (Number.isFinite(resilience) && resilience >= 75) {
+    return 'Controlled with evidence';
+  }
+
+  return 'Monitoring required';
+}
+
+export function buildComplianceExecutiveSummary(payload = {}) {
+  const riskScore = normalizeScore(payload.riskScore);
+  const resilienceScore = normalizeScore(payload.resilienceScore);
+  const recommendations = normalizeRecommendations(payload.recommendations);
+  const evidenceSummary =
+    payload.evidenceSummary && typeof payload.evidenceSummary === 'object'
+      ? payload.evidenceSummary
+      : {};
+  const evidenceCoverage = normalizeScore(
+    evidenceSummary.coverage ??
+      evidenceSummary.evidenceCoverage ??
+      payload.evidenceCoverage
+  );
+  const title = normalizeText(payload.title) || 'Compliance Report';
+  const supplierName = normalizeText(payload.supplierName);
+  const headline = payload.summary
+    ? normalizeText(payload.summary)
+    : supplierName
+      ? `${supplierName} compliance posture reviewed for executive decision.`
+      : 'Portfolio compliance posture reviewed for executive decision.';
+
+  return {
+    version: 'compliance-executive-summary-v1',
+    title,
+    scope: normalizeScope(payload.scope),
+    headline,
+    posture: buildPosture({
+      riskScore,
+      resilienceScore,
+      riskLevel: payload.riskLevel
+    }),
+    risk: {
+      score: riskScore,
+      level: normalizeLevel(payload.riskLevel)
+    },
+    resilience: {
+      score: resilienceScore,
+      level: normalizeLevel(payload.resilienceLevel)
+    },
+    evidence: {
+      coverage: evidenceCoverage,
+      summary: evidenceSummary
+    },
+    recommendationCount: recommendations.length,
+    topRecommendations: recommendations.slice(0, 5),
+    overviewSignals: {
+      legalScore:
+        riskScore === null ? null : Math.max(0, Math.min(100, 100 - riskScore)),
+      evidenceCoverage,
+      boardReady:
+        riskScore !== null &&
+        riskScore < 56 &&
+        (evidenceCoverage === null || evidenceCoverage >= 60)
+    },
+    hubIntegration: {
+      executiveOverviewEligible: true,
+      schema: 'ceo_os_compliance_hub_v1'
+    }
+  };
+}
+
 function assertOrganizationScope(organizationId) {
   if (!organizationId) {
     throw createForbiddenError(
@@ -107,9 +191,12 @@ async function assertSupplierBelongsToOrganization(supplierId, organizationId) {
     return null;
   }
 
-  const supplier = await suppliersStore.getById(normalizedSupplierId);
+  const supplier = await suppliersStore.getByIdForOrganization(
+    normalizedSupplierId,
+    organizationId
+  );
 
-  if (!belongsToOrganization(supplier, organizationId)) {
+  if (!supplier) {
     throw createNotFoundError(
       'Proveedor no encontrado para esta organización.',
       'SUPPLIER_NOT_FOUND'
@@ -120,6 +207,16 @@ async function assertSupplierBelongsToOrganization(supplierId, organizationId) {
 }
 
 function normalizeReportPayload(payload = {}) {
+  const recommendations = normalizeRecommendations(payload.recommendations);
+  const basePayload = {
+    ...payload,
+    recommendations
+  };
+  const executiveSummary =
+    payload.executiveSummary && typeof payload.executiveSummary === 'object'
+      ? payload.executiveSummary
+      : buildComplianceExecutiveSummary(basePayload);
+
   return {
     ...payload,
     title: normalizeText(payload.title) || 'Compliance Report',
@@ -133,10 +230,9 @@ function normalizeReportPayload(payload = {}) {
     resilienceLevel: normalizeLevel(payload.resilienceLevel),
     riskScore: normalizeScore(payload.riskScore),
     resilienceScore: normalizeScore(payload.resilienceScore),
-    recommendations: Array.isArray(payload.recommendations)
-      ? payload.recommendations
-      : [],
+    recommendations,
     evidenceSummary: payload.evidenceSummary || null,
+    executiveSummary,
     items: Array.isArray(payload.items) ? payload.items : []
   };
 }
@@ -144,23 +240,13 @@ function normalizeReportPayload(payload = {}) {
 export const listReports = async (scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const items = await reportsStore.list();
-
-  return items.filter((item) =>
-    belongsToOrganization(item, scope.organizationId)
-  );
+  return reportsStore.listByOrganization(scope.organizationId);
 };
 
 export const getReportById = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const item = await reportsStore.getById(id);
-
-  if (!belongsToOrganization(item, scope.organizationId)) {
-    return null;
-  }
-
-  return item;
+  return reportsStore.getByIdForOrganization(id, scope.organizationId);
 };
 
 export const createComplianceReport = async (payload = {}) => {
@@ -191,11 +277,12 @@ export const createComplianceReport = async (payload = {}) => {
 export const updateComplianceReport = async (id, patch = {}, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await reportsStore.getById(id);
+  const existing = await reportsStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
-    return null;
-  }
+  if (!existing) return null;
 
   const normalizedPatch = normalizeReportPayload({
     ...existing,
@@ -221,15 +308,18 @@ export const updateComplianceReport = async (id, patch = {}, scope = {}) => {
     }
   );
 
-  return reportsStore.update(id, safePatch);
+  return reportsStore.updateForOrganization(id, safePatch, scope.organizationId);
 };
 
 export const deleteComplianceReport = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await reportsStore.getById(id);
+  const existing = await reportsStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
+  if (!existing) {
     return {
       deleted: false,
       id,
@@ -240,7 +330,10 @@ export const deleteComplianceReport = async (id, scope = {}) => {
     };
   }
 
-  const result = await reportsStore.remove(id);
+  const result = await reportsStore.removeForOrganization(
+    id,
+    scope.organizationId
+  );
 
   return {
     deleted: result.deleted,

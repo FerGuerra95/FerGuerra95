@@ -126,9 +126,12 @@ async function assertSupplierBelongsToOrganization(supplierId, organizationId) {
     );
   }
 
-  const supplier = await suppliersStore.getById(normalizedSupplierId);
+  const supplier = await suppliersStore.getByIdForOrganization(
+    normalizedSupplierId,
+    organizationId
+  );
 
-  if (!belongsToOrganization(supplier, organizationId)) {
+  if (!supplier) {
     throw createNotFoundError(
       'Proveedor no encontrado para esta organización.',
       'SUPPLIER_NOT_FOUND'
@@ -147,9 +150,12 @@ async function assertAlertBelongsToOrganization(alertId, organizationId) {
     return null;
   }
 
-  const alert = await alertsStore.getById(normalizedAlertId);
+  const alert = await alertsStore.getByIdForOrganization(
+    normalizedAlertId,
+    organizationId
+  );
 
-  if (!belongsToOrganization(alert, organizationId)) {
+  if (!alert) {
     throw createNotFoundError(
       'Alerta no encontrada para esta organización.',
       'ALERT_NOT_FOUND'
@@ -289,23 +295,13 @@ function normalizeEvidencePayload(payload = {}, options = {}) {
 export const listEvidence = async (scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const items = await evidenceStore.list();
-
-  return items.filter((item) =>
-    belongsToOrganization(item, scope.organizationId)
-  );
+  return evidenceStore.listByOrganization(scope.organizationId);
 };
 
 export const getEvidenceById = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const item = await evidenceStore.getById(id);
-
-  if (!belongsToOrganization(item, scope.organizationId)) {
-    return null;
-  }
-
-  return item;
+  return evidenceStore.getByIdForOrganization(id, scope.organizationId);
 };
 
 export const createEvidence = async (payload = {}) => {
@@ -336,11 +332,12 @@ export const createEvidence = async (payload = {}) => {
 export const updateEvidence = async (id, patch = {}, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await evidenceStore.getById(id);
+  const existing = await evidenceStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
-    return null;
-  }
+  if (!existing) return null;
 
   const normalizedPatch = normalizeEvidencePayload(patch, {
     isPatch: true
@@ -363,15 +360,18 @@ export const updateEvidence = async (id, patch = {}, scope = {}) => {
     }
   );
 
-  return evidenceStore.update(id, safePatch);
+  return evidenceStore.updateForOrganization(id, safePatch, scope.organizationId);
 };
 
 export const deleteEvidence = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await evidenceStore.getById(id);
+  const existing = await evidenceStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
+  if (!existing) {
     return {
       deleted: false,
       id,
@@ -382,7 +382,10 @@ export const deleteEvidence = async (id, scope = {}) => {
     };
   }
 
-  const result = await evidenceStore.remove(id);
+  const result = await evidenceStore.removeForOrganization(
+    id,
+    scope.organizationId
+  );
 
   return {
     deleted: result.deleted,

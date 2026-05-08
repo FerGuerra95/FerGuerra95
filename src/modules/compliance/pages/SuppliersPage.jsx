@@ -46,16 +46,16 @@ import {
 } from '../../../shared/config/demoMode.js';
 
 const TIER_OPTIONS = ['Tier 1', 'Tier 2', 'Tier 3'];
-const CRITICALITY_OPTIONS = ['Baja', 'Media', 'Alta', 'CrÃ­tica'];
+const CRITICALITY_OPTIONS = ['Baja', 'Media', 'Alta', 'Crítica'];
 
 const REGION_OPTIONS = [
   'Europa',
-  'Ãfrica Norte',
-  'Ãfrica',
+  'África Norte',
+  'África',
   'Asia',
-  'AmÃ©rica',
+  'América',
   'Global',
-  'Sin regiÃ³n'
+  'Sin región'
 ];
 
 const STATUS_OPTIONS = ['active', 'watchlist', 'inactive'];
@@ -630,7 +630,7 @@ const suppliersPageCss = `
     }
   }
 
-  /* FINAL POLISH â€” Supplier Portfolio Overview */
+  /* FINAL POLISH — Supplier Portfolio Overview */
   .suppliers-grid-two {
     align-items: start !important;
   }
@@ -943,7 +943,7 @@ function getRegistrySignal({
       title: 'Supplier registry pending',
       posture: 'Build supplier base',
       description:
-        'Crea el primer proveedor para activar scoring de riesgo, resiliencia, evidencia y priorizaciÃ³n ejecutiva.'
+        'Crea el primer proveedor para activar scoring de riesgo, resiliencia, evidencia y priorización ejecutiva.'
     };
   }
 
@@ -961,7 +961,7 @@ function getRegistrySignal({
       title: 'High-risk suppliers detected',
       posture: 'Prioritize review',
       description:
-        'Hay proveedores de alto riesgo. Conviene activar revisiÃ³n, evidencias y seguimiento antes de considerar la base controlada.'
+        'Hay proveedores de alto riesgo. Conviene activar revisión, evidencias y seguimiento antes de considerar la base controlada.'
     };
   }
 
@@ -990,7 +990,7 @@ function getRegistrySignal({
     title: 'Supplier base needs attention',
     posture: 'Strengthen controls',
     description:
-      'La base existe, pero necesita mayor control documental, revisiÃ³n de criticidad y mejora de resiliencia.'
+      'La base existe, pero necesita mayor control documental, revisión de criticidad y mejora de resiliencia.'
   };
 }
 
@@ -1094,8 +1094,8 @@ function SupplierCard({
           <h3 className="suppliers-list-card-title">{supplier.name}</h3>
 
           <p className="muted suppliers-list-meta">
-            {supplier.country || 'Sin paÃ­s'} Â· {supplier.region || 'Sin regiÃ³n'} Â·{' '}
-            {supplier.tier || 'Tier N/A'} Â· {supplier.criticality || 'Media'}
+            {supplier.country || 'Sin país'} · {supplier.region || 'Sin región'} ·{' '}
+            {supplier.tier || 'Tier N/A'} · {supplier.criticality || 'Media'}
           </p>
         </div>
 
@@ -1279,7 +1279,7 @@ export function SuppliersPage() {
     const spendValue = parseSpend(newSupplier.spend);
 
     if (spendValue === null) {
-      pushToast('El spend anual debe ser un nÃºmero vÃ¡lido');
+      pushToast('El spend anual debe ser un número válido');
       return;
     }
 
@@ -1293,8 +1293,8 @@ export function SuppliersPage() {
         createSupplier({
           ...newSupplier,
           name: supplierName,
-          country: normalizeText(newSupplier.country) || 'Sin paÃ­s',
-          region: newSupplier.region || 'Sin regiÃ³n',
+          country: normalizeText(newSupplier.country) || 'Sin país',
+          region: newSupplier.region || 'Sin región',
           tier: newSupplier.tier || 'Tier 1',
           sector: normalizeText(newSupplier.sector) || 'General',
           criticality: newSupplier.criticality || 'Media',
@@ -1417,8 +1417,8 @@ export function SuppliersPage() {
                 <Badge>Compliance & Risk</Badge>
                 <Badge>Global Third-Party Registry</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                {canCreateSupplier ? <Badge>CreaciÃ³n permitida</Badge> : null}
-                {canDeleteSupplier ? <Badge>EliminaciÃ³n permitida</Badge> : null}
+                {canCreateSupplier ? <Badge>Creación permitida</Badge> : null}
+                {canDeleteSupplier ? <Badge>Eliminación permitida</Badge> : null}
               </div>
 
               <h1 className="suppliers-title">
@@ -1427,7 +1427,7 @@ export function SuppliersPage() {
               </h1>
 
               <p className="suppliers-copy">
-                Registro centralizado de proveedores con segmentaciÃ³n, criticidad,
+                Registro centralizado de proveedores con segmentación, criticidad,
                 spend, scoring de riesgo, resiliencia operativa y continuidad
                 hacia alertas, evidencias y revisiones humanas.
               </p>
@@ -1488,7 +1488,7 @@ export function SuppliersPage() {
                   >
                     <div className="suppliers-score-core">
                       <strong className={registrySignal.score === null ? 'is-empty-score' : ''}>
-                        {registrySignal.score === null ? 'â€”' : registrySignal.score}
+                        {registrySignal.score === null ? '—' : registrySignal.score}
                       </strong>
                     </div>
                   </div>
@@ -1519,7 +1519,7 @@ export function SuppliersPage() {
               kicker="Create supplier"
               icon={Plus}
               title="Nuevo proveedor"
-              description="AÃ±ade un proveedor al registro para activar scoring, evidencias, alertas y revisiones."
+              description="Añade un proveedor al registro para activar scoring, evidencias, alertas y revisiones."
             />
 
             {canCreateSupplier ? (
@@ -1532,7 +1532,7 @@ export function SuppliersPage() {
 
                 <div className="grid-2">
                   <Input
-                    label="PaÃ­s"
+                    label="País"
                     value={newSupplier.country}
                     onChange={(e) =>
                       updateNewSupplierField('country', e.target.value)
@@ -1540,7 +1540,7 @@ export function SuppliersPage() {
                   />
 
                   <Select
-                    label="RegiÃ³n"
+                    label="Región"
                     value={newSupplier.region}
                     onChange={(e) =>
                       updateNewSupplierField('region', e.target.value)
@@ -1577,7 +1577,7 @@ export function SuppliersPage() {
                   />
 
                   <Input
-                    label="Spend anual (â‚¬)"
+                    label="Spend anual (€)"
                     inputMode="decimal"
                     value={newSupplier.spend}
                     onChange={(e) =>
@@ -1603,7 +1603,7 @@ export function SuppliersPage() {
             ) : (
               <div className="suppliers-empty-wrap">
                 <EmptyState
-                  title="Sin permisos de creaciÃ³n"
+                  title="Sin permisos de creación"
                   description="Tu rol actual solo permite consultar proveedores."
                 />
               </div>
@@ -1615,7 +1615,7 @@ export function SuppliersPage() {
               kicker="Portfolio overview"
               icon={Gauge}
               title="Portfolio Overview"
-              description="Lectura rÃ¡pida del riesgo agregado, resiliencia, proveedores crÃ­ticos y cobertura documental."
+              description="Lectura rápida del riesgo agregado, resiliencia, proveedores críticos y cobertura documental."
             />
 
             <div className="suppliers-grid suppliers-grid-kpis">
@@ -1637,7 +1637,7 @@ export function SuppliersPage() {
               <KpiCard
                 label="Alto riesgo"
                 value={highRiskSuppliers.length}
-                description="Proveedores que requieren revisiÃ³n"
+                description="Proveedores que requieren revisión"
                 icon={AlertTriangle}
                 tone={highRiskSuppliers.length > 0 ? 'text-danger' : ''}
               />
@@ -1651,8 +1651,8 @@ export function SuppliersPage() {
             </div>
 
             <p className="muted suppliers-muted-tight">
-              Esta vista permite controlar quÃ© proveedores requieren revisiÃ³n
-              prioritaria antes de pasar al mÃ³dulo de evidencias, alertas y
+              Esta vista permite controlar qué proveedores requieren revisión
+              prioritaria antes de pasar al módulo de evidencias, alertas y
               reportes.
             </p>
           </Card>
@@ -1680,7 +1680,7 @@ export function SuppliersPage() {
               <div className="suppliers-empty-wrap">
                 <EmptyState
                   title="No hay proveedores"
-                  description="Crea un proveedor o cambia el filtro de bÃºsqueda."
+                  description="Crea un proveedor o cambia el filtro de búsqueda."
                 />
               </div>
             ) : (
@@ -1717,7 +1717,7 @@ export function SuppliersPage() {
             <KpiCard
               label="Alertas"
               value={safeAlerts.length}
-              description="SeÃ±ales asociadas al portfolio"
+              description="Señales asociadas al portfolio"
               icon={AlertTriangle}
             />
 
