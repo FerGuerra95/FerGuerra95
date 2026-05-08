@@ -2,9 +2,17 @@ import { httpClient } from '../../../shared/services/httpClient.js';
 
 const CASES_KEY = 'ma_mvp_cases_v1';
 
-const ALLOW_LOCAL_FALLBACK =
-  import.meta.env.DEV ||
+const LOCAL_FALLBACK_REQUESTED =
   import.meta.env.VITE_ENABLE_MA_LOCAL_FALLBACK === 'true';
+
+if (import.meta.env.PROD && LOCAL_FALLBACK_REQUESTED) {
+  throw new Error(
+    'VITE_ENABLE_MA_LOCAL_FALLBACK cannot be enabled in production builds.'
+  );
+}
+
+const ALLOW_LOCAL_FALLBACK =
+  !import.meta.env.PROD && LOCAL_FALLBACK_REQUESTED;
 
 function safeReadLocal() {
   try {

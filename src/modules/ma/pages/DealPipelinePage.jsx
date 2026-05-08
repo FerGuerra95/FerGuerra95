@@ -11,6 +11,7 @@ import {
   Globe2,
   Layers3,
   LockKeyhole,
+  RefreshCw,
   Search,
   ShieldCheck,
   Sparkles,
@@ -25,8 +26,10 @@ import {
   useAuth
 } from '../../../app/providers/AuthProvider.jsx';
 import { useMAStore } from '../store/maStore.jsx';
+import { maDealsApi } from '../services/maDealsApi.js';
 import { useValuationEngine } from '../engine/useValuationEngine.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
+import { ENTERPRISE_MA_PIPELINE_DEALS } from '../../../shared/config/demoData.js';
 
 const PIPELINE_STAGES = [
   {
@@ -69,86 +72,7 @@ const PRIORITY_FILTERS = [
   { value: 'build', label: 'Build' }
 ];
 
-const DEMO_PIPELINE_DEALS = [
-  {
-    id: 'demo-iberia-industrial',
-    name: 'Iberia Industrial Services',
-    sector: 'Industrial Services',
-    market: 'Spain / Portugal',
-    stageId: 'screening',
-    equityValue: 18500000,
-    riskLabel: 'Moderate',
-    priority: 'Review',
-    priorityTone: 'review',
-    owner: 'Southern Europe Desk',
-    updatedLabel: 'Demo case'
-  },
-  {
-    id: 'demo-nordic-saas',
-    name: 'Nordic SaaS Platform',
-    sector: 'Software / SaaS',
-    market: 'Nordics',
-    stageId: 'nda',
-    equityValue: 42000000,
-    riskLabel: 'Controlled',
-    priority: 'High',
-    priorityTone: 'high',
-    owner: 'Technology M&A',
-    updatedLabel: 'Demo case'
-  },
-  {
-    id: 'demo-latam-logistics',
-    name: 'LATAM Logistics Group',
-    sector: 'Logistics',
-    market: 'LATAM',
-    stageId: 'due-diligence',
-    equityValue: 31500000,
-    riskLabel: 'Elevated',
-    priority: 'Watch',
-    priorityTone: 'watch',
-    owner: 'Cross-border Desk',
-    updatedLabel: 'Demo case'
-  },
-  {
-    id: 'demo-dach-manufacturing',
-    name: 'DACH Manufacturing Target',
-    sector: 'Advanced Manufacturing',
-    market: 'Germany / Austria / Switzerland',
-    stageId: 'ic-review',
-    equityValue: 76000000,
-    riskLabel: 'Moderate',
-    priority: 'High',
-    priorityTone: 'high',
-    owner: 'Industrial M&A',
-    updatedLabel: 'Demo case'
-  },
-  {
-    id: 'demo-uk-healthcare',
-    name: 'UK Healthcare Assets',
-    sector: 'Healthcare Services',
-    market: 'United Kingdom',
-    stageId: 'negotiation',
-    equityValue: 54000000,
-    riskLabel: 'Controlled',
-    priority: 'Review',
-    priorityTone: 'review',
-    owner: 'Healthcare Desk',
-    updatedLabel: 'Demo case'
-  },
-  {
-    id: 'demo-france-energy',
-    name: 'France Energy Services',
-    sector: 'Energy Services',
-    market: 'France / Benelux',
-    stageId: 'closing',
-    equityValue: 68000000,
-    riskLabel: 'Controlled',
-    priority: 'High',
-    priorityTone: 'high',
-    owner: 'Infrastructure Desk',
-    updatedLabel: 'Demo case'
-  }
-];
+const DEMO_PIPELINE_DEALS = ENTERPRISE_MA_PIPELINE_DEALS;
 const pipelineCss = `
   .ma-pipeline-page {
     width: min(1540px, 100%);
@@ -1029,6 +953,80 @@ const pipelineCss = `
     border-radius: 999px;
   }
 
+  .ma-pipeline-page :is(
+    .ma-pipeline-hero,
+    .ma-pipeline-summary-card,
+    .ma-pipeline-board-wrap,
+    .ma-pipeline-column,
+    .ma-deal-card,
+    .ma-pipeline-empty,
+    .ma-pipeline-panel,
+    .ma-pipeline-card,
+    .card,
+    .panel
+  ) {
+    background: rgba(15, 23, 42, 0.72) !important;
+    background-image: none !important;
+    border-color: rgba(148, 163, 184, 0.14) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .ma-pipeline-page :is(
+    .ma-pipeline-hero,
+    .ma-pipeline-summary-card,
+    .ma-pipeline-board-wrap,
+    .ma-pipeline-column,
+    .ma-deal-card,
+    .ma-pipeline-empty,
+    .ma-pipeline-panel,
+    .ma-pipeline-card
+  )::before,
+  .ma-pipeline-page :is(
+    .ma-pipeline-hero,
+    .ma-pipeline-summary-card,
+    .ma-pipeline-board-wrap,
+    .ma-pipeline-column,
+    .ma-deal-card,
+    .ma-pipeline-empty,
+    .ma-pipeline-panel,
+    .ma-pipeline-card
+  )::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .ma-pipeline-page :is(
+    .ma-pipeline-hero-inner,
+    .ma-pipeline-summary-grid,
+    .ma-pipeline-board,
+    .ma-pipeline-card-list,
+    .ma-deal-meta,
+    .ma-deal-footer,
+    .ma-pipeline-controls
+  ) {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  .ma-pipeline-page :is(
+    .ma-pipeline-title,
+    .ma-pipeline-signal-title,
+    .ma-pipeline-summary-card strong,
+    .ma-pipeline-board-header h2,
+    .ma-deal-card h3,
+    .ma-deal-meta-row strong,
+    .ma-pipeline-kicker,
+    .kpi-label
+  ) {
+    letter-spacing: 0 !important;
+    text-shadow: none !important;
+  }
+
   @media (max-width: 1400px) {
     .ma-pipeline-board {
       grid-template-columns: repeat(6, 260px);
@@ -1077,10 +1075,15 @@ export function DealPipelinePage() {
 
   const canEditCases = can(PERMISSIONS.UPDATE_MA_CASE);
   const canExportReports = can(PERMISSIONS.CREATE_MA_REPORT);
+  const canCreateDeal = can(PERMISSIONS.CREATE_MA_DEAL);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [stageFilter, setStageFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
+  const [backendDeals, setBackendDeals] = useState([]);
+  const [isBackendLoading, setIsBackendLoading] = useState(true);
+  const [isSyncingPipeline, setIsSyncingPipeline] = useState(false);
+  const [pipelineError, setPipelineError] = useState('');
 
   const derived = useValuationEngine({
     financials,
@@ -1090,15 +1093,34 @@ export function DealPipelinePage() {
   const reportCurrency = settings?.reportCurrency || financials?.currency || 'EUR';
   const safeSavedCases = Array.isArray(savedCases) ? savedCases : [];
 
+  async function loadBackendDeals() {
+    setIsBackendLoading(true);
+    setPipelineError('');
+
+    try {
+      setBackendDeals(await maDealsApi.list());
+    } catch (error) {
+      setPipelineError(error.message || 'No se pudo cargar el pipeline backend.');
+      setBackendDeals([]);
+    } finally {
+      setIsBackendLoading(false);
+    }
+  }
+
+  React.useEffect(() => {
+    loadBackendDeals();
+  }, []);
+
   const pipelineDeals = useMemo(
     () =>
       buildPipelineDeals({
         financials,
         derived,
         savedCases: safeSavedCases,
+        backendDeals,
         currency: reportCurrency
       }),
-    [financials, derived, safeSavedCases, reportCurrency]
+    [financials, derived, safeSavedCases, backendDeals, reportCurrency]
   );
 
   const filteredDeals = useMemo(
@@ -1115,6 +1137,32 @@ export function DealPipelinePage() {
   const pipelineSummary = getPipelineSummary(filteredDeals, reportCurrency);
   const totalSummary = getPipelineSummary(pipelineDeals, reportCurrency);
 
+  async function handleSyncPipeline() {
+    if (!canCreateDeal || isSyncingPipeline) return;
+
+    setIsSyncingPipeline(true);
+    setPipelineError('');
+
+    try {
+      const existingNames = new Set(
+        backendDeals.map((deal) => String(deal.name || '').toLowerCase())
+      );
+      const candidates = pipelineDeals
+        .filter((deal) => !existingNames.has(String(deal.name || '').toLowerCase()))
+        .slice(0, 6);
+
+      for (const deal of candidates) {
+        await maDealsApi.create(toBackendDealPayload(deal));
+      }
+
+      await loadBackendDeals();
+    } catch (error) {
+      setPipelineError(error.message || 'No se pudo sincronizar el pipeline.');
+    } finally {
+      setIsSyncingPipeline(false);
+    }
+  }
+
   return (
     <div className="page">
       <style>{pipelineCss}</style>
@@ -1129,6 +1177,7 @@ export function DealPipelinePage() {
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
                 {canEditCases ? <Badge>Edición permitida</Badge> : null}
                 {canExportReports ? <Badge>Reporting permitido</Badge> : null}
+                {backendDeals.length > 0 ? <Badge>Backend pipeline</Badge> : null}
               </div>
 
               <h1 className="ma-pipeline-title">
@@ -1139,8 +1188,9 @@ export function DealPipelinePage() {
               <p className="ma-pipeline-copy">
                 Vista enterprise para seguir operaciones por fase, prioridad,
                 valor potencial, riesgo, responsable y siguiente paso. Esta
-                primera versión reutiliza el caso activo y los deals guardados
-                sin romper multi-tenancy ni forzar backend adicional.
+                versión SaaS usa entidad backend `ma_deals`, audit trail,
+                permisos por rol y fallback visual desde casos guardados si el
+                pipeline real aun no tiene operaciones.
               </p>
 
               <div className="ma-pipeline-actions">
@@ -1157,6 +1207,16 @@ export function DealPipelinePage() {
                     Abrir Deal Repository
                   </Button>
                 </Link>
+
+                <Button
+                  variant="secondary"
+                  disabled={!canCreateDeal}
+                  loading={isSyncingPipeline}
+                  onClick={handleSyncPipeline}
+                >
+                  <RefreshCw size={16} />
+                  Sincronizar pipeline
+                </Button>
 
                 <Link to="/ma/cim">
                   <Button variant="secondary">
@@ -1179,9 +1239,24 @@ export function DealPipelinePage() {
 
                 <CommandItem
                   label="Data posture"
-                  value="Organization-scoped"
+                  value={
+                    backendDeals.length > 0
+                      ? 'ma_deals backend'
+                      : isBackendLoading
+                        ? 'Loading backend'
+                        : 'Generated fallback'
+                  }
                 />
               </div>
+
+              {pipelineError ? (
+                <div className="ma-pipeline-empty" style={{ marginTop: 18 }}>
+                  <div>
+                    <strong>Pipeline backend notice</strong>
+                    <p>{pipelineError}</p>
+                  </div>
+                </div>
+              ) : null}
             </div>
 
             <aside className="ma-pipeline-signal-card">
@@ -1303,10 +1378,9 @@ export function DealPipelinePage() {
               <h2>Pipeline por fases</h2>
 
               <p className="muted">
-                Board ejecutivo de operaciones. En MVP, las tarjetas se generan
-                desde el caso activo y los snapshots guardados. En fase backend
-                enterprise, cada tarjeta evolucionará a entidad propia con owner,
-                permisos, audit trail, data room e IC memo.
+                Board ejecutivo de operaciones sobre entidad `ma_deals`.
+                Cada tarjeta puede evolucionar con owner, permisos, audit
+                trail, data room e IC memo.
               </p>
             </div>
 
@@ -1511,12 +1585,21 @@ function filterPipelineDeals({
   });
 }
 
-function buildPipelineDeals({ financials, derived, savedCases, currency }) {
-  const deals = DEMO_PIPELINE_DEALS.map((demoDeal) => ({
-    ...demoDeal,
-    equityLabel: formatCurrency(demoDeal.equityValue, currency),
-    href: `/ma/deal/${demoDeal.id}`
-  }));
+function buildPipelineDeals({
+  financials,
+  derived,
+  savedCases,
+  backendDeals,
+  currency
+}) {
+  const serverDeals = normalizeBackendDeals(backendDeals, currency);
+  const deals = serverDeals.length > 0
+    ? [...serverDeals]
+    : DEMO_PIPELINE_DEALS.map((demoDeal) => ({
+        ...demoDeal,
+        equityLabel: formatCurrency(demoDeal.equityValue, currency),
+        href: `/ma/deal/${demoDeal.id}`
+      }));
 
   if (hasSufficientDealData(financials, derived)) {
     const activeScore = getSafeQualityScore(derived?.qualityScore);
@@ -1584,6 +1667,10 @@ function buildPipelineDeals({ financials, derived, savedCases, currency }) {
       href: `/ma/deal/${dealId}`
     });
   });
+  if (serverDeals.length > 0) {
+    return deals;
+  }
+
   DEMO_PIPELINE_DEALS.forEach((demoDeal) => {
     const alreadyExists = deals.some(
       (deal) => deal.id === demoDeal.id || deal.name === demoDeal.name
@@ -1599,6 +1686,98 @@ function buildPipelineDeals({ financials, derived, savedCases, currency }) {
   });
 
   return deals;
+}
+
+function normalizeBackendDeals(backendDeals = [], currency = 'EUR') {
+  if (!Array.isArray(backendDeals)) return [];
+
+  return backendDeals.filter(Boolean).map((deal) => {
+    const equityValue = Number(deal.equityValue);
+    const priorityTone = normalizePriorityTone(deal.priority);
+
+    return {
+      id: deal.id,
+      name: deal.name || 'M&A Deal',
+      sector: deal.sector || deal.payload?.sector || 'Enterprise deal',
+      market: deal.market || deal.payload?.market || 'Private pipeline',
+      stageId: deal.stage || 'screening',
+      equityValue: Number.isFinite(equityValue) ? equityValue : 0,
+      equityLabel: Number.isFinite(equityValue)
+        ? formatCurrency(equityValue, currency)
+        : 'N/A',
+      riskLabel: normalizeRiskLabel(deal.riskLevel),
+      priority: getPriorityLabelFromTone(priorityTone),
+      priorityTone,
+      owner: deal.ownerName || 'Deal owner',
+      updatedLabel: formatShortDate(deal.updatedAt || deal.createdAt),
+      href: `/ma/deal/${deal.caseId || deal.id}`
+    };
+  });
+}
+
+function toBackendDealPayload(deal) {
+  return {
+    name: deal.name,
+    stage: deal.stageId,
+    ownerName: deal.owner,
+    priority: deal.priorityTone,
+    riskLevel: normalizeRiskValue(deal.riskLabel),
+    status: 'active',
+    nextStep: 'Review next action before IC memo',
+    icMemoStatus: deal.stageId === 'ic-review' ? 'draft' : 'not_started',
+    sector: deal.sector,
+    market: deal.market,
+    equityValue: deal.equityValue || 0,
+    payload: {
+      source: 'pipeline_sync',
+      originalId: deal.id,
+      equityValue: deal.equityValue || 0,
+      sector: deal.sector,
+      market: deal.market
+    }
+  };
+}
+
+function normalizePriorityTone(value) {
+  const normalized = String(value || '').toLowerCase();
+
+  if (['high', 'review', 'watch', 'build'].includes(normalized)) return normalized;
+  if (normalized === 'low') return 'watch';
+
+  return 'review';
+}
+
+function getPriorityLabelFromTone(value) {
+  const tone = normalizePriorityTone(value);
+
+  if (tone === 'high') return 'High';
+  if (tone === 'watch') return 'Watch';
+  if (tone === 'build') return 'Build';
+
+  return 'Review';
+}
+
+function normalizeRiskValue(value) {
+  const normalized = String(value || '').toLowerCase();
+
+  if (normalized.includes('control')) return 'controlled';
+  if (normalized.includes('elev')) return 'elevated';
+  if (normalized.includes('mod')) return 'moderate';
+  if (['low', 'medium', 'high'].includes(normalized)) return normalized;
+
+  return 'medium';
+}
+
+function normalizeRiskLabel(value) {
+  const normalized = normalizeRiskValue(value);
+
+  if (normalized === 'controlled') return 'Controlled';
+  if (normalized === 'elevated') return 'Elevated';
+  if (normalized === 'moderate') return 'Moderate';
+  if (normalized === 'high') return 'High';
+  if (normalized === 'low') return 'Low';
+
+  return 'Medium';
 }
 
 function getPipelineSummary(deals, currency) {

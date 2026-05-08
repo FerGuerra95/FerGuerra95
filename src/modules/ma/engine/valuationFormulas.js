@@ -35,25 +35,32 @@ export const DEFAULT_FINANCIALS = {
   foundersEquity: '70',
   taxRate: '21',
   transactionFees: '3',
-  leverageRatio: '3'
+  leverageRatio: '3',
+  wacc: '11',
+  terminalGrowth: '2',
+  projectionYears: '5',
+  depreciationAmortization: '45000',
+  capex: '65000',
+  changeInWorkingCapital: '15000'
 };
 
 export const DEFAULT_SETTINGS = {
   reportCurrency: 'EUR',
   riskMode: 'balanced',
-  showAdvancedNotes: true
+  showAdvancedNotes: true,
+  evidenceDocuments: []
 };
 
 export const ANALYSIS_STEPS = [
-  { label: 'Ingestando métricas financieras y normalizando...', progress: 16 },
+  { label: 'Ingestando metricas financieras y normalizando...', progress: 16 },
   { label: 'Ajustando Deuda Neta y Working Capital...', progress: 34 },
   { label: 'Auditando riesgo operativo y resiliencia...', progress: 52 },
   { label: 'Proyectando Cap Table y Waterfall...', progress: 74 },
   { label: 'Construyendo salida ejecutiva del deal...', progress: 89 },
-  { label: 'Análisis completado', progress: 100 }
+  { label: 'Analisis completado', progress: 100 }
 ];
 
-export function parseFinancialInputs(financials) {
+export function parseFinancialInputs(financials = {}) {
   return {
     reportedEbitda: parseNumber(financials.reportedEbitda),
     addBacks: parseNumber(financials.addBacks),
@@ -72,7 +79,31 @@ export function parseFinancialInputs(financials) {
     foundersEquity: clamp(parseNumber(financials.foundersEquity), 0, 100),
     taxRate: clamp(parseNumber(financials.taxRate), 0, 100),
     transactionFees: clamp(parseNumber(financials.transactionFees), 0, 100),
-    leverageRatioSetting: Math.max(0, parseNumber(financials.leverageRatio))
+    leverageRatioSetting: Math.max(0, parseNumber(financials.leverageRatio)),
+    wacc: clamp(parseNumber(financials.wacc ?? DEFAULT_FINANCIALS.wacc), 0, 100),
+    terminalGrowth: clamp(
+      parseNumber(financials.terminalGrowth ?? DEFAULT_FINANCIALS.terminalGrowth),
+      -10,
+      20
+    ),
+    projectionYears: clamp(
+      Math.round(
+        parseNumber(financials.projectionYears ?? DEFAULT_FINANCIALS.projectionYears)
+      ),
+      1,
+      10
+    ),
+    depreciationAmortization: Math.max(
+      0,
+      parseNumber(
+        financials.depreciationAmortization ??
+          DEFAULT_FINANCIALS.depreciationAmortization
+      )
+    ),
+    capex: Math.max(0, parseNumber(financials.capex ?? DEFAULT_FINANCIALS.capex)),
+    changeInWorkingCapital: parseNumber(
+      financials.changeInWorkingCapital ?? DEFAULT_FINANCIALS.changeInWorkingCapital
+    )
   };
 }
 
@@ -83,4 +114,69 @@ export function calculateCoreMetrics(inputs) {
   const leverageRatio = normalizedEbitda > 0 ? netDebt / normalizedEbitda : 0;
 
   return { normalizedEbitda, netDebt, wcAdjustment, leverageRatio };
+}
+
+export function calculateDcfEnterpriseValue({
+  normalizedEbitda = 0,
+  growthPct = 0,
+  taxRatePct = 0,
+  waccPct = 0,
+  terminalGrowthPct = 0,
+  projectionYears = 5,
+  depreciationAmortization = 0,
+  capex = 0,
+  changeInWorkingCapital = 0
+} = {}) {
+  const years = clamp(Math.round(Number(projectionYears) || 5), 1, 10);
+  const wacc = Number(waccPct) / 100;
+  const terminalGrowth = Number(terminalGrowthPct) / 100;
+  const growth = Number(growthPct) / 100;
+  const taxRate = clamp(Number(taxRatePct) || 0, 0, 100) / 100;
+
+  if (!Number.isFinite(wacc) || wacc <= terminalGrowth || wacc <= 0) {
+    return {
+      enterpriseValue: null,
+      annualCashFlows: [],
+      terminalValue: null,
+      terminalPresentValue: null,
+      warnings: ['DCF requires WACC above terminal growth.']
+    };
+  }
+
+  const annualCashFlows = Array.from({ length: years }, (_item, index) => {
+    const year = index + 1;
+    const ebitda = Number(normalizedEbitda) * (1 + growth) ** year;
+    const ebit = ebitda - Number(depreciationAmortization || 0);
+    const taxAdjustedEbit = ebit * (1 - taxRate);
+    const freeCashFlow =
+      taxAdjustedEbit +
+      Number(depreciationAmortization || 0) -
+      Number(capex || 0) -
+      Number(changeInWorkingCapital || 0);
+    const discountFactor = (1 + wacc) ** year;
+
+    return {
+      year,
+      ebitda,
+      freeCashFlow,
+      presentValue: freeCashFlow / discountFactor
+    };
+  });
+
+  const finalCashFlow =
+    annualCashFlows[annualCashFlows.length - 1]?.freeCashFlow || 0;
+  const terminalValue =
+    (finalCashFlow * (1 + terminalGrowth)) / (wacc - terminalGrowth);
+  const terminalPresentValue = terminalValue / (1 + wacc) ** years;
+  const enterpriseValue =
+    annualCashFlows.reduce((total, row) => total + row.presentValue, 0) +
+    terminalPresentValue;
+
+  return {
+    enterpriseValue,
+    annualCashFlows,
+    terminalValue,
+    terminalPresentValue,
+    warnings: []
+  };
 }

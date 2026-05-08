@@ -296,6 +296,45 @@ const comparablesGridCss = `
       text-align: left;
     }
   }
+
+  .ma-comparables-header,
+  .ma-comparable-card,
+  .ma-comparables-empty {
+    background: rgba(15, 23, 42, 0.72) !important;
+    background-image: none !important;
+    border-color: rgba(148, 163, 184, 0.14) !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .ma-comparables-header::before,
+  .ma-comparable-card::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  .ma-comparables-header-inner,
+  .ma-comparables-grid,
+  .ma-comparable-inner,
+  .ma-comparable-top,
+  .ma-comparable-title-wrap,
+  .ma-comparable-footer,
+  .ma-comparable-multiple-row,
+  .ma-comparable-chip {
+    background: transparent !important;
+    background-image: none !important;
+    border-color: rgba(148, 163, 184, 0.10) !important;
+    box-shadow: none !important;
+  }
+
+  .ma-comparables-header h2,
+  .ma-comparable-name,
+  .ma-comparable-multiple,
+  .ma-comparables-kicker,
+  .ma-comparable-multiple-label {
+    letter-spacing: 0 !important;
+    text-shadow: none !important;
+  }
 `;
 
 function getSafeComparables(comparables) {
@@ -351,8 +390,8 @@ export function ComparablesGrid({ comparables }) {
           <h3>Sin comparables disponibles</h3>
 
           <p className="muted">
-            Completa la valoración y selecciona un sector para generar una
-            lectura comparativa de múltiplos.
+            Selecciona sector y actualiza valoración para activar la lectura
+            comparativa de múltiplos.
           </p>
         </div>
       ) : (

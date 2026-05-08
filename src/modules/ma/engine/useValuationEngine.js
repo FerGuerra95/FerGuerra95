@@ -4,7 +4,8 @@ import {
   SECTOR_DATA,
   DEFAULT_SECTOR,
   parseFinancialInputs,
-  calculateCoreMetrics
+  calculateCoreMetrics,
+  calculateDcfEnterpriseValue
 } from './valuationFormulas.js';
 import {
   getRiskModeMultiplier,
@@ -16,6 +17,8 @@ import {
   buildBuyerMatches,
   buildNarrative
 } from './reportBuilder.js';
+import { buildDecisionSourcePack } from './sourceEvidence.js';
+import { applyComplianceValuationImpact } from './complianceValuationBridge.js';
 import { clamp } from '../../../shared/utils/validators.js';
 
 export function useValuationEngine({ financials, settings }) {
@@ -35,11 +38,16 @@ export function useValuationEngine({ financials, settings }) {
 
     const riskModeMultiplier = getRiskModeMultiplier(riskMode);
 
-    const adjustedMultiple = clamp(
+    const preComplianceMultiple = clamp(
       sectorMeta.mult * riskModeMultiplier * (0.72 + qualityScore / 100),
       1.6,
       12
     );
+    const complianceValuation = applyComplianceValuationImpact(
+      preComplianceMultiple,
+      settings?.complianceRiskImpact
+    );
+    const adjustedMultiple = complianceValuation.adjustedMultiple;
 
     const evLow =
       core.normalizedEbitda * clamp(adjustedMultiple - 0.5, 1.4, 11);
@@ -54,6 +62,21 @@ export function useValuationEngine({ financials, settings }) {
     const totalSynergyValue = inputs.synergiesCost * 4.5 + inputs.synergiesRev * 3;
     const maxDebtCapacity = core.normalizedEbitda * inputs.leverageRatioSetting;
     const lboEquityReq = evBase - maxDebtCapacity;
+    const dcf = calculateDcfEnterpriseValue({
+      normalizedEbitda: core.normalizedEbitda,
+      growthPct: inputs.growth,
+      taxRatePct: inputs.taxRate,
+      waccPct: inputs.wacc,
+      terminalGrowthPct: inputs.terminalGrowth,
+      projectionYears: inputs.projectionYears,
+      depreciationAmortization: inputs.depreciationAmortization,
+      capex: inputs.capex,
+      changeInWorkingCapital: inputs.changeInWorkingCapital
+    });
+    const dcfEnterpriseValue = dcf.enterpriseValue;
+    const blendedEnterpriseValue = Number.isFinite(Number(dcfEnterpriseValue))
+      ? evBase * 0.65 + Number(dcfEnterpriseValue) * 0.35
+      : evBase;
 
     const feesVal = equityBase * (inputs.transactionFees / 100);
     const taxableAmount = Math.max(0, equityBase - feesVal);
@@ -101,6 +124,8 @@ export function useValuationEngine({ financials, settings }) {
       inferences.push({
         type: 'Legal Risk',
         impact: 'High',
+        sourceId: 'ma.financials.regionHighRisk',
+        sourceLabel: 'High-risk supply chain exposure input',
         msg: `Riesgo CSDDD: ${inputs.regionHighRisk}% de la cadena en zona de conflicto. Auditoría física requerida.`
       });
     }
@@ -109,6 +134,8 @@ export function useValuationEngine({ financials, settings }) {
       inferences.push({
         type: 'Risk',
         impact: 'Medium',
+        sourceId: 'ma.financials.clientConcentration',
+        sourceLabel: 'Client concentration input',
         msg: `Concentración de ingresos (${inputs.clientConcentration}%). Reforzar earn-out o cláusulas protectoras.`
       });
     }
@@ -117,6 +144,8 @@ export function useValuationEngine({ financials, settings }) {
       inferences.push({
         type: 'Opportunity',
         impact: 'Low',
+        sourceId: 'ma.financials.growth',
+        sourceLabel: 'Reported YoY growth input',
         msg: `Crecimiento acelerado (${inputs.growth}% YoY). Prima razonable de mercado.`
       });
     }
@@ -139,7 +168,9 @@ export function useValuationEngine({ financials, settings }) {
       ...core,
       sectorMeta,
       qualityScore,
+      preComplianceMultiple,
       adjustedMultiple,
+      complianceRiskImpact: complianceValuation.complianceRiskImpact,
       evLow,
       evBase,
       evHigh,
@@ -149,6 +180,12 @@ export function useValuationEngine({ financials, settings }) {
       totalSynergyValue,
       maxDebtCapacity,
       lboEquityReq,
+      dcfEnterpriseValue,
+      dcfAnnualCashFlows: dcf.annualCashFlows,
+      dcfTerminalValue: dcf.terminalValue,
+      dcfTerminalPresentValue: dcf.terminalPresentValue,
+      dcfWarnings: dcf.warnings,
+      blendedEnterpriseValue,
       feesVal,
       taxesVal,
       netProceeds,
@@ -170,12 +207,25 @@ export function useValuationEngine({ financials, settings }) {
       derived
     });
 
+    const decisionSourcePack = buildDecisionSourcePack({
+      financials,
+      settings,
+      derived: {
+        ...derived,
+        ...narrative
+      }
+    });
+
     return {
       ...derived,
       ...narrative,
+      decisionSourcePack: decisionSourcePack.sources,
+      decisionSourceSummary: decisionSourcePack.summary,
       pretty: {
         equityBase: formatCurrency(equityBase, reportCurrency),
         evBase: formatCurrency(evBase, reportCurrency),
+        dcfEnterpriseValue: formatCurrency(dcfEnterpriseValue, reportCurrency),
+        blendedEnterpriseValue: formatCurrency(blendedEnterpriseValue, reportCurrency),
         netDebt: formatCurrency(core.netDebt, reportCurrency),
         netProceeds: formatCurrency(netProceeds, reportCurrency)
       }

@@ -24,105 +24,9 @@ import { Button } from '../../../shared/components/ui/Button.jsx';
 import { useMAStore } from '../store/maStore.jsx';
 import { useValuationEngine } from '../engine/useValuationEngine.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
+import { ENTERPRISE_MA_DEAL_DETAILS } from '../../../shared/config/demoData.js';
 
-const DEMO_DEAL_DETAILS = [
-  {
-    id: 'demo-iberia-industrial',
-    name: 'Iberia Industrial Services',
-    sourceLabel: 'Demo multinational',
-    sector: 'Industrial Services',
-    market: 'Spain / Portugal',
-    owner: 'Southern Europe Desk',
-    stageId: 'screening',
-    equityValue: 18500000,
-    enterpriseValue: 21200000,
-    ebitda: 3100000,
-    multiple: 6.8,
-    qualityScore: 58,
-    riskLabel: 'Moderate',
-    updatedLabel: 'Demo case'
-  },
-  {
-    id: 'demo-nordic-saas',
-    name: 'Nordic SaaS Platform',
-    sourceLabel: 'Demo multinational',
-    sector: 'Software / SaaS',
-    market: 'Nordics',
-    owner: 'Technology M&A',
-    stageId: 'nda',
-    equityValue: 42000000,
-    enterpriseValue: 45500000,
-    ebitda: 5200000,
-    multiple: 8.8,
-    qualityScore: 86,
-    riskLabel: 'Controlled',
-    updatedLabel: 'Demo case'
-  },
-  {
-    id: 'demo-latam-logistics',
-    name: 'LATAM Logistics Group',
-    sourceLabel: 'Demo multinational',
-    sector: 'Logistics',
-    market: 'LATAM',
-    owner: 'Cross-border Desk',
-    stageId: 'due-diligence',
-    equityValue: 31500000,
-    enterpriseValue: 36800000,
-    ebitda: 6100000,
-    multiple: 6.0,
-    qualityScore: 48,
-    riskLabel: 'Elevated',
-    updatedLabel: 'Demo case'
-  },
-  {
-    id: 'demo-dach-manufacturing',
-    name: 'DACH Manufacturing Target',
-    sourceLabel: 'Demo multinational',
-    sector: 'Advanced Manufacturing',
-    market: 'Germany / Austria / Switzerland',
-    owner: 'Industrial M&A',
-    stageId: 'ic-review',
-    equityValue: 76000000,
-    enterpriseValue: 84500000,
-    ebitda: 11800000,
-    multiple: 7.2,
-    qualityScore: 88,
-    riskLabel: 'Moderate',
-    updatedLabel: 'Demo case'
-  },
-  {
-    id: 'demo-uk-healthcare',
-    name: 'UK Healthcare Assets',
-    sourceLabel: 'Demo multinational',
-    sector: 'Healthcare Services',
-    market: 'United Kingdom',
-    owner: 'Healthcare Desk',
-    stageId: 'negotiation',
-    equityValue: 54000000,
-    enterpriseValue: 59700000,
-    ebitda: 7800000,
-    multiple: 7.7,
-    qualityScore: 72,
-    riskLabel: 'Controlled',
-    updatedLabel: 'Demo case'
-  },
-  {
-    id: 'demo-france-energy',
-    name: 'France Energy Services',
-    sourceLabel: 'Demo multinational',
-    sector: 'Energy Services',
-    market: 'France / Benelux',
-    owner: 'Infrastructure Desk',
-    stageId: 'closing',
-    equityValue: 68000000,
-    enterpriseValue: 74200000,
-    ebitda: 9200000,
-    multiple: 8.1,
-    qualityScore: 84,
-    riskLabel: 'Controlled',
-    updatedLabel: 'Demo case'
-  }
-];
+const DEMO_DEAL_DETAILS = ENTERPRISE_MA_DEAL_DETAILS;
 
 const dealDetailCss = `
   .ma-deal-detail-page {
@@ -595,7 +499,7 @@ export function DealDetailPage() {
             <h2>No se ha encontrado esta operacion</h2>
 
             <p className="muted">
-              El identificador no existe en los demos, en el caso activo ni en el repositorio.
+              El identificador no existe en casos de referencia, caso activo ni repositorio.
             </p>
 
             <div className="ma-deal-detail-actions" style={{ justifyContent: 'center' }}>
@@ -1141,7 +1045,7 @@ function buildDataRoomHtml(deal) {
             <div class="item-marker">B</div>
             <div>
               <h3>Enterprise extension</h3>
-              <p>Future version should include signed links, access expiry, revocation, document versioning and audit trail by organization.</p>
+              <p>Requiere enlaces firmados, expiración, revocación, versionado documental y audit trail por organización antes de circulación externa.</p>
             </div>
           </div>
         `
@@ -2435,7 +2339,7 @@ function buildDeal({
     timeline: [
       {
         title: 'Deal file generated',
-        description: 'Ficha ejecutiva creada desde caso activo, demo o snapshot guardado.'
+        description: 'Ficha ejecutiva creada desde caso activo, caso de referencia o snapshot guardado.'
       },
       {
         title: 'Valuation context attached',

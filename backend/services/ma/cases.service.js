@@ -74,20 +74,44 @@ function normalizeStatus(value) {
   return VALID_STATUSES.includes(status) ? status : 'draft';
 }
 
+function normalizeSourceIds(value) {
+  const sourceIds = Array.isArray(value) ? value : [];
+
+  return [...new Set(sourceIds.map(normalizeText).filter(Boolean))];
+}
+
+function normalizeEvidenceDocuments(documents = [], scope = {}) {
+  return Array.isArray(documents)
+    ? documents
+        .filter((item) => item && typeof item === 'object')
+        .map((item, index) => ({
+          ...item,
+          id: normalizeText(item.id || item.documentId) || `ma_doc_${Date.now()}_${index}`,
+          title:
+            normalizeText(item.title || item.documentTitle || item.name) ||
+            `Evidence document ${index + 1}`,
+          sourceType: normalizeText(item.sourceType || item.type) || 'document',
+          status: normalizeText(item.status) || 'linked',
+          version: normalizeText(item.version) || 'current',
+          sourceUrl: normalizeText(item.sourceUrl || item.url),
+          sourceIds: normalizeSourceIds([
+            item.sourceId,
+            ...(Array.isArray(item.sourceIds) ? item.sourceIds : []),
+            ...(Array.isArray(item.linkedSourceIds) ? item.linkedSourceIds : [])
+          ]),
+          organizationId: scope.organizationId || '',
+          userId: scope.userId || ''
+        }))
+        .filter((item) => item.sourceIds.length > 0)
+    : [];
+}
+
 function assertOrganizationScope(organizationId) {
   if (!organizationId) {
     throw createForbiddenError(
       'Scope de organización no definido. No se puede operar sin organizationId.'
     );
   }
-}
-
-function belongsToOrganization(item, organizationId) {
-  if (!item) return false;
-  if (!organizationId) return false;
-  if (!item.organizationId) return false;
-
-  return item.organizationId === organizationId;
 }
 
 function applyOwnership(payload = {}, scope = {}) {
@@ -126,11 +150,15 @@ function normalizeFinancials(financials = {}, caseName = '') {
   return next;
 }
 
-function normalizeSettings(settings = {}) {
+function normalizeSettings(settings = {}, scope = {}) {
   return {
     ...(settings || {}),
     reportCurrency: normalizeText(settings?.reportCurrency) || 'EUR',
-    scenarioMode: normalizeText(settings?.scenarioMode) || 'balanced'
+    scenarioMode: normalizeText(settings?.scenarioMode) || 'balanced',
+    evidenceDocuments: normalizeEvidenceDocuments(
+      settings?.evidenceDocuments,
+      scope
+    )
   };
 }
 
@@ -156,6 +184,7 @@ function getEbitdaValue(financials = {}) {
 
 function validateCasePayload(payload = {}, options = {}) {
   const isPatch = Boolean(options.isPatch);
+  const scope = options.scope || {};
   const next = {
     ...payload
   };
@@ -215,7 +244,7 @@ function validateCasePayload(payload = {}, options = {}) {
   }
 
   if (!isPatch || Object.prototype.hasOwnProperty.call(next, 'settings')) {
-    next.settings = normalizeSettings(next.settings || {});
+    next.settings = normalizeSettings(next.settings || {}, scope);
   }
 
   if (!isPatch || Object.prototype.hasOwnProperty.call(next, 'status')) {
@@ -244,10 +273,9 @@ async function assertNoDuplicateCaseName({
 
   if (!normalizedName) return;
 
-  const items = await casesStore.list();
+  const items = await casesStore.listByOrganization(organizationId);
 
   const duplicated = items.find((item) => {
-    if (!belongsToOrganization(item, organizationId)) return false;
     if (excludeId && item.id === excludeId) return false;
 
     return (
@@ -284,29 +312,24 @@ function normalizeSnapshot(snapshot = {}, scope = {}) {
 export const listMaCases = async (scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const items = await casesStore.list();
-
-  return items.filter((item) =>
-    belongsToOrganization(item, scope.organizationId)
-  );
+  return casesStore.listByOrganization(scope.organizationId);
 };
 
 export const getMaCaseById = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const item = await casesStore.getById(id);
-
-  if (!belongsToOrganization(item, scope.organizationId)) {
-    return null;
-  }
-
-  return item;
+  return casesStore.getByIdForOrganization(id, scope.organizationId);
 };
 
 export const createMaCase = async (payload = {}) => {
   assertOrganizationScope(payload.organizationId);
 
-  const normalizedPayload = validateCasePayload(payload);
+  const normalizedPayload = validateCasePayload(payload, {
+    scope: {
+      organizationId: payload.organizationId,
+      userId: payload.userId
+    }
+  });
 
   await assertNoDuplicateCaseName({
     name: normalizedPayload.name,
@@ -335,14 +358,19 @@ export const createMaCase = async (payload = {}) => {
 export const updateMaCase = async (id, patch = {}, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await casesStore.getById(id);
+  const existing = await casesStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
-    return null;
-  }
+  if (!existing) return null;
 
   const normalizedPatch = validateCasePayload(patch, {
-    isPatch: true
+    isPatch: true,
+    scope: {
+      organizationId: scope.organizationId,
+      userId: patch.userId || existing.userId
+    }
   });
 
   if (
@@ -367,15 +395,18 @@ export const updateMaCase = async (id, patch = {}, scope = {}) => {
     }
   );
 
-  return casesStore.update(id, safePatch);
+  return casesStore.updateForOrganization(id, safePatch, scope.organizationId);
 };
 
 export const deleteMaCase = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await casesStore.getById(id);
+  const existing = await casesStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
+  if (!existing) {
     return {
       deleted: false,
       id,
@@ -383,17 +414,18 @@ export const deleteMaCase = async (id, scope = {}) => {
     };
   }
 
-  return casesStore.remove(id);
+  return casesStore.removeForOrganization(id, scope.organizationId);
 };
 
 export async function addMaSnapshot(caseId, snapshot = {}, scope = {}) {
   assertOrganizationScope(scope.organizationId);
 
-  const item = await casesStore.getById(caseId);
+  const item = await casesStore.getByIdForOrganization(
+    caseId,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(item, scope.organizationId)) {
-    return null;
-  }
+  if (!item) return null;
 
   const currentTime = new Date().toISOString();
 
@@ -407,11 +439,15 @@ export async function addMaSnapshot(caseId, snapshot = {}, scope = {}) {
     ...(item.snapshots || [])
   ];
 
-  return casesStore.update(caseId, {
-    snapshots: nextSnapshots,
-    lastSnapshotAt: currentTime,
-    updatedAt: currentTime,
-    organizationId: scope.organizationId,
-    userId: item.userId || snapshot.userId || ''
-  });
+  return casesStore.updateForOrganization(
+    caseId,
+    {
+      snapshots: nextSnapshots,
+      lastSnapshotAt: currentTime,
+      updatedAt: currentTime,
+      organizationId: scope.organizationId,
+      userId: item.userId || snapshot.userId || ''
+    },
+    scope.organizationId
+  );
 }

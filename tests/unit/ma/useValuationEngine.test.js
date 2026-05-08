@@ -48,6 +48,21 @@ describe('useValuationEngine', () => {
     expect(result.current.buyerMatches.length).toBe(3);
   });
 
+  it('expone triangulacion DCF para control de comite', () => {
+    const { result } = renderHook(() =>
+      useValuationEngine({
+        financials: DEFAULT_FINANCIALS,
+        settings: DEFAULT_SETTINGS
+      })
+    );
+
+    expect(result.current.dcfEnterpriseValue).toBeGreaterThan(0);
+    expect(result.current.dcfAnnualCashFlows).toHaveLength(5);
+    expect(result.current.blendedEnterpriseValue).toBeGreaterThan(0);
+    expect(result.current.pretty.dcfEnterpriseValue).toContain('€');
+  });
+
+
   it('genera narrativa ejecutiva y tesis de inversión', () => {
     const { result } = renderHook(() =>
       useValuationEngine({
@@ -61,6 +76,36 @@ describe('useValuationEngine', () => {
 
     expect(Array.isArray(result.current.thesis)).toBe(true);
     expect(result.current.thesis.length).toBeGreaterThan(0);
+  });
+
+  it('vincula conclusiones M&A con documentos de evidencia cuando existen', () => {
+    const { result } = renderHook(() =>
+      useValuationEngine({
+        financials: DEFAULT_FINANCIALS,
+        settings: {
+          ...DEFAULT_SETTINGS,
+          evidenceDocuments: [
+            {
+              id: 'doc_management_accounts',
+              title: 'Management accounts',
+              status: 'verified',
+              sourceIds: ['ma.financials.normalizedEbitda']
+            }
+          ]
+        }
+      })
+    );
+
+    expect(Array.isArray(result.current.decisionSourcePack)).toBe(true);
+    expect(result.current.decisionSourceSummary.total).toBeGreaterThan(0);
+    expect(result.current.decisionSourceSummary.linked).toBeGreaterThan(0);
+
+    const ebitdaSource = result.current.decisionSourcePack.find(
+      (item) => item.sourceId === 'ma.financials.normalizedEbitda'
+    );
+
+    expect(ebitdaSource.documentCount).toBe(1);
+    expect(ebitdaSource.documents[0].title).toBe('Management accounts');
   });
 
   it('recalcula la valoración si cambia el EBITDA', () => {

@@ -3,6 +3,7 @@ import { Download, Printer, Share2 } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import formatMAReportData from '../utils/formatMAReportData.js';
 import buildMAReportHtml from '../utils/buildMAReportHtml.js';
+import { maReportsApi } from '../services/maReportsApi.js';
 
 const DEFAULT_BRAND_NAME = "CEO's OS";
 
@@ -255,7 +256,7 @@ export function MAReportExportButton({
       if (!printWindow) {
         notifyExport(
           onExportComplete,
-          'El navegador ha bloqueado la ventana de impresión. Permite ventanas emergentes para guardar el informe como PDF'
+          'El navegador ha bloqueado la ventana de impresion. Permite ventanas emergentes para guardar el informe como PDF'
         );
 
         return;
@@ -268,7 +269,7 @@ export function MAReportExportButton({
         } catch {
           notifyExport(
             onExportComplete,
-            'La vista imprimible se abrió, pero no se pudo lanzar la impresión automáticamente'
+            'La vista imprimible se abrio, pero no se pudo lanzar la impresion automaticamente'
           );
         }
       };
@@ -283,7 +284,7 @@ export function MAReportExportButton({
 
       notifyExport(
         onExportComplete,
-        'Vista imprimible abierta. Para conservar el diseño premium, activa "Gráficos de fondo" en la ventana de impresión'
+        'Vista imprimible abierta. Para conservar el diseno premium, activa "Graficos de fondo" en la ventana de impresion'
       );
     } catch (error) {
       notifyExport(
@@ -329,16 +330,23 @@ export function MAReportExportButton({
         return;
       }
 
+      const share = await maReportsApi.createSecureShareLink({
+        ...secureSharePayload,
+        expiresInHours: 72
+      });
+
       notifyExport(
         onExportComplete,
-        'Share secure link preparado para fase backend enterprise: requiere enlace firmado, expiración, permisos por organización, revocación y audit trail. No se ha generado un enlace falso desde frontend.'
+        share?.shareUrl
+          ? `Secure share link creado. Caduca el ${new Date(share.expiresAt).toLocaleDateString('es-ES')}`
+          : 'Secure share link creado con acceso autenticado'
       );
     } catch (error) {
       notifyExport(
         onExportComplete,
         error instanceof Error
-          ? `No se pudo preparar Share secure link: ${error.message}`
-          : 'No se pudo preparar Share secure link'
+          ? `No se pudo preparar el secure share link: ${error.message}`
+          : 'No se pudo preparar el secure share link'
       );
     } finally {
       setIsSharing(false);
@@ -366,11 +374,11 @@ export function MAReportExportButton({
         title={
           disabled
             ? 'Completa los inputs obligatorios antes de exportar'
-            : 'Descargar informe profesional en HTML'
+            : 'Descargar informe ejecutivo en HTML'
         }
       >
         <Download size={16} />
-        {isExporting ? 'Generando...' : 'Exportar report'}
+        {isExporting ? 'Generando...' : 'Exportar informe'}
       </Button>
 
       {showPrintButton ? (
@@ -382,7 +390,7 @@ export function MAReportExportButton({
           title={
             disabled
               ? 'Completa los inputs obligatorios antes de imprimir'
-              : 'Abrir vista imprimible para guardar como PDF'
+              : 'Abrir informe imprimible'
           }
         >
           <Printer size={16} />
@@ -399,16 +407,16 @@ export function MAReportExportButton({
           title={
             disabled
               ? 'Completa los inputs obligatorios antes de compartir'
-              : 'Preparar Share secure link para fase backend enterprise'
+              : 'Solicitar secure share link'
           }
         >
           <Share2 size={16} />
-          {isSharing ? 'Preparando...' : 'Share secure link'}
+          {isSharing ? 'Preparando...' : 'Secure share'}
         </Button>
       ) : null}
 
       <div className="ma-report-export-hint">
-        HTML, PDF imprimible y secure sharing preparado para backend enterprise.
+        Informe HTML, vista PDF y secure sharing autenticado.
       </div>
     </div>
   );
