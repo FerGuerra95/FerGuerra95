@@ -1,4 +1,5 @@
 import { execSql } from './sqliteStorage.js';
+import { runSchemaMigrations } from './migrationRunner.js';
 
 export function initializeDatabaseSchema() {
   execSql(`
@@ -27,6 +28,69 @@ export function initializeDatabaseSchema() {
 
     CREATE INDEX IF NOT EXISTS idx_users_organization_id
       ON users (organization_id);
+
+    CREATE TABLE IF NOT EXISTS auth_sessions (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      organization_id TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'active',
+      created_at TEXT NOT NULL,
+      expires_at TEXT NOT NULL,
+      revoked_at TEXT,
+      last_seen_at TEXT,
+      ip_hash TEXT,
+      user_agent_hash TEXT,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_auth_sessions_user_id
+      ON auth_sessions (user_id);
+
+    CREATE INDEX IF NOT EXISTS idx_auth_sessions_organization_id
+      ON auth_sessions (organization_id);
+
+    CREATE INDEX IF NOT EXISTS idx_auth_sessions_status
+      ON auth_sessions (status);
+
+    CREATE TABLE IF NOT EXISTS audit_logs (
+      id TEXT PRIMARY KEY,
+      organization_id TEXT NOT NULL,
+      user_id TEXT NOT NULL,
+      action TEXT NOT NULL,
+      entity_type TEXT NOT NULL,
+      entity_id TEXT NOT NULL DEFAULT '',
+      metadata_json TEXT NOT NULL DEFAULT '{}',
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_audit_logs_organization_id
+      ON audit_logs (organization_id);
+
+    CREATE INDEX IF NOT EXISTS idx_audit_logs_entity
+      ON audit_logs (organization_id, entity_type, entity_id);
+
+    CREATE INDEX IF NOT EXISTS idx_audit_logs_action
+      ON audit_logs (organization_id, action);
+
+    CREATE TABLE IF NOT EXISTS secure_share_links (
+      id TEXT PRIMARY KEY,
+      organization_id TEXT NOT NULL,
+      user_id TEXT NOT NULL,
+      report_id TEXT,
+      token_hash TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'active',
+      expires_at TEXT NOT NULL,
+      revoked_at TEXT,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_secure_share_links_organization_id
+      ON secure_share_links (organization_id);
+
+    CREATE INDEX IF NOT EXISTS idx_secure_share_links_report_id
+      ON secure_share_links (organization_id, report_id);
 
     CREATE TABLE IF NOT EXISTS compliance_suppliers (
       id TEXT PRIMARY KEY,
@@ -222,7 +286,8 @@ export function initializeDatabaseSchema() {
       status TEXT NOT NULL DEFAULT 'generated',
       payload_json TEXT NOT NULL DEFAULT '{}',
       created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL
+      updated_at TEXT NOT NULL,
+      FOREIGN KEY (case_id) REFERENCES ma_cases(id) ON DELETE SET NULL
     );
 
     CREATE INDEX IF NOT EXISTS idx_ma_reports_organization_id
@@ -245,6 +310,8 @@ export function initializeDatabaseSchema() {
     )
     ON CONFLICT(id) DO NOTHING;
   `);
+
+  runSchemaMigrations();
 }
 
 export default initializeDatabaseSchema;
