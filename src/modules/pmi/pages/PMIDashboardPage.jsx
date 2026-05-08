@@ -953,7 +953,7 @@ export function PMIDashboardPage() {
             </div>
 
             <div className="pmi-link-row">
-              <Link className="pmi-link" to="/overview">
+              <Link className="pmi-link" to="/dashboard">
                 Back to Executive Overview
                 <ArrowRight size={14} />
               </Link>
