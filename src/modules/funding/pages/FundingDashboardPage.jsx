@@ -1,4 +1,5 @@
-﻿import React from 'react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Activity,
   ArrowRight,
@@ -30,7 +31,9 @@ import { FundingHeroCard } from '../components/FundingHeroCard.jsx';
 import { UseOfFundsCard } from '../components/UseOfFundsCard.jsx';
 import { ReadinessChecklistCard } from '../components/ReadinessChecklistCard.jsx';
 import { fundingExportApi } from '../services/fundingExportApi.js';
+import { fundingEnterpriseApi } from '../services/fundingEnterpriseApi.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
+import { FundingExecutiveWidget } from '../components/FundingExecutiveWidget.jsx';
 import {
   DEMO_FUNDING_INPUTS,
   DEMO_FUNDING_SETTINGS
@@ -40,6 +43,13 @@ import {
   DEMO_BUTTON_LABELS,
   DEMO_RESET_LABELS
 } from '../../../shared/config/demoMode.js';
+import {
+  classifyRunwayStatus,
+  getDisplayText,
+  getOptimalFundingWindowLabel,
+  getRunwayStatusLabel,
+  toSafeNumber
+} from '../utils/fundingExecutiveMetrics.js';
 
 const EMPTY_FUNDING_INPUTS = {
   companyName: '',
@@ -888,7 +898,7 @@ function getFundingSignal({
       title: 'Funding case pending',
       posture: 'Build raise case',
       description:
-        'Completa capital objetivo, valoraciÃ³n, burn y readiness para construir una lectura ejecutiva de la ronda.'
+        'Completa capital objetivo, valoración, burn y readiness para construir una lectura ejecutiva de la ronda.'
     };
   }
 
@@ -904,7 +914,7 @@ function getFundingSignal({
       title: 'Investor-ready raise',
       posture: 'Prepare outreach',
       description:
-        'La ronda muestra una combinaciÃ³n sÃ³lida de readiness, runway y diluciÃ³n para preparar narrativa inversora.'
+        'La ronda muestra una combinación sólida de readiness, runway y dilución para preparar narrativa inversora.'
     };
   }
 
@@ -914,7 +924,7 @@ function getFundingSignal({
       title: 'Qualified funding case',
       posture: 'Refine memo',
       description:
-        'La ronda tiene base suficiente, aunque conviene reforzar data room, narrativa y sensibilidad de diluciÃ³n.'
+        'La ronda tiene base suficiente, aunque conviene reforzar data room, narrativa y sensibilidad de dilución.'
     };
   }
 
@@ -924,7 +934,7 @@ function getFundingSignal({
       title: 'Funding case in progress',
       posture: 'Improve readiness',
       description:
-        'El caso requiere mejorar preparaciÃ³n inversora, runway o estructura antes de salir al mercado.'
+        'El caso requiere mejorar preparación inversora, runway o estructura antes de salir al mercado.'
     };
   }
 
@@ -933,7 +943,7 @@ function getFundingSignal({
     title: 'Weak funding signal',
     posture: 'Rework case',
     description:
-      'La ronda necesita una revisiÃ³n de inputs, valoraciÃ³n, burn y readiness antes de presentarse a inversores.'
+      'La ronda necesita una revisión de inputs, valoración, burn y readiness antes de presentarse a inversores.'
   };
 }
 
@@ -1034,11 +1044,11 @@ function ThesisList({ items }) {
   if (items.length === 0) {
     return (
       <div className="funding-glass-block">
-        <strong>Sin tesis suficiente todavÃ­a</strong>
+        <strong>Sin tesis suficiente todavía</strong>
 
         <p className="muted funding-muted-tight" style={{ marginTop: 8 }}>
-          Completa los principales datos de financiaciÃ³n para generar una
-          narrativa mÃ¡s sÃ³lida para inversores.
+          Completa los principales datos de financiación para generar una
+          narrativa más sólida para inversores.
         </p>
       </div>
     );
@@ -1077,6 +1087,45 @@ function formatMonthsValue(value) {
   if (!Number.isFinite(parsed) || parsed <= 0) return 'N/A';
 
   return `${Math.round(parsed)} meses`;
+}
+
+function normalizeSummary(summary = {}) {
+  const latest = summary?.latestRound || {};
+  const projectedRunwayMonths =
+    toSafeNumber(summary.projectedRunwayMonths) ??
+    toSafeNumber(latest.projectedRunwayMonths);
+  const monthlyBurnRate =
+    toSafeNumber(summary.monthlyBurnRate) ?? toSafeNumber(latest.monthlyBurnRate);
+  const estimatedDilution =
+    toSafeNumber(summary.estimatedDilution) ??
+    toSafeNumber(latest.dilutionPercentage) ??
+    toSafeNumber(summary.averageDilution);
+  const totalAmountRaised =
+    toSafeNumber(summary.totalAmountRaised) ?? toSafeNumber(summary.totalRaised) ?? 0;
+
+  return {
+    totalAmountRaised,
+    latestRoundType: latest.roundType || summary.latestRoundType || '',
+    latestInvestorName: latest.investorName || summary.latestInvestorName || '',
+    latestClosingDate: latest.closingDate || summary.latestClosingDate || '',
+    latestPostMoneyValuation:
+      toSafeNumber(summary.latestPostMoneyValuation) ??
+      toSafeNumber(latest.valuationPostMoney),
+    estimatedDilution,
+    monthlyBurnRate,
+    projectedRunwayMonths,
+    fundingRiskStatus:
+      latest.riskStatus || summary.fundingRiskStatus || summary.riskStatus || 'normal',
+    complianceStatus: summary.complianceStatus || 'not_available',
+    suggestedPreMoneyValuation: toSafeNumber(summary.suggestedPreMoneyValuation),
+    suggestedValuationSource: summary.suggestedValuationSource || 'not_available',
+    optimalFundingWindowStatus: summary.optimalFundingWindowStatus || 'insufficient_data',
+    humanReviewRequired: Boolean(summary.humanReviewRequired),
+    executiveSignals: Array.isArray(summary.executiveSignals) ? summary.executiveSignals : [],
+    requiresExecutiveUpdate: Boolean(summary.requiresExecutiveUpdate),
+    capitalEfficiencyScore: toSafeNumber(summary.capitalEfficiencyScore),
+    roundsCount: toSafeNumber(summary.roundsCount) ?? 0
+  };
 }
 
 function getFundingDecisionMemo({ fundingSignal, readinessScore, runwayAfterRaise, impliedDilution }) {
@@ -1365,6 +1414,10 @@ export function FundingDashboardPage() {
   } = useFundingStore();
 
   const { pushToast } = useNotifications();
+  const [rounds, setRounds] = useState([]);
+  const [summary, setSummary] = useState(null);
+  const [isLoadingFundingData, setIsLoadingFundingData] = useState(true);
+  const [fundingDataError, setFundingDataError] = useState('');
 
   const derived = useFundingEngine({
     fundingInputs,
@@ -1372,7 +1425,7 @@ export function FundingDashboardPage() {
   });
 
   const reportCurrency = fundingSettings?.reportCurrency || 'EUR';
-  const companyName = fundingInputs?.companyName?.trim() || 'Sin compaÃ±Ã­a activa';
+  const companyName = fundingInputs?.companyName?.trim() || 'Sin compañía activa';
   const stage = fundingInputs?.stage || 'Seed';
   const scenarioMode = fundingSettings?.scenarioMode || 'balanced';
 
@@ -1403,6 +1456,12 @@ export function FundingDashboardPage() {
   });
 
   const scoreAngle = `${(fundingSignal.score ?? 0) * 3.6}deg`;
+  const normalizedSummary = normalizeSummary(summary || {});
+  const runwayStatus = getRunwayStatusLabel(normalizedSummary.projectedRunwayMonths);
+  const windowStatus = getOptimalFundingWindowLabel(
+    normalizedSummary.optimalFundingWindowStatus
+  );
+  const runwayRiskTone = classifyRunwayStatus(normalizedSummary.projectedRunwayMonths);
 
   const fundingMultinationalPack = buildMultinationalFundingPack({
     fundingInputs,
@@ -1420,6 +1479,44 @@ export function FundingDashboardPage() {
     readinessScore,
     fundingSignal
   });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadFundingData() {
+      setIsLoadingFundingData(true);
+      setFundingDataError('');
+
+      try {
+        const bridgeSnapshot = await fundingEnterpriseApi.getExecutiveBridgeSnapshot();
+        const summaryData = bridgeSnapshot?.summary ?? {};
+
+        if (!cancelled) {
+          setRounds(Array.isArray(bridgeSnapshot?.rounds) ? bridgeSnapshot.rounds : []);
+          setSummary(summaryData && typeof summaryData === 'object' ? summaryData : {});
+          if (bridgeSnapshot?.meta?.summaryFailed || bridgeSnapshot?.meta?.hubFailed) {
+            setFundingDataError('Funding bridge in degraded mode. Showing best available data.');
+          }
+        }
+      } catch {
+        if (!cancelled) {
+          setFundingDataError('Funding intelligence temporarily unavailable.');
+          setRounds([]);
+          setSummary({});
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoadingFundingData(false);
+        }
+      }
+    }
+
+    loadFundingData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function updateField(key, value) {
     setFundingInputs((prev) => ({
@@ -1470,7 +1567,7 @@ export function FundingDashboardPage() {
 
     pushToast(
       ok
-        ? 'Funding memo preparado para impresiÃ³n'
+        ? 'Funding memo preparado para impresión'
         : 'El navegador ha bloqueado la ventana emergente'
     );
   }
@@ -1504,9 +1601,13 @@ export function FundingDashboardPage() {
                 </h1>
 
                 <p className="funding-copy">
-                  Vista ejecutiva del proceso de financiaciÃ³n: capital objetivo,
-                  runway, diluciÃ³n estimada, uso de fondos, readiness inversor y
-                  memo exportable para preparar una ronda mÃ¡s defendible.
+                  Vista ejecutiva del proceso de financiación: capital objetivo,
+                  runway, dilución estimada, uso de fondos, readiness inversor y
+                  memo exportable para preparar una ronda más defendible.
+                </p>
+                <p className="muted" style={{ marginTop: 10 }}>
+                  Funding Intelligence is a decision-support layer. Financial, legal and investor
+                  actions require human review.
                 </p>
 
                 <div className="funding-actions">
@@ -1531,14 +1632,20 @@ export function FundingDashboardPage() {
                 </div>
 
                 <div className="funding-command-bar">
-                  <CommandItem label="Company" value={companyName} />
                   <CommandItem
-                    label="Target raise"
-                    value={formatCurrency(targetRaise, reportCurrency)}
+                    label="Latest round"
+                    value={normalizedSummary.latestRoundType || 'No funding rounds yet'}
                   />
                   <CommandItem
-                    label="Funding posture"
-                    value={fundingSignal.posture}
+                    label="Capital raised"
+                    value={formatCurrency(
+                      normalizedSummary.totalAmountRaised,
+                      reportCurrency
+                    )}
+                  />
+                  <CommandItem
+                    label="Funding window"
+                    value={windowStatus}
                   />
                 </div>
               </div>
@@ -1565,7 +1672,7 @@ export function FundingDashboardPage() {
                     >
                       <div className="funding-score-core">
                         <strong className={fundingSignal.score === null ? 'is-empty-score' : ''}>
-                          {fundingSignal.score === null ? 'â€”' : fundingSignal.score}
+                          {fundingSignal.score === null ? '—' : fundingSignal.score}
                         </strong>
                       </div>
                     </div>
@@ -1581,23 +1688,46 @@ export function FundingDashboardPage() {
 
                   <div className="funding-signal-table">
                     <SignalRow
-                      label="Runway post-raise"
-                      value={`${runwayAfterRaise} meses`}
+                      label="Runway"
+                      value={
+                        normalizedSummary.projectedRunwayMonths === null
+                          ? 'Insufficient data'
+                          : `${Math.round(normalizedSummary.projectedRunwayMonths)} meses`
+                      }
                     />
 
                     <SignalRow
-                      label="DiluciÃ³n estimada"
-                      value={`${impliedDilution}%`}
+                      label="Funding risk"
+                      value={normalizedSummary.fundingRiskStatus || 'Not available'}
+                    />
+                    <SignalRow
+                      label="Compliance status"
+                      value={getDisplayText(normalizedSummary.complianceStatus, 'Not available')}
                     />
 
                     <SignalRow
-                      label="Investor readiness"
-                      value={`${readinessScore}/100`}
+                      label="Latest investor"
+                      value={normalizedSummary.latestInvestorName || 'Pending data'}
                     />
 
                     <SignalRow
                       label="Post-money"
-                      value={formatCurrency(postMoneyValuation, reportCurrency)}
+                      value={
+                        normalizedSummary.latestPostMoneyValuation === null
+                          ? 'Pending data'
+                          : formatCurrency(
+                              normalizedSummary.latestPostMoneyValuation,
+                              reportCurrency
+                            )
+                      }
+                    />
+                    <SignalRow
+                      label="Executive sync"
+                      value={
+                        normalizedSummary.requiresExecutiveUpdate
+                          ? 'Requires update'
+                          : 'Synced'
+                      }
                     />
                   </div>
                 </div>
@@ -1605,45 +1735,124 @@ export function FundingDashboardPage() {
             </div>
           </section>
 
+          {normalizedSummary.executiveSignals.length > 0 ? (
+            <Card className="funding-panel">
+              <PanelHeader
+                kicker="Executive signals"
+                icon={ShieldCheck}
+                title="Bridge Signals"
+                description="Funding, Compliance and M&A inputs combined as defensive decision-support signals."
+              />
+              <div className="funding-mini-stack">
+                {normalizedSummary.executiveSignals.slice(0, 4).map((signal, index) => (
+                  <div className="funding-mini-card" key={`${signal}-${index}`}>
+                    <p className="muted funding-muted-tight">{signal}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          ) : null}
+
           <section className="funding-section">
             <SectionHeader
               kicker="Raise overview"
               icon={Activity}
               title="Funding metrics at a glance"
-              description="Una lectura rÃ¡pida de capital objetivo, runway, diluciÃ³n y readiness antes de preparar memo o conversaciÃ³n con inversores."
+              description="Una lectura rápida de capital objetivo, runway, dilución y readiness antes de preparar memo o conversación con inversores."
             />
 
             <div className="funding-grid funding-grid-kpis">
               <KpiCard
-                label="Capital objetivo"
-                value={formatCurrency(targetRaise, reportCurrency)}
-                description="Raise principal"
+                label="Capital raised"
+                value={formatCurrency(normalizedSummary.totalAmountRaised, reportCurrency)}
+                description="Funding rounds aggregate"
                 icon={Banknote}
               />
 
               <KpiCard
                 label="Runway post-raise"
-                value={`${runwayAfterRaise} meses`}
-                description="Caja actual + ronda"
+                value={
+                  normalizedSummary.projectedRunwayMonths === null
+                    ? 'Insufficient data'
+                    : `${Math.round(normalizedSummary.projectedRunwayMonths)} meses`
+                }
+                description="Estimated from latest summary"
                 icon={Gauge}
               />
 
               <KpiCard
-                label="DiluciÃ³n estimada"
-                value={`${impliedDilution}%`}
-                description="Sobre post-money"
+                label="Dilución estimada"
+                value={
+                  normalizedSummary.estimatedDilution === null
+                    ? 'Pending data'
+                    : `${Math.round(normalizedSummary.estimatedDilution)}%`
+                }
+                description="Latest / average dilution"
                 icon={PieChart}
-                tone={impliedDilution > 25 ? 'text-warning' : ''}
+                tone={
+                  normalizedSummary.estimatedDilution !== null &&
+                  normalizedSummary.estimatedDilution > 25
+                    ? 'text-warning'
+                    : ''
+                }
               />
 
               <KpiCard
                 label="Investor Readiness"
-                value={`${readinessScore}/100`}
-                description="PreparaciÃ³n comercial"
+                value={
+                  normalizedSummary.capitalEfficiencyScore === null
+                    ? 'Pending data'
+                    : `${Math.round(normalizedSummary.capitalEfficiencyScore)}/100`
+                }
+                description="Capital efficiency"
                 icon={Target}
-                tone="text-success"
+                tone={runwayRiskTone === 'critical' ? 'text-warning' : 'text-success'}
               />
             </div>
+          </section>
+
+          <section className="funding-section">
+            <SectionHeader
+              kicker="Funding rounds"
+              icon={BriefcaseBusiness}
+              title="Round history"
+              description="Round type, amount raised, valuation, dilution, investor and closing date from enterprise backend."
+            />
+            <Card className="funding-panel">
+              {isLoadingFundingData ? (
+                <p className="muted">Loading funding rounds...</p>
+              ) : fundingDataError ? (
+                <p className="muted">{fundingDataError}</p>
+              ) : rounds.length === 0 ? (
+                <p className="muted">
+                  No funding rounds registered yet. Add a round to activate Funding Intelligence.
+                </p>
+              ) : (
+                <div className="funding-mini-stack">
+                  {rounds.map((round) => (
+                    <div key={round.id} className="funding-mini-card">
+                      <strong>{round.roundType || 'Not available'}</strong>
+                      <p className="muted funding-muted-tight">
+                        Raised:{' '}
+                        {formatCurrency(toNumber(round.amountRaised), reportCurrency)} | Investor:{' '}
+                        {round.investorName || 'Pending data'} | Post-money:{' '}
+                        {round.valuationPostMoney
+                          ? formatCurrency(toNumber(round.valuationPostMoney), reportCurrency)
+                          : 'Pending data'}
+                      </p>
+                      <p className="muted funding-muted-tight" style={{ marginTop: 6 }}>
+                        Dilution:{' '}
+                        {round.dilutionPercentage === null || round.dilutionPercentage === undefined
+                          ? 'Pending data'
+                          : `${Math.round(toNumber(round.dilutionPercentage))}%`}{' '}
+                        | Closing date: {round.closingDate || 'Not available'} | Status:{' '}
+                        {round.status || 'Not available'}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </Card>
           </section>
 
           <section className="funding-multinational-grid">
@@ -1749,20 +1958,20 @@ export function FundingDashboardPage() {
               kicker="Operating logic"
               icon={Layers3}
               title="From inputs to investor-ready memo"
-              description="CEOâ€™s OS convierte los datos de financiaciÃ³n en una estructura clara: capital, runway, diluciÃ³n, uso de fondos y narrativa de inversiÃ³n."
+              description="CEO’s OS convierte los datos de financiación en una estructura clara: capital, runway, dilución, uso de fondos y narrativa de inversión."
             />
 
             <div className="funding-flow-grid">
               <FlowStep
                 number="01"
                 title="Define round"
-                text="Capital objetivo, valoraciÃ³n, burn, caja y escenario de ronda."
+                text="Capital objetivo, valoración, burn, caja y escenario de ronda."
               />
 
               <FlowStep
                 number="02"
                 title="Model runway"
-                text="CuÃ¡ntos meses compra la ronda y quÃ© margen operativo deja."
+                text="Cuántos meses compra la ronda y qué margen operativo deja."
               />
 
               <FlowStep
@@ -1784,7 +1993,16 @@ export function FundingDashboardPage() {
               kicker="Capital cockpit"
               icon={BarChart3}
               title="Funding economics and runway posture"
-              description="Resumen visual del caso de financiaciÃ³n y de sus principales seÃ±ales econÃ³micas."
+              description="Resumen visual del caso de financiación y de sus principales señales económicas."
+            />
+
+            <FundingExecutiveWidget
+              summary={{
+                ...normalizedSummary,
+                totalAmountRaised: normalizedSummary.totalAmountRaised
+              }}
+              currency={reportCurrency}
+              className="funding-panel"
             />
 
             <FundingHeroCard derived={derived} settings={fundingSettings} />
@@ -1796,7 +2014,7 @@ export function FundingDashboardPage() {
                 kicker="Use of funds"
                 icon={WalletCards}
                 title="Capital allocation"
-                description="DistribuciÃ³n del capital para explicar cÃ³mo la ronda se transforma en crecimiento operativo."
+                description="Distribución del capital para explicar cómo la ronda se transforma en crecimiento operativo."
               />
 
               <UseOfFundsCard
@@ -1829,7 +2047,7 @@ export function FundingDashboardPage() {
                 kicker="Funding memo"
                 icon={FileText}
                 title="Funding Memo"
-                description="Lectura preparada para convertir los datos de financiaciÃ³n en una narrativa clara de inversiÃ³n."
+                description="Lectura preparada para convertir los datos de financiación en una narrativa clara de inversión."
               />
 
               <div className="funding-mini-stack">
@@ -1846,7 +2064,7 @@ export function FundingDashboardPage() {
                   <strong>Use of funds</strong>
 
                   <p className="muted funding-muted-tight">
-                    DistribuciÃ³n del capital hacia crecimiento, equipo,
+                    Distribución del capital hacia crecimiento, equipo,
                     producto, ventas y reserva operativa.
                   </p>
                 </div>
@@ -1855,8 +2073,8 @@ export function FundingDashboardPage() {
                   <strong>Exportable memo</strong>
 
                   <p className="muted funding-muted-tight">
-                    El memo permite preparar una vista imprimible para revisiÃ³n
-                    interna o conversaciÃ³n con inversores.
+                    El memo permite preparar una vista imprimible para revisión
+                    interna o conversación con inversores.
                   </p>
                 </div>
               </div>
@@ -1867,7 +2085,7 @@ export function FundingDashboardPage() {
                 kicker="Investor readiness"
                 icon={ShieldCheck}
                 title="Investor Readiness"
-                description="Checklist de preparaciÃ³n para salir al mercado con data room, narrativa y seÃ±ales de tracciÃ³n."
+                description="Checklist de preparación para salir al mercado con data room, narrativa y señales de tracción."
               />
 
               <ReadinessChecklistCard
@@ -1880,7 +2098,7 @@ export function FundingDashboardPage() {
                 <p className="muted funding-muted-tight" style={{ marginTop: 8 }}>
                   {readinessScore >= 75
                     ? 'Preparar outreach, materiales y pipeline de inversores.'
-                    : 'Reforzar data room, tesis y seÃ±ales de tracciÃ³n antes de iniciar conversaciones.'}
+                    : 'Reforzar data room, tesis y señales de tracción antes de iniciar conversaciones.'}
                 </p>
               </div>
             </Card>

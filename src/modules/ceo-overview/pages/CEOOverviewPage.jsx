@@ -1,5 +1,5 @@
-﻿import React from 'react';
-import { Link } from 'react-router-dom';
+﻿import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Activity,
   AlertTriangle,
@@ -15,7 +15,8 @@ import {
   ShieldCheck,
   Sparkles,
   Target,
-  TrendingUp
+  TrendingUp,
+  Radar
 } from 'lucide-react';
 import { Card } from '../../../shared/components/ui/Card.jsx';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
@@ -25,6 +26,15 @@ import { useComplianceEngine } from '../../compliance/engine/useComplianceEngine
 import { useFundingStore } from '../../funding/store/fundingStore.jsx';
 import { useFundingEngine } from '../../funding/engine/useFundingEngine.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
+import { maCasesApi } from '../../ma/services/maCasesApi.js';
+import { complianceAuditApi } from '../../compliance/services/complianceAuditApi.js';
+import { fundingEnterpriseApi } from '../../funding/services/fundingEnterpriseApi.js';
+import { FundingExecutiveWidget } from '../../funding/components/FundingExecutiveWidget.jsx';
+import {
+  getDisplayText,
+  getOptimalFundingWindowLabel,
+  getRunwayStatusLabel
+} from '../../funding/utils/fundingExecutiveMetrics.js';
 
 const ceoOverviewCss = `
   .ceo-overview-page {
@@ -469,6 +479,131 @@ const ceoOverviewCss = `
     margin-bottom: 0;
   }
 
+  .ceo-command-item-hit {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
+    border-radius: 22px;
+  }
+
+  .ceo-deal-readiness-radar-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(290px, 0.82fr);
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  .ceo-deal-readiness-card {
+    border-radius: 28px;
+    padding: 24px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(15, 23, 42, 0.44);
+    display: grid;
+    gap: 14px;
+  }
+
+  .ceo-deal-score-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    align-items: stretch;
+    margin-top: 6px;
+  }
+
+  .ceo-deal-pill {
+    padding: 12px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .ceo-drag-bar-shell {
+    position: relative;
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.09);
+    margin-top: 10px;
+    overflow: hidden;
+  }
+
+  .ceo-drag-fill-valuation {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: 999px;
+    background: rgba(96,165,250,0.82);
+    min-width: 6px;
+    z-index: 1;
+    box-shadow: 0 6px 20px rgba(37,99,235,0.28);
+    transition: width 0.4s cubic-bezier(.4,.2,.2,1);
+  }
+
+  .ceo-drag-fill-drag {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 999px;
+    background: repeating-linear-gradient(-45deg, rgba(245,158,11,0.6), rgba(245,158,11,0.6) 4px, rgba(239,68,68,0.45) 4px, rgba(239,68,68,0.45) 8px);
+    min-width: 0;
+    opacity: 0.85;
+    z-index: 2;
+    transition: width 0.4s cubic-bezier(.4,.2,.2,1), opacity 0.25s ease;
+    pointer-events: none;
+    mix-blend-mode: lighten;
+  }
+
+  .ceo-radar-card-inner {
+    display: grid;
+    grid-template-rows: auto minmax(0, 220px);
+    gap: 10px;
+  }
+
+  .ceo-radar-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .ceo-radar-legend a {
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 14px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 750;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .ceo-radar-legend a:hover {
+    border-color: rgba(96,165,250,0.28);
+    background: rgba(37,99,235,0.12);
+  }
+
+  .ceo-radar-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+  }
+
+  @media (max-width: 1100px) {
+    .ceo-deal-readiness-radar-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ceo-deal-score-row {
+      grid-template-columns: 1fr;
+    }
+  }
 
   /* CEO OVERVIEW · PER-BRANCH GLASS COLOR SYSTEM */
   .ceo-branch-surface {
@@ -699,6 +834,108 @@ function clampScore(value) {
   return Math.max(0, Math.min(100, Math.round(value)));
 }
 
+/** Financial axis from synced M&A cases — uses persisted financial cues and compliance valuation drag. */
+function estimateMaFinancialRadar(cases = []) {
+  const list = Array.isArray(cases) ? cases.filter(Boolean) : [];
+
+  if (list.length === 0) return clampScore(58);
+
+  let total = 0;
+
+  list.forEach((caseItem) => {
+    let pts = 68;
+    const fin = caseItem?.financials || caseItem?.financialInputs || {};
+    const ebitLike =
+      Number(fin.normalizedEbitda ?? fin.ebitda ?? fin.ebitDa ?? fin.revenue) || 0;
+
+    if (ebitLike > 0) pts += 10;
+
+    const dirty =
+      Boolean(caseItem?.settings?.complianceRiskImpact?.valuationDirty) ||
+      caseItem?.settings?.valuationRecalculation?.status === 'dirty';
+
+    if (dirty) pts -= 15;
+
+    const legalTouch = Number(caseItem?.settings?.complianceRiskImpact?.legalRiskScore);
+
+    if (Number.isFinite(legalTouch) && legalTouch >= 55) pts -= 9;
+
+    total += clampScore(pts);
+  });
+
+  return clampScore(total / list.length);
+}
+
+function CorporateHealthRadarSVG({ axes }) {
+  const cx = 120;
+  const cy = 120;
+  const rMax = 88;
+  const count = axes.length || 5;
+  const tau = Math.PI * 2;
+
+  const points = axes.map((axis, index) => {
+    const angle = -Math.PI / 2 + (index / count) * tau;
+    const rr = Math.max(12, Math.min(100, Number(axis.value) || 0)) / 100;
+    const x = cx + rMax * rr * Math.cos(angle);
+    const y = cy + rMax * rr * Math.sin(angle);
+
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+
+  const baseRingPoints = axes.map((_axis, index) => {
+    const angle = -Math.PI / 2 + (index / count) * tau;
+    const x = cx + rMax * Math.cos(angle);
+    const y = cy + rMax * Math.sin(angle);
+
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+
+  return (
+    <svg width="100%" height="220" viewBox="0 0 240 240" aria-label="Radar corporativo ejecutivo CEO OS">
+      <defs>
+        <linearGradient id="radarExecutiveFill" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="rgba(37,99,235,0.55)" />
+          <stop offset="100%" stopColor="rgba(16,185,129,0.6)" />
+        </linearGradient>
+      </defs>
+
+      <polygon
+        points={baseRingPoints.join(' ')}
+        fill="rgba(148,163,184,0.08)"
+        stroke="rgba(148,163,184,0.22)"
+      />
+
+      <polygon
+        points={points.join(' ')}
+        fill="url(#radarExecutiveFill)"
+        stroke="rgba(226,232,240,0.55)"
+        strokeWidth="2.2"
+        strokeLinejoin="round"
+        fillOpacity={0.32}
+      />
+
+      {axes.map((axis, index) => {
+        const angle = -Math.PI / 2 + (index / count) * tau;
+        const lx = cx + (rMax + 18) * Math.cos(angle);
+        const ly = cy + (rMax + 18) * Math.sin(angle);
+
+        return (
+          <text
+            key={axis.key}
+            x={lx}
+            y={ly}
+            textAnchor="middle"
+            fill="rgba(226,232,240,0.78)"
+            fontSize="11"
+          >
+            {axis.label}
+          </text>
+        );
+      })}
+    </svg>
+  );
+}
+
 function getOpenAlertsCount(alerts = []) {
   return getSafeArray(alerts).filter((alert) => {
     const status = String(alert?.status || '').toLowerCase();
@@ -793,34 +1030,91 @@ function getComplianceOverview({ suppliers, alerts, evidenceItems, reviews }) {
   };
 }
 
-function getFundingOverview({ fundingInputs, fundingSettings }) {
+function getFundingOverviewWithSummary({
+  fundingInputs,
+  fundingSettings,
+  fundingDerived,
+  fundingSummary
+}) {
   const targetRaise = toNumber(fundingInputs?.targetRaise);
   const currentCash = toNumber(fundingInputs?.currentCash);
   const monthlyBurn = toNumber(fundingInputs?.monthlyBurn);
   const preMoney = toNumber(fundingInputs?.preMoneyValuation);
   const postMoney = preMoney + targetRaise;
-  const readiness = calculateFundingReadiness(fundingInputs);
-  const runway = monthlyBurn > 0 ? Math.round((currentCash + targetRaise) / monthlyBurn) : 0;
-  const dilution = postMoney > 0 ? Math.round((targetRaise / postMoney) * 100) : 0;
-  const currency = fundingSettings?.reportCurrency || 'EUR';
+  const readiness = clampScore(
+    fundingDerived?.readinessScore ?? calculateFundingReadiness(fundingInputs)
+  );
+  const latestRound = fundingSummary?.latestRound || {};
+  const summaryRunway = Number(fundingSummary?.projectedRunwayMonths);
+  const summaryRaised = Number(
+    fundingSummary?.totalAmountRaised ?? fundingSummary?.totalRaised
+  );
+  const summaryDilution = Number(
+    fundingSummary?.estimatedDilution ??
+      latestRound?.dilutionPercentage ??
+      fundingSummary?.averageDilution
+  );
 
-  const score = targetRaise > 0
+  const runway = Math.round(
+    Number.isFinite(summaryRunway)
+      ? summaryRunway
+      : toNumber(
+          fundingDerived?.runwayAfterRaiseMonths ??
+            (monthlyBurn > 0 ? (currentCash + targetRaise) / monthlyBurn : 0)
+        )
+  );
+  const dilution = Math.round(
+    Number.isFinite(summaryDilution)
+      ? summaryDilution
+      : toNumber(
+          fundingDerived?.dilutionPct ??
+            (postMoney > 0 ? (targetRaise / postMoney) * 100 : 0)
+        )
+  );
+  const currency = fundingSettings?.reportCurrency || 'EUR';
+  const effectiveRaised = Number.isFinite(summaryRaised) ? summaryRaised : targetRaise;
+  const runwayStatus = getRunwayStatusLabel(
+    Number.isFinite(summaryRunway) ? summaryRunway : null
+  );
+  const complianceStatus = getDisplayText(fundingSummary?.complianceStatus, 'not_available');
+  const fundingWindowStatus = getOptimalFundingWindowLabel(
+    fundingSummary?.optimalFundingWindowStatus
+  );
+  const suggestedValuationSource = getDisplayText(
+    fundingSummary?.suggestedValuationSource,
+    'not_available'
+  );
+
+  const score = effectiveRaised > 0
     ? clampScore(readiness * 0.44 + clampScore((runway / 24) * 100) * 0.34 + clampScore(100 - Math.max(0, dilution - 10) * 3) * 0.22)
     : 58;
 
   return {
     score,
-    title: targetRaise > 0 ? 'Funding board case prepared' : 'Funding case pending',
-    posture: targetRaise > 0 ? 'Validate investor memo' : 'Build funding case',
-    targetRaise,
+    title: effectiveRaised > 0 ? 'Funding board case prepared' : 'Funding case pending',
+    posture: effectiveRaised > 0 ? 'Validate investor memo' : 'Build funding case',
+    targetRaise: effectiveRaised,
     runway,
     dilution,
     readiness,
     currency,
+    latestRoundType: latestRound?.roundType || fundingSummary?.latestRoundType || '',
+    latestInvestorName: latestRound?.investorName || fundingSummary?.latestInvestorName || '',
+    fundingRiskStatus:
+      latestRound?.riskStatus || fundingSummary?.fundingRiskStatus || 'normal',
+    requiresExecutiveUpdate: Boolean(fundingSummary?.requiresExecutiveUpdate),
+    complianceStatus,
+    fundingWindowStatus,
+    suggestedValuationSource,
+    executiveSignals: Array.isArray(fundingSummary?.executiveSignals)
+      ? fundingSummary.executiveSignals
+      : [],
+    humanReviewRequired: Boolean(fundingSummary?.humanReviewRequired),
+    runwayStatus,
     description:
-      targetRaise > 0
+      effectiveRaised > 0
         ? 'Funding ya estructura capital stack, readiness, use of funds, data room y Board Memo.'
-        : 'Funding está listo como tercera rama premium. Completa inputs o carga demo para exportar memo.'
+        : 'Pending Funding Data. Add funding rounds to activate executive funding intelligence.'
   };
 }
 
@@ -849,18 +1143,35 @@ function getExecutiveSignal({ maScore, complianceScore, fundingScore }) {
 
   return {
     score,
-    title: 'Executive layer needs polish',
-    posture: 'Complete module signals',
+    title: 'Executive OS in controlled rollout',
+    posture: 'Prioritize decision quality',
     description:
-      'La capa ejecutiva ya existe, pero conviene reforzar datos, QA o exportaciones antes de la demo.'
+      'La capa ejecutiva consolida señales clave y prioriza las decisiones que requieren revisión antes de escalar.'
   };
 }
 
-function CommandItem({ label, value, branch = 'overview' }) {
-  return (
-    <div className={`ceo-command-item ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}>
+function CommandItem({ label, value, branch = 'overview', to = '' }) {
+  const content = (
+    <>
       <div className="kpi-label">{label}</div>
       <strong>{value}</strong>
+    </>
+  );
+
+  if (to) {
+    return (
+      <Link
+        className={`ceo-command-item ceo-command-item-hit ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}
+        to={to}
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <div className={`ceo-command-item ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}>
+      {content}
     </div>
   );
 }
@@ -932,49 +1243,77 @@ function ModuleCard({
   posture,
   rows,
   primaryLink,
-  secondaryLink
+  secondaryLink,
+  surfaceNavigateTo = ''
 }) {
+  const navigate = useNavigate();
+
+  function handleSurface(event) {
+    if (!surfaceNavigateTo) return;
+    if (event.target.closest('.ceo-module-nav')) return;
+
+    navigate(surfaceNavigateTo);
+  }
+
+  const interactive = Boolean(surfaceNavigateTo);
+
+  const shellProps = interactive
+    ? {
+        role: 'button',
+        tabIndex: 0,
+        onClick: handleSurface,
+        onKeyDown: (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          handleSurface(event);
+        },
+        style: { cursor: 'pointer' }
+      }
+    : {};
+
   return (
-    <Card className={`ceo-module-card ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}>
-      <div className="ceo-module-head">
-        <div>
-          <div className="ceo-kicker">
-            <Icon size={14} />
-            {kicker}
+    <div className={interactive ? 'ceo-module-hit' : ''} {...shellProps}>
+      <Card className={`ceo-module-card ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}>
+        <div className="ceo-module-head">
+          <div>
+            <div className="ceo-kicker">
+              <Icon size={14} />
+              {kicker}
+            </div>
+
+            <h3 className="ceo-module-title">{title}</h3>
+
+            <p className="muted ceo-module-copy">{description}</p>
           </div>
 
-          <h3 className="ceo-module-title">{title}</h3>
-
-          <p className="muted ceo-module-copy">{description}</p>
+          <div className="ceo-panel-icon">
+            <Icon size={18} />
+          </div>
         </div>
 
-        <div className="ceo-panel-icon">
-          <Icon size={18} />
+        <div className="ceo-module-metrics">
+          <MiniRow label="Signal score" value={`${score}/100`} />
+          <MiniRow label="Current posture" value={posture} />
+
+          {rows.map((row) => (
+            <MiniRow key={row.label} label={row.label} value={row.value} />
+          ))}
         </div>
-      </div>
 
-      <div className="ceo-module-metrics">
-        <MiniRow label="Signal score" value={`${score}/100`} />
-        <MiniRow label="Current posture" value={posture} />
-
-        {rows.map((row) => (
-          <MiniRow key={row.label} label={row.label} value={row.value} />
-        ))}
-      </div>
-
-      <div className="ceo-link-row">
-        <Link className="ceo-link" to={primaryLink.to}>
-          {primaryLink.label}
-          <ArrowRight size={14} />
-        </Link>
-
-        {secondaryLink ? (
-          <Link className="ceo-link secondary" to={secondaryLink.to}>
-            {secondaryLink.label}
+        <div className="ceo-link-row ceo-module-nav" onClick={(event) => event.stopPropagation()}>
+          <Link className="ceo-link" to={primaryLink.to}>
+            {primaryLink.label}
+            <ArrowRight size={14} />
           </Link>
-        ) : null}
-      </div>
-    </Card>
+
+          {secondaryLink ? (
+            <Link className="ceo-link secondary" to={secondaryLink.to}>
+              {secondaryLink.label}
+            </Link>
+          ) : null}
+        </div>
+      </Card>
+    </div>
   );
 }
 
@@ -1004,6 +1343,7 @@ function ActionCard({ icon: Icon, branch = 'overview', title, description, to, l
 }
 
 export function CEOOverviewPage() {
+  const navigate = useNavigate();
   const maStore = useMAStore();
 
   const {
@@ -1023,6 +1363,34 @@ export function CEOOverviewPage() {
   const safeAlerts = getSafeArray(alerts);
   const safeEvidenceItems = getSafeArray(evidenceItems);
   const safeReviews = getSafeArray(reviews);
+
+  const [hubBrief, setHubBrief] = useState(null);
+  const [hydratedCases, setHydratedCases] = useState([]);
+  const [fundingSummary, setFundingSummary] = useState({});
+
+  useEffect(() => {
+    maCasesApi
+      .hydrateFromBackend()
+      .then((items) => setHydratedCases(Array.isArray(items) ? items : []))
+      .catch(() => setHydratedCases([]));
+
+    complianceAuditApi
+      .getExecutiveHubBrief()
+      .then((envelope) => {
+        const data = envelope?.data ?? envelope;
+
+        setHubBrief(data && typeof data === 'object' ? data : null);
+      })
+      .catch(() => setHubBrief(null));
+
+    fundingEnterpriseApi
+      .getExecutiveBridgeSnapshot()
+      .then((snapshot) => {
+        const data = snapshot?.summary ?? {};
+        setFundingSummary(data && typeof data === 'object' ? data : {});
+      })
+      .catch(() => setFundingSummary({}));
+  }, []);
 
   useComplianceEngine({
     suppliers: safeSuppliers,
@@ -1044,9 +1412,11 @@ export function CEOOverviewPage() {
     evidenceItems: safeEvidenceItems,
     reviews: safeReviews
   });
-  const fundingOverview = getFundingOverview({
+  const fundingOverview = getFundingOverviewWithSummary({
     fundingInputs,
-    fundingSettings
+    fundingSettings,
+    fundingDerived,
+    fundingSummary
   });
 
   const executiveSignal = getExecutiveSignal({
@@ -1054,6 +1424,73 @@ export function CEOOverviewPage() {
     complianceScore: complianceOverview.score,
     fundingScore: fundingOverview.score
   });
+
+  const casesForRadar =
+    hydratedCases.length > 0
+      ? hydratedCases
+      : getSafeArray(
+          maStore.cases ||
+            maStore.savedCases ||
+            maStore.maCases ||
+            maStore.deals ||
+            maStore.savedDeals
+        );
+
+  const legalHealthRadar =
+    hubBrief &&
+    hubBrief.legalHealthScore !== undefined &&
+    hubBrief.legalHealthScore !== null &&
+    Number.isFinite(Number(hubBrief.legalHealthScore))
+      ? clampScore(Number(hubBrief.legalHealthScore))
+      : complianceOverview.score;
+
+  const maValuationSignal = maOverview.score;
+  const dealReadinessCombined = clampScore(
+    Math.round(maValuationSignal * 0.52 + legalHealthRadar * 0.48)
+  );
+  const complianceDragPenalty = clampScore(maValuationSignal - dealReadinessCombined);
+  const maFinancialRadar = estimateMaFinancialRadar(casesForRadar);
+  const operationalRadar = clampScore(62);
+  const esgRadar = clampScore(55);
+  const fundingRadar = clampScore(fundingOverview.readiness ?? 58);
+
+  const radarAxes = [
+    {
+      key: 'legal',
+      label: 'Legal',
+      value: legalHealthRadar,
+      route: '/compliance/audit-runs',
+      tone: '#60a5fa'
+    },
+    {
+      key: 'financial',
+      label: 'Financial · M&A',
+      value: maFinancialRadar,
+      route: '/ma/valuation',
+      tone: '#34d399'
+    },
+    {
+      key: 'ops',
+      label: 'Operational',
+      value: operationalRadar,
+      route: '/compliance/suppliers',
+      tone: '#a78bfa'
+    },
+    {
+      key: 'esg',
+      label: 'ESG · slot',
+      value: esgRadar,
+      route: '/governance/dashboard',
+      tone: '#4ade80'
+    },
+    {
+      key: 'funding',
+      label: 'Funding',
+      value: fundingRadar,
+      route: '/funding/dashboard',
+      tone: '#fbbf24'
+    }
+  ];
 
   const scoreAngle = `${executiveSignal.score * 3.6}deg`;
   const availablePacks = [
@@ -1089,9 +1526,161 @@ export function CEOOverviewPage() {
               </p>
 
               <div className="ceo-command-bar">
-                <CommandItem branch="ma" label="M&A posture" value={maOverview.posture} />
-                <CommandItem branch="compliance" label="Compliance posture" value={complianceOverview.posture} />
-                <CommandItem branch="funding" label="Funding posture" value={fundingOverview.posture} />
+                <CommandItem
+                  branch="ma"
+                  label="M&A posture"
+                  value={maOverview.posture}
+                  to="/ma/dashboard"
+                />
+
+                <CommandItem
+                  branch="compliance"
+                  label="Compliance posture"
+                  value={complianceOverview.posture}
+                  to="/compliance/dashboard"
+                />
+
+                <CommandItem
+                  branch="funding"
+                  label="Funding posture"
+                  value={fundingOverview.posture}
+                  to="/funding/dashboard"
+                />
+              </div>
+
+              <div className="ceo-deal-readiness-radar-grid">
+                <article className="ceo-deal-readiness-card ceo-branch-surface ceo-glass-branch ceo-branch-overview">
+                  <div className="ceo-kicker">
+                    <Target size={14} />
+                    Deal readiness index
+                  </div>
+
+                  <h3 style={{ margin: '4px 0 0', letterSpacing: '-0.035em', fontSize: 22 }}>
+                    Valuation readiness vs legal drag
+                  </h3>
+
+                  <p className="muted muted-tight">
+                    Sintetiza el signal financiero ({maValuationSignal}/100) con la salud legal
+                    ejecutiva más reciente ({legalHealthRadar}/100). Compliance bajo muestra cómo{' '}
+                    <strong>{complianceDragPenalty > 0 ? 'lastra' : 'neutraliza'}</strong> la
+                    preparación comercial combinada (~{dealReadinessCombined}/100).
+                  </p>
+
+                  <div className="ceo-deal-score-row">
+                    <div className="ceo-deal-pill">
+                      <div className="kpi-label">Valuation signal</div>
+                      <strong style={{ fontSize: 26 }}>{maValuationSignal}</strong>
+                      <button
+                        type="button"
+                        className="ceo-link secondary"
+                        style={{
+                          marginTop: 12,
+                          width: '100%',
+                          justifyContent: 'center',
+                          display: 'inline-flex',
+                          border: 'none',
+                          cursor: 'pointer',
+                          background: 'transparent',
+                          color: 'inherit',
+                          padding: '8px'
+                        }}
+                        onClick={() => navigate('/ma/valuation')}
+                      >
+                        Drill M&A valuation
+                      </button>
+                    </div>
+
+                    <div className="ceo-deal-pill">
+                      <div className="kpi-label">Legal / Compliance health</div>
+                      <strong style={{ fontSize: 26 }}>{legalHealthRadar}</strong>
+                      <button
+                        type="button"
+                        className="ceo-link secondary"
+                        style={{
+                          marginTop: 12,
+                          width: '100%',
+                          justifyContent: 'center',
+                          display: 'inline-flex',
+                          border: 'none',
+                          cursor: 'pointer',
+                          background: 'transparent',
+                          color: 'inherit',
+                          padding: '8px'
+                        }}
+                        onClick={() => navigate('/compliance/audit-runs')}
+                      >
+                        Drill audit ledger
+                      </button>
+                    </div>
+
+                    <div className="ceo-deal-pill">
+                      <div className="kpi-label">Unified readiness</div>
+                      <strong style={{ fontSize: 26 }}>{dealReadinessCombined}</strong>
+                      <div className="kpi-label" style={{ marginTop: 10 }}>
+                        Compliance drag Δ {complianceDragPenalty} pts
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="kpi-label">
+                      Franja visual: combinación ponderada penaliza financieramente el lento avance legal
+                    </div>
+                    <div className="ceo-drag-bar-shell">
+                      <div
+                        className="ceo-drag-fill-valuation"
+                        style={{ width: `${dealReadinessCombined}%` }}
+                        title={`Ready ${dealReadinessCombined}%`}
+                      />
+                      <div
+                        className="ceo-drag-fill-drag"
+                        style={{
+                          width: `${complianceDragPenalty}%`,
+                          opacity: complianceDragPenalty > 6 ? 0.95 : 0.55
+                        }}
+                        title={`Legal drag absorbs ${complianceDragPenalty}% points`}
+                      />
+                    </div>
+                  </div>
+
+                  <p className="muted ceo-muted-tight" style={{ fontSize: 12.5 }}>
+                    {hubBrief?.portfolioReportBrief?.headline
+                      ? `Memo compliance: ${hubBrief.portfolioReportBrief.headline}`
+                      : 'Genera auditorías Compliance Enterprise para alimentar el hub legal en vivo.'}
+                  </p>
+                </article>
+
+                <article className="ceo-deal-readiness-card ceo-branch-surface ceo-glass-branch ceo-branch-overview ceo-radar-card-inner">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+                    <div>
+                      <div className="ceo-kicker">
+                        <Radar size={14} />
+                        Corporate health radar
+                      </div>
+                      <strong style={{ display: 'block', marginTop: 6 }}>
+                        Radar de salud ejecutiva · multi-rama
+                      </strong>
+                      <p className="muted" style={{ margin: '10px 0 0', lineHeight: 1.52 }}>
+                        Legal, financiero y funding ya consumen señales activas; Operational y ESG siguen en capa piloto
+                        hasta conectar KPIs externos.
+                      </p>
+                    </div>
+                  </div>
+
+                  <CorporateHealthRadarSVG
+                    axes={radarAxes.map(({ key, label, value }) => ({ key, label, value }))}
+                  />
+
+                  <div className="ceo-radar-legend">
+                    {radarAxes.map((axis) => (
+                      <Link key={axis.key} to={axis.route}>
+                        <span className="ceo-radar-swatch" style={{ backgroundColor: axis.tone }} />
+                        <span>{axis.label}</span>
+                        <strong>{clampScore(axis.value)}%</strong>
+                      </Link>
+                    ))}
+                  </div>
+                </article>
               </div>
             </div>
 
@@ -1177,10 +1766,10 @@ export function CEOOverviewPage() {
             <KpiCard
               branch="funding"
               label="Next milestone"
-              value="QA + Logo"
-              description="Validación final e integración visual."
+              value="Enterprise polish"
+              description="Consistencia visual, datos y narrativa ejecutiva."
               icon={Target}
-              tone="text-warning"
+              tone="text-success"
             />
           </div>
         </section>
@@ -1196,11 +1785,13 @@ export function CEOOverviewPage() {
           <div className="ceo-grid ceo-grid-three">
             <ModuleCard
               icon={BriefcaseBusiness}
+              branch="ma"
               kicker="M&A Intelligence"
               title="M&A Command"
               description={maOverview.description}
               score={maOverview.score}
               posture={maOverview.posture}
+              surfaceNavigateTo="/ma/dashboard"
               rows={[
                 { label: 'Active target', value: maOverview.targetName },
                 { label: 'Deals / cases', value: maOverview.dealsCount },
@@ -1212,11 +1803,13 @@ export function CEOOverviewPage() {
 
             <ModuleCard
               icon={ShieldCheck}
+              branch="compliance"
               kicker="Compliance & Risk"
               title="Supply Chain Control"
               description={complianceOverview.description}
               score={complianceOverview.score}
               posture={complianceOverview.posture}
+              surfaceNavigateTo="/compliance/dashboard"
               rows={[
                 { label: 'Suppliers', value: complianceOverview.supplierCount },
                 { label: 'Open alerts', value: complianceOverview.openAlerts },
@@ -1228,23 +1821,72 @@ export function CEOOverviewPage() {
 
             <ModuleCard
               icon={Rocket}
+              branch="funding"
               kicker="Funding Strategy"
               title="Capital Readiness"
               description={fundingOverview.description}
               score={fundingOverview.score}
               posture={fundingOverview.posture}
+              surfaceNavigateTo="/funding/dashboard"
               rows={[
                 {
-                  label: 'Target raise',
+                  label: 'Capital raised',
                   value: formatCurrency(fundingOverview.targetRaise, fundingOverview.currency)
                 },
                 { label: 'Runway', value: `${fundingOverview.runway} meses` },
-                { label: 'Dilution', value: `${fundingOverview.dilution}%` }
+                { label: 'Window', value: fundingOverview.fundingWindowStatus },
+                { label: 'Risk status', value: fundingOverview.fundingRiskStatus || 'normal' }
               ]}
               primaryLink={{ to: '/funding/dashboard', label: 'Open Funding' }}
               secondaryLink={{ to: '/funding/data-room', label: 'Data Room' }}
             />
           </div>
+        </section>
+
+        <section className="ceo-section">
+          <SectionHeader
+            kicker="Funding Bridge"
+            icon={Rocket}
+            title="Liquidity & Runway Widget"
+            description="Funding data bridged from enterprise backend summary."
+          />
+          <FundingExecutiveWidget
+            summary={{
+              ...fundingSummary,
+              totalAmountRaised:
+                fundingSummary?.totalAmountRaised ?? fundingSummary?.totalRaised ?? 0
+            }}
+            currency={fundingOverview.currency}
+            className="ceo-panel ceo-branch-surface ceo-glass-branch ceo-branch-funding"
+          />
+          <Card className="ceo-panel ceo-branch-surface ceo-glass-branch ceo-branch-overview">
+            <div className="ceo-panel-head">
+              <div>
+                <div className="ceo-kicker">
+                  <Sparkles size={14} />
+                  Executive Synergy Signal
+                </div>
+                <h3 className="ceo-panel-title">M&A + Compliance + Funding bridge</h3>
+                <p className="muted ceo-panel-copy">
+                  CEO’s OS combines M&A, Compliance and Funding signals as decision-support
+                  intelligence. Outputs require human review before legal, financial or investor
+                  action.
+                </p>
+              </div>
+              <div className="ceo-panel-icon">
+                <Sparkles size={18} />
+              </div>
+            </div>
+            <div className="ceo-list">
+              <MiniRow label="M&A valuation source" value={fundingOverview.suggestedValuationSource} />
+              <MiniRow label="Compliance status" value={fundingOverview.complianceStatus} />
+              <MiniRow label="Funding window" value={fundingOverview.fundingWindowStatus} />
+              <MiniRow
+                label="Human review"
+                value={fundingOverview.humanReviewRequired ? 'Required' : 'Recommended'}
+              />
+            </div>
+          </Card>
         </section>
 
         <section className="ceo-grid ceo-grid-two">
@@ -1286,10 +1928,10 @@ export function CEOOverviewPage() {
                   Executive priorities
                 </div>
 
-                <h3 className="ceo-panel-title">What remains before selling</h3>
+                <h3 className="ceo-panel-title">Executive operating priorities</h3>
 
                 <p className="muted ceo-panel-copy">
-                  Esta capa ayuda a cerrar el MVP sin abrir ramas nuevas.
+                  Prioridades de control para mantener el producto enfocado en decision ejecutiva.
                 </p>
               </div>
 
@@ -1299,10 +1941,10 @@ export function CEOOverviewPage() {
             </div>
 
             <div className="ceo-list">
-              <MiniRow label="QA final" value="Pending" />
-              <MiniRow label="Logo integration" value="Pending" />
-              <MiniRow label="Demo script" value="Pending" />
-              <MiniRow label="Deck / one-pager" value="Pending" />
+              <MiniRow label="Decision quality" value="Active" />
+              <MiniRow label="Visual consistency" value="Active" />
+              <MiniRow label="Executive narrative" value="Active" />
+              <MiniRow label="Board outputs" value="Ready" />
             </div>
           </Card>
         </section>
@@ -1336,7 +1978,7 @@ export function CEOOverviewPage() {
               icon={FileText}
               title="Prepare executive demo"
               description="Preparar demo corta y demo enterprise de 20 minutos con enfoque DSS y PoC."
-              to="/overview"
+              to="/dashboard"
               label="Use this overview"
             />
           </div>
