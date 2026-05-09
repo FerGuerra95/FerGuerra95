@@ -1,7 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
-  BrainCircuit,
   Calculator,
   Landmark,
   Gem,
@@ -12,6 +11,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { routeGroups } from '../router/routeConfig.jsx';
+import { BrandLogo } from '../../shared/components/brand/BrandLogo.jsx';
 
 const GOLD = '#d4af37';
 const MUTED_ICON = 'rgba(226,232,240,0.68)';
@@ -294,12 +294,14 @@ const sidebarCss = `
     pointer-events: none;
   }
 
-  .ceos-brand-mark svg {
+  .ceos-brand-mark img {
     position: relative;
     z-index: 1;
-    color: ${GOLD} !important;
-    stroke: ${GOLD} !important;
-    filter: drop-shadow(0 0 12px rgba(212,175,55,0.26));
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(212,175,55,0.2));
   }
 
   .ceos-brand-title {
@@ -858,7 +860,7 @@ export function Sidebar() {
       <div className="ceos-sidebar-brand">
         <div className="ceos-brand-row">
           <div className="ceos-brand-mark">
-            <BrainCircuit size={23} />
+            <BrandLogo variant="emblem" loading="eager" alt="" />
           </div>
 
           <div>

@@ -1,7 +1,8 @@
 ﻿import React, { useState } from 'react';
-import { Eye, EyeOff, Lock, LogIn, ShieldCheck } from 'lucide-react';
+import { Eye, EyeOff, Lock, LogIn } from 'lucide-react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../../shared/components/ui/Button.jsx';
+import { BrandLogo } from '../../shared/components/brand/BrandLogo.jsx';
 import { useAuth } from '../providers/AuthProvider.jsx';
 
 function resolveInitialForm(isDemoAuthEnabled) {
@@ -136,21 +137,20 @@ export function LoginPage() {
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <div
             style={{
-              width: 58,
-              height: 58,
-              borderRadius: 18,
-              display: 'grid',
-              placeItems: 'center',
-              margin: '0 auto 16px',
-              background: 'rgba(16,185,129,0.16)',
-              border: '1px solid rgba(16,185,129,0.35)'
+              margin: '0 auto 18px',
+              display: 'flex',
+              justifyContent: 'center'
             }}
           >
-            <ShieldCheck size={28} className="text-success" />
-          </div>
-
-          <div className="badge" style={{ marginBottom: 12 }}>
-            CEO&apos;s OS
+            <BrandLogo
+              variant="emblem"
+              loading="eager"
+              style={{
+                width: 64,
+                height: 64,
+                objectFit: 'contain'
+              }}
+            />
           </div>
 
           <h1 style={{ margin: 0, fontSize: 30 }}>
@@ -158,7 +158,7 @@ export function LoginPage() {
           </h1>
 
           <p className="muted" style={{ marginTop: 10 }}>
-            Inicia sesion para acceder al workspace de M&A, Compliance y Funding.
+            Inicia sesión para acceder al workspace de M&A, Compliance y Funding.
           </p>
         </div>
 

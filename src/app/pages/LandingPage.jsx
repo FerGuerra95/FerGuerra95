@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { BrandLogo } from '../../shared/components/brand/BrandLogo.jsx';
 import {
   Activity,
   ArrowUpRight,
@@ -24,7 +25,6 @@ import {
   Radar,
   Rocket,
   ShieldCheck,
-  Sparkles,
   Target,
   Users,
   Zap
@@ -260,19 +260,16 @@ export function LandingPage() {
           letter-spacing: -0.035em;
         }
 
-        .landing-logo-mark {
-          width: 36px;
-          height: 36px;
-          border-radius: 13px;
-          display: grid;
-          place-items: center;
-          background:
-            radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.18), transparent 24%),
-            linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(59, 130, 246, 0.2));
-          border: 1px solid rgba(201, 162, 77, 0.52);
-          box-shadow:
-            0 0 30px rgba(201, 162, 77, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        .landing-brand-logo-nav {
+          height: clamp(26px, 3.2vw, 34px);
+          width: auto;
+          display: block;
+        }
+
+        .landing-brand-logo-footer {
+          height: clamp(22px, 2.8vw, 28px);
+          width: auto;
+          display: block;
         }
 
         .landing-nav-links {
@@ -1469,11 +1466,12 @@ export function LandingPage() {
 
       <nav className="landing-nav">
         <div className="landing-nav-inner">
-          <Link to="/" className="landing-logo">
-            <span className="landing-logo-mark">
-              <Sparkles size={18} />
-            </span>
-            CEO’s OS
+          <Link to="/" className="landing-logo" aria-label="CEO's OS — inicio">
+            <BrandLogo
+              variant="horizontal"
+              className="landing-brand-logo-nav"
+              loading="eager"
+            />
           </Link>
 
           <div className="landing-nav-links">
@@ -1984,10 +1982,11 @@ export function LandingPage() {
         <footer className="landing-footer">
           <div className="landing-footer-inner">
             <div className="landing-logo">
-              <span className="landing-logo-mark">
-                <Sparkles size={16} />
-              </span>
-              CEO’s OS
+              <BrandLogo
+                variant="horizontal"
+                className="landing-brand-logo-footer"
+                loading="lazy"
+              />
             </div>
 
             <div className="footer-claim">
