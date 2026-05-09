@@ -4,6 +4,7 @@ export const notFoundMiddleware = (req, res) => {
     meta: {
       method: req.method,
       path: req.originalUrl,
+      requestId: req.requestId,
       timestamp: new Date().toISOString()
     },
     error: {

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_FINANCIALS,
   parseFinancialInputs,
-  calculateCoreMetrics
+  calculateCoreMetrics,
+  calculateDcfEnterpriseValue
 } from '../../../src/modules/ma/engine/valuationFormulas.js';
 
 describe('valuationFormulas', () => {
@@ -22,7 +23,7 @@ describe('valuationFormulas', () => {
     expect(core.leverageRatio).toBeCloseTo(70000 / 535000, 5);
   });
 
-  it('convierte correctamente inputs de texto a números', () => {
+  it('convierte correctamente inputs de texto a numeros', () => {
     const inputs = parseFinancialInputs({
       ...DEFAULT_FINANCIALS,
       reportedEbitda: '450000',
@@ -52,5 +53,37 @@ describe('valuationFormulas', () => {
     expect(inputs.ownerDependency).toBe(100);
     expect(inputs.clientConcentration).toBe(0);
     expect(inputs.recurringRevenue).toBe(100);
+  });
+
+  it('calcula DCF con WACC, crecimiento terminal y flujos descontados', () => {
+    const inputs = parseFinancialInputs(DEFAULT_FINANCIALS);
+    const core = calculateCoreMetrics(inputs);
+    const dcf = calculateDcfEnterpriseValue({
+      normalizedEbitda: core.normalizedEbitda,
+      growthPct: inputs.growth,
+      taxRatePct: inputs.taxRate,
+      waccPct: inputs.wacc,
+      terminalGrowthPct: inputs.terminalGrowth,
+      projectionYears: inputs.projectionYears,
+      depreciationAmortization: inputs.depreciationAmortization,
+      capex: inputs.capex,
+      changeInWorkingCapital: inputs.changeInWorkingCapital
+    });
+
+    expect(dcf.warnings).toEqual([]);
+    expect(dcf.annualCashFlows).toHaveLength(5);
+    expect(dcf.enterpriseValue).toBeGreaterThan(0);
+    expect(dcf.terminalPresentValue).toBeGreaterThan(0);
+  });
+
+  it('bloquea DCF cuando WACC no supera el crecimiento terminal', () => {
+    const dcf = calculateDcfEnterpriseValue({
+      normalizedEbitda: 500000,
+      waccPct: 2,
+      terminalGrowthPct: 3
+    });
+
+    expect(dcf.enterpriseValue).toBeNull();
+    expect(dcf.warnings).toContain('DCF requires WACC above terminal growth.');
   });
 });

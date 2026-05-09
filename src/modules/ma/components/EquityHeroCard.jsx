@@ -304,6 +304,42 @@ const equityHeroCss = `
       grid-template-columns: 1fr;
     }
   }
+
+  .ma-equity-safe-card,
+  .ma-equity-safe-signal,
+  .ma-equity-safe-score,
+  .ma-equity-safe-score-copy,
+  .ma-equity-safe-metric {
+    background: rgba(15, 23, 42, 0.72) !important;
+    background-image: none !important;
+    border-color: rgba(148, 163, 184, 0.14) !important;
+    box-shadow: none !important;
+  }
+
+  .ma-equity-safe-card::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  .ma-equity-safe-inner,
+  .ma-equity-safe-signal-grid,
+  .ma-equity-safe-score-copy,
+  .ma-equity-safe-metrics,
+  .ma-equity-safe-metric-head,
+  .ma-equity-safe-metric-description {
+    background: transparent !important;
+    background-image: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .ma-equity-safe-value,
+  .ma-equity-safe-metric-value,
+  .ma-equity-safe-kicker,
+  .ma-equity-safe-signal-title {
+    letter-spacing: 0 !important;
+    text-shadow: none !important;
+  }
 `;
 
 function getSafeNumber(value, fallback = 0) {

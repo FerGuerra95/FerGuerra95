@@ -112,9 +112,12 @@ async function assertSupplierBelongsToOrganization(supplierId, organizationId) {
     );
   }
 
-  const supplier = await suppliersStore.getById(normalizedSupplierId);
+  const supplier = await suppliersStore.getByIdForOrganization(
+    normalizedSupplierId,
+    organizationId
+  );
 
-  if (!belongsToOrganization(supplier, organizationId)) {
+  if (!supplier) {
     throw createNotFoundError(
       'Proveedor no encontrado para esta organización.',
       'SUPPLIER_NOT_FOUND'
@@ -136,9 +139,12 @@ async function assertAlertBelongsToOrganization(alertId, organizationId) {
     );
   }
 
-  const alert = await alertsStore.getById(normalizedAlertId);
+  const alert = await alertsStore.getByIdForOrganization(
+    normalizedAlertId,
+    organizationId
+  );
 
-  if (!belongsToOrganization(alert, organizationId)) {
+  if (!alert) {
     throw createNotFoundError(
       'Alerta no encontrada para esta organización.',
       'ALERT_NOT_FOUND'
@@ -284,23 +290,13 @@ function normalizeDecisionPayload(payload = {}) {
 export const listReviews = async (scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const items = await reviewsStore.list();
-
-  return items.filter((item) =>
-    belongsToOrganization(item, scope.organizationId)
-  );
+  return reviewsStore.listByOrganization(scope.organizationId);
 };
 
 export const getReviewById = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const item = await reviewsStore.getById(id);
-
-  if (!belongsToOrganization(item, scope.organizationId)) {
-    return null;
-  }
-
-  return item;
+  return reviewsStore.getByIdForOrganization(id, scope.organizationId);
 };
 
 export const createReviewDecision = async (payload = {}) => {
@@ -332,11 +328,12 @@ export const createReviewDecision = async (payload = {}) => {
 export const updateReviewDecision = async (id, patch = {}, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await reviewsStore.getById(id);
+  const existing = await reviewsStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
-    return null;
-  }
+  if (!existing) return null;
 
   const normalizedPatch = normalizeReviewPayload(patch, {
     isPatch: true
@@ -359,15 +356,18 @@ export const updateReviewDecision = async (id, patch = {}, scope = {}) => {
     }
   );
 
-  return reviewsStore.update(id, safePatch);
+  return reviewsStore.updateForOrganization(id, safePatch, scope.organizationId);
 };
 
 export const deleteReviewDecision = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await reviewsStore.getById(id);
+  const existing = await reviewsStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
+  if (!existing) {
     return {
       deleted: false,
       id,
@@ -378,7 +378,10 @@ export const deleteReviewDecision = async (id, scope = {}) => {
     };
   }
 
-  const result = await reviewsStore.remove(id);
+  const result = await reviewsStore.removeForOrganization(
+    id,
+    scope.organizationId
+  );
 
   return {
     deleted: result.deleted,
@@ -392,11 +395,12 @@ export const deleteReviewDecision = async (id, scope = {}) => {
 export async function decideReview(id, payload = {}, scope = {}) {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await reviewsStore.getById(id);
+  const existing = await reviewsStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
-    return null;
-  }
+  if (!existing) return null;
 
   const decisionPayload = normalizeDecisionPayload(payload);
   const decidedAt = new Date().toISOString();
@@ -416,5 +420,5 @@ export async function decideReview(id, payload = {}, scope = {}) {
     }
   );
 
-  return reviewsStore.update(id, safePatch);
+  return reviewsStore.updateForOrganization(id, safePatch, scope.organizationId);
 }

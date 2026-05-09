@@ -17,7 +17,7 @@ const alerts = [
   {
     id: 'alert_001',
     supplierId: 'supplier_001',
-    title: 'Alerta de riesgo geográfico',
+    title: 'Alerta de riesgo geografico',
     category: 'Geopolitical Risk',
     severity: 'high',
     status: 'open',
@@ -109,7 +109,7 @@ describe('evidenceAssembler', () => {
     expect(types).toContain('review');
   });
 
-  it('genera resumen de evidencia del proveedor', () => {
+  it('genera resumen de evidencia del proveedor con cobertura de citas', () => {
     const summary = buildEvidenceSummary({
       supplier,
       evidenceItems,
@@ -122,10 +122,12 @@ describe('evidenceAssembler', () => {
     expect(summary.totalAlerts).toBe(1);
     expect(summary.validatedReviews).toBe(1);
     expect(summary.averageConfidence).toBe(80);
+    expect(summary.traceableEvidence).toBe(1);
+    expect(summary.citationCoveragePct).toBe(100);
     expect(summary.coverageLabel).toBe('Media');
   });
 
-  it('genera lista de citas de fuentes', () => {
+  it('genera lista de citas de fuentes con estado de trazabilidad', () => {
     const citations = buildSourceCitationList(evidenceItems);
 
     expect(Array.isArray(citations)).toBe(true);
@@ -133,6 +135,7 @@ describe('evidenceAssembler', () => {
     expect(citations[0]).toHaveProperty('title');
     expect(citations[0]).toHaveProperty('label');
     expect(citations[0]).toHaveProperty('excerpt');
+    expect(citations[0]).toHaveProperty('traceabilityStatus', 'traceable');
   });
 
   it('genera items para reporte de evidencia', () => {
@@ -151,6 +154,8 @@ describe('evidenceAssembler', () => {
       expect(item).toHaveProperty('title');
       expect(item).toHaveProperty('status');
       expect(item).toHaveProperty('description');
+      expect(item).toHaveProperty('sourceId');
+      expect(item).toHaveProperty('traceabilityStatus');
     });
   });
 });

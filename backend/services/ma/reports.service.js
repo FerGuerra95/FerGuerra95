@@ -1,4 +1,5 @@
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
+import { getMaCaseById } from './cases.service.js';
 
 const reportsStore = createSqliteEntityStore('ma_reports', 'ma_report', {
   status: 'generated',
@@ -39,14 +40,6 @@ function assertOrganizationScope(organizationId) {
   }
 }
 
-function belongsToOrganization(item, organizationId) {
-  if (!item) return false;
-  if (!organizationId) return false;
-  if (!item.organizationId) return false;
-
-  return item.organizationId === organizationId;
-}
-
 function applyOwnership(payload = {}, scope = {}) {
   return {
     ...payload,
@@ -55,13 +48,28 @@ function applyOwnership(payload = {}, scope = {}) {
   };
 }
 
+async function assertCaseBelongsToOrganization(caseId, organizationId) {
+  if (!caseId) return;
+
+  const item = await getMaCaseById(caseId, {
+    organizationId
+  });
+
+  if (!item) {
+    const error = new Error('Caso M&A no encontrado para esta organizacion.');
+    error.status = 404;
+    error.code = 'MA_CASE_NOT_FOUND';
+    throw error;
+  }
+}
+
 function normalizeReportPayload(payload = {}) {
   const title =
     normalizeText(payload.title) ||
     normalizeText(payload.name) ||
     'M&A Report';
 
-  const caseId = normalizeText(payload.caseId || payload.case_id);
+  const caseId = normalizeText(payload.caseId || payload.case_id) || null;
   const status = normalizeStatus(payload.status);
 
   return {
@@ -101,21 +109,20 @@ function expandReport(entity) {
 export const listMaReports = async (scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const items = await reportsStore.list();
+  const items = await reportsStore.listByOrganization(scope.organizationId);
 
-  return items
-    .filter((item) => belongsToOrganization(item, scope.organizationId))
-    .map(expandReport);
+  return items.map(expandReport);
 };
 
 export const getMaReportById = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const item = await reportsStore.getById(id);
+  const item = await reportsStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(item, scope.organizationId)) {
-    return null;
-  }
+  if (!item) return null;
 
   return expandReport(item);
 };
@@ -124,6 +131,11 @@ export const createMaReport = async (payload = {}) => {
   assertOrganizationScope(payload.organizationId);
 
   const normalizedPayload = normalizeReportPayload(payload);
+
+  await assertCaseBelongsToOrganization(
+    normalizedPayload.caseId,
+    payload.organizationId
+  );
 
   const item = applyOwnership(
     {
@@ -145,9 +157,12 @@ export const createMaReport = async (payload = {}) => {
 export const deleteMaReport = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await reportsStore.getById(id);
+  const existing = await reportsStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
+  if (!existing) {
     return {
       deleted: false,
       id,
@@ -155,5 +170,5 @@ export const deleteMaReport = async (id, scope = {}) => {
     };
   }
 
-  return reportsStore.remove(id);
+  return reportsStore.removeForOrganization(id, scope.organizationId);
 };

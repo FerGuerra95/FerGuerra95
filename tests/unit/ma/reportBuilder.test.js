@@ -17,6 +17,8 @@ import {
   buildBuyerMatches,
   buildNarrative
 } from '../../../src/modules/ma/engine/reportBuilder.js';
+import formatMAReportData from '../../../src/modules/ma/utils/formatMAReportData.js';
+import buildMAReportHtml from '../../../src/modules/ma/utils/buildMAReportHtml.js';
 import { clamp } from '../../../src/shared/utils/validators.js';
 
 function buildDerivedBase() {
@@ -70,11 +72,12 @@ describe('reportBuilder', () => {
     expect(comparables[0]).toHaveProperty('name');
     expect(comparables[0]).toHaveProperty('multiple');
     expect(comparables[0]).toHaveProperty('note');
+    expect(comparables[0]).toHaveProperty('sourceId');
 
     expect(comparables[1].multiple).toBeCloseTo(6.1, 2);
   });
 
-  it('limita los múltiplos comparables dentro de un rango razonable', () => {
+  it('limita los multiplos comparables dentro de un rango razonable', () => {
     const lowComparables = buildComparables(DEFAULT_SECTOR, 0.5);
     const highComparables = buildComparables(DEFAULT_SECTOR, 20);
 
@@ -105,13 +108,14 @@ describe('reportBuilder', () => {
       expect(buyer).toHaveProperty('title');
       expect(buyer).toHaveProperty('fit');
       expect(buyer).toHaveProperty('desc');
+      expect(buyer).toHaveProperty('sourceId');
 
       expect(buyer.fit).toBeGreaterThanOrEqual(0);
       expect(buyer.fit).toBeLessThanOrEqual(100);
     });
   });
 
-  it('mejora el match estratégico con mayor recurrencia y menor dependencia del dueño', () => {
+  it('mejora el match estrategico con mayor recurrencia y menor dependencia del dueno', () => {
     const baseBuyers = buildBuyerMatches({
       sector: DEFAULT_FINANCIALS.sector,
       qualityScore: 70,
@@ -130,13 +134,13 @@ describe('reportBuilder', () => {
       clientConcentration: 10
     });
 
-    const baseStrategic = baseBuyers.find((buyer) => buyer.type === 'Estratégico');
-    const improvedStrategic = improvedBuyers.find((buyer) => buyer.type === 'Estratégico');
+    const baseStrategic = baseBuyers.find((buyer) => buyer.type === 'Estrategico');
+    const improvedStrategic = improvedBuyers.find((buyer) => buyer.type === 'Estrategico');
 
     expect(improvedStrategic.fit).toBeGreaterThan(baseStrategic.fit);
   });
 
-  it('genera narrativa ejecutiva y tesis de inversión', () => {
+  it('genera narrativa ejecutiva y tesis de inversion con fuentes', () => {
     const derived = buildDerivedBase();
 
     const narrative = buildNarrative({
@@ -147,11 +151,34 @@ describe('reportBuilder', () => {
 
     expect(narrative).toHaveProperty('execSummary');
     expect(narrative).toHaveProperty('thesis');
+    expect(narrative).toHaveProperty('thesisSources');
+    expect(narrative).toHaveProperty('execSummarySourceIds');
 
     expect(typeof narrative.execSummary).toBe('string');
     expect(narrative.execSummary.length).toBeGreaterThan(40);
 
     expect(Array.isArray(narrative.thesis)).toBe(true);
     expect(narrative.thesis.length).toBeGreaterThan(0);
+    expect(narrative.thesisSources.length).toBeGreaterThan(0);
+    expect(narrative.thesisSources[0]).toHaveProperty('sourceId');
+  });
+
+  it('genera un informe M&A confidencial con metadata y disclaimer enterprise', () => {
+    const derived = buildDerivedBase();
+    const reportData = formatMAReportData({
+      financials: DEFAULT_FINANCIALS,
+      settings: DEFAULT_SETTINGS,
+      derived,
+      reportStatus: 'Controlled Draft'
+    });
+
+    const html = buildMAReportHtml(reportData);
+
+    expect(reportData.title).toBe('Confidential M&A Executive Report');
+    expect(reportData.meta.reportTitle).toContain('Confidential M&A Executive Report');
+    expect(html).toContain('Confidential M&A Executive Report');
+    expect(html).toContain('noindex,nofollow');
+    expect(html).toContain('fairness opinion');
+    expect(html).toContain('Distribution must remain controlled');
   });
 });

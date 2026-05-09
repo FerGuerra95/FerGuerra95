@@ -12,10 +12,17 @@ import alertsRoutes from './api/routes/alerts.routes.js';
 import evidenceRoutes from './api/routes/evidence.routes.js';
 import reviewsRoutes from './api/routes/reviews.routes.js';
 import reportsRoutes from './api/routes/reports.routes.js';
+import complianceRoutes from './api/routes/compliance.routes.js';
+import fundingRoutes from './api/routes/funding.routes.js';
 
 import { requireAuth } from './api/middlewares/auth.middleware.js';
 import { notFoundMiddleware } from './api/middlewares/notFound.middleware.js';
 import { errorMiddleware } from './api/middlewares/error.middleware.js';
+import {
+  createRateLimiter,
+  requestIdMiddleware,
+  securityHeadersMiddleware
+} from './api/middlewares/security.middleware.js';
 
 import { initializeDatabaseSchema } from './storage/databaseSchema.js';
 
@@ -29,6 +36,7 @@ const app = express();
 const PORT = Number.parseInt(process.env.PORT || '4000', 10);
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const IS_PRODUCTION = NODE_ENV === 'production';
+const IS_E2E = process.env.CEOS_E2E === 'true';
 
 const DIST_DIR = path.resolve(__dirname, '../dist');
 const ASSETS_DIR = path.join(DIST_DIR, 'assets');
@@ -166,24 +174,35 @@ function validateProductionEnvironment() {
       'AUTH_SECRET debe tener al menos 32 caracteres en producción.'
     );
   }
+  if (process.env.VITE_ENABLE_MA_LOCAL_FALLBACK === 'true') {
+    throw new Error(
+      'VITE_ENABLE_MA_LOCAL_FALLBACK no puede estar activo en produccion.'
+    );
+  }
 }
 
-function healthHandler(_req, res) {
+function healthHandler(req, res) {
   const frontendReady = fs.existsSync(INDEX_FILE);
   const assetsReady = fs.existsSync(ASSETS_DIR);
+  const isDetailedHealth = req.path === '/api/health' && !IS_PRODUCTION;
 
   res.json({
     data: {
       status: 'ok',
       service: 'CEO OS Backend',
-      environment: NODE_ENV,
-      database: 'sqlite',
-      frontend: frontendReady ? 'dist-ready' : 'dist-not-found',
-      assets: assetsReady ? 'assets-ready' : 'assets-not-found',
-      uptimeSeconds: Math.round(process.uptime()),
+      ...(isDetailedHealth
+        ? {
+            environment: NODE_ENV,
+            database: 'sqlite',
+            frontend: frontendReady ? 'dist-ready' : 'dist-not-found',
+            assets: assetsReady ? 'assets-ready' : 'assets-not-found',
+            uptimeSeconds: Math.round(process.uptime())
+          }
+        : {}),
       timestamp: new Date().toISOString()
     },
     meta: {
+      requestId: req.requestId,
       version: 1
     },
     error: null
@@ -193,9 +212,31 @@ function healthHandler(_req, res) {
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
 
+app.use(requestIdMiddleware);
+app.use(securityHeadersMiddleware);
 app.use(createCorsMiddleware());
 
-app.use(express.json({ limit: '10mb' }));
+app.use(
+  '/api',
+  createRateLimiter({
+    windowMs: 60_000,
+    max: IS_E2E ? 2000 : 240,
+    code: 'API_RATE_LIMITED',
+    message: 'Demasiadas solicitudes a la API. Intentalo de nuevo en breve.'
+  })
+);
+
+app.use(
+  '/api/auth/login',
+  createRateLimiter({
+    windowMs: 15 * 60_000,
+    max: IS_E2E ? 500 : 20,
+    code: 'AUTH_RATE_LIMITED',
+    message: 'Demasiados intentos de login. Espera unos minutos.'
+  })
+);
+
+app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/health', healthHandler);
@@ -209,6 +250,8 @@ app.use('/api/alerts', requireAuth, alertsRoutes);
 app.use('/api/evidence', requireAuth, evidenceRoutes);
 app.use('/api/reviews', requireAuth, reviewsRoutes);
 app.use('/api/reports', requireAuth, reportsRoutes);
+app.use('/api/compliance', requireAuth, complianceRoutes);
+app.use('/api/funding', requireAuth, fundingRoutes);
 
 if (fs.existsSync(ASSETS_DIR)) {
   app.use(

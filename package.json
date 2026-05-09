@@ -15,7 +15,12 @@
     "start": "node backend/server.js",
     "prod": "npm run build && npm start",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "playwright test tests/e2e",
+    "test:e2e:online": "playwright test tests/*.spec.js",
+    "quality": "npm run build && npm run test:unit && npm run test:integration"
   },
   "dependencies": {
     "better-sqlite3": "^12.9.0",

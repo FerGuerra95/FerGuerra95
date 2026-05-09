@@ -932,13 +932,13 @@ export function BuyerMatchingPage() {
                 <Badge>M&A Workspace</Badge>
                 <Badge>Buyer Intelligence</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                {canEditCase ? <Badge>EdiciÃ³n M&A permitida</Badge> : null}
-                {canExportReport ? <Badge>ExportaciÃ³n permitida</Badge> : null}
+                {canEditCase ? <Badge>Edición M&A permitida</Badge> : null}
+                {canExportReport ? <Badge>Exportación permitida</Badge> : null}
               </div>
 
               <h1 className="buyer-title">
                 Buyer Matching.
-                <span>Find the right acquirer profile.</span>
+                <span>Prioritize the right acquirer universe.</span>
               </h1>
 
               <p className="buyer-copy">
@@ -987,7 +987,7 @@ export function BuyerMatchingPage() {
                   >
                     <div className="buyer-score-core">
                       <strong className={hasTopBuyer ? '' : 'is-empty-score'}>
-                        {hasTopBuyer ? topScore : 'â€”'}
+                        {hasTopBuyer ? topScore : '—'}
                       </strong>
                     </div>
                   </div>
@@ -1032,7 +1032,7 @@ export function BuyerMatchingPage() {
             kicker="Buyer universe"
             icon={Network}
             title="Buyer landscape at a glance"
-            description="Resumen rÃ¡pido del universo de compradores estimado para entender profundidad de mercado, perfiles estratÃ©gicos, financieros y mejor encaje actual."
+            description="Vista ejecutiva del universo comprador, profundidad de mercado y mejor encaje estimado."
           />
 
           <div className="buyer-grid buyer-grid-kpis">
@@ -1070,15 +1070,15 @@ export function BuyerMatchingPage() {
           <SectionHeader
             kicker="Matching logic"
             icon={Target}
-            title="From company profile to buyer prioritization"
-            description="El matching no busca una lista larga. Busca identificar quÃ© perfiles pueden pagar, ejecutar y aportar valor despuÃ©s de la adquisiciÃ³n."
+            title="Buyer prioritization model"
+            description="Priorización de perfiles con capacidad de pagar, ejecutar e integrar el activo."
           />
 
           <div className="buyer-bridge-grid">
             <BridgeStep
               number="01"
               title="Strategic fit"
-              text="Sinergias, acceso a clientes, tecnologÃ­a, equipo o expansiÃ³n geogrÃ¡fica."
+              text="Sinergias, acceso a clientes, tecnología, equipo o expansión geográfica."
             />
 
             <BridgeStep
@@ -1090,13 +1090,13 @@ export function BuyerMatchingPage() {
             <BridgeStep
               number="03"
               title="Execution fit"
-              text="Capacidad real de cerrar la operaciÃ³n y absorber el activo."
+              text="Capacidad real de cerrar la operación y absorber el activo."
             />
 
             <BridgeStep
               number="04"
               title="Priority"
-              text="Ordenar conversaciones segÃºn encaje, probabilidad y valor esperado."
+              text="Prioridad comercial según encaje, probabilidad y valor esperado."
             />
           </div>
         </section>
@@ -1107,14 +1107,14 @@ export function BuyerMatchingPage() {
               kicker="Fit model"
               icon={Target}
               title="Buyer Fit Score"
-              description="El matching prioriza compradores segÃºn tamaÃ±o del deal, estabilidad del EBITDA, calidad del activo, riesgo de ejecuciÃ³n y capacidad de aportar valor despuÃ©s de la compra."
+              description="El matching prioriza compradores según tamaño del deal, estabilidad del EBITDA, calidad del activo, riesgo de ejecución y capacidad de aportar valor después de la compra."
             />
 
             <div className="buyer-rationale-list">
               <RationaleItem
                 icon={Building2}
                 title="Strategic rationale"
-                text="Compradores industriales pueden pagar mejor si existen sinergias, acceso a clientes, tecnologÃ­a, equipo o expansiÃ³n geogrÃ¡fica."
+                text="Compradores industriales pueden pagar mejor si existen sinergias, acceso a clientes, tecnología, equipo o expansión geográfica."
               />
 
               <RationaleItem
@@ -1126,7 +1126,7 @@ export function BuyerMatchingPage() {
               <RationaleItem
                 icon={ShieldCheck}
                 title="Execution discipline"
-                text="El perfil prioritario no solo debe tener interÃ©s. Debe poder ejecutar, financiar, integrar y defender la adquisiciÃ³n internamente."
+                text="El perfil prioritario no solo debe tener interés. Debe poder ejecutar, financiar, integrar y defender la adquisición internamente."
               />
             </div>
           </section>
@@ -1136,7 +1136,7 @@ export function BuyerMatchingPage() {
               kicker="Priority match"
               icon={BriefcaseBusiness}
               title="Match Rationale"
-              description="Lectura ejecutiva del tipo de comprador mÃ¡s adecuado para el activo analizado."
+              description="Lectura ejecutiva del tipo de comprador más adecuado para el activo analizado."
             />
 
             {hasTopBuyer ? (
@@ -1147,7 +1147,7 @@ export function BuyerMatchingPage() {
                   {topBuyer.rationale ||
                     topBuyer.desc ||
                     topBuyer.description ||
-                    'Perfil con alto encaje segÃºn calidad del activo, tamaÃ±o de operaciÃ³n y narrativa del deal.'}
+                    'Perfil con alto encaje según calidad del activo, tamaño de operación y narrativa del deal.'}
                 </p>
 
                 <div className="buyer-chip-row">
@@ -1158,12 +1158,11 @@ export function BuyerMatchingPage() {
               </div>
             ) : (
               <div className="buyer-glass-block">
-                <strong>Sin comprador prioritario todavÃ­a</strong>
+                <strong>Sin comprador prioritario todavía</strong>
 
                 <p className="muted buyer-muted-tight" style={{ marginTop: 10 }}>
-                  Completa la valoraciÃ³n para generar perfiles de comprador
-                  accionables y priorizar el universo de potenciales
-                  adquirentes.
+                  Actualiza la valoración para priorizar perfiles de comprador
+                  y conversaciones de mayor probabilidad.
                 </p>
               </div>
             )}
@@ -1175,7 +1174,7 @@ export function BuyerMatchingPage() {
             kicker="Buyer pipeline"
             icon={Users}
             title="Prioritized buyer universe"
-            description="Lista de compradores potenciales priorizados por encaje estratÃ©gico, capacidad financiera y lÃ³gica de adquisiciÃ³n."
+            description="Lista de compradores potenciales priorizados por encaje estratégico, capacidad financiera y lógica de adquisición."
           />
 
           <BuyerMatchGrid buyers={buyerMatches} />
@@ -1314,7 +1313,7 @@ function getBuyerSignal(score, count) {
       title: 'Buyer universe pending',
       posture: 'Build pipeline',
       description:
-        'Completa la valoraciÃ³n para generar perfiles accionables y priorizar potenciales compradores.'
+        'Actualiza la valoración para priorizar perfiles accionables y potenciales compradores.'
     };
   }
 
@@ -1323,7 +1322,7 @@ function getBuyerSignal(score, count) {
       title: 'High-fit buyer identified',
       posture: 'Prioritize outreach',
       description:
-        'Existe un perfil comprador con encaje fuerte para avanzar en una conversaciÃ³n prioritaria.'
+        'Existe un perfil comprador con encaje fuerte para avanzar en una conversación prioritaria.'
     };
   }
 
@@ -1332,7 +1331,7 @@ function getBuyerSignal(score, count) {
       title: 'Qualified buyer universe',
       posture: 'Review shortlist',
       description:
-        'El activo muestra compradores cualificados, aunque conviene validar tesis, capacidad y probabilidad de ejecuciÃ³n.'
+        'El activo muestra compradores cualificados, aunque conviene validar tesis, capacidad y probabilidad de ejecución.'
     };
   }
 
@@ -1341,7 +1340,7 @@ function getBuyerSignal(score, count) {
       title: 'Moderate buyer fit',
       posture: 'Refine positioning',
       description:
-        'Hay perfiles potenciales, pero la narrativa del activo necesita mÃ¡s claridad para mejorar el encaje.'
+        'Hay perfiles potenciales, pero la narrativa del activo necesita más claridad para mejorar el encaje.'
     };
   }
 

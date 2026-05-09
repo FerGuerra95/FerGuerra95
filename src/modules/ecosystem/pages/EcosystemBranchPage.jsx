@@ -528,7 +528,7 @@ export function EcosystemBranchPage({ branch }) {
             </p>
 
             <div className="ecosystem-link-row">
-              <Link className="ecosystem-link" to="/overview">
+              <Link className="ecosystem-link" to="/dashboard">
                 Executive Overview
                 <ArrowRight size={14} />
               </Link>

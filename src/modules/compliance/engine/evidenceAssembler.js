@@ -7,14 +7,25 @@ function sortByNewest(items = []) {
   });
 }
 
+function hasTraceableSource(evidence = {}) {
+  return Boolean(
+    evidence.sourceUrl ||
+      evidence.documentId ||
+      evidence.fileName ||
+      evidence.excerpt ||
+      evidence.translatedExcerpt
+  );
+}
+
 function buildCitationLabel(evidence) {
   if (!evidence) return 'Sin evidencia';
 
   const sourceType = evidence.sourceType || 'manual';
   const language = evidence.language || 'es';
   const confidence = Math.round((Number(evidence.confidence) || 0) * 100);
+  const traceability = hasTraceableSource(evidence) ? 'trazable' : 'sin fuente';
 
-  return `${sourceType.toUpperCase()} · ${language.toUpperCase()} · ${confidence}% confianza`;
+  return `${sourceType.toUpperCase()} | ${language.toUpperCase()} | ${confidence}% confianza | ${traceability}`;
 }
 
 export function getEvidenceForSupplier({
@@ -68,7 +79,9 @@ export function assembleEvidenceTimeline({
     status: alert.status,
     date: alert.createdAt,
     description: alert.description,
-    source: alert.source
+    source: alert.source,
+    sourceId: alert.id,
+    traceabilityStatus: alert.source ? 'traceable' : 'needs_source'
   }));
 
   const evidenceEvents = supplierEvidence.map((evidence) => ({
@@ -83,7 +96,11 @@ export function assembleEvidenceTimeline({
       evidence.translatedExcerpt ||
       evidence.excerpt ||
       'Evidencia registrada sin extracto.',
-    source: evidence.sourceUrl || evidence.sourceType
+    source: evidence.sourceUrl || evidence.sourceType,
+    sourceId: evidence.id,
+    traceabilityStatus: hasTraceableSource(evidence)
+      ? 'traceable'
+      : 'needs_source'
   }));
 
   const reviewEvents = supplierReviews.map((review) => ({
@@ -91,8 +108,8 @@ export function assembleEvidenceTimeline({
     type: 'review',
     title:
       review.status === 'decided'
-        ? `Revisión ${review.decision}`
-        : 'Revisión pendiente',
+        ? `Revision ${review.decision}`
+        : 'Revision pendiente',
     subtitle: review.reviewer || 'Sin revisor asignado',
     severity:
       review.decision === 'validated'
@@ -102,8 +119,10 @@ export function assembleEvidenceTimeline({
           : 'medium',
     status: review.status,
     date: review.decidedAt || review.createdAt,
-    description: review.notes || 'Sin notas de revisión.',
-    source: 'Human review'
+    description: review.notes || 'Sin notas de revision.',
+    source: 'Human review',
+    sourceId: review.id,
+    traceabilityStatus: review.reviewer ? 'traceable' : 'needs_reviewer'
   }));
 
   return sortByNewest([
@@ -127,6 +146,8 @@ export function buildEvidenceSummary({
       pendingReviews: 0,
       validatedReviews: 0,
       averageConfidence: 0,
+      traceableEvidence: 0,
+      citationCoveragePct: 0,
       coverageLabel: 'Sin proveedor seleccionado'
     };
   }
@@ -160,10 +181,24 @@ export function buildEvidenceSummary({
     (review) => review.decision === 'validated'
   ).length;
 
+  const traceableEvidence = supplierEvidence.filter(hasTraceableSource).length;
+  const citationCoveragePct =
+    supplierEvidence.length > 0
+      ? Math.round((traceableEvidence / supplierEvidence.length) * 100)
+      : 0;
+
   let coverageLabel = 'Baja';
-  if (supplierEvidence.length >= 3 && averageConfidence >= 70) {
+  if (
+    supplierEvidence.length >= 3 &&
+    averageConfidence >= 70 &&
+    citationCoveragePct >= 90
+  ) {
     coverageLabel = 'Alta';
-  } else if (supplierEvidence.length >= 1 && averageConfidence >= 50) {
+  } else if (
+    supplierEvidence.length >= 1 &&
+    averageConfidence >= 50 &&
+    citationCoveragePct >= 70
+  ) {
     coverageLabel = 'Media';
   }
 
@@ -174,6 +209,8 @@ export function buildEvidenceSummary({
     pendingReviews,
     validatedReviews,
     averageConfidence,
+    traceableEvidence,
+    citationCoveragePct,
     coverageLabel
   };
 }
@@ -185,7 +222,10 @@ export function buildSourceCitationList(evidenceItems = []) {
     label: buildCitationLabel(evidence),
     sourceUrl: evidence.sourceUrl,
     excerpt: evidence.translatedExcerpt || evidence.excerpt,
-    createdAt: evidence.createdAt
+    createdAt: evidence.createdAt,
+    traceabilityStatus: hasTraceableSource(evidence)
+      ? 'traceable'
+      : 'needs_source'
   }));
 }
 
@@ -212,6 +252,8 @@ export function buildEvidenceReportItems({
     severity: event.severity,
     date: event.date,
     description: event.description,
-    source: event.source
+    source: event.source,
+    sourceId: event.sourceId,
+    traceabilityStatus: event.traceabilityStatus
   }));
 }

@@ -239,6 +239,40 @@ const financialInputCss = `
       grid-template-columns: 1fr;
     }
   }
+
+  .ma-input-card,
+  .ma-slider-field,
+  .ma-config-note {
+    background: rgba(15, 23, 42, 0.72) !important;
+    background-image: none !important;
+    border-color: rgba(148, 163, 184, 0.14) !important;
+    box-shadow: none !important;
+  }
+
+  .ma-input-card::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  .ma-input-card-inner,
+  .ma-input-stack,
+  .ma-input-grid,
+  .ma-slider-list,
+  .ma-slider-head,
+  .ma-slider-track-row {
+    background: transparent !important;
+    background-image: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .ma-input-kicker,
+  .ma-input-header h3,
+  .ma-slider-value,
+  .ma-slider-foot {
+    letter-spacing: 0 !important;
+    text-shadow: none !important;
+  }
 `;
 
 function toPercent(value) {

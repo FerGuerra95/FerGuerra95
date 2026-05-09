@@ -1,3 +1,5 @@
+import { buildDecisionSourcePack } from '../engine/sourceEvidence.js';
+
 const DEFAULT_CURRENCY = 'EUR';
 const DEFAULT_COMPANY_NAME = 'Target Company';
 const DEFAULT_BRAND_NAME = "CEO's OS";
@@ -214,6 +216,25 @@ function getDebtMode(financials = {}, derived = {}) {
 }
 
 function getEbitdaAdjustments(financials = {}, derived = {}) {
+  const explicitAddBacks = firstNumber(
+    financials?.addBacks,
+    financials?.ebitdaAddBacks,
+    financials?.normalizationAddBacks,
+    derived?.addBacks,
+    derived?.ebitdaAddBacks
+  );
+
+  const addBacksItem = explicitAddBacks !== 0
+    ? [
+        {
+          id: 'management-add-backs',
+          label: 'Management add-backs',
+          amount: explicitAddBacks,
+          note: 'Normalization add-backs provided for preliminary adjusted EBITDA.'
+        }
+      ]
+    : [];
+
   const rawAdjustments = [
     ...toArray(financials?.ebitdaAdjustments),
     ...toArray(financials?.adjustments),
@@ -221,7 +242,9 @@ function getEbitdaAdjustments(financials = {}, derived = {}) {
     ...toArray(derived?.adjustments)
   ];
 
-  const items = rawAdjustments
+  const items = [
+    ...addBacksItem,
+    ...rawAdjustments
     .map((item, index) => {
       if (typeof item === 'string') {
         return {
@@ -247,7 +270,8 @@ function getEbitdaAdjustments(financials = {}, derived = {}) {
         )
       };
     })
-    .filter(Boolean);
+    .filter(Boolean)
+  ];
 
   return {
     items,
@@ -285,7 +309,9 @@ function getBuyerMatching(settings = {}, derived = {}) {
         name: safeString(firstDefined(buyer.name, buyer.buyerName, buyer.title), `Buyer ${index + 1}`),
         type: safeString(firstDefined(buyer.type, buyer.category, buyer.profile), 'Strategic / Financial'),
         fitScore,
-        fit: fitScore !== null ? String(fitScore) : safeString(firstDefined(buyer.fit, buyer.match), 'To qualify'),
+        fit: fitScore !== null && fitScore !== undefined
+          ? String(fitScore)
+          : safeString(firstDefined(buyer.fit, buyer.match), 'To qualify'),
         rationale: safeString(
           firstDefined(buyer.rationale, buyer.description, buyer.notes),
           'Strategic fit pending validation with buyer appetite, ticket size and acquisition criteria.'
@@ -397,6 +423,37 @@ function getRisks(settings = {}, derived = {}) {
   ];
 }
 
+function getDecisionSourcePack({ financials = {}, settings = {}, derived = {} } = {}) {
+  const pack = buildDecisionSourcePack({
+    financials,
+    settings,
+    derived
+  });
+
+  return pack.sources.length > 0
+    ? pack.sources
+    : [
+        {
+          sourceId: 'ma.financials.inputs',
+          label: 'User-provided financial inputs',
+          sourceType: 'Financial input',
+          status: 'Document validation required',
+          evidenceStatus: 'required',
+          documentCount: 0,
+          documents: []
+        },
+        {
+          sourceId: 'ma.formula.valuation',
+          label: 'Adjusted EBITDA multiple methodology',
+          sourceType: 'Valuation formula',
+          status: 'Traceable',
+          evidenceStatus: 'linked',
+          documentCount: 0,
+          documents: []
+        }
+      ];
+}
+
 function getWaterfallTone(type) {
   if (type === 'addition') return 'positive';
   if (type === 'deduction') return 'negative';
@@ -441,7 +498,7 @@ export function formatMAReportData({
   const safeOrganizationName = normalizeBrandText(organizationName, DEFAULT_BRAND_NAME);
 
   const currency = safeString(
-    firstDefined(financials?.currency, settings?.currency, derived?.currency),
+    firstDefined(financials?.currency, settings?.currency, settings?.reportCurrency, derived?.currency),
     DEFAULT_CURRENCY
   ).toUpperCase();
 
@@ -482,6 +539,8 @@ export function formatMAReportData({
     financials?.sales,
     financials?.netSales,
     financials?.ltmRevenue,
+    financials?.ltmSales,
+    financials?.annualRevenue,
     derived?.revenue,
     derived?.ltmRevenue
   );
@@ -507,11 +566,21 @@ export function formatMAReportData({
   const multiples = getMultiples(settings, derived);
   const debtMode = getDebtMode(financials, derived);
 
+  const computedWorkingCapitalAdjustment =
+    firstDefined(financials?.actualWC, derived?.actualWC) !== undefined &&
+    firstDefined(financials?.targetWC, derived?.targetWC) !== undefined
+      ? toNumber(firstDefined(financials?.actualWC, derived?.actualWC)) -
+        toNumber(firstDefined(financials?.targetWC, derived?.targetWC))
+      : undefined;
+
   const workingCapitalAdjustment = firstNumber(
     financials?.workingCapitalAdjustment,
+    financials?.wcAdjustment,
     financials?.nwcAdjustment,
     derived?.workingCapitalAdjustment,
-    derived?.nwcAdjustment
+    derived?.wcAdjustment,
+    derived?.nwcAdjustment,
+    computedWorkingCapitalAdjustment
   );
 
   const otherAdjustments = firstNumber(
@@ -674,6 +743,11 @@ export function formatMAReportData({
 
   const buyerMatching = getBuyerMatching(settings, derived);
   const risksAndMitigants = getRisks(settings, derived);
+  const decisionSourcePack = getDecisionSourcePack({
+    financials,
+    settings,
+    derived
+  });
 
   const investmentThesis = getTextItems(
     firstDefined(derived?.investmentThesis, settings?.investmentThesis),
@@ -779,12 +853,13 @@ export function formatMAReportData({
   ];
 
   const fileName = `${sanitizeFileName(companyName)}-ma-report-${generatedAt.toISOString().slice(0, 10)}.html`;
-  const reportTitle = `${companyName} - M&A Preliminary Valuation Report`;
+  const reportTitle = `${companyName} - Confidential M&A Executive Report`;
   const valuationRangeHeadline = `${formatCurrency(evLow, currency)} - ${formatCurrency(evHigh, currency)}`;
 
   return {
-    title: 'M&A Professional Report',
-    subtitle: 'Strategic valuation and transaction review prepared for internal decision-making.',
+    title: 'Confidential M&A Executive Report',
+    subtitle:
+      'Strategic valuation, transaction review, evidence control and buyer readiness prepared for controlled executive decision-making.',
     companyName,
     targetName: companyName,
     organizationName: safeOrganizationName,
@@ -847,9 +922,10 @@ export function formatMAReportData({
     preliminaryCim: preliminaryCIM,
     preliminaryCIM,
     humanReviewNotes,
+    decisionSourcePack,
     appendix,
     disclaimer:
-      "DSS Disclaimer: This document is a preliminary decision-support output generated within CEO's OS for internal strategic use only. It does not constitute legal, tax, audit, accounting or investment advice. All conclusions remain subject to human review, source validation, confirmatory due diligence and final approval.",
+      "This document is a confidential decision-support output generated within CEO's OS for internal strategic use only. It does not constitute legal, tax, audit, accounting or investment advice, nor a fairness opinion. All conclusions remain subject to human review, source validation, confirmatory due diligence, professional adviser review and final approval.",
     meta: {
       reportTitle,
       companyName,
@@ -927,6 +1003,7 @@ export function formatMAReportData({
       risksAndMitigants,
       preliminaryCIM,
       humanReviewNotes,
+      decisionSourcePack,
       appendix
     }
   };

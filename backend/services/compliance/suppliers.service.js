@@ -197,10 +197,9 @@ async function assertNoDuplicateSupplierName({
 
   if (!normalizedName) return;
 
-  const items = await suppliersStore.list();
+  const items = await suppliersStore.listByOrganization(organizationId);
 
   const duplicated = items.find((item) => {
-    if (!belongsToOrganization(item, organizationId)) return false;
     if (excludeId && item.id === excludeId) return false;
 
     return normalizeComparableText(item.name) === normalizedName;
@@ -214,11 +213,11 @@ async function assertNoDuplicateSupplierName({
   }
 }
 
-async function removeMany(store, items = []) {
+async function removeMany(store, items = [], organizationId = '') {
   const results = [];
 
   for (const item of items) {
-    const result = await store.remove(item.id);
+    const result = await store.removeForOrganization(item.id, organizationId);
     results.push(result);
   }
 
@@ -228,23 +227,13 @@ async function removeMany(store, items = []) {
 export const listSuppliers = async (scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const items = await suppliersStore.list();
-
-  return items.filter((item) =>
-    belongsToOrganization(item, scope.organizationId)
-  );
+  return suppliersStore.listByOrganization(scope.organizationId);
 };
 
 export const getSupplierById = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const item = await suppliersStore.getById(id);
-
-  if (!belongsToOrganization(item, scope.organizationId)) {
-    return null;
-  }
-
-  return item;
+  return suppliersStore.getByIdForOrganization(id, scope.organizationId);
 };
 
 export const createSupplier = async (payload = {}) => {
@@ -274,11 +263,12 @@ export const createSupplier = async (payload = {}) => {
 export const updateSupplier = async (id, patch = {}, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await suppliersStore.getById(id);
+  const existing = await suppliersStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
-    return null;
-  }
+  if (!existing) return null;
 
   const normalizedPatch = normalizeSupplierPayload(patch, {
     isPatch: true
@@ -304,15 +294,22 @@ export const updateSupplier = async (id, patch = {}, scope = {}) => {
     }
   );
 
-  return suppliersStore.update(id, safePatch);
+  return suppliersStore.updateForOrganization(
+    id,
+    safePatch,
+    scope.organizationId
+  );
 };
 
 export const deleteSupplier = async (id, scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  const existing = await suppliersStore.getById(id);
+  const existing = await suppliersStore.getByIdForOrganization(
+    id,
+    scope.organizationId
+  );
 
-  if (!belongsToOrganization(existing, scope.organizationId)) {
+  if (!existing) {
     return {
       deleted: false,
       id,
@@ -320,50 +317,41 @@ export const deleteSupplier = async (id, scope = {}) => {
     };
   }
 
-  const allAlerts = await alertsStore.list();
+  const allAlerts = await alertsStore.listByOrganization(scope.organizationId);
 
   const removedAlerts = allAlerts.filter((alert) => {
-    return (
-      belongsToOrganization(alert, scope.organizationId) &&
-      alert.supplierId === id
-    );
+    return alert.supplierId === id;
   });
 
   const removedAlertIds = new Set(removedAlerts.map((alert) => alert.id));
 
-  const allEvidence = await evidenceStore.list();
+  const allEvidence = await evidenceStore.listByOrganization(scope.organizationId);
 
   const removedEvidence = allEvidence.filter((item) => {
-    return (
-      belongsToOrganization(item, scope.organizationId) &&
-      (item.supplierId === id || removedAlertIds.has(item.alertId))
-    );
+    return item.supplierId === id || removedAlertIds.has(item.alertId);
   });
 
-  const allReviews = await reviewsStore.list();
+  const allReviews = await reviewsStore.listByOrganization(scope.organizationId);
 
   const removedReviews = allReviews.filter((review) => {
-    return (
-      belongsToOrganization(review, scope.organizationId) &&
-      (review.supplierId === id || removedAlertIds.has(review.alertId))
-    );
+    return review.supplierId === id || removedAlertIds.has(review.alertId);
   });
 
-  const allReports = await reportsStore.list();
+  const allReports = await reportsStore.listByOrganization(scope.organizationId);
 
   const removedReports = allReports.filter((report) => {
-    return (
-      belongsToOrganization(report, scope.organizationId) &&
-      report.supplierId === id
-    );
+    return report.supplierId === id;
   });
 
-  await removeMany(evidenceStore, removedEvidence);
-  await removeMany(reviewsStore, removedReviews);
-  await removeMany(reportsStore, removedReports);
-  await removeMany(alertsStore, removedAlerts);
+  await removeMany(evidenceStore, removedEvidence, scope.organizationId);
+  await removeMany(reviewsStore, removedReviews, scope.organizationId);
+  await removeMany(reportsStore, removedReports, scope.organizationId);
+  await removeMany(alertsStore, removedAlerts, scope.organizationId);
 
-  const supplierResult = await suppliersStore.remove(id);
+  const supplierResult = await suppliersStore.removeForOrganization(
+    id,
+    scope.organizationId
+  );
 
   return {
     deleted: supplierResult.deleted,

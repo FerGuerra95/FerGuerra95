@@ -22,7 +22,7 @@ function resolveRedirectPath(location) {
   const from = location.state?.from?.pathname;
 
   if (!from || from === '/login') {
-    return '/overview';
+    return '/dashboard';
   }
 
   return from;
@@ -65,7 +65,7 @@ export function LoginPage() {
     const password = String(form.password || '').trim();
 
     if (!email || !password) {
-      setError('Introduce email y contraseÃ±a.');
+      setError('Introduce email y contrasena.');
       return;
     }
 
@@ -79,13 +79,13 @@ export function LoginPage() {
       });
 
       if (!result?.ok) {
-        setError(result?.message || 'Email o contraseÃ±a incorrectos.');
+        setError(result?.message || 'Email o contrasena incorrectos.');
         return;
       }
 
       navigate(from, { replace: true });
     } catch {
-      setError('No se pudo iniciar sesiÃ³n.');
+      setError('No se pudo iniciar sesion.');
     } finally {
       setIsSubmitting(false);
     }
@@ -106,7 +106,7 @@ export function LoginPage() {
           color: '#e8edf7'
         }}
       >
-        Cargando sesiÃ³n...
+        Cargando sesion...
       </div>
     );
   }
@@ -158,7 +158,7 @@ export function LoginPage() {
           </h1>
 
           <p className="muted" style={{ marginTop: 10 }}>
-            Inicia sesiÃ³n para acceder al workspace de M&A, Compliance y Funding.
+            Inicia sesion para acceder al workspace de M&A, Compliance y Funding.
           </p>
         </div>
 
@@ -176,7 +176,7 @@ export function LoginPage() {
           </div>
 
           <div className="field">
-            <label>ContraseÃ±a</label>
+            <label>Contrasena</label>
 
             <div
               style={{
@@ -201,10 +201,10 @@ export function LoginPage() {
                 type="button"
                 onClick={togglePasswordVisibility}
                 aria-label={
-                  showPassword ? 'Ocultar contraseÃ±a' : 'Mostrar contraseÃ±a'
+                  showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'
                 }
                 title={
-                  showPassword ? 'Ocultar contraseÃ±a' : 'Mostrar contraseÃ±a'
+                  showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'
                 }
                 disabled={isSubmitting}
                 style={{
@@ -261,7 +261,7 @@ export function LoginPage() {
               <div>
                 <strong>Credenciales demo</strong>
                 <p className="muted" style={{ marginBottom: 0 }}>
-                  admin@ceoos.local Â· admin123
+                  admin@ceoos.local - admin123
                 </p>
               </div>
             </div>

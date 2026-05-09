@@ -953,7 +953,7 @@ function getSupplierSignal({ riskScore, resilienceScore, alertCount, evidenceCou
       title: 'High supplier exposure',
       posture: 'Prioritize review',
       description:
-        'El proveedor presenta exposiciÃ³n elevada. Prioriza revision humana, evidencias y plan de mitigacion.'
+        'El proveedor presenta exposición elevada. Prioriza revision humana, evidencias y plan de mitigacion.'
     };
   }
 
@@ -963,7 +963,7 @@ function getSupplierSignal({ riskScore, resilienceScore, alertCount, evidenceCou
       title: 'Supplier requires monitoring',
       posture: 'Review open items',
       description:
-        'Existen seÃ±ales que requieren seguimiento antes de considerar al proveedor como controlado.'
+        'Existen señales que requieren seguimiento antes de considerar al proveedor como controlado.'
     };
   }
 
@@ -1174,7 +1174,7 @@ function AlertCard({ alert }) {
           <h3 className="supplier-detail-list-card-title">{alert.title}</h3>
 
           <p className="muted supplier-detail-muted-tight" style={{ marginTop: 8 }}>
-            {alert.category || 'CategorÃ­a N/A'} · {alert.source || 'Fuente N/A'}
+            {alert.category || 'Categoría N/A'} · {alert.source || 'Fuente N/A'}
           </p>
         </div>
 
@@ -1227,8 +1227,8 @@ function ReviewCard({ review }) {
         <div>
           <h3 className="supplier-detail-list-card-title">
             {review.status === 'decided'
-              ? `DecisiÃ³n: ${review.decision}`
-              : 'RevisiÃ³n pendiente'}
+              ? `Decisión: ${review.decision}`
+              : 'Revisión pendiente'}
           </h3>
 
           <p className="muted supplier-detail-muted-tight" style={{ marginTop: 8 }}>
@@ -1439,7 +1439,7 @@ export function SupplierDetailPage() {
               <div className="supplier-detail-command-bar">
                 <CommandItem
                   label="Country"
-                  value={supplier.country || 'Sin paÃ­s'}
+                  value={supplier.country || 'Sin país'}
                 />
 
                 <CommandItem
@@ -1701,7 +1701,7 @@ export function SupplierDetailPage() {
                 <EmptyBlock
                   icon={FileBadge}
                   title="No hay evidencias asociadas"
-                  description="AÃ±ade evidencias para reforzar la trazabilidad documental del proveedor."
+                  description="Añade evidencias para reforzar la trazabilidad documental del proveedor."
                 />
               ) : (
                 activeSupplierEvidence.map((evidence) => (
@@ -1751,7 +1751,7 @@ export function SupplierDetailPage() {
                 <EmptyBlock
                   icon={Layers3}
                   title="No hay actividad registrada"
-                  description="La actividad aparecerÃ¡ cuando haya alertas, evidencias o revisiones asociadas."
+                  description="La actividad aparecerá cuando haya alertas, evidencias o revisiones asociadas."
                 />
               ) : (
                 evidenceTimeline.map((event) => (

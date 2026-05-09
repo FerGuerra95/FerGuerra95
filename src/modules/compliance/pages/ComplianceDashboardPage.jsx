@@ -1,4 +1,5 @@
-﻿import React from 'react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Activity,
   AlertTriangle,
@@ -14,8 +15,16 @@ import {
 } from 'lucide-react';
 import { Card } from '../../../shared/components/ui/Card.jsx';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
+import { Button } from '../../../shared/components/ui/Button.jsx';
+import {
+  PERMISSIONS,
+  useAuth
+} from '../../../app/providers/AuthProvider.jsx';
+import { useNotifications } from '../../../app/providers/NotificationsProvider.jsx';
 import { useComplianceStore } from '../store/complianceStore.js';
 import { useComplianceEngine } from '../engine/useComplianceEngine.js';
+import { complianceAuditApi } from '../services/complianceAuditApi.js';
+import { maCasesApi } from '../../ma/services/maCasesApi.js';
 
 const complianceDashboardCss = `
   .compliance-page,
@@ -566,6 +575,106 @@ const complianceDashboardCss = `
     line-height: 1.65;
   }
 
+  .compliance-enterprise-panel {
+    padding: 28px;
+    border-radius: 28px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025)),
+      rgba(15, 23, 42, 0.72);
+    box-shadow:
+      0 22px 62px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .compliance-enterprise-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .compliance-enterprise-head h3 {
+    margin: 0;
+    letter-spacing: -0.04em;
+  }
+
+  .compliance-action-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 9px 13px;
+    border-radius: 999px;
+    color: rgba(226, 232, 240, 0.94);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .compliance-enterprise-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  .compliance-enterprise-metric {
+    min-width: 0;
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.075);
+  }
+
+  .compliance-enterprise-metric strong {
+    display: block;
+    margin-top: 8px;
+    font-size: 23px;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  .compliance-enterprise-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .compliance-enterprise-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
+    color: inherit;
+    text-decoration: none;
+    border-radius: 14px;
+  }
+
+  .compliance-enterprise-row:hover {
+    background: rgba(255,255,255,0.032);
+  }
+
+  .compliance-enterprise-row strong {
+    display: block;
+    overflow-wrap: anywhere;
+  }
+
+  .compliance-error {
+    margin-top: 14px;
+    border-radius: 14px;
+    padding: 12px;
+    color: #fecaca;
+    background: rgba(127, 29, 29, 0.28);
+    border: 1px solid rgba(248, 113, 113, 0.26);
+    font-size: 13px;
+  }
+
   .compliance-muted-tight {
     margin-bottom: 0;
   }
@@ -753,6 +862,30 @@ function getEvidenceCoverage(value) {
   return parsed ?? 0;
 }
 
+function getAuditRiskLabel(score = 0) {
+  const safeScore = parseScore(score) ?? 0;
+
+  if (safeScore >= 76) return 'Crítico';
+  if (safeScore >= 56) return 'Alto';
+  if (safeScore >= 31) return 'Medio';
+  return 'Bajo';
+}
+
+function formatDate(value) {
+  if (!value) return 'N/A';
+
+  try {
+    return new Intl.DateTimeFormat('es-ES', {
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(new Date(value));
+  } catch {
+    return 'N/A';
+  }
+}
+
 function CommandItem({ label, value }) {
   return (
     <div className="compliance-command-item">
@@ -856,6 +989,112 @@ function EmptyBlock({ icon: Icon, title, description }) {
   );
 }
 
+function EnterpriseAuditPanel({
+  auditRuns,
+  latestAuditRun,
+  canRunAudit,
+  isRunningAudit,
+  auditError,
+  onRunAudit
+}) {
+  const summary = latestAuditRun?.summary || latestAuditRun?.payload || {};
+  const score = latestAuditRun
+    ? Number(latestAuditRun.score ?? summary.score ?? 0)
+    : null;
+  const criticalFindings = latestAuditRun
+    ? Number(latestAuditRun.criticalFindings ?? summary.criticalFindings ?? 0)
+    : 0;
+  const evidenceCoverage = latestAuditRun
+    ? Number(summary.evidenceCoverage ?? latestAuditRun.payload?.evidenceCoverage ?? 0)
+    : 0;
+  const riskLevel = latestAuditRun
+    ? getAuditRiskLabel(score)
+    : 'Pendiente';
+
+  return (
+    <section className="compliance-enterprise-panel">
+      <div className="compliance-enterprise-head">
+        <div>
+          <div className="compliance-kicker">
+            <ShieldCheck size={14} />
+            Enterprise rule engine
+          </div>
+
+          <h3>Compliance Audit Run</h3>
+
+          <p className="muted compliance-muted-tight" style={{ marginTop: 9 }}>
+            Ejecuta reglas deterministas GDPR, ISO 27001, SOC 2 y CSDDD con
+            enlaces automáticos al Evidence Vault.
+          </p>
+        </div>
+
+        <div className="row wrap" style={{ justifyContent: 'flex-end' }}>
+          <Button
+            variant="secondary"
+            disabled={!canRunAudit}
+            loading={isRunningAudit}
+            onClick={onRunAudit}
+          >
+            <ClipboardCheck size={15} />
+            Run audit
+          </Button>
+
+          <Link className="compliance-action-link" to="/compliance/audit-runs">
+            Audit ledger
+          </Link>
+        </div>
+      </div>
+
+      <div className="compliance-enterprise-grid">
+        <div className="compliance-enterprise-metric">
+          <div className="kpi-label">CEO risk score</div>
+          <strong>{latestAuditRun ? `${score}/100` : 'N/A'}</strong>
+        </div>
+
+        <div className="compliance-enterprise-metric">
+          <div className="kpi-label">Risk level</div>
+          <strong>{riskLevel}</strong>
+        </div>
+
+        <div className="compliance-enterprise-metric">
+          <div className="kpi-label">Critical findings</div>
+          <strong>{latestAuditRun ? criticalFindings : 'N/A'}</strong>
+        </div>
+
+        <div className="compliance-enterprise-metric">
+          <div className="kpi-label">Evidence coverage</div>
+          <strong>{latestAuditRun ? `${evidenceCoverage}%` : 'N/A'}</strong>
+        </div>
+      </div>
+
+      {auditError ? <div className="compliance-error">{auditError}</div> : null}
+
+      <div className="compliance-enterprise-list">
+        {auditRuns.slice(0, 4).map((item) => (
+          <Link
+            className="compliance-enterprise-row"
+            key={item.id}
+            to={`/compliance/audit-runs/${item.id}`}
+          >
+            <div>
+              <strong>{item.framework || 'all frameworks'}</strong>
+              <span className="muted">{formatDate(item.createdAt)}</span>
+            </div>
+            <Badge>{getAuditRiskLabel(item.score)}</Badge>
+            <strong>{Number(item.score || 0)}/100</strong>
+          </Link>
+        ))}
+
+        {auditRuns.length === 0 ? (
+          <div className="compliance-empty" style={{ marginTop: 12 }}>
+            No enterprise audit run has been executed yet.
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
 function SupplierRiskCard({ supplier }) {
   const riskColor = supplier?.riskLevel?.color || '';
   const riskLabel = supplier?.riskLevel?.label || 'Sin clasificar';
@@ -907,6 +1146,8 @@ function AlertCard({ alert }) {
 }
 
 export function ComplianceDashboardPage() {
+  const { can } = useAuth();
+  const notifications = useNotifications();
   const {
     suppliers,
     alerts,
@@ -914,6 +1155,11 @@ export function ComplianceDashboardPage() {
     reviews,
     activeSupplierId
   } = useComplianceStore();
+  const [auditRuns, setAuditRuns] = useState([]);
+  const [isLoadingAuditRuns, setIsLoadingAuditRuns] = useState(true);
+  const [isRunningAudit, setIsRunningAudit] = useState(false);
+  const [auditError, setAuditError] = useState('');
+  const canRunAudit = can(PERMISSIONS.RUN_COMPLIANCE_AUDIT);
 
   const safeSuppliers = Array.isArray(suppliers) ? suppliers : [];
   const safeAlerts = Array.isArray(alerts) ? alerts : [];
@@ -927,6 +1173,24 @@ export function ComplianceDashboardPage() {
     reviews: safeReviews,
     activeSupplierId
   });
+
+  async function loadAuditRuns() {
+    setIsLoadingAuditRuns(true);
+    setAuditError('');
+
+    try {
+      const items = await complianceAuditApi.listAuditRuns();
+      setAuditRuns(items);
+    } catch (error) {
+      setAuditError(error.message || 'Enterprise audit runs could not be loaded.');
+    } finally {
+      setIsLoadingAuditRuns(false);
+    }
+  }
+
+  useEffect(() => {
+    loadAuditRuns();
+  }, []);
 
   const dashboardCards = Array.isArray(engine.dashboardCards)
     ? engine.dashboardCards
@@ -960,6 +1224,41 @@ export function ComplianceDashboardPage() {
   const latestAlerts = Array.isArray(engine.latestAlerts)
     ? engine.latestAlerts
     : [];
+  const sortedAuditRuns = useMemo(
+    () =>
+      [...auditRuns].sort((left, right) => {
+        return (
+          new Date(right.createdAt || 0).getTime() -
+          new Date(left.createdAt || 0).getTime()
+        );
+      }),
+    [auditRuns]
+  );
+  const latestAuditRun = sortedAuditRuns[0] || null;
+
+  async function handleRunAudit() {
+    if (!canRunAudit) return;
+
+    setIsRunningAudit(true);
+    setAuditError('');
+
+    try {
+      const item = await complianceAuditApi.runAudit({
+        scope: 'portfolio'
+      });
+      setAuditRuns((current) => [item, ...current]);
+      notifications?.pushToast?.('Compliance enterprise audit completed');
+      try {
+        await maCasesApi.hydrateFromBackend();
+      } catch {
+        /* Cases refresh may fail if M&A endpoints are unavailable; audit still succeeded */
+      }
+    } catch (error) {
+      setAuditError(error.message || 'Enterprise audit could not be executed.');
+    } finally {
+      setIsRunningAudit(false);
+    }
+  }
 
   return (
     <div className="page">
@@ -1089,6 +1388,15 @@ export function ComplianceDashboardPage() {
             />
           </div>
         </section>
+
+        <EnterpriseAuditPanel
+          auditRuns={sortedAuditRuns}
+          latestAuditRun={latestAuditRun}
+          canRunAudit={canRunAudit}
+          isRunningAudit={isRunningAudit || isLoadingAuditRuns}
+          auditError={auditError}
+          onRunAudit={handleRunAudit}
+        />
 
         <section className="compliance-bridge-panel">
           <SectionHeader

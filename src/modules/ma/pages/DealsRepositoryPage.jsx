@@ -1035,9 +1035,9 @@ export function DealsRepositoryPage() {
                 <Badge>Private Deal Archive</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
                 {canDeleteCase ? (
-                  <Badge>EliminaciÃ³n permitida</Badge>
+                  <Badge>Eliminación permitida</Badge>
                 ) : (
-                  <Badge>Sin permiso de eliminaciÃ³n</Badge>
+                  <Badge>Sin permiso de eliminación</Badge>
                 )}
               </div>
 
@@ -1047,9 +1047,9 @@ export function DealsRepositoryPage() {
               </h1>
 
               <p className="deals-copy">
-                HistÃ³rico operativo de deals guardados con snapshot de
-                valoraciÃ³n, score de calidad, mÃºltiplo ajustado, sincronizaciÃ³n
-                backend/local y continuidad de anÃ¡lisis por organizaciÃ³n.
+                Histórico operativo de deals guardados con snapshot de
+                valoración, score de calidad, múltiplo ajustado, sincronización
+                backend/local y continuidad de análisis por organización.
               </p>
 
               <div className="deals-actions">
@@ -1105,7 +1105,7 @@ export function DealsRepositoryPage() {
                   >
                     <div className="deals-score-core">
                       <strong className={hasRepositoryScore ? '' : 'is-empty-score'}>
-                        {hasRepositoryScore ? repositoryHealth.score : 'â€”'}
+                        {hasRepositoryScore ? repositoryHealth.score : '—'}
                       </strong>
                     </div>
                   </div>
@@ -1150,26 +1150,26 @@ export function DealsRepositoryPage() {
             kicker="Repository overview"
             icon={Database}
             title="Deal archive at a glance"
-            description="Resumen rÃ¡pido del histÃ³rico M&A disponible, Ãºltimo caso guardado, snapshot econÃ³mico y estado de sincronizaciÃ³n."
+            description="Histórico privado de operaciones, último snapshot económico y estado de continuidad del repositorio."
           />
 
           <div className="deals-grid deals-grid-kpis">
             <KpiCard
               label="Deals guardados"
               value={safeSavedCases.length}
-              description="HistÃ³rico disponible"
+              description="Histórico disponible"
               icon={BriefcaseBusiness}
             />
 
             <KpiCard
-              label="Ãšltimo deal"
+              label="Último deal"
               value={latestCase?.name || 'N/A'}
-              description="Caso mÃ¡s reciente"
+              description="Caso más reciente"
               icon={FileSearch}
             />
 
             <KpiCard
-              label="Ãšltimo Equity Value"
+              label="Último Equity Value"
               value={latestEquityValue}
               description="Snapshot guardado"
               icon={TrendingUp}
@@ -1177,7 +1177,7 @@ export function DealsRepositoryPage() {
             />
 
             <KpiCard
-              label="SincronizaciÃ³n"
+              label="Sincronización"
               value={backendStatus?.error ? 'Local' : 'OK'}
               description="Estado backend/local"
               icon={ShieldCheck}
@@ -1194,7 +1194,7 @@ export function DealsRepositoryPage() {
 
         {backendStatus?.lastSyncAt ? (
           <StateCard tone="success" icon={CheckCircle2}>
-            Ãšltima sincronizaciÃ³n:{' '}
+            Última sincronización:{' '}
             {new Date(backendStatus.lastSyncAt).toLocaleString('es-ES')}
           </StateCard>
         ) : null}
@@ -1207,11 +1207,11 @@ export function DealsRepositoryPage() {
                 Private archive
               </div>
 
-              <h2 className="deals-panel-title">Deal Archive</h2>
+              <h2 className="deals-panel-title">Private Deal Archive</h2>
 
               <p className="muted deals-panel-description">
-                Carga un deal guardado para continuar el anÃ¡lisis, revisar la
-                valoraciÃ³n o exportar el reporte ejecutivo.
+                Consulta casos guardados, recupera snapshots y conserva
+                continuidad ejecutiva entre sesiones.
               </p>
             </div>
 
@@ -1223,8 +1223,8 @@ export function DealsRepositoryPage() {
           {safeSavedCases.length === 0 ? (
             <div className="deals-empty-wrap">
               <EmptyState
-                title="No hay deals guardados"
-                description="Guarda un deal desde Valuation Engine para empezar a construir histÃ³rico."
+                title="Repositorio sin deals guardados"
+                description="Guarda un deal desde valoración para activar histórico y continuidad de análisis."
               />
             </div>
           ) : (
@@ -1261,11 +1261,11 @@ export function DealsRepositoryPage() {
                         <h3 className="deals-case-title">{item.name}</h3>
 
                         <p className="muted deals-case-meta">
-                          {formatDate(item.createdAt)} Â· Equity Value {equityValue}
+                          {formatDate(item.createdAt)} · Equity Value {equityValue}
                         </p>
 
                         <p className="muted deals-case-meta">
-                          Quality Score {qualityScore}/100 Â· MÃºltiplo x
+                          Quality Score {qualityScore}/100 · Múltiplo x
                           {adjustedMultiple}
                         </p>
                       </div>
@@ -1310,7 +1310,7 @@ export function DealsRepositoryPage() {
                       <Badge>{currency}</Badge>
 
                       {!canDeleteCase ? (
-                        <Badge>Sin permiso de eliminaciÃ³n</Badge>
+                        <Badge>Sin permiso de eliminación</Badge>
                       ) : null}
                     </div>
                   </article>
@@ -1411,7 +1411,7 @@ function getRepositoryHealth({ count, backendStatus }) {
       title: 'Repository empty',
       posture: 'Build archive',
       description:
-        'TodavÃ­a no hay deals guardados. Guarda un primer caso para activar el histÃ³rico y medir la salud del repositorio.'
+        'Todavía no hay deals guardados. Guarda un primer caso para activar el histórico y medir la salud del repositorio.'
     };
   }
 
@@ -1421,7 +1421,7 @@ function getRepositoryHealth({ count, backendStatus }) {
       title: 'Local repository mode',
       posture: 'Local fallback',
       description:
-        'El repositorio tiene histÃ³rico, pero estÃ¡ operando en modo local. Conviene recuperar sincronizaciÃ³n backend para persistencia completa.'
+        'El repositorio tiene histórico, pero está operando en modo local. Conviene recuperar sincronización backend para persistencia completa.'
     };
   }
 
@@ -1431,7 +1431,7 @@ function getRepositoryHealth({ count, backendStatus }) {
       title: 'Repository synchronized',
       posture: 'Synced',
       description:
-        'Los deals guardados estÃ¡n sincronizados y disponibles para continuidad de anÃ¡lisis.'
+        'Los deals guardados están sincronizados y disponibles para continuidad de análisis.'
     };
   }
 
@@ -1440,7 +1440,7 @@ function getRepositoryHealth({ count, backendStatus }) {
     title: 'Repository ready',
     posture: 'Ready',
     description:
-      'El repositorio estÃ¡ preparado para cargar, consultar y mantener continuidad entre casos M&A.'
+      'El repositorio está preparado para cargar, consultar y mantener continuidad entre casos M&A.'
   };
 }
 

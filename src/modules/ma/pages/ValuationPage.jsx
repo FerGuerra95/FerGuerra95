@@ -33,12 +33,16 @@ import { FinancialInputPanel } from '../components/FinancialInputPanel.jsx';
 import { EquityHeroCard } from '../components/EquityHeroCard.jsx';
 import { ComparablesGrid } from '../components/ComparablesGrid.jsx';
 import { MAReportExportButton } from '../components/MAReportExportButton.jsx';
-import { DEMO_MA_CASE } from '../../../shared/config/demoData.js';
+import {
+  DEMO_MA_CASE,
+  ENTERPRISE_MA_DEMO_CASES
+} from '../../../shared/config/demoData.js';
 import {
   SHOW_DEMO_TOOLS,
   DEMO_BUTTON_LABELS,
   DEMO_RESET_LABELS
 } from '../../../shared/config/demoMode.js';
+import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 
 const maValuationCss = `
   .ma-valuation-page {
@@ -717,6 +721,123 @@ const maValuationCss = `
     line-height: 1.6;
   }
 
+  .ma-traceability-panel {
+    width: 100%;
+    border-radius: 28px;
+    padding: 28px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.72);
+    box-shadow:
+      0 24px 72px rgba(2, 6, 23, 0.22),
+      inset 0 1px 0 rgba(255,255,255,0.035);
+  }
+
+  .ma-traceability-score {
+    flex: 0 0 auto;
+    min-width: 124px;
+    padding: 15px 18px;
+    border-radius: 18px;
+    text-align: right;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .ma-traceability-score span {
+    display: block;
+    color: #bbf7d0;
+    font-size: 26px;
+    line-height: 1;
+    font-weight: 800;
+  }
+
+  .ma-traceability-score small {
+    display: block;
+    margin-top: 6px;
+    color: rgba(203, 213, 225, 0.72);
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  .ma-traceability-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .ma-traceability-source {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(190px, auto);
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .ma-traceability-source strong {
+    display: block;
+    margin-bottom: 5px;
+    color: rgba(248, 250, 252, 0.94);
+  }
+
+  .ma-traceability-source span {
+    display: block;
+    color: rgba(148, 163, 184, 0.9);
+    font-size: 12px;
+  }
+
+  .ma-traceability-source code {
+    justify-self: end;
+    max-width: 100%;
+    padding: 8px 10px;
+    border-radius: 12px;
+    color: #bfdbfe;
+    background: rgba(37, 99, 235, 0.1);
+    border: 1px solid rgba(96, 165, 250, 0.16);
+    font-size: 11px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .ma-traceability-docs {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(148, 163, 184, 0.12);
+  }
+
+  .ma-traceability-docs span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 7px 9px;
+    border-radius: 999px;
+    color: rgba(226, 232, 240, 0.86);
+    background: rgba(15, 23, 42, 0.32);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .ma-traceability-footer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
+    color: rgba(203, 213, 225, 0.82);
+    line-height: 1.5;
+  }
+
+  .ma-traceability-footer svg {
+    flex: 0 0 auto;
+    color: #86efac;
+  }
+
 
   /* M&A VALUATION · PREMIUM DEAL GLASS SYSTEM */
   .ma-valuation-page {
@@ -990,6 +1111,101 @@ const maValuationCss = `
     filter: brightness(1.035) saturate(1.04);
   }
 
+  .ma-valuation-page :is(
+    .ma-valuation-hero,
+    .ma-valuation-status-card,
+    .ma-valuation-command-item,
+    .ma-valuation-status-box,
+    .ma-score-module,
+    .ma-state-card,
+    .ma-empty-engine,
+    .ma-premium-deal-card,
+    .ma-premium-metric,
+    .ma-closing-structure-box,
+    .ma-bridge-row,
+    .ma-closing-footer-card,
+    .ma-closing-arrow,
+    .ma-intelligence-panel,
+    .ma-inference-item,
+    .ma-valuation-side .card,
+    .ma-valuation-side .panel,
+    .ma-valuation-main .card,
+    .ma-valuation-main .panel
+  ) {
+    background: rgba(15, 23, 42, 0.72) !important;
+    background-image: none !important;
+    border-color: rgba(148, 163, 184, 0.14) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .ma-valuation-page :is(
+    .ma-valuation-hero,
+    .ma-valuation-status-card,
+    .ma-valuation-command-item,
+    .ma-valuation-status-box,
+    .ma-score-module,
+    .ma-state-card,
+    .ma-empty-engine,
+    .ma-premium-deal-card,
+    .ma-premium-metric,
+    .ma-closing-structure-box,
+    .ma-bridge-row,
+    .ma-closing-footer-card,
+    .ma-closing-arrow,
+    .ma-intelligence-panel,
+    .ma-inference-item
+  )::before,
+  .ma-valuation-page :is(
+    .ma-valuation-hero,
+    .ma-valuation-status-card,
+    .ma-valuation-command-item,
+    .ma-valuation-status-box,
+    .ma-score-module,
+    .ma-state-card,
+    .ma-empty-engine,
+    .ma-premium-deal-card,
+    .ma-premium-metric,
+    .ma-closing-structure-box,
+    .ma-bridge-row,
+    .ma-closing-footer-card,
+    .ma-closing-arrow,
+    .ma-intelligence-panel,
+    .ma-inference-item
+  )::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .ma-valuation-page :is(
+    .ma-valuation-title,
+    .ma-premium-deal-header h3,
+    .ma-premium-metric strong,
+    .ma-bridge-value strong,
+    .ma-panel-header h3,
+    .ma-kicker,
+    .kpi-label
+  ) {
+    text-shadow: none !important;
+    letter-spacing: 0 !important;
+  }
+
+  .ma-valuation-page :is(
+    .ma-premium-metrics-grid,
+    .ma-bridge-list,
+    .ma-closing-footer,
+    .ma-inference-list,
+    .ma-valuation-status-grid
+  ) {
+    background: transparent !important;
+    background-image: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
   @media (max-width: 1180px) {
     .ma-valuation-hero-inner,
     .ma-valuation-workspace {
@@ -1087,6 +1303,20 @@ const maValuationCss = `
       padding: 24px;
     }
 
+    .ma-traceability-grid,
+    .ma-traceability-source {
+      grid-template-columns: 1fr;
+    }
+
+    .ma-traceability-score {
+      width: 100%;
+      text-align: left;
+    }
+
+    .ma-traceability-source code {
+      justify-self: start;
+    }
+
     .ma-empty-engine {
       border-radius: 26px;
       padding: 28px;
@@ -1141,7 +1371,7 @@ export function ValuationPage() {
   const validationErrors = [];
 
   if (!requiredString(financials.name)) {
-    validationErrors.push('La razÃ³n social es obligatoria.');
+    validationErrors.push('La razón social es obligatoria.');
   }
 
   if (derived.normalizedEbitda <= 0) {
@@ -1149,7 +1379,7 @@ export function ValuationPage() {
   }
 
   if (!financials.sector) {
-    validationErrors.push('Selecciona un sector vÃ¡lido.');
+    validationErrors.push('Selecciona un sector válido.');
   }
 
   const canAnalyze = validationErrors.length === 0 && !analysis.isAnalyzing;
@@ -1164,7 +1394,7 @@ export function ValuationPage() {
     };
   }, []);
 
-  function resetAnalysisState(label = 'Valuation Engine listo') {
+  function resetAnalysisState(label = 'Valoración lista') {
     if (analysisRef.current) {
       clearInterval(analysisRef.current);
       analysisRef.current = null;
@@ -1194,7 +1424,7 @@ export function ValuationPage() {
 
   function updateSetting(key, value) {
     if (!canEditCase) {
-      pushToast('No tienes permisos para editar la configuraciÃ³n M&A');
+      pushToast('No tienes permisos para editar la configuración M&A');
       return;
     }
 
@@ -1206,22 +1436,37 @@ export function ValuationPage() {
 
   function handleLoadDemoCase() {
     if (!canEditCase) {
-      pushToast('No tienes permisos para cargar la demo M&A');
+      pushToast('No tienes permisos para cargar el caso M&A');
       return;
     }
 
-    resetAnalysisState('Demo M&A preparada');
+    const primaryCase = ENTERPRISE_MA_DEMO_CASES[0] || DEMO_MA_CASE;
+    const demoCaseIds = new Set(
+      ENTERPRISE_MA_DEMO_CASES.map((item) => item.id)
+    );
+    const preparedCases = ENTERPRISE_MA_DEMO_CASES.map((item) => ({
+      ...item,
+      createdAt: item.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }));
+    const remainingCases = safeSavedCases.filter(
+      (item) => !demoCaseIds.has(item.id)
+    );
+
+    resetAnalysisState('Caso M&A preparado');
 
     setFinancials({
-      ...DEMO_MA_CASE.financials
+      ...primaryCase.financials
     });
 
     setSettings((prev) => ({
       ...prev,
-      ...DEMO_MA_CASE.settings
+      ...primaryCase.settings
     }));
 
-    pushToast('Demo M&A preparada: NovaTech Industrial Services');
+    updateSavedCases([...preparedCases, ...remainingCases].slice(0, 20));
+
+    pushToast('3 casos M&A enterprise preparados');
   }
 
   function handleResetDemoCase() {
@@ -1246,7 +1491,7 @@ export function ValuationPage() {
     setAnalysis({
       isAnalyzing: false,
       progress: 0,
-      label: 'Valuation Engine listo',
+      label: 'Valoración lista',
       showResults: false
     });
 
@@ -1279,11 +1524,11 @@ export function ValuationPage() {
         setAnalysis({
           isAnalyzing: false,
           progress: 100,
-          label: 'AnÃ¡lisis completado',
+          label: 'Análisis completado',
           showResults: true
         });
 
-        pushToast('AnÃ¡lisis M&A completado');
+        pushToast('Análisis M&A completado');
         return;
       }
 
@@ -1344,21 +1589,21 @@ export function ValuationPage() {
                 <Badge>M&A Valuation</Badge>
                 <Badge>Private Workspace</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                {canEditCase ? <Badge>EdiciÃ³n permitida</Badge> : null}
+                {canEditCase ? <Badge>Edición permitida</Badge> : null}
                 {canCreateCase ? <Badge>Guardado permitido</Badge> : null}
-                {canExportReport ? <Badge>ExportaciÃ³n permitida</Badge> : null}
+                {canExportReport ? <Badge>Exportación permitida</Badge> : null}
               </div>
 
               <h1 className="ma-valuation-title">
-                Valuation Engine.
+                M&A Valuation.
                 <span>Turn financial inputs into executive judgement.</span>
               </h1>
 
               <p className="ma-valuation-copy">
                 Ordena los datos financieros del target, normaliza EBITDA,
-                ajusta mÃºltiplos, detecta seÃ±ales crÃ­ticas y convierte el
-                anÃ¡lisis en una lectura defendible para comitÃ©, inversores o
-                decisiÃ³n interna.
+                ajusta múltiplos, detecta señales críticas y convierte el
+                análisis en una lectura defendible para comité, inversores o
+                decisión interna.
               </p>
 
               <div className="ma-valuation-actions">
@@ -1400,7 +1645,7 @@ export function ValuationPage() {
 
                 <Button onClick={handleAnalyze} disabled={!canAnalyze}>
                   <Zap size={16} />
-                  {analysis.isAnalyzing ? 'Procesando...' : 'Ejecutar anÃ¡lisis'}
+                  {analysis.isAnalyzing ? 'Procesando...' : 'Actualizar valoración'}
                 </Button>
               </div>
 
@@ -1476,7 +1721,7 @@ export function ValuationPage() {
 
                   <StatusRow
                     label="Analysis"
-                    value={analysis.label || 'Valuation Engine listo'}
+                    value={analysis.label || 'Valoración lista'}
                   />
 
                   <StatusRow
@@ -1505,7 +1750,7 @@ export function ValuationPage() {
           <main className="ma-valuation-main">
             {!canEditCase ? (
               <StateCard>
-                Tu rol actual permite consultar y ejecutar el anÃ¡lisis, pero no
+                Tu rol actual permite consultar y ejecutar el análisis, pero no
                 modificar inputs ni guardar cambios.
               </StateCard>
             ) : null}
@@ -1540,14 +1785,14 @@ export function ValuationPage() {
 
                   <h2>
                     {analysis.isAnalyzing
-                      ? 'Sincronizando motores...'
-                      : 'Valuation Engine listo'}
+                      ? 'Actualizando valoración...'
+                      : 'Valoración preparada'}
                   </h2>
 
                   <p className="muted">
                     {analysis.isAnalyzing
-                      ? 'El motor estÃ¡ consolidando mÃ©tricas, riesgo, mÃºltiplo ajustado y estructura del deal.'
-                      : 'Completa los inputs financieros y ejecuta el anÃ¡lisis para generar una lectura ejecutiva del activo.'}
+                      ? 'El motor está consolidando métricas, riesgo, múltiplo ajustado y estructura del deal.'
+                      : 'Carga información financiera suficiente para activar la lectura ejecutiva del activo.'}
                   </p>
 
                   {analysis.isAnalyzing ? (
@@ -1565,7 +1810,7 @@ export function ValuationPage() {
                     <strong>{analysis.label}</strong>
                     <div style={{ marginTop: 14 }}>
                       <ProgressBar
-                        label="Progreso del anÃ¡lisis"
+                        label="Progreso del análisis"
                         value={analysis.progress}
                       />
                     </div>
@@ -1589,9 +1834,9 @@ export function ValuationPage() {
                       <h3>Signals, risks and executive interpretation</h3>
 
                       <p className="muted">
-                        Lectura automÃ¡tica de seÃ±ales relevantes del deal:
-                        calidad del EBITDA, riesgos operativos, concentraciÃ³n,
-                        dependencia del dueÃ±o y palancas de ajuste.
+                        Lectura automática de señales relevantes del deal:
+                        calidad del EBITDA, riesgos operativos, concentración,
+                        dependencia del dueño y palancas de ajuste.
                       </p>
                     </div>
 
@@ -1611,8 +1856,8 @@ export function ValuationPage() {
                           <strong>No se han detectado red flags relevantes</strong>
 
                           <p className="muted">
-                            La lectura actual no muestra seÃ±ales crÃ­ticas,
-                            aunque conviene revisar documentaciÃ³n, calidad de
+                            La lectura actual no muestra señales críticas,
+                            aunque conviene revisar documentación, calidad de
                             beneficios y dependencia operativa antes de avanzar.
                           </p>
                         </div>
@@ -1635,6 +1880,8 @@ export function ValuationPage() {
                   </div>
                 </section>
 
+                <DecisionTraceabilityPanel derived={derived} />
+
                 <ComparablesGrid comparables={derived.comparables} />
               </>
             )}
@@ -1642,6 +1889,79 @@ export function ValuationPage() {
         </section>
       </div>
     </div>
+  );
+}
+
+function DecisionTraceabilityPanel({ derived }) {
+  const sources = Array.isArray(derived?.decisionSourcePack)
+    ? derived.decisionSourcePack
+    : [];
+  const summary = derived?.decisionSourceSummary || {};
+  const coverage = Number.isFinite(Number(summary.coverage))
+    ? Number(summary.coverage)
+    : 0;
+
+  return (
+    <section className="ma-traceability-panel">
+      <div className="ma-panel-header">
+        <div>
+          <div className="ma-kicker">
+            <ShieldCheck size={14} />
+            Evidence Control
+          </div>
+
+          <h3>Control documental de comite.</h3>
+
+          <p className="muted">
+            Fuentes criticas vinculadas a documentos del caso, con cobertura
+            visible antes de exportar o elevar conclusiones.
+          </p>
+        </div>
+
+        <div className="ma-traceability-score">
+          <span>{coverage}%</span>
+          <small>evidence coverage</small>
+        </div>
+      </div>
+
+      <div className="ma-traceability-grid">
+        {sources.map((source) => (
+          <article key={source.sourceId} className="ma-traceability-source">
+            <div>
+              <strong>{source.label}</strong>
+              <span>
+                {source.sourceType} · {source.documentCount || 0} doc(s)
+              </span>
+            </div>
+
+            <code>{source.sourceId}</code>
+
+            <div className="ma-traceability-docs">
+              {Array.isArray(source.documents) && source.documents.length > 0 ? (
+                source.documents.map((document) => (
+                  <span key={document.id || document.title}>
+                    {document.title}
+                  </span>
+                ))
+              ) : (
+                <span>
+                  Required: {(source.requiredDocuments || []).join(', ') || 'source evidence'}
+                </span>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="ma-traceability-footer">
+        <CheckCircle2 size={16} />
+        <span>
+          {summary.linked || 0}/{summary.total || sources.length} controles con
+          documento vinculado. Validacion humana requerida para circulacion
+          externa.
+        </span>
+      </div>
+    </section>
   );
 }
 
@@ -1654,6 +1974,8 @@ function PremiumDealStructureCard({ derived, settings }) {
   const netProceeds = readNumber(derived, ['netProceeds']);
   const qualityScore = readNumber(derived, ['qualityScore']);
   const riskLabel = derived?.riskLevel?.label || derived?.riskLevel || 'Moderate';
+  const reportCurrency =
+    settings?.reportCurrency || derived?.reportCurrency || derived?.currency || 'EUR';
 
   return (
     <section className="ma-premium-deal-card">
@@ -1682,12 +2004,12 @@ function PremiumDealStructureCard({ derived, settings }) {
         <div className="ma-premium-metrics-grid">
           <MetricBox
             label="EBITDA normalizado"
-            value={formatCurrencyValue(normalizedEbitda)}
+            value={formatCurrencyValue(normalizedEbitda, reportCurrency)}
             hint="Base operativa ajustada"
           />
 
           <MetricBox
-            label="MÃºltiplo ajustado"
+            label="Múltiplo ajustado"
             value={formatMultipleValue(adjustedMultiple)}
             hint="Riesgo, calidad y sector"
           />
@@ -1701,7 +2023,7 @@ function PremiumDealStructureCard({ derived, settings }) {
           <MetricBox
             label="Risk level"
             value={String(riskLabel)}
-            hint="SeÃ±al ejecutiva de riesgo"
+            hint="Señal ejecutiva de riesgo"
           />
         </div>
 
@@ -1711,8 +2033,8 @@ function PremiumDealStructureCard({ derived, settings }) {
               <h4>Estructura de cierre</h4>
 
               <p className="muted">
-                Este cuadro resume el recorrido econÃ³mico del deal en formato
-                comitÃ©: valoraciÃ³n de empresa, ajustes de deuda/caja, valor para
+                Este cuadro resume el recorrido económico del deal en formato
+                comité: valoración de empresa, ajustes de deuda/caja, valor para
                 accionistas y proceeds estimados.
               </p>
             </div>
@@ -1727,32 +2049,32 @@ function PremiumDealStructureCard({ derived, settings }) {
             <BridgeRow
               number="01"
               title="Enterprise Value"
-              description="Resultado de aplicar el mÃºltiplo ajustado sobre el EBITDA normalizado."
-              value={formatCurrencyValue(evBase)}
-              meta={`${formatCurrencyValue(normalizedEbitda)} Ã— ${formatMultipleValue(adjustedMultiple)}`}
+              description="Resultado de aplicar el múltiplo ajustado sobre el EBITDA normalizado."
+              value={formatCurrencyValue(evBase, reportCurrency)}
+              meta={`${formatCurrencyValue(normalizedEbitda, reportCurrency)} x ${formatMultipleValue(adjustedMultiple)}`}
             />
 
             <BridgeRow
               number="02"
               title="Ajuste de deuda neta"
               description="Puente entre valor de empresa y valor atribuible al accionista."
-              value={formatCurrencyValue(netDebt)}
+              value={formatCurrencyValue(netDebt, reportCurrency)}
               meta="Deuda financiera neta / caja"
             />
 
             <BridgeRow
               number="03"
               title="Equity Value"
-              description="Valor estimado de las participaciones despuÃ©s de ajustar deuda y caja."
-              value={formatCurrencyValue(equityBase)}
-              meta="Base de negociaciÃ³n"
+              description="Valor estimado de las participaciones después de ajustar deuda y caja."
+              value={formatCurrencyValue(equityBase, reportCurrency)}
+              meta="Base de negociación"
             />
 
             <BridgeRow
               number="04"
               title="Net proceeds estimados"
-              description="Lectura final orientada al vendedor, despuÃ©s de los supuestos econÃ³micos del deal."
-              value={formatCurrencyValue(netProceeds)}
+              description="Lectura final orientada al vendedor, después de los supuestos económicos del deal."
+              value={formatCurrencyValue(netProceeds, reportCurrency)}
               meta="Vista cierre"
             />
           </div>
@@ -1762,8 +2084,8 @@ function PremiumDealStructureCard({ derived, settings }) {
               <strong>Uso recomendado</strong>
 
               <p className="muted">
-                Utilizar como resumen principal para explicar la operaciÃ³n a
-                comitÃ©, comprador, vendedor o inversor.
+                Utilizar como resumen principal para explicar la operación a
+                comité, comprador, vendedor o inversor.
               </p>
             </div>
 
@@ -1772,11 +2094,11 @@ function PremiumDealStructureCard({ derived, settings }) {
             </div>
 
             <div className="ma-closing-footer-card">
-              <strong>PrÃ³ximo paso</strong>
+              <strong>Próximo paso</strong>
 
               <p className="muted">
-                Validar deuda, caja, ajustes normalizados, concentraciÃ³n de
-                clientes y documentaciÃ³n soporte antes de emitir conclusiÃ³n.
+                Validar deuda, caja, ajustes normalizados, concentración de
+                clientes y documentación soporte antes de emitir conclusión.
               </p>
             </div>
           </div>
@@ -1858,18 +2180,8 @@ function readNumber(source, keys, fallback = 0) {
   return fallback;
 }
 
-function formatCurrencyValue(value) {
-  const parsed = Number(value);
-
-  if (!Number.isFinite(parsed)) {
-    return 'â‚¬0';
-  }
-
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0
-  }).format(parsed);
+function formatCurrencyValue(value, currency = 'EUR') {
+  return formatCurrency(value, currency);
 }
 
 function formatMultipleValue(value) {
@@ -1914,7 +2226,7 @@ function getReadinessTitle({ canAnalyze, isAnalyzing, hasValidationErrors }) {
   if (hasValidationErrors) return 'Inputs required';
   if (canAnalyze) return 'Ready for valuation';
 
-  return 'Valuation Engine ready';
+  return 'Valuation ready';
 }
 
 function getReadinessHeadline({ canAnalyze, isAnalyzing, hasValidationErrors }) {
@@ -1927,16 +2239,16 @@ function getReadinessHeadline({ canAnalyze, isAnalyzing, hasValidationErrors }) 
 
 function getReadinessDescription({ canAnalyze, isAnalyzing, hasValidationErrors }) {
   if (isAnalyzing) {
-    return "CEO's OS estÃ¡ consolidando mÃ©tricas, riesgo, mÃºltiplo ajustado y estructura del deal.";
+    return "CEO's OS está consolidando métricas, riesgo, múltiplo ajustado y estructura del deal.";
   }
 
   if (hasValidationErrors) {
-    return 'El anÃ¡lisis necesita razÃ³n social, sector y EBITDA normalizado positivo para generar una lectura ejecutiva sÃ³lida.';
+    return 'El análisis necesita razón social, sector y EBITDA normalizado positivo para generar una lectura ejecutiva sólida.';
   }
 
   if (canAnalyze) {
-    return 'Puedes ejecutar el anÃ¡lisis para convertir los inputs financieros en valoraciÃ³n, seÃ±ales de riesgo y lectura ejecutiva.';
+    return 'Puedes ejecutar el análisis para convertir los inputs financieros en valoración, señales de riesgo y lectura ejecutiva.';
   }
 
-  return 'Carga los datos financieros del target para activar el motor de valoraciÃ³n.';
+  return 'Carga los datos financieros del target para activar el motor de valoración.';
 }

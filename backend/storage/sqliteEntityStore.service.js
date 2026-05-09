@@ -59,6 +59,12 @@ function getFieldName(column) {
   return snakeToCamel(column);
 }
 
+function getOrganizationColumn(tableName) {
+  return getColumns(tableName).includes('organization_id')
+    ? 'organization_id'
+    : null;
+}
+
 function getPayloadValueForColumn(payload = {}, column) {
   const camelKey = getFieldName(column);
   const snakeKey = column;
@@ -165,10 +171,48 @@ export function createSqliteEntityStore(tableName, idPrefix, defaults = {}) {
       return rows.map(rowToEntity);
     },
 
+    async listByOrganization(organizationId) {
+      const organizationColumn = getOrganizationColumn(safeTable);
+
+      if (!organizationColumn || !organizationId) return [];
+
+      const columns = getColumns(safeTable);
+      const orderColumn = columns.includes('created_at') ? 'created_at' : 'id';
+
+      const rows = allSql(
+        `
+          SELECT * FROM ${safeTable}
+          WHERE ${organizationColumn} = @organizationId
+          ORDER BY ${orderColumn} DESC
+        `,
+        { organizationId }
+      );
+
+      return rows.map(rowToEntity);
+    },
+
     async getById(id) {
       const row = getSql(
         `SELECT * FROM ${safeTable} WHERE id = @id LIMIT 1`,
         { id }
+      );
+
+      return row ? rowToEntity(row) : null;
+    },
+
+    async getByIdForOrganization(id, organizationId) {
+      const organizationColumn = getOrganizationColumn(safeTable);
+
+      if (!organizationColumn || !organizationId) return null;
+
+      const row = getSql(
+        `
+          SELECT * FROM ${safeTable}
+          WHERE id = @id
+            AND ${organizationColumn} = @organizationId
+          LIMIT 1
+        `,
+        { id, organizationId }
       );
 
       return row ? rowToEntity(row) : null;
@@ -245,10 +289,102 @@ export function createSqliteEntityStore(tableName, idPrefix, defaults = {}) {
       return this.getById(id);
     },
 
+    async updateForOrganization(id, patch = {}, organizationId) {
+      const existing = await this.getByIdForOrganization(id, organizationId);
+
+      if (!existing) return null;
+
+      const columns = getColumns(safeTable);
+      const organizationColumn = getOrganizationColumn(safeTable);
+
+      const nextPatch = {
+        ...patch,
+        id,
+        updatedAt: now()
+      };
+
+      if (organizationColumn) {
+        nextPatch.organizationId = organizationId;
+      }
+
+      const valuesByColumn = {
+        id,
+        organizationId
+      };
+
+      columns.forEach((column) => {
+        if (column === 'id') return;
+        if (column === 'created_at') return;
+
+        const value = getPayloadValueForColumn(nextPatch, column);
+
+        if (value === undefined) return;
+
+        if (column.endsWith('_json')) {
+          valuesByColumn[column] = toJson(
+            value,
+            column === 'items_json' ? [] : null
+          );
+          return;
+        }
+
+        valuesByColumn[column] = value;
+      });
+
+      const updateColumns = Object.keys(valuesByColumn).filter(
+        (column) => column !== 'id' && column !== 'organizationId'
+      );
+
+      if (updateColumns.length === 0) {
+        return existing;
+      }
+
+      const assignments = updateColumns.map(
+        (column) => `${column} = @${column}`
+      );
+
+      runSql(
+        `
+          UPDATE ${safeTable}
+          SET ${assignments.join(', ')}
+          WHERE id = @id
+            AND ${organizationColumn} = @organizationId
+        `,
+        valuesByColumn
+      );
+
+      return this.getByIdForOrganization(id, organizationId);
+    },
+
     async remove(id) {
       const result = runSql(
         `DELETE FROM ${safeTable} WHERE id = @id`,
         { id }
+      );
+
+      return {
+        deleted: result.changes > 0,
+        id
+      };
+    },
+
+    async removeForOrganization(id, organizationId) {
+      const organizationColumn = getOrganizationColumn(safeTable);
+
+      if (!organizationColumn || !organizationId) {
+        return {
+          deleted: false,
+          id
+        };
+      }
+
+      const result = runSql(
+        `
+          DELETE FROM ${safeTable}
+          WHERE id = @id
+            AND ${organizationColumn} = @organizationId
+        `,
+        { id, organizationId }
       );
 
       return {

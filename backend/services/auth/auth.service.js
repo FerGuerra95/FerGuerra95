@@ -12,6 +12,13 @@ const AUTH_SECRET =
   process.env.AUTH_SECRET || 'ceo-os-local-development-secret';
 
 const TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7;
+const PASSWORD_HASH_VERSION = 'scrypt_v1';
+const SCRYPT_KEY_LENGTH = 64;
+const SCRYPT_OPTIONS = {
+  N: 16384,
+  r: 8,
+  p: 1
+};
 
 const VALID_ROLES = ['admin', 'user', 'viewer'];
 
@@ -132,10 +139,52 @@ function createSalt() {
 }
 
 function hashPassword(password, salt) {
+  const hash = crypto
+    .scryptSync(String(password), salt, SCRYPT_KEY_LENGTH, SCRYPT_OPTIONS)
+    .toString('hex');
+
+  return [
+    PASSWORD_HASH_VERSION,
+    SCRYPT_OPTIONS.N,
+    SCRYPT_OPTIONS.r,
+    SCRYPT_OPTIONS.p,
+    hash
+  ].join('$');
+}
+
+function legacyHashPassword(password, salt) {
   return crypto
     .createHash('sha256')
     .update(`${salt}:${password}`)
     .digest('hex');
+}
+
+function parsePasswordHash(passwordHash) {
+  const parts = String(passwordHash || '').split('$');
+
+  if (parts.length !== 5 || parts[0] !== PASSWORD_HASH_VERSION) {
+    return null;
+  }
+
+  const [, rawN, rawR, rawP, hash] = parts;
+  const N = Number(rawN);
+  const r = Number(rawR);
+  const p = Number(rawP);
+
+  if (!Number.isFinite(N) || !Number.isFinite(r) || !Number.isFinite(p)) {
+    return null;
+  }
+
+  if (!/^[a-f0-9]+$/i.test(hash)) {
+    return null;
+  }
+
+  return {
+    N,
+    r,
+    p,
+    hash
+  };
 }
 
 function createPasswordRecord(password) {
@@ -156,9 +205,49 @@ function verifyPassword(password, user) {
     return false;
   }
 
-  const candidateHash = hashPassword(password, user.passwordSalt);
+  const passwordRecord = parsePasswordHash(user.passwordHash);
 
-  return safeCompare(candidateHash, user.passwordHash);
+  if (!passwordRecord) {
+    const legacyCandidateHash = legacyHashPassword(password, user.passwordSalt);
+
+    return safeCompare(legacyCandidateHash, user.passwordHash);
+  }
+
+  const candidateHash = crypto
+    .scryptSync(String(password), user.passwordSalt, SCRYPT_KEY_LENGTH, {
+      N: passwordRecord.N,
+      r: passwordRecord.r,
+      p: passwordRecord.p
+    })
+    .toString('hex');
+
+  return safeCompare(candidateHash, passwordRecord.hash);
+}
+
+function passwordNeedsUpgrade(user) {
+  return !parsePasswordHash(user?.passwordHash);
+}
+
+function updateUserPasswordRecord(userId, password) {
+  const passwordRecord = createPasswordRecord(password);
+  const updatedAt = now();
+
+  runSql(
+    `
+      UPDATE users
+      SET
+        password_hash = @passwordHash,
+        password_salt = @passwordSalt,
+        updated_at = @updatedAt
+      WHERE id = @id
+    `,
+    {
+      id: userId,
+      passwordHash: passwordRecord.passwordHash,
+      passwordSalt: passwordRecord.passwordSalt,
+      updatedAt
+    }
+  );
 }
 
 function now() {
@@ -274,21 +363,22 @@ function getUserById(id) {
   return mapDbUser(row);
 }
 
-function userExistsByIdOrEmail({ id, email }) {
-  return Boolean(
-    getSql(
-      `
-        SELECT id
-        FROM users
-        WHERE id = @id OR email = @email
-        LIMIT 1
-      `,
-      {
-        id,
-        email: normalizeEmail(email)
-      }
-    )
+function findUserByIdOrEmail({ id, email }) {
+  const row = getSql(
+    `
+      SELECT id
+      FROM users
+      WHERE id = @id OR email = @email
+      ORDER BY CASE WHEN id = @id THEN 0 ELSE 1 END
+      LIMIT 1
+    `,
+    {
+      id,
+      email: normalizeEmail(email)
+    }
   );
+
+  return row?.id || null;
 }
 
 function insertUser(user) {
@@ -336,6 +426,48 @@ function insertUser(user) {
       passwordSalt: passwordRecord.passwordSalt,
       createdAt,
       updatedAt: createdAt
+    }
+  );
+}
+
+function shouldSyncBootstrapUsers() {
+  return (
+    !isProduction() ||
+    process.env.CEOS_E2E === 'true' ||
+    process.env.BOOTSTRAP_SYNC_USERS === 'true'
+  );
+}
+
+function updateBootstrapUser(existingUserId, user) {
+  const updatedAt = now();
+  const passwordRecord = createPasswordRecord(user.password);
+
+  runSql(
+    `
+      UPDATE users
+      SET
+        name = @name,
+        email = @email,
+        role = @role,
+        organization_id = @organizationId,
+        workspaces_json = @workspacesJson,
+        status = @status,
+        password_hash = @passwordHash,
+        password_salt = @passwordSalt,
+        updated_at = @updatedAt
+      WHERE id = @id
+    `,
+    {
+      id: existingUserId,
+      name: user.name,
+      email: normalizeEmail(user.email),
+      role: normalizeRole(user.role),
+      organizationId: user.organizationId,
+      workspacesJson: JSON.stringify(normalizeWorkspaces(user.workspaces)),
+      status: normalizeStatus(user.status),
+      passwordHash: passwordRecord.passwordHash,
+      passwordSalt: passwordRecord.passwordSalt,
+      updatedAt
     }
   );
 }
@@ -538,8 +670,12 @@ function ensureUsersSeeded() {
 
   transaction(() => {
     for (const user of bootstrapUsers) {
-      if (!userExistsByIdOrEmail(user)) {
+      const existingUserId = findUserByIdOrEmail(user);
+
+      if (!existingUserId) {
         insertUser(user);
+      } else if (shouldSyncBootstrapUsers()) {
+        updateBootstrapUser(existingUserId, user);
       }
     }
   });
@@ -547,9 +683,101 @@ function ensureUsersSeeded() {
   return getAllUsers();
 }
 
-function createToken(user) {
-  const issuedAt = Math.floor(Date.now() / 1000);
+function createSessionId() {
+  return `auth_session_${crypto.randomUUID()}`;
+}
 
+function createAuthSession(user, issuedAt) {
+  const sessionId = createSessionId();
+  const expiresAt = new Date(
+    (issuedAt + TOKEN_TTL_SECONDS) * 1000
+  ).toISOString();
+  const createdAt = now();
+
+  runSql(
+    `
+      INSERT INTO auth_sessions (
+        id,
+        user_id,
+        organization_id,
+        status,
+        created_at,
+        expires_at,
+        revoked_at,
+        last_seen_at
+      )
+      VALUES (
+        @id,
+        @userId,
+        @organizationId,
+        'active',
+        @createdAt,
+        @expiresAt,
+        NULL,
+        @createdAt
+      )
+    `,
+    {
+      id: sessionId,
+      userId: user.id,
+      organizationId: user.organizationId,
+      createdAt,
+      expiresAt
+    }
+  );
+
+  return {
+    id: sessionId,
+    expiresAt
+  };
+}
+
+function assertActiveSession(sessionId, userId) {
+  if (!sessionId) {
+    throw createError('Sesion no valida.', 401, 'INVALID_SESSION');
+  }
+
+  const session = getSql(
+    `
+      SELECT id, user_id, status, expires_at, revoked_at
+      FROM auth_sessions
+      WHERE id = @id
+      LIMIT 1
+    `,
+    {
+      id: sessionId
+    }
+  );
+
+  if (!session || session.user_id !== userId) {
+    throw createError('Sesion no valida.', 401, 'INVALID_SESSION');
+  }
+
+  if (session.status !== 'active' || session.revoked_at) {
+    throw createError('Sesion revocada.', 401, 'SESSION_REVOKED');
+  }
+
+  if (
+    session.expires_at &&
+    new Date(session.expires_at).getTime() <= Date.now()
+  ) {
+    throw createError('Sesion caducada.', 401, 'TOKEN_EXPIRED');
+  }
+
+  runSql(
+    `
+      UPDATE auth_sessions
+      SET last_seen_at = @lastSeenAt
+      WHERE id = @id
+    `,
+    {
+      id: sessionId,
+      lastSeenAt: now()
+    }
+  );
+}
+
+function createToken(user, sessionId, issuedAt = Math.floor(Date.now() / 1000)) {
   const header = {
     alg: 'HS256',
     typ: 'JWT'
@@ -561,6 +789,7 @@ function createToken(user) {
     role: normalizeRole(user.role),
     organizationId: user.organizationId,
     workspaces: normalizeWorkspaces(user.workspaces),
+    jti: sessionId,
     iat: issuedAt,
     exp: issuedAt + TOKEN_TTL_SECONDS
   };
@@ -629,12 +858,22 @@ export async function loginUser({ email, password }) {
     );
   }
 
+  if (passwordNeedsUpgrade(user)) {
+    updateUserPasswordRecord(user.id, normalizedPassword);
+  }
+
   const safeUser = sanitizeUser(user);
-  const token = createToken(safeUser);
+  const issuedAt = Math.floor(Date.now() / 1000);
+  const session = createAuthSession(safeUser, issuedAt);
+  const token = createToken(safeUser, session.id, issuedAt);
 
   return {
     user: safeUser,
-    token
+    token,
+    session: {
+      id: session.id,
+      expiresAt: session.expiresAt
+    }
   };
 }
 
@@ -649,6 +888,8 @@ export async function getUserFromToken(token) {
     throw createError('Usuario no encontrado.', 401, 'USER_NOT_FOUND');
   }
 
+  assertActiveSession(payload.jti, payload.sub);
+
   return sanitizeUser(user);
 }
 
@@ -658,4 +899,37 @@ export function getTokenPayload(token) {
 
 export function listUsers() {
   return ensureUsersSeeded().map(sanitizeUser);
+}
+
+export async function logoutUser(token) {
+  const payload = verifyToken(token);
+
+  if (!payload?.jti) {
+    return {
+      loggedOut: true,
+      revoked: false
+    };
+  }
+
+  const revokedAt = now();
+  const result = runSql(
+    `
+      UPDATE auth_sessions
+      SET
+        status = 'revoked',
+        revoked_at = @revokedAt,
+        last_seen_at = @revokedAt
+      WHERE id = @id
+        AND revoked_at IS NULL
+    `,
+    {
+      id: payload.jti,
+      revokedAt
+    }
+  );
+
+  return {
+    loggedOut: true,
+    revoked: result.changes > 0
+  };
 }

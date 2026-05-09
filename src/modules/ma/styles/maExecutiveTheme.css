@@ -1,0 +1,210 @@
+.ma-executive-page,
+.ma-valuation-page,
+.ma-pipeline-page,
+.waterfall-page,
+.cim-page,
+.buyer-page,
+.deals-page,
+.ma-deal-detail-page {
+  --ma-exec-green: 16, 185, 129;
+  --ma-exec-blue: 37, 99, 235;
+  --ma-exec-gold: 212, 175, 55;
+  --ma-exec-line: rgba(148, 163, 184, 0.16);
+  --ma-exec-panel: rgba(15, 23, 42, 0.64);
+  --ma-exec-panel-strong: rgba(15, 23, 42, 0.76);
+  width: min(1540px, 100%);
+}
+
+.ma-executive-page :is(.ma-hero),
+.ma-valuation-page :is(.ma-valuation-hero),
+.ma-pipeline-page :is(.ma-pipeline-hero),
+.waterfall-page :is(.waterfall-hero),
+.cim-page :is(.cim-hero),
+.buyer-page :is(.buyer-hero),
+.deals-page :is(.deals-hero),
+.ma-deal-detail-page :is(.ma-deal-detail-hero) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-color: rgba(var(--ma-exec-green), 0.18) !important;
+  background:
+    linear-gradient(135deg, rgba(2, 6, 23, 0.995), rgba(15, 23, 42, 0.98) 58%, rgba(6, 78, 59, 0.92)) !important;
+  box-shadow:
+    0 38px 120px rgba(0, 0, 0, 0.42),
+    0 0 46px rgba(var(--ma-exec-green), 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+}
+
+.ma-executive-page :is(.ma-hero)::before,
+.ma-valuation-page :is(.ma-valuation-hero)::before,
+.ma-pipeline-page :is(.ma-pipeline-hero)::before,
+.waterfall-page :is(.waterfall-hero)::before,
+.cim-page :is(.cim-hero)::before,
+.buyer-page :is(.buyer-hero)::before,
+.deals-page :is(.deals-hero)::before,
+.ma-deal-detail-page :is(.ma-deal-detail-hero)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 82%);
+  pointer-events: none;
+}
+
+.ma-executive-page :is(.ma-title),
+.ma-valuation-page :is(.ma-valuation-title),
+.ma-pipeline-page :is(.ma-pipeline-title),
+.waterfall-page :is(.waterfall-title),
+.cim-page :is(.cim-title),
+.buyer-page :is(.buyer-title),
+.deals-page :is(.deals-title),
+.ma-deal-detail-page :is(.ma-deal-detail-title) {
+  letter-spacing: 0 !important;
+}
+
+.ma-executive-page :is(.ma-signal-card),
+.ma-valuation-page :is(.ma-valuation-status-card),
+.ma-pipeline-page :is(.ma-pipeline-signal-card),
+.waterfall-page :is(.waterfall-signal-card),
+.cim-page :is(.cim-export-card),
+.buyer-page :is(.buyer-signal-card),
+.deals-page :is(.deals-signal-card),
+.ma-deal-detail-page :is(.ma-detail-status-card) {
+  border-color: rgba(148, 163, 184, 0.20) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.086), rgba(255, 255, 255, 0.026)),
+    var(--ma-exec-panel-strong) !important;
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(22px) saturate(138%);
+  -webkit-backdrop-filter: blur(22px) saturate(138%);
+}
+
+.ma-executive-page :is(.ma-command-item, .ma-kpi-card, .ma-panel, .ma-summary-card, .ma-workflow-card, .ma-bridge-panel, .ma-pipeline-preview, .ma-glass-block),
+.ma-valuation-page :is(.ma-valuation-command-item, .ma-valuation-status-box, .ma-state-card, .ma-intelligence-panel, .ma-premium-deal-card, .ma-closing-structure-box, .ma-closing-footer-card, .ma-premium-metric),
+.ma-pipeline-page :is(.ma-pipeline-command-item, .ma-pipeline-summary-card, .ma-pipeline-toolbar, .ma-pipeline-board-shell, .ma-pipeline-column, .ma-deal-card),
+.waterfall-page :is(.waterfall-command-item, .waterfall-kpi-card, .waterfall-panel, .waterfall-bridge-panel, .waterfall-glass-block),
+.cim-page :is(.cim-command-item, .cim-kpi-card, .cim-panel, .cim-workflow-card, .cim-bridge-panel),
+.buyer-page :is(.buyer-command-item, .buyer-kpi-card, .buyer-panel, .buyer-bridge-panel, .buyer-bridge-step, .buyer-glass-block, .buyer-grid-frame),
+.deals-page :is(.deals-command-item, .deals-kpi-card, .deals-panel, .deals-case-card, .deals-state-card, .deals-case-metric),
+.ma-deal-detail-page :is(.ma-detail-panel, .ma-detail-note, .ma-detail-empty, .ma-detail-metric, .ma-detail-command-item) {
+  border-color: var(--ma-exec-line) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.064), rgba(255, 255, 255, 0.022)),
+    var(--ma-exec-panel) !important;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.21),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  backdrop-filter: blur(18px) saturate(132%);
+  -webkit-backdrop-filter: blur(18px) saturate(132%);
+}
+
+.ma-executive-page :is(.ma-icon-box, .ma-card-icon, .ma-panel-icon),
+.ma-valuation-page :is(.ma-valuation-icon-box, .ma-panel-icon, .ma-premium-deal-icon, .ma-empty-icon, .ma-inference-icon),
+.ma-pipeline-page :is(.ma-pipeline-icon-box, .ma-pipeline-summary-icon),
+.waterfall-page :is(.waterfall-icon-box, .waterfall-card-icon, .waterfall-panel-icon),
+.cim-page :is(.cim-icon-box, .cim-card-icon, .cim-panel-icon, .cim-arrow-icon),
+.buyer-page :is(.buyer-icon-box, .buyer-card-icon, .buyer-panel-icon, .buyer-rationale-icon),
+.deals-page :is(.deals-icon-box, .deals-card-icon, .deals-panel-icon, .deals-state-icon),
+.ma-deal-detail-page :is(.ma-detail-icon, .ma-detail-panel-icon) {
+  background:
+    linear-gradient(135deg, rgba(var(--ma-exec-green), 0.16), rgba(var(--ma-exec-blue), 0.10)) !important;
+  border-color: rgba(var(--ma-exec-green), 0.24) !important;
+  box-shadow:
+    0 0 18px rgba(var(--ma-exec-green), 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.065) !important;
+}
+
+.ma-executive-page :is(.ma-eyebrow-row),
+.ma-valuation-page :is(.ma-valuation-badges),
+.ma-pipeline-page :is(.ma-pipeline-badges),
+.waterfall-page :is(.waterfall-badge-row),
+.cim-page :is(.cim-badge-row),
+.buyer-page :is(.buyer-badge-row),
+.deals-page :is(.deals-badge-row),
+.ma-deal-detail-page :is(.ma-deal-detail-badges) {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.ma-executive-page :is(.ma-arrow-link, .ma-action-row a),
+.ma-pipeline-page :is(.ma-deal-open),
+.deals-page :is(.deals-case-actions a),
+.ma-deal-detail-page :is(.ma-deal-detail-actions a) {
+  border-color: rgba(var(--ma-exec-green), 0.24) !important;
+  background:
+    linear-gradient(90deg, rgba(var(--ma-exec-green), 0.145), rgba(var(--ma-exec-blue), 0.080)) !important;
+}
+
+.ma-valuation-page :is(.ma-valuation-workspace),
+.ma-pipeline-page :is(.ma-pipeline-board),
+.buyer-page :is(.buyer-grid),
+.deals-page :is(.deals-archive-list) {
+  align-items: stretch;
+}
+
+.ma-executive-page *,
+.ma-valuation-page *,
+.ma-pipeline-page *,
+.waterfall-page *,
+.cim-page *,
+.buyer-page *,
+.deals-page *,
+.ma-deal-detail-page * {
+  box-sizing: border-box;
+  min-width: 0;
+  letter-spacing: 0 !important;
+}
+
+.ma-executive-page :is(button, a, .badge, [class*="card"], [class*="panel"], [class*="row"], [class*="item"]),
+.ma-valuation-page :is(button, a, .badge, [class*="card"], [class*="panel"], [class*="row"], [class*="item"]),
+.ma-pipeline-page :is(button, a, .badge, [class*="card"], [class*="panel"], [class*="row"], [class*="item"]),
+.waterfall-page :is(button, a, .badge, [class*="card"], [class*="panel"], [class*="row"], [class*="item"]),
+.cim-page :is(button, a, .badge, [class*="card"], [class*="panel"], [class*="row"], [class*="item"]),
+.buyer-page :is(button, a, .badge, [class*="card"], [class*="panel"], [class*="row"], [class*="item"]),
+.deals-page :is(button, a, .badge, [class*="card"], [class*="panel"], [class*="row"], [class*="item"]),
+.ma-deal-detail-page :is(button, a, .badge, [class*="card"], [class*="panel"], [class*="row"], [class*="item"]) {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.ma-executive-page :is(.ma-hero),
+.ma-valuation-page :is(.ma-valuation-hero),
+.ma-pipeline-page :is(.ma-pipeline-hero),
+.waterfall-page :is(.waterfall-hero),
+.cim-page :is(.cim-hero),
+.buyer-page :is(.buyer-hero),
+.deals-page :is(.deals-hero),
+.ma-deal-detail-page :is(.ma-deal-detail-hero) {
+  border-radius: 12px !important;
+}
+
+.ma-executive-page :is(.ma-command-item, .ma-kpi-card, .ma-panel, .ma-summary-card, .ma-workflow-card, .ma-bridge-panel, .ma-pipeline-preview, .ma-glass-block),
+.ma-valuation-page :is(.ma-valuation-command-item, .ma-valuation-status-box, .ma-state-card, .ma-intelligence-panel, .ma-premium-deal-card, .ma-closing-structure-box, .ma-closing-footer-card, .ma-premium-metric),
+.ma-pipeline-page :is(.ma-pipeline-command-item, .ma-pipeline-summary-card, .ma-pipeline-toolbar, .ma-pipeline-board-shell, .ma-pipeline-column, .ma-deal-card),
+.waterfall-page :is(.waterfall-command-item, .waterfall-kpi-card, .waterfall-panel, .waterfall-bridge-panel, .waterfall-glass-block),
+.cim-page :is(.cim-command-item, .cim-kpi-card, .cim-panel, .cim-workflow-card, .cim-bridge-panel, .cim-export-card),
+.buyer-page :is(.buyer-command-item, .buyer-kpi-card, .buyer-panel, .buyer-bridge-panel, .buyer-bridge-step, .buyer-glass-block, .buyer-grid-frame),
+.deals-page :is(.deals-command-item, .deals-kpi-card, .deals-panel, .deals-case-card, .deals-state-card, .deals-case-metric),
+.ma-deal-detail-page :is(.ma-detail-panel, .ma-detail-note, .ma-detail-empty, .ma-detail-metric, .ma-detail-command-item) {
+  border-radius: 8px !important;
+}
+
+@media (max-width: 780px) {
+  .ma-executive-page,
+  .ma-valuation-page,
+  .ma-pipeline-page,
+  .waterfall-page,
+  .cim-page,
+  .buyer-page,
+  .deals-page,
+  .ma-deal-detail-page {
+    gap: 28px;
+  }
+}

@@ -994,7 +994,7 @@ export function WaterfallPage() {
                 <Badge>M&A Workspace</Badge>
                 <Badge>Deal Economics</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                {canEditCase ? <Badge>EdiciÃ³n M&A permitida</Badge> : null}
+                {canEditCase ? <Badge>Edición M&A permitida</Badge> : null}
               </div>
 
               <h1 className="waterfall-title">
@@ -1004,8 +1004,8 @@ export function WaterfallPage() {
 
               <p className="waterfall-copy">
                 Bridge ejecutivo desde Enterprise Value hasta Equity Value y Net
-                Proceeds, incorporando deuda, caja, ajustes de operaciÃ³n y reparto
-                econÃ³mico entre accionistas.
+                Proceeds, incorporando deuda, caja, ajustes de operación y reparto
+                económico entre accionistas.
               </p>
 
               <div className="waterfall-command-bar">
@@ -1048,7 +1048,7 @@ export function WaterfallPage() {
                   >
                     <div className="waterfall-score-core">
                       <strong className={hasWaterfallScore ? '' : 'is-empty-score'}>
-                        {hasWaterfallScore ? waterfallSignal.score : 'â€”'}
+                        {hasWaterfallScore ? waterfallSignal.score : '—'}
                       </strong>
                     </div>
                   </div>
@@ -1093,7 +1093,7 @@ export function WaterfallPage() {
             kicker="Economic bridge"
             icon={TrendingUp}
             title="Deal economics at a glance"
-            description="Resumen de las principales mÃ©tricas que explican cÃ³mo se transforma el valor bruto del activo en caja final para las partes."
+            description="Resumen de las principales métricas que explican cómo se transforma el valor bruto del activo en caja final para las partes."
           />
 
           <div className="waterfall-grid waterfall-grid-kpis">
@@ -1133,32 +1133,32 @@ export function WaterfallPage() {
             kicker="Transaction logic"
             icon={ArrowDownUp}
             title="From headline valuation to distributable cash"
-            description="El waterfall ayuda a explicar cÃ³mo cada ajuste transforma la valoraciÃ³n inicial en proceeds finales y en reparto econÃ³mico real."
+            description="El waterfall ayuda a explicar cómo cada ajuste transforma la valoración inicial en proceeds finales y en reparto económico real."
           />
 
           <div className="waterfall-bridge-grid">
             <BridgeStep
               number="01"
               title="Enterprise Value"
-              text="Valor econÃ³mico inicial del activo antes de aplicar deuda, caja y ajustes."
+              text="Valor económico inicial del activo antes de aplicar deuda, caja y ajustes."
             />
 
             <BridgeStep
               number="02"
               title="Net debt bridge"
-              text="Impacto de deuda financiera, caja disponible y posiciÃ³n neta sobre el equity."
+              text="Impacto de deuda financiera, caja disponible y posición neta sobre el equity."
             />
 
             <BridgeStep
               number="03"
               title="Equity Value"
-              text="Valor atribuible a los accionistas despuÃ©s de ajustar el valor empresa."
+              text="Valor atribuible a los accionistas después de ajustar el valor empresa."
             />
 
             <BridgeStep
               number="04"
               title="Net Proceeds"
-              text="Caja final estimada tras ajustes de operaciÃ³n, estructura y reparto."
+              text="Caja final estimada tras ajustes de operación, estructura y reparto."
             />
           </div>
         </section>
@@ -1169,7 +1169,7 @@ export function WaterfallPage() {
               kicker="Waterfall model"
               icon={Activity}
               title="Enterprise value to equity bridge"
-              description="Vista operativa del puente de valor y de los principales ajustes econÃ³micos de la operaciÃ³n."
+              description="Vista operativa del puente de valor y de los principales ajustes económicos de la operación."
             />
 
             <WaterfallPanel
@@ -1184,7 +1184,7 @@ export function WaterfallPage() {
               kicker="Cap table"
               icon={PieChart}
               title="Cap Table Distribution"
-              description="Reparto estimado de proceeds entre fundadores e inversores segÃºn la estructura de equity indicada."
+              description="Reparto estimado de proceeds entre fundadores e inversores según la estructura de equity indicada."
             />
 
             <div className="waterfall-distribution-grid">
@@ -1204,13 +1204,13 @@ export function WaterfallPage() {
               <AdjustmentItem
                 icon={Calculator}
                 title="Transaction Adjustments"
-                text="El waterfall explica cÃ³mo cada ajuste transforma la valoraciÃ³n bruta en caja final recibida por las partes."
+                text="El waterfall explica cómo cada ajuste transforma la valoración bruta en caja final recibida por las partes."
               />
 
               <AdjustmentItem
                 icon={CheckCircle2}
                 title="Decision clarity"
-                text="El objetivo no es solo calcular proceeds, sino entender quÃ© palancas afectan al resultado y dÃ³nde puede negociarse mejor."
+                text="El objetivo no es solo calcular proceeds, sino entender qué palancas afectan al resultado y dónde puede negociarse mejor."
               />
             </div>
           </section>
@@ -1221,11 +1221,11 @@ export function WaterfallPage() {
             kicker="Sensitivity"
             icon={Sparkles}
             title="Sensitivity Analysis"
-            description="Lectura de sensibilidad del valor ante cambios de mÃºltiplo y EBITDA normalizado."
+            description="Lectura de sensibilidad del valor ante cambios de múltiplo y EBITDA normalizado."
           />
 
           <div style={{ marginBottom: 22 }}>
-            <Badge>{derived.adjustedMultiple}x mÃºltiplo ajustado</Badge>
+            <Badge>{derived.adjustedMultiple}x múltiplo ajustado</Badge>
           </div>
 
           <SensitivityMatrix
@@ -1439,7 +1439,7 @@ function getWaterfallSignal({
       title: 'Incomplete economics',
       posture: 'Build bridge',
       description:
-        'Completa la valoraciÃ³n para generar un puente econÃ³mico defendible desde Enterprise Value hasta proceeds.'
+        'Completa la valoración para generar un puente económico defendible desde Enterprise Value hasta proceeds.'
     };
   }
 
@@ -1449,7 +1449,7 @@ function getWaterfallSignal({
       title: 'Clean proceeds bridge',
       posture: 'Proceed with structure',
       description:
-        'La estructura muestra un puente sÃ³lido entre valor empresa, deuda neta, equity y caja final estimada.'
+        'La estructura muestra un puente sólido entre valor empresa, deuda neta, equity y caja final estimada.'
     };
   }
 
@@ -1478,7 +1478,7 @@ function getWaterfallSignal({
     title: 'Weak proceeds bridge',
     posture: 'Rebuild economics',
     description:
-      'La estructura actual no genera una lectura econÃ³mica suficientemente sÃ³lida. Revisa supuestos antes de avanzar.'
+      'La estructura actual no genera una lectura económica suficientemente sólida. Revisa supuestos antes de avanzar.'
   };
 }
 

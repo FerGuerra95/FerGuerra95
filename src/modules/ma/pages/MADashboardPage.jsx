@@ -887,6 +887,90 @@ const maDashboardCss = `
     filter: brightness(1.035) saturate(1.04);
   }
 
+  .ma-executive-page :is(
+    .ma-hero,
+    .ma-command-item,
+    .ma-signal-card,
+    .ma-kpi-card,
+    .ma-module-card,
+    .ma-mini-metric,
+    .ma-glass-block,
+    .ma-bridge-step,
+    .ma-pipeline-preview,
+    .ma-pipeline-preview-metric,
+    .ma-score-module,
+    .ma-panel,
+    .card,
+    .panel
+  ) {
+    background: rgba(15, 23, 42, 0.72) !important;
+    background-image: none !important;
+    border-color: rgba(148, 163, 184, 0.14) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .ma-executive-page :is(
+    .ma-hero,
+    .ma-command-item,
+    .ma-signal-card,
+    .ma-kpi-card,
+    .ma-module-card,
+    .ma-mini-metric,
+    .ma-glass-block,
+    .ma-bridge-step,
+    .ma-pipeline-preview,
+    .ma-pipeline-preview-metric,
+    .ma-score-module
+  )::before,
+  .ma-executive-page :is(
+    .ma-hero,
+    .ma-command-item,
+    .ma-signal-card,
+    .ma-kpi-card,
+    .ma-module-card,
+    .ma-mini-metric,
+    .ma-glass-block,
+    .ma-bridge-step,
+    .ma-pipeline-preview,
+    .ma-pipeline-preview-metric,
+    .ma-score-module
+  )::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .ma-executive-page :is(
+    .ma-hero-layout,
+    .ma-grid-kpis,
+    .ma-grid-two,
+    .ma-bridge-grid,
+    .ma-latest-grid,
+    .ma-summary-grid,
+    .ma-pipeline-preview-inner,
+    .ma-pipeline-preview-metrics
+  ) {
+    background: transparent !important;
+    background-image: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .ma-executive-page :is(
+    .ma-title,
+    .ma-kicker,
+    .ma-kpi-value,
+    .ma-pipeline-preview-metric strong,
+    .ma-mini-metric strong,
+    .kpi-label
+  ) {
+    letter-spacing: 0 !important;
+    text-shadow: none !important;
+  }
+
   @media (max-width: 1180px) {
     .ma-hero-layout,
     .ma-pipeline-preview-inner {
@@ -1044,8 +1128,8 @@ export function MADashboardPage() {
                 <Badge>M&A Intelligence</Badge>
                 <Badge>Executive Command Center</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                {canEditCases ? <Badge>EdiciÃ³n permitida</Badge> : null}
-                {canExportReports ? <Badge>ExportaciÃ³n permitida</Badge> : null}
+                {canEditCases ? <Badge>Edición permitida</Badge> : null}
+                {canExportReports ? <Badge>Exportación permitida</Badge> : null}
               </div>
 
               <h1 className="ma-title">
@@ -1055,8 +1139,8 @@ export function MADashboardPage() {
 
               <p className="ma-hero-copy">
                 Pantalla de mando para revisar el estado del caso activo,
-                acceder a los mÃ³dulos principales y mantener continuidad entre
-                valoraciÃ³n, pipeline, waterfall, reporting y repositorio de
+                acceder a los módulos principales y mantener continuidad entre
+                valoración, pipeline, waterfall, reporting y repositorio de
                 deals.
               </p>
 
@@ -1065,8 +1149,8 @@ export function MADashboardPage() {
                   <Button>
                     <BarChart3 size={16} />
                     {isViewer
-                      ? 'Ver Valuation Engine'
-                      : 'Abrir Valuation Engine'}
+                      ? 'Ver valoración'
+                      : 'Abrir valoración'}
                   </Button>
                 </Link>
 
@@ -1099,8 +1183,8 @@ export function MADashboardPage() {
                 />
 
                 <CommandItem
-                  label="Operating loop"
-                  value="Analyze Â· Pipeline Â· Structure Â· Report"
+                label="Operating model"
+                value="Value · Pipeline · Structure · Report"
                 />
 
                 <CommandItem
@@ -1132,7 +1216,7 @@ export function MADashboardPage() {
                   >
                     <div className="ma-score-core">
                       <strong className={qualityScore === null ? 'is-empty-score' : ''}>
-                        {qualityScore === null ? 'â€”' : qualityScore}
+                        {qualityScore === null ? '—' : qualityScore}
                       </strong>
                     </div>
                   </div>
@@ -1174,7 +1258,7 @@ export function MADashboardPage() {
             kicker="Executive overview"
             icon={Activity}
             title="M&A workspace at a glance"
-            description="Resumen rÃ¡pido del caso activo y del estado general del workspace sin duplicar las pantallas especÃ­ficas de valoraciÃ³n, pipeline, waterfall o reporting."
+            description="Vista ejecutiva del caso activo, valoración base, señal de calidad y continuidad del portfolio M&A."
           />
 
           <div className="ma-grid ma-grid-kpis">
@@ -1202,7 +1286,7 @@ export function MADashboardPage() {
             <KpiCard
               label="Deals guardados"
               value={safeSavedCases.length}
-              description="HistÃ³rico disponible"
+              description="Histórico disponible"
               icon={FileSearch}
             />
           </div>
@@ -1212,15 +1296,15 @@ export function MADashboardPage() {
           <SectionHeader
             kicker="Operating system logic"
             icon={Target}
-            title="Analyze, pipeline, structure, document and decide"
-            description="CEO's OS organiza el ciclo M&A en una secuencia clara. Cada mÃ³dulo tiene una funciÃ³n concreta y evita duplicar informaciÃ³n entre pantallas."
+            title="Executive deal operating model"
+            description="Un marco compacto para valorar, priorizar, estructurar y documentar decisiones M&A con disciplina de comité."
           />
 
           <div className="ma-bridge-grid">
             <BridgeStep
               number="01"
-              title="Analyze"
-              text="Carga inputs, normaliza EBITDA y detecta seÃ±ales crÃ­ticas en Valuation Engine."
+              title="Value"
+              text="Valoración base, sensibilidad, DCF de control y señales críticas del activo."
             />
 
             <BridgeStep
@@ -1232,13 +1316,13 @@ export function MADashboardPage() {
             <BridgeStep
               number="03"
               title="Structure"
-              text="Revisa deuda, caja, equity value, net proceeds y waterfall econÃ³mico."
+              text="Revisa deuda, caja, equity value, net proceeds y waterfall económico."
             />
 
             <BridgeStep
               number="04"
               title="Report"
-              text="Convierte el anÃ¡lisis en narrativa ejecutiva, CIM y material exportable."
+              text="Convierte el análisis en narrativa ejecutiva, CIM y material exportable."
             />
           </div>
         </section>
@@ -1254,10 +1338,8 @@ export function MADashboardPage() {
               <h2>M&A Deal Pipeline</h2>
 
               <p className="muted">
-                El pipeline vive ahora en una pÃ¡gina propia para mantener el
-                dashboard limpio y permitir una evoluciÃ³n enterprise: fases,
-                owner, prioridad, riesgo, valor potencial, filtros y futuras
-                pÃ¡ginas de detalle por operaciÃ³n.
+                Pipeline privado para gobernar fases, owner, prioridad, riesgo,
+                valor potencial y foco ejecutivo de cada oportunidad.
               </p>
 
               <div className="ma-pipeline-preview-actions">
@@ -1305,50 +1387,50 @@ export function MADashboardPage() {
           <SectionHeader
             kicker="Execution path"
             icon={Target}
-            title="Open the right module for the next decision"
-            description="Accesos directos a cada parte del flujo M&A. El dashboard resume; los mÃ³dulos especÃ­ficos profundizan."
+            title="Decision workbench"
+            description="Accesos directos a las vistas críticas del ciclo M&A."
           />
 
           <div className="ma-grid ma-grid-two">
             <WorkflowCard
               number="01"
-              title="Valuation Engine"
-              description="Trabaja los inputs financieros, ejecuta el anÃ¡lisis y revisa el resultado principal de valoraciÃ³n."
+              title="Valuation"
+              description="Valor base, rango, sensibilidad, DCF de control y calidad del activo."
               to="/ma/valuation"
             />
 
             <WorkflowCard
               number="02"
               title="Deal Pipeline"
-              description="Gestiona operaciones por fase, prioridad, valor, riesgo, owner y siguiente paso."
+              description="Gobierna fases, prioridad, valor, riesgo, owner y foco ejecutivo."
               to="/ma/pipeline"
             />
 
             <WorkflowCard
               number="03"
               title="Deal Waterfall"
-              description="Analiza Enterprise Value, deuda neta, Equity Value, proceeds y reparto econÃ³mico."
+              description="Analiza Enterprise Value, deuda neta, Equity Value, proceeds y reparto económico."
               to="/ma/waterfall"
             />
 
             <WorkflowCard
               number="04"
               title="CIM / Executive Report"
-              description="Prepara narrativa ejecutiva, tesis, riesgos y material para inversores o comitÃ©."
+              description="Prepara narrativa ejecutiva, tesis, riesgos y material para inversores o comité."
               to="/ma/cim"
             />
 
             <WorkflowCard
               number="05"
               title="Buyer Matching"
-              description="Revisa encaje de compradores estratÃ©gicos, financieros y capital paciente."
+              description="Revisa encaje de compradores estratégicos, financieros y capital paciente."
               to="/ma/matching"
             />
 
             <WorkflowCard
               number="06"
               title="Deals Repository"
-              description="Recupera casos guardados, consulta snapshots y conserva el histÃ³rico M&A."
+              description="Recupera casos guardados, consulta snapshots y conserva el histórico M&A."
               to="/ma/deals"
             />
           </div>
@@ -1366,8 +1448,8 @@ export function MADashboardPage() {
                 <h3>Current deal snapshot</h3>
 
                 <p className="muted">
-                  Lectura compacta del caso activo. Para el anÃ¡lisis completo,
-                  entra en Valuation Engine, Deal Pipeline o Deal Waterfall.
+                  Lectura compacta del caso activo con acceso directo a
+                  valoración, pipeline y waterfall.
                 </p>
               </div>
 
@@ -1387,7 +1469,7 @@ export function MADashboardPage() {
               <Link to="/ma/valuation">
                 <Button variant="secondary">
                   <BarChart3 size={16} />
-                  Revisar valoraciÃ³n
+                  Revisar valoración
                 </Button>
               </Link>
 
@@ -1412,22 +1494,22 @@ export function MADashboardPage() {
               kicker="Decision discipline"
               icon={ShieldCheck}
               title="Recommended Next Step"
-              description="Siguiente acciÃ³n sugerida segÃºn el estado actual del caso y del repositorio."
+              description="Siguiente acción sugerida según el estado actual del caso y del repositorio."
             />
 
             <div className="ma-glass-block">
               <strong>{getRecommendedAction(qualityScore, latestCase)}</strong>
 
               <p className="muted" style={{ marginTop: 10 }}>
-                El objetivo del dashboard no es repetir todo el anÃ¡lisis. Es
-                ayudarte a decidir quÃ© mÃ³dulo abrir y quÃ© paso dar ahora.
+                Prioriza la siguiente decisión con base en calidad del activo,
+                evidencia disponible y estado del repositorio.
               </p>
 
               <div className="ma-action-row">
                 <Link to="/ma/valuation">
                   <Button variant="secondary">
                     <BarChart3 size={16} />
-                    Valuation Engine
+                    Valuation
                   </Button>
                 </Link>
 
@@ -1455,7 +1537,7 @@ export function MADashboardPage() {
               kicker="Private repository"
               icon={LockKeyhole}
               title="Saved Deal Snapshot"
-              description="Ãšltimo caso guardado en el repositorio privado de M&A."
+              description="Último caso guardado en el repositorio privado de M&A."
             />
 
             {latestCase ? (
@@ -1466,7 +1548,7 @@ export function MADashboardPage() {
                       <strong>{latestCase.name}</strong>
 
                       <p className="muted ma-muted-tight" style={{ marginTop: 10 }}>
-                        Ãšltimo snapshot disponible para continuidad de anÃ¡lisis.
+                        Último snapshot disponible para continuidad de análisis.
                       </p>
                     </div>
 
@@ -1499,11 +1581,11 @@ export function MADashboardPage() {
               </div>
             ) : (
               <div className="ma-glass-block">
-                <strong>No hay deals guardados todavÃ­a</strong>
+                <strong>Repositorio sin casos guardados</strong>
 
                 <p className="muted" style={{ marginTop: 10 }}>
-                  Guarda un caso desde Valuation Engine para construir
-                  histÃ³rico, recuperar anÃ¡lisis y preparar una demo completa de
+                  Guarda un caso desde valoración para construir histórico,
+                  recuperar análisis y preparar una presentación completa de
                   M&A.
                 </p>
 
@@ -1530,9 +1612,9 @@ export function MADashboardPage() {
                 <h3>Clean dashboard mode</h3>
 
                 <p className="muted">
-                  Esta vista queda reservada para mando ejecutivo. La valoraciÃ³n
+                  Esta vista queda reservada para mando ejecutivo. La valoración
                   detallada, pipeline completo, deal structure y comparables
-                  viven en sus mÃ³dulos correspondientes.
+                  viven en sus módulos correspondientes.
                 </p>
               </div>
 
@@ -1542,7 +1624,7 @@ export function MADashboardPage() {
             </div>
 
             <div className="ma-summary-grid">
-              <MiniMetric label="Valuation detail" value="Valuation Engine" />
+              <MiniMetric label="Valuation detail" value="Valuation" />
               <MiniMetric label="Pipeline detail" value="Deal Pipeline" />
               <MiniMetric label="Waterfall detail" value="Deal Waterfall" />
               <MiniMetric label="Report detail" value="CIM / Report" />
@@ -1735,7 +1817,7 @@ function getQualitySignal(score) {
       title: 'Incomplete deal picture',
       posture: 'Build case',
       description:
-        'Faltan datos suficientes para una lectura ejecutiva sÃ³lida. Completa razÃ³n social, sector y EBITDA normalizado antes de presentar conclusiones.'
+        'El caso necesita razón social, sector y EBITDA normalizado antes de presentar conclusiones.'
     };
   }
 
@@ -1744,7 +1826,7 @@ function getQualitySignal(score) {
       title: 'High-conviction opportunity',
       posture: 'Advance',
       description:
-        'El deal presenta seÃ±ales sÃ³lidas para avanzar a revisiÃ³n profunda, manteniendo validaciÃ³n financiera, legal y operativa.'
+        'El deal presenta señales sólidas para avanzar a revisión profunda, manteniendo validación financiera, legal y operativa.'
     };
   }
 
@@ -1753,7 +1835,7 @@ function getQualitySignal(score) {
       title: 'Qualified opportunity',
       posture: 'Review',
       description:
-        'El deal tiene base suficiente para anÃ¡lisis, aunque conviene revisar riesgos, calidad de beneficios y dependencias clave.'
+        'El deal tiene base suficiente para análisis, aunque conviene revisar riesgos, calidad de beneficios y dependencias clave.'
     };
   }
 
@@ -1762,7 +1844,7 @@ function getQualitySignal(score) {
       title: 'Watchlist opportunity',
       posture: 'Validate',
       description:
-        'El deal requiere validaciÃ³n adicional antes de avanzar. Prioriza calidad de informaciÃ³n, riesgos y consistencia financiera.'
+        'El deal requiere validación adicional antes de avanzar. Prioriza calidad de información, riesgos y consistencia financiera.'
     };
   }
 
@@ -1770,28 +1852,28 @@ function getQualitySignal(score) {
     title: 'Incomplete deal picture',
     posture: 'Build case',
     description:
-      'Faltan datos suficientes para una lectura ejecutiva sÃ³lida. Completa inputs financieros antes de presentar conclusiones.'
+      'El caso necesita información financiera suficiente antes de presentar conclusiones.'
   };
 }
 
 function getRecommendedAction(score, latestCase) {
   if (score === null) {
-    return 'Completar los datos mÃ­nimos del caso antes de interpretar el score ejecutivo.';
+    return 'Cerrar los datos mínimos del caso antes de interpretar el score ejecutivo.';
   }
 
   if (!latestCase) {
-    return 'Crear y guardar un primer caso para construir histÃ³rico de anÃ¡lisis.';
+    return 'Crear y guardar un primer caso para construir histórico de análisis.';
   }
 
   if (score >= 70) {
-    return 'Preparar CIM / Executive Report y revisar el caso para presentaciÃ³n.';
+    return 'Preparar CIM / Executive Report y revisar el caso para presentación.';
   }
 
   if (score >= 45) {
-    return 'Completar inputs crÃ­ticos y validar riesgos antes de exportar conclusiones.';
+    return 'Cerrar inputs críticos y validar riesgos antes de exportar conclusiones.';
   }
 
-  return 'Reforzar datos financieros antes de avanzar a valoraciÃ³n o reporte.';
+  return 'Reforzar datos financieros antes de avanzar a valoración o reporte.';
 }
 
 export default MADashboardPage;

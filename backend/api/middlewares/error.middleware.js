@@ -41,11 +41,13 @@ export const errorMiddleware = (err, req, res, _next) => {
     meta: {
       method: req.method,
       path: req.originalUrl,
+      requestId: req.requestId,
       timestamp: new Date().toISOString()
     },
     error: {
       code,
-      message
+      message,
+      ...(err.details ? { details: err.details } : {})
     }
   });
 };

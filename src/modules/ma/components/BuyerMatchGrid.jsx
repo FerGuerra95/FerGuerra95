@@ -405,11 +405,11 @@ export function BuyerMatchGrid({ buyers }) {
             <Users size={24} />
           </div>
 
-          <h3>Sin compradores generados todavía</h3>
+          <h3>Buyer universe pendiente</h3>
 
           <p className="muted">
-            Completa la valoración del activo para generar perfiles de comprador
-            accionables y priorizar el universo de potenciales adquirentes.
+            Actualiza la valoración del activo para priorizar perfiles de
+            comprador y conversaciones de mayor probabilidad.
           </p>
         </div>
       ) : (

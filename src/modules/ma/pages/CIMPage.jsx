@@ -929,7 +929,7 @@ export function CIMPage() {
     : [];
   const execSummary =
     derived.execSummary ||
-    'El memorando ejecutivo se completarÃ¡ cuando existan inputs financieros suficientes para construir una lectura defendible del activo.';
+    'El memorando ejecutivo se completará cuando existan inputs financieros suficientes para construir una lectura defendible del activo.';
 
   function handleExport() {
     if (!canExportReport) {
@@ -965,9 +965,9 @@ export function CIMPage() {
                 <Badge>CIM Executive</Badge>
                 {isViewer ? <Badge>Modo solo lectura</Badge> : null}
                 {canExportReport ? (
-                  <Badge>ExportaciÃ³n permitida</Badge>
+                  <Badge>Exportación permitida</Badge>
                 ) : (
-                  <Badge>Sin permiso de exportaciÃ³n</Badge>
+                  <Badge>Sin permiso de exportación</Badge>
                 )}
               </div>
 
@@ -977,9 +977,9 @@ export function CIMPage() {
               </h1>
 
               <p className="cim-hero-copy">
-                Convierte la valoraciÃ³n del activo en una narrativa ejecutiva:
-                resumen de inversiÃ³n, tesis, mÃºltiplos, comparables, riesgos y
-                seÃ±ales clave preparadas para comitÃ©, inversores o revisiÃ³n
+                Convierte la valoración del activo en una narrativa ejecutiva:
+                resumen de inversión, tesis, múltiplos, comparables, riesgos y
+                señales clave preparadas para comité, inversores o revisión
                 interna.
               </p>
 
@@ -990,7 +990,7 @@ export function CIMPage() {
                     Imprimir / Guardar PDF
                   </Button>
                 ) : (
-                  <Badge>ExportaciÃ³n bloqueada por permisos</Badge>
+                  <Badge>Exportación bloqueada por permisos</Badge>
                 )}
               </div>
 
@@ -1063,12 +1063,12 @@ export function CIMPage() {
             kicker="Memo snapshot"
             icon={BarChart3}
             title="Investment memo at a glance"
-            description="Resumen de las principales mÃ©tricas del activo para entender valoraciÃ³n, calidad del deal y posiciÃ³n del documento antes de exportar."
+            description="Resumen de las principales métricas del activo para entender valoración, calidad del deal y posición del documento antes de exportar."
           />
 
           <div className="cim-grid cim-grid-kpis">
             <KpiCard
-              label="CompaÃ±Ã­a"
+              label="Compañía"
               value={activeCompanyName}
               description="Activo analizado"
               icon={FileSearch}
@@ -1085,7 +1085,7 @@ export function CIMPage() {
             <KpiCard
               label="Adjusted Multiple"
               value={`${derived.adjustedMultiple}x`}
-              description="MÃºltiplo ajustado"
+              description="Múltiplo ajustado"
               icon={Sparkles}
             />
 
@@ -1104,7 +1104,7 @@ export function CIMPage() {
               kicker="Executive memo"
               icon={FileSearch}
               title="Executive Memo"
-              description="Resumen de alto nivel para explicar el activo, la lÃ³gica de valoraciÃ³n y el encaje del deal."
+              description="Resumen de alto nivel para explicar el activo, la lógica de valoración y el encaje del deal."
             />
 
             <div className="cim-memo-body">
@@ -1117,7 +1117,7 @@ export function CIMPage() {
               kicker="Investment logic"
               icon={Sparkles}
               title="Investment Highlights"
-              description="Puntos principales que sostienen la tesis de inversiÃ³n."
+              description="Puntos principales que sostienen la tesis de inversión."
             />
 
             {thesisItems.length > 0 ? (
@@ -1135,8 +1135,8 @@ export function CIMPage() {
             ) : (
               <div className="cim-memo-body">
                 <p>
-                  TodavÃ­a no hay suficientes seÃ±ales para construir una tesis de
-                  inversiÃ³n completa. Completa el caso desde Valuation Engine.
+                  Todavía no hay suficientes señales para construir una tesis de
+                  inversión completa. Completa el caso desde Valuation Engine.
                 </p>
               </div>
             )}
@@ -1148,32 +1148,32 @@ export function CIMPage() {
             kicker="Deal narrative"
             icon={ShieldCheck}
             title="From valuation to investment narrative"
-            description="El CIM no solo muestra nÃºmeros. Convierte el anÃ¡lisis en un argumento defendible para tomar decisiones, presentar el activo y preparar una conversaciÃ³n ejecutiva."
+            description="El CIM no solo muestra números. Convierte el análisis en un argumento defendible para tomar decisiones, presentar el activo y preparar una conversación ejecutiva."
           />
 
           <div className="cim-bridge-grid">
             <BridgeStep
               number="01"
               title="Defensible valuation"
-              text="EBITDA normalizado, mÃºltiplo sectorial, ajustes de calidad, deuda neta y sensibilidad."
+              text="EBITDA normalizado, múltiplo sectorial, ajustes de calidad, deuda neta y sensibilidad."
             />
 
             <BridgeStep
               number="02"
               title="Investment thesis"
-              text="Lectura de crecimiento, transferibilidad, riesgos y lÃ³gica estratÃ©gica del deal."
+              text="Lectura de crecimiento, transferibilidad, riesgos y lógica estratégica del deal."
             />
 
             <BridgeStep
               number="03"
               title="Market context"
-              text="Comparables y seÃ±ales de mercado para reforzar el rango de valoraciÃ³n."
+              text="Comparables y señales de mercado para reforzar el rango de valoración."
             />
 
             <BridgeStep
               number="04"
               title="Board-ready output"
-              text="Vista imprimible para comitÃ©, inversores, socios o revisiÃ³n interna."
+              text="Vista imprimible para comité, inversores, socios o revisión interna."
             />
           </div>
         </section>
@@ -1183,32 +1183,32 @@ export function CIMPage() {
             kicker="Export logic"
             icon={LockKeyhole}
             title="Prepared for controlled distribution"
-            description="El documento se genera como una vista imprimible. Desde el navegador puede imprimirse o guardarse como PDF, manteniendo control sobre el flujo de distribuciÃ³n."
+            description="El documento se genera como una vista imprimible. Desde el navegador puede imprimirse o guardarse como PDF, manteniendo control sobre el flujo de distribución."
           />
 
           <div className="cim-grid cim-grid-two">
             <WorkflowCard
               number="01"
               title="Review the active case"
-              description="Comprueba que los inputs financieros, la tesis y la valoraciÃ³n son coherentes antes de exportar."
+              description="Comprueba que los inputs financieros, la tesis y la valoración son coherentes antes de exportar."
             />
 
             <WorkflowCard
               number="02"
               title="Generate the executive report"
-              description="Abre la vista imprimible del CIM para revisiÃ³n interna o preparaciÃ³n de entrega."
+              description="Abre la vista imprimible del CIM para revisión interna o preparación de entrega."
             />
 
             <WorkflowCard
               number="03"
               title="Print or save as PDF"
-              description="Desde el navegador, selecciona imprimir o guardar como PDF segÃºn el flujo de trabajo."
+              description="Desde el navegador, selecciona imprimir o guardar como PDF según el flujo de trabajo."
             />
 
             <WorkflowCard
               number="04"
               title="Share under control"
-              description="Distribuye el documento solo bajo NDA, revisiÃ³n interna o permisos definidos por la organizaciÃ³n."
+              description="Distribuye el documento solo bajo NDA, revisión interna o permisos definidos por la organización."
             />
           </div>
         </section>
@@ -1218,7 +1218,7 @@ export function CIMPage() {
             kicker="Market context"
             icon={TrendingUp}
             title="Comparable intelligence"
-            description="Una lectura comparativa para entender el rango de mercado y reforzar la narrativa de valoraciÃ³n."
+            description="Una lectura comparativa para entender el rango de mercado y reforzar la narrativa de valoración."
           />
 
           <ComparablesGrid comparables={comparables} />
@@ -1354,16 +1354,16 @@ function getReadinessPosture(score) {
 
 function getReadinessDescription(score) {
   if (score >= 75) {
-    return 'El documento tiene una base sÃ³lida para revisiÃ³n ejecutiva, comitÃ© o distribuciÃ³n controlada.';
+    return 'El documento tiene una base sólida para revisión ejecutiva, comité o distribución controlada.';
   }
 
   if (score >= 55) {
-    return 'El memorando puede revisarse internamente, aunque conviene reforzar riesgos, tesis y documentaciÃ³n antes de compartir.';
+    return 'El memorando puede revisarse internamente, aunque conviene reforzar riesgos, tesis y documentación antes de compartir.';
   }
 
   if (score >= 35) {
-    return 'El documento necesita mÃ¡s validaciÃ³n antes de presentarse como output ejecutivo.';
+    return 'El documento necesita más validación antes de presentarse como output ejecutivo.';
   }
 
-  return 'Completa los principales datos financieros y ejecuta el anÃ¡lisis antes de generar conclusiones.';
+  return 'Completa los principales datos financieros y ejecuta el análisis antes de generar conclusiones.';
 }
