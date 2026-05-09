@@ -65,7 +65,7 @@ export function LoginPage() {
     const password = String(form.password || '').trim();
 
     if (!email || !password) {
-      setError('Introduce email y contrasena.');
+      setError('Introduce email y contraseña.');
       return;
     }
 
@@ -79,13 +79,13 @@ export function LoginPage() {
       });
 
       if (!result?.ok) {
-        setError(result?.message || 'Email o contrasena incorrectos.');
+        setError(result?.message || 'Email o contraseña incorrectos.');
         return;
       }
 
       navigate(from, { replace: true });
     } catch {
-      setError('No se pudo iniciar sesion.');
+      setError('No se pudo iniciar sesión.');
     } finally {
       setIsSubmitting(false);
     }
@@ -106,7 +106,7 @@ export function LoginPage() {
           color: '#e8edf7'
         }}
       >
-        Cargando sesion...
+        Cargando sesión...
       </div>
     );
   }
@@ -176,7 +176,7 @@ export function LoginPage() {
           </div>
 
           <div className="field">
-            <label>Contrasena</label>
+            <label>Contraseña</label>
 
             <div
               style={{
@@ -201,10 +201,10 @@ export function LoginPage() {
                 type="button"
                 onClick={togglePasswordVisibility}
                 aria-label={
-                  showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'
+                  showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
                 }
                 title={
-                  showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'
+                  showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
                 }
                 disabled={isSubmitting}
                 style={{

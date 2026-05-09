@@ -147,15 +147,20 @@ function RouteFallback() {
         minHeight: '100vh',
         display: 'grid',
         placeItems: 'center',
-        background: '#f8fafc',
-        color: '#334155',
+        padding: 24,
+        background:
+          'radial-gradient(circle at top, rgba(16,185,129,0.08), transparent 42%), #0b1020',
+        color: '#e8edf7',
         fontSize: 13,
-        fontWeight: 700,
-        letterSpacing: 0,
-        textTransform: 'uppercase'
+        fontWeight: 600,
+        letterSpacing: '0.02em',
+        textAlign: 'center'
       }}
     >
-      Loading executive workspace
+      <div>
+        <div style={{ opacity: 0.72, marginBottom: 10 }}>CEO&apos;s OS</div>
+        <div>Loading executive workspace</div>
+      </div>
     </div>
   );
 }

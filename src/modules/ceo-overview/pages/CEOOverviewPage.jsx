@@ -1127,14 +1127,14 @@ function getExecutiveSignal({ maScore, complianceScore, fundingScore }) {
       title: 'Executive OS ready for demo',
       posture: 'Prepare enterprise pitch',
       description:
-        'M&A, Compliance y Funding tienen una base premium suficiente para presentar CEO’s OS como MVP ejecutivo vendible.'
+        'M&A, Compliance y Funding tienen una base sólida para presentar CEO’s OS como sistema ejecutivo listo para demo comercial.'
     };
   }
 
   if (score >= 68) {
     return {
       score,
-      title: 'Premium MVP in closing stage',
+      title: 'Executive release in closing stage',
       posture: 'Run final QA',
       description:
         'El producto ya tiene las ramas clave. La prioridad es QA final, logo, demo ejecutiva y materiales comerciales.'
@@ -1478,9 +1478,9 @@ export function CEOOverviewPage() {
     },
     {
       key: 'esg',
-      label: 'ESG · slot',
+      label: 'ESG & reputational risk',
       value: esgRadar,
-      route: '/governance/dashboard',
+      route: '/compliance/dashboard',
       tone: '#4ade80'
     },
     {
@@ -1510,8 +1510,8 @@ export function CEOOverviewPage() {
               <div className="ceo-badge-row">
                 <Badge>CEO Overview</Badge>
                 <Badge>Executive Command Center</Badge>
-                <Badge>DSS Layer</Badge>
-                <Badge>MVP Premium</Badge>
+                <Badge>Decision-support layer</Badge>
+                <Badge>Executive roadmap</Badge>
               </div>
 
               <h1 className="ceo-title">
@@ -1661,8 +1661,8 @@ export function CEOOverviewPage() {
                         Radar de salud ejecutiva · multi-rama
                       </strong>
                       <p className="muted" style={{ margin: '10px 0 0', lineHeight: 1.52 }}>
-                        Legal, financiero y funding ya consumen señales activas; Operational y ESG siguen en capa piloto
-                        hasta conectar KPIs externos.
+                        Legal, financiero y funding ya consumen señales activas; Operational y ESG operan como señales
+                        en evolución hasta conectar KPIs externos. La capa de gobernanza ampliada permanece en roadmap.
                       </p>
                     </div>
                   </div>
@@ -1734,13 +1734,13 @@ export function CEOOverviewPage() {
             kicker="Executive snapshot"
             icon={Activity}
             title="CEO’s OS at a glance"
-            description="Lectura rápida del estado del MVP premium: módulos, señales, riesgos, funding y entregables ejecutivos."
+            description="Lectura rápida del estado del release ejecutivo: módulos, señales, riesgos, funding y entregables para el board."
           />
 
           <div className="ceo-grid ceo-grid-kpis">
             <KpiCard
               branch="overview"
-              label="MVP status"
+              label="Release readiness"
               value="Closing"
               description="Producto entrando en cierre vendible."
               icon={CheckCircle2}
@@ -1749,7 +1749,7 @@ export function CEOOverviewPage() {
 
             <KpiCard
               branch="ma"
-              label="Premium modules"
+              label="Core workspaces"
               value="3 + Overview"
               description="M&A, Compliance, Funding y capa ejecutiva."
               icon={Layers3}
@@ -1901,7 +1901,7 @@ export function CEOOverviewPage() {
                 <h3 className="ceo-panel-title">Available executive outputs</h3>
 
                 <p className="muted ceo-panel-copy">
-                  Entregables premium ya disponibles para demostrar el valor del MVP.
+                  Entregables ejecutivos listos para demostrar valor en cierre comercial.
                 </p>
               </div>
 
@@ -1953,7 +1953,7 @@ export function CEOOverviewPage() {
           <SectionHeader
             kicker="Next actions"
             icon={TrendingUp}
-            title="Close the MVP without opening new product branches"
+            title="Close the executive release without opening new product branches"
             description="Las próximas acciones deben enfocarse en cierre, demo, marca y validación comercial."
           />
 
