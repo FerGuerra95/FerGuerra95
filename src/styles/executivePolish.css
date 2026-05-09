@@ -24,6 +24,12 @@ body,
   background-image: none !important;
 }
 
+html,
+body,
+#root {
+  min-height: 100dvh;
+}
+
 body,
 button,
 input,

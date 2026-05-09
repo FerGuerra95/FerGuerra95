@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { LogOut, UserCircle } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Sidebar } from './Sidebar.jsx';
@@ -103,6 +103,19 @@ const appShellBlackCss = `
   .ceos-logout-btn .button-content {
     font-size: 10.5px !important;
     line-height: 1 !important;
+  }
+
+  @keyframes ceos-outlet-fade {
+    from {
+      opacity: 0.58;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .ceos-outlet-fallback {
+    animation: ceos-outlet-fade 0.32s ease-out;
   }
 `;
 
@@ -273,7 +286,36 @@ export function AppShell() {
 
         <Topbar title={meta.title} description={meta.description} />
 
-        <Outlet />
+        <Suspense
+          fallback={
+            <div
+              className="ceos-outlet-fallback"
+              style={{
+                minHeight: 'min(560px, calc(100dvh - 240px))',
+                display: 'grid',
+                placeItems: 'center',
+                padding: 32,
+                margin: '0 24px 24px',
+                borderRadius: 22,
+                background:
+                  'radial-gradient(circle at 50% 0%, rgba(16,185,129,0.06), transparent 45%), #000000',
+                color: 'rgba(232, 237, 247, 0.9)',
+                fontSize: 13,
+                fontWeight: 600,
+                letterSpacing: '0.02em',
+                textAlign: 'center',
+                border: '1px solid rgba(148, 163, 184, 0.08)'
+              }}
+            >
+              <div>
+                <div style={{ opacity: 0.7, marginBottom: 10 }}>CEO&apos;s OS</div>
+                <div>Loading workspace…</div>
+              </div>
+            </div>
+          }
+        >
+          <Outlet />
+        </Suspense>
 
         <ExecutivePremiumStyle />
       </div>

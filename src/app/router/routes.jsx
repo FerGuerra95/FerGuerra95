@@ -144,7 +144,7 @@ function RouteFallback() {
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         display: 'grid',
         placeItems: 'center',
         padding: 24,
@@ -183,12 +183,25 @@ function ProtectedAppShell() {
 
 export function AppRoutes() {
   return (
-    <Suspense fallback={<RouteFallback />}>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Suspense fallback={<RouteFallback />}>
+            <LandingPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <Suspense fallback={<RouteFallback />}>
+            <LoginPage />
+          </Suspense>
+        }
+      />
 
-        <Route element={<ProtectedAppShell />}>
+      <Route element={<ProtectedAppShell />}>
           <Route path="/dashboard" element={<ExecutiveOverviewer />} />
           <Route path="/overview" element={<ExecutiveOverviewer />} />
           <Route path="/ceo/overview" element={<ExecutiveOverviewer />} />
@@ -287,8 +300,7 @@ export function AppRoutes() {
           />
         </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Suspense>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
