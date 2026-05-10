@@ -137,19 +137,18 @@ export function LoginPage() {
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <div
             style={{
-              margin: '0 auto 18px',
+              margin: '0 auto 20px',
               display: 'flex',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              width: '100%'
             }}
           >
             <BrandLogo
-              variant="emblem"
+              variant="horizontal"
+              size="lg"
+              surface="framed"
               loading="eager"
-              style={{
-                width: 64,
-                height: 64,
-                objectFit: 'contain'
-              }}
+              style={{ width: '100%', maxWidth: 360, justifyContent: 'center' }}
             />
           </div>
 

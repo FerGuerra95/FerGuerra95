@@ -258,50 +258,39 @@ const sidebarCss = `
   .ceos-brand-mark {
     position: relative;
     overflow: hidden;
-    width: 46px;
-    height: 46px;
-    border-radius: 17px;
-    display: grid;
-    place-items: center;
-    color: ${GOLD};
-    background:
-      radial-gradient(circle at 35% 18%, rgba(255,255,255,0.075), transparent 25%),
-      linear-gradient(135deg, rgba(212,175,55,0.075), rgba(255,255,255,0.010)),
-      #000000;
-    border: 1px solid rgba(212,175,55,0.15);
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #0b1020;
+    border: 1px solid rgba(148, 163, 184, 0.14);
     box-shadow:
-      0 18px 42px rgba(0,0,0,0.90),
-      0 0 22px rgba(212,175,55,0.10),
-      inset 0 1px 0 rgba(255,255,255,0.060),
-      inset 0 -1px 0 rgba(255,255,255,0.010);
-    backdrop-filter: blur(18px) saturate(135%);
-    -webkit-backdrop-filter: blur(18px) saturate(135%);
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 10px 28px rgba(0, 0, 0, 0.55);
   }
 
   .ceos-brand-mark::before {
     content: "";
     position: absolute;
-    inset: 1px;
-    border-radius: 16px;
-    background:
-      linear-gradient(
-        145deg,
-        rgba(255,255,255,0.075),
-        transparent 36%,
-        transparent 70%,
-        rgba(255,255,255,0.020)
-      );
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at 40% 20%,
+      rgba(255, 255, 255, 0.05),
+      transparent 55%
+    );
     pointer-events: none;
+    opacity: 0.55;
   }
 
-  .ceos-brand-mark img {
+  .ceos-brand-mark .ceos-brand-logo-root {
     position: relative;
     z-index: 1;
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-    display: block;
-    filter: drop-shadow(0 0 10px rgba(212,175,55,0.2));
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .ceos-brand-title {
@@ -860,7 +849,13 @@ export function Sidebar() {
       <div className="ceos-sidebar-brand">
         <div className="ceos-brand-row">
           <div className="ceos-brand-mark">
-            <BrandLogo variant="emblem" loading="eager" alt="" />
+            <BrandLogo
+              variant="compact"
+              size="sm"
+              surface="transparent"
+              loading="eager"
+              alt=""
+            />
           </div>
 
           <div>

@@ -1028,3 +1028,14 @@ select option {
     white-space: normal;
   }
 }
+
+/* Public brand assets (/brand/*): wrapper from BrandLogo.jsx */
+.ceos-brand-logo-root {
+  max-width: 100%;
+  line-height: 0;
+}
+
+.ceos-brand-logo-root img {
+  object-fit: contain;
+  display: block;
+}

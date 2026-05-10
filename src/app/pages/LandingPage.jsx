@@ -260,16 +260,19 @@ export function LandingPage() {
           letter-spacing: -0.035em;
         }
 
-        .landing-brand-logo-nav {
-          height: clamp(26px, 3.2vw, 34px);
-          width: auto;
-          display: block;
+        .landing-logo--nav-brand {
+          flex: 0 1 auto;
+          max-width: min(280px, 46vw);
+        }
+
+        .landing-hero-brand-wrap {
+          width: 100%;
+          max-width: min(760px, 100%);
+          margin: 0 0 22px;
         }
 
         .landing-brand-logo-footer {
-          height: clamp(22px, 2.8vw, 28px);
-          width: auto;
-          display: block;
+          max-width: min(340px, 72vw);
         }
 
         .landing-nav-links {
@@ -1466,10 +1469,15 @@ export function LandingPage() {
 
       <nav className="landing-nav">
         <div className="landing-nav-inner">
-          <Link to="/" className="landing-logo" aria-label="CEO's OS — inicio">
+          <Link
+            to="/"
+            className="landing-logo landing-logo--nav-brand"
+            aria-label="CEO's OS — inicio"
+          >
             <BrandLogo
               variant="horizontal"
-              className="landing-brand-logo-nav"
+              size="sm"
+              surface="framed"
               loading="eager"
             />
           </Link>
@@ -1498,6 +1506,15 @@ export function LandingPage() {
           <div className="landing-hero-content">
             <div className="landing-eyebrow">
               Private by Design · Sovereign Intelligence
+            </div>
+
+            <div className="landing-hero-brand-wrap">
+              <BrandLogo
+                variant="horizontal"
+                size="hero"
+                surface="hero"
+                loading="eager"
+              />
             </div>
 
             <h1>
@@ -1981,10 +1998,11 @@ export function LandingPage() {
 
         <footer className="landing-footer">
           <div className="landing-footer-inner">
-            <div className="landing-logo">
+            <div className="landing-logo landing-brand-logo-footer">
               <BrandLogo
                 variant="horizontal"
-                className="landing-brand-logo-footer"
+                size="md"
+                surface="framed"
                 loading="lazy"
               />
             </div>

@@ -1031,3 +1031,9 @@ textarea,
     font-size: clamp(30px, 10vw, 38px) !important;
   }
 }
+
+/* App shell brand mark: avoid clipping wide PNGs inside sidebar tile */
+.ceos-brand-mark .ceos-brand-logo-root img {
+  max-width: 100%;
+  max-height: 100%;
+}
