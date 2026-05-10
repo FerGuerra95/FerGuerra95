@@ -35,7 +35,7 @@ const COMPACT_SIZE = /** @type {const} */ ({
 
 /**
  * CEO's OS brand marks — bundled from `src/assets/brand/*.png` via Vite `?url` (content-hashed
- * in production so browsers cannot keep stale `/public` copies). RGB on dark base, no alpha.
+ * in production). RGB mat composited on `#0b1020` (same as `index.html` body), no alpha.
  *
  * @param {object} props
  * @param {BrandVariant} [props.variant]

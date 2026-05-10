@@ -9,8 +9,8 @@ import struct
 import zlib
 from pathlib import Path
 
-# Matches landing shell: linear-gradient(180deg, #030712 0%, ...)
-BG_R, BG_G, BG_B = 0x03, 0x07, 0x12
+# Match index.html html,body and app shell (avoids “black plaque” vs #0b1020).
+BG_R, BG_G, BG_B = 0x0B, 0x10, 0x20
 PAD = 2
 
 
