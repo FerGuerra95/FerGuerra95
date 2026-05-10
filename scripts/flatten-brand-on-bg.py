@@ -1,7 +1,6 @@
 """
-Composite CEO's OS brand PNGs onto the marketing/login dark base (#030712) and
-emit RGB-only PNGs (no alpha). Removes browser-visible checkerboard from broken
-alpha / transparency grids. Tight-crops to original non-transparent bbox + pad.
+Composite CEO's OS brand PNGs onto the app base (#0b1020, matches index.html body)
+and emit RGB-only PNGs (no alpha). Tight-crops to original non-transparent bbox + pad.
 """
 from __future__ import annotations
 
