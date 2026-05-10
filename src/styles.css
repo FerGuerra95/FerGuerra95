@@ -1063,3 +1063,12 @@ select option {
   justify-content: center;
   width: 100%;
 }
+
+/* Emblema sobre card: sin segundo “marco”; solo aire y alineación con el fondo de la página */
+.login-brand-emblem-wrap .login-brand-emblem-logo {
+  padding: 4px 0 2px;
+}
+
+.login-brand-emblem-wrap .login-brand-emblem-logo img {
+  filter: none;
+}

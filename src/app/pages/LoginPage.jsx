@@ -124,8 +124,9 @@ export function LoginPage() {
             <BrandLogo
               variant="emblem"
               size="auth"
-              surface="subtle"
+              surface="transparent"
               loading="eager"
+              className="login-brand-emblem-logo"
             />
           </div>
 

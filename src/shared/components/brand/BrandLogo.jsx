@@ -117,13 +117,6 @@ export function BrandLogo({
           maxHeight: '100%'
         };
 
-  const imgFilter =
-    wrapperSurface === 'transparent'
-      ? 'drop-shadow(0 2px 12px rgba(0,0,0,0.35))'
-      : wrapperSurface === 'subtle'
-        ? 'drop-shadow(0 1px 6px rgba(0,0,0,0.42))'
-        : 'drop-shadow(0 1px 8px rgba(0,0,0,0.45))';
-
   const rootClass = ['ceos-brand-logo-root', className].filter(Boolean).join(' ');
 
   return (
@@ -136,8 +129,7 @@ export function BrandLogo({
           objectFit: 'contain',
           display: 'block',
           margin: 0,
-          ...imgDims,
-          filter: imgFilter
+          ...imgDims
         }}
         loading={loading}
         decoding={decoding}
@@ -171,13 +163,12 @@ function getSurfaceStyle(surface, size, isHorizontal) {
       alignItems: 'center',
       justifyContent: 'center',
       boxSizing: 'border-box',
-      background:
-        'radial-gradient(circle at 50% 0%, rgba(255,255,255,0.04), rgba(5,8,20,0.92) 52%)',
-      border: '1px solid rgba(148, 163, 184, 0.1)',
-      borderRadius: 22,
-      padding: '11px 13px',
-      boxShadow:
-        '0 10px 32px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.035)'
+      isolation: 'isolate',
+      background: 'linear-gradient(180deg, #050814 0%, #030712 100%)',
+      border: '1px solid rgba(255, 255, 255, 0.045)',
+      borderRadius: 20,
+      padding: '10px 12px',
+      boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.028)'
     };
   }
 
@@ -187,27 +178,24 @@ function getSurfaceStyle(surface, size, isHorizontal) {
     alignItems: 'center',
     justifyContent: 'center',
     boxSizing: 'border-box',
-    background:
-      'radial-gradient(ellipse 110% 100% at 50% -10%, rgba(16,185,129,0.09), rgba(11,16,32,0.96) 48%, rgba(7,10,20,0.99))',
-    border: '1px solid rgba(148, 163, 184, 0.14)',
-    boxShadow:
-      '0 14px 44px rgba(0,0,0,0.48), inset 0 1px 0 rgba(255,255,255,0.045)',
-    borderRadius: surface === 'hero' ? 26 : 18,
-    padding: padSmall ? '9px 12px' : '12px 16px'
+    isolation: 'isolate',
+    background: 'linear-gradient(180deg, #070b16 0%, #050814 52%, #030712 100%)',
+    border: '1px solid rgba(255, 255, 255, 0.055)',
+    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.03)',
+    borderRadius: surface === 'hero' ? 22 : 16,
+    padding: padSmall ? '8px 11px' : '11px 14px'
   };
 
   if (surface === 'hero' && isHorizontal) {
     return {
       ...base,
-      padding: '14px 20px',
-      borderRadius: 24,
+      padding: '12px 16px',
+      borderRadius: 22,
       width: '100%',
       maxWidth: 'min(100%, 720px)',
-      background:
-        'radial-gradient(ellipse 100% 90% at 50% -8%, rgba(16,185,129,0.07), rgba(5,8,20,0.94) 50%, rgba(3,7,18,0.98))',
-      border: '1px solid rgba(148, 163, 184, 0.11)',
-      boxShadow:
-        '0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)'
+      background: 'linear-gradient(180deg, #070b16 0%, #050814 48%, #030712 100%)',
+      border: '1px solid rgba(255, 255, 255, 0.05)',
+      boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.032)'
     };
   }
 

@@ -265,11 +265,9 @@ const sidebarCss = `
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: #0b1020;
-    border: 1px solid rgba(148, 163, 184, 0.14);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.04),
-      0 10px 28px rgba(0, 0, 0, 0.55);
+    background: linear-gradient(180deg, #070b16 0%, #050814 100%);
+    border: 1px solid rgba(255, 255, 255, 0.055);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
 
   .ceos-brand-mark::before {
