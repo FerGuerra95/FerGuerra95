@@ -35,7 +35,7 @@ const COMPACT_SIZE = /** @type {const} */ ({
 
 /**
  * CEO's OS brand marks — bundled from `src/assets/brand/*.png` via Vite `?url` (content-hashed
- * in production). RGB mat composited on `#0b1020` (same as `index.html` body), no alpha.
+ * in production). Horizontal mark is RGBA (real transparency); emblem may be RGB or RGBA.
  *
  * @param {object} props
  * @param {BrandVariant} [props.variant]
