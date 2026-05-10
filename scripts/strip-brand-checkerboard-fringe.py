@@ -111,15 +111,29 @@ def _is_checker_neutral(r: int, g: int, b: int, a: int) -> bool:
     if a < 250:
         return False
     mx, mn = max(r, g, b), min(r, g, b)
-    if mx - mn > 18:
+    if mx - mn > 22:
         return False
     avg = (r + g + b) // 3
-    # Typical PS checker mid-grays; avoids saturated logo colors
-    return 148 <= avg <= 218
+    # PS-style checker grays (was 148 min — missed 143–147 and caused visible grid)
+    return 120 <= avg <= 228
+
+
+def _touches_transparent_8(w: int, h: int, rgba: bytearray, x: int, y: int) -> bool:
+    for dx in (-1, 0, 1):
+        for dy in (-1, 0, 1):
+            if dx == 0 and dy == 0:
+                continue
+            nx, ny = x + dx, y + dy
+            if nx < 0 or ny < 0 or nx >= w or ny >= h:
+                return True
+            j = (ny * w + nx) * 4
+            if rgba[j + 3] == 0:
+                return True
+    return False
 
 
 def strip_fringe(w: int, h: int, rgba: bytearray) -> int:
-    """Expand transparency into neutral checker-like pixels touching alpha=0. Returns pixels cleared."""
+    """Expand transparency into checker-like pixels touching alpha=0 (8-neighbor). Returns pixels cleared."""
     cleared = 0
     while True:
         to_clear: list[tuple[int, int]] = []
@@ -127,19 +141,11 @@ def strip_fringe(w: int, h: int, rgba: bytearray) -> int:
             for x in range(w):
                 i = (y * w + x) * 4
                 r, g, b, a = rgba[i], rgba[i + 1], rgba[i + 2], rgba[i + 3]
-                if a == 0 or not _is_checker_neutral(r, g, b, a):
+                if a == 0:
                     continue
-                touches = False
-                for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
-                    nx, ny = x + dx, y + dy
-                    if nx < 0 or ny < 0 or nx >= w or ny >= h:
-                        touches = True
-                        break
-                    j = (ny * w + nx) * 4
-                    if rgba[j + 3] == 0:
-                        touches = True
-                        break
-                if touches:
+                if not _is_checker_neutral(r, g, b, a):
+                    continue
+                if _touches_transparent_8(w, h, rgba, x, y):
                     to_clear.append((x, y))
         if not to_clear:
             break
