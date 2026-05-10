@@ -35,8 +35,9 @@ const COMPACT_SIZE = /** @type {const} */ ({
 
 /**
  * CEO's OS brand marks from `public/brand` (`/brand/...`).
- * For a pixel-perfect look on any background, export PNG/SVG with **transparent** alpha.
- * Until then, use `surface="framed"` or `surface="hero"` to blend non-transparent art.
+ * Use **PNG-32 (color type 6 / RGBA)** or SVG with alpha. PNG **color type 2 (RGB)** has no
+ * transparency: a white rectangle in the file is opaque pixels, not fixable in CSS alone.
+ * Prefer `surface="transparent"` so true transparent assets blend with the page.
  *
  * @param {object} props
  * @param {BrandVariant} [props.variant]

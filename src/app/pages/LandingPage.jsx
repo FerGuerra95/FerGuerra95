@@ -1483,7 +1483,7 @@ export function LandingPage() {
             <BrandLogo
               variant="horizontal"
               size="sm"
-              surface="framed"
+              surface="transparent"
               loading="eager"
             />
           </Link>
@@ -1518,7 +1518,7 @@ export function LandingPage() {
               <BrandLogo
                 variant="horizontal"
                 size="hero"
-                surface="hero"
+                surface="transparent"
                 loading="eager"
               />
             </div>
@@ -2008,7 +2008,7 @@ export function LandingPage() {
               <BrandLogo
                 variant="horizontal"
                 size="md"
-                surface="framed"
+                surface="transparent"
                 loading="lazy"
               />
             </div>

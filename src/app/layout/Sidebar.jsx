@@ -257,7 +257,7 @@ const sidebarCss = `
 
   .ceos-brand-mark {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     width: 52px;
     height: 52px;
     border-radius: 16px;
@@ -265,23 +265,13 @@ const sidebarCss = `
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: linear-gradient(180deg, #070b16 0%, #050814 100%);
-    border: 1px solid rgba(255, 255, 255, 0.055);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
 
   .ceos-brand-mark::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(
-      circle at 40% 20%,
-      rgba(255, 255, 255, 0.05),
-      transparent 55%
-    );
-    pointer-events: none;
-    opacity: 0.55;
+    content: none;
   }
 
   .ceos-brand-mark .ceos-brand-logo-root {
