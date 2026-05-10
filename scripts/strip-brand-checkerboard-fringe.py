@@ -1,9 +1,9 @@
 """
-Remove baked-in checkerboard / neutral-gray fringe next to real transparency.
+Fix checker-style artifacts in brand PNGs:
 
-Pixels are cleared (RGBA 0,0,0,0) only if they are opaque neutral grays typical of
-Photoshop-style checker previews AND they touch transparency (4-neighbor), repeated
-until stable — avoids eating interior metallic/chrome grays that never border alpha=0.
+1. Strip neutral-gray opaque cells touching transparency (8-neighbor, iterative).
+2. Fill alpha pinholes: transparent pixels with >=4 opaque 8-neighbors get averaged RGB;
+   removes 1px transparent grid lines in otherwise-opaque artwork.
 """
 from __future__ import annotations
 
@@ -156,6 +156,53 @@ def strip_fringe(w: int, h: int, rgba: bytearray) -> int:
     return cleared
 
 
+def fill_alpha_pinholes(
+    w: int,
+    h: int,
+    rgba: bytearray,
+    *,
+    min_opaque_neighbors: int = 4,
+    max_passes: int = 24,
+) -> int:
+    """
+    Close tiny transparent gaps in otherwise-opaque areas (checkerboard in the alpha
+    channel). Uses majority vote of opaque 8-neighbors; leaves large transparent
+    regions untouched (neighbor count stays low at interior).
+    """
+    filled = 0
+    for _ in range(max_passes):
+        batch: list[tuple[int, int, int, int, int]] = []
+        for y in range(h):
+            for x in range(w):
+                i = (y * w + x) * 4
+                if rgba[i + 3] >= 128:
+                    continue
+                rs = gs = bs = n = 0
+                for dx in (-1, 0, 1):
+                    for dy in (-1, 0, 1):
+                        if dx == 0 and dy == 0:
+                            continue
+                        nx, ny = x + dx, y + dy
+                        if nx < 0 or ny < 0 or nx >= w or ny >= h:
+                            continue
+                        j = (ny * w + nx) * 4
+                        if rgba[j + 3] < 250:
+                            continue
+                        n += 1
+                        rs += rgba[j]
+                        gs += rgba[j + 1]
+                        bs += rgba[j + 2]
+                if n >= min_opaque_neighbors:
+                    batch.append((x, y, rs // n, gs // n, bs // n))
+        if not batch:
+            break
+        for x, y, r, g, b in batch:
+            i = (y * w + x) * 4
+            rgba[i : i + 4] = bytes((r, g, b, 255))
+            filled += 1
+    return filled
+
+
 def main() -> None:
     root = Path(__file__).resolve().parents[1]
     brand = root / "public" / "brand"
@@ -164,8 +211,9 @@ def main() -> None:
         w, h, rgba_b = _read_png_rgba(path)
         rgba = bytearray(rgba_b)
         n = strip_fringe(w, h, rgba)
+        m = fill_alpha_pinholes(w, h, rgba)
         _write_png_rgba(path, w, h, bytes(rgba))
-        print(f"{name}: cleared {n} fringe pixels")
+        print(f"{name}: cleared {n} fringe pixels, filled {m} alpha pinholes")
 
 
 if __name__ == "__main__":
