@@ -1,15 +1,16 @@
 import React from 'react';
 
-const BRAND_EMBLEM = '/brand/ceos-os-emblem.png';
-const BRAND_HORIZONTAL = '/brand/ceos-os-horizontal.png';
+/** Query avoids stale cached PNGs after asset replacement (public/ is fingerprint-free). */
+const BRAND_EMBLEM = '/brand/ceos-os-emblem.png?v=rgbflat1';
+const BRAND_HORIZONTAL = '/brand/ceos-os-horizontal.png?v=rgbflat1';
 
 /** @typedef {'horizontal' | 'emblem' | 'compact'} BrandVariant */
 /** @typedef {'sm' | 'md' | 'lg' | 'xl' | 'hero' | 'auth'} BrandSize — `auth` = emblem on login (responsive clamp) */
 /** @typedef {'transparent' | 'framed' | 'hero' | 'subtle'} BrandSurface — `subtle` = minimal dark plate */
 
 const HORIZONTAL_DIMS = {
-  sm: { maxHeight: 30, maxWidth: 220 },
-  md: { maxHeight: 40, maxWidth: 320 },
+  sm: { maxHeight: 34, maxWidth: 268 },
+  md: { maxHeight: 42, maxWidth: 340 },
   lg: { maxHeight: 96, maxWidth: 400 },
   xl: { maxHeight: 120, maxWidth: 460 },
   hero: {},
@@ -35,9 +36,9 @@ const COMPACT_SIZE = /** @type {const} */ ({
 
 /**
  * CEO's OS brand marks from `public/brand` (`/brand/...`).
- * Use **PNG-32 (color type 6 / RGBA)** or SVG with alpha. PNG **color type 2 (RGB)** has no
- * transparency: a white rectangle in the file is opaque pixels, not fixable in CSS alone.
- * Prefer `surface="transparent"` so true transparent assets blend with the page.
+ * Shipped marks are **RGB PNGs** composited on `#030712` (no alpha) so broken transparency
+ * grids never show. For custom assets, PNG-32 / SVG with real alpha works with
+ * `surface="transparent"`.
  *
  * @param {object} props
  * @param {BrandVariant} [props.variant]
@@ -90,12 +91,19 @@ export function BrandLogo({
 
   const imgDims = isHorizontal
     ? effectiveSize === 'hero'
-      ? {
-          width: '100%',
-          height: 'auto',
-          maxWidth: '100%',
-          maxHeight: 'none'
-        }
+      ? surface === 'hero'
+        ? {
+            width: '100%',
+            height: 'auto',
+            maxWidth: '100%',
+            maxHeight: 'clamp(44px, min(11vw, 10vh), 86px)'
+          }
+        : {
+            width: 'auto',
+            height: 'auto',
+            maxWidth: '100%',
+            maxHeight: 'clamp(44px, min(11vw, 10vh), 86px)'
+          }
       : {
           width: 'auto',
           height: 'auto',
@@ -106,8 +114,8 @@ export function BrandLogo({
         }
     : isAuthEmblem
       ? {
-          width: 'clamp(72px, 22vmin, 120px)',
-          height: 'clamp(72px, 22vmin, 120px)',
+          width: 'clamp(80px, 24vmin, 128px)',
+          height: 'clamp(80px, 24vmin, 128px)',
           maxWidth: '100%',
           maxHeight: '100%'
         }
