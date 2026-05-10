@@ -4,23 +4,25 @@ const BRAND_EMBLEM = '/brand/ceos-os-emblem.png';
 const BRAND_HORIZONTAL = '/brand/ceos-os-horizontal.png';
 
 /** @typedef {'horizontal' | 'emblem' | 'compact'} BrandVariant */
-/** @typedef {'sm' | 'md' | 'lg' | 'xl' | 'hero'} BrandSize */
-/** @typedef {'transparent' | 'framed' | 'hero'} BrandSurface */
+/** @typedef {'sm' | 'md' | 'lg' | 'xl' | 'hero' | 'auth'} BrandSize — `auth` = emblem on login (responsive clamp) */
+/** @typedef {'transparent' | 'framed' | 'hero' | 'subtle'} BrandSurface — `subtle` = minimal dark plate */
 
 const HORIZONTAL_DIMS = {
   sm: { maxHeight: 30, maxWidth: 220 },
   md: { maxHeight: 40, maxWidth: 320 },
   lg: { maxHeight: 96, maxWidth: 400 },
   xl: { maxHeight: 120, maxWidth: 460 },
-  hero: {}
+  hero: {},
+  auth: {}
 };
 
 const EMBLEM_DIMS = {
   sm: { width: 44, height: 44 },
   md: { width: 52, height: 52 },
   lg: { width: 112, height: 112 },
-  xl: { width: 144, height: 144 },
-  hero: { width: 168, height: 168 }
+  xl: { width: 120, height: 120 },
+  hero: { width: 168, height: 168 },
+  auth: {}
 };
 
 const COMPACT_SIZE = /** @type {const} */ ({
@@ -73,13 +75,17 @@ export function BrandLogo({
 
   const dimTable = isHorizontal ? HORIZONTAL_DIMS : EMBLEM_DIMS;
   const dim =
-    dimTable[effectiveSize] ||
-    (isHorizontal ? HORIZONTAL_DIMS.md : EMBLEM_DIMS.md);
+    effectiveSize === 'auth' && !isHorizontal
+      ? EMBLEM_DIMS.md
+      : dimTable[effectiveSize] ||
+        (isHorizontal ? HORIZONTAL_DIMS.md : EMBLEM_DIMS.md);
 
   const wrapperSurface =
     surface === 'hero' && !isHorizontal ? 'framed' : surface;
 
   const surfaceStyle = getSurfaceStyle(wrapperSurface, effectiveSize, isHorizontal);
+
+  const isAuthEmblem = !isHorizontal && effectiveSize === 'auth';
 
   const imgDims = isHorizontal
     ? effectiveSize === 'hero'
@@ -97,17 +103,26 @@ export function BrandLogo({
           maxHeight:
             typeof dim.maxHeight === 'number' ? dim.maxHeight : dim.maxHeight
         }
-    : {
-        width: dim.width,
-        height: dim.height,
-        maxWidth: '100%',
-        maxHeight: '100%'
-      };
+    : isAuthEmblem
+      ? {
+          width: 'clamp(72px, 22vmin, 120px)',
+          height: 'clamp(72px, 22vmin, 120px)',
+          maxWidth: '100%',
+          maxHeight: '100%'
+        }
+      : {
+          width: dim.width,
+          height: dim.height,
+          maxWidth: '100%',
+          maxHeight: '100%'
+        };
 
   const imgFilter =
     wrapperSurface === 'transparent'
       ? 'drop-shadow(0 2px 12px rgba(0,0,0,0.35))'
-      : 'drop-shadow(0 1px 8px rgba(0,0,0,0.45))';
+      : wrapperSurface === 'subtle'
+        ? 'drop-shadow(0 1px 6px rgba(0,0,0,0.42))'
+        : 'drop-shadow(0 1px 8px rgba(0,0,0,0.45))';
 
   const rootClass = ['ceos-brand-logo-root', className].filter(Boolean).join(' ');
 
@@ -150,7 +165,23 @@ function getSurfaceStyle(surface, size, isHorizontal) {
     };
   }
 
-  const padSmall = size === 'sm' || size === 'md';
+  if (surface === 'subtle') {
+    return {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxSizing: 'border-box',
+      background:
+        'radial-gradient(circle at 50% 0%, rgba(255,255,255,0.04), rgba(5,8,20,0.92) 52%)',
+      border: '1px solid rgba(148, 163, 184, 0.1)',
+      borderRadius: 22,
+      padding: '11px 13px',
+      boxShadow:
+        '0 10px 32px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.035)'
+    };
+  }
+
+  const padSmall = size === 'sm' || size === 'md' || size === 'auth';
   const base = {
     display: 'inline-flex',
     alignItems: 'center',
@@ -168,10 +199,15 @@ function getSurfaceStyle(surface, size, isHorizontal) {
   if (surface === 'hero' && isHorizontal) {
     return {
       ...base,
-      padding: '16px 22px',
-      borderRadius: 26,
+      padding: '14px 20px',
+      borderRadius: 24,
       width: '100%',
-      maxWidth: 'min(100%, 760px)'
+      maxWidth: 'min(100%, 720px)',
+      background:
+        'radial-gradient(ellipse 100% 90% at 50% -8%, rgba(16,185,129,0.07), rgba(5,8,20,0.94) 50%, rgba(3,7,18,0.98))',
+      border: '1px solid rgba(148, 163, 184, 0.11)',
+      boxShadow:
+        '0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)'
     };
   }
 

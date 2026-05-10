@@ -1039,3 +1039,27 @@ select option {
   object-fit: contain;
   display: block;
 }
+
+/* Login (public): same dark base as marketing for cohesive brand marks */
+.login-page {
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse 120% 70% at 50% 0%, rgba(16, 185, 129, 0.055), transparent 52%),
+    linear-gradient(180deg, #030712 0%, #050814 48%, #070b16 100%);
+  color: var(--text);
+}
+
+.login-page--center {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.login-brand-emblem-wrap {
+  margin: 0 auto 22px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}

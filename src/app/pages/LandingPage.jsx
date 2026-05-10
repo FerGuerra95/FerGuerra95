@@ -199,10 +199,10 @@ export function LandingPage() {
         .landing-page {
           min-height: 100vh;
           background:
-            radial-gradient(circle at 18% -4%, rgba(37, 99, 235, 0.26), transparent 32%),
-            radial-gradient(circle at 80% 6%, rgba(16, 185, 129, 0.14), transparent 28%),
-            radial-gradient(circle at 52% 46%, rgba(201, 162, 77, 0.08), transparent 30%),
-            linear-gradient(180deg, #01030a 0%, #040714 38%, #02040b 100%);
+            radial-gradient(circle at 18% -4%, rgba(37, 99, 235, 0.18), transparent 34%),
+            radial-gradient(circle at 80% 6%, rgba(16, 185, 129, 0.1), transparent 30%),
+            radial-gradient(circle at 52% 46%, rgba(201, 162, 77, 0.055), transparent 32%),
+            linear-gradient(180deg, #030712 0%, #050814 40%, #070b16 100%);
           color: #f8fafc;
           overflow-x: hidden;
         }
@@ -225,7 +225,7 @@ export function LandingPage() {
           top: 0;
           z-index: 30;
           backdrop-filter: blur(20px);
-          background: rgba(1, 3, 10, 0.78);
+          background: rgba(3, 7, 18, 0.82);
           border-bottom: 1px solid rgba(148, 163, 184, 0.12);
         }
 
@@ -267,8 +267,14 @@ export function LandingPage() {
 
         .landing-hero-brand-wrap {
           width: 100%;
-          max-width: min(760px, 100%);
+          max-width: min(720px, 100%);
           margin: 0 0 22px;
+        }
+
+        @media (max-width: 540px) {
+          .landing-hero-brand-wrap {
+            max-width: min(320px, calc(100% - 4px));
+          }
         }
 
         .landing-brand-logo-footer {

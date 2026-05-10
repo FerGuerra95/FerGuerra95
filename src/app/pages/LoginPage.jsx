@@ -98,16 +98,10 @@ export function LoginPage() {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          minHeight: '100vh',
-          display: 'grid',
-          placeItems: 'center',
-          background: '#0b1020',
-          color: '#e8edf7'
-        }}
-      >
-        Cargando sesión...
+      <div className="login-page login-page--center">
+        <div style={{ color: '#e8edf7', fontSize: 14, fontWeight: 600 }}>
+          Cargando sesión...
+        </div>
       </div>
     );
   }
@@ -117,16 +111,7 @@ export function LoginPage() {
   }
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'grid',
-        placeItems: 'center',
-        padding: 24,
-        background:
-          'radial-gradient(circle at top left, rgba(16,185,129,0.16), transparent 34%), #0b1020'
-      }}
-    >
+    <div className="login-page login-page--center">
       <div
         className="card"
         style={{
@@ -135,20 +120,12 @@ export function LoginPage() {
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
-          <div
-            style={{
-              margin: '0 auto 20px',
-              display: 'flex',
-              justifyContent: 'center',
-              width: '100%'
-            }}
-          >
+          <div className="login-brand-emblem-wrap">
             <BrandLogo
-              variant="horizontal"
-              size="lg"
-              surface="framed"
+              variant="emblem"
+              size="auth"
+              surface="subtle"
               loading="eager"
-              style={{ width: '100%', maxWidth: 360, justifyContent: 'center' }}
             />
           </div>
 
