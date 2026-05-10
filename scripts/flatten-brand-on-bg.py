@@ -161,7 +161,9 @@ def flatten_crop_write(path: Path) -> tuple[int, int]:
 
 def main() -> None:
     root = Path(__file__).resolve().parents[1]
-    brand = root / "public" / "brand"
+    # Logos ship from src/assets/brand (Vite ?url); keep public/brand empty.
+    brand = root / "src" / "assets" / "brand"
+    brand.mkdir(parents=True, exist_ok=True)
     for name in ("ceos-os-emblem.png", "ceos-os-horizontal.png"):
         p = brand / name
         cw, ch = flatten_crop_write(p)

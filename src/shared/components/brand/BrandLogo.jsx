@@ -1,8 +1,7 @@
 import React from 'react';
 
-/** Query avoids stale cached PNGs after asset replacement (public/ is fingerprint-free). */
-const BRAND_EMBLEM = '/brand/ceos-os-emblem.png?v=rgbflat1';
-const BRAND_HORIZONTAL = '/brand/ceos-os-horizontal.png?v=rgbflat1';
+import brandEmblemUrl from '../../../assets/brand/ceos-os-emblem.png?url';
+import brandHorizontalUrl from '../../../assets/brand/ceos-os-horizontal.png?url';
 
 /** @typedef {'horizontal' | 'emblem' | 'compact'} BrandVariant */
 /** @typedef {'sm' | 'md' | 'lg' | 'xl' | 'hero' | 'auth'} BrandSize — `auth` = emblem on login (responsive clamp) */
@@ -35,10 +34,8 @@ const COMPACT_SIZE = /** @type {const} */ ({
 });
 
 /**
- * CEO's OS brand marks from `public/brand` (`/brand/...`).
- * Shipped marks are **RGB PNGs** composited on `#030712` (no alpha) so broken transparency
- * grids never show. For custom assets, PNG-32 / SVG with real alpha works with
- * `surface="transparent"`.
+ * CEO's OS brand marks — bundled from `src/assets/brand/*.png` via Vite `?url` (content-hashed
+ * in production so browsers cannot keep stale `/public` copies). RGB on dark base, no alpha.
  *
  * @param {object} props
  * @param {BrandVariant} [props.variant]
@@ -65,7 +62,7 @@ export function BrandLogo({
     variant === 'compact' ? COMPACT_SIZE[size] || 'sm' : size;
 
   const src =
-    effectiveVariant === 'horizontal' ? BRAND_HORIZONTAL : BRAND_EMBLEM;
+    effectiveVariant === 'horizontal' ? brandHorizontalUrl : brandEmblemUrl;
 
   const resolvedAlt =
     alt ??

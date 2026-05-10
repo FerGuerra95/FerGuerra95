@@ -1029,7 +1029,7 @@ select option {
   }
 }
 
-/* Public brand assets (/brand/*): wrapper from BrandLogo.jsx */
+/* Brand logos: bundled via BrandLogo.jsx (src/assets/brand, Vite ?url) */
 .ceos-brand-logo-root {
   max-width: 100%;
   line-height: 0;
@@ -1070,5 +1070,5 @@ select option {
 }
 
 .login-brand-emblem-wrap .login-brand-emblem-logo img {
-  filter: none;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.52));
 }
