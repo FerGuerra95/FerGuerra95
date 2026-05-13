@@ -22,6 +22,11 @@ function resolveApiBaseUrl() {
 
 const API_BASE_URL = resolveApiBaseUrl().replace(/\/$/, '');
 
+/** Base URL del API (p. ej. `/api` o `http://localhost:4000/api`) para redirecciones SSO absolutas. */
+export function getResolvedApiBaseUrl() {
+  return API_BASE_URL;
+}
+
 const AUTH_TOKEN_KEY = 'ceo_os_auth_token';
 const DEFAULT_TIMEOUT_MS = 30_000;
 
@@ -71,6 +76,36 @@ function normalizePath(path) {
   return `/${safePath}`;
 }
 
+function buildRequestUrl(path, params) {
+  const normalized = normalizePath(path);
+  const qIndex = normalized.indexOf('?');
+  const pathname = qIndex >= 0 ? normalized.slice(0, qIndex) : normalized;
+  const existingQuery = qIndex >= 0 ? normalized.slice(qIndex + 1) : '';
+
+  const searchParams = new URLSearchParams(existingQuery);
+
+  if (params && typeof params === 'object') {
+    for (const [key, value] of Object.entries(params)) {
+      if (value === '' || value === null || value === undefined) {
+        continue;
+      }
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          if (item === '' || item === null || item === undefined) {
+            continue;
+          }
+          searchParams.append(key, String(item));
+        }
+      } else {
+        searchParams.append(key, String(value));
+      }
+    }
+  }
+
+  const qs = searchParams.toString();
+  return qs ? `${API_BASE_URL}${pathname}?${qs}` : `${API_BASE_URL}${pathname}`;
+}
+
 async function parseResponse(response) {
   const text = await response.text();
 
@@ -96,38 +131,47 @@ async function parseResponse(response) {
 }
 
 async function request(path, options = {}) {
-  const url = `${API_BASE_URL}${normalizePath(path)}`;
+  const {
+    params,
+    skipAuthExpiredEvent,
+    skipJsonContentType,
+    timeoutMs: timeoutOpt,
+    responseType,
+    ...fetchRest
+  } = options;
+
+  const url = buildRequestUrl(path, params);
   const token = getAuthToken();
   const controller = new AbortController();
-  const timeoutMs = Number(options.timeoutMs || DEFAULT_TIMEOUT_MS);
+  const timeoutMs = Number(timeoutOpt || DEFAULT_TIMEOUT_MS);
   const timerApi = typeof window !== 'undefined' ? window : globalThis;
   const timeoutId = timerApi.setTimeout(() => {
     controller.abort();
   }, timeoutMs);
 
-  const methodUpper = String(options.method || 'GET').toUpperCase();
+  const methodUpper = String(fetchRest.method || 'GET').toUpperCase();
   const hasJsonBody =
-    typeof options.body === 'string' &&
-    options.body.length > 0 &&
+    typeof fetchRest.body === 'string' &&
+    fetchRest.body.length > 0 &&
     ['POST', 'PUT', 'PATCH', 'DELETE'].includes(methodUpper);
 
   const headers = {
-    ...(hasJsonBody && !options.skipJsonContentType
+    ...(hasJsonBody && !skipJsonContentType
       ? { 'Content-Type': 'application/json' }
       : {}),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...(options.headers || {})
+    ...(fetchRest.headers || {})
   };
 
   let response;
   let payload;
-  const expectsBlob = options.responseType === 'blob';
+  const expectsBlob = responseType === 'blob';
 
   try {
     response = await fetch(url, {
-      ...options,
+      ...fetchRest,
       headers,
-      signal: options.signal || controller.signal
+      signal: fetchRest.signal || controller.signal
     });
 
     if (expectsBlob && response.ok) {
@@ -174,7 +218,11 @@ async function request(path, options = {}) {
       meta: payload?.meta || null
     });
 
-    if (response.status === 401 && typeof window !== 'undefined') {
+    if (
+      response.status === 401 &&
+      typeof window !== 'undefined' &&
+      !skipAuthExpiredEvent
+    ) {
       window.dispatchEvent(
         new CustomEvent('ceos:auth-expired', {
           detail: {

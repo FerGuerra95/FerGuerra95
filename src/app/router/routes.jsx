@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+﻿import React, { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from '../layout/AppShell.jsx';
 import { ProtectedRoute } from '../layout/ProtectedRoute.jsx';
@@ -201,6 +201,15 @@ export function AppRoutes() {
         }
       />
 
+      <Route
+        path="/ma/secure-share"
+        element={
+          <Suspense fallback={<RouteFallback />}>
+            <SecureShareViewerPage />
+          </Suspense>
+        }
+      />
+
       <Route element={<ProtectedAppShell />}>
           <Route path="/dashboard" element={<ExecutiveOverviewer />} />
           <Route path="/overview" element={<ExecutiveOverviewer />} />
@@ -215,7 +224,6 @@ export function AppRoutes() {
           <Route path="/ma/cim" element={<CIMPage />} />
           <Route path="/ma/deals" element={<DealsRepositoryPage />} />
           <Route path="/ma/data-room" element={<MADataRoomPage />} />
-          <Route path="/ma/secure-share" element={<SecureShareViewerPage />} />
 
           <Route
             path="/compliance/dashboard"

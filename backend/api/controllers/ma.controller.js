@@ -14,6 +14,7 @@ import {
 import {
   createMaSecureShareLink,
   getMaSecureShare,
+  getMaSecureSharePublic,
   listMaSecureShares,
   revokeMaSecureShare
 } from '../../services/ma/secureShare.service.js';
@@ -688,6 +689,27 @@ export async function getSecureShare(req, res, next) {
 
     await auditMaAction(scope, 'ma.secure_share.accessed', req.params.id, {
       reportId: item.report?.id
+    });
+
+    return ok(res, item);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function getSecureSharePublic(req, res, next) {
+  try {
+    const shareToken =
+      String(
+        typeof req.get === 'function'
+          ? req.get('x-ma-share-token') || ''
+          : ''
+      ).trim() ||
+      String(req.query?.token ?? '').trim();
+
+    const item = await getMaSecureSharePublic({
+      id: req.params.id,
+      token: shareToken
     });
 
     return ok(res, item);

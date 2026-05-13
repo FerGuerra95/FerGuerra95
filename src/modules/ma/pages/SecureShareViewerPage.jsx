@@ -65,10 +65,11 @@ export function SecureShareViewerPage() {
 
     if (!shareFetchDedupeByKey.has(dedupeKey)) {
       const promise = httpClient
-        .get(`/ma/secure-shares/${encodeURIComponent(shareId)}`, {
+        .get(`/ma/public/secure-shares/${encodeURIComponent(shareId)}`, {
           headers: {
             'X-MA-Share-Token': token
-          }
+          },
+          skipAuthExpiredEvent: true
         })
         .finally(() => {
           queueMicrotask(() => shareFetchDedupeByKey.delete(dedupeKey));
@@ -228,7 +229,7 @@ export function SecureShareViewerPage() {
                 color: '#e2e8f0'
               }}
             >
-              Validando sesion y token...
+              Validando enlace seguro...
             </div>
           ) : (
             <iframe

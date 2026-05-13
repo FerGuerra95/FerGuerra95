@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 
+import { recordAuditLog } from '../audit/auditLog.service.js';
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
 import { getMaReportById } from './reports.service.js';
 
@@ -72,7 +73,8 @@ function isExpired(item) {
 /**
  * Builds a URL for human sharing: SPA route keeps the bearer secret in the fragment
  * (never sent as Referrer to arbitrary origins, omit from typical server-side access logs).
- * Access still requires authenticated session matching organizationId (enterprise pilot model).
+ * Resolution uses `GET /api/ma/public/secure-shares/:id` with header `X-MA-Share-Token`
+ * (no JWT). The authenticated route `/api/ma/secure-shares/:id` remains for org-scoped access.
  *
  * Prefer calling the backend with header `X-MA-Share-Token`, not query `?token=`.
  */
@@ -80,7 +82,7 @@ function buildShareUrls(id, token) {
   const safeId = encodeURIComponent(id);
   const safeToken = encodeURIComponent(token);
 
-  const apiPathPlain = `/api/ma/secure-shares/${safeId}`;
+  const apiPathPlain = `/api/ma/public/secure-shares/${safeId}`;
   const viewerFragment = `#sid=${safeId}&t=${safeToken}`;
   const viewerPath = `/ma/secure-share${viewerFragment}`;
 
@@ -228,6 +230,63 @@ export async function getMaSecureShare({
   if (!report) {
     throw createError('Informe M&A no encontrado.', 404, 'MA_REPORT_NOT_FOUND');
   }
+
+  return {
+    share: sanitizeShare(item),
+    report
+  };
+}
+
+/**
+ * Resolves a secure share using only id + token (no JWT). Organization scope comes from the
+ * share row. Caller must rate-limit at the HTTP layer.
+ */
+export async function getMaSecureSharePublic({ id, token } = {}) {
+  const safeId = normalizeText(id);
+  const safeToken = normalizeText(token);
+
+  if (!safeId || !safeToken) {
+    throw createError(
+      'Se requiere id de secure share y token.',
+      400,
+      'SECURE_SHARE_BAD_REQUEST'
+    );
+  }
+
+  const item = await secureShareStore.getById(safeId);
+
+  if (!item) {
+    throw createError('Secure share no encontrado.', 404, 'SECURE_SHARE_NOT_FOUND');
+  }
+
+  if (item.status !== 'active' || item.revokedAt) {
+    throw createError('Secure share revocado.', 403, 'SECURE_SHARE_REVOKED');
+  }
+
+  if (isExpired(item)) {
+    throw createError('Secure share caducado.', 403, 'SECURE_SHARE_EXPIRED');
+  }
+
+  if (!safeTokenCompare(hashToken(safeToken), item.tokenHash)) {
+    throw createError('Token de secure share no valido.', 403, 'SECURE_SHARE_TOKEN_INVALID');
+  }
+
+  const report = await getMaReportById(item.reportId, {
+    organizationId: item.organizationId
+  });
+
+  if (!report) {
+    throw createError('Informe M&A no encontrado.', 404, 'MA_REPORT_NOT_FOUND');
+  }
+
+  await recordAuditLog({
+    organizationId: item.organizationId,
+    userId: item.userId,
+    action: 'ma.secure_share.public_accessed',
+    entityType: 'ma',
+    entityId: safeId,
+    metadata: { reportId: report.id, via: 'public_link' }
+  });
 
   return {
     share: sanitizeShare(item),
