@@ -20,7 +20,14 @@
     "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test tests/e2e",
     "test:e2e:online": "playwright test tests/*.spec.js",
-    "quality": "npm run build && npm run test:unit && npm run test:integration"
+    "test:a11y": "playwright test tests/e2e/a11y",
+    "test:lighthouse": "node scripts/lighthouse-ci.mjs",
+    "test:lighthouse:perf": "node scripts/lighthouse-ci.mjs lighthouserc.perf.cjs",
+    "check:bundle-budget": "node scripts/check-dist-budget.mjs",
+    "playwright:install": "playwright install chromium",
+    "postinstall": "npm rebuild better-sqlite3",
+    "quality": "npm run build && npm rebuild better-sqlite3 && npm run check:bundle-budget && npm run test:unit && npm run test:integration",
+    "ci": "npm run quality && npm run test:e2e && npm run test:a11y && npm run test:lighthouse && npm run test:lighthouse:perf"
   },
   "dependencies": {
     "better-sqlite3": "^12.9.0",
@@ -30,16 +37,21 @@
     "html2pdf.js": "^0.14.0",
     "jspdf": "^4.2.1",
     "lucide-react": "^0.525.0",
+    "nodemailer": "^8.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.30.1"
+    "react-router-dom": "^6.30.1",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@lhci/cli": "^0.14.0",
     "@playwright/test": "^1.59.1",
     "@testing-library/react": "^16.3.2",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "^6.0.1",
     "jsdom": "^29.0.2",
-    "vite": "^5.4.11",
+    "supertest": "^7.0.0",
+    "vite": "^8.0.12",
     "vitest": "^4.1.5"
   }
 }

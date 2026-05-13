@@ -23,7 +23,7 @@ function resolveApiBaseUrl() {
   return new URL('/api', appBaseUrl).toString().replace(/\/$/, '');
 }
 
-function getLocalCredentials() {
+export function getE2eCredentials() {
   const envEmail = process.env.CEOS_E2E_USER || process.env.CEOS_USER;
   const envPassword = process.env.CEOS_E2E_PASSWORD || process.env.CEOS_PASSWORD;
 
@@ -52,8 +52,37 @@ function getLocalCredentials() {
   };
 }
 
+/**
+ * Token JWT para llamadas API en e2e (misma resolución de credenciales que `loginAsDemoAdmin`).
+ */
+export async function fetchDemoAdminApiToken(request) {
+  const credentials = getE2eCredentials();
+  const response = await request.post(`${resolveApiBaseUrl()}/auth/login`, {
+    data: {
+      email: credentials.email,
+      password: credentials.password
+    }
+  });
+
+  if (!response.ok()) {
+    throw new Error(
+      `Login API e2e falló: ${response.status()} ${await response.text()}`
+    );
+  }
+
+  const payload = await response.json();
+  const data = payload.data ?? payload;
+  const token = data?.token || data?.accessToken || '';
+
+  if (!token) {
+    throw new Error('Respuesta de login API sin token.');
+  }
+
+  return token;
+}
+
 export async function loginAsDemoAdmin(page) {
-  const credentials = getLocalCredentials();
+  const credentials = getE2eCredentials();
   const response = await page.request.post(`${resolveApiBaseUrl()}/auth/login`, {
     data: {
       email: credentials.email,

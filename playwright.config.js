@@ -15,6 +15,34 @@ const webServerEnv = {
   CEOS_E2E: process.env.CEOS_E2E || 'true'
 };
 
+const extraBrowsers = process.env.CEOS_PLAYWRIGHT_EXTRA_BROWSERS === '1';
+
+const projects = [
+  {
+    name: 'chromium',
+    use: {
+      ...devices['Desktop Chrome']
+    }
+  }
+];
+
+if (extraBrowsers) {
+  projects.push(
+    {
+      name: 'webkit',
+      use: {
+        ...devices['Desktop Safari']
+      }
+    },
+    {
+      name: 'firefox',
+      use: {
+        ...devices['Desktop Firefox']
+      }
+    }
+  );
+}
+
 export default defineConfig({
   testDir: './tests',
   testMatch: ['**/*.spec.js'],
@@ -25,19 +53,16 @@ export default defineConfig({
   expect: {
     timeout: 10_000
   },
+  reporter: [
+    ['list'],
+    ['html', { open: 'never', outputFolder: 'playwright-report' }]
+  ],
   use: {
     baseURL,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure'
   },
-  projects: [
-    {
-      name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome']
-      }
-    }
-  ],
+  projects,
   webServer: useExternalApp
     ? undefined
     : [

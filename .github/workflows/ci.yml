@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit (solo criticas bloquean)
+        run: npm audit --audit-level=critical
+
+      - name: Native modules (better-sqlite3)
+        run: npm rebuild better-sqlite3
+
+      - name: Build, presupuesto de bundle, unit e integracion
+        run: npm run quality
+
+  e2e-a11y-lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CEOS_E2E_USER: admin@ceoos.local
+      CEOS_E2E_PASSWORD: admin123
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Native modules (better-sqlite3)
+        run: npm rebuild better-sqlite3
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Production build
+        run: npm run build
+
+      - name: E2E, axe, Lighthouse accesibilidad y Lighthouse perf/BP
+        run: npm run test:e2e && npm run test:a11y && npm run test:lighthouse && npm run test:lighthouse:perf
+
+      - name: Subir reporte Playwright si falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-e2e-${{ github.run_id }}
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+
+      - name: Subir salidas Lighthouse si falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-ci-${{ github.run_id }}
+          path: .lighthouseci
+          if-no-files-found: ignore

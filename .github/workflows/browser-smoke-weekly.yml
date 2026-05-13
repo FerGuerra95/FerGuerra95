@@ -1,0 +1,39 @@
+name: Browser smoke (WebKit y Firefox)
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: browser-smoke-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  alternate-browsers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CEOS_PLAYWRIGHT_EXTRA_BROWSERS: '1'
+      CEOS_E2E_USER: admin@ceoos.local
+      CEOS_E2E_PASSWORD: admin123
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm rebuild better-sqlite3
+
+      - name: Install Playwright browsers
+        run: npx playwright install webkit firefox --with-deps
+
+      - name: Login + accesibilidad (WebKit)
+        run: npx playwright test --project=webkit tests/e2e/auth tests/e2e/a11y
+
+      - name: Login + accesibilidad (Firefox)
+        run: npx playwright test --project=firefox tests/e2e/auth tests/e2e/a11y
