@@ -37,6 +37,7 @@ import { fundingEnterpriseApi } from '../../funding/services/fundingEnterpriseAp
 import { pmiApi } from '../../pmi/services/pmiApi.js';
 import { ecosystemApi } from '../../ecosystem/services/ecosystemApi.js';
 import { bridgeApi } from '../../bridge/services/bridgeApi.js';
+import { riskApi } from '../../risk/services/riskApi.js';
 import { boardPackApi } from '../services/boardPackApi.js';
 import { BoardPackModal } from '../components/BoardPackModal.jsx';
 import { FundingExecutiveWidget } from '../../funding/components/FundingExecutiveWidget.jsx';
@@ -1511,6 +1512,7 @@ export function CEOOverviewPage() {
   const [pmiBrief, setPmiBrief] = useState(null);
   const [ecosystemBrief, setEcosystemBrief] = useState(null);
   const [bridgeSummary, setBridgeSummary] = useState(null);
+  const [riskSummary, setRiskSummary] = useState(null);
   const [boardPack, setBoardPack] = useState(null);
   const [boardPackLoading, setBoardPackLoading] = useState(false);
   const [boardPackError, setBoardPackError] = useState(null);
@@ -1560,6 +1562,11 @@ export function CEOOverviewPage() {
       .getSummary()
       .then((data) => setBridgeSummary(data && typeof data === 'object' ? data : null))
       .catch(() => setBridgeSummary(null));
+
+    riskApi
+      .getSummary()
+      .then((data) => setRiskSummary(data && typeof data === 'object' ? data : null))
+      .catch(() => setRiskSummary(null));
   }, []);
 
   const canGenerateBoardPack = role === 'admin' || role === 'board_member';
@@ -1665,6 +1672,18 @@ export function CEOOverviewPage() {
         latestTitle: bridgeSummary.latestSignal?.title || legacyBridgeOverview.latestTitle
       }
     : legacyBridgeOverview;
+  const riskMetrics = riskSummary?.metrics || {};
+  const riskOverview = {
+    score: clampScore(riskMetrics.riskReadinessScore || riskSummary?.riskReadinessScore || 62),
+    title: 'Enterprise Risk Command',
+    posture: riskMetrics.riskPosture || 'controlled',
+    description:
+      'Enterprise Risk centralizes risk register, heatmap, controls, mitigations, incidents, KRIs and appetite breaches with human review required.',
+    recordsCount: riskSummary?.counts?.risks || 0,
+    activeRecordsCount: riskMetrics.criticalRiskCount || riskSummary?.criticalRiskCount || 0,
+    latestTitle: riskSummary?.latestRisk?.title || 'Enterprise risk posture',
+    metrics: riskMetrics
+  };
 
   const executiveSignal = getExecutiveSignal({
     scores: [
@@ -1674,7 +1693,8 @@ export function CEOOverviewPage() {
       pmiOverview.score,
       governanceOverview.score,
       heritageOverview.score,
-      bridgeOverview.score
+      bridgeOverview.score,
+      riskOverview.score
     ]
   });
 
@@ -1742,6 +1762,13 @@ export function CEOOverviewPage() {
       value: fundingRadar,
       route: '/funding/dashboard',
       tone: '#fbbf24'
+    },
+    {
+      key: 'risk',
+      label: 'Enterprise Risk',
+      value: riskOverview.score,
+      route: '/risk/dashboard',
+      tone: '#f87171'
     },
     {
       key: 'bridge',
@@ -2272,6 +2299,28 @@ export function CEOOverviewPage() {
               ]}
               primaryLink={{ to: '/heritage/dashboard', label: 'Open Heritage' }}
               secondaryLink={{ to: '/ma/dashboard', label: 'Company value' }}
+            />
+
+            <ModuleCard
+              icon={Radar}
+              branch="compliance"
+              kicker="Enterprise Risk"
+              title="Risk Command"
+              description={riskOverview.description}
+              score={riskOverview.score}
+              posture={riskOverview.posture}
+              surfaceNavigateTo="/risk/dashboard"
+              rows={[
+                { label: 'Risk register', value: riskOverview.recordsCount },
+                { label: 'Critical risks', value: riskOverview.activeRecordsCount },
+                { label: 'Overdue mitigations', value: riskOverview.metrics?.overdueMitigations || 0 },
+                { label: 'KRI breaches', value: riskOverview.metrics?.kriBreaches || 0 },
+                { label: 'Appetite breaches', value: riskOverview.metrics?.appetiteBreaches || 0 },
+                { label: 'Residual risk', value: `${riskOverview.metrics?.residualRisk || 0}/100` },
+                { label: 'Latest', value: riskOverview.latestTitle }
+              ]}
+              primaryLink={{ to: '/risk/dashboard', label: 'Open Risk' }}
+              secondaryLink={{ to: '/bridge/dashboard', label: 'Bridge signals' }}
             />
 
             <ModuleCard
