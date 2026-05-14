@@ -9,9 +9,12 @@ import {
   Download,
   FileText,
   Gauge,
+  Gem,
   Layers3,
   LockKeyhole,
+  Network,
   Rocket,
+  Scale,
   ShieldCheck,
   Sparkles,
   Target,
@@ -20,6 +23,8 @@ import {
 } from 'lucide-react';
 import { Card } from '../../../shared/components/ui/Card.jsx';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
+import { Button } from '../../../shared/components/ui/Button.jsx';
+import { useAuth } from '../../../app/providers/AuthProvider.jsx';
 import { useMAStore } from '../../ma/store/maStore.jsx';
 import { useComplianceStore } from '../../compliance/store/complianceStore.js';
 import { useComplianceEngine } from '../../compliance/engine/useComplianceEngine.js';
@@ -29,6 +34,10 @@ import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { maCasesApi } from '../../ma/services/maCasesApi.js';
 import { complianceAuditApi } from '../../compliance/services/complianceAuditApi.js';
 import { fundingEnterpriseApi } from '../../funding/services/fundingEnterpriseApi.js';
+import { pmiApi } from '../../pmi/services/pmiApi.js';
+import { ecosystemApi } from '../../ecosystem/services/ecosystemApi.js';
+import { boardPackApi } from '../services/boardPackApi.js';
+import { BoardPackModal } from '../components/BoardPackModal.jsx';
 import { FundingExecutiveWidget } from '../../funding/components/FundingExecutiveWidget.jsx';
 import {
   getDisplayText,
@@ -147,6 +156,27 @@ const ceoOverviewCss = `
     margin-top: 8px;
     line-height: 1.25;
     overflow-wrap: anywhere;
+  }
+
+  .ceo-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    margin-top: 28px;
+  }
+
+  .ceo-report-trace {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(226, 232, 240, 0.82);
+    font-size: 12px;
+    font-weight: 760;
   }
 
   .ceo-signal-card {
@@ -817,6 +847,7 @@ const ceoOverviewCss = `
     .ceo-signal-row strong {
       text-align: left;
     }
+
   }
 `;
 
@@ -1118,8 +1149,84 @@ function getFundingOverviewWithSummary({
   };
 }
 
-function getExecutiveSignal({ maScore, complianceScore, fundingScore }) {
-  const score = clampScore((maScore + complianceScore + fundingScore) / 3);
+function getPmiOverview(pmiBrief = null) {
+  const metrics = pmiBrief?.metrics || {};
+  const latestCase = pmiBrief?.latestCase || null;
+  const score = clampScore(pmiBrief?.score ?? 58);
+  const synergyCaptureRate = clampScore(metrics.synergyCaptureRate ?? 0);
+  const openRiskCount = Number(metrics.openRiskCount ?? 0);
+  const blockedWorkstreamsCount = Number(metrics.blockedWorkstreamsCount ?? 0);
+  const blockedDependenciesCount = Number(metrics.blockedDependenciesCount ?? 0);
+  const synergyGap = Number(metrics.synergyGap ?? 0);
+  const budgetRemaining = Number(metrics.budgetRemaining ?? 0);
+  const alerts = [];
+
+  if (synergyGap > 0 && synergyCaptureRate < 45) {
+    alerts.push('Synergy gap below target');
+  }
+
+  if (openRiskCount > 0) {
+    alerts.push(`${openRiskCount} open PMI risks`);
+  }
+  if (blockedWorkstreamsCount > 0) {
+    alerts.push(`${blockedWorkstreamsCount} blocked workstreams`);
+  }
+  if (blockedDependenciesCount > 0) {
+    alerts.push(`${blockedDependenciesCount} blocked dependencies`);
+  }
+
+  return {
+    score,
+    title: pmiBrief?.title || 'PMI enterprise layer ready',
+    posture: pmiBrief?.posture || 'Seed integration plan',
+    description:
+      pmiBrief?.description ||
+      'PMI connects post-close execution, synergies, risks, owners and 30-60-90 milestones into the CEO layer.',
+    dealName: latestCase?.dealName || 'PMI integration file',
+    casesCount: metrics.casesCount ?? 0,
+    workstreamsCount: metrics.workstreamsCount ?? 0,
+    highRiskCount: metrics.highRiskCount ?? 0,
+    openRiskCount,
+    blockedWorkstreamsCount,
+    blockedDependenciesCount,
+    ledgerCaptureRate: clampScore(metrics.ledgerCaptureRate ?? 0),
+    playbookProgress: clampScore(metrics.playbookProgress ?? 0),
+    dependencyRiskScore: clampScore(metrics.dependencyRiskScore ?? 100),
+    synergyCaptureRate,
+    synergyGap,
+    budgetRemaining,
+    progress: metrics.workstreamProgress ?? score,
+    alerts
+  };
+}
+
+function getEcosystemBranchOverview(ecosystemBrief = null, branchKey, fallback = {}) {
+  const branch = getSafeArray(ecosystemBrief?.branches).find(
+    (item) => item?.branch === branchKey
+  );
+
+  return {
+    score: clampScore(branch?.score ?? fallback.score ?? 58),
+    title: branch?.title || fallback.title,
+    posture: branch?.posture || fallback.posture,
+    description: fallback.description,
+    route: branch?.route || fallback.route,
+    recordsCount: branch?.recordsCount ?? 0,
+    activeRecordsCount: branch?.activeRecordsCount ?? 0,
+    metrics: branch?.metrics || {},
+    latestTitle: branch?.latestRecord?.title || fallback.latestTitle
+  };
+}
+
+function getExecutiveSignal({ scores = [] }) {
+  const safeScores = scores
+    .map((score) => Number(score))
+    .filter((score) => Number.isFinite(score));
+  const score = clampScore(
+    safeScores.length
+      ? safeScores.reduce((sum, item) => sum + item, 0) / safeScores.length
+      : 0
+  );
 
   if (score >= 82) {
     return {
@@ -1127,7 +1234,7 @@ function getExecutiveSignal({ maScore, complianceScore, fundingScore }) {
       title: 'Executive OS ready for demo',
       posture: 'Prepare enterprise pitch',
       description:
-        'M&A, Compliance y Funding tienen una base sólida para presentar CEO’s OS como sistema ejecutivo listo para demo comercial.'
+        'M&A, Compliance, Funding, PMI and enterprise branches feed a unified CEO decision layer ready for commercial demo.'
     };
   }
 
@@ -1137,7 +1244,7 @@ function getExecutiveSignal({ maScore, complianceScore, fundingScore }) {
       title: 'Executive release in closing stage',
       posture: 'Run final QA',
       description:
-        'El producto ya tiene las ramas clave. La prioridad es QA final, logo, demo ejecutiva y materiales comerciales.'
+        'The core and expansion branches are connected. Priority is final QA, executive narrative and commercial materials.'
     };
   }
 
@@ -1148,6 +1255,38 @@ function getExecutiveSignal({ maScore, complianceScore, fundingScore }) {
     description:
       'La capa ejecutiva consolida señales clave y prioriza las decisiones que requieren revisión antes de escalar.'
   };
+}
+
+function buildExecutivePriorityRows({ pmiOverview, fundingOverview, complianceOverview }) {
+  const rows = [
+    { label: 'Decision quality', value: 'Active' },
+    { label: 'Visual consistency', value: 'Active' },
+    { label: 'Executive narrative', value: 'Active' },
+    { label: 'Board outputs', value: 'Ready' }
+  ];
+
+  if (pmiOverview.alerts.length > 0) {
+    rows.unshift({
+      label: 'PMI escalation',
+      value: pmiOverview.alerts[0]
+    });
+  }
+
+  if (fundingOverview.requiresExecutiveUpdate) {
+    rows.unshift({
+      label: 'Funding update',
+      value: 'Executive review required'
+    });
+  }
+
+  if (complianceOverview.openAlerts > 0) {
+    rows.unshift({
+      label: 'Compliance control',
+      value: `${complianceOverview.openAlerts} open alerts`
+    });
+  }
+
+  return rows.slice(0, 6);
 }
 
 function CommandItem({ label, value, branch = 'overview', to = '' }) {
@@ -1344,6 +1483,7 @@ function ActionCard({ icon: Icon, branch = 'overview', title, description, to, l
 
 export function CEOOverviewPage() {
   const navigate = useNavigate();
+  const { role } = useAuth();
   const maStore = useMAStore();
 
   const {
@@ -1367,6 +1507,19 @@ export function CEOOverviewPage() {
   const [hubBrief, setHubBrief] = useState(null);
   const [hydratedCases, setHydratedCases] = useState([]);
   const [fundingSummary, setFundingSummary] = useState({});
+  const [pmiBrief, setPmiBrief] = useState(null);
+  const [ecosystemBrief, setEcosystemBrief] = useState(null);
+  const [boardPack, setBoardPack] = useState(null);
+  const [boardPackLoading, setBoardPackLoading] = useState(false);
+  const [boardPackError, setBoardPackError] = useState(null);
+  const [isBoardPackOpen, setIsBoardPackOpen] = useState(false);
+  const [lastReportGeneratedAt, setLastReportGeneratedAt] = useState(() => {
+    try {
+      return localStorage.getItem('ceos:last_board_pack_generated_at') || '';
+    } catch {
+      return '';
+    }
+  });
 
   useEffect(() => {
     maCasesApi
@@ -1390,7 +1543,48 @@ export function CEOOverviewPage() {
         setFundingSummary(data && typeof data === 'object' ? data : {});
       })
       .catch(() => setFundingSummary({}));
+
+    pmiApi
+      .getExecutiveHubBrief()
+      .then((data) => setPmiBrief(data && typeof data === 'object' ? data : null))
+      .catch(() => setPmiBrief(null));
+
+    ecosystemApi
+      .getExecutiveHubBrief()
+      .then((data) => setEcosystemBrief(data && typeof data === 'object' ? data : null))
+      .catch(() => setEcosystemBrief(null));
   }, []);
+
+  const canGenerateBoardPack = role === 'admin' || role === 'board_member';
+
+  async function handleGenerateBoardPack() {
+    setIsBoardPackOpen(true);
+    setBoardPackLoading(true);
+    setBoardPackError(null);
+
+    try {
+      const data = await boardPackApi.getBoardPack();
+      setBoardPack(data);
+      setLastReportGeneratedAt(data?.generatedAt || new Date().toISOString());
+      try {
+        localStorage.setItem(
+          'ceos:last_board_pack_generated_at',
+          data?.generatedAt || new Date().toISOString()
+        );
+      } catch {
+        // Local trace only; report generation remains valid without storage.
+      }
+    } catch (error) {
+      setBoardPackError(error);
+    } finally {
+      setBoardPackLoading(false);
+    }
+  }
+
+  function handleExportBoardPack() {
+    if (typeof window === 'undefined') return;
+    window.print();
+  }
 
   useComplianceEngine({
     suppliers: safeSuppliers,
@@ -1418,11 +1612,45 @@ export function CEOOverviewPage() {
     fundingDerived,
     fundingSummary
   });
+  const pmiOverview = getPmiOverview(pmiBrief);
+  const governanceOverview = getEcosystemBranchOverview(ecosystemBrief, 'governance', {
+    score: 64,
+    title: 'Governance control foundation',
+    posture: 'Formalize board controls',
+    description:
+      'Governance & ESG connects board decisions, ESG reporting and enterprise controls with Compliance and Funding.',
+    route: '/governance/dashboard',
+    latestTitle: 'Board governance baseline'
+  });
+  const heritageOverview = getEcosystemBranchOverview(ecosystemBrief, 'heritage', {
+    score: 58,
+    title: 'Legacy infrastructure foundation',
+    posture: 'Map owner legacy',
+    description:
+      'Heritage structures patrimony, succession, asset protection and family-office continuity as a premium retention layer.',
+    route: '/heritage/dashboard',
+    latestTitle: 'Owner legacy map'
+  });
+  const bridgeOverview = getEcosystemBranchOverview(ecosystemBrief, 'bridge', {
+    score: 62,
+    title: 'Liquidity network foundation',
+    posture: 'Curate verified network',
+    description:
+      'The Bridge connects validated M&A and Funding opportunities with investors, buyers, banks and advisors.',
+    route: '/bridge/dashboard',
+    latestTitle: 'Verified opportunity network'
+  });
 
   const executiveSignal = getExecutiveSignal({
-    maScore: maOverview.score,
-    complianceScore: complianceOverview.score,
-    fundingScore: fundingOverview.score
+    scores: [
+      maOverview.score,
+      complianceOverview.score,
+      fundingOverview.score,
+      pmiOverview.score,
+      governanceOverview.score,
+      heritageOverview.score,
+      bridgeOverview.score
+    ]
   });
 
   const casesForRadar =
@@ -1450,8 +1678,8 @@ export function CEOOverviewPage() {
   );
   const complianceDragPenalty = clampScore(maValuationSignal - dealReadinessCombined);
   const maFinancialRadar = estimateMaFinancialRadar(casesForRadar);
-  const operationalRadar = clampScore(62);
-  const esgRadar = clampScore(55);
+  const operationalRadar = clampScore(pmiOverview.progress || pmiOverview.score || 62);
+  const esgRadar = clampScore(governanceOverview.score || 55);
   const fundingRadar = clampScore(fundingOverview.readiness ?? 58);
 
   const radarAxes = [
@@ -1489,6 +1717,20 @@ export function CEOOverviewPage() {
       value: fundingRadar,
       route: '/funding/dashboard',
       tone: '#fbbf24'
+    },
+    {
+      key: 'bridge',
+      label: 'Bridge',
+      value: bridgeOverview.score,
+      route: '/bridge/dashboard',
+      tone: '#22d3ee'
+    },
+    {
+      key: 'heritage',
+      label: 'Heritage',
+      value: heritageOverview.score,
+      route: '/heritage/dashboard',
+      tone: '#d4af37'
     }
   ];
 
@@ -1496,8 +1738,17 @@ export function CEOOverviewPage() {
   const availablePacks = [
     'M&A Deal Brief / IC Memo / Data Room',
     'Compliance Board Pack',
-    'Funding Board Memo / Data Room'
+    'Funding Board Memo / Data Room',
+    'PMI Board Integration Memo',
+    'Governance / ESG control brief',
+    'Bridge verified network brief',
+    'Heritage legacy map'
   ];
+  const executivePriorityRows = buildExecutivePriorityRows({
+    pmiOverview,
+    fundingOverview,
+    complianceOverview
+  });
 
   return (
     <div className="page">
@@ -1521,9 +1772,27 @@ export function CEOOverviewPage() {
 
               <p className="ceo-copy">
                 Capa ejecutiva que une las señales principales de M&A,
-                Compliance y Funding para presentar CEO’s OS como sistema
-                operativo ejecutivo, no como módulos aislados.
+                Compliance, Funding, PMI, Governance, Heritage y The Bridge
+                para presentar CEO’s OS como sistema operativo ejecutivo,
+                no como módulos aislados.
               </p>
+
+              <div className="ceo-hero-actions">
+                <Button
+                  onClick={handleGenerateBoardPack}
+                  loading={boardPackLoading}
+                  disabled={!canGenerateBoardPack}
+                >
+                  <FileText size={16} />
+                  Generate Board Pack
+                </Button>
+                <span className="ceo-report-trace">
+                  Last Report Generated:{' '}
+                  {lastReportGeneratedAt
+                    ? new Date(lastReportGeneratedAt).toLocaleString('en-GB')
+                    : 'Not generated yet'}
+                </span>
+              </div>
 
               <div className="ceo-command-bar">
                 <CommandItem
@@ -1545,6 +1814,34 @@ export function CEOOverviewPage() {
                   label="Funding posture"
                   value={fundingOverview.posture}
                   to="/funding/dashboard"
+                />
+
+                <CommandItem
+                  branch="pmi"
+                  label="PMI posture"
+                  value={pmiOverview.posture}
+                  to="/pmi/dashboard"
+                />
+
+                <CommandItem
+                  branch="governance"
+                  label="Governance posture"
+                  value={governanceOverview.posture}
+                  to="/governance/dashboard"
+                />
+
+                <CommandItem
+                  branch="heritage"
+                  label="Heritage posture"
+                  value={heritageOverview.posture}
+                  to="/heritage/dashboard"
+                />
+
+                <CommandItem
+                  branch="bridge"
+                  label="Bridge posture"
+                  value={bridgeOverview.posture}
+                  to="/bridge/dashboard"
                 />
               </div>
 
@@ -1661,8 +1958,8 @@ export function CEOOverviewPage() {
                         Radar de salud ejecutiva · multi-rama
                       </strong>
                       <p className="muted" style={{ margin: '10px 0 0', lineHeight: 1.52 }}>
-                        Legal, financiero y funding ya consumen señales activas; Operational y ESG operan como señales
-                        en evolución hasta conectar KPIs externos. La capa de gobernanza ampliada permanece en roadmap.
+                        Legal, financiero, funding y PMI consumen señales activas; Governance, Heritage y Bridge
+                        aportan lectura enterprise para continuidad, red transaccional y gobierno corporativo.
                       </p>
                     </div>
                   </div>
@@ -1722,7 +2019,8 @@ export function CEOOverviewPage() {
                   <SignalRow label="M&A Signal" value={`${maOverview.score}/100`} />
                   <SignalRow label="Compliance Signal" value={`${complianceOverview.score}/100`} />
                   <SignalRow label="Funding Signal" value={`${fundingOverview.score}/100`} />
-                  <SignalRow label="Board Packs" value={availablePacks.length} />
+                  <SignalRow label="PMI Signal" value={`${pmiOverview.score}/100`} />
+                  <SignalRow label="Ecosystem Signal" value={`${ecosystemBrief?.score ?? 61}/100`} />
                 </div>
               </div>
             </aside>
@@ -1750,8 +2048,8 @@ export function CEOOverviewPage() {
             <KpiCard
               branch="ma"
               label="Core workspaces"
-              value="3 + Overview"
-              description="M&A, Compliance, Funding y capa ejecutiva."
+              value="7 + Overview"
+              description="Core, PMI y ramas enterprise conectadas."
               icon={Layers3}
             />
 
@@ -1766,8 +2064,8 @@ export function CEOOverviewPage() {
             <KpiCard
               branch="funding"
               label="Next milestone"
-              value="Enterprise polish"
-              description="Consistencia visual, datos y narrativa ejecutiva."
+              value="Enterprise sync"
+              description="Señales multi-rama alimentando el CEO Overview."
               icon={Target}
               tone="text-success"
             />
@@ -1778,8 +2076,8 @@ export function CEOOverviewPage() {
           <SectionHeader
             kicker="Operating modules"
             icon={Layers3}
-            title="Three premium workspaces feeding one executive layer"
-            description="Esta vista conecta las ramas ya trabajadas para que el producto se entienda como un sistema operativo ejecutivo."
+            title="Enterprise branches feeding one executive layer"
+            description="Esta vista conecta core, post-merger execution y ramas enterprise sin desacoplar los módulos que ya funcionan."
           />
 
           <div className="ceo-grid ceo-grid-three">
@@ -1840,6 +2138,154 @@ export function CEOOverviewPage() {
               primaryLink={{ to: '/funding/dashboard', label: 'Open Funding' }}
               secondaryLink={{ to: '/funding/data-room', label: 'Data Room' }}
             />
+
+            <ModuleCard
+              icon={Activity}
+              branch="pmi"
+              kicker="PMI & Synergies"
+              title="Post-Merger Execution"
+              description={pmiOverview.description}
+              score={pmiOverview.score}
+              posture={pmiOverview.posture}
+              surfaceNavigateTo="/pmi/dashboard"
+              rows={[
+                { label: 'Integration file', value: pmiOverview.dealName },
+                { label: 'Workstreams', value: pmiOverview.workstreamsCount },
+                { label: 'High risks', value: pmiOverview.highRiskCount },
+                { label: 'Open risks', value: pmiOverview.openRiskCount },
+                { label: 'Synergy capture', value: `${pmiOverview.synergyCaptureRate}%` },
+                { label: 'Ledger capture', value: `${pmiOverview.ledgerCaptureRate}%` },
+                { label: 'Playbooks', value: `${pmiOverview.playbookProgress}%` },
+                { label: 'Dependency risk', value: `${pmiOverview.dependencyRiskScore}%` },
+                {
+                  label: 'Budget remaining',
+                  value: formatCurrency(
+                    pmiOverview.budgetRemaining,
+                    pmiBrief?.latestCase?.currency || 'EUR'
+                  )
+                }
+              ]}
+              primaryLink={{ to: '/pmi/dashboard', label: 'Open PMI' }}
+              secondaryLink={{ to: '/ma/dashboard', label: 'M&A thesis' }}
+            />
+
+            <ModuleCard
+              icon={Scale}
+              branch="governance"
+              kicker="Governance & ESG"
+              title="Board Control Layer"
+              description={governanceOverview.description}
+              score={governanceOverview.score}
+              posture={governanceOverview.posture}
+              surfaceNavigateTo="/governance/dashboard"
+              rows={[
+                { label: 'Records', value: governanceOverview.recordsCount },
+                { label: 'Active controls', value: governanceOverview.activeRecordsCount },
+                {
+                  label: 'Decision closure',
+                  value: `${governanceOverview.metrics?.decisionClosureRate || 0}%`
+                },
+                {
+                  label: 'Control effectiveness',
+                  value: `${governanceOverview.metrics?.controlEffectiveness || 0}%`
+                },
+                {
+                  label: 'ESG readiness',
+                  value: `${governanceOverview.metrics?.esgReadiness || 0}%`
+                },
+                {
+                  label: 'Board readiness',
+                  value: `${governanceOverview.metrics?.boardReadinessScore || 0}%`
+                },
+                {
+                  label: 'Bottlenecks',
+                  value: governanceOverview.metrics?.approvalBottlenecks || 0
+                },
+                {
+                  label: 'Policy risk',
+                  value: governanceOverview.metrics?.policyReviewRisk || 0
+                },
+                { label: 'Latest', value: governanceOverview.latestTitle }
+              ]}
+              primaryLink={{ to: '/governance/dashboard', label: 'Open Governance' }}
+              secondaryLink={{ to: '/governance/security-audit', label: 'Audit Trail' }}
+            />
+
+            <ModuleCard
+              icon={Gem}
+              branch="heritage"
+              kicker="Heritage & Legacy"
+              title="Owner Continuity"
+              description={heritageOverview.description}
+              score={heritageOverview.score}
+              posture={heritageOverview.posture}
+              surfaceNavigateTo="/heritage/dashboard"
+              rows={[
+                { label: 'Records', value: heritageOverview.recordsCount },
+                { label: 'Active maps', value: heritageOverview.activeRecordsCount },
+                {
+                  label: 'Mapped value',
+                  value: formatCurrency(heritageOverview.metrics?.totalAssetValue || 0, 'EUR')
+                },
+                {
+                  label: 'Succession readiness',
+                  value: `${heritageOverview.metrics?.successionReadiness || 0}%`
+                },
+                {
+                  label: 'Protection coverage',
+                  value: `${heritageOverview.metrics?.protectionCoverage || 0}%`
+                },
+                {
+                  label: 'Evidence docs',
+                  value: heritageOverview.metrics?.documentsCount || 0
+                },
+                {
+                  label: 'Reports',
+                  value: heritageOverview.metrics?.reportsCount || 0
+                },
+                { label: 'Latest', value: heritageOverview.latestTitle }
+              ]}
+              primaryLink={{ to: '/heritage/dashboard', label: 'Open Heritage' }}
+              secondaryLink={{ to: '/ma/dashboard', label: 'Company value' }}
+            />
+
+            <ModuleCard
+              icon={Network}
+              branch="bridge"
+              kicker="The Bridge"
+              title="Verified Liquidity Network"
+              description={bridgeOverview.description}
+              score={bridgeOverview.score}
+              posture={bridgeOverview.posture}
+              surfaceNavigateTo="/bridge/dashboard"
+              rows={[
+                { label: 'Records', value: bridgeOverview.recordsCount },
+                { label: 'Active opportunities', value: bridgeOverview.activeRecordsCount },
+                {
+                  label: 'Pipeline value',
+                  value: formatCurrency(bridgeOverview.metrics?.totalOpportunityValue || 0, 'EUR')
+                },
+                {
+                  label: 'Introductions',
+                  value: bridgeOverview.metrics?.introductionsCount || 0
+                },
+                {
+                  label: 'Qualified',
+                  value: bridgeOverview.metrics?.qualifiedOpportunitiesCount || 0
+                },
+                {
+                  label: 'Documents',
+                  value: bridgeOverview.metrics?.documentsCount || 0
+                },
+                {
+                  label: 'Reports',
+                  value: bridgeOverview.metrics?.reportsCount || 0
+                },
+                { label: 'Latest', value: bridgeOverview.latestTitle }
+              ]}
+              primaryLink={{ to: '/bridge/dashboard', label: 'Open Bridge' }}
+              secondaryLink={{ to: '/funding/dashboard', label: 'Funding feed' }}
+            />
           </div>
         </section>
 
@@ -1866,11 +2312,11 @@ export function CEOOverviewPage() {
                   <Sparkles size={14} />
                   Executive Synergy Signal
                 </div>
-                <h3 className="ceo-panel-title">M&A + Compliance + Funding bridge</h3>
+                <h3 className="ceo-panel-title">M&A + Compliance + Funding + PMI + Ecosystem bridge</h3>
                 <p className="muted ceo-panel-copy">
-                  CEO’s OS combines M&A, Compliance and Funding signals as decision-support
-                  intelligence. Outputs require human review before legal, financial or investor
-                  action.
+                  CEO’s OS combines core transaction, risk, capital, integration and enterprise branch signals
+                  as decision-support intelligence. Outputs require human review before legal, financial,
+                  investor or governance action.
                 </p>
               </div>
               <div className="ceo-panel-icon">
@@ -1881,6 +2327,8 @@ export function CEOOverviewPage() {
               <MiniRow label="M&A valuation source" value={fundingOverview.suggestedValuationSource} />
               <MiniRow label="Compliance status" value={fundingOverview.complianceStatus} />
               <MiniRow label="Funding window" value={fundingOverview.fundingWindowStatus} />
+              <MiniRow label="PMI posture" value={pmiOverview.posture} />
+              <MiniRow label="Ecosystem posture" value={ecosystemBrief?.posture || 'Activate branch records'} />
               <MiniRow
                 label="Human review"
                 value={fundingOverview.humanReviewRequired ? 'Required' : 'Recommended'}
@@ -1941,10 +2389,9 @@ export function CEOOverviewPage() {
             </div>
 
             <div className="ceo-list">
-              <MiniRow label="Decision quality" value="Active" />
-              <MiniRow label="Visual consistency" value="Active" />
-              <MiniRow label="Executive narrative" value="Active" />
-              <MiniRow label="Board outputs" value="Ready" />
+              {executivePriorityRows.map((row) => (
+                <MiniRow key={row.label} label={row.label} value={row.value} />
+              ))}
             </div>
           </Card>
         </section>
@@ -1954,7 +2401,7 @@ export function CEOOverviewPage() {
             kicker="Next actions"
             icon={TrendingUp}
             title="Close the executive release without opening new product branches"
-            description="Las próximas acciones deben enfocarse en cierre, demo, marca y validación comercial."
+            description="Las próximas acciones deben enfocarse en QA, datos demo enterprise y validación comercial de las ramas conectadas."
           />
 
           <div className="ceo-grid ceo-grid-three">
@@ -1969,21 +2416,31 @@ export function CEOOverviewPage() {
             <ActionCard
               icon={Sparkles}
               title="Integrate logo"
-              description="Incorporar el logo ya creado en landing, login y app shell sin rediseñar todo."
-              to="/"
-              label="Open landing"
+              description="Mantener marca para una fase posterior y priorizar ahora la validación operativa de ramas enterprise."
+              to="/governance/dashboard"
+              label="Review governance"
             />
 
             <ActionCard
               icon={FileText}
               title="Prepare executive demo"
-              description="Preparar demo corta y demo enterprise de 20 minutos con enfoque DSS y PoC."
+              description="Preparar demo enterprise de 20 minutos recorriendo M&A, Compliance, Funding, PMI y ramas ecosystem."
               to="/dashboard"
               label="Use this overview"
             />
           </div>
         </section>
       </div>
+
+      {isBoardPackOpen ? (
+        <BoardPackModal
+          boardPack={boardPack}
+          loading={boardPackLoading}
+          error={boardPackError}
+          onClose={() => setIsBoardPackOpen(false)}
+          onExport={handleExportBoardPack}
+        />
+      ) : null}
     </div>
   );
 }

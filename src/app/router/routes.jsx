@@ -127,9 +127,45 @@ const PMIDashboardPage = lazyNamed(
   () => import('../../modules/pmi/pages/PMIDashboardPage.jsx'),
   'PMIDashboardPage'
 );
-const GovernanceESGPage = lazyNamed(
-  () => import('../../modules/ecosystem/pages/GovernanceESGPage.jsx'),
-  'GovernanceESGPage'
+const GovernanceDashboardPage = lazyNamed(
+  () => import('../../modules/governance/pages/GovernanceDashboardPage.jsx'),
+  'GovernanceDashboardPage'
+);
+const DecisionRegisterPage = lazyNamed(
+  () => import('../../modules/governance/pages/DecisionRegisterPage.jsx'),
+  'DecisionRegisterPage'
+);
+const DecisionDetailPage = lazyNamed(
+  () => import('../../modules/governance/pages/DecisionDetailPage.jsx'),
+  'DecisionDetailPage'
+);
+const BoardPacksPage = lazyNamed(
+  () => import('../../modules/governance/pages/BoardPacksPage.jsx'),
+  'BoardPacksPage'
+);
+const CommitteesPage = lazyNamed(
+  () => import('../../modules/governance/pages/CommitteesPage.jsx'),
+  'CommitteesPage'
+);
+const PoliciesPage = lazyNamed(
+  () => import('../../modules/governance/pages/PoliciesPage.jsx'),
+  'PoliciesPage'
+);
+const ActionTrackerPage = lazyNamed(
+  () => import('../../modules/governance/pages/ActionTrackerPage.jsx'),
+  'ActionTrackerPage'
+);
+const GovernanceMeetingsPage = lazyNamed(
+  () => import('../../modules/governance/pages/GovernanceMeetingsPage.jsx'),
+  'GovernanceMeetingsPage'
+);
+const GovernanceReportsPage = lazyNamed(
+  () => import('../../modules/governance/pages/GovernanceReportsPage.jsx'),
+  'GovernanceReportsPage'
+);
+const GovernanceAuditTrailPage = lazyNamed(
+  () => import('../../modules/governance/pages/GovernanceAuditTrailPage.jsx'),
+  'GovernanceAuditTrailPage'
 );
 const HeritageLegacyPage = lazyNamed(
   () => import('../../modules/ecosystem/pages/HeritageLegacyPage.jsx'),
@@ -294,7 +330,47 @@ export function AppRoutes() {
 
           <Route
             path="/governance/dashboard"
-            element={<GovernanceESGPage />}
+            element={<GovernanceDashboardPage />}
+          />
+          <Route
+            path="/governance/decisions"
+            element={<DecisionRegisterPage />}
+          />
+          <Route
+            path="/governance/decisions/:id"
+            element={<DecisionDetailPage />}
+          />
+          <Route
+            path="/governance/board-packs"
+            element={<BoardPacksPage />}
+          />
+          <Route
+            path="/governance/committees"
+            element={<CommitteesPage />}
+          />
+          <Route
+            path="/governance/policies"
+            element={<PoliciesPage />}
+          />
+          <Route
+            path="/governance/actions"
+            element={<ActionTrackerPage />}
+          />
+          <Route
+            path="/governance/meetings"
+            element={<GovernanceMeetingsPage />}
+          />
+          <Route
+            path="/governance/reports"
+            element={<GovernanceReportsPage />}
+          />
+          <Route
+            path="/governance/audit-trail"
+            element={<GovernanceAuditTrailPage />}
+          />
+          <Route
+            path="/governance/security-audit"
+            element={<GovernanceAuditTrailPage />}
           />
 
           <Route

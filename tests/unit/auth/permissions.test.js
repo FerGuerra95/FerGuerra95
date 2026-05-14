@@ -19,7 +19,10 @@ describe('enterprise permissions', () => {
       ])
     );
 
-    expect(getPermissionsForRole('viewer')).toEqual([PERMISSIONS.READ]);
+    expect(getPermissionsForRole('viewer')).toEqual([
+      PERMISSIONS.READ,
+      PERMISSIONS.READ_GOVERNANCE
+    ]);
     expect(getPermissionsForRole('viewer')).not.toContain(
       PERMISSIONS.MANAGE_MA_DATA_ROOM
     );
@@ -28,6 +31,12 @@ describe('enterprise permissions', () => {
     );
     expect(getPermissionsForRole('viewer')).not.toContain(
       PERMISSIONS.CREATE_FUNDING_SNAPSHOT
+    );
+    expect(getPermissionsForRole('viewer')).not.toContain(
+      PERMISSIONS.UPDATE_GOVERNANCE
+    );
+    expect(getPermissionsForRole('viewer')).not.toContain(
+      PERMISSIONS.APPROVE_GOVERNANCE_DECISION
     );
   });
 });

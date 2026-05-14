@@ -40,11 +40,33 @@ export const PERMISSIONS = Object.freeze({
   DELETE_MA_DEAL: 'delete:ma_deal',
   READ_AUDIT_LOG: 'read:audit_log',
 
-  CREATE_FUNDING_SNAPSHOT: 'create:funding_snapshot'
+  CREATE_FUNDING_SNAPSHOT: 'create:funding_snapshot',
+  MANAGE_PMI_CASE: 'manage:pmi_case',
+  CREATE_PMI_FROM_MA_DEAL: 'create:pmi_from_ma_deal',
+  DUPLICATE_PMI_CASE: 'duplicate:pmi_case',
+  READ_PMI_AUDIT: 'read:pmi_audit',
+  UPDATE_PMI_WORKSTREAM: 'update:pmi_workstream',
+  MANAGE_ECOSYSTEM_BRANCH: 'manage:ecosystem_branch',
+
+  READ_GOVERNANCE: 'read:governance',
+  CREATE_GOVERNANCE: 'create:governance',
+  UPDATE_GOVERNANCE: 'update:governance',
+  DELETE_GOVERNANCE: 'delete:governance',
+  APPROVE_GOVERNANCE_DECISION: 'approve:governance_decision',
+  MANAGE_GOVERNANCE_POLICY: 'manage:governance_policy',
+  MANAGE_GOVERNANCE_COMMITTEE: 'manage:governance_committee',
+  EXPORT_GOVERNANCE_REPORT: 'export:governance_report'
 });
 
 const ROLE_PERMISSIONS = Object.freeze({
   admin: Object.freeze(['*']),
+
+  board_member: Object.freeze([
+    PERMISSIONS.READ,
+    PERMISSIONS.READ_GOVERNANCE,
+    PERMISSIONS.READ_AUDIT_LOG,
+    PERMISSIONS.READ_PMI_AUDIT
+  ]),
 
   user: Object.freeze([
     PERMISSIONS.READ,
@@ -75,11 +97,24 @@ const ROLE_PERMISSIONS = Object.freeze({
     PERMISSIONS.UPDATE_MA_DEAL,
     PERMISSIONS.READ_AUDIT_LOG,
 
-    PERMISSIONS.CREATE_FUNDING_SNAPSHOT
+    PERMISSIONS.CREATE_FUNDING_SNAPSHOT,
+    PERMISSIONS.MANAGE_PMI_CASE,
+    PERMISSIONS.CREATE_PMI_FROM_MA_DEAL,
+    PERMISSIONS.DUPLICATE_PMI_CASE,
+    PERMISSIONS.READ_PMI_AUDIT,
+    PERMISSIONS.UPDATE_PMI_WORKSTREAM,
+    PERMISSIONS.MANAGE_ECOSYSTEM_BRANCH,
+    PERMISSIONS.READ_GOVERNANCE,
+    PERMISSIONS.CREATE_GOVERNANCE,
+    PERMISSIONS.UPDATE_GOVERNANCE,
+    PERMISSIONS.MANAGE_GOVERNANCE_POLICY,
+    PERMISSIONS.MANAGE_GOVERNANCE_COMMITTEE,
+    PERMISSIONS.EXPORT_GOVERNANCE_REPORT
   ]),
 
   viewer: Object.freeze([
-    PERMISSIONS.READ
+    PERMISSIONS.READ,
+    PERMISSIONS.READ_GOVERNANCE
   ])
 });
 

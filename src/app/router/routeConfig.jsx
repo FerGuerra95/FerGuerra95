@@ -4,6 +4,7 @@ import {
   BarChart3,
   Calculator,
   CheckCheck,
+  ClipboardCheck,
   FileBadge,
   FileSearch,
   FolderKanban,
@@ -18,6 +19,7 @@ import {
   PieChart,
   Rocket,
   Scale,
+  ScrollText,
   ShieldAlert,
   Sparkles,
   Users
@@ -174,8 +176,48 @@ export const routeGroups = {
     items: [
       {
         to: '/governance/dashboard',
-        label: 'Governance & ESG',
+        label: 'Dashboard',
         icon: <Scale size={18} />
+      },
+      {
+        to: '/governance/decisions',
+        label: 'Decision Register',
+        icon: <ClipboardCheck size={18} />
+      },
+      {
+        to: '/governance/board-packs',
+        label: 'Board Packs',
+        icon: <FileSearch size={18} />
+      },
+      {
+        to: '/governance/committees',
+        label: 'Committees',
+        icon: <Users size={18} />
+      },
+      {
+        to: '/governance/policies',
+        label: 'Policies',
+        icon: <FileBadge size={18} />
+      },
+      {
+        to: '/governance/actions',
+        label: 'Action Tracker',
+        icon: <CheckCheck size={18} />
+      },
+      {
+        to: '/governance/meetings',
+        label: 'Meetings',
+        icon: <FolderKanban size={18} />
+      },
+      {
+        to: '/governance/reports',
+        label: 'Reports',
+        icon: <FileSearch size={18} />
+      },
+      {
+        to: '/governance/audit-trail',
+        label: 'Audit Trail',
+        icon: <ScrollText size={18} />
       }
     ]
   },
@@ -361,9 +403,56 @@ export const pageMetaMap = {
   },
 
   '/governance/dashboard': {
-    title: 'Governance & ESG Strategy',
+    title: 'Governance Command Center',
     description:
-      'Rama enterprise para gobernanza, sostenibilidad, reporting ESG, actas de consejo y cumplimiento estratégico.'
+      'Rama enterprise para decisiones ejecutivas, board packs, comites, politicas, acciones, actas y reporting de gobierno corporativo.'
+  },
+
+  '/governance/decisions': {
+    title: 'Decision Register',
+    description: 'Registro de decisiones ejecutivas con workflow de revision, aprobacion, rechazo, diferimiento, escalado e implementacion.'
+  },
+
+  '/governance/board-packs': {
+    title: 'Governance Board Packs',
+    description: 'Agenda, resumen ejecutivo, decisiones clave, riesgos, highlights y evidencias para readiness de consejo.'
+  },
+
+  '/governance/committees': {
+    title: 'Governance Committees',
+    description: 'Gestion de comites, miembros, cadencia, proximas reuniones, scope y decisiones vinculadas.'
+  },
+
+  '/governance/policies': {
+    title: 'Governance Policies',
+    description: 'Registro de politicas corporativas, revision, evidencia requerida, controles y riesgo por vencimiento.'
+  },
+
+  '/governance/actions': {
+    title: 'Governance Action Tracker',
+    description: 'Seguimiento de acciones, owners, deadlines, escalaciones, bloqueos y evidencia de cierre.'
+  },
+
+  '/governance/meetings': {
+    title: 'Governance Meetings',
+    description: 'Meeting minutes lite para agenda, asistentes, decisiones, acciones y resumen de acta.'
+  },
+
+  '/governance/reports': {
+    title: 'Governance Reports',
+    description: 'Board pack, decision memo, action tracker, policy summary, risk brief, readiness snapshot y audit summary.'
+  },
+
+  '/governance/security-audit': {
+    title: 'Governance Audit Trail',
+    description:
+      'Registro de eventos de auditoría de la organización (M&A, autenticación y más) con exportación CSV.'
+  },
+
+  '/governance/audit-trail': {
+    title: 'Governance Audit Trail',
+    description:
+      'Registro de eventos de auditoria governance con trazabilidad de decisiones, aprobaciones, politicas, acciones, meetings y reports.'
   },
 
   '/heritage/dashboard': {
