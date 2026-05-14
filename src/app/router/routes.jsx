@@ -127,6 +127,54 @@ const PMIDashboardPage = lazyNamed(
   () => import('../../modules/pmi/pages/PMIDashboardPage.jsx'),
   'PMIDashboardPage'
 );
+const PMIProgramsPage = lazyNamed(
+  () => import('../../modules/pmi/pages/PMIProgramsPage.jsx'),
+  'PMIProgramsPage'
+);
+const PMIProgramDetailPage = lazyNamed(
+  () => import('../../modules/pmi/pages/PMIProgramDetailPage.jsx'),
+  'PMIProgramDetailPage'
+);
+const SynergyTrackerPage = lazyNamed(
+  () => import('../../modules/pmi/pages/SynergyTrackerPage.jsx'),
+  'SynergyTrackerPage'
+);
+const IntegrationMilestonesPage = lazyNamed(
+  () => import('../../modules/pmi/pages/IntegrationMilestonesPage.jsx'),
+  'IntegrationMilestonesPage'
+);
+const IntegrationRisksPage = lazyNamed(
+  () => import('../../modules/pmi/pages/IntegrationRisksPage.jsx'),
+  'IntegrationRisksPage'
+);
+const DayOneReadinessPage = lazyNamed(
+  () => import('../../modules/pmi/pages/DayOneReadinessPage.jsx'),
+  'DayOneReadinessPage'
+);
+const HundredDayPlanPage = lazyNamed(
+  () => import('../../modules/pmi/pages/HundredDayPlanPage.jsx'),
+  'HundredDayPlanPage'
+);
+const TransitionServicesPage = lazyNamed(
+  () => import('../../modules/pmi/pages/TransitionServicesPage.jsx'),
+  'TransitionServicesPage'
+);
+const OperatingModelPage = lazyNamed(
+  () => import('../../modules/pmi/pages/OperatingModelPage.jsx'),
+  'OperatingModelPage'
+);
+const PeopleCulturePage = lazyNamed(
+  () => import('../../modules/pmi/pages/PeopleCulturePage.jsx'),
+  'PeopleCulturePage'
+);
+const TechnologyIntegrationPage = lazyNamed(
+  () => import('../../modules/pmi/pages/TechnologyIntegrationPage.jsx'),
+  'TechnologyIntegrationPage'
+);
+const PMIReportsPage = lazyNamed(
+  () => import('../../modules/pmi/pages/PMIReportsPage.jsx'),
+  'PMIReportsPage'
+);
 const GovernanceDashboardPage = lazyNamed(
   () => import('../../modules/governance/pages/GovernanceDashboardPage.jsx'),
   'GovernanceDashboardPage'
@@ -351,6 +399,18 @@ export function AppRoutes() {
             path="/pmi/dashboard"
             element={<PMIDashboardPage />}
           />
+          <Route path="/pmi/programs" element={<PMIProgramsPage />} />
+          <Route path="/pmi/programs/:id" element={<PMIProgramDetailPage />} />
+          <Route path="/pmi/synergies" element={<SynergyTrackerPage />} />
+          <Route path="/pmi/milestones" element={<IntegrationMilestonesPage />} />
+          <Route path="/pmi/risks" element={<IntegrationRisksPage />} />
+          <Route path="/pmi/day1" element={<DayOneReadinessPage />} />
+          <Route path="/pmi/day-100" element={<HundredDayPlanPage />} />
+          <Route path="/pmi/transition-services" element={<TransitionServicesPage />} />
+          <Route path="/pmi/operating-model" element={<OperatingModelPage />} />
+          <Route path="/pmi/people-culture" element={<PeopleCulturePage />} />
+          <Route path="/pmi/technology" element={<TechnologyIntegrationPage />} />
+          <Route path="/pmi/reports" element={<PMIReportsPage />} />
 
           <Route
             path="/governance/dashboard"

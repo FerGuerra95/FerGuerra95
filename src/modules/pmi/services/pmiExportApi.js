@@ -357,7 +357,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
           .brand {
             font-size: 24px;
             font-weight: 950;
-            letter-spacing: -0.05em;
+            letter-spacing: 0;
             color: #020617;
           }
 
@@ -400,7 +400,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
           h1 {
             font-size: 34px;
             margin: 0 0 8px 0;
-            letter-spacing: -0.055em;
+            letter-spacing: 0;
             line-height: 1;
             color: #020617;
           }
@@ -520,7 +520,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
             font-size: 21px;
             font-weight: 950;
             color: #020617;
-            letter-spacing: -0.04em;
+            letter-spacing: 0;
           }
 
           .green { color: #059669; }
@@ -568,7 +568,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
           .hero-value {
             font-size: 46px;
             font-weight: 950;
-            letter-spacing: -0.06em;
+            letter-spacing: 0;
             line-height: 1;
           }
 

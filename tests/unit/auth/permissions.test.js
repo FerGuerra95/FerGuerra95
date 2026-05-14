@@ -22,7 +22,8 @@ describe('enterprise permissions', () => {
     expect(getPermissionsForRole('viewer')).toEqual([
       PERMISSIONS.READ,
       PERMISSIONS.READ_GOVERNANCE,
-      PERMISSIONS.READ_HERITAGE
+      PERMISSIONS.READ_HERITAGE,
+      PERMISSIONS.READ_PMI
     ]);
     expect(getPermissionsForRole('viewer')).not.toContain(
       PERMISSIONS.MANAGE_MA_DATA_ROOM
@@ -41,6 +42,9 @@ describe('enterprise permissions', () => {
     );
     expect(getPermissionsForRole('viewer')).not.toContain(
       PERMISSIONS.UPDATE_HERITAGE
+    );
+    expect(getPermissionsForRole('viewer')).not.toContain(
+      PERMISSIONS.UPDATE_PMI
     );
   });
 });
