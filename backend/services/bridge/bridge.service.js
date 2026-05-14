@@ -7,6 +7,7 @@ import { getFundingSummary } from '../funding/funding.service.js';
 import { getGovernanceSummary } from '../governance/governance.service.js';
 import { getPmiSummary } from '../pmi/pmi.service.js';
 import { getRiskSummary } from '../risk/risk.service.js';
+import { getReportingSummary } from '../reporting/reporting.service.js';
 
 const opportunitiesStore = createSqliteEntityStore('bridge_opportunities', 'bridge_opp', {
   title: 'Bridge opportunity',
@@ -939,12 +940,13 @@ function latestByDate(items = []) {
 export async function collectBridgeModuleSummaries(scope = {}) {
   assertOrganizationId(scope.organizationId);
   const organizationId = scope.organizationId;
-  const [compliance, funding, governance, pmi, risk, maDeals] = await Promise.all([
+  const [compliance, funding, governance, pmi, risk, reporting, maDeals] = await Promise.all([
     safeLoad('compliance', () => getExecutiveComplianceHubBrief({ organizationId })),
     safeLoad('funding', () => getFundingSummary(organizationId, { userId: scope.userId || '' })),
     safeLoad('governance', () => getGovernanceSummary({ organizationId })),
     safeLoad('pmi', () => getPmiSummary({ organizationId })),
     safeLoad('risk', () => getRiskSummary({ organizationId })),
+    safeLoad('reporting', () => getReportingSummary({ organizationId })),
     safeLoad('ma', () => listMaDeals({ organizationId }))
   ]);
   return {
@@ -960,7 +962,7 @@ export async function collectBridgeModuleSummaries(scope = {}) {
       }
     },
     risk,
-    reporting: { name: 'reporting', status: 'not_available', data: null },
+    reporting,
     strategy: { name: 'strategy', status: 'not_available', data: null }
   };
 }
@@ -1081,17 +1083,21 @@ export function buildEnterpriseBridgeSignals(summaries = {}) {
     });
   }
 
-  if (normalizeNumber(governanceMetrics.boardReadinessScore, 100) < 70 && summaries.governance?.status === 'available') {
+  const reportingMetrics = summaries.reporting?.data?.metrics || {};
+  if (
+    normalizeNumber(governanceMetrics.boardReadinessScore, 100) < 70 ||
+    normalizeNumber(reportingMetrics.missingEvidenceCount) > 0
+  ) {
     signals.push({
       sourceModule: 'Reporting',
       targetModule: 'Governance',
       signalType: 'board_pack_evidence_gap',
-      severity: 'watch',
+      severity: normalizeNumber(reportingMetrics.missingEvidenceCount) > 2 ? 'risk' : 'watch',
       title: 'Board pack evidence gap',
-      description: `Board readiness score is ${normalizeNumber(governanceMetrics.boardReadinessScore)}/100.`,
+      description: `Board readiness score is ${normalizeNumber(governanceMetrics.boardReadinessScore)}/100 and missing evidence count is ${normalizeNumber(reportingMetrics.missingEvidenceCount)}.`,
       recommendedAction: 'Complete board evidence links and human review before final board pack circulation.',
-      confidenceLevel: 66,
-      evidence: [{ sourceModule: 'Reporting', label: 'Governance board readiness', quality: 'medium' }]
+      confidenceLevel: summaries.reporting?.status === 'available' ? 82 : 66,
+      evidence: [{ sourceModule: 'Reporting', label: summaries.reporting?.status === 'available' ? 'Reporting summary' : 'Governance board readiness', quality: summaries.reporting?.status === 'available' ? 'high' : 'medium' }]
     });
   }
 

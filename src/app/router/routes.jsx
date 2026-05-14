@@ -323,6 +323,34 @@ const RiskNotificationsPage = lazyNamed(
   () => import('../../modules/risk/pages/RiskNotificationsPage.jsx'),
   'RiskNotificationsPage'
 );
+const ReportingDashboardPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingDashboardPage.jsx'),
+  'ReportingDashboardPage'
+);
+const ReportingLibraryPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingLibraryPage.jsx'),
+  'ReportingLibraryPage'
+);
+const ReportingTemplatesPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingTemplatesPage.jsx'),
+  'ReportingTemplatesPage'
+);
+const ReportingBoardPackPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingBoardPackPage.jsx'),
+  'ReportingBoardPackPage'
+);
+const ReportingExportsPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingExportsPage.jsx'),
+  'ReportingExportsPage'
+);
+const ReportingSchedulesPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingSchedulesPage.jsx'),
+  'ReportingSchedulesPage'
+);
+const ReportingEvidencePage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingEvidencePage.jsx'),
+  'ReportingEvidencePage'
+);
 
 function RouteFallback() {
   return (
@@ -586,6 +614,14 @@ export function AppRoutes() {
           <Route path="/risk/committee-reviews" element={<RiskCommitteeReviewsPage />} />
           <Route path="/risk/evidence" element={<RiskEvidencePage />} />
           <Route path="/risk/notifications" element={<RiskNotificationsPage />} />
+
+          <Route path="/reporting/dashboard" element={<ReportingDashboardPage />} />
+          <Route path="/reporting/library" element={<ReportingLibraryPage />} />
+          <Route path="/reporting/templates" element={<ReportingTemplatesPage />} />
+          <Route path="/reporting/board-pack" element={<ReportingBoardPackPage />} />
+          <Route path="/reporting/exports" element={<ReportingExportsPage />} />
+          <Route path="/reporting/schedules" element={<ReportingSchedulesPage />} />
+          <Route path="/reporting/evidence" element={<ReportingEvidencePage />} />
         </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
