@@ -1,7 +1,13 @@
 import {
+  completePasswordReset,
   loginUser,
-  logoutUser
+  logoutUser,
+  requestPasswordReset
 } from '../../services/auth/auth.service.js';
+import {
+  completeOidcAuthorization,
+  startOidcAuthorization
+} from '../../services/auth/oidcAuth.service.js';
 
 function buildMeta(extra = {}) {
   return {
@@ -81,4 +87,80 @@ export const me = async (req, res) => {
     }),
     error: null
   });
+};
+
+export const passwordResetRequest = async (req, res) => {
+  try {
+    const result = await requestPasswordReset(req.body?.email || '');
+
+    return res.json({
+      data: result,
+      meta: buildMeta(),
+      error: null
+    });
+  } catch (error) {
+    return res.status(error?.status || 500).json({
+      data: null,
+      meta: buildMeta(),
+      error: {
+        code: error?.code || 'PASSWORD_RESET_ERROR',
+        message: error?.message || 'No se pudo procesar la solicitud.'
+      }
+    });
+  }
+};
+
+export const passwordResetConfirm = async (req, res) => {
+  try {
+    const result = await completePasswordReset({
+      token: req.body?.token,
+      password: req.body?.password
+    });
+
+    return res.json({
+      data: result,
+      meta: buildMeta(),
+      error: null
+    });
+  } catch (error) {
+    return res.status(error?.status || 400).json({
+      data: null,
+      meta: buildMeta(),
+      error: {
+        code: error?.code || 'PASSWORD_RESET_ERROR',
+        message: error?.message || 'No se pudo restablecer la contraseña.'
+      }
+    });
+  }
+};
+
+export const oidcStart = async (req, res) => {
+  try {
+    await startOidcAuthorization(res);
+  } catch (error) {
+    return res.status(error?.status || 500).json({
+      data: null,
+      meta: buildMeta(),
+      error: {
+        code: error?.code || 'OIDC_ERROR',
+        message: error?.message || 'SSO no disponible.'
+      }
+    });
+  }
+};
+
+export const oidcCallback = async (req, res) => {
+  try {
+    await completeOidcAuthorization(req, res);
+  } catch (error) {
+    const frontend = (
+      process.env.FRONTEND_URL ||
+      process.env.PUBLIC_APP_URL ||
+      'http://localhost:5173'
+    ).replace(/\/$/, '');
+    return res.redirect(
+      302,
+      `${frontend}/login?sso_error=${encodeURIComponent(error?.message || 'Error SSO')}`
+    );
+  }
 };

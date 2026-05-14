@@ -524,11 +524,17 @@ function normalizeDealBody(body = {}, { partial = false } = {}) {
 function auditLogQuery(query = {}) {
   const payload = query && typeof query === 'object' ? query : {};
   const limit = Number(payload.limit || 100);
+  const rawEntityType = payload.entityType;
+  let entityType = 'ma';
+  if (rawEntityType !== undefined && rawEntityType !== null) {
+    const t = normalizeString(rawEntityType);
+    entityType = t === 'all' ? '' : t;
+  }
 
   return {
     action: normalizeString(payload.action),
     entityId: normalizeString(payload.entityId),
-    entityType: normalizeString(payload.entityType || 'ma'),
+    entityType,
     limit: Number.isFinite(limit)
       ? Math.max(1, Math.min(Math.round(limit), 500))
       : 100

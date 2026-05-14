@@ -167,9 +167,33 @@ const GovernanceAuditTrailPage = lazyNamed(
   () => import('../../modules/governance/pages/GovernanceAuditTrailPage.jsx'),
   'GovernanceAuditTrailPage'
 );
-const HeritageLegacyPage = lazyNamed(
-  () => import('../../modules/ecosystem/pages/HeritageLegacyPage.jsx'),
-  'HeritageLegacyPage'
+const HeritageDashboardPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageDashboardPage.jsx'),
+  'HeritageDashboardPage'
+);
+const HeritageAssetsPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageAssetsPage.jsx'),
+  'HeritageAssetsPage'
+);
+const HeritageSuccessionsPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageSuccessionsPage.jsx'),
+  'HeritageSuccessionsPage'
+);
+const HeritageProtectionsPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageProtectionsPage.jsx'),
+  'HeritageProtectionsPage'
+);
+const HeritageDocumentsPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageDocumentsPage.jsx'),
+  'HeritageDocumentsPage'
+);
+const HeritageReportsPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageReportsPage.jsx'),
+  'HeritageReportsPage'
+);
+const HeritageAuditTrailPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageAuditTrailPage.jsx'),
+  'HeritageAuditTrailPage'
 );
 const BridgeMarketplacePage = lazyNamed(
   () => import('../../modules/ecosystem/pages/BridgeMarketplacePage.jsx'),
@@ -375,7 +399,31 @@ export function AppRoutes() {
 
           <Route
             path="/heritage/dashboard"
-            element={<HeritageLegacyPage />}
+            element={<HeritageDashboardPage />}
+          />
+          <Route
+            path="/heritage/assets"
+            element={<HeritageAssetsPage />}
+          />
+          <Route
+            path="/heritage/successions"
+            element={<HeritageSuccessionsPage />}
+          />
+          <Route
+            path="/heritage/protections"
+            element={<HeritageProtectionsPage />}
+          />
+          <Route
+            path="/heritage/documents"
+            element={<HeritageDocumentsPage />}
+          />
+          <Route
+            path="/heritage/reports"
+            element={<HeritageReportsPage />}
+          />
+          <Route
+            path="/heritage/audit-trail"
+            element={<HeritageAuditTrailPage />}
           />
 
           <Route

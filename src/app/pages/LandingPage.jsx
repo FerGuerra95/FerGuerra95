@@ -195,7 +195,43 @@ export function LandingPage() {
 
   return (
     <main className="landing-page">
+      <a href="#contenido-principal" className="landing-skip-link">
+        Saltar al contenido
+      </a>
       <style>{`
+        .landing-skip-link {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+
+        .landing-skip-link:focus {
+          position: fixed;
+          top: 12px;
+          left: 12px;
+          z-index: 10000;
+          width: auto;
+          height: auto;
+          margin: 0;
+          clip: auto;
+          overflow: visible;
+          white-space: nowrap;
+          padding: 10px 16px;
+          border-radius: 10px;
+          font-size: 14px;
+          font-weight: 800;
+          text-decoration: none;
+          color: #030712;
+          background: #7dd3fc;
+          box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+        }
+
         .landing-page {
           min-height: 100vh;
           background:
@@ -260,25 +296,101 @@ export function LandingPage() {
           letter-spacing: -0.035em;
         }
 
-        .landing-logo--nav-brand {
-          flex: 0 1 auto;
-          max-width: min(280px, 46vw);
+        .landing-nav-home {
+          flex: 0 0 auto;
+          text-decoration: none;
+          color: inherit;
+          padding: 4px 0;
+          line-height: 0;
+          overflow: visible;
+          max-width: min(520px, 90vw);
+        }
+
+        /* Nav: solo letras (export RGBA recortado) */
+        .landing-nav-letters-img {
+          line-height: 0;
+        }
+
+        .landing-nav-letters-img img {
+          display: block;
+          height: clamp(28px, 4.5vw, 44px);
+          width: auto;
+          max-width: min(420px, 88vw);
+          object-fit: contain;
+          object-position: left center;
+          filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.45));
+        }
+
+        .landing-nav-home:focus-visible {
+          outline: 2px solid rgba(125, 211, 252, 0.9);
+          outline-offset: 4px;
+          border-radius: 10px;
+        }
+
+        .landing-nav-links a:focus-visible {
+          outline: 2px solid rgba(125, 211, 252, 0.85);
+          outline-offset: 4px;
+          border-radius: 6px;
+        }
+
+        .landing-button:focus-visible {
+          outline: 2px solid rgba(125, 211, 252, 0.95);
+          outline-offset: 3px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .landing-button:hover {
+            transform: none;
+          }
         }
 
         .landing-hero-brand-wrap {
           width: 100%;
-          max-width: min(720px, 100%);
-          margin: 0 0 22px;
+          max-width: min(920px, 100%);
+          margin: 0 0 24px;
+          display: flex;
+          justify-content: center;
+        }
+
+        .landing-hero-lockup {
+          filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.34));
         }
 
         @media (max-width: 540px) {
           .landing-hero-brand-wrap {
-            max-width: min(320px, calc(100% - 4px));
+            max-width: min(100%, calc(100vw - 24px));
+            margin-bottom: 20px;
+          }
+
+          .landing-hero-lockup {
+            filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.38));
+          }
+        }
+
+        @media (max-width: 360px) {
+          .landing-hero-brand-wrap {
+            max-width: min(100%, calc(100vw - 16px));
+            margin-bottom: 16px;
           }
         }
 
         .landing-brand-logo-footer {
-          max-width: min(340px, 72vw);
+          max-width: min(380px, 82vw);
+        }
+
+        .landing-footer-brand-img {
+          line-height: 0;
+        }
+
+        .landing-footer-brand-img img {
+          display: block;
+          max-height: 40px;
+          width: auto;
+          max-width: min(320px, 70vw);
+          object-fit: contain;
+          object-position: left center;
+          filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.38));
+          opacity: 0.96;
         }
 
         .landing-nav-links {
@@ -1404,7 +1516,9 @@ export function LandingPage() {
 
         @media (max-width: 700px) {
           .landing-nav-inner {
-            align-items: flex-start;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
           }
 
           .landing-nav-actions {
@@ -1473,26 +1587,25 @@ export function LandingPage() {
         }
       `}</style>
 
-      <nav className="landing-nav">
+      <nav className="landing-nav" aria-label="Navegación principal">
         <div className="landing-nav-inner">
-          <Link
-            to="/"
-            className="landing-logo landing-logo--nav-brand"
-            aria-label="CEO's OS — inicio"
-          >
+          <Link to="/" className="landing-nav-home">
             <BrandLogo
               variant="horizontal"
-              size="sm"
+              horizontalAsset="letters"
+              size="md"
               surface="transparent"
+              className="landing-nav-letters-img"
+              alt="CEO's OS"
               loading="eager"
             />
           </Link>
 
           <div className="landing-nav-links">
             <a href="#modules">Módulos</a>
-            <a href="#agents">AI Agents</a>
-            <a href="#security">Security</a>
-            <a href="#access">Access</a>
+            <a href="#agents">Agentes IA</a>
+            <a href="#security">Seguridad</a>
+            <a href="#access">Acceso</a>
           </div>
 
           <div className="landing-nav-actions">
@@ -1507,8 +1620,8 @@ export function LandingPage() {
         </div>
       </nav>
 
-      <div className="landing-shell">
-        <section className="landing-hero">
+      <div className="landing-shell" id="contenido-principal">
+        <section className="landing-hero" aria-labelledby="landing-hero-heading">
           <div className="landing-hero-content">
             <div className="landing-eyebrow">
               Private by Design · Sovereign Intelligence
@@ -1516,14 +1629,20 @@ export function LandingPage() {
 
             <div className="landing-hero-brand-wrap">
               <BrandLogo
-                variant="horizontal"
+                variant="lockup"
+                emblemAsset="lion"
+                horizontalAsset="letters"
                 size="hero"
                 surface="transparent"
+                className="landing-hero-lockup"
+                alt="CEO's OS — Executive Operating System"
                 loading="eager"
+                fetchpriority="high"
+                lockupResponsive
               />
             </div>
 
-            <h1>
+            <h1 id="landing-hero-heading">
               <span className="landing-gradient-text">
                 The private executive operating system for company intelligence.
               </span>
@@ -2007,8 +2126,11 @@ export function LandingPage() {
             <div className="landing-logo landing-brand-logo-footer">
               <BrandLogo
                 variant="horizontal"
+                horizontalAsset="letters"
                 size="md"
                 surface="transparent"
+                className="landing-footer-brand-img"
+                alt="CEO's OS"
                 loading="lazy"
               />
             </div>

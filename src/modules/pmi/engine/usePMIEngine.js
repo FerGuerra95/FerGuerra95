@@ -26,19 +26,72 @@ function getHighRiskCount(risks = []) {
   }).length;
 }
 
+function getOpenRiskCount(risks = []) {
+  if (!Array.isArray(risks)) return 0;
+
+  return risks.filter((risk) => {
+    const status = String(risk?.status || 'open').toLowerCase();
+
+    return status !== 'closed' && status !== 'mitigated';
+  }).length;
+}
+
+function getBlockedWorkstreams(workstreams = []) {
+  if (!Array.isArray(workstreams)) return [];
+
+  return workstreams.filter((item) => {
+    const risk = String(item?.risk || '').toLowerCase();
+    const progress = toNumber(item?.progress);
+
+    return risk.includes('high') || progress < 45;
+  });
+}
+
+function getSafeArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function getLedgerTotals(synergyLedger = []) {
+  const items = getSafeArray(synergyLedger);
+  const forecast = items.reduce((sum, item) => sum + toNumber(item?.forecast), 0);
+  const captured = items.reduce((sum, item) => sum + toNumber(item?.captured), 0);
+  const confidenceTotal = items.reduce((sum, item) => sum + toNumber(item?.confidence), 0);
+
+  return {
+    ledgerForecast: forecast,
+    ledgerCaptured: captured,
+    ledgerCaptureRate: forecast > 0 ? clampScore((captured / forecast) * 100) : 0,
+    ledgerConfidenceScore: items.length > 0 ? clampScore(confidenceTotal / items.length) : 0
+  };
+}
+
+function getPlaybookProgress(playbooks = []) {
+  const checks = getSafeArray(playbooks).flatMap((item) => getSafeArray(item?.checklist));
+  if (checks.length > 0) {
+    const done = checks.filter((item) => Boolean(item?.done)).length;
+    return clampScore((done / checks.length) * 100);
+  }
+
+  return getAverageProgress(playbooks);
+}
+
+function getBlockedDependencies(dependencies = []) {
+  return getSafeArray(dependencies).filter((item) => {
+    const status = String(item?.status || '').toLowerCase();
+    const severity = String(item?.severity || '').toLowerCase();
+
+    return status.includes('block') || severity.includes('high') || severity.includes('critical');
+  });
+}
+
 export function usePMIEngine({ pmiCase }) {
-  const workstreams = Array.isArray(pmiCase?.workstreams)
-    ? pmiCase.workstreams
-    : [];
-  const risks = Array.isArray(pmiCase?.risks)
-    ? pmiCase.risks
-    : [];
-  const milestones = Array.isArray(pmiCase?.milestones)
-    ? pmiCase.milestones
-    : [];
-  const boardActions = Array.isArray(pmiCase?.boardActions)
-    ? pmiCase.boardActions
-    : [];
+  const workstreams = getSafeArray(pmiCase?.workstreams);
+  const risks = getSafeArray(pmiCase?.risks);
+  const milestones = getSafeArray(pmiCase?.milestones);
+  const boardActions = getSafeArray(pmiCase?.boardActions);
+  const synergyLedger = getSafeArray(pmiCase?.synergyLedger);
+  const playbooks = getSafeArray(pmiCase?.playbooks);
+  const dependencies = getSafeArray(pmiCase?.dependencies);
 
   const synergyTarget = toNumber(pmiCase?.synergyTarget);
   const synergyCaptured = toNumber(pmiCase?.synergyCaptured);
@@ -54,12 +107,31 @@ export function usePMIEngine({ pmiCase }) {
   const workstreamProgress = getAverageProgress(workstreams);
   const milestoneProgress = getAverageProgress(milestones);
   const highRiskCount = getHighRiskCount(risks);
+  const openRiskCount = getOpenRiskCount(risks);
+  const blockedWorkstreams = getBlockedWorkstreams(workstreams);
+  const synergyGap = Math.max(0, synergyTarget - synergyCaptured);
+  const budgetRemaining = Math.max(0, integrationBudget - integrationCostUsed);
+  const ledgerMetrics = getLedgerTotals(synergyLedger);
+  const playbookProgress = getPlaybookProgress(playbooks);
+  const blockedDependencies = getBlockedDependencies(dependencies);
+  const dependencyRiskScore = clampScore(
+    100 - blockedDependencies.length * 22 - dependencies.length * 3
+  );
+  const executionVelocity = clampScore(
+    workstreamProgress * 0.45 +
+      milestoneProgress * 0.35 +
+      Math.max(0, 100 - blockedWorkstreams.length * 16) * 0.14 +
+      dependencyRiskScore * 0.06
+  );
 
   const integrationScore = clampScore(
-    workstreamProgress * 0.34 +
-      milestoneProgress * 0.26 +
-      synergyCaptureRate * 0.26 +
-      Math.max(0, 100 - highRiskCount * 18) * 0.14
+    workstreamProgress * 0.24 +
+      milestoneProgress * 0.18 +
+      synergyCaptureRate * 0.18 +
+      ledgerMetrics.ledgerCaptureRate * 0.12 +
+      playbookProgress * 0.12 +
+      dependencyRiskScore * 0.08 +
+      Math.max(0, 100 - highRiskCount * 18) * 0.08
   );
 
   let signalTitle = 'Integration plan in progress';
@@ -84,15 +156,27 @@ export function usePMIEngine({ pmiCase }) {
     risks,
     milestones,
     boardActions,
+    synergyLedger,
+    playbooks,
+    dependencies,
     synergyTarget,
     synergyCaptured,
+    synergyGap,
     synergyCaptureRate,
+    ...ledgerMetrics,
+    playbookProgress,
+    blockedDependencies,
+    dependencyRiskScore,
     integrationBudget,
     integrationCostUsed,
+    budgetRemaining,
     budgetUsedRate,
     workstreamProgress,
     milestoneProgress,
     highRiskCount,
+    openRiskCount,
+    blockedWorkstreams,
+    executionVelocity,
     integrationScore,
     signalTitle,
     signalPosture,

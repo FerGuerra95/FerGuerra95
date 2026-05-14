@@ -258,8 +258,8 @@ const sidebarCss = `
   .ceos-brand-mark {
     position: relative;
     overflow: visible;
-    width: 52px;
-    height: 52px;
+    width: min(108px, 44%);
+    height: 56px;
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -839,7 +839,7 @@ export function Sidebar() {
           <div className="ceos-brand-mark">
             <BrandLogo
               variant="compact"
-              size="sm"
+              size="lg"
               surface="transparent"
               loading="eager"
               alt=""

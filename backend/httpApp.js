@@ -14,6 +14,11 @@ import reviewsRoutes from './api/routes/reviews.routes.js';
 import reportsRoutes from './api/routes/reports.routes.js';
 import complianceRoutes from './api/routes/compliance.routes.js';
 import fundingRoutes from './api/routes/funding.routes.js';
+import pmiRoutes from './api/routes/pmi.routes.js';
+import ecosystemRoutes from './api/routes/ecosystem.routes.js';
+import bridgeRoutes from './api/routes/bridge.routes.js';
+import governanceRoutes from './api/routes/governance.routes.js';
+import heritageRoutes from './api/routes/heritage.routes.js';
 
 import { requireAuth } from './api/middlewares/auth.middleware.js';
 import { notFoundMiddleware } from './api/middlewares/notFound.middleware.js';
@@ -213,6 +218,11 @@ export function buildHttpApp() {
   app.use('/api/reports', requireAuth, reportsRoutes);
   app.use('/api/compliance', requireAuth, complianceRoutes);
   app.use('/api/funding', requireAuth, fundingRoutes);
+  app.use('/api/pmi', requireAuth, pmiRoutes);
+  app.use('/api/ecosystem', requireAuth, ecosystemRoutes);
+  app.use('/api/bridge', requireAuth, bridgeRoutes);
+  app.use('/api/governance', requireAuth, governanceRoutes);
+  app.use('/api/heritage', requireAuth, heritageRoutes);
 
   if (fs.existsSync(ASSETS_DIR)) {
     app.use(

@@ -430,7 +430,9 @@ export async function getEcosystemExecutiveHubBrief(scope = {}) {
             recordsCount:
               heritageBrief.metrics.assetsCount +
               heritageBrief.metrics.successionsCount +
-              heritageBrief.metrics.protectionsCount,
+              heritageBrief.metrics.protectionsCount +
+              (heritageBrief.metrics.documentsCount || 0) +
+              (heritageBrief.metrics.reportsCount || 0),
             activeRecordsCount: heritageBrief.metrics.protectedAssetsCount,
             metrics: heritageBrief.metrics,
             latestRecord: heritageBrief.latestAsset

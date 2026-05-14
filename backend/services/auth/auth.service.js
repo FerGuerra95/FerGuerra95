@@ -1,5 +1,8 @@
 import crypto from 'node:crypto';
 
+import { recordAuditLog } from '../audit/auditLog.service.js';
+import { sendPasswordResetEmail, isSmtpConfigured } from '../../integrations/email/mailTransport.js';
+import { validateNewPasswordStrength } from './passwordPolicy.js';
 import {
   allSql,
   getSql,
@@ -20,7 +23,7 @@ const SCRYPT_OPTIONS = {
   p: 1
 };
 
-const VALID_ROLES = ['admin', 'user', 'viewer'];
+const VALID_ROLES = ['admin', 'board_member', 'user', 'viewer'];
 
 const DEMO_USERS = [
   {
@@ -432,7 +435,6 @@ function insertUser(user) {
 
 function shouldSyncBootstrapUsers() {
   return (
-    !isProduction() ||
     process.env.CEOS_E2E === 'true' ||
     process.env.BOOTSTRAP_SYNC_USERS === 'true'
   );
@@ -631,6 +633,10 @@ function dedupeBootstrapUsers(users = []) {
  * - Development:
  *   Uses BOOTSTRAP_ADMIN_* and/or BOOTSTRAP_USERS_JSON when configured.
  *   Falls back to DEMO_USERS only if no bootstrap users are configured.
+ *
+ * La sincronización de usuarios ya existentes con el JSON/env (updateBootstrapUser)
+ * solo ocurre si CEOS_E2E=true o BOOTSTRAP_SYNC_USERS=true, para no pisar contraseñas
+ * cambiadas por el usuario (p. ej. tras password reset).
  *
  * This allows local development with real backend users from .env
  * without re-enabling frontend demo authentication.
@@ -832,6 +838,21 @@ function verifyToken(token) {
   return payload;
 }
 
+export function issueAuthForSanitizedUser(safeUser) {
+  const issuedAt = Math.floor(Date.now() / 1000);
+  const session = createAuthSession(safeUser, issuedAt);
+  const token = createToken(safeUser, session.id, issuedAt);
+
+  return {
+    user: safeUser,
+    token,
+    session: {
+      id: session.id,
+      expiresAt: session.expiresAt
+    }
+  };
+}
+
 export async function loginUser({ email, password }) {
   ensureUsersSeeded();
 
@@ -862,19 +883,245 @@ export async function loginUser({ email, password }) {
     updateUserPasswordRecord(user.id, normalizedPassword);
   }
 
-  const safeUser = sanitizeUser(user);
-  const issuedAt = Math.floor(Date.now() / 1000);
-  const session = createAuthSession(safeUser, issuedAt);
-  const token = createToken(safeUser, session.id, issuedAt);
+  return issueAuthForSanitizedUser(sanitizeUser(user));
+}
 
-  return {
-    user: safeUser,
-    token,
-    session: {
-      id: session.id,
-      expiresAt: session.expiresAt
+function hashResetToken(token) {
+  return crypto.createHash('sha256').update(String(token), 'utf8').digest('hex');
+}
+
+function deletePendingPasswordResetTokensForUser(userId) {
+  runSql(
+    `
+      DELETE FROM password_reset_tokens
+      WHERE user_id = @userId
+        AND used_at IS NULL
+    `,
+    { userId }
+  );
+}
+
+function revokeAllSessionsForUser(userId) {
+  const revokedAt = now();
+  runSql(
+    `
+      UPDATE auth_sessions
+      SET
+        status = 'revoked',
+        revoked_at = @revokedAt,
+        last_seen_at = COALESCE(last_seen_at, @revokedAt)
+      WHERE user_id = @userId
+        AND revoked_at IS NULL
+    `,
+    { userId, revokedAt }
+  );
+}
+
+export async function requestPasswordReset(email) {
+  ensureUsersSeeded();
+
+  const normalizedEmail = normalizeEmail(email);
+  const user = getUserByEmail(normalizedEmail);
+
+  const genericMessage =
+    'Si el email existe en el sistema, recibirás instrucciones para restablecer la contraseña.';
+
+  if (!user || user.status === 'inactive') {
+    return { ok: true, message: genericMessage };
+  }
+
+  deletePendingPasswordResetTokensForUser(user.id);
+
+  const plainToken = crypto.randomBytes(32).toString('hex');
+  const tokenHash = hashResetToken(plainToken);
+  const id = `pwd_reset_${crypto.randomUUID()}`;
+  const createdAt = now();
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+
+  runSql(
+    `
+      INSERT INTO password_reset_tokens (
+        id,
+        user_id,
+        token_hash,
+        expires_at,
+        used_at,
+        created_at
+      )
+      VALUES (
+        @id,
+        @userId,
+        @tokenHash,
+        @expiresAt,
+        NULL,
+        @createdAt
+      )
+    `,
+    {
+      id,
+      userId: user.id,
+      tokenHash,
+      expiresAt,
+      createdAt
     }
-  };
+  );
+
+  const frontendBase =
+    process.env.FRONTEND_URL ||
+    process.env.PUBLIC_APP_URL ||
+    'http://localhost:5173';
+  const resetUrl = `${String(frontendBase).replace(/\/$/, '')}/reset-password?token=${encodeURIComponent(plainToken)}`;
+
+  try {
+    const mailResult = await sendPasswordResetEmail({
+      to: normalizedEmail,
+      resetUrl
+    });
+
+    if (!mailResult.sent && !isProduction()) {
+      console.info('[password-reset] enlace de desarrollo:', resetUrl);
+    }
+  } catch (err) {
+    if (isProduction() && isSmtpConfigured()) {
+      throw createError(
+        'No se pudo enviar el correo de recuperación.',
+        500,
+        'PASSWORD_RESET_EMAIL_FAILED'
+      );
+    }
+    console.error('[password-reset] fallo al enviar correo:', err?.message || err);
+    if (!isProduction()) {
+      console.info('[password-reset] enlace de desarrollo:', resetUrl);
+    }
+  }
+
+  await recordAuditLog({
+    organizationId: user.organizationId,
+    userId: user.id,
+    action: 'auth.password_reset.requested',
+    entityType: 'user',
+    entityId: user.id,
+    metadata: {}
+  });
+
+  return { ok: true, message: genericMessage };
+}
+
+export async function completePasswordReset({ token, password }) {
+  ensureUsersSeeded();
+
+  const normalizedPassword = String(password || '').trim();
+  const strength = validateNewPasswordStrength(normalizedPassword);
+  if (!strength.ok) {
+    throw createError(strength.message, 400, 'WEAK_PASSWORD');
+  }
+
+  const tokenHash = hashResetToken(token);
+  const row = getSql(
+    `
+      SELECT id, user_id, expires_at, used_at
+      FROM password_reset_tokens
+      WHERE token_hash = @tokenHash
+      LIMIT 1
+    `,
+    { tokenHash }
+  );
+
+  if (!row || row.used_at) {
+    throw createError(
+      'Enlace inválido o ya utilizado.',
+      400,
+      'INVALID_RESET_TOKEN'
+    );
+  }
+
+  if (new Date(row.expires_at).getTime() <= Date.now()) {
+    throw createError(
+      'El enlace ha caducado. Solicita uno nuevo.',
+      400,
+      'RESET_TOKEN_EXPIRED'
+    );
+  }
+
+  const user = getUserById(row.user_id);
+
+  if (!user || user.status === 'inactive') {
+    throw createError('Usuario no encontrado.', 400, 'USER_NOT_FOUND');
+  }
+
+  updateUserPasswordRecord(user.id, normalizedPassword);
+
+  revokeAllSessionsForUser(user.id);
+
+  const usedAt = now();
+  runSql(
+    `
+      UPDATE password_reset_tokens
+      SET used_at = @usedAt
+      WHERE id = @id
+    `,
+    { id: row.id, usedAt }
+  );
+
+  await recordAuditLog({
+    organizationId: user.organizationId,
+    userId: user.id,
+    action: 'auth.password_reset.completed',
+    entityType: 'user',
+    entityId: user.id,
+    metadata: {}
+  });
+
+  return { ok: true, message: 'Contraseña actualizada. Ya puedes iniciar sesión.' };
+}
+
+export async function loginUserWithOidcProfile({ email, name }) {
+  ensureUsersSeeded();
+
+  const normalizedEmail = normalizeEmail(email);
+  let user = getUserByEmail(normalizedEmail);
+
+  if (!user && process.env.OIDC_AUTO_PROVISION === 'true') {
+    const organizationId =
+      process.env.OIDC_DEFAULT_ORG_ID || 'org_demo';
+    const role = normalizeRole(process.env.OIDC_DEFAULT_ROLE || 'viewer');
+    const displayName =
+      normalizeText(name) || normalizedEmail.split('@')[0] || 'Usuario';
+
+    insertUser({
+      id: `u_oidc_${crypto.randomUUID()}`,
+      name: displayName,
+      email: normalizedEmail,
+      password: crypto.randomBytes(32).toString('hex'),
+      role,
+      organizationId,
+      workspaces: ['ma', 'compliance', 'funding'],
+      status: 'active'
+    });
+
+    user = getUserByEmail(normalizedEmail);
+  }
+
+  if (!user || user.status === 'inactive') {
+    throw createError(
+      'Tu cuenta no está provisionada en CEO OS. Contacta con administración.',
+      403,
+      'OIDC_USER_NOT_PROVISIONED'
+    );
+  }
+
+  const auth = issueAuthForSanitizedUser(sanitizeUser(user));
+
+  await recordAuditLog({
+    organizationId: user.organizationId,
+    userId: user.id,
+    action: 'auth.oidc.login',
+    entityType: 'user',
+    entityId: user.id,
+    metadata: { email: normalizedEmail }
+  });
+
+  return auth;
 }
 
 export async function getUserFromToken(token) {

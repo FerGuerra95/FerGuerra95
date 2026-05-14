@@ -1,0 +1,18 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Tras el primer deploy, configura en el panel (Environment):
+#   AUTH_SECRET   — mínimo 32 caracteres (obligatorio en producción)
+#   DB_PATH       — ruta SQLite, p.ej. /var/data/ceos.db si montas un Disk en Render
+# Render inyecta PORT y RENDER_EXTERNAL_URL; CORS ya contempla RENDER_EXTERNAL_URL en backend.
+
+services:
+  - type: web
+    name: ceos-os
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production

@@ -10,6 +10,7 @@ import {
   updateComplianceReport as updateComplianceReportService,
   deleteComplianceReport as deleteComplianceReportService
 } from '../../services/compliance/reports.service.js';
+import { generateBoardPack } from '../../services/reporting/boardPack.service.js';
 
 function buildMeta(extra = {}) {
   return {
@@ -115,6 +116,23 @@ export async function listReports(req, res, next) {
       items,
       total: items.length
     });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function getBoardPack(req, res, next) {
+  try {
+    const scope = getRequestScope(req);
+
+    if (!validateScope(res, scope)) return null;
+
+    const item = await generateBoardPack({
+      organizationId: scope.organizationId,
+      userId: scope.userId
+    });
+
+    return ok(res, item);
   } catch (error) {
     return next(error);
   }

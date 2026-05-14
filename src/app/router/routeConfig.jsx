@@ -227,8 +227,38 @@ export const routeGroups = {
     items: [
       {
         to: '/heritage/dashboard',
-        label: 'Heritage & Legacy OS',
+        label: 'Dashboard',
         icon: <Gem size={18} />
+      },
+      {
+        to: '/heritage/assets',
+        label: 'Asset Register',
+        icon: <Landmark size={18} />
+      },
+      {
+        to: '/heritage/successions',
+        label: 'Succession',
+        icon: <Users size={18} />
+      },
+      {
+        to: '/heritage/protections',
+        label: 'Protection',
+        icon: <ShieldAlert size={18} />
+      },
+      {
+        to: '/heritage/documents',
+        label: 'Evidence',
+        icon: <FileBadge size={18} />
+      },
+      {
+        to: '/heritage/reports',
+        label: 'Reports',
+        icon: <FileSearch size={18} />
+      },
+      {
+        to: '/heritage/audit-trail',
+        label: 'Audit Trail',
+        icon: <ScrollText size={18} />
       }
     ]
   },
@@ -456,9 +486,39 @@ export const pageMetaMap = {
   },
 
   '/heritage/dashboard': {
-    title: 'Heritage & Legacy OS',
+    title: 'Heritage Command Center',
     description:
-      'Rama futura para patrimonio, family office, protocolos familiares, sucesión, protección de activos y legado.'
+      'Rama enterprise para patrimonio, sucesion, proteccion de activos, evidencia, continuidad del owner y readiness de consejo.'
+  },
+
+  '/heritage/assets': {
+    title: 'Heritage Asset Register',
+    description: 'Registro patrimonial con owner, jurisdiccion, liquidez, riesgo, proteccion y valor estimado.'
+  },
+
+  '/heritage/successions': {
+    title: 'Heritage Succession Planning',
+    description: 'Protocolos de continuidad, successor readiness, evidencia y fechas efectivas.'
+  },
+
+  '/heritage/protections': {
+    title: 'Heritage Protection Controls',
+    description: 'Controles legales, fiscales, aseguradores y de gobierno para proteccion de activos.'
+  },
+
+  '/heritage/documents': {
+    title: 'Heritage Evidence Register',
+    description: 'Registro documental confidencial para evidencias patrimoniales, sucesion y continuidad.'
+  },
+
+  '/heritage/reports': {
+    title: 'Heritage Continuity Reports',
+    description: 'Informes ejecutivos para board readiness, continuidad patrimonial y riesgos del owner.'
+  },
+
+  '/heritage/audit-trail': {
+    title: 'Heritage Audit Trail',
+    description: 'Trazabilidad de cambios y eventos de Heritage por organizacion.'
   },
 
   '/bridge/dashboard': {

@@ -22,6 +22,7 @@ import {
 import {
   createMaSecureShareLink,
   getMaSecureShare,
+  getMaSecureSharePublic,
   revokeMaSecureShare
 } from '../../../backend/services/ma/secureShare.service.js';
 import {
@@ -238,6 +239,22 @@ describe('ma services multi-tenancy', () => {
 
     expect(resolved.report.id).toBe(report.id);
     expect(resolved.report.payload.html).toContain('Secure report');
+
+    const publicResolved = await getMaSecureSharePublic({
+      id: share.id,
+      token: share.token
+    });
+
+    expect(publicResolved.report.id).toBe(report.id);
+
+    await expect(
+      getMaSecureSharePublic({
+        id: share.id,
+        token: 'wrong-token'
+      })
+    ).rejects.toMatchObject({
+      code: 'SECURE_SHARE_TOKEN_INVALID'
+    });
 
     await expect(
       getMaSecureShare({
