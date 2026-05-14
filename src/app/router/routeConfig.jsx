@@ -339,6 +339,19 @@ export const routeGroups = {
         icon: <Activity size={18} />
       }
     ]
+  },
+
+  reporting: {
+    label: 'Reporting',
+    items: [
+      { to: '/reporting/dashboard', label: 'Dashboard', icon: <FileSearch size={18} /> },
+      { to: '/reporting/library', label: 'Report Library', icon: <FolderOpen size={18} /> },
+      { to: '/reporting/templates', label: 'Templates', icon: <FileBadge size={18} /> },
+      { to: '/reporting/board-pack', label: 'Board Pack', icon: <ClipboardCheck size={18} /> },
+      { to: '/reporting/exports', label: 'Export Ledger', icon: <ScrollText size={18} /> },
+      { to: '/reporting/schedules', label: 'Schedules', icon: <Activity size={18} /> },
+      { to: '/reporting/evidence', label: 'Evidence', icon: <CheckCheck size={18} /> }
+    ]
   }
 };
 
@@ -654,5 +667,40 @@ export const pageMetaMap = {
   '/risk/notifications': {
     title: 'Executive Risk Notifications',
     description: 'Cola trazable de notificaciones y escalaciones de riesgo hacia ejecutivos y comité.'
+  },
+
+  '/reporting/dashboard': {
+    title: 'Enterprise Reporting Command Center',
+    description: 'Centro transversal de informes, board packs, plantillas, export ledger, versioning y evidencias.'
+  },
+
+  '/reporting/library': {
+    title: 'Report Library',
+    description: 'Biblioteca central por módulo, tipo, estado, owner, versión, export y completitud de evidencia.'
+  },
+
+  '/reporting/templates': {
+    title: 'Template Manager',
+    description: 'Plantillas, estructura, secciones requeridas y evidencia requerida por módulo.'
+  },
+
+  '/reporting/board-pack': {
+    title: 'Board Pack Builder',
+    description: 'Constructor de board packs con resumen ejecutivo, decisiones, riesgos y highlights cross-module.'
+  },
+
+  '/reporting/exports': {
+    title: 'Export Ledger',
+    description: 'Ledger de exportaciones con checksum, destino, confidencialidad y trazabilidad.'
+  },
+
+  '/reporting/schedules': {
+    title: 'Scheduled Reports',
+    description: 'Programación básica de informes recurrentes, owners, next run, estado y template.'
+  },
+
+  '/reporting/evidence': {
+    title: 'Evidence-backed Reports',
+    description: 'Evidencias enlazadas, missing evidence, calidad y revisión humana requerida.'
   }
 };
