@@ -87,6 +87,49 @@ function auditQuery(value = {}) {
   return next;
 }
 
+function enterpriseBody(value = {}) {
+  const source = assertPlainObject(value, 'PMI enterprise payload');
+  const next = {};
+
+  Object.entries(source).forEach(([key, rawValue]) => {
+    if (rawValue === undefined) return;
+    if (Array.isArray(rawValue)) {
+      next[key] = rawValue;
+      return;
+    }
+    if (rawValue && typeof rawValue === 'object') {
+      next[key] = assertPlainObject(rawValue, key);
+      return;
+    }
+    if (typeof rawValue === 'number') {
+      next[key] = assertFiniteNumber(rawValue, key);
+      return;
+    }
+    if (typeof rawValue === 'boolean') {
+      next[key] = rawValue;
+      return;
+    }
+    const numericKeys = new Set([
+      'targetValue',
+      'capturedValue',
+      'annualizedValue',
+      'oneTimeCost',
+      'confidenceLevel',
+      'progress',
+      'likelihood',
+      'impact',
+      'readinessScore',
+      'valueCaptureProgress',
+      'cost'
+    ]);
+    next[key] = numericKeys.has(key)
+      ? assertFiniteNumber(rawValue, key)
+      : normalizeString(rawValue);
+  });
+
+  return next;
+}
+
 export const pmiValidator = {
   create: {
     body: caseBody
@@ -103,6 +146,13 @@ export const pmiValidator = {
   },
   auditQuery: {
     query: auditQuery
+  },
+  enterpriseBody: {
+    body: enterpriseBody
+  },
+  enterpriseUpdate: {
+    body: enterpriseBody,
+    params: caseParams
   }
 };
 

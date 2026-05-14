@@ -47,17 +47,17 @@ test('PMI enterprise dashboard exposes case, M&A handoff, CRUD and audit control
   await expect(page.locator('strong', { hasText: 'Industrial integration' }).first()).toBeVisible();
 
   await page.getByLabel('New workstream').fill('Customer handoff');
-  await page.getByLabel('Workstream owner').fill('PMI Lead');
-  await page.getByRole('button', { name: 'Add' }).first().click();
+  await page.getByRole('textbox', { name: 'Workstream owner' }).fill('PMI Lead');
+  await page.locator('form').filter({ has: page.getByLabel('New workstream') }).getByRole('button', { name: 'Add' }).click();
   await expect(page.getByRole('heading', { name: 'Customer handoff' })).toBeVisible();
 
   await page.getByLabel('New risk').fill('Customer churn risk');
   await page.getByLabel('Risk owner').fill('Revenue Lead');
-  await page.getByRole('button', { name: 'Add' }).nth(2).click();
+  await page.locator('form').filter({ has: page.getByLabel('New risk') }).getByRole('button', { name: 'Add' }).click();
   await expect(page.getByRole('heading', { name: 'Customer churn risk' })).toBeVisible();
 
   await page.getByLabel('Add board action').fill('Prepare CEO integration readout');
-  await page.getByRole('button', { name: 'Add' }).last().click();
+  await page.locator('form').filter({ has: page.getByLabel('Add board action') }).getByRole('button', { name: 'Add' }).click();
   await expect(page.getByText('Prepare CEO integration readout')).toBeVisible();
 
   await assertNoSurfaceRegression(page);
@@ -65,4 +65,29 @@ test('PMI enterprise dashboard exposes case, M&A handoff, CRUD and audit control
   await page.goto('/dashboard');
   await expect(page.getByRole('heading', { name: 'Post-Merger Execution' })).toBeVisible();
   await expect(page.getByText('PMI Signal')).toBeVisible();
+});
+
+test('PMI enterprise branch pages load without undefined financial state', async ({ page }) => {
+  await page.setViewportSize({ width: 1366, height: 900 });
+  await loginAsDemoAdmin(page);
+
+  const routes = [
+    ['/pmi/programs', 'Integration programs.'],
+    ['/pmi/synergies', 'Synergy capture tracker.'],
+    ['/pmi/milestones', 'Integration milestone tracker.'],
+    ['/pmi/risks', 'Integration risk register.'],
+    ['/pmi/day1', 'Day 1 readiness.'],
+    ['/pmi/day-100', '30-60-90-100 integration plan.'],
+    ['/pmi/transition-services', 'Transition services.'],
+    ['/pmi/operating-model', 'Target operating model.'],
+    ['/pmi/people-culture', 'People and culture.'],
+    ['/pmi/technology', 'Technology integration.'],
+    ['/pmi/reports', 'PMI executive reporting.']
+  ];
+
+  for (const [route, heading] of routes) {
+    await page.goto(route);
+    await expect(page.getByRole('heading', { name: heading })).toBeVisible();
+    await assertNoSurfaceRegression(page);
+  }
 });

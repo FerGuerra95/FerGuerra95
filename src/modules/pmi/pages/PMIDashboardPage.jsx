@@ -105,7 +105,7 @@ const pmiDashboardCss = `
     max-width: 940px;
     font-size: clamp(40px, 4.8vw, 68px);
     line-height: 0.94;
-    letter-spacing: -0.075em;
+    letter-spacing: 0;
   }
 
   .pmi-title span {
@@ -221,7 +221,7 @@ const pmiDashboardCss = `
     margin-top: 10px;
     font-size: 23px;
     line-height: 1.16;
-    letter-spacing: -0.04em;
+    letter-spacing: 0;
   }
 
   .pmi-score-module {
@@ -260,7 +260,7 @@ const pmiDashboardCss = `
 
   .pmi-score-core strong {
     font-size: 23px;
-    letter-spacing: -0.055em;
+    letter-spacing: 0;
   }
 
   .pmi-score-copy strong {
@@ -319,7 +319,7 @@ const pmiDashboardCss = `
   .pmi-section-header h2,
   .pmi-section-header h3 {
     margin: 0;
-    letter-spacing: -0.045em;
+    letter-spacing: 0;
   }
 
   .pmi-section-header p {
@@ -386,7 +386,7 @@ const pmiDashboardCss = `
     font-size: 25px;
     font-weight: 790;
     line-height: 1.12;
-    letter-spacing: -0.045em;
+    letter-spacing: 0;
     overflow-wrap: anywhere;
   }
 
@@ -408,7 +408,7 @@ const pmiDashboardCss = `
   .pmi-card-title,
   .pmi-panel-title {
     margin: 0;
-    letter-spacing: -0.04em;
+    letter-spacing: 0;
   }
 
   .pmi-card-copy,

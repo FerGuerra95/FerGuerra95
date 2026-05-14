@@ -16,6 +16,172 @@ const pmiCasesStore = createSqliteEntityStore('pmi_cases', 'pmi_case', {
   payload: {}
 });
 
+const pmiProgramsStore = createSqliteEntityStore('pmi_programs', 'pmi_program', {
+  acquisitionName: '',
+  title: 'PMI Program',
+  strategicRationale: '',
+  integrationThesis: '',
+  integrationPhase: 'planning',
+  owner: 'PMI Lead',
+  sponsor: '',
+  integrationManager: '',
+  linkedMaDealId: '',
+  startDate: '',
+  targetCompletionDate: '',
+  status: 'active',
+  integrationScope: '',
+  targetOperatingModel: '',
+  valueCreationThesis: '',
+  statusNotes: '',
+  payload: {}
+});
+
+const pmiSynergiesStore = createSqliteEntityStore('pmi_synergy_initiatives', 'pmi_synergy', {
+  programId: '',
+  title: 'Synergy initiative',
+  synergyType: 'cost',
+  targetValue: 0,
+  capturedValue: 0,
+  annualizedValue: 0,
+  oneTimeCost: 0,
+  confidenceLevel: 50,
+  owner: 'PMI Lead',
+  status: 'identified',
+  dueDate: '',
+  evidence: [],
+  dependencies: [],
+  valueLeakageRisk: 'medium',
+  realizationDate: '',
+  financeValidationStatus: 'pending',
+  payload: {}
+});
+
+const pmiMilestonesStore = createSqliteEntityStore('pmi_milestones', 'pmi_milestone', {
+  programId: '',
+  title: 'Integration milestone',
+  category: 'operations',
+  owner: 'PMI Lead',
+  dueDate: '',
+  status: 'pending',
+  progress: 0,
+  dependencies: [],
+  blockers: [],
+  linkedSynergyId: '',
+  evidence: [],
+  escalation: 'none',
+  criticalPathFlag: 0,
+  payload: {}
+});
+
+const pmiRisksStore = createSqliteEntityStore('pmi_risks', 'pmi_risk', {
+  programId: '',
+  title: 'Integration risk',
+  riskArea: 'operations',
+  severity: 'medium',
+  likelihood: 2,
+  impact: 2,
+  mitigation: '',
+  owner: 'PMI Lead',
+  status: 'open',
+  linkedComplianceAlertId: '',
+  linkedMilestoneId: '',
+  residualRisk: 'medium',
+  escalationStatus: 'none',
+  payload: {}
+});
+
+const pmiDayOneStore = createSqliteEntityStore('pmi_day1_checklist', 'pmi_day1', {
+  programId: '',
+  title: 'Day 1 readiness item',
+  checklistArea: 'governance',
+  owner: 'PMI Lead',
+  status: 'pending',
+  readinessScore: 0,
+  evidence: [],
+  blockerNotes: '',
+  payload: {}
+});
+
+const pmiHundredDayStore = createSqliteEntityStore('pmi_100_day_plan', 'pmi_day100', {
+  programId: '',
+  title: '100-day plan item',
+  period: 'day_30',
+  priorities: [],
+  completedActions: [],
+  delayedActions: [],
+  criticalBlockers: [],
+  valueCaptureProgress: 0,
+  committeeDecisionsRequired: [],
+  status: 'in_progress',
+  owner: 'PMI Lead',
+  payload: {}
+});
+
+const pmiTransitionServicesStore = createSqliteEntityStore('pmi_transition_services', 'pmi_tsa', {
+  programId: '',
+  title: 'TSA item',
+  provider: '',
+  receiver: '',
+  serviceArea: '',
+  startDate: '',
+  endDate: '',
+  cost: 0,
+  risk: 'medium',
+  owner: 'PMI Lead',
+  exitPlan: '',
+  status: 'active',
+  payload: {}
+});
+
+const pmiOperatingModelStore = createSqliteEntityStore('pmi_operating_model_items', 'pmi_ops_model', {
+  programId: '',
+  title: 'Operating model item',
+  targetOperatingModelNotes: '',
+  orgStructureDependencies: [],
+  systemsIntegrationDependencies: [],
+  processHarmonization: '',
+  reportingLines: '',
+  decisionRights: '',
+  governanceCadence: '',
+  owner: 'PMI Lead',
+  status: 'draft',
+  payload: {}
+});
+
+const pmiPeopleCultureStore = createSqliteEntityStore('pmi_people_culture_items', 'pmi_people', {
+  programId: '',
+  title: 'People and culture item',
+  keyPeopleRisk: 'medium',
+  retentionPlan: '',
+  culturalIntegrationNotes: '',
+  communicationPlan: '',
+  laborDependencyNote: '',
+  leadershipAlignment: '',
+  owner: 'PMI Lead',
+  status: 'active',
+  payload: {}
+});
+
+const pmiTechnologyStore = createSqliteEntityStore('pmi_technology_items', 'pmi_tech', {
+  programId: '',
+  title: 'Technology integration item',
+  systemsInventory: [],
+  integrationApproach: '',
+  cyberSecurityDependencies: [],
+  dataMigrationRisk: 'medium',
+  tsaTechnologyDependency: '',
+  owner: 'Technology Lead',
+  status: 'active',
+  payload: {}
+});
+
+const pmiReportsStore = createSqliteEntityStore('pmi_report_exports', 'pmi_report', {
+  reportType: 'pmi_executive_integration_memo',
+  title: 'PMI Report',
+  status: 'generated',
+  payload: {}
+});
+
 function createError(message, status = 400, code = 'PMI_ERROR') {
   const error = new Error(message);
   error.status = status;
@@ -33,10 +199,61 @@ function normalizeNumber(value, fallback = 0) {
   return Number.isFinite(number) ? number : fallback;
 }
 
+function normalizeArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function normalizeBool(value, fallback = false) {
+  if (value === true || value === 'true' || value === 1 || value === '1') return true;
+  if (value === false || value === 'false' || value === 0 || value === '0') return false;
+  return fallback;
+}
+
+function clampScore(value) {
+  return Math.max(0, Math.min(100, Math.round(normalizeNumber(value))));
+}
+
 function assertOrganizationId(organizationId) {
   if (!normalizeText(organizationId)) {
     throw createError('Scope de organizacion no definido.', 403, 'INVALID_SCOPE');
   }
+}
+
+function todayMs() {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  return now.getTime();
+}
+
+function isPastDate(value) {
+  const safe = normalizeText(value);
+  if (!safe) return false;
+  const date = new Date(safe);
+  if (Number.isNaN(date.getTime())) return false;
+  date.setHours(0, 0, 0, 0);
+  return date.getTime() < todayMs();
+}
+
+function isWithinDays(value, days = 30) {
+  const safe = normalizeText(value);
+  if (!safe) return false;
+  const date = new Date(safe);
+  if (Number.isNaN(date.getTime())) return false;
+  const diff = date.getTime() - todayMs();
+  return diff >= 0 && diff <= days * 24 * 60 * 60 * 1000;
+}
+
+function actorId(actor = {}) {
+  return normalizeText(actor.userId || actor.id);
+}
+
+function commonCreate(organizationId, actor = {}) {
+  const userId = actorId(actor);
+  return {
+    organizationId,
+    userId,
+    createdBy: userId
+  };
 }
 
 function sanitizePayload(payload = {}, { requireDealName = false } = {}) {
@@ -731,6 +948,438 @@ export async function listPmiAuditLogs(organizationId, options = {}) {
   });
 }
 
+function sanitizeProgram(payload = {}, { requireTitle = false } = {}) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const next = {};
+  if (requireTitle || source.title !== undefined) next.title = normalizeText(source.title, 'PMI Program') || 'PMI Program';
+  [
+    'acquisitionName',
+    'strategicRationale',
+    'integrationThesis',
+    'integrationPhase',
+    'owner',
+    'sponsor',
+    'integrationManager',
+    'linkedMaDealId',
+    'startDate',
+    'targetCompletionDate',
+    'status',
+    'integrationScope',
+    'targetOperatingModel',
+    'valueCreationThesis',
+    'statusNotes'
+  ].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeText(source[key]);
+  });
+  if (source.payload && typeof source.payload === 'object') next.payload = source.payload;
+  return next;
+}
+
+function sanitizeSynergy(payload = {}, { requireTitle = false } = {}) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const next = {};
+  if (requireTitle || source.title !== undefined || source.name !== undefined) next.title = normalizeText(source.title || source.name, 'Synergy initiative') || 'Synergy initiative';
+  ['programId', 'synergyType', 'owner', 'status', 'dueDate', 'valueLeakageRisk', 'realizationDate', 'financeValidationStatus'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeText(source[key]);
+  });
+  ['targetValue', 'capturedValue', 'annualizedValue', 'oneTimeCost', 'confidenceLevel'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeNumber(source[key]);
+  });
+  if (source.evidence !== undefined) next.evidence = normalizeArray(source.evidence);
+  if (source.dependencies !== undefined) next.dependencies = normalizeArray(source.dependencies);
+  if (source.payload && typeof source.payload === 'object') next.payload = source.payload;
+  return next;
+}
+
+function sanitizeMilestone(payload = {}, { requireTitle = false } = {}) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const next = {};
+  if (requireTitle || source.title !== undefined) next.title = normalizeText(source.title, 'Integration milestone') || 'Integration milestone';
+  ['programId', 'category', 'owner', 'dueDate', 'status', 'linkedSynergyId', 'escalation'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeText(source[key]);
+  });
+  if (source.progress !== undefined) next.progress = clampScore(source.progress);
+  if (source.criticalPathFlag !== undefined) next.criticalPathFlag = normalizeBool(source.criticalPathFlag) ? 1 : 0;
+  if (source.dependencies !== undefined) next.dependencies = normalizeArray(source.dependencies);
+  if (source.blockers !== undefined) next.blockers = normalizeArray(source.blockers);
+  if (source.evidence !== undefined) next.evidence = normalizeArray(source.evidence);
+  if (source.payload && typeof source.payload === 'object') next.payload = source.payload;
+  return next;
+}
+
+function sanitizeRisk(payload = {}, { requireTitle = false } = {}) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const next = {};
+  if (requireTitle || source.title !== undefined) next.title = normalizeText(source.title, 'Integration risk') || 'Integration risk';
+  ['programId', 'riskArea', 'severity', 'mitigation', 'owner', 'status', 'linkedComplianceAlertId', 'linkedMilestoneId', 'residualRisk', 'escalationStatus'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeText(source[key]);
+  });
+  if (source.likelihood !== undefined) next.likelihood = normalizeNumber(source.likelihood);
+  if (source.impact !== undefined) next.impact = normalizeNumber(source.impact);
+  if (source.payload && typeof source.payload === 'object') next.payload = source.payload;
+  return next;
+}
+
+function sanitizeDayOne(payload = {}, { requireTitle = false } = {}) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const next = {};
+  if (requireTitle || source.title !== undefined) next.title = normalizeText(source.title, 'Day 1 readiness item') || 'Day 1 readiness item';
+  ['programId', 'checklistArea', 'owner', 'status', 'blockerNotes'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeText(source[key]);
+  });
+  if (source.readinessScore !== undefined) next.readinessScore = clampScore(source.readinessScore);
+  if (source.evidence !== undefined) next.evidence = normalizeArray(source.evidence);
+  if (source.payload && typeof source.payload === 'object') next.payload = source.payload;
+  return next;
+}
+
+function sanitizeHundredDay(payload = {}, { requireTitle = false } = {}) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const next = {};
+  if (requireTitle || source.title !== undefined) next.title = normalizeText(source.title, '100-day plan item') || '100-day plan item';
+  ['programId', 'period', 'status', 'owner'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeText(source[key]);
+  });
+  ['priorities', 'completedActions', 'delayedActions', 'criticalBlockers', 'committeeDecisionsRequired'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeArray(source[key]);
+  });
+  if (source.valueCaptureProgress !== undefined) next.valueCaptureProgress = clampScore(source.valueCaptureProgress);
+  if (source.payload && typeof source.payload === 'object') next.payload = source.payload;
+  return next;
+}
+
+function sanitizeTransitionService(payload = {}, { requireTitle = false } = {}) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const next = {};
+  if (requireTitle || source.title !== undefined || source.tsaItem !== undefined) next.title = normalizeText(source.title || source.tsaItem, 'TSA item') || 'TSA item';
+  ['programId', 'provider', 'receiver', 'serviceArea', 'startDate', 'endDate', 'risk', 'owner', 'exitPlan', 'status'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeText(source[key]);
+  });
+  if (source.cost !== undefined) next.cost = normalizeNumber(source.cost);
+  if (source.payload && typeof source.payload === 'object') next.payload = source.payload;
+  return next;
+}
+
+function sanitizeOperatingModel(payload = {}, { requireTitle = false } = {}) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const next = {};
+  if (requireTitle || source.title !== undefined) next.title = normalizeText(source.title, 'Operating model item') || 'Operating model item';
+  ['programId', 'targetOperatingModelNotes', 'processHarmonization', 'reportingLines', 'decisionRights', 'governanceCadence', 'owner', 'status'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeText(source[key]);
+  });
+  if (source.orgStructureDependencies !== undefined) next.orgStructureDependencies = normalizeArray(source.orgStructureDependencies);
+  if (source.systemsIntegrationDependencies !== undefined) next.systemsIntegrationDependencies = normalizeArray(source.systemsIntegrationDependencies);
+  if (source.payload && typeof source.payload === 'object') next.payload = source.payload;
+  return next;
+}
+
+function sanitizePeopleCulture(payload = {}, { requireTitle = false } = {}) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const next = {};
+  if (requireTitle || source.title !== undefined) next.title = normalizeText(source.title, 'People and culture item') || 'People and culture item';
+  ['programId', 'keyPeopleRisk', 'retentionPlan', 'culturalIntegrationNotes', 'communicationPlan', 'laborDependencyNote', 'leadershipAlignment', 'owner', 'status'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeText(source[key]);
+  });
+  if (source.payload && typeof source.payload === 'object') next.payload = source.payload;
+  return next;
+}
+
+function sanitizeTechnology(payload = {}, { requireTitle = false } = {}) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const next = {};
+  if (requireTitle || source.title !== undefined) next.title = normalizeText(source.title, 'Technology integration item') || 'Technology integration item';
+  ['programId', 'integrationApproach', 'dataMigrationRisk', 'tsaTechnologyDependency', 'owner', 'status'].forEach((key) => {
+    if (source[key] !== undefined) next[key] = normalizeText(source[key]);
+  });
+  if (source.systemsInventory !== undefined) next.systemsInventory = normalizeArray(source.systemsInventory);
+  if (source.cyberSecurityDependencies !== undefined) next.cyberSecurityDependencies = normalizeArray(source.cyberSecurityDependencies);
+  if (source.payload && typeof source.payload === 'object') next.payload = source.payload;
+  return next;
+}
+
+function createEnterpriseCrud({ store, sanitize, createAction, updateAction, completeAction }) {
+  return {
+    async list(organizationId) {
+      assertOrganizationId(organizationId);
+      return store.listByOrganization(organizationId);
+    },
+    async get(organizationId, id) {
+      assertOrganizationId(organizationId);
+      return store.getByIdForOrganization(normalizeText(id), organizationId);
+    },
+    async create(organizationId, payload = {}, actor = {}) {
+      assertOrganizationId(organizationId);
+      const created = await store.create({
+        ...sanitize(payload, { requireTitle: true }),
+        ...commonCreate(organizationId, actor)
+      });
+      await recordPmiAudit({ organizationId, userId: actorId(actor), action: createAction, entityId: created?.id || '' });
+      return created;
+    },
+    async update(organizationId, id, payload = {}, actor = {}) {
+      assertOrganizationId(organizationId);
+      const updated = await store.updateForOrganization(normalizeText(id), sanitize(payload), organizationId);
+      if (updated) {
+        const status = normalizeText(updated.status).toLowerCase();
+        const event = completeAction && ['completed', 'captured', 'finance_validated'].includes(status) ? completeAction : updateAction;
+        await recordPmiAudit({ organizationId, userId: actorId(actor), action: event, entityId: updated.id });
+      }
+      return updated;
+    }
+  };
+}
+
+const programCrud = createEnterpriseCrud({ store: pmiProgramsStore, sanitize: sanitizeProgram, createAction: 'pmi.program.created', updateAction: 'pmi.program.updated' });
+const synergyCrud = createEnterpriseCrud({ store: pmiSynergiesStore, sanitize: sanitizeSynergy, createAction: 'pmi.synergy.created', updateAction: 'pmi.synergy.updated', completeAction: 'pmi.synergy.captured' });
+const milestoneCrud = createEnterpriseCrud({ store: pmiMilestonesStore, sanitize: sanitizeMilestone, createAction: 'pmi.milestone.created', updateAction: 'pmi.milestone.updated', completeAction: 'pmi.milestone.completed' });
+const riskCrud = createEnterpriseCrud({ store: pmiRisksStore, sanitize: sanitizeRisk, createAction: 'pmi.risk.created', updateAction: 'pmi.risk.updated', completeAction: 'pmi.risk.escalated' });
+const dayOneCrud = createEnterpriseCrud({ store: pmiDayOneStore, sanitize: sanitizeDayOne, createAction: 'pmi.day1.updated', updateAction: 'pmi.day1.updated' });
+const hundredDayCrud = createEnterpriseCrud({ store: pmiHundredDayStore, sanitize: sanitizeHundredDay, createAction: 'pmi.day100.updated', updateAction: 'pmi.day100.updated' });
+const transitionCrud = createEnterpriseCrud({ store: pmiTransitionServicesStore, sanitize: sanitizeTransitionService, createAction: 'pmi.tsa.created', updateAction: 'pmi.tsa.updated', completeAction: 'pmi.tsa.exit_risk' });
+const operatingModelCrud = createEnterpriseCrud({ store: pmiOperatingModelStore, sanitize: sanitizeOperatingModel, createAction: 'pmi.operating_model.updated', updateAction: 'pmi.operating_model.updated' });
+const peopleCultureCrud = createEnterpriseCrud({ store: pmiPeopleCultureStore, sanitize: sanitizePeopleCulture, createAction: 'pmi.people_culture.updated', updateAction: 'pmi.people_culture.updated' });
+const technologyCrud = createEnterpriseCrud({ store: pmiTechnologyStore, sanitize: sanitizeTechnology, createAction: 'pmi.technology.updated', updateAction: 'pmi.technology.updated' });
+
+export const listPmiPrograms = programCrud.list;
+export const getPmiProgramById = programCrud.get;
+export const createPmiProgram = programCrud.create;
+export const updatePmiProgram = programCrud.update;
+export const listPmiSynergies = synergyCrud.list;
+export const createPmiSynergy = synergyCrud.create;
+export const updatePmiSynergy = synergyCrud.update;
+export const listPmiMilestones = milestoneCrud.list;
+export const createPmiMilestone = milestoneCrud.create;
+export const updatePmiMilestone = milestoneCrud.update;
+export const listPmiRisks = riskCrud.list;
+export const createPmiRisk = riskCrud.create;
+export const updatePmiRisk = riskCrud.update;
+export const listPmiDayOneItems = dayOneCrud.list;
+export const createPmiDayOneItem = dayOneCrud.create;
+export const updatePmiDayOneItem = dayOneCrud.update;
+export const listPmiHundredDayItems = hundredDayCrud.list;
+export const createPmiHundredDayItem = hundredDayCrud.create;
+export const updatePmiHundredDayItem = hundredDayCrud.update;
+export const listPmiTransitionServices = transitionCrud.list;
+export const createPmiTransitionService = transitionCrud.create;
+export const updatePmiTransitionService = transitionCrud.update;
+export const listPmiOperatingModelItems = operatingModelCrud.list;
+export const createPmiOperatingModelItem = operatingModelCrud.create;
+export const updatePmiOperatingModelItem = operatingModelCrud.update;
+export const listPmiPeopleCultureItems = peopleCultureCrud.list;
+export const createPmiPeopleCultureItem = peopleCultureCrud.create;
+export const updatePmiPeopleCultureItem = peopleCultureCrud.update;
+export const listPmiTechnologyItems = technologyCrud.list;
+export const createPmiTechnologyItem = technologyCrud.create;
+export const updatePmiTechnologyItem = technologyCrud.update;
+
+function severityWeight(value) {
+  const severity = normalizeText(value).toLowerCase();
+  if (severity.includes('critical')) return 4;
+  if (severity.includes('high')) return 3;
+  if (severity.includes('medium')) return 2;
+  if (severity.includes('low')) return 1;
+  return 2;
+}
+
+export function calculatePmiEnterpriseMetrics({
+  cases = [],
+  programs = [],
+  synergies = [],
+  milestones = [],
+  risks = [],
+  dayOneItems = [],
+  hundredDayItems = [],
+  transitionServices = [],
+  peopleCultureItems = [],
+  technologyItems = []
+} = {}) {
+  const latestCase = cases[0] || null;
+  const legacyLedger = cases.flatMap((item) => normalizeArray(item.synergyLedger));
+  const legacyMilestones = cases.flatMap((item) => normalizeArray(item.milestones));
+  const legacyRisks = cases.flatMap((item) => normalizeArray(item.risks));
+  const totalSynergyTarget = synergies.reduce((sum, item) => sum + normalizeNumber(item.targetValue), 0) || cases.reduce((sum, item) => sum + normalizeNumber(item.synergyTarget), 0) || legacyLedger.reduce((sum, item) => sum + normalizeNumber(item.forecast), 0);
+  const capturedSynergy = synergies.reduce((sum, item) => sum + normalizeNumber(item.capturedValue), 0) || cases.reduce((sum, item) => sum + normalizeNumber(item.synergyCaptured), 0) || legacyLedger.reduce((sum, item) => sum + normalizeNumber(item.captured), 0);
+  const synergyCaptureRatio = totalSynergyTarget > 0 ? clampScore((capturedSynergy / totalSynergyTarget) * 100) : 0;
+  const allMilestones = [...milestones, ...legacyMilestones];
+  const delayedMilestones = allMilestones.filter((item) => {
+    const status = normalizeText(item.status).toLowerCase();
+    return status.includes('delay') || status.includes('blocked') || (isPastDate(item.dueDate) && !status.includes('complete'));
+  });
+  const allRisks = [...risks, ...legacyRisks];
+  const criticalIntegrationRisks = allRisks.filter((item) => severityWeight(item.severity || item.residualRisk) >= 3 && !['closed', 'mitigated'].includes(normalizeText(item.status).toLowerCase()));
+  const blockedSynergies = synergies.filter((item) => ['delayed', 'at_risk'].includes(normalizeText(item.status).toLowerCase()) || severityWeight(item.valueLeakageRisk) >= 3);
+  const day1ReadinessScore = dayOneItems.length > 0
+    ? clampScore(dayOneItems.reduce((sum, item) => sum + normalizeNumber(item.readinessScore), 0) / dayOneItems.length)
+    : getPlaybookProgress(cases.flatMap((item) => normalizeArray(item.playbooks)).filter((item) => normalizeText(item.label).toLowerCase().includes('day 1')));
+  const progressForPeriod = (period) => {
+    const items = hundredDayItems.filter((item) => normalizeText(item.period).toLowerCase() === period);
+    if (items.length > 0) return clampScore(items.reduce((sum, item) => sum + normalizeNumber(item.valueCaptureProgress), 0) / items.length);
+    const legacy = legacyMilestones.filter((item) => normalizeText(item.label).toLowerCase().replace(/\s+/g, '_') === period);
+    return legacy.length > 0 ? clampScore(legacy.reduce((sum, item) => sum + normalizeNumber(item.progress), 0) / legacy.length) : 0;
+  };
+  const tsaRisk = transitionServices.filter((item) => severityWeight(item.risk) >= 3 || isWithinDays(item.endDate, 30) || isPastDate(item.endDate)).length;
+  const peopleRisk = peopleCultureItems.filter((item) => severityWeight(item.keyPeopleRisk) >= 3).length;
+  const technologyRisk = technologyItems.filter((item) => severityWeight(item.dataMigrationRisk) >= 3 || normalizeText(item.status).toLowerCase().includes('block')).length;
+  const milestoneProgress = allMilestones.length > 0 ? clampScore(allMilestones.reduce((sum, item) => sum + normalizeNumber(item.progress), 0) / allMilestones.length) : 0;
+  const riskControlScore = clampScore(100 - criticalIntegrationRisks.length * 18 - delayedMilestones.length * 8 - tsaRisk * 8 - peopleRisk * 8 - technologyRisk * 8);
+  const integrationReadinessScore = clampScore(
+    day1ReadinessScore * 0.2 +
+      synergyCaptureRatio * 0.25 +
+      milestoneProgress * 0.2 +
+      riskControlScore * 0.25 +
+      Math.max(0, 100 - blockedSynergies.length * 15) * 0.1
+  );
+  const requiresExecutiveAttention =
+    criticalIntegrationRisks.length > 0 ||
+    delayedMilestones.length > 1 ||
+    blockedSynergies.length > 0 ||
+    tsaRisk > 0 ||
+    day1ReadinessScore < 70;
+  const valueCaptureStatus = synergyCaptureRatio >= 75 ? 'on_track' : blockedSynergies.length > 0 ? 'at_risk' : 'building';
+  const pmiStatus =
+    cases.length + programs.length + synergies.length + milestones.length === 0
+      ? 'insufficient_data'
+      : integrationReadinessScore >= 78 && !requiresExecutiveAttention
+        ? 'strong'
+        : integrationReadinessScore >= 62
+          ? 'watch'
+          : requiresExecutiveAttention
+            ? 'risk'
+            : 'blocked';
+
+  return {
+    pmiReadinessScore: integrationReadinessScore,
+    integrationReadinessScore,
+    integrationPhase: programs[0]?.integrationPhase || latestCase?.status || 'planning',
+    totalSynergyTarget,
+    capturedSynergy,
+    synergyCaptureRatio,
+    day1ReadinessScore,
+    day30Progress: progressForPeriod('day_30'),
+    day60Progress: progressForPeriod('day_60'),
+    day90Progress: progressForPeriod('day_90'),
+    delayedMilestones: delayedMilestones.length,
+    criticalBlockers: delayedMilestones.filter((item) => normalizeBool(item.criticalPathFlag) || normalizeArray(item.blockers).length > 0).length,
+    integrationRisks: criticalIntegrationRisks.length,
+    criticalIntegrationRisks: criticalIntegrationRisks.length,
+    blockedSynergies: blockedSynergies.length,
+    valueCaptureStatus,
+    tsaRisk,
+    peopleRisk,
+    technologyRisk,
+    requiresExecutiveAttention,
+    pmiStatus,
+    nextIntegrationCommitteeActions: hundredDayItems.flatMap((item) => normalizeArray(item.committeeDecisionsRequired)).slice(0, 5),
+    humanReviewPosture: requiresExecutiveAttention ? 'human_review_required' : 'human_review_available'
+  };
+}
+
+export async function getPmiSummary(scope = {}) {
+  assertOrganizationId(scope.organizationId);
+  const [cases, programs, synergies, milestones, risks, dayOneItems, hundredDayItems, transitionServices, operatingModelItems, peopleCultureItems, technologyItems, reports] = await Promise.all([
+    listPmiCases(scope.organizationId),
+    listPmiPrograms(scope.organizationId),
+    listPmiSynergies(scope.organizationId),
+    listPmiMilestones(scope.organizationId),
+    listPmiRisks(scope.organizationId),
+    listPmiDayOneItems(scope.organizationId),
+    listPmiHundredDayItems(scope.organizationId),
+    listPmiTransitionServices(scope.organizationId),
+    listPmiOperatingModelItems(scope.organizationId),
+    listPmiPeopleCultureItems(scope.organizationId),
+    listPmiTechnologyItems(scope.organizationId),
+    listPmiReports(scope.organizationId)
+  ]);
+  const metrics = calculatePmiEnterpriseMetrics({ cases, programs, synergies, milestones, risks, dayOneItems, hundredDayItems, transitionServices, operatingModelItems, peopleCultureItems, technologyItems });
+  return {
+    version: 'pmi-synergies-enterprise-v1',
+    organizationId: scope.organizationId,
+    generatedAt: new Date().toISOString(),
+    metrics,
+    latestProgram: programs[0] || null,
+    latestCase: cases[0] || null,
+    latestReport: reports[0] || null
+  };
+}
+
+export async function getPmiDashboard(scope = {}) {
+  const [summary, auditEvents] = await Promise.all([
+    getPmiSummary(scope),
+    listPmiAuditLogs(scope.organizationId, { limit: 10 })
+  ]);
+  return {
+    ...summary,
+    auditEvents,
+    dssNotice: 'Decision support only. PMI outputs do not replace integration committees, CFO, HR, legal counsel, advisors or formal board approvals.'
+  };
+}
+
+export async function generatePmiReport(organizationId, payload = {}, actor = {}) {
+  assertOrganizationId(organizationId);
+  const summary = await getPmiSummary({ organizationId });
+  const reportType = normalizeText(payload.reportType, 'pmi_executive_integration_memo');
+  const title = normalizeText(payload.title) || ({
+    pmi_executive_integration_memo: 'PMI Executive Integration Memo',
+    day1_readiness_pack: 'Day 1 Readiness Pack',
+    day_30_60_90_integration_plan: '30-60-90 Integration Plan',
+    hundred_day_value_capture_report: '100-Day Value Capture Report',
+    synergy_capture_report: 'Synergy Capture Report',
+    integration_risk_brief: 'Integration Risk Brief',
+    integration_committee_pack: 'Integration Committee Pack',
+    tsa_exit_plan_summary: 'TSA Exit Plan Summary'
+  }[reportType] || 'PMI Report');
+  const created = await pmiReportsStore.create({
+    ...commonCreate(organizationId, actor),
+    reportType,
+    title,
+    status: 'generated',
+    payload: {
+      generatedAt: new Date().toISOString(),
+      summary,
+      dssNotice: 'Decision support only. Requires human review before committee or board use.'
+    }
+  });
+  await recordPmiAudit({ organizationId, userId: actorId(actor), action: 'pmi.report.exported', entityId: created.id, metadata: { reportType } });
+  return created;
+}
+
+export async function listPmiReports(organizationId) {
+  assertOrganizationId(organizationId);
+  return pmiReportsStore.listByOrganization(organizationId);
+}
+
+export function buildPmiBridgeSignals(summary = {}) {
+  const metrics = summary.metrics || summary;
+  const signals = [];
+  if (metrics.delayedMilestones > 0 || metrics.synergyCaptureRatio < 50) signals.push('pmi.synergy_delay_affects_ma_value');
+  if (metrics.criticalBlockers > 0 || metrics.requiresExecutiveAttention) signals.push('pmi.governance_decision_required');
+  if (metrics.criticalIntegrationRisks > 0) signals.push('pmi.integration_risk_critical');
+  if (metrics.blockedSynergies > 0 || metrics.valueCaptureStatus === 'at_risk') signals.push('pmi.value_capture_at_risk');
+  if (metrics.tsaRisk > 0) signals.push('pmi.tsa_exit_risk');
+  if (metrics.day1ReadinessScore < 70) signals.push('pmi.day1_not_ready');
+  if (metrics.integrationRisks > 0) signals.push('pmi.compliance_blocker_detected');
+  return signals;
+}
+
+export async function getPmiBridgeSignals(scope = {}) {
+  const summary = await getPmiSummary(scope);
+  const signals = buildPmiBridgeSignals(summary);
+  if (signals.length > 0) {
+    await recordPmiAudit({
+      organizationId: scope.organizationId,
+      userId: scope.userId || '',
+      action: 'bridge.pmi_signal.created',
+      metadata: { signals }
+    });
+  }
+  return {
+    version: 'pmi-bridge-signals-v1',
+    organizationId: scope.organizationId,
+    generatedAt: new Date().toISOString(),
+    signals
+  };
+}
+
 export async function getPmiExecutiveHubBrief(scope = {}) {
   assertOrganizationId(scope.organizationId);
 
@@ -763,12 +1412,15 @@ export async function getPmiExecutiveHubBrief(scope = {}) {
   const ledger = getLedgerTotals(synergyLedger);
   const blockedDependencies = getBlockedDependencies(dependencies);
 
+  const enterpriseSummary = await getPmiSummary(scope);
+  const enterpriseMetrics = enterpriseSummary.metrics || {};
+
   return {
     version: 'pmi-executive-hub-v2',
     organizationId: scope.organizationId,
     generatedAt: new Date().toISOString(),
-    score: signal.score,
-    posture: signal.posture,
+    score: enterpriseMetrics.pmiReadinessScore || signal.score,
+    posture: enterpriseMetrics.requiresExecutiveAttention ? 'Executive attention required' : signal.posture,
     title: signal.title,
     description: signal.description,
     latestCase: latestCase && {
@@ -806,7 +1458,8 @@ export async function getPmiExecutiveHubBrief(scope = {}) {
       blockedWorkstreamsCount: getBlockedWorkstreams(workstreams).length,
       dependenciesCount: dependencies.length,
       blockedDependenciesCount: blockedDependencies.length,
-      dependencyRiskScore: Math.max(0, 100 - blockedDependencies.length * 22 - dependencies.length * 3)
+      dependencyRiskScore: Math.max(0, 100 - blockedDependencies.length * 22 - dependencies.length * 3),
+      ...enterpriseMetrics
     }
   };
 }
@@ -820,5 +1473,41 @@ export default {
   updatePmiCase,
   deletePmiCase,
   listPmiAuditLogs,
+  listPmiPrograms,
+  getPmiProgramById,
+  createPmiProgram,
+  updatePmiProgram,
+  listPmiSynergies,
+  createPmiSynergy,
+  updatePmiSynergy,
+  listPmiMilestones,
+  createPmiMilestone,
+  updatePmiMilestone,
+  listPmiRisks,
+  createPmiRisk,
+  updatePmiRisk,
+  listPmiDayOneItems,
+  createPmiDayOneItem,
+  updatePmiDayOneItem,
+  listPmiHundredDayItems,
+  createPmiHundredDayItem,
+  updatePmiHundredDayItem,
+  listPmiTransitionServices,
+  createPmiTransitionService,
+  updatePmiTransitionService,
+  listPmiOperatingModelItems,
+  createPmiOperatingModelItem,
+  updatePmiOperatingModelItem,
+  listPmiPeopleCultureItems,
+  createPmiPeopleCultureItem,
+  updatePmiPeopleCultureItem,
+  listPmiTechnologyItems,
+  createPmiTechnologyItem,
+  updatePmiTechnologyItem,
+  getPmiSummary,
+  getPmiDashboard,
+  generatePmiReport,
+  listPmiReports,
+  getPmiBridgeSignals,
   getPmiExecutiveHubBrief
 };
