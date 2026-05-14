@@ -25,9 +25,10 @@ describe('enterprise permissions', () => {
       PERMISSIONS.READ_HERITAGE,
       PERMISSIONS.READ_PMI,
       PERMISSIONS.READ_BRIDGE,
-      PERMISSIONS.READ_RISK,
-      PERMISSIONS.READ_REPORTING,
-      PERMISSIONS.READ_STRATEGY
+        PERMISSIONS.READ_RISK,
+        PERMISSIONS.READ_REPORTING,
+        PERMISSIONS.READ_STRATEGY,
+        PERMISSIONS.READ_EXECUTIVE
     ]);
     expect(getPermissionsForRole('viewer')).not.toContain(
       PERMISSIONS.MANAGE_MA_DATA_ROOM
@@ -61,6 +62,9 @@ describe('enterprise permissions', () => {
     );
     expect(getPermissionsForRole('viewer')).not.toContain(
       PERMISSIONS.UPDATE_STRATEGY
+    );
+    expect(getPermissionsForRole('viewer')).not.toContain(
+      PERMISSIONS.UPDATE_EXECUTIVE_SIGNAL
     );
   });
 });
