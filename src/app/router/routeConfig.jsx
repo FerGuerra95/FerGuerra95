@@ -17,11 +17,13 @@ import {
   Map,
   Network,
   PieChart,
+  Radar,
   Rocket,
   Scale,
   ScrollText,
   ShieldAlert,
   Sparkles,
+  Target,
   Users
 } from 'lucide-react';
 
@@ -271,6 +273,98 @@ export const routeGroups = {
         label: 'Bridge Marketplace',
         icon: <Network size={18} />
       }
+    ]
+  },
+
+  risk: {
+    label: 'Enterprise Risk',
+    items: [
+      {
+        to: '/risk/dashboard',
+        label: 'Risk Dashboard',
+        icon: <Radar size={18} />
+      },
+      {
+        to: '/risk/register',
+        label: 'Risk Register',
+        icon: <ShieldAlert size={18} />
+      },
+      {
+        to: '/risk/heatmap',
+        label: 'Heatmap',
+        icon: <Map size={18} />
+      },
+      {
+        to: '/risk/controls',
+        label: 'Controls',
+        icon: <CheckCheck size={18} />
+      },
+      {
+        to: '/risk/mitigations',
+        label: 'Mitigations',
+        icon: <ClipboardCheck size={18} />
+      },
+      {
+        to: '/risk/incidents',
+        label: 'Incidents',
+        icon: <ShieldAlert size={18} />
+      },
+      {
+        to: '/risk/kri',
+        label: 'KRI Tracker',
+        icon: <LineChart size={18} />
+      },
+      {
+        to: '/risk/appetite',
+        label: 'Risk Appetite',
+        icon: <Scale size={18} />
+      },
+      {
+        to: '/risk/reports',
+        label: 'Reports',
+        icon: <FileSearch size={18} />
+      },
+      {
+        to: '/risk/committee-reviews',
+        label: 'Committee Reviews',
+        icon: <Users size={18} />
+      },
+      {
+        to: '/risk/evidence',
+        label: 'Evidence Links',
+        icon: <FileBadge size={18} />
+      },
+      {
+        to: '/risk/notifications',
+        label: 'Notifications',
+        icon: <Activity size={18} />
+      }
+    ]
+  },
+
+  reporting: {
+    label: 'Reporting',
+    items: [
+      { to: '/reporting/dashboard', label: 'Dashboard', icon: <FileSearch size={18} /> },
+      { to: '/reporting/library', label: 'Report Library', icon: <FolderOpen size={18} /> },
+      { to: '/reporting/templates', label: 'Templates', icon: <FileBadge size={18} /> },
+      { to: '/reporting/board-pack', label: 'Board Pack', icon: <ClipboardCheck size={18} /> },
+      { to: '/reporting/exports', label: 'Export Ledger', icon: <ScrollText size={18} /> },
+      { to: '/reporting/schedules', label: 'Schedules', icon: <Activity size={18} /> },
+      { to: '/reporting/evidence', label: 'Evidence', icon: <CheckCheck size={18} /> }
+    ]
+  },
+
+  strategy: {
+    label: 'Strategy',
+    items: [
+      { to: '/strategy/dashboard', label: 'Dashboard', icon: <Sparkles size={18} /> },
+      { to: '/strategy/objectives', label: 'Objectives', icon: <Target size={18} /> },
+      { to: '/strategy/initiatives', label: 'Initiatives', icon: <Rocket size={18} /> },
+      { to: '/strategy/scenarios', label: 'Scenarios', icon: <LineChart size={18} /> },
+      { to: '/strategy/market-notes', label: 'Market Notes', icon: <FileSearch size={18} /> },
+      { to: '/strategy/risks', label: 'Strategic Risks', icon: <ShieldAlert size={18} /> },
+      { to: '/strategy/reports', label: 'Reports', icon: <FileBadge size={18} /> }
     ]
   }
 };
@@ -525,5 +619,137 @@ export const pageMetaMap = {
     title: 'The Bridge Marketplace',
     description:
       'Capa futura de red para conectar oportunidades M&A y Funding con inversores, compradores y capital verificado.'
+  },
+
+  '/risk/dashboard': {
+    title: 'Enterprise Risk Command Center',
+    description:
+      'Registro transversal de riesgos, heatmap, controles, mitigaciones, incidentes, KRIs, appetite y señales ejecutivas.'
+  },
+
+  '/risk/register': {
+    title: 'Enterprise Risk Register',
+    description:
+      'Riesgos por categoría, severidad inherente, probabilidad, impacto, residual, owner, mitigación y revisión.'
+  },
+
+  '/risk/heatmap': {
+    title: 'Risk Heatmap',
+    description: 'Mapa de riesgo por probabilidad e impacto con filtros por categoría, owner y estado.'
+  },
+
+  '/risk/controls': {
+    title: 'Controls Library',
+    description: 'Biblioteca de controles, evidencia, frecuencia, pruebas y efectividad.'
+  },
+
+  '/risk/mitigations': {
+    title: 'Mitigation Plans',
+    description: 'Planes de mitigación con owners, deadlines, progreso, bloqueos y estado.'
+  },
+
+  '/risk/incidents': {
+    title: 'Incident Log',
+    description: 'Registro de incidentes, severidad, área impactada, resolución, causa raíz y riesgo asociado.'
+  },
+
+  '/risk/kri': {
+    title: 'KRI Tracker',
+    description: 'Indicadores clave de riesgo con umbrales, valores actuales, breaches y tendencia.'
+  },
+
+  '/risk/appetite': {
+    title: 'Risk Appetite',
+    description: 'Declaraciones de appetite, métricas, umbrales, manejo de breaches y owners.'
+  },
+
+  '/risk/reports': {
+    title: 'Risk Reports',
+    description: 'Enterprise Risk Brief, Risk Committee Pack, Control Effectiveness Report e Incident Summary.'
+  },
+
+  '/risk/committee-reviews': {
+    title: 'Risk Committee Reviews',
+    description: 'Revisiones formales del comité de riesgos, agendas, decisiones, actas y paquetes board-ready.'
+  },
+
+  '/risk/evidence': {
+    title: 'Risk Evidence Links',
+    description: 'Evidencias enlazadas, calidad, fuente, reviewer y estado de revisión humana.'
+  },
+
+  '/risk/notifications': {
+    title: 'Executive Risk Notifications',
+    description: 'Cola trazable de notificaciones y escalaciones de riesgo hacia ejecutivos y comité.'
+  },
+
+  '/reporting/dashboard': {
+    title: 'Enterprise Reporting Command Center',
+    description: 'Centro transversal de informes, board packs, plantillas, export ledger, versioning y evidencias.'
+  },
+
+  '/reporting/library': {
+    title: 'Report Library',
+    description: 'Biblioteca central por módulo, tipo, estado, owner, versión, export y completitud de evidencia.'
+  },
+
+  '/reporting/templates': {
+    title: 'Template Manager',
+    description: 'Plantillas, estructura, secciones requeridas y evidencia requerida por módulo.'
+  },
+
+  '/reporting/board-pack': {
+    title: 'Board Pack Builder',
+    description: 'Constructor de board packs con resumen ejecutivo, decisiones, riesgos y highlights cross-module.'
+  },
+
+  '/reporting/exports': {
+    title: 'Export Ledger',
+    description: 'Ledger de exportaciones con checksum, destino, confidencialidad y trazabilidad.'
+  },
+
+  '/reporting/schedules': {
+    title: 'Scheduled Reports',
+    description: 'Programación básica de informes recurrentes, owners, next run, estado y template.'
+  },
+
+  '/reporting/evidence': {
+    title: 'Evidence-backed Reports',
+    description: 'Evidencias enlazadas, missing evidence, calidad y revisión humana requerida.'
+  },
+
+  '/strategy/dashboard': {
+    title: 'Strategy Command Center',
+    description: 'Planificacion estrategica, objetivos, iniciativas, escenarios, riesgos y reporting ejecutivo.'
+  },
+
+  '/strategy/objectives': {
+    title: 'Strategic Objectives',
+    description: 'Objetivos por horizonte, prioridad, owner, metricas, modulo vinculado y decision de board.'
+  },
+
+  '/strategy/initiatives': {
+    title: 'Strategic Initiatives',
+    description: 'Iniciativas con progreso, bloqueos, dependencias, capital necesario, funding y riesgos vinculados.'
+  },
+
+  '/strategy/scenarios': {
+    title: 'Strategic Scenarios',
+    description: 'Escenarios, assumptions, upside, downside, capital impact, risk impact y confianza.'
+  },
+
+  '/strategy/market-notes': {
+    title: 'Market Notes',
+    description: 'Notas competitivas, senales de mercado, implicacion, fuente/evidencia y confianza.'
+  },
+
+  '/strategy/risks': {
+    title: 'Strategic Risks',
+    description: 'Riesgos estrategicos, impacto, mitigacion y vinculacion con enterprise risk.'
+  },
+
+  '/strategy/reports': {
+    title: 'Strategy Reports',
+    description: 'Strategy Board Memo, Scenario Pack, Execution Report y Capital Allocation Memo.'
   }
 };

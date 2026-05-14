@@ -127,6 +127,54 @@ const PMIDashboardPage = lazyNamed(
   () => import('../../modules/pmi/pages/PMIDashboardPage.jsx'),
   'PMIDashboardPage'
 );
+const PMIProgramsPage = lazyNamed(
+  () => import('../../modules/pmi/pages/PMIProgramsPage.jsx'),
+  'PMIProgramsPage'
+);
+const PMIProgramDetailPage = lazyNamed(
+  () => import('../../modules/pmi/pages/PMIProgramDetailPage.jsx'),
+  'PMIProgramDetailPage'
+);
+const SynergyTrackerPage = lazyNamed(
+  () => import('../../modules/pmi/pages/SynergyTrackerPage.jsx'),
+  'SynergyTrackerPage'
+);
+const IntegrationMilestonesPage = lazyNamed(
+  () => import('../../modules/pmi/pages/IntegrationMilestonesPage.jsx'),
+  'IntegrationMilestonesPage'
+);
+const IntegrationRisksPage = lazyNamed(
+  () => import('../../modules/pmi/pages/IntegrationRisksPage.jsx'),
+  'IntegrationRisksPage'
+);
+const DayOneReadinessPage = lazyNamed(
+  () => import('../../modules/pmi/pages/DayOneReadinessPage.jsx'),
+  'DayOneReadinessPage'
+);
+const HundredDayPlanPage = lazyNamed(
+  () => import('../../modules/pmi/pages/HundredDayPlanPage.jsx'),
+  'HundredDayPlanPage'
+);
+const TransitionServicesPage = lazyNamed(
+  () => import('../../modules/pmi/pages/TransitionServicesPage.jsx'),
+  'TransitionServicesPage'
+);
+const OperatingModelPage = lazyNamed(
+  () => import('../../modules/pmi/pages/OperatingModelPage.jsx'),
+  'OperatingModelPage'
+);
+const PeopleCulturePage = lazyNamed(
+  () => import('../../modules/pmi/pages/PeopleCulturePage.jsx'),
+  'PeopleCulturePage'
+);
+const TechnologyIntegrationPage = lazyNamed(
+  () => import('../../modules/pmi/pages/TechnologyIntegrationPage.jsx'),
+  'TechnologyIntegrationPage'
+);
+const PMIReportsPage = lazyNamed(
+  () => import('../../modules/pmi/pages/PMIReportsPage.jsx'),
+  'PMIReportsPage'
+);
 const GovernanceDashboardPage = lazyNamed(
   () => import('../../modules/governance/pages/GovernanceDashboardPage.jsx'),
   'GovernanceDashboardPage'
@@ -198,6 +246,138 @@ const HeritageAuditTrailPage = lazyNamed(
 const BridgeMarketplacePage = lazyNamed(
   () => import('../../modules/ecosystem/pages/BridgeMarketplacePage.jsx'),
   'BridgeMarketplacePage'
+);
+const BridgeDashboardPage = lazyNamed(
+  () => import('../../modules/bridge/pages/BridgeDashboardPage.jsx'),
+  'BridgeDashboardPage'
+);
+const BridgeSignalsPage = lazyNamed(
+  () => import('../../modules/bridge/pages/BridgeSignalsPage.jsx'),
+  'BridgeSignalsPage'
+);
+const DependencyMapPage = lazyNamed(
+  () => import('../../modules/bridge/pages/DependencyMapPage.jsx'),
+  'DependencyMapPage'
+);
+const ConflictRegisterPage = lazyNamed(
+  () => import('../../modules/bridge/pages/ConflictRegisterPage.jsx'),
+  'ConflictRegisterPage'
+);
+const ExecutiveAttentionQueuePage = lazyNamed(
+  () => import('../../modules/bridge/pages/ExecutiveAttentionQueuePage.jsx'),
+  'ExecutiveAttentionQueuePage'
+);
+const BridgeReportsPage = lazyNamed(
+  () => import('../../modules/bridge/pages/BridgeReportsPage.jsx'),
+  'BridgeReportsPage'
+);
+const BridgeSnapshotPage = lazyNamed(
+  () => import('../../modules/bridge/pages/BridgeSnapshotPage.jsx'),
+  'BridgeSnapshotPage'
+);
+const RiskDashboardPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskDashboardPage.jsx'),
+  'RiskDashboardPage'
+);
+const RiskRegisterPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskRegisterPage.jsx'),
+  'RiskRegisterPage'
+);
+const RiskHeatmapEnterprisePage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskHeatmapPage.jsx'),
+  'RiskHeatmapPage'
+);
+const RiskControlsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskControlsPage.jsx'),
+  'RiskControlsPage'
+);
+const RiskMitigationsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskMitigationsPage.jsx'),
+  'RiskMitigationsPage'
+);
+const RiskIncidentsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskIncidentsPage.jsx'),
+  'RiskIncidentsPage'
+);
+const RiskKriPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskKriPage.jsx'),
+  'RiskKriPage'
+);
+const RiskAppetitePage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskAppetitePage.jsx'),
+  'RiskAppetitePage'
+);
+const RiskReportsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskReportsPage.jsx'),
+  'RiskReportsPage'
+);
+const RiskCommitteeReviewsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskCommitteeReviewsPage.jsx'),
+  'RiskCommitteeReviewsPage'
+);
+const RiskEvidencePage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskEvidencePage.jsx'),
+  'RiskEvidencePage'
+);
+const RiskNotificationsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskNotificationsPage.jsx'),
+  'RiskNotificationsPage'
+);
+const ReportingDashboardPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingDashboardPage.jsx'),
+  'ReportingDashboardPage'
+);
+const ReportingLibraryPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingLibraryPage.jsx'),
+  'ReportingLibraryPage'
+);
+const ReportingTemplatesPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingTemplatesPage.jsx'),
+  'ReportingTemplatesPage'
+);
+const ReportingBoardPackPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingBoardPackPage.jsx'),
+  'ReportingBoardPackPage'
+);
+const ReportingExportsPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingExportsPage.jsx'),
+  'ReportingExportsPage'
+);
+const ReportingSchedulesPage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingSchedulesPage.jsx'),
+  'ReportingSchedulesPage'
+);
+const ReportingEvidencePage = lazyNamed(
+  () => import('../../modules/reporting/pages/ReportingEvidencePage.jsx'),
+  'ReportingEvidencePage'
+);
+const StrategyDashboardPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategyDashboardPage.jsx'),
+  'StrategyDashboardPage'
+);
+const StrategicObjectivesPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategicObjectivesPage.jsx'),
+  'StrategicObjectivesPage'
+);
+const StrategicInitiativesPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategicInitiativesPage.jsx'),
+  'StrategicInitiativesPage'
+);
+const StrategicScenariosPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategicScenariosPage.jsx'),
+  'StrategicScenariosPage'
+);
+const StrategicMarketNotesPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategicMarketNotesPage.jsx'),
+  'StrategicMarketNotesPage'
+);
+const StrategicRisksPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategicRisksPage.jsx'),
+  'StrategicRisksPage'
+);
+const StrategyReportsPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategyReportsPage.jsx'),
+  'StrategyReportsPage'
 );
 
 function RouteFallback() {
@@ -351,6 +531,18 @@ export function AppRoutes() {
             path="/pmi/dashboard"
             element={<PMIDashboardPage />}
           />
+          <Route path="/pmi/programs" element={<PMIProgramsPage />} />
+          <Route path="/pmi/programs/:id" element={<PMIProgramDetailPage />} />
+          <Route path="/pmi/synergies" element={<SynergyTrackerPage />} />
+          <Route path="/pmi/milestones" element={<IntegrationMilestonesPage />} />
+          <Route path="/pmi/risks" element={<IntegrationRisksPage />} />
+          <Route path="/pmi/day1" element={<DayOneReadinessPage />} />
+          <Route path="/pmi/day-100" element={<HundredDayPlanPage />} />
+          <Route path="/pmi/transition-services" element={<TransitionServicesPage />} />
+          <Route path="/pmi/operating-model" element={<OperatingModelPage />} />
+          <Route path="/pmi/people-culture" element={<PeopleCulturePage />} />
+          <Route path="/pmi/technology" element={<TechnologyIntegrationPage />} />
+          <Route path="/pmi/reports" element={<PMIReportsPage />} />
 
           <Route
             path="/governance/dashboard"
@@ -428,8 +620,44 @@ export function AppRoutes() {
 
           <Route
             path="/bridge/dashboard"
-            element={<BridgeMarketplacePage />}
+            element={<BridgeDashboardPage />}
           />
+          <Route path="/bridge/marketplace" element={<BridgeMarketplacePage />} />
+          <Route path="/bridge/signals" element={<BridgeSignalsPage />} />
+          <Route path="/bridge/dependencies" element={<DependencyMapPage />} />
+          <Route path="/bridge/conflicts" element={<ConflictRegisterPage />} />
+          <Route path="/bridge/attention-queue" element={<ExecutiveAttentionQueuePage />} />
+          <Route path="/bridge/reports" element={<BridgeReportsPage />} />
+          <Route path="/bridge/snapshots" element={<BridgeSnapshotPage />} />
+
+          <Route path="/risk/dashboard" element={<RiskDashboardPage />} />
+          <Route path="/risk/register" element={<RiskRegisterPage />} />
+          <Route path="/risk/heatmap" element={<RiskHeatmapEnterprisePage />} />
+          <Route path="/risk/controls" element={<RiskControlsPage />} />
+          <Route path="/risk/mitigations" element={<RiskMitigationsPage />} />
+          <Route path="/risk/incidents" element={<RiskIncidentsPage />} />
+          <Route path="/risk/kri" element={<RiskKriPage />} />
+          <Route path="/risk/appetite" element={<RiskAppetitePage />} />
+          <Route path="/risk/reports" element={<RiskReportsPage />} />
+          <Route path="/risk/committee-reviews" element={<RiskCommitteeReviewsPage />} />
+          <Route path="/risk/evidence" element={<RiskEvidencePage />} />
+          <Route path="/risk/notifications" element={<RiskNotificationsPage />} />
+
+          <Route path="/reporting/dashboard" element={<ReportingDashboardPage />} />
+          <Route path="/reporting/library" element={<ReportingLibraryPage />} />
+          <Route path="/reporting/templates" element={<ReportingTemplatesPage />} />
+          <Route path="/reporting/board-pack" element={<ReportingBoardPackPage />} />
+          <Route path="/reporting/exports" element={<ReportingExportsPage />} />
+          <Route path="/reporting/schedules" element={<ReportingSchedulesPage />} />
+          <Route path="/reporting/evidence" element={<ReportingEvidencePage />} />
+
+          <Route path="/strategy/dashboard" element={<StrategyDashboardPage />} />
+          <Route path="/strategy/objectives" element={<StrategicObjectivesPage />} />
+          <Route path="/strategy/initiatives" element={<StrategicInitiativesPage />} />
+          <Route path="/strategy/scenarios" element={<StrategicScenariosPage />} />
+          <Route path="/strategy/market-notes" element={<StrategicMarketNotesPage />} />
+          <Route path="/strategy/risks" element={<StrategicRisksPage />} />
+          <Route path="/strategy/reports" element={<StrategyReportsPage />} />
         </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

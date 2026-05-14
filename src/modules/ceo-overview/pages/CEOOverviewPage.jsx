@@ -36,8 +36,20 @@ import { complianceAuditApi } from '../../compliance/services/complianceAuditApi
 import { fundingEnterpriseApi } from '../../funding/services/fundingEnterpriseApi.js';
 import { pmiApi } from '../../pmi/services/pmiApi.js';
 import { ecosystemApi } from '../../ecosystem/services/ecosystemApi.js';
+import { bridgeApi } from '../../bridge/services/bridgeApi.js';
+import { riskApi } from '../../risk/services/riskApi.js';
+import { strategyApi } from '../../strategy/services/strategyApi.js';
+import { executiveApi } from '../services/executiveApi.js';
 import { boardPackApi } from '../services/boardPackApi.js';
 import { BoardPackModal } from '../components/BoardPackModal.jsx';
+import { CorporateHealthRadar } from '../components/CorporateHealthRadar.jsx';
+import { ReadinessIndexCard } from '../components/ReadinessIndexCard.jsx';
+import { ExecutiveSignalFeed } from '../components/ExecutiveSignalFeed.jsx';
+import { DecisionQueuePanel } from '../components/DecisionQueuePanel.jsx';
+import { BoardViewSnapshot } from '../components/BoardViewSnapshot.jsx';
+import { ExecutiveModuleCard } from '../components/ExecutiveModuleCard.jsx';
+import { ExecutiveAlertsPanel } from '../components/ExecutiveAlertsPanel.jsx';
+import { ExecutiveCalendarPanel } from '../components/ExecutiveCalendarPanel.jsx';
 import { FundingExecutiveWidget } from '../../funding/components/FundingExecutiveWidget.jsx';
 import {
   getDisplayText,
@@ -370,6 +382,194 @@ const ceoOverviewCss = `
 
   .ceo-grid-two {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .executive-command-layer {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.86fr) minmax(0, 1.14fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .executive-command-stack {
+    display: grid;
+    gap: 18px;
+  }
+
+  .executive-command-card,
+  .executive-module-card {
+    border-radius: 22px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.72);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.045);
+    padding: 22px;
+    min-width: 0;
+  }
+
+  .executive-command-card h3,
+  .executive-module-card h4 {
+    margin: 6px 0 0;
+    letter-spacing: -0.025em;
+  }
+
+  .executive-command-card p,
+  .executive-module-card p {
+    color: rgba(203, 213, 225, 0.74);
+    line-height: 1.55;
+    margin: 10px 0 0;
+  }
+
+  .executive-eyebrow {
+    color: rgba(148, 163, 184, 0.86);
+    font-size: 11px;
+    font-weight: 780;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .executive-progress {
+    height: 9px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.9);
+    overflow: hidden;
+    margin: 16px 0 10px;
+  }
+
+  .executive-progress span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #22c55e, #38bdf8);
+  }
+
+  .executive-radar-panel {
+    display: grid;
+    grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+  }
+
+  .executive-radar-panel svg {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .executive-radar-grid,
+  .executive-radar-axis {
+    fill: none;
+    stroke: rgba(148, 163, 184, 0.25);
+    stroke-width: 1;
+  }
+
+  .executive-radar-fill {
+    fill: rgba(56, 189, 248, 0.22);
+    stroke: rgba(56, 189, 248, 0.92);
+    stroke-width: 2;
+  }
+
+  .executive-radar-list {
+    display: grid;
+    gap: 8px;
+  }
+
+  .executive-radar-list a,
+  .executive-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  }
+
+  .executive-radar-list a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .executive-list {
+    display: grid;
+    gap: 2px;
+    margin-top: 14px;
+  }
+
+  .executive-row p {
+    margin: 4px 0 0;
+    font-size: 12px;
+  }
+
+  .executive-badge {
+    flex: 0 0 auto;
+    border-radius: 999px;
+    padding: 6px 9px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    background: rgba(148, 163, 184, 0.1);
+    color: rgba(226, 232, 240, 0.9);
+    font-size: 11px;
+    font-weight: 760;
+  }
+
+  .executive-critical,
+  .executive-blocked,
+  .executive-risk {
+    border-color: rgba(248, 113, 113, 0.36);
+    background: rgba(127, 29, 29, 0.22);
+    color: #fecaca;
+  }
+
+  .executive-normal,
+  .executive-available {
+    border-color: rgba(34, 197, 94, 0.32);
+    background: rgba(20, 83, 45, 0.18);
+    color: #bbf7d0;
+  }
+
+  .executive-insufficient_data,
+  .executive-not_available {
+    border-color: rgba(148, 163, 184, 0.24);
+    background: rgba(71, 85, 105, 0.16);
+  }
+
+  .executive-snapshot-grid,
+  .executive-module-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .executive-snapshot-grid div {
+    padding: 13px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .executive-snapshot-grid span {
+    display: block;
+    color: rgba(148, 163, 184, 0.88);
+    font-size: 11px;
+  }
+
+  .executive-snapshot-grid strong {
+    display: block;
+    margin-top: 6px;
+    overflow-wrap: anywhere;
+  }
+
+  .executive-module-card {
+    display: grid;
+    gap: 10px;
+  }
+
+  .executive-module-card > strong {
+    font-size: 25px;
+  }
+
+  .executive-module-card a {
+    color: #93c5fd;
+    font-weight: 760;
+    text-decoration: none;
   }
 
   .ceo-kpi-card,
@@ -806,7 +1006,8 @@ const ceoOverviewCss = `
 
     .ceo-hero-layout,
     .ceo-grid-three,
-    .ceo-grid-two {
+    .ceo-grid-two,
+    .executive-command-layer {
       grid-template-columns: 1fr;
     }
 
@@ -822,7 +1023,10 @@ const ceoOverviewCss = `
 
   @media (max-width: 780px) {
     .ceo-command-bar,
-    .ceo-grid-kpis {
+    .ceo-grid-kpis,
+    .executive-module-grid,
+    .executive-radar-panel,
+    .executive-snapshot-grid {
       grid-template-columns: 1fr;
     }
 
@@ -1509,6 +1713,10 @@ export function CEOOverviewPage() {
   const [fundingSummary, setFundingSummary] = useState({});
   const [pmiBrief, setPmiBrief] = useState(null);
   const [ecosystemBrief, setEcosystemBrief] = useState(null);
+  const [bridgeSummary, setBridgeSummary] = useState(null);
+  const [riskSummary, setRiskSummary] = useState(null);
+  const [strategySummary, setStrategySummary] = useState(null);
+  const [executiveOverview, setExecutiveOverview] = useState(null);
   const [boardPack, setBoardPack] = useState(null);
   const [boardPackLoading, setBoardPackLoading] = useState(false);
   const [boardPackError, setBoardPackError] = useState(null);
@@ -1553,6 +1761,26 @@ export function CEOOverviewPage() {
       .getExecutiveHubBrief()
       .then((data) => setEcosystemBrief(data && typeof data === 'object' ? data : null))
       .catch(() => setEcosystemBrief(null));
+
+    bridgeApi
+      .getSummary()
+      .then((data) => setBridgeSummary(data && typeof data === 'object' ? data : null))
+      .catch(() => setBridgeSummary(null));
+
+    riskApi
+      .getSummary()
+      .then((data) => setRiskSummary(data && typeof data === 'object' ? data : null))
+      .catch(() => setRiskSummary(null));
+
+    strategyApi
+      .getSummary()
+      .then((data) => setStrategySummary(data && typeof data === 'object' ? data : null))
+      .catch(() => setStrategySummary(null));
+
+    executiveApi
+      .getOverview()
+      .then((data) => setExecutiveOverview(data && typeof data === 'object' ? data : null))
+      .catch(() => setExecutiveOverview(null));
   }, []);
 
   const canGenerateBoardPack = role === 'admin' || role === 'board_member';
@@ -1631,7 +1859,7 @@ export function CEOOverviewPage() {
     route: '/heritage/dashboard',
     latestTitle: 'Owner legacy map'
   });
-  const bridgeOverview = getEcosystemBranchOverview(ecosystemBrief, 'bridge', {
+  const legacyBridgeOverview = getEcosystemBranchOverview(ecosystemBrief, 'bridge', {
     score: 62,
     title: 'Liquidity network foundation',
     posture: 'Curate verified network',
@@ -1640,6 +1868,48 @@ export function CEOOverviewPage() {
     route: '/bridge/dashboard',
     latestTitle: 'Verified opportunity network'
   });
+  const bridgeMetrics = bridgeSummary?.metrics || {};
+  const bridgeOverview = bridgeSummary
+    ? {
+        ...legacyBridgeOverview,
+        score: clampScore(bridgeMetrics.crossModuleReadiness || legacyBridgeOverview.score),
+        title: 'Cross-module intelligence layer',
+        posture: bridgeMetrics.bridgeHealthStatus || legacyBridgeOverview.posture,
+        description:
+          'Bridge consolidates cross-module signals, dependencies, conflicts and executive attention items. Human review required.',
+        metrics: {
+          ...(legacyBridgeOverview.metrics || {}),
+          ...bridgeMetrics
+        },
+        recordsCount: bridgeSummary.counts?.signals || legacyBridgeOverview.recordsCount,
+        activeRecordsCount: bridgeMetrics.criticalCrossModuleSignals || 0,
+        latestTitle: bridgeSummary.latestSignal?.title || legacyBridgeOverview.latestTitle
+      }
+    : legacyBridgeOverview;
+  const riskMetrics = riskSummary?.metrics || {};
+  const riskOverview = {
+    score: clampScore(riskMetrics.riskReadinessScore || riskSummary?.riskReadinessScore || 62),
+    title: 'Enterprise Risk Command',
+    posture: riskMetrics.riskPosture || 'controlled',
+    description:
+      'Enterprise Risk centralizes risk register, heatmap, controls, mitigations, incidents, KRIs and appetite breaches with human review required.',
+    recordsCount: riskSummary?.counts?.risks || 0,
+    activeRecordsCount: riskMetrics.criticalRiskCount || riskSummary?.criticalRiskCount || 0,
+    latestTitle: riskSummary?.latestRisk?.title || 'Enterprise risk posture',
+    metrics: riskMetrics
+  };
+  const strategyMetrics = strategySummary?.metrics || {};
+  const strategyOverview = {
+    score: clampScore(strategyMetrics.strategyReadinessScore || strategySummary?.strategyReadinessScore || 60),
+    title: 'Strategy Command',
+    posture: strategyMetrics.requiresExecutiveAttention ? 'executive_attention' : 'aligned',
+    description:
+      'Strategy connects objectives, initiatives, scenarios, market signals, capital dependencies and board decisions into the executive layer.',
+    recordsCount: strategySummary?.counts?.objectives || 0,
+    activeRecordsCount: strategyMetrics.blockedStrategicInitiatives || strategySummary?.blockedStrategicInitiatives || 0,
+    latestTitle: strategySummary?.latestObjective?.title || 'Strategic execution baseline',
+    metrics: strategyMetrics
+  };
 
   const executiveSignal = getExecutiveSignal({
     scores: [
@@ -1649,7 +1919,9 @@ export function CEOOverviewPage() {
       pmiOverview.score,
       governanceOverview.score,
       heritageOverview.score,
-      bridgeOverview.score
+      bridgeOverview.score,
+      riskOverview.score,
+      strategyOverview.score
     ]
   });
 
@@ -1719,6 +1991,20 @@ export function CEOOverviewPage() {
       tone: '#fbbf24'
     },
     {
+      key: 'risk',
+      label: 'Enterprise Risk',
+      value: riskOverview.score,
+      route: '/risk/dashboard',
+      tone: '#f87171'
+    },
+    {
+      key: 'strategy',
+      label: 'Strategy',
+      value: strategyOverview.score,
+      route: '/strategy/dashboard',
+      tone: '#38bdf8'
+    },
+    {
       key: 'bridge',
       label: 'Bridge',
       value: bridgeOverview.score,
@@ -1733,6 +2019,31 @@ export function CEOOverviewPage() {
       tone: '#d4af37'
     }
   ];
+
+  const executiveCommand = executiveOverview || {};
+  const commandReadiness = executiveCommand.readiness || executiveCommand.executiveReadinessIndex || {
+    score: executiveSignal.score,
+    trend: 'stable',
+    confidence: 0,
+    missingData: ['executive_api'],
+    humanReviewPosture: 'human_review_required'
+  };
+  const commandRadarAxes = Array.isArray(executiveCommand.corporateHealthRadar)
+    ? executiveCommand.corporateHealthRadar.map((axis) => ({
+        key: axis.key,
+        label: axis.label,
+        value: axis.value,
+        route: axis.route
+      }))
+    : radarAxes
+        .filter((axis) => !['heritage'].includes(axis.key))
+        .map((axis) => ({ key: axis.key, label: axis.label, value: axis.value, route: axis.route }));
+  const commandSignals = Array.isArray(executiveCommand.signals) ? executiveCommand.signals : [];
+  const commandDecisionQueue = Array.isArray(executiveCommand.decisionQueue) ? executiveCommand.decisionQueue : [];
+  const commandBoardView = executiveCommand.boardView || {};
+  const commandAlerts = Array.isArray(executiveCommand.alerts) ? executiveCommand.alerts : [];
+  const commandCalendar = Array.isArray(executiveCommand.calendar) ? executiveCommand.calendar : [];
+  const commandModuleCards = Array.isArray(executiveCommand.moduleCards) ? executiveCommand.moduleCards : [];
 
   const scoreAngle = `${executiveSignal.score * 3.6}deg`;
   const availablePacks = [
@@ -2027,6 +2338,57 @@ export function CEOOverviewPage() {
           </div>
         </section>
 
+        <section className="ceo-section" data-testid="ceo-command-center-enterprise">
+          <SectionHeader
+            kicker="CEO Command Center"
+            icon={Gauge}
+            title="Enterprise executive layer"
+            description="Capa consolidada desde /api/executive/overview: readiness, señales, decisiones, board view y calendario. Human review required."
+          />
+
+          <div className="executive-command-layer">
+            <div className="executive-command-stack">
+              <ReadinessIndexCard readiness={commandReadiness} />
+              <article className="executive-command-card">
+                <span className="executive-eyebrow">Corporate Health Radar</span>
+                <h3>Readiness by enterprise branch.</h3>
+                <CorporateHealthRadar axes={commandRadarAxes} />
+              </article>
+            </div>
+
+            <div className="executive-command-stack">
+              <ExecutiveSignalFeed signals={commandSignals} />
+              <DecisionQueuePanel decisions={commandDecisionQueue} />
+            </div>
+          </div>
+
+          <div className="executive-command-layer" style={{ marginTop: 18 }}>
+            <BoardViewSnapshot boardView={commandBoardView} />
+            <div className="executive-command-stack">
+              <ExecutiveAlertsPanel alerts={commandAlerts} />
+              <ExecutiveCalendarPanel items={commandCalendar} />
+            </div>
+          </div>
+
+          <div className="executive-module-grid">
+            {(commandModuleCards.length
+              ? commandModuleCards
+              : [
+                  { key: 'ma', title: 'M&A', route: '/ma/dashboard', score: maOverview.score, status: 'normal', keyMetric: `${maOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
+                  { key: 'compliance', title: 'Compliance', route: '/compliance/dashboard', score: complianceOverview.score, status: 'normal', keyMetric: `${complianceOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
+                  { key: 'funding', title: 'Funding', route: '/funding/dashboard', score: fundingOverview.score, status: 'normal', keyMetric: `${fundingOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
+                  { key: 'governance', title: 'Governance', route: '/governance/dashboard', score: governanceOverview.score, status: 'normal', keyMetric: `${governanceOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
+                  { key: 'pmi', title: 'PMI', route: '/pmi/dashboard', score: pmiOverview.score, status: 'normal', keyMetric: `${pmiOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
+                  { key: 'bridge', title: 'Bridge', route: '/bridge/dashboard', score: bridgeOverview.score, status: 'normal', keyMetric: `${bridgeOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
+                  { key: 'risk', title: 'Risk', route: '/risk/dashboard', score: riskOverview.score, status: 'normal', keyMetric: `${riskOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
+                  { key: 'reporting', title: 'Reporting', route: '/reporting/dashboard', score: 65, status: 'normal', keyMetric: 'Pending enterprise signal', cta: 'Open module', humanReviewRequired: true },
+                  { key: 'strategy', title: 'Strategy', route: '/strategy/dashboard', score: strategyOverview.score, status: 'normal', keyMetric: `${strategyOverview.score}/100`, cta: 'Open module', humanReviewRequired: true }
+                ]).map((card) => (
+              <ExecutiveModuleCard key={card.key || card.title} card={card} />
+            ))}
+          </div>
+        </section>
+
         <section className="ceo-section">
           <SectionHeader
             kicker="Executive snapshot"
@@ -2250,32 +2612,83 @@ export function CEOOverviewPage() {
             />
 
             <ModuleCard
+              icon={Radar}
+              branch="compliance"
+              kicker="Enterprise Risk"
+              title="Risk Command"
+              description={riskOverview.description}
+              score={riskOverview.score}
+              posture={riskOverview.posture}
+              surfaceNavigateTo="/risk/dashboard"
+              rows={[
+                { label: 'Risk register', value: riskOverview.recordsCount },
+                { label: 'Critical risks', value: riskOverview.activeRecordsCount },
+                { label: 'Overdue mitigations', value: riskOverview.metrics?.overdueMitigations || 0 },
+                { label: 'KRI breaches', value: riskOverview.metrics?.kriBreaches || 0 },
+                { label: 'Appetite breaches', value: riskOverview.metrics?.appetiteBreaches || 0 },
+                { label: 'Residual risk', value: `${riskOverview.metrics?.residualRisk || 0}/100` },
+                { label: 'Latest', value: riskOverview.latestTitle }
+              ]}
+              primaryLink={{ to: '/risk/dashboard', label: 'Open Risk' }}
+              secondaryLink={{ to: '/bridge/dashboard', label: 'Bridge signals' }}
+            />
+
+            <ModuleCard
+              icon={Target}
+              branch="overview"
+              kicker="Enterprise Strategy"
+              title="Strategic Execution"
+              description={strategyOverview.description}
+              score={strategyOverview.score}
+              posture={strategyOverview.posture}
+              surfaceNavigateTo="/strategy/dashboard"
+              rows={[
+                { label: 'Objectives', value: strategyOverview.recordsCount },
+                { label: 'Blocked initiatives', value: strategyOverview.activeRecordsCount },
+                { label: 'Capital dependencies', value: strategyOverview.metrics?.capitalDependencyCount || 0 },
+                { label: 'Board decisions', value: strategyOverview.metrics?.boardDecisionsRequired || 0 },
+                { label: 'Strategic risk', value: strategyOverview.metrics?.strategicRiskLevel || 'controlled' },
+                { label: 'Latest', value: strategyOverview.latestTitle }
+              ]}
+              primaryLink={{ to: '/strategy/dashboard', label: 'Open Strategy' }}
+              secondaryLink={{ to: '/funding/dashboard', label: 'Capital plan' }}
+            />
+
+            <ModuleCard
               icon={Network}
               branch="bridge"
               kicker="The Bridge"
-              title="Verified Liquidity Network"
+              title={bridgeSummary ? 'Cross-Module Intelligence' : 'Verified Liquidity Network'}
               description={bridgeOverview.description}
               score={bridgeOverview.score}
               posture={bridgeOverview.posture}
               surfaceNavigateTo="/bridge/dashboard"
               rows={[
-                { label: 'Records', value: bridgeOverview.recordsCount },
-                { label: 'Active opportunities', value: bridgeOverview.activeRecordsCount },
+                { label: bridgeSummary ? 'Signals' : 'Records', value: bridgeOverview.recordsCount },
+                { label: bridgeSummary ? 'Critical signals' : 'Active opportunities', value: bridgeOverview.activeRecordsCount },
                 {
-                  label: 'Pipeline value',
-                  value: formatCurrency(bridgeOverview.metrics?.totalOpportunityValue || 0, 'EUR')
+                  label: bridgeSummary ? 'Blocked deps' : 'Pipeline value',
+                  value: bridgeSummary
+                    ? bridgeOverview.metrics?.blockedDependencies || 0
+                    : formatCurrency(bridgeOverview.metrics?.totalOpportunityValue || 0, 'EUR')
                 },
                 {
-                  label: 'Introductions',
-                  value: bridgeOverview.metrics?.introductionsCount || 0
+                  label: bridgeSummary ? 'Conflicts' : 'Introductions',
+                  value: bridgeSummary
+                    ? bridgeOverview.metrics?.unresolvedConflicts || 0
+                    : bridgeOverview.metrics?.introductionsCount || 0
                 },
                 {
-                  label: 'Qualified',
-                  value: bridgeOverview.metrics?.qualifiedOpportunitiesCount || 0
+                  label: bridgeSummary ? 'Attention queue' : 'Qualified',
+                  value: bridgeSummary
+                    ? bridgeOverview.metrics?.executiveAttentionCount || 0
+                    : bridgeOverview.metrics?.qualifiedOpportunitiesCount || 0
                 },
                 {
-                  label: 'Documents',
-                  value: bridgeOverview.metrics?.documentsCount || 0
+                  label: bridgeSummary ? 'Stale signals' : 'Documents',
+                  value: bridgeSummary
+                    ? bridgeOverview.metrics?.staleSignalCount || 0
+                    : bridgeOverview.metrics?.documentsCount || 0
                 },
                 {
                   label: 'Reports',
