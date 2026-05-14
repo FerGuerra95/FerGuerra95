@@ -18,7 +18,7 @@
     "test:run": "vitest run",
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run tests/integration",
-    "test:e2e": "playwright test tests/e2e",
+    "test:e2e": "node scripts/run-e2e.mjs tests/e2e",
     "test:e2e:online": "playwright test tests/*.spec.js",
     "test:a11y": "playwright test tests/e2e/a11y",
     "test:lighthouse": "node scripts/lighthouse-ci.mjs",
