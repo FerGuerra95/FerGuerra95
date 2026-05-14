@@ -23,6 +23,7 @@ import {
   ScrollText,
   ShieldAlert,
   Sparkles,
+  Target,
   Users
 } from 'lucide-react';
 
@@ -351,6 +352,19 @@ export const routeGroups = {
       { to: '/reporting/exports', label: 'Export Ledger', icon: <ScrollText size={18} /> },
       { to: '/reporting/schedules', label: 'Schedules', icon: <Activity size={18} /> },
       { to: '/reporting/evidence', label: 'Evidence', icon: <CheckCheck size={18} /> }
+    ]
+  },
+
+  strategy: {
+    label: 'Strategy',
+    items: [
+      { to: '/strategy/dashboard', label: 'Dashboard', icon: <Sparkles size={18} /> },
+      { to: '/strategy/objectives', label: 'Objectives', icon: <Target size={18} /> },
+      { to: '/strategy/initiatives', label: 'Initiatives', icon: <Rocket size={18} /> },
+      { to: '/strategy/scenarios', label: 'Scenarios', icon: <LineChart size={18} /> },
+      { to: '/strategy/market-notes', label: 'Market Notes', icon: <FileSearch size={18} /> },
+      { to: '/strategy/risks', label: 'Strategic Risks', icon: <ShieldAlert size={18} /> },
+      { to: '/strategy/reports', label: 'Reports', icon: <FileBadge size={18} /> }
     ]
   }
 };
@@ -702,5 +716,40 @@ export const pageMetaMap = {
   '/reporting/evidence': {
     title: 'Evidence-backed Reports',
     description: 'Evidencias enlazadas, missing evidence, calidad y revisión humana requerida.'
+  },
+
+  '/strategy/dashboard': {
+    title: 'Strategy Command Center',
+    description: 'Planificacion estrategica, objetivos, iniciativas, escenarios, riesgos y reporting ejecutivo.'
+  },
+
+  '/strategy/objectives': {
+    title: 'Strategic Objectives',
+    description: 'Objetivos por horizonte, prioridad, owner, metricas, modulo vinculado y decision de board.'
+  },
+
+  '/strategy/initiatives': {
+    title: 'Strategic Initiatives',
+    description: 'Iniciativas con progreso, bloqueos, dependencias, capital necesario, funding y riesgos vinculados.'
+  },
+
+  '/strategy/scenarios': {
+    title: 'Strategic Scenarios',
+    description: 'Escenarios, assumptions, upside, downside, capital impact, risk impact y confianza.'
+  },
+
+  '/strategy/market-notes': {
+    title: 'Market Notes',
+    description: 'Notas competitivas, senales de mercado, implicacion, fuente/evidencia y confianza.'
+  },
+
+  '/strategy/risks': {
+    title: 'Strategic Risks',
+    description: 'Riesgos estrategicos, impacto, mitigacion y vinculacion con enterprise risk.'
+  },
+
+  '/strategy/reports': {
+    title: 'Strategy Reports',
+    description: 'Strategy Board Memo, Scenario Pack, Execution Report y Capital Allocation Memo.'
   }
 };

@@ -38,6 +38,7 @@ import { pmiApi } from '../../pmi/services/pmiApi.js';
 import { ecosystemApi } from '../../ecosystem/services/ecosystemApi.js';
 import { bridgeApi } from '../../bridge/services/bridgeApi.js';
 import { riskApi } from '../../risk/services/riskApi.js';
+import { strategyApi } from '../../strategy/services/strategyApi.js';
 import { boardPackApi } from '../services/boardPackApi.js';
 import { BoardPackModal } from '../components/BoardPackModal.jsx';
 import { FundingExecutiveWidget } from '../../funding/components/FundingExecutiveWidget.jsx';
@@ -1513,6 +1514,7 @@ export function CEOOverviewPage() {
   const [ecosystemBrief, setEcosystemBrief] = useState(null);
   const [bridgeSummary, setBridgeSummary] = useState(null);
   const [riskSummary, setRiskSummary] = useState(null);
+  const [strategySummary, setStrategySummary] = useState(null);
   const [boardPack, setBoardPack] = useState(null);
   const [boardPackLoading, setBoardPackLoading] = useState(false);
   const [boardPackError, setBoardPackError] = useState(null);
@@ -1567,6 +1569,11 @@ export function CEOOverviewPage() {
       .getSummary()
       .then((data) => setRiskSummary(data && typeof data === 'object' ? data : null))
       .catch(() => setRiskSummary(null));
+
+    strategyApi
+      .getSummary()
+      .then((data) => setStrategySummary(data && typeof data === 'object' ? data : null))
+      .catch(() => setStrategySummary(null));
   }, []);
 
   const canGenerateBoardPack = role === 'admin' || role === 'board_member';
@@ -1684,6 +1691,18 @@ export function CEOOverviewPage() {
     latestTitle: riskSummary?.latestRisk?.title || 'Enterprise risk posture',
     metrics: riskMetrics
   };
+  const strategyMetrics = strategySummary?.metrics || {};
+  const strategyOverview = {
+    score: clampScore(strategyMetrics.strategyReadinessScore || strategySummary?.strategyReadinessScore || 60),
+    title: 'Strategy Command',
+    posture: strategyMetrics.requiresExecutiveAttention ? 'executive_attention' : 'aligned',
+    description:
+      'Strategy connects objectives, initiatives, scenarios, market signals, capital dependencies and board decisions into the executive layer.',
+    recordsCount: strategySummary?.counts?.objectives || 0,
+    activeRecordsCount: strategyMetrics.blockedStrategicInitiatives || strategySummary?.blockedStrategicInitiatives || 0,
+    latestTitle: strategySummary?.latestObjective?.title || 'Strategic execution baseline',
+    metrics: strategyMetrics
+  };
 
   const executiveSignal = getExecutiveSignal({
     scores: [
@@ -1694,7 +1713,8 @@ export function CEOOverviewPage() {
       governanceOverview.score,
       heritageOverview.score,
       bridgeOverview.score,
-      riskOverview.score
+      riskOverview.score,
+      strategyOverview.score
     ]
   });
 
@@ -1769,6 +1789,13 @@ export function CEOOverviewPage() {
       value: riskOverview.score,
       route: '/risk/dashboard',
       tone: '#f87171'
+    },
+    {
+      key: 'strategy',
+      label: 'Strategy',
+      value: strategyOverview.score,
+      route: '/strategy/dashboard',
+      tone: '#38bdf8'
     },
     {
       key: 'bridge',
@@ -2321,6 +2348,27 @@ export function CEOOverviewPage() {
               ]}
               primaryLink={{ to: '/risk/dashboard', label: 'Open Risk' }}
               secondaryLink={{ to: '/bridge/dashboard', label: 'Bridge signals' }}
+            />
+
+            <ModuleCard
+              icon={Target}
+              branch="overview"
+              kicker="Enterprise Strategy"
+              title="Strategic Execution"
+              description={strategyOverview.description}
+              score={strategyOverview.score}
+              posture={strategyOverview.posture}
+              surfaceNavigateTo="/strategy/dashboard"
+              rows={[
+                { label: 'Objectives', value: strategyOverview.recordsCount },
+                { label: 'Blocked initiatives', value: strategyOverview.activeRecordsCount },
+                { label: 'Capital dependencies', value: strategyOverview.metrics?.capitalDependencyCount || 0 },
+                { label: 'Board decisions', value: strategyOverview.metrics?.boardDecisionsRequired || 0 },
+                { label: 'Strategic risk', value: strategyOverview.metrics?.strategicRiskLevel || 'controlled' },
+                { label: 'Latest', value: strategyOverview.latestTitle }
+              ]}
+              primaryLink={{ to: '/strategy/dashboard', label: 'Open Strategy' }}
+              secondaryLink={{ to: '/funding/dashboard', label: 'Capital plan' }}
             />
 
             <ModuleCard
