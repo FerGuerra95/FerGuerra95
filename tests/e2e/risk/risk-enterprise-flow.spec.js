@@ -31,7 +31,7 @@ test('Risk enterprise routes load and expose register CRUD path', async ({ page 
   await page.getByLabel('title').fill('Cyber resilience exposure');
   await page.getByLabel('owner', { exact: true }).fill('CRO');
   await page.getByRole('button', { name: 'Create' }).click();
-  await expect(page.getByText('Cyber resilience exposure')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Cyber resilience exposure' }).first()).toBeVisible();
   await assertNoSurfaceRegression(page);
 
   const routes = [
