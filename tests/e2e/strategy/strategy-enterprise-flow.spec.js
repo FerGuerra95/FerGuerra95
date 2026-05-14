@@ -30,7 +30,7 @@ test('Strategy enterprise routes load and objectives create records', async ({ p
   await page.getByLabel('title').fill('Enterprise expansion');
   await page.getByLabel('owner', { exact: true }).fill('Strategy Office');
   await page.getByRole('button', { name: 'Create' }).click();
-  await expect(page.getByText('Enterprise expansion')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Enterprise expansion' }).first()).toBeVisible();
   await assertNoSurfaceRegression(page);
 
   const routes = [

@@ -30,7 +30,7 @@ test('Reporting enterprise routes load and report library creates records', asyn
   await page.getByLabel('title').fill('Board Executive Snapshot');
   await page.getByLabel('module', { exact: true }).fill('CEO');
   await page.getByRole('button', { name: 'Create' }).click();
-  await expect(page.getByText('Board Executive Snapshot')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'Board Executive Snapshot' }).first()).toBeVisible();
   await assertNoSurfaceRegression(page);
 
   const routes = [
