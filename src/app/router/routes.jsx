@@ -247,6 +247,34 @@ const BridgeMarketplacePage = lazyNamed(
   () => import('../../modules/ecosystem/pages/BridgeMarketplacePage.jsx'),
   'BridgeMarketplacePage'
 );
+const BridgeDashboardPage = lazyNamed(
+  () => import('../../modules/bridge/pages/BridgeDashboardPage.jsx'),
+  'BridgeDashboardPage'
+);
+const BridgeSignalsPage = lazyNamed(
+  () => import('../../modules/bridge/pages/BridgeSignalsPage.jsx'),
+  'BridgeSignalsPage'
+);
+const DependencyMapPage = lazyNamed(
+  () => import('../../modules/bridge/pages/DependencyMapPage.jsx'),
+  'DependencyMapPage'
+);
+const ConflictRegisterPage = lazyNamed(
+  () => import('../../modules/bridge/pages/ConflictRegisterPage.jsx'),
+  'ConflictRegisterPage'
+);
+const ExecutiveAttentionQueuePage = lazyNamed(
+  () => import('../../modules/bridge/pages/ExecutiveAttentionQueuePage.jsx'),
+  'ExecutiveAttentionQueuePage'
+);
+const BridgeReportsPage = lazyNamed(
+  () => import('../../modules/bridge/pages/BridgeReportsPage.jsx'),
+  'BridgeReportsPage'
+);
+const BridgeSnapshotPage = lazyNamed(
+  () => import('../../modules/bridge/pages/BridgeSnapshotPage.jsx'),
+  'BridgeSnapshotPage'
+);
 
 function RouteFallback() {
   return (
@@ -488,8 +516,15 @@ export function AppRoutes() {
 
           <Route
             path="/bridge/dashboard"
-            element={<BridgeMarketplacePage />}
+            element={<BridgeDashboardPage />}
           />
+          <Route path="/bridge/marketplace" element={<BridgeMarketplacePage />} />
+          <Route path="/bridge/signals" element={<BridgeSignalsPage />} />
+          <Route path="/bridge/dependencies" element={<DependencyMapPage />} />
+          <Route path="/bridge/conflicts" element={<ConflictRegisterPage />} />
+          <Route path="/bridge/attention-queue" element={<ExecutiveAttentionQueuePage />} />
+          <Route path="/bridge/reports" element={<BridgeReportsPage />} />
+          <Route path="/bridge/snapshots" element={<BridgeSnapshotPage />} />
         </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

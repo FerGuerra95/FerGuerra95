@@ -36,6 +36,7 @@ import { complianceAuditApi } from '../../compliance/services/complianceAuditApi
 import { fundingEnterpriseApi } from '../../funding/services/fundingEnterpriseApi.js';
 import { pmiApi } from '../../pmi/services/pmiApi.js';
 import { ecosystemApi } from '../../ecosystem/services/ecosystemApi.js';
+import { bridgeApi } from '../../bridge/services/bridgeApi.js';
 import { boardPackApi } from '../services/boardPackApi.js';
 import { BoardPackModal } from '../components/BoardPackModal.jsx';
 import { FundingExecutiveWidget } from '../../funding/components/FundingExecutiveWidget.jsx';
@@ -1509,6 +1510,7 @@ export function CEOOverviewPage() {
   const [fundingSummary, setFundingSummary] = useState({});
   const [pmiBrief, setPmiBrief] = useState(null);
   const [ecosystemBrief, setEcosystemBrief] = useState(null);
+  const [bridgeSummary, setBridgeSummary] = useState(null);
   const [boardPack, setBoardPack] = useState(null);
   const [boardPackLoading, setBoardPackLoading] = useState(false);
   const [boardPackError, setBoardPackError] = useState(null);
@@ -1553,6 +1555,11 @@ export function CEOOverviewPage() {
       .getExecutiveHubBrief()
       .then((data) => setEcosystemBrief(data && typeof data === 'object' ? data : null))
       .catch(() => setEcosystemBrief(null));
+
+    bridgeApi
+      .getSummary()
+      .then((data) => setBridgeSummary(data && typeof data === 'object' ? data : null))
+      .catch(() => setBridgeSummary(null));
   }, []);
 
   const canGenerateBoardPack = role === 'admin' || role === 'board_member';
@@ -1631,7 +1638,7 @@ export function CEOOverviewPage() {
     route: '/heritage/dashboard',
     latestTitle: 'Owner legacy map'
   });
-  const bridgeOverview = getEcosystemBranchOverview(ecosystemBrief, 'bridge', {
+  const legacyBridgeOverview = getEcosystemBranchOverview(ecosystemBrief, 'bridge', {
     score: 62,
     title: 'Liquidity network foundation',
     posture: 'Curate verified network',
@@ -1640,6 +1647,24 @@ export function CEOOverviewPage() {
     route: '/bridge/dashboard',
     latestTitle: 'Verified opportunity network'
   });
+  const bridgeMetrics = bridgeSummary?.metrics || {};
+  const bridgeOverview = bridgeSummary
+    ? {
+        ...legacyBridgeOverview,
+        score: clampScore(bridgeMetrics.crossModuleReadiness || legacyBridgeOverview.score),
+        title: 'Cross-module intelligence layer',
+        posture: bridgeMetrics.bridgeHealthStatus || legacyBridgeOverview.posture,
+        description:
+          'Bridge consolidates cross-module signals, dependencies, conflicts and executive attention items. Human review required.',
+        metrics: {
+          ...(legacyBridgeOverview.metrics || {}),
+          ...bridgeMetrics
+        },
+        recordsCount: bridgeSummary.counts?.signals || legacyBridgeOverview.recordsCount,
+        activeRecordsCount: bridgeMetrics.criticalCrossModuleSignals || 0,
+        latestTitle: bridgeSummary.latestSignal?.title || legacyBridgeOverview.latestTitle
+      }
+    : legacyBridgeOverview;
 
   const executiveSignal = getExecutiveSignal({
     scores: [
@@ -2253,29 +2278,37 @@ export function CEOOverviewPage() {
               icon={Network}
               branch="bridge"
               kicker="The Bridge"
-              title="Verified Liquidity Network"
+              title={bridgeSummary ? 'Cross-Module Intelligence' : 'Verified Liquidity Network'}
               description={bridgeOverview.description}
               score={bridgeOverview.score}
               posture={bridgeOverview.posture}
               surfaceNavigateTo="/bridge/dashboard"
               rows={[
-                { label: 'Records', value: bridgeOverview.recordsCount },
-                { label: 'Active opportunities', value: bridgeOverview.activeRecordsCount },
+                { label: bridgeSummary ? 'Signals' : 'Records', value: bridgeOverview.recordsCount },
+                { label: bridgeSummary ? 'Critical signals' : 'Active opportunities', value: bridgeOverview.activeRecordsCount },
                 {
-                  label: 'Pipeline value',
-                  value: formatCurrency(bridgeOverview.metrics?.totalOpportunityValue || 0, 'EUR')
+                  label: bridgeSummary ? 'Blocked deps' : 'Pipeline value',
+                  value: bridgeSummary
+                    ? bridgeOverview.metrics?.blockedDependencies || 0
+                    : formatCurrency(bridgeOverview.metrics?.totalOpportunityValue || 0, 'EUR')
                 },
                 {
-                  label: 'Introductions',
-                  value: bridgeOverview.metrics?.introductionsCount || 0
+                  label: bridgeSummary ? 'Conflicts' : 'Introductions',
+                  value: bridgeSummary
+                    ? bridgeOverview.metrics?.unresolvedConflicts || 0
+                    : bridgeOverview.metrics?.introductionsCount || 0
                 },
                 {
-                  label: 'Qualified',
-                  value: bridgeOverview.metrics?.qualifiedOpportunitiesCount || 0
+                  label: bridgeSummary ? 'Attention queue' : 'Qualified',
+                  value: bridgeSummary
+                    ? bridgeOverview.metrics?.executiveAttentionCount || 0
+                    : bridgeOverview.metrics?.qualifiedOpportunitiesCount || 0
                 },
                 {
-                  label: 'Documents',
-                  value: bridgeOverview.metrics?.documentsCount || 0
+                  label: bridgeSummary ? 'Stale signals' : 'Documents',
+                  value: bridgeSummary
+                    ? bridgeOverview.metrics?.staleSignalCount || 0
+                    : bridgeOverview.metrics?.documentsCount || 0
                 },
                 {
                   label: 'Reports',

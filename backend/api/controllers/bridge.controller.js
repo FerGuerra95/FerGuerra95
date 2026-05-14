@@ -1,25 +1,48 @@
 import {
   createBridgeCounterparty,
   createBridgeDocument,
+  createBridgeDependency,
+  createBridgeEvidenceLink,
+  createBridgeConflict,
+  createBridgeSignal,
+  createBridgeSnapshot,
   createBridgeIntroduction,
   createBridgeOpportunity,
   createBridgeOpportunityFromFundingRound,
   createBridgeOpportunityFromMaDeal,
   createBridgeReport,
+  dismissBridgeSignal,
   deleteBridgeCounterparty,
   deleteBridgeOpportunity,
+  generateEnterpriseBridgeReport,
   generateBridgeNetworkReport,
+  getEnterpriseBridgeDashboard,
+  getEnterpriseBridgeSummary,
   listBridgeAuditLogs,
   getBridgeExecutiveHubBrief,
   getBridgeMatches,
+  listBridgeAttentionQueue,
   listBridgeCounterparties,
+  listBridgeConflicts,
+  listBridgeDependencies,
   listBridgeDocuments,
+  listBridgeEvidenceLinks,
   listBridgeIntroductions,
   listBridgeOpportunities,
   listBridgeReports,
+  listBridgeSignals,
+  listBridgeSnapshots,
+  markBridgeSignalInReview,
+  recalculateEnterpriseBridge,
+  resolveBridgeSignal,
+  acknowledgeBridgeSignal,
   updateBridgeCounterparty,
+  updateBridgeDependency,
+  updateBridgeConflict,
   updateBridgeDocument,
-  updateBridgeOpportunity
+  updateBridgeEvidenceLink,
+  updateBridgeOpportunity,
+  updateBridgeSignal
 } from '../../services/bridge/bridge.service.js';
 
 function meta(extra = {}) {
@@ -45,9 +68,50 @@ function notFound(res, message = 'Recurso no encontrado') {
 function scope(req) {
   return {
     organizationId: req.organizationId || req.user?.organizationId || '',
-    userId: req.user?.id || ''
+    userId: req.user?.id || '',
+    role: req.user?.role || req.role || 'viewer'
   };
 }
+
+const actor = (req) => ({ userId: scope(req).userId, role: scope(req).role });
+
+async function listResponse(req, res, next, loader) {
+  try {
+    const items = await loader(scope(req).organizationId);
+    return ok(res, { items, total: items.length });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function createResponse(req, res, next, creator) {
+  try {
+    const currentScope = scope(req);
+    return created(res, await creator(currentScope.organizationId, req.body, actor(req)));
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function updateResponse(req, res, next, updater, message) {
+  try {
+    const currentScope = scope(req);
+    const item = await updater(currentScope.organizationId, req.params.id, req.body, actor(req));
+    if (!item) return notFound(res, message);
+    return ok(res, item);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export const getDashboard = (req, res, next) =>
+  getEnterpriseBridgeDashboard(scope(req)).then((data) => ok(res, data)).catch(next);
+
+export const getSummary = (req, res, next) =>
+  getEnterpriseBridgeSummary(scope(req)).then((data) => ok(res, data)).catch(next);
+
+export const recalculate = (req, res, next) =>
+  recalculateEnterpriseBridge(scope(req)).then((data) => ok(res, data)).catch(next);
 
 export async function listOpportunities(req, res, next) {
   try {
@@ -307,6 +371,52 @@ export async function getMatches(req, res, next) {
 export async function getHubOverview(req, res, next) {
   try {
     return ok(res, await getBridgeExecutiveHubBrief({ organizationId: scope(req).organizationId }));
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export const listSignals = (req, res, next) => listResponse(req, res, next, listBridgeSignals);
+export const createSignal = (req, res, next) => createResponse(req, res, next, createBridgeSignal);
+export const updateSignal = (req, res, next) => updateResponse(req, res, next, updateBridgeSignal, 'Bridge signal no encontrada');
+
+async function signalWorkflow(req, res, next, runner) {
+  try {
+    const currentScope = scope(req);
+    const item = await runner(currentScope.organizationId, req.params.id, actor(req), req.body || {});
+    if (!item) return notFound(res, 'Bridge signal no encontrada');
+    return ok(res, item);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export const acknowledgeSignal = (req, res, next) => signalWorkflow(req, res, next, acknowledgeBridgeSignal);
+export const markSignalInReview = (req, res, next) => signalWorkflow(req, res, next, markBridgeSignalInReview);
+export const resolveSignal = (req, res, next) => signalWorkflow(req, res, next, resolveBridgeSignal);
+export const dismissSignal = (req, res, next) => signalWorkflow(req, res, next, dismissBridgeSignal);
+
+export const listDependencies = (req, res, next) => listResponse(req, res, next, listBridgeDependencies);
+export const createDependency = (req, res, next) => createResponse(req, res, next, createBridgeDependency);
+export const updateDependency = (req, res, next) => updateResponse(req, res, next, updateBridgeDependency, 'Bridge dependency no encontrada');
+
+export const listConflicts = (req, res, next) => listResponse(req, res, next, listBridgeConflicts);
+export const createConflict = (req, res, next) => createResponse(req, res, next, createBridgeConflict);
+export const updateConflict = (req, res, next) => updateResponse(req, res, next, updateBridgeConflict, 'Bridge conflict no encontrado');
+
+export const listAttentionQueue = (req, res, next) => listResponse(req, res, next, listBridgeAttentionQueue);
+
+export const listEvidenceLinks = (req, res, next) => listResponse(req, res, next, listBridgeEvidenceLinks);
+export const createEvidenceLink = (req, res, next) => createResponse(req, res, next, createBridgeEvidenceLink);
+export const updateEvidenceLink = (req, res, next) => updateResponse(req, res, next, updateBridgeEvidenceLink, 'Bridge evidence link no encontrado');
+
+export const listSnapshots = (req, res, next) => listResponse(req, res, next, listBridgeSnapshots);
+export const createSnapshot = (req, res, next) => createResponse(req, res, next, createBridgeSnapshot);
+
+export async function createEnterpriseReport(req, res, next) {
+  try {
+    const currentScope = scope(req);
+    return created(res, await generateEnterpriseBridgeReport(currentScope.organizationId, req.body || {}, actor(req)));
   } catch (error) {
     return next(error);
   }
