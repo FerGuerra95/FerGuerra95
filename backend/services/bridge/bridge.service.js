@@ -8,6 +8,7 @@ import { getGovernanceSummary } from '../governance/governance.service.js';
 import { getPmiSummary } from '../pmi/pmi.service.js';
 import { getRiskSummary } from '../risk/risk.service.js';
 import { getReportingSummary } from '../reporting/reporting.service.js';
+import { getStrategySummary } from '../strategy/strategy.service.js';
 
 const opportunitiesStore = createSqliteEntityStore('bridge_opportunities', 'bridge_opp', {
   title: 'Bridge opportunity',
@@ -940,13 +941,14 @@ function latestByDate(items = []) {
 export async function collectBridgeModuleSummaries(scope = {}) {
   assertOrganizationId(scope.organizationId);
   const organizationId = scope.organizationId;
-  const [compliance, funding, governance, pmi, risk, reporting, maDeals] = await Promise.all([
+  const [compliance, funding, governance, pmi, risk, reporting, strategy, maDeals] = await Promise.all([
     safeLoad('compliance', () => getExecutiveComplianceHubBrief({ organizationId })),
     safeLoad('funding', () => getFundingSummary(organizationId, { userId: scope.userId || '' })),
     safeLoad('governance', () => getGovernanceSummary({ organizationId })),
     safeLoad('pmi', () => getPmiSummary({ organizationId })),
     safeLoad('risk', () => getRiskSummary({ organizationId })),
     safeLoad('reporting', () => getReportingSummary({ organizationId })),
+    safeLoad('strategy', () => getStrategySummary({ organizationId })),
     safeLoad('ma', () => listMaDeals({ organizationId }))
   ]);
   return {
@@ -963,7 +965,7 @@ export async function collectBridgeModuleSummaries(scope = {}) {
     },
     risk,
     reporting,
-    strategy: { name: 'strategy', status: 'not_available', data: null }
+    strategy
   };
 }
 
@@ -1101,17 +1103,18 @@ export function buildEnterpriseBridgeSignals(summaries = {}) {
     });
   }
 
-  if (fundingMetrics.capitalRequired || fundingMetrics.targetRaise || fundingMetrics.nextRoundTarget) {
+  const strategyMetrics = summaries.strategy?.data?.metrics || {};
+  if (fundingMetrics.capitalRequired || fundingMetrics.targetRaise || fundingMetrics.nextRoundTarget || normalizeNumber(strategyMetrics.capitalDependencyCount) > 0) {
     signals.push({
       sourceModule: 'Strategy',
       targetModule: 'Funding',
       signalType: 'strategic_capital_dependency',
-      severity: 'watch',
+      severity: normalizeNumber(strategyMetrics.capitalDependencyCount) > 1 ? 'risk' : 'watch',
       title: 'Strategic capital dependency detected',
-      description: 'Strategic or operating plan indicates a capital dependency.',
+      description: `Strategic plan indicates ${normalizeNumber(strategyMetrics.capitalDependencyCount)} capital dependency item(s).`,
       recommendedAction: 'Align strategic initiative timing with funding runway and board-approved capital plan.',
-      confidenceLevel: 58,
-      evidence: [{ sourceModule: 'Strategy', label: 'Derived funding requirement', quality: 'medium' }]
+      confidenceLevel: summaries.strategy?.status === 'available' ? 84 : 58,
+      evidence: [{ sourceModule: 'Strategy', label: summaries.strategy?.status === 'available' ? 'Strategy summary' : 'Derived funding requirement', quality: summaries.strategy?.status === 'available' ? 'high' : 'medium' }]
     });
   } else if (summaries.strategy?.status === 'not_available') {
     signals.push({

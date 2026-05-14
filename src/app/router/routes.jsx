@@ -351,6 +351,34 @@ const ReportingEvidencePage = lazyNamed(
   () => import('../../modules/reporting/pages/ReportingEvidencePage.jsx'),
   'ReportingEvidencePage'
 );
+const StrategyDashboardPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategyDashboardPage.jsx'),
+  'StrategyDashboardPage'
+);
+const StrategicObjectivesPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategicObjectivesPage.jsx'),
+  'StrategicObjectivesPage'
+);
+const StrategicInitiativesPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategicInitiativesPage.jsx'),
+  'StrategicInitiativesPage'
+);
+const StrategicScenariosPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategicScenariosPage.jsx'),
+  'StrategicScenariosPage'
+);
+const StrategicMarketNotesPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategicMarketNotesPage.jsx'),
+  'StrategicMarketNotesPage'
+);
+const StrategicRisksPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategicRisksPage.jsx'),
+  'StrategicRisksPage'
+);
+const StrategyReportsPage = lazyNamed(
+  () => import('../../modules/strategy/pages/StrategyReportsPage.jsx'),
+  'StrategyReportsPage'
+);
 
 function RouteFallback() {
   return (
@@ -622,6 +650,14 @@ export function AppRoutes() {
           <Route path="/reporting/exports" element={<ReportingExportsPage />} />
           <Route path="/reporting/schedules" element={<ReportingSchedulesPage />} />
           <Route path="/reporting/evidence" element={<ReportingEvidencePage />} />
+
+          <Route path="/strategy/dashboard" element={<StrategyDashboardPage />} />
+          <Route path="/strategy/objectives" element={<StrategicObjectivesPage />} />
+          <Route path="/strategy/initiatives" element={<StrategicInitiativesPage />} />
+          <Route path="/strategy/scenarios" element={<StrategicScenariosPage />} />
+          <Route path="/strategy/market-notes" element={<StrategicMarketNotesPage />} />
+          <Route path="/strategy/risks" element={<StrategicRisksPage />} />
+          <Route path="/strategy/reports" element={<StrategyReportsPage />} />
         </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
