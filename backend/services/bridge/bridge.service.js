@@ -6,6 +6,7 @@ import { listByOrganization as listFundingRounds } from '../funding/funding.serv
 import { getFundingSummary } from '../funding/funding.service.js';
 import { getGovernanceSummary } from '../governance/governance.service.js';
 import { getPmiSummary } from '../pmi/pmi.service.js';
+import { getRiskSummary } from '../risk/risk.service.js';
 
 const opportunitiesStore = createSqliteEntityStore('bridge_opportunities', 'bridge_opp', {
   title: 'Bridge opportunity',
@@ -938,11 +939,12 @@ function latestByDate(items = []) {
 export async function collectBridgeModuleSummaries(scope = {}) {
   assertOrganizationId(scope.organizationId);
   const organizationId = scope.organizationId;
-  const [compliance, funding, governance, pmi, maDeals] = await Promise.all([
+  const [compliance, funding, governance, pmi, risk, maDeals] = await Promise.all([
     safeLoad('compliance', () => getExecutiveComplianceHubBrief({ organizationId })),
     safeLoad('funding', () => getFundingSummary(organizationId, { userId: scope.userId || '' })),
     safeLoad('governance', () => getGovernanceSummary({ organizationId })),
     safeLoad('pmi', () => getPmiSummary({ organizationId })),
+    safeLoad('risk', () => getRiskSummary({ organizationId })),
     safeLoad('ma', () => listMaDeals({ organizationId }))
   ]);
   return {
@@ -957,7 +959,7 @@ export async function collectBridgeModuleSummaries(scope = {}) {
         latestDeal: latestByDate(maDeals.data)
       }
     },
-    risk: { name: 'risk', status: 'not_available', data: null },
+    risk,
     reporting: { name: 'reporting', status: 'not_available', data: null },
     strategy: { name: 'strategy', status: 'not_available', data: null }
   };
@@ -1059,17 +1061,23 @@ export function buildEnterpriseBridgeSignals(summaries = {}) {
     });
   }
 
-  if (normalizeNumber(pmiMetrics.criticalIntegrationRisks) > 0 || normalizeNumber(governanceMetrics.governanceRisks) > 2) {
+  const riskMetrics = summaries.risk?.data?.metrics || {};
+  if (
+    normalizeNumber(riskMetrics.criticalRiskCount) > 0 ||
+    normalizeNumber(riskMetrics.appetiteBreaches) > 0 ||
+    normalizeNumber(pmiMetrics.criticalIntegrationRisks) > 0 ||
+    normalizeNumber(governanceMetrics.governanceRisks) > 2
+  ) {
     signals.push({
       sourceModule: 'Risk',
       targetModule: 'CEO Overview',
       signalType: 'enterprise_risk_attention',
-      severity: 'critical',
+      severity: normalizeNumber(riskMetrics.criticalRiskCount) > 0 ? 'critical' : 'risk',
       title: 'Enterprise risk requires CEO attention',
-      description: 'Critical risk indicators detected across governance or PMI execution.',
+      description: 'Critical risk indicators detected across Enterprise Risk, governance or PMI execution.',
       recommendedAction: 'Assign executive owner and review mitigation evidence in the next operating cadence.',
-      confidenceLevel: 70,
-      evidence: [{ sourceModule: 'Risk', label: 'Derived cross-module risk', quality: 'medium' }]
+      confidenceLevel: summaries.risk?.status === 'available' ? 86 : 70,
+      evidence: [{ sourceModule: 'Risk', label: summaries.risk?.status === 'available' ? 'Enterprise Risk summary' : 'Derived cross-module risk', quality: summaries.risk?.status === 'available' ? 'high' : 'medium' }]
     });
   }
 

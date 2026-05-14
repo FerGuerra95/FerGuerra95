@@ -275,6 +275,54 @@ const BridgeSnapshotPage = lazyNamed(
   () => import('../../modules/bridge/pages/BridgeSnapshotPage.jsx'),
   'BridgeSnapshotPage'
 );
+const RiskDashboardPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskDashboardPage.jsx'),
+  'RiskDashboardPage'
+);
+const RiskRegisterPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskRegisterPage.jsx'),
+  'RiskRegisterPage'
+);
+const RiskHeatmapEnterprisePage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskHeatmapPage.jsx'),
+  'RiskHeatmapPage'
+);
+const RiskControlsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskControlsPage.jsx'),
+  'RiskControlsPage'
+);
+const RiskMitigationsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskMitigationsPage.jsx'),
+  'RiskMitigationsPage'
+);
+const RiskIncidentsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskIncidentsPage.jsx'),
+  'RiskIncidentsPage'
+);
+const RiskKriPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskKriPage.jsx'),
+  'RiskKriPage'
+);
+const RiskAppetitePage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskAppetitePage.jsx'),
+  'RiskAppetitePage'
+);
+const RiskReportsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskReportsPage.jsx'),
+  'RiskReportsPage'
+);
+const RiskCommitteeReviewsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskCommitteeReviewsPage.jsx'),
+  'RiskCommitteeReviewsPage'
+);
+const RiskEvidencePage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskEvidencePage.jsx'),
+  'RiskEvidencePage'
+);
+const RiskNotificationsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskNotificationsPage.jsx'),
+  'RiskNotificationsPage'
+);
 
 function RouteFallback() {
   return (
@@ -525,6 +573,19 @@ export function AppRoutes() {
           <Route path="/bridge/attention-queue" element={<ExecutiveAttentionQueuePage />} />
           <Route path="/bridge/reports" element={<BridgeReportsPage />} />
           <Route path="/bridge/snapshots" element={<BridgeSnapshotPage />} />
+
+          <Route path="/risk/dashboard" element={<RiskDashboardPage />} />
+          <Route path="/risk/register" element={<RiskRegisterPage />} />
+          <Route path="/risk/heatmap" element={<RiskHeatmapEnterprisePage />} />
+          <Route path="/risk/controls" element={<RiskControlsPage />} />
+          <Route path="/risk/mitigations" element={<RiskMitigationsPage />} />
+          <Route path="/risk/incidents" element={<RiskIncidentsPage />} />
+          <Route path="/risk/kri" element={<RiskKriPage />} />
+          <Route path="/risk/appetite" element={<RiskAppetitePage />} />
+          <Route path="/risk/reports" element={<RiskReportsPage />} />
+          <Route path="/risk/committee-reviews" element={<RiskCommitteeReviewsPage />} />
+          <Route path="/risk/evidence" element={<RiskEvidencePage />} />
+          <Route path="/risk/notifications" element={<RiskNotificationsPage />} />
         </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

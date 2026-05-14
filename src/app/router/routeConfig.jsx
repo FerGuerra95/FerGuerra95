@@ -17,6 +17,7 @@ import {
   Map,
   Network,
   PieChart,
+  Radar,
   Rocket,
   Scale,
   ScrollText,
@@ -272,6 +273,72 @@ export const routeGroups = {
         icon: <Network size={18} />
       }
     ]
+  },
+
+  risk: {
+    label: 'Enterprise Risk',
+    items: [
+      {
+        to: '/risk/dashboard',
+        label: 'Risk Dashboard',
+        icon: <Radar size={18} />
+      },
+      {
+        to: '/risk/register',
+        label: 'Risk Register',
+        icon: <ShieldAlert size={18} />
+      },
+      {
+        to: '/risk/heatmap',
+        label: 'Heatmap',
+        icon: <Map size={18} />
+      },
+      {
+        to: '/risk/controls',
+        label: 'Controls',
+        icon: <CheckCheck size={18} />
+      },
+      {
+        to: '/risk/mitigations',
+        label: 'Mitigations',
+        icon: <ClipboardCheck size={18} />
+      },
+      {
+        to: '/risk/incidents',
+        label: 'Incidents',
+        icon: <ShieldAlert size={18} />
+      },
+      {
+        to: '/risk/kri',
+        label: 'KRI Tracker',
+        icon: <LineChart size={18} />
+      },
+      {
+        to: '/risk/appetite',
+        label: 'Risk Appetite',
+        icon: <Scale size={18} />
+      },
+      {
+        to: '/risk/reports',
+        label: 'Reports',
+        icon: <FileSearch size={18} />
+      },
+      {
+        to: '/risk/committee-reviews',
+        label: 'Committee Reviews',
+        icon: <Users size={18} />
+      },
+      {
+        to: '/risk/evidence',
+        label: 'Evidence Links',
+        icon: <FileBadge size={18} />
+      },
+      {
+        to: '/risk/notifications',
+        label: 'Notifications',
+        icon: <Activity size={18} />
+      }
+    ]
   }
 };
 
@@ -525,5 +592,67 @@ export const pageMetaMap = {
     title: 'The Bridge Marketplace',
     description:
       'Capa futura de red para conectar oportunidades M&A y Funding con inversores, compradores y capital verificado.'
+  },
+
+  '/risk/dashboard': {
+    title: 'Enterprise Risk Command Center',
+    description:
+      'Registro transversal de riesgos, heatmap, controles, mitigaciones, incidentes, KRIs, appetite y señales ejecutivas.'
+  },
+
+  '/risk/register': {
+    title: 'Enterprise Risk Register',
+    description:
+      'Riesgos por categoría, severidad inherente, probabilidad, impacto, residual, owner, mitigación y revisión.'
+  },
+
+  '/risk/heatmap': {
+    title: 'Risk Heatmap',
+    description: 'Mapa de riesgo por probabilidad e impacto con filtros por categoría, owner y estado.'
+  },
+
+  '/risk/controls': {
+    title: 'Controls Library',
+    description: 'Biblioteca de controles, evidencia, frecuencia, pruebas y efectividad.'
+  },
+
+  '/risk/mitigations': {
+    title: 'Mitigation Plans',
+    description: 'Planes de mitigación con owners, deadlines, progreso, bloqueos y estado.'
+  },
+
+  '/risk/incidents': {
+    title: 'Incident Log',
+    description: 'Registro de incidentes, severidad, área impactada, resolución, causa raíz y riesgo asociado.'
+  },
+
+  '/risk/kri': {
+    title: 'KRI Tracker',
+    description: 'Indicadores clave de riesgo con umbrales, valores actuales, breaches y tendencia.'
+  },
+
+  '/risk/appetite': {
+    title: 'Risk Appetite',
+    description: 'Declaraciones de appetite, métricas, umbrales, manejo de breaches y owners.'
+  },
+
+  '/risk/reports': {
+    title: 'Risk Reports',
+    description: 'Enterprise Risk Brief, Risk Committee Pack, Control Effectiveness Report e Incident Summary.'
+  },
+
+  '/risk/committee-reviews': {
+    title: 'Risk Committee Reviews',
+    description: 'Revisiones formales del comité de riesgos, agendas, decisiones, actas y paquetes board-ready.'
+  },
+
+  '/risk/evidence': {
+    title: 'Risk Evidence Links',
+    description: 'Evidencias enlazadas, calidad, fuente, reviewer y estado de revisión humana.'
+  },
+
+  '/risk/notifications': {
+    title: 'Executive Risk Notifications',
+    description: 'Cola trazable de notificaciones y escalaciones de riesgo hacia ejecutivos y comité.'
   }
 };
