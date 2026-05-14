@@ -1,15 +1,26 @@
 import React from 'react';
 
 import brandEmblemUrl from '../../../assets/brand/ceos-os-emblem.png?url';
+import brandEmblemWebpUrl from '../../../assets/brand/ceos-os-emblem.webp?url';
+import brandLionEmblemUrl from '../../../assets/brand/ceos-os-emblem-lion.png?url';
+import brandLionEmblemWebpUrl from '../../../assets/brand/ceos-os-emblem-lion.webp?url';
 import brandHorizontalUrl from '../../../assets/brand/ceos-os-horizontal.png?url';
+import brandHorizontalColorUrl from '../../../assets/brand/ceos-os-horizontal-color.png?url';
+import brandHorizontalColorWebpUrl from '../../../assets/brand/ceos-os-horizontal-color.webp?url';
+import brandWordmarkLettersUrl from '../../../assets/brand/ceos-os-wordmark-letters.png?url';
+import brandWordmarkLettersWebpUrl from '../../../assets/brand/ceos-os-wordmark-letters.webp?url';
+import brandNavLettersUrl from '../../../assets/brand/ceos-os-landing-nav-letters.png?url';
+import brandNavLettersWebpUrl from '../../../assets/brand/ceos-os-landing-nav-letters.webp?url';
 
-/** @typedef {'horizontal' | 'emblem' | 'compact'} BrandVariant */
-/** @typedef {'sm' | 'md' | 'lg' | 'xl' | 'hero' | 'auth'} BrandSize — `auth` = emblem on login (responsive clamp) */
+/** @typedef {'horizontal' | 'emblem' | 'compact' | 'lockup'} BrandVariant */
+/** @typedef {'default' | 'color' | 'letters'} BrandHorizontalAsset — `color` = horizontal a color; `letters` = solo nombre */
+/** @typedef {'default' | 'lion'} BrandEmblemAsset — `lion` = rueda león + segmentos (PNG a color) */
+/** @typedef {'sm' | 'md' | 'lg' | 'xl' | 'hero' | 'auth'} BrandSize — `auth` = login (emblema, clamp) */
 /** @typedef {'transparent' | 'framed' | 'hero' | 'subtle'} BrandSurface — `subtle` = minimal dark plate */
 
 const HORIZONTAL_DIMS = {
-  sm: { maxHeight: 34, maxWidth: 268 },
-  md: { maxHeight: 42, maxWidth: 340 },
+  sm: { maxHeight: 38, maxWidth: 300 },
+  md: { maxHeight: 44, maxWidth: 360 },
   lg: { maxHeight: 96, maxWidth: 400 },
   xl: { maxHeight: 120, maxWidth: 460 },
   hero: {},
@@ -33,12 +44,19 @@ const COMPACT_SIZE = /** @type {const} */ ({
   hero: 'lg'
 });
 
+/** Hero: scale with viewport so mark holds weight vs clamp(42px, 6vw, 78px) headline. */
+const HORIZONTAL_HERO_MAX_TRANSPARENT =
+  'clamp(52px, min(19vw, 16vh), 156px)';
+
 /**
- * CEO's OS brand marks — bundled from `src/assets/brand/*.png` via Vite `?url` (content-hashed
- * in production). Horizontal mark is RGBA (real transparency); emblem may be RGB or RGBA.
+ * CEO's OS brand marks — bundled from `src/assets/brand/*.png` via Vite `?url` (content-hashed).
+ * Landing: nav = wordmark letras; hero/pie = horizontal a color.
+ * Login: emblema león sin placa (surface transparent).
  *
  * @param {object} props
  * @param {BrandVariant} [props.variant]
+ * @param {BrandHorizontalAsset} [props.horizontalAsset]
+ * @param {BrandEmblemAsset} [props.emblemAsset]
  * @param {BrandSize} [props.size]
  * @param {BrandSurface} [props.surface]
  * @param {string} [props.className] — wrapper
@@ -49,28 +67,50 @@ export function BrandLogo({
   variant = 'emblem',
   size = 'md',
   surface = 'transparent',
+  horizontalAsset = 'default',
+  emblemAsset = 'default',
   className,
   style,
   imgClassName,
   alt,
   loading = 'lazy',
   decoding = 'async',
+  lockupResponsive = true,
   ...imgRest
 }) {
   const effectiveVariant = variant === 'compact' ? 'emblem' : variant;
   const effectiveSize =
     variant === 'compact' ? COMPACT_SIZE[size] || 'sm' : size;
 
-  const src =
-    effectiveVariant === 'horizontal' ? brandHorizontalUrl : brandEmblemUrl;
+  const src = (() => {
+    if (effectiveVariant === 'horizontal') {
+      if (horizontalAsset === 'color') {
+        return { png: brandHorizontalColorUrl, webp: brandHorizontalColorWebpUrl };
+      }
+      if (horizontalAsset === 'letters') {
+        return { png: brandNavLettersUrl, webp: brandNavLettersWebpUrl };
+      }
+      return { png: brandHorizontalUrl, webp: null };
+    }
+    return emblemAsset === 'lion'
+      ? { png: brandLionEmblemUrl, webp: brandLionEmblemWebpUrl }
+      : { png: brandEmblemUrl, webp: brandEmblemWebpUrl };
+  })();
 
   const resolvedAlt =
     alt ??
     (effectiveVariant === 'horizontal'
-      ? "CEO's OS — executive intelligence"
-      : "CEO's OS emblem");
+      ? horizontalAsset === 'color'
+        ? "CEO's OS — marca horizontal a color"
+        : horizontalAsset === 'letters'
+          ? "CEO's OS — nombre"
+          : "CEO's OS — executive intelligence"
+      : emblemAsset === 'lion'
+        ? "CEO's OS — emblema león"
+        : "CEO's OS emblem");
 
-  const isHorizontal = effectiveVariant === 'horizontal';
+  const isLockup = effectiveVariant === 'lockup';
+  const isHorizontal = effectiveVariant === 'horizontal' || isLockup;
 
   const dimTable = isHorizontal ? HORIZONTAL_DIMS : EMBLEM_DIMS;
   const dim =
@@ -85,8 +125,10 @@ export function BrandLogo({
   const surfaceStyle = getSurfaceStyle(wrapperSurface, effectiveSize, isHorizontal);
 
   const isAuthEmblem = !isHorizontal && effectiveSize === 'auth';
+  const isLionWheel = emblemAsset === 'lion';
 
-  const imgDims = isHorizontal
+  const imgDims = !isLockup
+    ? isHorizontal
     ? effectiveSize === 'hero'
       ? surface === 'hero'
         ? {
@@ -98,8 +140,11 @@ export function BrandLogo({
         : {
             width: 'auto',
             height: 'auto',
-            maxWidth: '100%',
-            maxHeight: 'clamp(44px, min(11vw, 10vh), 86px)'
+            maxWidth: 'min(100%, 680px)',
+            maxHeight:
+              surface === 'transparent'
+                ? HORIZONTAL_HERO_MAX_TRANSPARENT
+                : 'clamp(44px, min(11vw, 10vh), 86px)'
           }
       : {
           width: 'auto',
@@ -111,23 +156,95 @@ export function BrandLogo({
         }
     : isAuthEmblem
       ? {
-          width: 'clamp(80px, 24vmin, 128px)',
-          height: 'clamp(80px, 24vmin, 128px)',
+          height: isLionWheel
+            ? 'clamp(112px, min(40vmin, 72vw), 200px)'
+            : 'clamp(88px, min(32vmin, 44vw), 138px)',
+          width: 'auto',
+          maxWidth: '100%'
+        }
+      : {
+          height: dim.height,
+          width: 'auto',
           maxWidth: '100%',
           maxHeight: '100%'
         }
-      : {
-          width: dim.width,
-          height: dim.height,
-          maxWidth: '100%',
-          maxHeight: '100%'
-        };
+    : null;
 
-  const rootClass = ['ceos-brand-logo-root', className].filter(Boolean).join(' ');
+  const rootClass = ['ceos-brand-logo-root', isLockup ? 'ceos-brand-logo-lockup' : '', className]
+    .filter(Boolean)
+    .join(' ');
+
+  if (isLockup) {
+    const emblem = emblemAsset === 'lion'
+      ? { png: brandLionEmblemUrl, webp: brandLionEmblemWebpUrl }
+      : { png: brandEmblemUrl, webp: brandEmblemWebpUrl };
+    const wordmark = horizontalAsset === 'letters'
+      ? { png: brandNavLettersUrl, webp: brandNavLettersWebpUrl }
+      : horizontalAsset === 'color'
+        ? { png: brandHorizontalColorUrl, webp: brandHorizontalColorWebpUrl }
+        : { png: brandWordmarkLettersUrl, webp: brandWordmarkLettersWebpUrl };
+
+    const lockupDims =
+      effectiveSize === 'hero'
+        ? {
+            emblemMaxH: 'clamp(118px, min(24vw, 22vh), 220px)',
+            wordmarkMaxH: 'clamp(46px, min(9.2vw, 8.4vh), 84px)',
+            wordmarkMaxW: 'min(58vw, 620px)',
+            gap: 'clamp(14px, 2.6vw, 24px)'
+          }
+        : {
+            emblemMaxH: 'clamp(88px, min(18vw, 16vh), 144px)',
+            wordmarkMaxH: 'clamp(40px, min(8vw, 7vh), 72px)',
+            wordmarkMaxW: 'min(56vw, 420px)',
+            gap: 'clamp(12px, 2vw, 20px)'
+          };
+
+    return (
+      <div className={rootClass} style={{ ...surfaceStyle, ...style }}>
+        <div
+          className={`ceos-brand-lockup ${lockupResponsive ? 'ceos-brand-lockup-responsive' : ''}`}
+          role={alt ? 'img' : undefined}
+          aria-label={alt}
+          style={{ gap: lockupDims.gap }}
+        >
+          <BrandPicture
+            src={emblem}
+            alt=""
+            className={imgClassName}
+            loading={loading}
+            decoding={decoding}
+            style={{
+              width: 'auto',
+              height: 'auto',
+              maxHeight: lockupDims.emblemMaxH,
+              maxWidth: 'min(44vw, 280px)',
+              objectFit: 'contain',
+              display: 'block'
+            }}
+            {...imgRest}
+          />
+          <BrandPicture
+            src={wordmark}
+            alt=""
+            loading={loading}
+            decoding={decoding}
+            style={{
+              width: 'auto',
+              height: 'auto',
+              maxHeight: lockupDims.wordmarkMaxH,
+              maxWidth: lockupDims.wordmarkMaxW,
+              objectFit: 'contain',
+              display: 'block'
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={rootClass} style={{ ...surfaceStyle, ...style }}>
-      <img
+      <BrandPicture
         src={src}
         alt={resolvedAlt}
         className={imgClassName}
@@ -142,6 +259,15 @@ export function BrandLogo({
         {...imgRest}
       />
     </div>
+  );
+}
+
+function BrandPicture({ src, ...imgProps }) {
+  return (
+    <picture>
+      {src.webp ? <source srcSet={src.webp} type="image/webp" /> : null}
+      <img src={src.png} {...imgProps} />
+    </picture>
   );
 }
 

@@ -127,13 +127,73 @@ const PMIDashboardPage = lazyNamed(
   () => import('../../modules/pmi/pages/PMIDashboardPage.jsx'),
   'PMIDashboardPage'
 );
-const GovernanceESGPage = lazyNamed(
-  () => import('../../modules/ecosystem/pages/GovernanceESGPage.jsx'),
-  'GovernanceESGPage'
+const GovernanceDashboardPage = lazyNamed(
+  () => import('../../modules/governance/pages/GovernanceDashboardPage.jsx'),
+  'GovernanceDashboardPage'
 );
-const HeritageLegacyPage = lazyNamed(
-  () => import('../../modules/ecosystem/pages/HeritageLegacyPage.jsx'),
-  'HeritageLegacyPage'
+const DecisionRegisterPage = lazyNamed(
+  () => import('../../modules/governance/pages/DecisionRegisterPage.jsx'),
+  'DecisionRegisterPage'
+);
+const DecisionDetailPage = lazyNamed(
+  () => import('../../modules/governance/pages/DecisionDetailPage.jsx'),
+  'DecisionDetailPage'
+);
+const BoardPacksPage = lazyNamed(
+  () => import('../../modules/governance/pages/BoardPacksPage.jsx'),
+  'BoardPacksPage'
+);
+const CommitteesPage = lazyNamed(
+  () => import('../../modules/governance/pages/CommitteesPage.jsx'),
+  'CommitteesPage'
+);
+const PoliciesPage = lazyNamed(
+  () => import('../../modules/governance/pages/PoliciesPage.jsx'),
+  'PoliciesPage'
+);
+const ActionTrackerPage = lazyNamed(
+  () => import('../../modules/governance/pages/ActionTrackerPage.jsx'),
+  'ActionTrackerPage'
+);
+const GovernanceMeetingsPage = lazyNamed(
+  () => import('../../modules/governance/pages/GovernanceMeetingsPage.jsx'),
+  'GovernanceMeetingsPage'
+);
+const GovernanceReportsPage = lazyNamed(
+  () => import('../../modules/governance/pages/GovernanceReportsPage.jsx'),
+  'GovernanceReportsPage'
+);
+const GovernanceAuditTrailPage = lazyNamed(
+  () => import('../../modules/governance/pages/GovernanceAuditTrailPage.jsx'),
+  'GovernanceAuditTrailPage'
+);
+const HeritageDashboardPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageDashboardPage.jsx'),
+  'HeritageDashboardPage'
+);
+const HeritageAssetsPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageAssetsPage.jsx'),
+  'HeritageAssetsPage'
+);
+const HeritageSuccessionsPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageSuccessionsPage.jsx'),
+  'HeritageSuccessionsPage'
+);
+const HeritageProtectionsPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageProtectionsPage.jsx'),
+  'HeritageProtectionsPage'
+);
+const HeritageDocumentsPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageDocumentsPage.jsx'),
+  'HeritageDocumentsPage'
+);
+const HeritageReportsPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageReportsPage.jsx'),
+  'HeritageReportsPage'
+);
+const HeritageAuditTrailPage = lazyNamed(
+  () => import('../../modules/heritage/pages/HeritageAuditTrailPage.jsx'),
+  'HeritageAuditTrailPage'
 );
 const BridgeMarketplacePage = lazyNamed(
   () => import('../../modules/ecosystem/pages/BridgeMarketplacePage.jsx'),
@@ -294,12 +354,76 @@ export function AppRoutes() {
 
           <Route
             path="/governance/dashboard"
-            element={<GovernanceESGPage />}
+            element={<GovernanceDashboardPage />}
+          />
+          <Route
+            path="/governance/decisions"
+            element={<DecisionRegisterPage />}
+          />
+          <Route
+            path="/governance/decisions/:id"
+            element={<DecisionDetailPage />}
+          />
+          <Route
+            path="/governance/board-packs"
+            element={<BoardPacksPage />}
+          />
+          <Route
+            path="/governance/committees"
+            element={<CommitteesPage />}
+          />
+          <Route
+            path="/governance/policies"
+            element={<PoliciesPage />}
+          />
+          <Route
+            path="/governance/actions"
+            element={<ActionTrackerPage />}
+          />
+          <Route
+            path="/governance/meetings"
+            element={<GovernanceMeetingsPage />}
+          />
+          <Route
+            path="/governance/reports"
+            element={<GovernanceReportsPage />}
+          />
+          <Route
+            path="/governance/audit-trail"
+            element={<GovernanceAuditTrailPage />}
+          />
+          <Route
+            path="/governance/security-audit"
+            element={<GovernanceAuditTrailPage />}
           />
 
           <Route
             path="/heritage/dashboard"
-            element={<HeritageLegacyPage />}
+            element={<HeritageDashboardPage />}
+          />
+          <Route
+            path="/heritage/assets"
+            element={<HeritageAssetsPage />}
+          />
+          <Route
+            path="/heritage/successions"
+            element={<HeritageSuccessionsPage />}
+          />
+          <Route
+            path="/heritage/protections"
+            element={<HeritageProtectionsPage />}
+          />
+          <Route
+            path="/heritage/documents"
+            element={<HeritageDocumentsPage />}
+          />
+          <Route
+            path="/heritage/reports"
+            element={<HeritageReportsPage />}
+          />
+          <Route
+            path="/heritage/audit-trail"
+            element={<HeritageAuditTrailPage />}
           />
 
           <Route

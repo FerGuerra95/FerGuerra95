@@ -10,4 +10,18 @@ router.post('/login', validate(authValidator.login), controller.login);
 router.post('/logout', requireAuth, controller.logout);
 router.get('/me', requireAuth, controller.me);
 
+router.post(
+  '/password-reset/request',
+  validate(authValidator.passwordResetRequest),
+  controller.passwordResetRequest
+);
+router.post(
+  '/password-reset/confirm',
+  validate(authValidator.passwordResetConfirm),
+  controller.passwordResetConfirm
+);
+
+router.get('/oidc/start', controller.oidcStart);
+router.get('/oidc/callback', controller.oidcCallback);
+
 export default router;

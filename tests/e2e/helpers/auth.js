@@ -120,6 +120,6 @@ export async function loginAsDemoAdmin(page) {
     }
   );
 
-  await page.goto('/dashboard');
+  await page.goto('/dashboard', { waitUntil: 'domcontentloaded' });
   await expect(page).toHaveURL(/\/dashboard/);
 }

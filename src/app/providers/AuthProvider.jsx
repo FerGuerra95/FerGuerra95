@@ -49,11 +49,43 @@ export const PERMISSIONS = {
   DELETE_MA_DEAL: 'delete:ma_deal',
   READ_AUDIT_LOG: 'read:audit_log',
 
-  CREATE_FUNDING_SNAPSHOT: 'create:funding_snapshot'
+  CREATE_FUNDING_SNAPSHOT: 'create:funding_snapshot',
+
+  MANAGE_PMI_CASE: 'manage:pmi_case',
+  CREATE_PMI_FROM_MA_DEAL: 'create:pmi_from_ma_deal',
+  DUPLICATE_PMI_CASE: 'duplicate:pmi_case',
+  READ_PMI_AUDIT: 'read:pmi_audit',
+  UPDATE_PMI_WORKSTREAM: 'update:pmi_workstream',
+
+  MANAGE_ECOSYSTEM_BRANCH: 'manage:ecosystem_branch',
+  READ_GOVERNANCE: 'read:governance',
+  CREATE_GOVERNANCE: 'create:governance',
+  UPDATE_GOVERNANCE: 'update:governance',
+  DELETE_GOVERNANCE: 'delete:governance',
+  APPROVE_GOVERNANCE_DECISION: 'approve:governance_decision',
+  MANAGE_GOVERNANCE_POLICY: 'manage:governance_policy',
+  MANAGE_GOVERNANCE_COMMITTEE: 'manage:governance_committee',
+  EXPORT_GOVERNANCE_REPORT: 'export:governance_report',
+
+  READ_HERITAGE: 'read:heritage',
+  CREATE_HERITAGE: 'create:heritage',
+  UPDATE_HERITAGE: 'update:heritage',
+  DELETE_HERITAGE: 'delete:heritage',
+  MANAGE_HERITAGE_PROTECTION: 'manage:heritage_protection',
+  MANAGE_HERITAGE_SUCCESSION: 'manage:heritage_succession',
+  EXPORT_HERITAGE_REPORT: 'export:heritage_report'
 };
 
 const ROLE_PERMISSIONS = {
   admin: ['*'],
+
+  board_member: [
+    PERMISSIONS.READ,
+    PERMISSIONS.READ_GOVERNANCE,
+    PERMISSIONS.READ_HERITAGE,
+    PERMISSIONS.READ_AUDIT_LOG,
+    PERMISSIONS.READ_PMI_AUDIT
+  ],
 
   user: [
     PERMISSIONS.READ,
@@ -84,16 +116,37 @@ const ROLE_PERMISSIONS = {
     PERMISSIONS.UPDATE_MA_DEAL,
     PERMISSIONS.READ_AUDIT_LOG,
 
-    PERMISSIONS.CREATE_FUNDING_SNAPSHOT
+    PERMISSIONS.CREATE_FUNDING_SNAPSHOT,
+
+    PERMISSIONS.MANAGE_PMI_CASE,
+    PERMISSIONS.CREATE_PMI_FROM_MA_DEAL,
+    PERMISSIONS.DUPLICATE_PMI_CASE,
+    PERMISSIONS.READ_PMI_AUDIT,
+    PERMISSIONS.UPDATE_PMI_WORKSTREAM,
+    PERMISSIONS.MANAGE_ECOSYSTEM_BRANCH,
+    PERMISSIONS.READ_GOVERNANCE,
+    PERMISSIONS.CREATE_GOVERNANCE,
+    PERMISSIONS.UPDATE_GOVERNANCE,
+    PERMISSIONS.MANAGE_GOVERNANCE_POLICY,
+    PERMISSIONS.MANAGE_GOVERNANCE_COMMITTEE,
+    PERMISSIONS.EXPORT_GOVERNANCE_REPORT,
+
+    PERMISSIONS.READ_HERITAGE,
+    PERMISSIONS.CREATE_HERITAGE,
+    PERMISSIONS.UPDATE_HERITAGE,
+    PERMISSIONS.MANAGE_HERITAGE_PROTECTION,
+    PERMISSIONS.MANAGE_HERITAGE_SUCCESSION,
+    PERMISSIONS.EXPORT_HERITAGE_REPORT
   ],
 
-  viewer: [PERMISSIONS.READ]
+  viewer: [PERMISSIONS.READ, PERMISSIONS.READ_GOVERNANCE, PERMISSIONS.READ_HERITAGE]
 };
 
 function normalizeRole(role) {
   const normalizedRole = String(role || 'viewer').trim().toLowerCase();
 
   if (normalizedRole === 'admin') return 'admin';
+  if (normalizedRole === 'board_member') return 'board_member';
   if (normalizedRole === 'user') return 'user';
   if (normalizedRole === 'viewer') return 'viewer';
 
@@ -301,6 +354,52 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
+  async function completeSessionWithToken(token) {
+    clearStoredSession();
+    httpClient.clearAuthToken();
+    setUser(null);
+    setAuthMode('backend');
+
+    const normalized = String(token || '').trim();
+
+    if (!normalized) {
+      return {
+        ok: false,
+        message: 'Token de sesión no válido.'
+      };
+    }
+
+    try {
+      httpClient.setAuthToken(normalized);
+      const backendUser = await fetchCurrentUserFromBackend();
+
+      if (!backendUser) {
+        throw new Error('Sesión inválida.');
+      }
+
+      setUser(backendUser);
+      setAuthMode('backend');
+      writeStoredSession(backendUser, normalized);
+
+      return {
+        ok: true,
+        user: backendUser,
+        token: normalized,
+        mode: 'backend'
+      };
+    } catch {
+      clearStoredSession();
+      httpClient.clearAuthToken();
+      setUser(null);
+      setAuthMode('backend');
+
+      return {
+        ok: false,
+        message: 'No se pudo validar la sesión SSO.'
+      };
+    }
+  }
+
   async function login({ email, password }) {
     clearStoredSession();
     httpClient.clearAuthToken();
@@ -374,7 +473,8 @@ export function AuthProvider({ children }) {
       hasRole: (...roles) => userHasRole(user, ...roles),
 
       login,
-      logout
+      logout,
+      completeSessionWithToken
     }),
     [user, role, permissions, authMode, isLoading]
   );

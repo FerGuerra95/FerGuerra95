@@ -4,6 +4,7 @@ import {
   BarChart3,
   Calculator,
   CheckCheck,
+  ClipboardCheck,
   FileBadge,
   FileSearch,
   FolderKanban,
@@ -18,6 +19,7 @@ import {
   PieChart,
   Rocket,
   Scale,
+  ScrollText,
   ShieldAlert,
   Sparkles,
   Users
@@ -174,8 +176,48 @@ export const routeGroups = {
     items: [
       {
         to: '/governance/dashboard',
-        label: 'Governance & ESG',
+        label: 'Dashboard',
         icon: <Scale size={18} />
+      },
+      {
+        to: '/governance/decisions',
+        label: 'Decision Register',
+        icon: <ClipboardCheck size={18} />
+      },
+      {
+        to: '/governance/board-packs',
+        label: 'Board Packs',
+        icon: <FileSearch size={18} />
+      },
+      {
+        to: '/governance/committees',
+        label: 'Committees',
+        icon: <Users size={18} />
+      },
+      {
+        to: '/governance/policies',
+        label: 'Policies',
+        icon: <FileBadge size={18} />
+      },
+      {
+        to: '/governance/actions',
+        label: 'Action Tracker',
+        icon: <CheckCheck size={18} />
+      },
+      {
+        to: '/governance/meetings',
+        label: 'Meetings',
+        icon: <FolderKanban size={18} />
+      },
+      {
+        to: '/governance/reports',
+        label: 'Reports',
+        icon: <FileSearch size={18} />
+      },
+      {
+        to: '/governance/audit-trail',
+        label: 'Audit Trail',
+        icon: <ScrollText size={18} />
       }
     ]
   },
@@ -185,8 +227,38 @@ export const routeGroups = {
     items: [
       {
         to: '/heritage/dashboard',
-        label: 'Heritage & Legacy OS',
+        label: 'Dashboard',
         icon: <Gem size={18} />
+      },
+      {
+        to: '/heritage/assets',
+        label: 'Asset Register',
+        icon: <Landmark size={18} />
+      },
+      {
+        to: '/heritage/successions',
+        label: 'Succession',
+        icon: <Users size={18} />
+      },
+      {
+        to: '/heritage/protections',
+        label: 'Protection',
+        icon: <ShieldAlert size={18} />
+      },
+      {
+        to: '/heritage/documents',
+        label: 'Evidence',
+        icon: <FileBadge size={18} />
+      },
+      {
+        to: '/heritage/reports',
+        label: 'Reports',
+        icon: <FileSearch size={18} />
+      },
+      {
+        to: '/heritage/audit-trail',
+        label: 'Audit Trail',
+        icon: <ScrollText size={18} />
       }
     ]
   },
@@ -361,15 +433,92 @@ export const pageMetaMap = {
   },
 
   '/governance/dashboard': {
-    title: 'Governance & ESG Strategy',
+    title: 'Governance Command Center',
     description:
-      'Rama enterprise para gobernanza, sostenibilidad, reporting ESG, actas de consejo y cumplimiento estratégico.'
+      'Rama enterprise para decisiones ejecutivas, board packs, comites, politicas, acciones, actas y reporting de gobierno corporativo.'
+  },
+
+  '/governance/decisions': {
+    title: 'Decision Register',
+    description: 'Registro de decisiones ejecutivas con workflow de revision, aprobacion, rechazo, diferimiento, escalado e implementacion.'
+  },
+
+  '/governance/board-packs': {
+    title: 'Governance Board Packs',
+    description: 'Agenda, resumen ejecutivo, decisiones clave, riesgos, highlights y evidencias para readiness de consejo.'
+  },
+
+  '/governance/committees': {
+    title: 'Governance Committees',
+    description: 'Gestion de comites, miembros, cadencia, proximas reuniones, scope y decisiones vinculadas.'
+  },
+
+  '/governance/policies': {
+    title: 'Governance Policies',
+    description: 'Registro de politicas corporativas, revision, evidencia requerida, controles y riesgo por vencimiento.'
+  },
+
+  '/governance/actions': {
+    title: 'Governance Action Tracker',
+    description: 'Seguimiento de acciones, owners, deadlines, escalaciones, bloqueos y evidencia de cierre.'
+  },
+
+  '/governance/meetings': {
+    title: 'Governance Meetings',
+    description: 'Meeting minutes lite para agenda, asistentes, decisiones, acciones y resumen de acta.'
+  },
+
+  '/governance/reports': {
+    title: 'Governance Reports',
+    description: 'Board pack, decision memo, action tracker, policy summary, risk brief, readiness snapshot y audit summary.'
+  },
+
+  '/governance/security-audit': {
+    title: 'Governance Audit Trail',
+    description:
+      'Registro de eventos de auditoría de la organización (M&A, autenticación y más) con exportación CSV.'
+  },
+
+  '/governance/audit-trail': {
+    title: 'Governance Audit Trail',
+    description:
+      'Registro de eventos de auditoria governance con trazabilidad de decisiones, aprobaciones, politicas, acciones, meetings y reports.'
   },
 
   '/heritage/dashboard': {
-    title: 'Heritage & Legacy OS',
+    title: 'Heritage Command Center',
     description:
-      'Rama futura para patrimonio, family office, protocolos familiares, sucesión, protección de activos y legado.'
+      'Rama enterprise para patrimonio, sucesion, proteccion de activos, evidencia, continuidad del owner y readiness de consejo.'
+  },
+
+  '/heritage/assets': {
+    title: 'Heritage Asset Register',
+    description: 'Registro patrimonial con owner, jurisdiccion, liquidez, riesgo, proteccion y valor estimado.'
+  },
+
+  '/heritage/successions': {
+    title: 'Heritage Succession Planning',
+    description: 'Protocolos de continuidad, successor readiness, evidencia y fechas efectivas.'
+  },
+
+  '/heritage/protections': {
+    title: 'Heritage Protection Controls',
+    description: 'Controles legales, fiscales, aseguradores y de gobierno para proteccion de activos.'
+  },
+
+  '/heritage/documents': {
+    title: 'Heritage Evidence Register',
+    description: 'Registro documental confidencial para evidencias patrimoniales, sucesion y continuidad.'
+  },
+
+  '/heritage/reports': {
+    title: 'Heritage Continuity Reports',
+    description: 'Informes ejecutivos para board readiness, continuidad patrimonial y riesgos del owner.'
+  },
+
+  '/heritage/audit-trail': {
+    title: 'Heritage Audit Trail',
+    description: 'Trazabilidad de cambios y eventos de Heritage por organizacion.'
   },
 
   '/bridge/dashboard': {

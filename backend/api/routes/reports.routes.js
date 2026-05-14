@@ -2,10 +2,17 @@ import { Router } from 'express';
 import * as controller from '../controllers/reports.controller.js';
 import {
   PERMISSIONS,
-  requirePermission
+  requirePermission,
+  requireRole
 } from '../middlewares/auth.middleware.js';
 
 const router = Router();
+
+router.get(
+  '/board-pack',
+  requireRole('admin', 'board_member'),
+  controller.getBoardPack
+);
 
 router.get(
   '/',

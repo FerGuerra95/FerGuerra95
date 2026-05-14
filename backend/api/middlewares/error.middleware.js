@@ -22,6 +22,7 @@ export const errorMiddleware = (err, req, res, _next) => {
 
   if (status >= 500) {
     console.error('[SERVER_ERROR]', {
+      requestId: req.requestId,
       message: err.message,
       stack: err.stack,
       method: req.method,
@@ -29,6 +30,7 @@ export const errorMiddleware = (err, req, res, _next) => {
     });
   } else {
     console.warn('[REQUEST_ERROR]', {
+      requestId: req.requestId,
       code,
       message: err.message,
       method: req.method,

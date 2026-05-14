@@ -2,6 +2,8 @@ import { defineConfig, devices } from '@playwright/test';
 
 const baseURL = process.env.CEOS_BASE_URL || 'http://127.0.0.1:5173';
 const useExternalApp = Boolean(process.env.CEOS_BASE_URL);
+const useManagedWebServer =
+  !useExternalApp && process.env.CEOS_PLAYWRIGHT_MANAGED_SERVER === '1';
 const configuredWorkers = Number(
   process.env.CEOS_E2E_WORKERS || process.env.PLAYWRIGHT_WORKERS || 1
 );
@@ -10,7 +12,7 @@ if (!useExternalApp) {
   process.env.CEOS_E2E = process.env.CEOS_E2E || 'true';
 }
 
-const reuseDevServers = process.env.CI !== 'true';
+const reuseDevServers = process.env.CEOS_REUSE_DEV_SERVER === '1';
 
 /**
  * Cuando Playwright arranca backend+Vite, el servidor hace `dotenv.config()` y
@@ -77,22 +79,13 @@ export default defineConfig({
     screenshot: 'only-on-failure'
   },
   projects,
-  webServer: useExternalApp
-    ? undefined
-    : [
-        {
-          command: 'npm run server',
-          env: webServerEnv,
-          url: 'http://127.0.0.1:4000/health',
-          reuseExistingServer: reuseDevServers,
-          timeout: 120_000
-        },
-        {
-          command: 'npm run dev -- --host 127.0.0.1 --port 5173',
-          env: webServerEnv,
-          url: 'http://127.0.0.1:5173',
-          reuseExistingServer: reuseDevServers,
-          timeout: 120_000
-        }
-      ]
+  webServer: useManagedWebServer
+    ? {
+        command: 'node ./scripts/e2e-playwright-server.mjs',
+        env: webServerEnv,
+        url: 'http://127.0.0.1:5173',
+        reuseExistingServer: reuseDevServers,
+        timeout: 120_000
+      }
+    : undefined
 });

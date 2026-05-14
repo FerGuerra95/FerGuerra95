@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -10,11 +10,15 @@ import {
   ClipboardCheck,
   FileText,
   Gauge,
+  GitBranch,
   Layers3,
+  LineChart,
+  ListChecks,
   Milestone,
   ShieldAlert,
   Sparkles,
   Target,
+  Trash2,
   TrendingUp,
   Users
 } from 'lucide-react';
@@ -22,10 +26,12 @@ import { Link } from 'react-router-dom';
 import { Card } from '../../../shared/components/ui/Card.jsx';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { Button } from '../../../shared/components/ui/Button.jsx';
+import { useAuth } from '../../../app/providers/AuthProvider.jsx';
 import { usePMIStore } from '../store/pmiStore.jsx';
 import { usePMIEngine } from '../engine/usePMIEngine.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { pmiExportApi } from '../services/pmiExportApi.js';
+import { maDealsApi } from '../../ma/services/maDealsApi.js';
 
 const pmiDashboardCss = `
   .pmi-page {
@@ -470,6 +476,159 @@ const pmiDashboardCss = `
     margin-bottom: 0;
   }
 
+  .pmi-enterprise-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 24px;
+  }
+
+  .pmi-enterprise-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(226, 232, 240, 0.82);
+    font-size: 12px;
+    font-weight: 750;
+  }
+
+  .pmi-control-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  .pmi-control-row {
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) minmax(150px, 0.8fr) minmax(120px, 0.6fr) auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid rgba(148, 163, 184, 0.13);
+  }
+
+  .pmi-control-row strong,
+  .pmi-control-row span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .pmi-ledger-row,
+  .pmi-dependency-row,
+  .pmi-playbook-row {
+    display: grid;
+    gap: 12px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(148, 163, 184, 0.13);
+  }
+
+  .pmi-ledger-row {
+    grid-template-columns: minmax(190px, 1.2fr) minmax(110px, 0.7fr) minmax(120px, 0.8fr) minmax(110px, 0.7fr) auto;
+    align-items: center;
+  }
+
+  .pmi-dependency-row {
+    grid-template-columns: minmax(190px, 1fr) minmax(120px, 0.65fr) minmax(120px, 0.65fr) auto;
+    align-items: center;
+  }
+
+  .pmi-playbook-row {
+    grid-template-columns: minmax(150px, 0.7fr) minmax(0, 1fr);
+  }
+
+  .pmi-checklist {
+    display: grid;
+    gap: 8px;
+  }
+
+  .pmi-check-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    color: rgba(226, 232, 240, 0.86);
+    font-size: 13px;
+  }
+
+  .pmi-check-row input {
+    accent-color: #10b981;
+  }
+
+  .pmi-status-pill {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    border-radius: 999px;
+    padding: 6px 10px;
+    background: rgba(15, 23, 42, 0.68);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    color: rgba(226, 232, 240, 0.82);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .pmi-range {
+    width: 100%;
+    accent-color: #10b981;
+  }
+
+  .pmi-select,
+  .pmi-inline-input {
+    width: 100%;
+    min-height: 40px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.72);
+    color: rgba(226, 232, 240, 0.94);
+    padding: 9px 11px;
+    outline: none;
+  }
+
+  .pmi-inline-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .pmi-inline-form-three {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr) auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .pmi-audit-item {
+    padding: 13px 0;
+    border-top: 1px solid rgba(148, 163, 184, 0.13);
+  }
+
+  .pmi-audit-item strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .pmi-button-lite {
+    min-height: 38px;
+    border-radius: 14px;
+    border: 1px solid rgba(96, 165, 250, 0.24);
+    background: rgba(37, 99, 235, 0.16);
+    color: rgba(226, 232, 240, 0.94);
+    font-weight: 800;
+    cursor: pointer;
+    padding: 8px 12px;
+  }
+
+  .pmi-button-lite:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
   @media (max-width: 1180px) {
     .pmi-hero {
       min-height: auto;
@@ -508,6 +667,15 @@ const pmiDashboardCss = `
     }
 
     .pmi-score-module {
+      grid-template-columns: 1fr;
+    }
+
+    .pmi-control-row,
+    .pmi-ledger-row,
+    .pmi-dependency-row,
+    .pmi-playbook-row,
+    .pmi-inline-form,
+    .pmi-inline-form-three {
       grid-template-columns: 1fr;
     }
 
@@ -599,6 +767,326 @@ function ProgressBar({ value }) {
   );
 }
 
+function EnterpriseStatus({ backendStatus }) {
+  if (backendStatus?.loading) {
+    return <span className="pmi-enterprise-status">Syncing enterprise layer</span>;
+  }
+
+  if (backendStatus?.error) {
+    return <span className="pmi-enterprise-status">Local fallback active</span>;
+  }
+
+  if (backendStatus?.hydrated) {
+    return <span className="pmi-enterprise-status">Enterprise backend synced</span>;
+  }
+
+  return <span className="pmi-enterprise-status">Enterprise data contract ready</span>;
+}
+
+function WorkstreamControl({ item, onUpdate, onRemove, disabled = false }) {
+  return (
+    <div className="pmi-control-row">
+      <div>
+        <strong>{item.name}</strong>
+        <div className="kpi-label">{item.owner}</div>
+      </div>
+
+      <input
+        className="pmi-range"
+        type="range"
+        min="0"
+        max="100"
+        value={Number(item.progress) || 0}
+        onChange={(event) =>
+          onUpdate(item.id, {
+            progress: Number(event.target.value)
+          })
+        }
+        aria-label={`${item.name} progress`}
+        disabled={disabled}
+      />
+
+      <select
+        className="pmi-select"
+        value={item.risk || 'Medium'}
+        onChange={(event) =>
+          onUpdate(item.id, {
+            risk: event.target.value
+          })
+        }
+        aria-label={`${item.name} risk`}
+        disabled={disabled}
+      >
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+
+      <button
+        type="button"
+        className="pmi-button-lite"
+        onClick={() => onRemove(item.id)}
+        aria-label={`Remove ${item.name}`}
+        disabled={disabled}
+      >
+        <Trash2 size={14} />
+      </button>
+    </div>
+  );
+}
+
+function MilestoneControl({ item, onUpdate, onRemove, disabled = false }) {
+  return (
+    <div className="pmi-control-row">
+      <div>
+        <strong>{item.label}</strong>
+        <div className="kpi-label">{item.title}</div>
+      </div>
+
+      <input
+        className="pmi-range"
+        type="range"
+        min="0"
+        max="100"
+        value={Number(item.progress) || 0}
+        onChange={(event) =>
+          onUpdate(item.id, {
+            progress: Number(event.target.value),
+            status: Number(event.target.value) >= 100 ? 'Completed' : item.status
+          })
+        }
+        aria-label={`${item.label} progress`}
+        disabled={disabled}
+      />
+
+      <select
+        className="pmi-select"
+        value={item.status || 'Pending'}
+        onChange={(event) =>
+          onUpdate(item.id, {
+            status: event.target.value
+          })
+        }
+        aria-label={`${item.label} status`}
+        disabled={disabled}
+      >
+        <option value="Pending">Pending</option>
+        <option value="In progress">In progress</option>
+        <option value="Completed">Completed</option>
+        <option value="Blocked">Blocked</option>
+      </select>
+
+      <button
+        type="button"
+        className="pmi-button-lite"
+        onClick={() => onRemove(item.id)}
+        aria-label={`Remove ${item.label}`}
+        disabled={disabled}
+      >
+        <Trash2 size={14} />
+      </button>
+    </div>
+  );
+}
+
+function RiskControl({ item, onUpdate, onRemove, disabled = false }) {
+  return (
+    <div className="pmi-control-row">
+      <div>
+        <strong>{item.title}</strong>
+        <div className="kpi-label">{item.owner}</div>
+      </div>
+
+      <select
+        className="pmi-select"
+        value={item.severity || 'Medium'}
+        onChange={(event) =>
+          onUpdate(item.id, {
+            severity: event.target.value
+          })
+        }
+        aria-label={`${item.title} severity`}
+        disabled={disabled}
+      >
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+        <option value="Critical">Critical</option>
+      </select>
+
+      <select
+        className="pmi-select"
+        value={item.status || 'open'}
+        onChange={(event) =>
+          onUpdate(item.id, {
+            status: event.target.value
+          })
+        }
+        aria-label={`${item.title} status`}
+        disabled={disabled}
+      >
+        <option value="open">Open</option>
+        <option value="mitigating">Mitigating</option>
+        <option value="mitigated">Mitigated</option>
+        <option value="closed">Closed</option>
+      </select>
+
+      <button
+        type="button"
+        className="pmi-button-lite"
+        onClick={() => onRemove(item.id)}
+        aria-label={`Remove ${item.title}`}
+        disabled={disabled}
+      >
+        <Trash2 size={14} />
+      </button>
+    </div>
+  );
+}
+
+function SynergyLedgerRow({ item, currency, onUpdate, onRemove, disabled = false }) {
+  return (
+    <div className="pmi-ledger-row">
+      <div>
+        <strong>{item.name}</strong>
+        <div className="muted">{item.owner || 'PMI Owner'} · {item.type || 'Cost'}</div>
+      </div>
+
+      <input
+        className="pmi-inline-input"
+        type="number"
+        min="0"
+        value={item.forecast || 0}
+        onChange={(event) => onUpdate(item.id, { forecast: Number(event.target.value) || 0 })}
+        aria-label={`${item.name} forecast`}
+        disabled={disabled}
+      />
+
+      <input
+        className="pmi-inline-input"
+        type="number"
+        min="0"
+        value={item.captured || 0}
+        onChange={(event) => onUpdate(item.id, { captured: Number(event.target.value) || 0 })}
+        aria-label={`${item.name} captured`}
+        disabled={disabled}
+      />
+
+      <select
+        className="pmi-select"
+        value={item.status || 'Baseline'}
+        onChange={(event) => onUpdate(item.id, { status: event.target.value })}
+        aria-label={`${item.name} status`}
+        disabled={disabled}
+      >
+        <option value="Baseline">Baseline</option>
+        <option value="Thesis linked">Thesis linked</option>
+        <option value="Capturing">Capturing</option>
+        <option value="Validated">Validated</option>
+        <option value="At risk">At risk</option>
+      </select>
+
+      <button
+        type="button"
+        className="pmi-button-lite"
+        onClick={() => onRemove(item.id)}
+        aria-label={`Remove ${item.name}`}
+        disabled={disabled}
+      >
+        <Trash2 size={14} />
+      </button>
+
+      <span className="muted">
+        {formatCurrency(item.captured || 0, currency)} captured of {formatCurrency(item.forecast || 0, currency)}
+      </span>
+    </div>
+  );
+}
+
+function PlaybookControl({ item, onToggle, disabled = false }) {
+  const checklist = Array.isArray(item.checklist) ? item.checklist : [];
+  const done = checklist.filter((check) => check.done).length;
+  const progress =
+    checklist.length > 0 ? Math.round((done / checklist.length) * 100) : Number(item.progress) || 0;
+
+  return (
+    <div className="pmi-playbook-row">
+      <div>
+        <div className="pmi-status-pill">{item.label}</div>
+        <h3 className="pmi-card-title">{item.title}</h3>
+        <p className="muted pmi-card-copy">{item.owner || 'PMI Office'} · {progress}% complete</p>
+        <ProgressBar value={progress} />
+      </div>
+
+      <div className="pmi-checklist">
+        {checklist.map((check) => (
+          <label className="pmi-check-row" key={check.id}>
+            <input
+              type="checkbox"
+              checked={Boolean(check.done)}
+              onChange={() => onToggle(item.id, check.id)}
+              disabled={disabled}
+            />
+            <span>{check.label}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DependencyControl({ item, workstreams, onUpdate, onRemove, disabled = false }) {
+  const workstreamName = (id) =>
+    workstreams.find((workstream) => workstream.id === id)?.name || id || 'Unassigned';
+
+  return (
+    <div className="pmi-dependency-row">
+      <div>
+        <strong>{item.title}</strong>
+        <div className="muted">
+          {workstreamName(item.fromWorkstreamId)} → {workstreamName(item.toWorkstreamId)}
+        </div>
+      </div>
+
+      <select
+        className="pmi-select"
+        value={item.status || 'Monitoring'}
+        onChange={(event) => onUpdate(item.id, { status: event.target.value })}
+        aria-label={`${item.title} status`}
+        disabled={disabled}
+      >
+        <option value="Open">Open</option>
+        <option value="Monitoring">Monitoring</option>
+        <option value="Blocked">Blocked</option>
+        <option value="Resolved">Resolved</option>
+      </select>
+
+      <select
+        className="pmi-select"
+        value={item.severity || 'Medium'}
+        onChange={(event) => onUpdate(item.id, { severity: event.target.value })}
+        aria-label={`${item.title} severity`}
+        disabled={disabled}
+      >
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+        <option value="Critical">Critical</option>
+      </select>
+
+      <button
+        type="button"
+        className="pmi-button-lite"
+        onClick={() => onRemove(item.id)}
+        aria-label={`Remove ${item.title}`}
+        disabled={disabled}
+      >
+        <Trash2 size={14} />
+      </button>
+    </div>
+  );
+}
+
 function WorkstreamCard({ item }) {
   return (
     <article className="pmi-workstream-card">
@@ -663,16 +1151,128 @@ function MilestoneCard({ item }) {
 }
 
 export function PMIDashboardPage() {
-  const { pmiCase } = usePMIStore();
+  const { PERMISSIONS, can } = useAuth();
+  const {
+    pmiCase,
+    pmiCases,
+    auditLogs,
+    patchPmiCase,
+    savePmiCase,
+    selectPmiCase,
+    createBlankPmiCase,
+    duplicatePmiCase,
+    removePmiCase,
+    createFromMaDeal,
+    pmiTemplates,
+    refreshAuditLogs,
+    updateWorkstream,
+    addWorkstream,
+    removeWorkstream,
+    updateRisk,
+    addRisk,
+    removeRisk,
+    updateMilestone,
+    addMilestone,
+    removeMilestone,
+    updateSynergyInitiative,
+    addSynergyInitiative,
+    removeSynergyInitiative,
+    togglePlaybookCheck,
+    updateDependency,
+    addDependency,
+    removeDependency,
+    addBoardAction,
+    closeBoardAction,
+    backendStatus
+  } = usePMIStore();
+  const [newBoardAction, setNewBoardAction] = useState('');
+  const [maDeals, setMaDeals] = useState([]);
+  const [selectedMaDealId, setSelectedMaDealId] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState('industrial');
+  const [newWorkstream, setNewWorkstream] = useState({ name: '', owner: '' });
+  const [newMilestone, setNewMilestone] = useState({ label: '', title: '' });
+  const [newRisk, setNewRisk] = useState({ title: '', owner: '', severity: 'Medium' });
+  const [newSynergy, setNewSynergy] = useState({ name: '', owner: '', forecast: '' });
+  const [newDependency, setNewDependency] = useState({ title: '', owner: '' });
   const engine = usePMIEngine({ pmiCase });
+  const canManagePmi = can(PERMISSIONS.MANAGE_PMI_CASE);
+  const canUpdatePmi = can(PERMISSIONS.UPDATE_PMI_WORKSTREAM);
+  const canCreateFromMa = can(PERMISSIONS.CREATE_PMI_FROM_MA_DEAL);
+  const canDuplicatePmi = can(PERMISSIONS.DUPLICATE_PMI_CASE);
+  const canReadAudit = can(PERMISSIONS.READ_PMI_AUDIT);
 
   const scoreAngle = `${engine.integrationScore * 3.6}deg`;
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadMaDeals() {
+      try {
+        const items = await maDealsApi.list();
+        if (cancelled) return;
+        setMaDeals(items);
+        setSelectedMaDealId((current) => current || items[0]?.id || '');
+      } catch {
+        if (!cancelled) setMaDeals([]);
+      }
+    }
+
+    loadMaDeals();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (pmiCase?.id && canReadAudit) {
+      refreshAuditLogs(pmiCase.id);
+    }
+  }, [pmiCase?.id, canReadAudit]);
 
   function handleExportBoardMemo() {
     pmiExportApi.exportBoardMemo({
       pmiCase,
       engine
     });
+  }
+
+  function handleAddBoardAction(event) {
+    event.preventDefault();
+    const action = newBoardAction.trim();
+    if (!action) return;
+    setNewBoardAction('');
+    addBoardAction(action);
+  }
+
+  function handleAddWorkstream(event) {
+    event.preventDefault();
+    addWorkstream(newWorkstream);
+    setNewWorkstream({ name: '', owner: '' });
+  }
+
+  function handleAddMilestone(event) {
+    event.preventDefault();
+    addMilestone(newMilestone);
+    setNewMilestone({ label: '', title: '' });
+  }
+
+  function handleAddRisk(event) {
+    event.preventDefault();
+    addRisk(newRisk);
+    setNewRisk({ title: '', owner: '', severity: 'Medium' });
+  }
+
+  function handleAddSynergy(event) {
+    event.preventDefault();
+    addSynergyInitiative(newSynergy);
+    setNewSynergy({ name: '', owner: '', forecast: '' });
+  }
+
+  function handleAddDependency(event) {
+    event.preventDefault();
+    addDependency(newDependency);
+    setNewDependency({ title: '', owner: '' });
   }
 
   return (
@@ -705,6 +1305,34 @@ export function PMIDashboardPage() {
                   <Download size={16} />
                   Export Board Memo
                 </Button>
+                <Button
+                  onClick={() =>
+                    patchPmiCase({
+                      status:
+                        pmiCase.status === 'Board review'
+                          ? 'Active integration'
+                          : 'Board review'
+                    })
+                  }
+                  variant="secondary"
+                  loading={backendStatus?.loading}
+                  disabled={!canUpdatePmi}
+                >
+                  <ClipboardCheck size={16} />
+                  Toggle Board Review
+                </Button>
+              </div>
+
+              <div className="pmi-enterprise-toolbar">
+                <EnterpriseStatus backendStatus={backendStatus} />
+                <button
+                  type="button"
+                  className="pmi-button-lite"
+                  onClick={() => savePmiCase(pmiCase)}
+                  disabled={backendStatus?.loading || !canUpdatePmi}
+                >
+                  Save enterprise state
+                </button>
               </div>
 
               <div className="pmi-command-bar">
@@ -750,12 +1378,143 @@ export function PMIDashboardPage() {
 
                 <div className="pmi-signal-table">
                   <SignalRow label="Synergy capture" value={`${engine.synergyCaptureRate}%`} />
+                  <SignalRow label="Ledger capture" value={`${engine.ledgerCaptureRate}%`} />
+                  <SignalRow label="Playbook progress" value={`${engine.playbookProgress}%`} />
                   <SignalRow label="Workstream progress" value={`${engine.workstreamProgress}%`} />
                   <SignalRow label="Milestone progress" value={`${engine.milestoneProgress}%`} />
                   <SignalRow label="High risks" value={engine.highRiskCount} />
                 </div>
               </div>
             </aside>
+          </div>
+        </section>
+
+        <section className="pmi-section">
+          <SectionHeader
+            kicker="Enterprise case manager"
+            icon={BriefcaseBusiness}
+            title="PMI case portfolio"
+            description="Selecciona, crea, duplica o convierte una oportunidad M&A en caso PMI conectado."
+          />
+
+          <div className="pmi-grid pmi-grid-two">
+            <Card className="pmi-panel">
+              <div className="pmi-panel-head">
+                <div>
+                  <div className="pmi-kicker">
+                    <BriefcaseBusiness size={14} />
+                    Multi-case
+                  </div>
+                  <h3 className="pmi-panel-title">Active PMI case</h3>
+                  <p className="muted pmi-panel-copy">
+                    Cambia entre integraciones sin perder el contrato enterprise.
+                  </p>
+                </div>
+                <div className="pmi-panel-icon">
+                  <Layers3 size={18} />
+                </div>
+              </div>
+
+              <select
+                className="pmi-select"
+                value={pmiCase.id || ''}
+                onChange={(event) => selectPmiCase(event.target.value)}
+                aria-label="Select PMI case"
+              >
+                <option value="">Demo PMI case</option>
+                {pmiCases.map((item) => (
+                  <option value={item.id} key={item.id}>
+                    {item.dealName}
+                  </option>
+                ))}
+              </select>
+
+              <div className="pmi-enterprise-toolbar">
+                <select
+                  className="pmi-select"
+                  value={selectedTemplate}
+                  onChange={(event) => setSelectedTemplate(event.target.value)}
+                  aria-label="Select PMI template"
+                >
+                  {Object.entries(pmiTemplates || {}).map(([key, template]) => (
+                    <option value={key} key={key}>
+                      {template.label}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  className="pmi-button-lite"
+                  onClick={() => createBlankPmiCase(selectedTemplate)}
+                  disabled={!canManagePmi}
+                >
+                  New from template
+                </button>
+                <button
+                  type="button"
+                  className="pmi-button-lite"
+                  onClick={() => duplicatePmiCase(pmiCase.id)}
+                  disabled={!canDuplicatePmi}
+                >
+                  Duplicate
+                </button>
+                <button
+                  type="button"
+                  className="pmi-button-lite"
+                  onClick={() => removePmiCase(pmiCase.id)}
+                  disabled={!pmiCase.id || !canManagePmi}
+                >
+                  Archive
+                </button>
+              </div>
+            </Card>
+
+            <Card className="pmi-panel">
+              <div className="pmi-panel-head">
+                <div>
+                  <div className="pmi-kicker">
+                    <ArrowRight size={14} />
+                    M&A handoff
+                  </div>
+                  <h3 className="pmi-panel-title">Convert deal to PMI</h3>
+                  <p className="muted pmi-panel-copy">
+                    Crea el plan 30-60-90, riesgos y workstreams desde una oportunidad M&A.
+                  </p>
+                </div>
+                <div className="pmi-panel-icon">
+                  <FileText size={18} />
+                </div>
+              </div>
+
+              <select
+                className="pmi-select"
+                value={selectedMaDealId}
+                onChange={(event) => setSelectedMaDealId(event.target.value)}
+                aria-label="Select M&A deal"
+              >
+                <option value="">No M&A deal selected</option>
+                {maDeals.map((deal) => (
+                  <option value={deal.id} key={deal.id}>
+                    {deal.name}
+                  </option>
+                ))}
+              </select>
+
+              <div className="pmi-enterprise-toolbar">
+                <button
+                  type="button"
+                  className="pmi-button-lite"
+                  onClick={() => createFromMaDeal(selectedMaDealId)}
+                  disabled={!selectedMaDealId || !canCreateFromMa}
+                >
+                  Convert to PMI
+                </button>
+                <Link className="pmi-link" to="/ma/dashboard">
+                  Open M&A
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+            </Card>
           </div>
         </section>
 
@@ -793,10 +1552,455 @@ export function PMIDashboardPage() {
             <KpiCard
               label="Integration risks"
               value={engine.risks.length}
-              description={`${engine.highRiskCount} de alta severidad.`}
+              description={`${engine.highRiskCount} de alta severidad. ${engine.openRiskCount} abiertos.`}
               icon={ShieldAlert}
               tone={engine.highRiskCount > 0 ? 'text-warning' : 'text-success'}
             />
+
+            <KpiCard
+              label="Playbook readiness"
+              value={`${engine.playbookProgress}%`}
+              description={`${engine.blockedDependencies.length} dependencias bloqueadas.`}
+              icon={ListChecks}
+              tone={engine.blockedDependencies.length > 0 ? 'text-warning' : 'text-success'}
+            />
+          </div>
+        </section>
+
+        <section className="pmi-section">
+          <SectionHeader
+            kicker="PMI operating system"
+            icon={LineChart}
+            title="Synergy ledger, playbooks and dependency heatmap"
+            description="Control institucional de valor capturado, disciplina 30-60-90 y bloqueos críticos entre workstreams."
+          />
+
+          <div className="pmi-grid pmi-grid-two">
+            <Card className="pmi-panel">
+              <div className="pmi-panel-head">
+                <div>
+                  <div className="pmi-kicker">
+                    <TrendingUp size={14} />
+                    Synergy ledger
+                  </div>
+                  <h3 className="pmi-panel-title">Value capture register</h3>
+                  <p className="muted pmi-panel-copy">
+                    Forecast, captura, owner y estado por iniciativa económica.
+                  </p>
+                </div>
+                <div className="pmi-panel-icon">
+                  <LineChart size={18} />
+                </div>
+              </div>
+
+              <div>
+                <MiniRow
+                  label="Ledger forecast"
+                  value={formatCurrency(engine.ledgerForecast, pmiCase.currency)}
+                />
+                <MiniRow
+                  label="Ledger captured"
+                  value={formatCurrency(engine.ledgerCaptured, pmiCase.currency)}
+                />
+                <MiniRow label="Confidence" value={`${engine.ledgerConfidenceScore}%`} />
+              </div>
+
+              <div className="pmi-control-grid">
+                {engine.synergyLedger.map((item) => (
+                  <SynergyLedgerRow
+                    key={item.id}
+                    item={item}
+                    currency={pmiCase.currency}
+                    onUpdate={updateSynergyInitiative}
+                    onRemove={removeSynergyInitiative}
+                    disabled={!canUpdatePmi}
+                  />
+                ))}
+              </div>
+
+              <form className="pmi-inline-form-three" onSubmit={handleAddSynergy}>
+                <input
+                  className="pmi-inline-input"
+                  value={newSynergy.name}
+                  onChange={(event) =>
+                    setNewSynergy((current) => ({ ...current, name: event.target.value }))
+                  }
+                  placeholder="Initiative"
+                  aria-label="New synergy initiative"
+                />
+                <input
+                  className="pmi-inline-input"
+                  value={newSynergy.owner}
+                  onChange={(event) =>
+                    setNewSynergy((current) => ({ ...current, owner: event.target.value }))
+                  }
+                  placeholder="Owner"
+                  aria-label="Synergy owner"
+                />
+                <button className="pmi-button-lite" type="submit" disabled={!canUpdatePmi}>
+                  Add
+                </button>
+              </form>
+            </Card>
+
+            <Card className="pmi-panel">
+              <div className="pmi-panel-head">
+                <div>
+                  <div className="pmi-kicker">
+                    <ListChecks size={14} />
+                    Integration playbooks
+                  </div>
+                  <h3 className="pmi-panel-title">Board-ready execution checklist</h3>
+                  <p className="muted pmi-panel-copy">
+                    Day 1, Day 30 y Day 90 con evidencia operativa trazable.
+                  </p>
+                </div>
+                <div className="pmi-panel-icon">
+                  <ListChecks size={18} />
+                </div>
+              </div>
+
+              <div className="pmi-control-grid">
+                {engine.playbooks.map((item) => (
+                  <PlaybookControl
+                    key={item.id}
+                    item={item}
+                    onToggle={togglePlaybookCheck}
+                    disabled={!canUpdatePmi}
+                  />
+                ))}
+              </div>
+            </Card>
+          </div>
+
+          <Card className="pmi-panel">
+            <div className="pmi-panel-head">
+              <div>
+                <div className="pmi-kicker">
+                  <GitBranch size={14} />
+                  Dependency heatmap
+                </div>
+                <h3 className="pmi-panel-title">Critical path control</h3>
+                <p className="muted pmi-panel-copy">
+                  Bloqueos entre workstreams, severidad, owner y mitigación.
+                </p>
+              </div>
+              <div className="pmi-panel-icon">
+                <GitBranch size={18} />
+              </div>
+            </div>
+
+            <div>
+              <MiniRow label="Dependency risk score" value={`${engine.dependencyRiskScore}%`} />
+              <MiniRow label="Blocked dependencies" value={engine.blockedDependencies.length} />
+            </div>
+
+            <div className="pmi-control-grid">
+              {engine.dependencies.map((item) => (
+                <DependencyControl
+                  key={item.id}
+                  item={item}
+                  workstreams={engine.workstreams}
+                  onUpdate={updateDependency}
+                  onRemove={removeDependency}
+                  disabled={!canUpdatePmi}
+                />
+              ))}
+            </div>
+
+            <form className="pmi-inline-form-three" onSubmit={handleAddDependency}>
+              <input
+                className="pmi-inline-input"
+                value={newDependency.title}
+                onChange={(event) =>
+                  setNewDependency((current) => ({ ...current, title: event.target.value }))
+                }
+                placeholder="Dependency"
+                aria-label="New dependency"
+              />
+              <input
+                className="pmi-inline-input"
+                value={newDependency.owner}
+                onChange={(event) =>
+                  setNewDependency((current) => ({ ...current, owner: event.target.value }))
+                }
+                placeholder="Owner"
+                aria-label="Dependency owner"
+              />
+              <button className="pmi-button-lite" type="submit" disabled={!canUpdatePmi}>
+                Add
+              </button>
+            </form>
+          </Card>
+        </section>
+
+        <section className="pmi-section">
+          <SectionHeader
+            kicker="Enterprise control"
+            icon={Gauge}
+            title="Live integration controls"
+            description="Actualiza progreso, riesgo, hitos y acciones de comité con persistencia backend y fallback local."
+          />
+
+          <div className="pmi-grid pmi-grid-two">
+            <Card className="pmi-panel">
+              <div className="pmi-panel-head">
+                <div>
+                  <div className="pmi-kicker">
+                    <Layers3 size={14} />
+                    Workstream cockpit
+                  </div>
+                  <h3 className="pmi-panel-title">Execution sliders</h3>
+                  <p className="muted pmi-panel-copy">
+                    Ajusta progreso y riesgo por frente de integración.
+                  </p>
+                </div>
+                <div className="pmi-panel-icon">
+                  <Layers3 size={18} />
+                </div>
+              </div>
+
+              <div className="pmi-control-grid">
+                {engine.workstreams.map((item) => (
+                  <WorkstreamControl
+                    key={item.id}
+                    item={item}
+                    onUpdate={updateWorkstream}
+                    onRemove={removeWorkstream}
+                    disabled={!canUpdatePmi}
+                  />
+                ))}
+              </div>
+
+              <form className="pmi-inline-form-three" onSubmit={handleAddWorkstream}>
+                <input
+                  className="pmi-inline-input"
+                  value={newWorkstream.name}
+                  onChange={(event) =>
+                    setNewWorkstream((current) => ({
+                      ...current,
+                      name: event.target.value
+                    }))
+                  }
+                  placeholder="New workstream"
+                  aria-label="New workstream"
+                />
+                <input
+                  className="pmi-inline-input"
+                  value={newWorkstream.owner}
+                  onChange={(event) =>
+                    setNewWorkstream((current) => ({
+                      ...current,
+                      owner: event.target.value
+                    }))
+                  }
+                  placeholder="Owner"
+                  aria-label="Workstream owner"
+                />
+                <button className="pmi-button-lite" type="submit" disabled={!canUpdatePmi}>
+                  Add
+                </button>
+              </form>
+            </Card>
+
+            <Card className="pmi-panel">
+              <div className="pmi-panel-head">
+                <div>
+                  <div className="pmi-kicker">
+                    <Milestone size={14} />
+                    30-60-90 governance
+                  </div>
+                  <h3 className="pmi-panel-title">Milestone control</h3>
+                  <p className="muted pmi-panel-copy">
+                    Gestiona avance y estado de hitos ejecutivos.
+                  </p>
+                </div>
+                <div className="pmi-panel-icon">
+                  <Milestone size={18} />
+                </div>
+              </div>
+
+              <div className="pmi-control-grid">
+                {engine.milestones.map((item) => (
+                  <MilestoneControl
+                    key={item.id}
+                    item={item}
+                    onUpdate={updateMilestone}
+                    onRemove={removeMilestone}
+                    disabled={!canUpdatePmi}
+                  />
+                ))}
+              </div>
+
+              <form className="pmi-inline-form-three" onSubmit={handleAddMilestone}>
+                <input
+                  className="pmi-inline-input"
+                  value={newMilestone.label}
+                  onChange={(event) =>
+                    setNewMilestone((current) => ({
+                      ...current,
+                      label: event.target.value
+                    }))
+                  }
+                  placeholder="Label"
+                  aria-label="Milestone label"
+                />
+                <input
+                  className="pmi-inline-input"
+                  value={newMilestone.title}
+                  onChange={(event) =>
+                    setNewMilestone((current) => ({
+                      ...current,
+                      title: event.target.value
+                    }))
+                  }
+                  placeholder="Milestone title"
+                  aria-label="Milestone title"
+                />
+                <button className="pmi-button-lite" type="submit" disabled={!canUpdatePmi}>
+                  Add
+                </button>
+              </form>
+            </Card>
+          </div>
+
+          <div className="pmi-grid pmi-grid-two">
+            <Card className="pmi-panel">
+              <div className="pmi-panel-head">
+                <div>
+                  <div className="pmi-kicker">
+                    <AlertTriangle size={14} />
+                    Risk register
+                  </div>
+                  <h3 className="pmi-panel-title">Mitigation workflow</h3>
+                  <p className="muted pmi-panel-copy">
+                    Cambia severidad y estado de mitigación sin salir del dashboard.
+                  </p>
+                </div>
+                <div className="pmi-panel-icon">
+                  <ShieldAlert size={18} />
+                </div>
+              </div>
+
+              <div className="pmi-control-grid">
+                {engine.risks.map((item) => (
+                  <RiskControl
+                    key={item.id}
+                    item={item}
+                    onUpdate={updateRisk}
+                    onRemove={removeRisk}
+                    disabled={!canUpdatePmi}
+                  />
+                ))}
+              </div>
+
+              <form className="pmi-inline-form-three" onSubmit={handleAddRisk}>
+                <input
+                  className="pmi-inline-input"
+                  value={newRisk.title}
+                  onChange={(event) =>
+                    setNewRisk((current) => ({
+                      ...current,
+                      title: event.target.value
+                    }))
+                  }
+                  placeholder="New risk"
+                  aria-label="New risk"
+                />
+                <input
+                  className="pmi-inline-input"
+                  value={newRisk.owner}
+                  onChange={(event) =>
+                    setNewRisk((current) => ({
+                      ...current,
+                      owner: event.target.value
+                    }))
+                  }
+                  placeholder="Owner"
+                  aria-label="Risk owner"
+                />
+                <button className="pmi-button-lite" type="submit" disabled={!canUpdatePmi}>
+                  Add
+                </button>
+              </form>
+            </Card>
+
+            <Card className="pmi-panel">
+              <div className="pmi-panel-head">
+                <div>
+                  <div className="pmi-kicker">
+                    <Target size={14} />
+                    Value capture
+                  </div>
+                  <h3 className="pmi-panel-title">Synergy and budget command</h3>
+                  <p className="muted pmi-panel-copy">
+                    Controla captura de sinergias, gap pendiente y presupuesto restante.
+                  </p>
+                </div>
+                <div className="pmi-panel-icon">
+                  <TrendingUp size={18} />
+                </div>
+              </div>
+
+              <div>
+                <MiniRow
+                  label="Synergy gap"
+                  value={formatCurrency(engine.synergyGap, pmiCase.currency)}
+                />
+                <MiniRow
+                  label="Budget remaining"
+                  value={formatCurrency(engine.budgetRemaining, pmiCase.currency)}
+                />
+                <MiniRow label="Execution velocity" value={`${engine.executionVelocity}%`} />
+                <MiniRow
+                  label="Blocked workstreams"
+                  value={engine.blockedWorkstreams.length}
+                />
+              </div>
+
+              <div className="pmi-control-grid">
+                <label className="kpi-label" htmlFor="pmi-synergy-captured">
+                  Synergies captured
+                </label>
+                <input
+                  id="pmi-synergy-captured"
+                  className="pmi-inline-input"
+                  type="number"
+                  min="0"
+                  max={pmiCase.synergyTarget || undefined}
+                  value={pmiCase.synergyCaptured}
+                  disabled={!canUpdatePmi}
+                  onChange={(event) =>
+                    patchPmiCase({
+                      synergyCaptured: Math.min(
+                        Number(event.target.value) || 0,
+                        Number(pmiCase.synergyTarget) || Number(event.target.value) || 0
+                      )
+                    })
+                  }
+                />
+                <label className="kpi-label" htmlFor="pmi-cost-used">
+                  Integration cost used
+                </label>
+                <input
+                  id="pmi-cost-used"
+                  className="pmi-inline-input"
+                  type="number"
+                  min="0"
+                  max={pmiCase.integrationBudget || undefined}
+                  value={pmiCase.integrationCostUsed}
+                  disabled={!canUpdatePmi}
+                  onChange={(event) =>
+                    patchPmiCase({
+                      integrationCostUsed: Math.min(
+                        Number(event.target.value) || 0,
+                        Number(pmiCase.integrationBudget) || Number(event.target.value) || 0
+                      )
+                    })
+                  }
+                />
+              </div>
+            </Card>
           </div>
         </section>
 
@@ -851,8 +2055,81 @@ export function PMIDashboardPage() {
 
             <div className="pmi-list">
               {engine.boardActions.map((action) => (
-                <MiniRow key={action} label={action} value="Open" />
+                <div className="pmi-mini-row" key={action}>
+                  <span className="muted">{action}</span>
+                  <button
+                    type="button"
+                    className="pmi-button-lite"
+                    onClick={() => closeBoardAction(action)}
+                    disabled={!canUpdatePmi}
+                  >
+                    Close
+                  </button>
+                </div>
               ))}
+            </div>
+
+            <form className="pmi-inline-form" onSubmit={handleAddBoardAction}>
+              <input
+                className="pmi-inline-input"
+                value={newBoardAction}
+                onChange={(event) => setNewBoardAction(event.target.value)}
+                placeholder="Add board action"
+                aria-label="Add board action"
+              />
+              <button className="pmi-button-lite" type="submit" disabled={!canUpdatePmi}>
+                Add
+              </button>
+            </form>
+          </Card>
+        </section>
+
+        <section className="pmi-section">
+          <SectionHeader
+            kicker="Audit trail"
+            icon={ShieldAlert}
+            title="PMI governance log"
+            description="Historial enterprise de cambios sobre el caso PMI activo para control ejecutivo y trazabilidad."
+          />
+
+          <Card className="pmi-panel">
+            <div className="pmi-panel-head">
+              <div>
+                <div className="pmi-kicker">
+                  <ShieldAlert size={14} />
+                  Audit evidence
+                </div>
+                <h3 className="pmi-panel-title">Recent PMI activity</h3>
+                <p className="muted pmi-panel-copy">
+                  Cambios de creación, actualización, conversión desde M&A, duplicado y borrado.
+                </p>
+              </div>
+              <button
+                type="button"
+                className="pmi-button-lite"
+                onClick={() => refreshAuditLogs(pmiCase.id)}
+                disabled={!pmiCase.id || !canReadAudit}
+              >
+                Refresh
+              </button>
+            </div>
+
+            <div className="pmi-list">
+              {auditLogs.length === 0 ? (
+                <div className="pmi-audit-item">
+                  <strong>No audit entries yet</strong>
+                  <span className="muted">La auditoría aparecerá cuando el backend registre cambios PMI.</span>
+                </div>
+              ) : (
+                auditLogs.slice(0, 8).map((item) => (
+                  <div className="pmi-audit-item" key={item.id}>
+                    <strong>{item.action}</strong>
+                    <span className="muted">
+                      {item.createdAt} · {item.userId}
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
           </Card>
         </section>

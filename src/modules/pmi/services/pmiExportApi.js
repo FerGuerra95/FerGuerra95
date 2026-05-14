@@ -222,6 +222,10 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
   const integrationBudget = toNumber(engine.integrationBudget ?? pmiCase.integrationBudget);
   const integrationCostUsed = toNumber(engine.integrationCostUsed ?? pmiCase.integrationCostUsed);
   const budgetUsedRate = toNumber(engine.budgetUsedRate);
+  const synergyGap = toNumber(engine.synergyGap);
+  const budgetRemaining = toNumber(engine.budgetRemaining);
+  const openRiskCount = toNumber(engine.openRiskCount);
+  const executionVelocity = toNumber(engine.executionVelocity);
   const workstreamProgress = toNumber(engine.workstreamProgress);
   const milestoneProgress = toNumber(engine.milestoneProgress);
   const highRiskCount = toNumber(engine.highRiskCount);
@@ -839,6 +843,27 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
                 <div class="kpi">
                   <div class="kpi-label">High risks</div>
                   <div class="kpi-value red">${escapeHtml(highRiskCount)}</div>
+                  <div class="kpi-note">${escapeHtml(openRiskCount)} open risks in register.</div>
+                </div>
+              </div>
+
+              <div class="grid avoid-break">
+                <div class="kpi">
+                  <div class="kpi-label">Synergy gap</div>
+                  <div class="kpi-value orange">${escapeHtml(formatCurrency(synergyGap, currency))}</div>
+                  <div class="kpi-note">Remaining value capture against target.</div>
+                </div>
+
+                <div class="kpi">
+                  <div class="kpi-label">Budget remaining</div>
+                  <div class="kpi-value green">${escapeHtml(formatCurrency(budgetRemaining, currency))}</div>
+                  <div class="kpi-note">Available PMI budget envelope.</div>
+                </div>
+
+                <div class="kpi">
+                  <div class="kpi-label">Execution velocity</div>
+                  <div class="kpi-value purple">${escapeHtml(`${executionVelocity}%`)}</div>
+                  <div class="kpi-note">Combined workstream and milestone momentum.</div>
                 </div>
               </div>
 

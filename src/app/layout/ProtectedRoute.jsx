@@ -8,16 +8,11 @@ export function ProtectedRoute({ children }) {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          minHeight: '100vh',
-          display: 'grid',
-          placeItems: 'center',
-          background: '#0b1020',
-          color: '#e8edf7'
-        }}
-      >
-        Cargando sesión...
+      <div className="ceos-session-loading">
+        <div className="ceos-session-loading-inner">
+          <div className="ceos-session-loading-spinner" aria-hidden />
+          <p className="ceos-session-loading-text">Cargando sesión…</p>
+        </div>
       </div>
     );
   }

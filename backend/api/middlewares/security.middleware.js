@@ -1,7 +1,8 @@
 import crypto from 'node:crypto';
 
-function getClientIp(req) {
-  return (
+import { getSharedRedis } from '../../lib/redisClient.js';
+
+export function getClientIp(req) {  return (
     req.ip ||
     req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
     req.socket?.remoteAddress ||
@@ -26,6 +27,13 @@ export function requestIdMiddleware(req, res, next) {
   return next();
 }
 
+function parseExtraConnectSources() {
+  return String(process.env.CSP_EXTRA_CONNECT_SRC || '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 export function securityHeadersMiddleware(_req, res, next) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
@@ -36,6 +44,14 @@ export function securityHeadersMiddleware(_req, res, next) {
     'Permissions-Policy',
     'camera=(), microphone=(), geolocation=(), payment=(), usb=()'
   );
+
+  const connectParts = [
+    "'self'",
+    'http://localhost:4000',
+    'http://127.0.0.1:4000',
+    ...parseExtraConnectSources()
+  ];
+
   res.setHeader(
     'Content-Security-Policy',
     [
@@ -45,7 +61,7 @@ export function securityHeadersMiddleware(_req, res, next) {
       "frame-ancestors 'none'",
       "img-src 'self' data: blob:",
       "font-src 'self' data:",
-      "connect-src 'self' http://localhost:4000 http://127.0.0.1:4000",
+      `connect-src ${[...new Set(connectParts)].join(' ')}`,
       "script-src 'self'",
       "style-src 'self' 'unsafe-inline'"
     ].join('; ')
@@ -109,5 +125,74 @@ export function createRateLimiter({
         message
       }
     });
+  };
+}
+
+/**
+ * Rate limit en Redis (ventana fija) si hay REDIS_URL; si no, mismo comportamiento que createRateLimiter.
+ */
+export function createHybridRateLimiter({
+  windowMs = 60_000,
+  max = 120,
+  code = 'RATE_LIMITED',
+  message = 'Demasiadas solicitudes. Intentalo de nuevo en unos minutos.',
+  keyGenerator = getClientIp,
+  redisKeyPrefix = 'rl'
+} = {}) {
+  const memoryLimiter = createRateLimiter({
+    windowMs,
+    max,
+    code,
+    message,
+    keyGenerator
+  });
+
+  return (req, res, next) => {
+    void (async () => {
+      try {
+        const redis = await getSharedRedis();
+        if (!redis) {
+          memoryLimiter(req, res, next);
+          return;
+        }
+
+        const now = Date.now();
+        const slot = Math.floor(now / windowMs);
+        const clientKey = keyGenerator(req);
+        const key = `${redisKeyPrefix}:${clientKey}:${slot}`;
+        const n = await redis.incr(key);
+
+        if (n === 1) {
+          await redis.expire(key, Math.ceil(windowMs / 1000) + 2);
+        }
+
+        if (n > max) {
+          const elapsedInWindow = now % windowMs;
+          const retryAfterSeconds = Math.max(
+            1,
+            Math.ceil((windowMs - elapsedInWindow) / 1000)
+          );
+
+          res.setHeader('Retry-After', String(retryAfterSeconds));
+
+          return res.status(429).json({
+            data: null,
+            meta: {
+              requestId: req.requestId,
+              retryAfterSeconds,
+              timestamp: new Date().toISOString()
+            },
+            error: {
+              code,
+              message
+            }
+          });
+        }
+
+        next();
+      } catch {
+        memoryLimiter(req, res, next);
+      }
+    })();
   };
 }
