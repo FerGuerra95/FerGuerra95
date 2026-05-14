@@ -110,6 +110,29 @@ function reportBody(value = {}) {
   return next;
 }
 
+function genericBridgeBody(value = {}) {
+  const source = assertPlainObject(value, 'bridge payload');
+  const next = {};
+  const numberKeys = new Set(['confidenceLevel', 'priorityScore']);
+  Object.entries(source).forEach(([key, raw]) => {
+    if (raw === undefined) return;
+    if (Array.isArray(raw)) {
+      next[key] = raw;
+      return;
+    }
+    if (raw && typeof raw === 'object') {
+      next[key] = assertPlainObject(raw, key);
+      return;
+    }
+    if (typeof raw === 'boolean') {
+      next[key] = raw;
+      return;
+    }
+    next[key] = numberKeys.has(key) ? assertFiniteNumber(raw, key) : normalizeString(raw);
+  });
+  return next;
+}
+
 function idParams(value = {}) {
   return { ...value, id: assertId(value.id, 'id') };
 }
@@ -131,6 +154,16 @@ export const bridgeValidator = {
   documentCreate: { body: documentBody },
   documentUpdate: { params: idParams, body: documentBody },
   reportCreate: { body: reportBody },
+  signalCreate: { body: genericBridgeBody },
+  signalUpdate: { params: idParams, body: genericBridgeBody },
+  workflow: { params: idParams, body: genericBridgeBody },
+  dependencyCreate: { body: genericBridgeBody },
+  dependencyUpdate: { params: idParams, body: genericBridgeBody },
+  conflictCreate: { body: genericBridgeBody },
+  conflictUpdate: { params: idParams, body: genericBridgeBody },
+  evidenceCreate: { body: genericBridgeBody },
+  evidenceUpdate: { params: idParams, body: genericBridgeBody },
+  snapshotCreate: { body: genericBridgeBody },
   idParams: { params: idParams },
   dealParams: { params: dealParams },
   roundParams: { params: roundParams }
