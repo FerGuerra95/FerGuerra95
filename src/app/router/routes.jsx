@@ -311,6 +311,18 @@ const RiskReportsPage = lazyNamed(
   () => import('../../modules/risk/pages/RiskReportsPage.jsx'),
   'RiskReportsPage'
 );
+const RiskCommitteeReviewsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskCommitteeReviewsPage.jsx'),
+  'RiskCommitteeReviewsPage'
+);
+const RiskEvidencePage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskEvidencePage.jsx'),
+  'RiskEvidencePage'
+);
+const RiskNotificationsPage = lazyNamed(
+  () => import('../../modules/risk/pages/RiskNotificationsPage.jsx'),
+  'RiskNotificationsPage'
+);
 
 function RouteFallback() {
   return (
@@ -571,6 +583,9 @@ export function AppRoutes() {
           <Route path="/risk/kri" element={<RiskKriPage />} />
           <Route path="/risk/appetite" element={<RiskAppetitePage />} />
           <Route path="/risk/reports" element={<RiskReportsPage />} />
+          <Route path="/risk/committee-reviews" element={<RiskCommitteeReviewsPage />} />
+          <Route path="/risk/evidence" element={<RiskEvidencePage />} />
+          <Route path="/risk/notifications" element={<RiskNotificationsPage />} />
         </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

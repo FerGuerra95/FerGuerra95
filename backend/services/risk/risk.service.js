@@ -81,6 +81,45 @@ const reportsStore = createSqliteEntityStore('risk_report_exports', 'risk_report
   payload: {}
 });
 
+const committeeReviewsStore = createSqliteEntityStore('risk_committee_reviews', 'risk_committee', {
+  reviewTitle: 'Risk committee review',
+  committeeName: 'Risk Committee',
+  meetingDate: '',
+  chair: '',
+  attendees: [],
+  agenda: [],
+  linkedRisks: [],
+  decisions: [],
+  status: 'draft',
+  minutesSummary: '',
+  payload: {}
+});
+
+const evidenceLinksStore = createSqliteEntityStore('risk_evidence_links', 'risk_evidence', {
+  riskId: '',
+  linkedEntityType: 'risk',
+  linkedEntityId: '',
+  evidenceTitle: 'Risk evidence',
+  evidenceType: 'document',
+  evidenceQuality: 'medium',
+  sourceModule: 'Risk',
+  reviewer: '',
+  reviewStatus: 'pending',
+  humanReviewNote: '',
+  payload: {}
+});
+
+const notificationsStore = createSqliteEntityStore('risk_notifications', 'risk_notification', {
+  notificationType: 'risk_update_required',
+  targetRole: 'executive',
+  title: 'Risk update required',
+  message: '',
+  severity: 'watch',
+  status: 'queued',
+  linkedRiskId: '',
+  payload: {}
+});
+
 function createError(message, status = 400, code = 'RISK_ERROR') {
   const error = new Error(message);
   error.status = status;
@@ -168,6 +207,9 @@ export function calculateRiskMetrics({
   incidents = [],
   kri = [],
   appetite = []
+  ,
+  committeeReviews = [],
+  evidenceLinks = []
 } = {}) {
   const activeRisks = normalizeArray(risks).filter((item) => !['closed', 'archived'].includes(normalizeText(item.status).toLowerCase()));
   const criticalRiskCount = activeRisks.filter((item) => riskScoreFrom(item) >= 78 || severityRank(item.residualRisk) >= 5).length;
@@ -181,6 +223,11 @@ export function calculateRiskMetrics({
     : 30;
   const controlCoverage = activeRisks.length ? Math.round((normalizeArray(controls).filter((item) => item.riskId).length / activeRisks.length) * 100) : 100;
   const controlEffectiveness = controls.length ? Math.round((effectiveControls / controls.length) * 100) : 100;
+  const finalizedCommitteeReviews = normalizeArray(committeeReviews).filter((item) => ['final', 'approved', 'closed'].includes(normalizeText(item.status).toLowerCase())).length;
+  const committeeReadiness = clampScore(committeeReviews.length ? Math.round((finalizedCommitteeReviews / committeeReviews.length) * 100) : 70);
+  const highQualityEvidence = normalizeArray(evidenceLinks).filter((item) => ['high', 'verified'].includes(normalizeText(item.evidenceQuality).toLowerCase()) && ['reviewed', 'approved'].includes(normalizeText(item.reviewStatus).toLowerCase())).length;
+  const evidenceCoverage = activeRisks.length ? clampScore(Math.round((normalizeArray(evidenceLinks).filter((item) => item.riskId).length / activeRisks.length) * 100)) : 100;
+  const evidenceQualityScore = evidenceLinks.length ? clampScore(Math.round((highQualityEvidence / evidenceLinks.length) * 100)) : 70;
   const penalty =
     criticalRiskCount * 12 +
     overdueMitigations * 8 +
@@ -188,7 +235,14 @@ export function calculateRiskMetrics({
     kriBreaches * 7 +
     appetiteBreaches * 10 +
     Math.max(0, avgResidual - 45) * 0.45;
-  const riskReadinessScore = clampScore(100 - penalty + Math.min(10, controlCoverage * 0.04) + Math.min(10, controlEffectiveness * 0.04));
+  const riskReadinessScore = clampScore(
+    100 -
+      penalty +
+      Math.min(10, controlCoverage * 0.04) +
+      Math.min(10, controlEffectiveness * 0.04) +
+      Math.min(8, committeeReadiness * 0.04) +
+      Math.min(8, evidenceCoverage * 0.04)
+  );
   const requiresExecutiveAttention =
     criticalRiskCount > 0 || overdueMitigations > 0 || kriBreaches > 0 || appetiteBreaches > 0;
   const riskPosture =
@@ -213,6 +267,9 @@ export function calculateRiskMetrics({
     appetiteBreaches,
     controlCoverage: clampScore(controlCoverage),
     controlEffectiveness: clampScore(controlEffectiveness),
+    committeeReadiness,
+    evidenceCoverage,
+    evidenceQualityScore,
     incidentSeverityTrend: openIncidents > 0 ? 'elevated' : 'stable',
     requiresExecutiveAttention,
     executiveAttention: requiresExecutiveAttention
@@ -241,6 +298,8 @@ function buildBridgeSignals(metrics = {}) {
   if (metrics.kriBreaches > 0) signals.push('risk.kri_breach_detected');
   if (metrics.appetiteBreaches > 0) signals.push('risk.appetite_breach_requires_committee');
   if (metrics.requiresExecutiveAttention) signals.push('bridge.risk_signal.created');
+  if (metrics.committeeReadiness < 70) signals.push('risk.committee_readiness_gap');
+  if (metrics.evidenceCoverage < 70) signals.push('risk.evidence_gap_affects_board_readiness');
   return signals;
 }
 
@@ -257,16 +316,19 @@ async function recordRiskAudit({ organizationId, userId = '', action, entityId =
 
 async function listAll(organizationId) {
   assertOrganizationId(organizationId);
-  const [risks, controls, mitigations, incidents, kri, appetite, reports] = await Promise.all([
+  const [risks, controls, mitigations, incidents, kri, appetite, reports, committeeReviews, evidenceLinks, notifications] = await Promise.all([
     riskRegisterStore.listByOrganization(organizationId),
     controlsStore.listByOrganization(organizationId),
     mitigationsStore.listByOrganization(organizationId),
     incidentsStore.listByOrganization(organizationId),
     kriStore.listByOrganization(organizationId),
     appetiteStore.listByOrganization(organizationId),
-    reportsStore.listByOrganization(organizationId)
+    reportsStore.listByOrganization(organizationId),
+    committeeReviewsStore.listByOrganization(organizationId),
+    evidenceLinksStore.listByOrganization(organizationId),
+    notificationsStore.listByOrganization(organizationId)
   ]);
-  return { risks, controls, mitigations, incidents, kri, appetite, reports };
+  return { risks, controls, mitigations, incidents, kri, appetite, reports, committeeReviews, evidenceLinks, notifications };
 }
 
 async function createWith(store, organizationId, payload = {}, actor = {}, action) {
@@ -344,6 +406,31 @@ export async function listRiskReports(organizationId) {
   return reportsStore.listByOrganization(organizationId);
 }
 
+export async function listRiskCommitteeReviews(organizationId) {
+  assertOrganizationId(organizationId);
+  return committeeReviewsStore.listByOrganization(organizationId);
+}
+export const createRiskCommitteeReview = (organizationId, payload, actor) =>
+  createWith(committeeReviewsStore, organizationId, payload, actor, 'risk.committee_review.created');
+export const updateRiskCommitteeReview = (organizationId, id, payload, actor) =>
+  updateWith(committeeReviewsStore, organizationId, id, payload, actor, payload?.status === 'final' ? 'risk.committee_review.finalized' : 'risk.committee_review.updated');
+
+export async function listRiskEvidenceLinks(organizationId) {
+  assertOrganizationId(organizationId);
+  return evidenceLinksStore.listByOrganization(organizationId);
+}
+export const createRiskEvidenceLink = (organizationId, payload, actor) =>
+  createWith(evidenceLinksStore, organizationId, payload, actor, 'risk.evidence.linked');
+export const updateRiskEvidenceLink = (organizationId, id, payload, actor) =>
+  updateWith(evidenceLinksStore, organizationId, id, payload, actor, payload?.reviewStatus === 'reviewed' ? 'risk.evidence.reviewed' : 'risk.evidence.updated');
+
+export async function listRiskNotifications(organizationId) {
+  assertOrganizationId(organizationId);
+  return notificationsStore.listByOrganization(organizationId);
+}
+export const createRiskNotification = (organizationId, payload, actor) =>
+  createWith(notificationsStore, organizationId, payload, actor, 'executive.risk_notification.queued');
+
 export async function createRiskReport(organizationId, payload = {}, actor = {}) {
   const summary = await getRiskSummary({ organizationId });
   const item = await createWith(reportsStore, organizationId, {
@@ -359,6 +446,13 @@ export async function createRiskReport(organizationId, payload = {}, actor = {})
         'Risk Appetite Breach Report'
       ],
       summary,
+      boardReadyMemo: {
+        posture: summary.metrics.riskPosture,
+        committeeReadiness: summary.metrics.committeeReadiness,
+        evidenceCoverage: summary.metrics.evidenceCoverage,
+        requiredHumanReview: true,
+        disclaimer: 'Decision-support output. CRO, audit committee, legal and board review remain required.'
+      },
       humanReviewRequired: true
     }
   }, actor, 'risk.report.exported');
@@ -385,7 +479,13 @@ export async function getRiskSummary(scope = {}) {
       kri: data.kri.length,
       appetite: data.appetite.length,
       reports: data.reports.length
+      ,
+      committeeReviews: data.committeeReviews.length,
+      evidenceLinks: data.evidenceLinks.length,
+      notifications: data.notifications.length
     },
+    committeeReadiness: metrics.committeeReadiness,
+    evidenceCoverage: metrics.evidenceCoverage,
     latestRisk: data.risks[0] || null,
     bridgeSignals: buildBridgeSignals(metrics),
     humanReviewPosture: 'human_review_required'
@@ -405,6 +505,9 @@ export async function getRiskDashboard(scope = {}) {
     kri: data.kri,
     appetite: data.appetite,
     reports: data.reports,
+    committeeReviews: data.committeeReviews,
+    evidenceLinks: data.evidenceLinks,
+    notifications: data.notifications,
     heatmap: buildHeatmap(data.risks),
     bridgeSignals: buildBridgeSignals(metrics),
     humanReviewPosture: 'human_review_required'
@@ -454,5 +557,13 @@ export default {
   updateRiskAppetite,
   listRiskReports,
   createRiskReport,
+  listRiskCommitteeReviews,
+  createRiskCommitteeReview,
+  updateRiskCommitteeReview,
+  listRiskEvidenceLinks,
+  createRiskEvidenceLink,
+  updateRiskEvidenceLink,
+  listRiskNotifications,
+  createRiskNotification,
   listRiskAuditLogs
 };

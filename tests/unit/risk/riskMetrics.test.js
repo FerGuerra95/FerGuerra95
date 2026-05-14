@@ -13,7 +13,9 @@ describe('enterprise risk metrics', () => {
       mitigations: [{ dueDate: '2000-01-01', status: 'open' }],
       incidents: [{ severity: 'high', status: 'open' }],
       kri: [{ threshold: 10, actualValue: 14 }],
-      appetite: [{ breachFlag: 1 }]
+      appetite: [{ breachFlag: 1 }],
+      committeeReviews: [{ status: 'final' }, { status: 'draft' }],
+      evidenceLinks: [{ riskId: 'risk_1', evidenceQuality: 'high', reviewStatus: 'reviewed' }]
     });
 
     expect(metrics.criticalRiskCount).toBe(1);
@@ -21,6 +23,8 @@ describe('enterprise risk metrics', () => {
     expect(metrics.kriBreaches).toBe(1);
     expect(metrics.appetiteBreaches).toBe(1);
     expect(metrics.requiresExecutiveAttention).toBe(true);
+    expect(metrics.committeeReadiness).toBe(50);
+    expect(metrics.evidenceCoverage).toBe(50);
     expect(metrics.riskReadinessScore).toBeLessThan(80);
   });
 });

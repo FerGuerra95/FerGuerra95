@@ -9,9 +9,12 @@ import {
   createKriMetric,
   createRisk,
   createRiskAppetite,
+  createRiskCommitteeReview,
   createRiskControl,
+  createRiskEvidenceLink,
   createRiskIncident,
   createRiskMitigation,
+  createRiskNotification,
   createRiskReport,
   getRiskDashboard,
   getRiskSummary,
@@ -60,6 +63,9 @@ describe('enterprise risk foundation', () => {
     await createRiskIncident(organizationId, { description: 'Access exception', severity: 'high', status: 'open' }, actor);
     await createKriMetric(organizationId, { metric: 'Critical exceptions', threshold: 2, actualValue: 4 }, actor);
     await createRiskAppetite(organizationId, { appetiteStatement: 'Zero critical unmanaged access risks', breachFlag: 1 }, actor);
+    await createRiskCommitteeReview(organizationId, { reviewTitle: 'Quarterly risk committee', status: 'final', chair: 'CRO' }, actor);
+    await createRiskEvidenceLink(organizationId, { riskId: risk.id, evidenceTitle: 'Access review memo', evidenceQuality: 'high', reviewStatus: 'reviewed' }, actor);
+    await createRiskNotification(organizationId, { title: 'CEO risk update required', severity: 'critical', targetRole: 'executive' }, actor);
     await createRiskReport(organizationId, { reportType: 'risk_committee_pack' }, actor);
 
     expect((await updateRisk(organizationId, risk.id, { status: 'escalated' }, actor)).status).toBe('escalated');
@@ -68,11 +74,16 @@ describe('enterprise risk foundation', () => {
     expect(summary.metrics.criticalRiskCount).toBe(1);
     expect(summary.metrics.overdueMitigations).toBe(1);
     expect(summary.metrics.appetiteBreaches).toBe(1);
+    expect(summary.metrics.committeeReadiness).toBe(100);
+    expect(summary.metrics.evidenceCoverage).toBe(100);
     expect(summary.bridgeSignals).toContain('risk.critical_risk_requires_ceo');
 
     const dashboard = await getRiskDashboard({ organizationId });
     expect(dashboard.heatmap.length).toBe(1);
     expect(dashboard.reports.length).toBe(1);
+    expect(dashboard.committeeReviews.length).toBe(1);
+    expect(dashboard.evidenceLinks.length).toBe(1);
+    expect(dashboard.notifications.length).toBe(1);
 
     const logs = await listRiskAuditLogs(organizationId);
     expect(logs.some((item) => item.action === 'risk.created')).toBe(true);

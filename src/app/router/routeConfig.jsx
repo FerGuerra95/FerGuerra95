@@ -322,6 +322,21 @@ export const routeGroups = {
         to: '/risk/reports',
         label: 'Reports',
         icon: <FileSearch size={18} />
+      },
+      {
+        to: '/risk/committee-reviews',
+        label: 'Committee Reviews',
+        icon: <Users size={18} />
+      },
+      {
+        to: '/risk/evidence',
+        label: 'Evidence Links',
+        icon: <FileBadge size={18} />
+      },
+      {
+        to: '/risk/notifications',
+        label: 'Notifications',
+        icon: <Activity size={18} />
       }
     ]
   }
@@ -624,5 +639,20 @@ export const pageMetaMap = {
   '/risk/reports': {
     title: 'Risk Reports',
     description: 'Enterprise Risk Brief, Risk Committee Pack, Control Effectiveness Report e Incident Summary.'
+  },
+
+  '/risk/committee-reviews': {
+    title: 'Risk Committee Reviews',
+    description: 'Revisiones formales del comité de riesgos, agendas, decisiones, actas y paquetes board-ready.'
+  },
+
+  '/risk/evidence': {
+    title: 'Risk Evidence Links',
+    description: 'Evidencias enlazadas, calidad, fuente, reviewer y estado de revisión humana.'
+  },
+
+  '/risk/notifications': {
+    title: 'Executive Risk Notifications',
+    description: 'Cola trazable de notificaciones y escalaciones de riesgo hacia ejecutivos y comité.'
   }
 };

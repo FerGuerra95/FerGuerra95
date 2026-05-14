@@ -41,7 +41,10 @@ test('Risk enterprise routes load and expose register CRUD path', async ({ page 
     ['/risk/incidents', 'Incident and issue log.'],
     ['/risk/kri', 'KRI tracker.'],
     ['/risk/appetite', 'Risk appetite.'],
-    ['/risk/reports', 'Risk reports.']
+    ['/risk/reports', 'Risk reports.'],
+    ['/risk/committee-reviews', 'Risk committee reviews.'],
+    ['/risk/evidence', 'Risk evidence links.'],
+    ['/risk/notifications', 'Executive risk notifications.']
   ];
 
   for (const [route, heading] of routes) {

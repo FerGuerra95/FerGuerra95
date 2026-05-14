@@ -2,9 +2,12 @@ import {
   createKriMetric,
   createRisk,
   createRiskAppetite,
+  createRiskCommitteeReview,
   createRiskControl,
+  createRiskEvidenceLink,
   createRiskIncident,
   createRiskMitigation,
+  createRiskNotification,
   createRiskReport,
   getRiskBridgeSignals,
   getRiskDashboard,
@@ -15,12 +18,17 @@ import {
   listMitigations,
   listRiskAppetite,
   listRiskAuditLogs,
+  listRiskCommitteeReviews,
+  listRiskEvidenceLinks,
+  listRiskNotifications,
   listRiskReports,
   listRisks,
   updateKriMetric,
   updateRisk,
   updateRiskAppetite,
+  updateRiskCommitteeReview,
   updateRiskControl,
+  updateRiskEvidenceLink,
   updateRiskIncident,
   updateRiskMitigation
 } from '../../services/risk/risk.service.js';
@@ -122,6 +130,17 @@ export const updateAppetite = (req, res, next) => updateResponse(req, res, next,
 
 export const listReports = (req, res, next) => listResponse(req, res, next, listRiskReports);
 export const createReport = (req, res, next) => createResponse(req, res, next, createRiskReport);
+
+export const listCommitteeReviews = (req, res, next) => listResponse(req, res, next, listRiskCommitteeReviews);
+export const createCommitteeReview = (req, res, next) => createResponse(req, res, next, createRiskCommitteeReview);
+export const updateCommitteeReview = (req, res, next) => updateResponse(req, res, next, updateRiskCommitteeReview, 'Revision de comite no encontrada');
+
+export const listEvidenceLinks = (req, res, next) => listResponse(req, res, next, listRiskEvidenceLinks);
+export const createEvidenceLink = (req, res, next) => createResponse(req, res, next, createRiskEvidenceLink);
+export const updateEvidenceLink = (req, res, next) => updateResponse(req, res, next, updateRiskEvidenceLink, 'Evidencia no encontrada');
+
+export const listNotifications = (req, res, next) => listResponse(req, res, next, listRiskNotifications);
+export const createNotification = (req, res, next) => createResponse(req, res, next, createRiskNotification);
 
 export async function listAuditTrail(req, res, next) {
   try {

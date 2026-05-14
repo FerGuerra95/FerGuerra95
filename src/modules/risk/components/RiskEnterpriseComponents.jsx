@@ -182,6 +182,35 @@ export function RiskReportsPanel({ items = [] }) {
   ]} />;
 }
 
+export function RiskCommitteeReviewPanel({ items = [] }) {
+  return <EnterpriseRiskTable title="Risk committee reviews" items={items} columns={[
+    { key: 'reviewTitle', label: 'Review' },
+    { key: 'committeeName', label: 'Committee' },
+    { key: 'meetingDate', label: 'Meeting' },
+    { key: 'chair', label: 'Chair' },
+    { key: 'status', label: 'Status', render: (item) => <RiskStatusBadge status={item.status} /> }
+  ]} />;
+}
+
+export function RiskEvidencePanel({ items = [] }) {
+  return <EnterpriseRiskTable title="Risk evidence links" items={items} columns={[
+    { key: 'evidenceTitle', label: 'Evidence' },
+    { key: 'sourceModule', label: 'Source' },
+    { key: 'evidenceQuality', label: 'Quality', render: (item) => <RiskStatusBadge status={item.evidenceQuality} /> },
+    { key: 'reviewer', label: 'Reviewer' },
+    { key: 'reviewStatus', label: 'Review', render: (item) => <RiskStatusBadge status={item.reviewStatus} /> }
+  ]} />;
+}
+
+export function RiskNotificationPanel({ items = [] }) {
+  return <EnterpriseRiskTable title="Executive risk notifications" items={items} columns={[
+    { key: 'title', label: 'Notification' },
+    { key: 'targetRole', label: 'Target' },
+    { key: 'severity', label: 'Severity', render: (item) => <RiskStatusBadge status={item.severity} /> },
+    { key: 'status', label: 'Status', render: (item) => <RiskStatusBadge status={item.status} /> }
+  ]} />;
+}
+
 export function BoardRiskReadinessPanel({ metrics = {} }) {
   return (
     <Card className="risk-enterprise-panel">
@@ -190,7 +219,8 @@ export function BoardRiskReadinessPanel({ metrics = {} }) {
       <div className="risk-enterprise-grid">
         <RiskKpiCard icon={CheckCircle2} label="Control coverage" value={`${metrics.controlCoverage || 0}%`} description="Mapped controls." />
         <RiskKpiCard icon={BarChart3} label="Residual risk" value={`${metrics.residualRisk || 0}/100`} description="Portfolio average." />
-        <RiskKpiCard icon={FileText} label="Human review" value="Required" description="No automated decisioning." />
+        <RiskKpiCard icon={FileText} label="Evidence coverage" value={`${metrics.evidenceCoverage || 0}%`} description="Board support." />
+        <RiskKpiCard icon={CheckCircle2} label="Committee readiness" value={`${metrics.committeeReadiness || 0}%`} description="Formal review posture." />
       </div>
     </Card>
   );

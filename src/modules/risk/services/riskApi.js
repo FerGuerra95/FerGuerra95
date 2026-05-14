@@ -59,6 +59,24 @@ export const riskApi = {
   },
   async createReport(payload = {}) {
     return extractData(await httpClient.post('/risk/reports', payload));
+  },
+  async listCommitteeReviews() {
+    return extractItems(await httpClient.get('/risk/committee-reviews'));
+  },
+  async createCommitteeReview(payload = {}) {
+    return extractData(await httpClient.post('/risk/committee-reviews', payload));
+  },
+  async listEvidenceLinks() {
+    return extractItems(await httpClient.get('/risk/evidence-links'));
+  },
+  async createEvidenceLink(payload = {}) {
+    return extractData(await httpClient.post('/risk/evidence-links', payload));
+  },
+  async listNotifications() {
+    return extractItems(await httpClient.get('/risk/notifications'));
+  },
+  async createNotification(payload = {}) {
+    return extractData(await httpClient.post('/risk/notifications', payload));
   }
 };
 

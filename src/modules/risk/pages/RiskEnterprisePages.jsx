@@ -9,10 +9,13 @@ import {
   KriTrackerPanel,
   MitigationPlansPanel,
   RiskAppetitePanel,
+  RiskCommitteeReviewPanel,
+  RiskEvidencePanel,
   RiskExecutiveWidget,
   RiskHeatmap,
   RiskRegisterTable,
   RiskReportsPanel,
+  RiskNotificationPanel,
   riskEnterpriseCss
 } from '../components/RiskEnterpriseComponents.jsx';
 
@@ -110,6 +113,10 @@ export function RiskDashboardPage() {
         </section>
         <RiskRegisterTable items={dashboard?.risks || []} />
         <MitigationPlansPanel items={dashboard?.mitigations || []} />
+        <section className="risk-enterprise-grid-two">
+          <RiskCommitteeReviewPanel items={dashboard?.committeeReviews || []} />
+          <RiskEvidencePanel items={dashboard?.evidenceLinks || []} />
+        </section>
       </div>
     </div>
   );
@@ -145,4 +152,16 @@ export function RiskAppetitePage() {
 
 export function RiskReportsPage() {
   return <EntityPage badge="Reports" title="Risk reports." copy="Enterprise Risk Brief, Risk Committee Pack, Control Effectiveness Report, Incident Summary and Appetite Breach Report." load={riskApi.listReports} create={riskApi.createReport} defaults={{ title: 'Enterprise Risk Brief', reportType: 'enterprise_risk_brief' }} fields={['title', 'reportType']} permission={PERMISSIONS.EXPORT_RISK_REPORT} render={(items) => <RiskReportsPanel items={items} />} />;
+}
+
+export function RiskCommitteeReviewsPage() {
+  return <EntityPage badge="Committee" title="Risk committee reviews." copy="Formal committee review packets, agendas, linked risks, decisions and minutes for board-ready governance." load={riskApi.listCommitteeReviews} create={riskApi.createCommitteeReview} defaults={{ reviewTitle: '', committeeName: 'Risk Committee', meetingDate: '', chair: 'CRO', status: 'draft' }} fields={['reviewTitle', 'committeeName', 'meetingDate', 'chair', 'status']} permission={PERMISSIONS.UPDATE_RISK} render={(items) => <RiskCommitteeReviewPanel items={items} />} />;
+}
+
+export function RiskEvidencePage() {
+  return <EntityPage badge="Evidence" title="Risk evidence links." copy="Evidence quality, source module, reviewer, review status and human review notes attached to enterprise risks." load={riskApi.listEvidenceLinks} create={riskApi.createEvidenceLink} defaults={{ evidenceTitle: '', evidenceType: 'document', evidenceQuality: 'high', sourceModule: 'Risk', reviewer: 'CRO', reviewStatus: 'reviewed' }} fields={['evidenceTitle', 'evidenceType', 'evidenceQuality', 'sourceModule', 'reviewer', 'reviewStatus']} permission={PERMISSIONS.UPDATE_RISK} render={(items) => <RiskEvidencePanel items={items} />} />;
+}
+
+export function RiskNotificationsPage() {
+  return <EntityPage badge="Notifications" title="Executive risk notifications." copy="Queued executive updates for critical risks, appetite breaches, KRI breaches and board attention items." load={riskApi.listNotifications} create={riskApi.createNotification} defaults={{ title: '', targetRole: 'executive', severity: 'watch', status: 'queued' }} fields={['title', 'targetRole', 'severity', 'status']} permission={PERMISSIONS.UPDATE_RISK} render={(items) => <RiskNotificationPanel items={items} />} />;
 }

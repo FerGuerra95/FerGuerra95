@@ -49,4 +49,15 @@ router.patch('/appetite/:id', manageAppetite, validate(riskValidator.update), co
 router.get('/reports', readRisk, controller.listReports);
 router.post('/reports', exportRisk, validate(riskValidator.body), controller.createReport);
 
+router.get('/committee-reviews', readRisk, controller.listCommitteeReviews);
+router.post('/committee-reviews', updateRisk, validate(riskValidator.body), controller.createCommitteeReview);
+router.patch('/committee-reviews/:id', updateRisk, validate(riskValidator.update), controller.updateCommitteeReview);
+
+router.get('/evidence-links', readRisk, controller.listEvidenceLinks);
+router.post('/evidence-links', updateRisk, validate(riskValidator.body), controller.createEvidenceLink);
+router.patch('/evidence-links/:id', updateRisk, validate(riskValidator.update), controller.updateEvidenceLink);
+
+router.get('/notifications', readRisk, controller.listNotifications);
+router.post('/notifications', updateRisk, validate(riskValidator.body), controller.createNotification);
+
 export default router;
