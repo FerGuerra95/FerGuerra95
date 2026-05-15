@@ -286,8 +286,8 @@ const sidebarCss = `
   .ceos-brand-mark {
     position: relative;
     overflow: visible;
-    width: min(140px, 100%);
-    max-width: 150px;
+    width: min(200px, 100%);
+    max-width: 220px;
     min-height: 44px;
     height: auto;
     border-radius: 0;
@@ -308,14 +308,14 @@ const sidebarCss = `
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 140px;
-    max-height: 52px;
+    max-width: 220px;
+    max-height: 56px;
   }
 
   .ceos-brand-mark .ceos-brand-logo-root img {
     width: 100%;
     height: auto;
-    max-height: 52px;
+    max-height: 56px;
     object-fit: contain;
     object-position: left center;
   }
@@ -851,10 +851,11 @@ export function Sidebar() {
           <div className="ceos-brand-mark">
             <BrandLogo
               variant="horizontal"
-              horizontalAsset="color"
-              size="lg"
+              horizontalAsset="letters"
+              size="md"
               surface="transparent"
               loading="eager"
+              className="ceos-sidebar-brand-logo"
               alt="CEO's OS"
             />
           </div>

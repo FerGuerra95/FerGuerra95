@@ -205,21 +205,6 @@ export function AppShell() {
           <div>
             <div
               style={{
-                fontSize: 12,
-                fontWeight: 900,
-                letterSpacing: 0.6,
-                textTransform: 'uppercase',
-                color: '#34d399',
-                marginBottom: 4,
-                textShadow:
-                  '0 0 14px rgba(52,211,153,0.16), 0 0 10px rgba(212,175,55,0.06)'
-              }}
-            >
-              CEO's OS · Secure Executive Workspace
-            </div>
-
-            <div
-              style={{
                 fontSize: 14,
                 color: 'rgba(226,232,240,0.62)',
                 fontWeight: 600
