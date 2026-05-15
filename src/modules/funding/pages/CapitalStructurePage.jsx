@@ -797,7 +797,7 @@ export function CapitalStructurePage() {
 
               <MiniCard
                 title="Control de ownership"
-                text="Conviene vigilar que fundadores, equipo e inversores mantengan una estructura alineada con la siguiente fase de crecimiento."
+                text="Conviene vigilar que fundadores, equipo e inversores mantengan una estructura alineada con el próximo tramo de crecimiento."
               />
             </div>
           </div>

@@ -298,7 +298,7 @@ export const routeGroups = {
   },
 
   bridge: {
-    label: 'The Bridge',
+    label: 'Bridge',
     items: [
       {
         to: '/bridge/dashboard',
@@ -673,9 +673,9 @@ export const pageMetaMap = {
   },
 
   '/bridge/dashboard': {
-    title: 'The Bridge Marketplace',
+    title: 'Enterprise Bridge',
     description:
-      'Capa futura de red para conectar oportunidades M&A y Funding con inversores, compradores y capital verificado.'
+      'Capa transversal para señales cross-module, dependencias, conflictos, evidencias y atención ejecutiva.'
   },
 
   '/risk/dashboard': {

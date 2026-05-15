@@ -522,9 +522,8 @@ export function EcosystemBranchPage({ branch }) {
             <h3 className="ecosystem-panel-title">Connected to the executive release</h3>
 
             <p className="muted ecosystem-panel-copy">
-              Esta rama queda integrada visualmente en la arquitectura base, pero su
-              desarrollo operativo queda reservado para la siguiente fase después de
-              validar datos, informes y coherencia del release actual.
+              Esta rama mantiene una señal ejecutiva conectada al sistema,
+              condicionada a datos validados, evidencias disponibles y revisión humana.
             </p>
 
             <div className="ecosystem-link-row">

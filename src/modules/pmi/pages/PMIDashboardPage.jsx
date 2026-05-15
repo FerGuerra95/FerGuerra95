@@ -2138,7 +2138,7 @@ export function PMIDashboardPage() {
           <SectionHeader
             kicker="30-60-90 plan"
             icon={CalendarDays}
-            title="Integration roadmap"
+            title="Integration execution plan"
             description="Plan ejecutivo para convertir el cierre de la operación en ejecución, control y captura de valor."
           />
 
@@ -2191,8 +2191,8 @@ export function PMIDashboardPage() {
                 <h3 className="pmi-panel-title">Board Integration Memo</h3>
 
                 <p className="muted pmi-panel-copy">
-                  Próximo entregable premium: resumen para comité con sinergias,
-                  riesgos, owners, costes y decisiones pendientes.
+                  Resumen board-ready para comité con sinergias, riesgos,
+                  owners, costes y decisiones que requieren revisión humana.
                 </p>
               </div>
 
@@ -2204,7 +2204,7 @@ export function PMIDashboardPage() {
             <div>
               <MiniRow label="Memo status" value="Draft-ready" />
               <MiniRow label="Inputs" value="Workstreams + risks + synergies" />
-              <MiniRow label="Next version" value="Export premium" />
+              <MiniRow label="Executive action" value="Prepare board-ready export" />
             </div>
           </Card>
 

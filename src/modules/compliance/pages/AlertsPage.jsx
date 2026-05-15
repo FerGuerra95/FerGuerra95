@@ -733,7 +733,7 @@ function getAlertSignal({
     title: 'Alert history available',
     posture: 'Monitor changes',
     description:
-      'Existe histórico de alertas. Conviene mantener monitorización y conectar señales futuras con evidencia.'
+      'Existe histórico de alertas. Conviene mantener monitorización y conectar próximas señales con evidencia.'
   };
 }
 

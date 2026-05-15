@@ -5,7 +5,10 @@ import { useAuth } from '../providers/AuthProvider.jsx';
 const topbarBlackCss = `
   .topbar.ceos-topbar-premium {
     position: relative;
-    overflow: visible;
+    overflow-x: clip;
+    overflow-y: visible;
+    flex-wrap: wrap;
+    align-items: flex-start;
     background:
       linear-gradient(180deg, rgba(255,255,255,0.010), rgba(255,255,255,0.000)),
       #000000 !important;
@@ -54,6 +57,11 @@ const topbarBlackCss = `
   .topbar.ceos-topbar-premium .ceos-topbar-actions {
     position: relative;
     z-index: 1;
+    min-width: 0;
+  }
+
+  .topbar.ceos-topbar-premium .topbar-title {
+    flex: 1 1 300px;
   }
 
   .topbar.ceos-topbar-premium .topbar-title h1 {
@@ -72,6 +80,10 @@ const topbarBlackCss = `
   }
 
   .ceos-topbar-actions {
+    display: flex;
+    flex: 1 1 620px;
+    min-width: 0;
+    max-width: 100%;
     align-items: center;
     justify-content: flex-end;
     gap: 12px;

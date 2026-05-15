@@ -175,7 +175,7 @@ const securityItems = [
 ];
 
 export function LandingPage() {
-  const handleBetaSubmit = (event) => {
+  const handleAccessSubmit = (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -190,7 +190,7 @@ export function LandingPage() {
       ].join('\n')
     );
 
-    window.location.href = `mailto:demo@theceosos.com?subject=Solicitud%20Beta%20Ejecutiva%20CEO%27s%20OS&body=${body}`;
+    window.location.href = `mailto:demo@theceosos.com?subject=Solicitud%20Acceso%20Ejecutivo%20CEO%27s%20OS&body=${body}`;
   };
 
   return (
@@ -313,9 +313,9 @@ export function LandingPage() {
 
         .landing-nav-letters-img img {
           display: block;
-          height: clamp(28px, 4.5vw, 44px);
+          height: clamp(24px, 3.4vw, 36px);
           width: auto;
-          max-width: min(420px, 88vw);
+          max-width: min(300px, 70vw);
           object-fit: contain;
           object-position: left center;
           filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.45));
@@ -346,14 +346,19 @@ export function LandingPage() {
 
         .landing-hero-brand-wrap {
           width: 100%;
-          max-width: min(920px, 100%);
+          max-width: min(720px, 100%);
           margin: 0 0 24px;
           display: flex;
           justify-content: center;
         }
 
         .landing-hero-lockup {
-          filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.34));
+          max-width: min(680px, 92vw);
+          filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.42));
+        }
+
+        .landing-hero-lockup img {
+          image-rendering: auto;
         }
 
         @media (max-width: 540px) {
@@ -1663,7 +1668,7 @@ export function LandingPage() {
 
             <div className="landing-hero-actions">
               <a href="#access" className="landing-button landing-button-primary">
-                Solicitar acceso a la Beta Ejecutiva
+                Solicitar acceso ejecutivo
                 <ChevronRight size={16} />
               </a>
 
@@ -2054,7 +2059,7 @@ export function LandingPage() {
           <div className="loop-panel">
             <div>
               <div className="section-kicker">The Loop</div>
-              <h2 className="section-heading">Solicite acceso a la Beta Ejecutiva.</h2>
+              <h2 className="section-heading">Solicite acceso ejecutivo.</h2>
               <p className="section-copy">
                 CEO’s OS está actualmente en fase de despliegue controlado para
                 fundadores, inversores y operadores seleccionados. No es una
@@ -2073,12 +2078,12 @@ export function LandingPage() {
                 </div>
                 <div className="loop-badge">
                   <Users size={16} />
-                  Beta ejecutiva
+                  Acceso ejecutivo
                 </div>
               </div>
             </div>
 
-            <form className="landing-form" onSubmit={handleBetaSubmit}>
+            <form className="landing-form" onSubmit={handleAccessSubmit}>
               <label>
                 Name
                 <input name="name" placeholder="Ej. Fernando Guerra" />
@@ -2114,7 +2119,7 @@ export function LandingPage() {
               </label>
 
               <button className="landing-button landing-button-primary full" type="submit">
-                Request Executive Beta
+                Request executive access
                 <ChevronRight size={16} />
               </button>
             </form>

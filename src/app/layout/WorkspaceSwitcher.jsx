@@ -4,20 +4,23 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const workspaceSwitcherCss = `
   .ceos-workspace-switcher {
     --visual-index: 0;
-    --workspace-count: 8;
+    --workspace-count: 10;
     --workspace-accent: rgba(16, 185, 129, 0.95);
     --workspace-accent-soft: rgba(16, 185, 129, 0.22);
     --workspace-accent-glow: rgba(16, 185, 129, 0.16);
     position: relative;
     display: grid;
-    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--workspace-count), minmax(86px, 1fr));
     align-items: center;
-    width: min(1080px, 100%);
-    max-width: 1080px;
+    box-sizing: border-box;
+    flex: 1 1 760px;
+    width: min(960px, 100%);
+    max-width: 960px;
     min-width: 0;
     padding: 6px;
     border-radius: 999px;
-    overflow: visible;
+    overflow-x: auto;
+    overflow-y: visible;
     background:
       radial-gradient(circle at 0% 0%, rgba(255,255,255,0.052), transparent 34%),
       linear-gradient(135deg, rgba(255,255,255,0.046), rgba(255,255,255,0.012)),
@@ -32,6 +35,12 @@ const workspaceSwitcherCss = `
     backdrop-filter: blur(18px) saturate(140%);
     -webkit-backdrop-filter: blur(18px) saturate(140%);
     user-select: none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .ceos-workspace-switcher::-webkit-scrollbar {
+    display: none;
   }
 
   .ceos-workspace-switcher.is-overview {
@@ -64,22 +73,34 @@ const workspaceSwitcherCss = `
     --workspace-accent-glow: rgba(168, 85, 247, 0.34);
   }
 
+  .ceos-workspace-switcher.is-bridge {
+    --workspace-accent: rgba(34, 197, 94, 0.96);
+    --workspace-accent-soft: rgba(34, 197, 94, 0.22);
+    --workspace-accent-glow: rgba(34, 197, 94, 0.30);
+  }
+
   .ceos-workspace-switcher.is-governance {
     --workspace-accent: rgba(14, 165, 233, 0.96);
     --workspace-accent-soft: rgba(14, 165, 233, 0.22);
     --workspace-accent-glow: rgba(14, 165, 233, 0.26);
   }
 
-  .ceos-workspace-switcher.is-heritage {
-    --workspace-accent: rgba(212, 175, 55, 0.96);
-    --workspace-accent-soft: rgba(212, 175, 55, 0.24);
-    --workspace-accent-glow: rgba(212, 175, 55, 0.32);
+  .ceos-workspace-switcher.is-risk {
+    --workspace-accent: rgba(248, 113, 113, 0.96);
+    --workspace-accent-soft: rgba(248, 113, 113, 0.22);
+    --workspace-accent-glow: rgba(248, 113, 113, 0.26);
   }
 
-  .ceos-workspace-switcher.is-bridge {
-    --workspace-accent: rgba(34, 197, 94, 0.96);
-    --workspace-accent-soft: rgba(34, 197, 94, 0.22);
-    --workspace-accent-glow: rgba(34, 197, 94, 0.30);
+  .ceos-workspace-switcher.is-reporting {
+    --workspace-accent: rgba(129, 140, 248, 0.96);
+    --workspace-accent-soft: rgba(129, 140, 248, 0.22);
+    --workspace-accent-glow: rgba(129, 140, 248, 0.24);
+  }
+
+  .ceos-workspace-switcher.is-strategy {
+    --workspace-accent: rgba(244, 114, 182, 0.96);
+    --workspace-accent-soft: rgba(244, 114, 182, 0.22);
+    --workspace-accent-glow: rgba(244, 114, 182, 0.24);
   }
 
   .ceos-workspace-switcher::before {
@@ -221,7 +242,8 @@ const workspaceSwitcherCss = `
 
   @media (max-width: 1280px) {
     .ceos-workspace-switcher {
-      width: min(940px, 100%);
+      width: min(100%, 100%);
+      max-width: 100%;
     }
 
     .ceos-workspace-option {
@@ -232,7 +254,7 @@ const workspaceSwitcherCss = `
 
   @media (max-width: 980px) {
     .ceos-workspace-switcher {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(var(--workspace-count), minmax(116px, 1fr));
       border-radius: 26px;
     }
 
@@ -254,7 +276,7 @@ const workspaceSwitcherCss = `
 const WORKSPACES = [
   {
     key: 'overview',
-    label: 'Executive',
+    label: 'CEO Overview',
     path: '/dashboard',
     sidebarLabel: 'EXECUTIVE OS'
   },
@@ -277,28 +299,40 @@ const WORKSPACES = [
     sidebarLabel: 'FUNDING'
   },
   {
-    key: 'pmi',
-    label: 'PMI',
-    path: '/pmi/dashboard',
-    sidebarLabel: 'PMI'
-  },
-  {
     key: 'governance',
     label: 'Governance',
     path: '/governance/dashboard',
     sidebarLabel: 'GOVERNANCE & ESG'
   },
   {
-    key: 'heritage',
-    label: 'Heritage',
-    path: '/heritage/dashboard',
-    sidebarLabel: 'HERITAGE & LEGACY'
+    key: 'pmi',
+    label: 'PMI & Synergies',
+    path: '/pmi/dashboard',
+    sidebarLabel: 'PMI'
   },
   {
     key: 'bridge',
     label: 'Bridge',
     path: '/bridge/dashboard',
     sidebarLabel: 'THE BRIDGE'
+  },
+  {
+    key: 'risk',
+    label: 'Risk',
+    path: '/risk/dashboard',
+    sidebarLabel: 'ENTERPRISE RISK'
+  },
+  {
+    key: 'reporting',
+    label: 'Reporting',
+    path: '/reporting/dashboard',
+    sidebarLabel: 'REPORTING'
+  },
+  {
+    key: 'strategy',
+    label: 'Strategy',
+    path: '/strategy/dashboard',
+    sidebarLabel: 'STRATEGY'
   }
 ];
 
@@ -312,8 +346,10 @@ function getWorkspace(pathname) {
   if (pathname.startsWith('/funding')) return 'funding';
   if (pathname.startsWith('/pmi')) return 'pmi';
   if (pathname.startsWith('/governance')) return 'governance';
-  if (pathname.startsWith('/heritage')) return 'heritage';
   if (pathname.startsWith('/bridge')) return 'bridge';
+  if (pathname.startsWith('/risk')) return 'risk';
+  if (pathname.startsWith('/reporting')) return 'reporting';
+  if (pathname.startsWith('/strategy')) return 'strategy';
 
   return 'ma';
 }

@@ -21,19 +21,39 @@ const MUTED_ICON = 'rgba(226,232,240,0.68)';
 
 const SIDEBAR_GROUP_ORDER = [
   'overview',
-  'bridge',
   'ma',
-  'funding',
   'compliance',
+  'funding',
   'governance',
-  'risk',
   'pmi',
-  'strategy',
+  'bridge',
+  'risk',
   'reporting',
-  'heritage',
+  'strategy'
 ];
 
 const SIDEBAR_KEY_ROUTES = {
+  ma: new Set([
+    '/ma/dashboard',
+    '/ma/valuation',
+    '/ma/pipeline',
+    '/ma/deals',
+    '/ma/data-room'
+  ]),
+  compliance: new Set([
+    '/compliance/dashboard',
+    '/compliance/suppliers',
+    '/compliance/risk-map',
+    '/compliance/evidence',
+    '/compliance/reports'
+  ]),
+  governance: new Set([
+    '/governance/dashboard',
+    '/governance/decisions',
+    '/governance/board-packs',
+    '/governance/policies',
+    '/governance/reports'
+  ]),
   pmi: new Set([
     '/pmi/dashboard',
     '/pmi/programs',
@@ -63,7 +83,8 @@ const SIDEBAR_KEY_ROUTES = {
     '/reporting/dashboard',
     '/reporting/library',
     '/reporting/board-pack',
-    '/reporting/exports'
+    '/reporting/exports',
+    '/reporting/evidence'
   ]),
   strategy: new Set([
     '/strategy/dashboard',
@@ -102,13 +123,8 @@ const workspaceMeta = {
   },
   governance: {
     icon: <Scale size={18} />,
-    title: 'Governance & ESG Strategy',
-    description: 'Gobernanza, sostenibilidad, actas de consejo, decisiones estratégicas y reporting ESG.'
-  },
-  heritage: {
-    icon: <Gem size={18} />,
-    title: 'Heritage & Legacy OS',
-    description: 'Patrimonio, family office, sucesión, protección de activos y legado familiar.'
+    title: 'Governance',
+    description: 'Decisiones ejecutivas, board packs, políticas, comités y trazabilidad de gobierno.'
   },
   bridge: {
     icon: <Network size={18} />,
@@ -753,7 +769,6 @@ const STABLE_SIDEBAR_SECTION_LABELS = {
   funding: 'FUNDING',
   pmi: 'PMI',
   governance: 'GOVERNANCE & ESG',
-  heritage: 'HERITAGE & LEGACY',
   bridge: 'THE BRIDGE',
   risk: 'ENTERPRISE RISK',
   reporting: 'REPORTING',
