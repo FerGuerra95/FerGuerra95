@@ -49,10 +49,14 @@ export function StrategyTable({ title, items = [], columns = [] }) {
   return (
     <Card className="strategy-panel">
       <h3>{title}</h3>
-      {items.length === 0 ? <div className="strategy-empty">No records available.</div> : null}
+      {items.length === 0 ? (
+        <div className="strategy-empty ceos-enterprise-table-empty">
+          Insufficient validated data · Human review required
+        </div>
+      ) : null}
       {items.length > 0 ? (
-        <div className="strategy-scroll">
-          <table className="strategy-table">
+        <div className="strategy-scroll ceos-enterprise-table-wrap">
+          <table className="strategy-table ceos-enterprise-table">
             <thead><tr>{columns.map((column) => <th key={column.key}>{column.label}</th>)}</tr></thead>
             <tbody>{items.map((item) => <tr key={item.id}>{columns.map((column) => <td key={column.key}>{column.render ? column.render(item) : item[column.key] || 'N/A'}</td>)}</tr>)}</tbody>
           </table>

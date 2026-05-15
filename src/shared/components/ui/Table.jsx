@@ -1,9 +1,18 @@
 import React from 'react';
 
-export function Table({ columns, rows }) {
+export function Table({
+  columns,
+  rows,
+  className = '',
+  wrapClassName = ''
+}) {
+  const wrapCls =
+    `table-wrap ceos-enterprise-table-wrap ${wrapClassName}`.trim();
+  const tableCls = `table ceos-enterprise-table ${className}`.trim();
+
   return (
-    <div className="table-wrap">
-      <table className="table">
+    <div className={wrapCls}>
+      <table className={tableCls}>
         <thead>
           <tr>
             {columns.map((column) => (
@@ -15,7 +24,11 @@ export function Table({ columns, rows }) {
           {rows.map((row, index) => (
             <tr key={row.id ?? index}>
               {columns.map((column) => (
-                <td key={column.key}>{typeof column.render === 'function' ? column.render(row) : row[column.key]}</td>
+                <td key={column.key}>
+                  {typeof column.render === 'function'
+                    ? column.render(row)
+                    : row[column.key]}
+                </td>
               ))}
             </tr>
           ))}

@@ -49,10 +49,14 @@ export function ReportingTable({ title, items = [], columns = [] }) {
   return (
     <Card className="reporting-panel">
       <h3>{title}</h3>
-      {items.length === 0 ? <div className="reporting-empty">No records available.</div> : null}
+      {items.length === 0 ? (
+        <div className="reporting-empty ceos-enterprise-table-empty">
+          Insufficient validated data · Human review required
+        </div>
+      ) : null}
       {items.length > 0 ? (
-        <div className="reporting-scroll">
-          <table className="reporting-table">
+        <div className="reporting-scroll ceos-enterprise-table-wrap">
+          <table className="reporting-table ceos-enterprise-table">
             <thead><tr>{columns.map((column) => <th key={column.key}>{column.label}</th>)}</tr></thead>
             <tbody>{items.map((item) => <tr key={item.id}>{columns.map((column) => <td key={column.key}>{column.render ? column.render(item) : item[column.key] || 'N/A'}</td>)}</tr>)}</tbody>
           </table>

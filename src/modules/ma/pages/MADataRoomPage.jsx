@@ -411,8 +411,8 @@ function DataRoomTable({
   }
 
   return (
-    <div className="ma-data-room-table-scroll">
-      <table className="ma-data-room-table">
+    <div className="ma-data-room-table-scroll ceos-enterprise-table-wrap">
+      <table className="ma-data-room-table ceos-enterprise-table">
         <thead>
           <tr>
             <th>Document</th>
@@ -523,8 +523,8 @@ function SharesTable({ shares, canRevokeShare, onRevokeShare }) {
   }
 
   return (
-    <div className="ma-data-room-table-scroll">
-      <table className="ma-data-room-table">
+    <div className="ma-data-room-table-scroll ceos-enterprise-table-wrap">
+      <table className="ma-data-room-table ceos-enterprise-table">
         <thead>
           <tr>
             <th>Share</th>
@@ -576,8 +576,8 @@ function AuditLogTable({ auditLogs }) {
   }
 
   return (
-    <div className="ma-data-room-table-scroll">
-      <table className="ma-data-room-table">
+    <div className="ma-data-room-table-scroll ceos-enterprise-table-wrap">
+      <table className="ma-data-room-table ceos-enterprise-table">
         <thead>
           <tr>
             <th>Action</th>

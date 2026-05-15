@@ -741,3 +741,222 @@
     0 0 14px var(--ws-accent-glow),
     inset 0 1px 0 rgba(255, 255, 255, 0.032) !important;
 }
+
+/* ——— Section typography (lower panels) ——— */
+
+.main-area[data-workspace] .ceos-ws-section-kicker {
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ws-accent-text);
+  opacity: 0.9;
+}
+
+.main-area[data-workspace] .ceos-ws-section-title {
+  margin: 4px 0 6px;
+  font-size: clamp(1.12rem, 2vw, 1.42rem);
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+}
+
+.main-area[data-workspace] .ceos-ws-section-subtitle {
+  margin: 0;
+  max-width: 72ch;
+  color: rgba(226, 232, 240, 0.64);
+  line-height: 1.55;
+  font-size: 13px;
+}
+
+/* ——— Enterprise table system (opt-in classes + shared primitives) ——— */
+
+.main-area[data-workspace] .ceos-enterprise-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: visible;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.11);
+  border-top: 2px solid var(--ws-accent-border);
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.38), rgba(2, 6, 23, 0.78));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.032),
+    0 0 18px var(--ws-accent-glow);
+  -webkit-overflow-scrolling: touch;
+}
+
+.main-area[data-workspace] .ceos-enterprise-div-table {
+  padding: 4px 10px 12px;
+}
+
+.main-area[data-workspace]
+  .ceos-enterprise-table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  border: 1px solid var(--ws-accent-border);
+  background:
+    linear-gradient(135deg, var(--ws-surface), rgba(0, 0, 0, 0.42));
+}
+
+.main-area[data-workspace] .ceos-enterprise-table-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.main-area[data-workspace] .ceos-enterprise-table-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  margin-top: 8px;
+  border-radius: 0 0 12px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 var(--ws-accent-soft);
+  color: rgba(226, 232, 240, 0.62);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.main-area[data-workspace] .ceos-enterprise-table-empty {
+  padding: 22px 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.55;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.main-area[data-workspace] .ceos-enterprise-row-action {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.main-area[data-workspace] .ceos-enterprise-row-meta {
+  font-size: 12px;
+  color: rgba(226, 232, 240, 0.58);
+}
+
+.main-area[data-workspace]
+  table.ceos-enterprise-table,
+  table.reporting-table.ceos-enterprise-table,
+  table.strategy-table.ceos-enterprise-table,
+  table.risk-enterprise-table.ceos-enterprise-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+}
+
+.main-area[data-workspace]
+  table.ceos-enterprise-table thead th,
+  table.reporting-table.ceos-enterprise-table thead th,
+  table.strategy-table.ceos-enterprise-table thead th,
+  table.risk-enterprise-table.ceos-enterprise-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 13px 12px;
+  font-size: 11px;
+  font-weight: 820;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(248, 250, 252, 0.94);
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  border-bottom: 1px solid var(--ws-accent-border) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.main-area[data-workspace]
+  table.ceos-enterprise-table tbody td,
+  table.reporting-table.ceos-enterprise-table tbody td,
+  table.strategy-table.ceos-enterprise-table tbody td,
+  table.risk-enterprise-table.ceos-enterprise-table tbody td {
+  padding: 13px 12px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.09);
+  vertical-align: middle;
+}
+
+.main-area[data-workspace]
+  table.ceos-enterprise-table tbody tr:hover td,
+  table.reporting-table.ceos-enterprise-table tbody tr:hover td,
+  table.strategy-table.ceos-enterprise-table tbody tr:hover td,
+  table.risk-enterprise-table.ceos-enterprise-table tbody tr:hover td {
+  background: var(--ws-surface) !important;
+}
+
+.main-area[data-workspace] .ceos-enterprise-table-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.main-area[data-workspace] .ceos-enterprise-table-status::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--ws-accent);
+  box-shadow: 0 0 10px var(--ws-accent-glow);
+}
+
+/* Div-based enterprise lists (Bridge / Governance / PMI) */
+
+.main-area[data-workspace='bridge'] .bridge-enterprise-table-head,
+.main-area[data-workspace='governance'] .governance-enterprise-table-head,
+.main-area[data-workspace='pmi'] .pmi-enterprise-table-head {
+  padding: 12px 10px !important;
+  margin: 0 -4px 6px;
+  border-radius: 10px;
+  border-bottom: 1px solid var(--ws-accent-border) !important;
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  color: rgba(248, 250, 252, 0.92) !important;
+}
+
+.main-area[data-workspace='bridge']
+  .ceos-enterprise-div-table
+  .bridge-enterprise-row:not(.bridge-enterprise-table-head):hover,
+.main-area[data-workspace='governance']
+  .ceos-enterprise-div-table
+  .governance-enterprise-row:not(.governance-enterprise-table-head):hover,
+.main-area[data-workspace='pmi']
+  .ceos-enterprise-div-table
+  .pmi-enterprise-row:not(.pmi-enterprise-table-head):hover {
+  background: var(--ws-surface) !important;
+}
+
+/* Authenticated pages: constrain horizontal bleed (tables scroll inside wrappers) */
+
+.main-area[data-workspace] .page {
+  max-width: 100%;
+  overflow-x: clip;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .main-area[data-workspace] .ceos-enterprise-table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

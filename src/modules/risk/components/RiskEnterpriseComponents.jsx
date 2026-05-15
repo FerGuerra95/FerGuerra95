@@ -84,10 +84,14 @@ export function EnterpriseRiskTable({ title, items = [], columns = [] }) {
   return (
     <Card className="risk-enterprise-panel">
       <h3>{title}</h3>
-      {items.length === 0 ? <div className="risk-enterprise-empty">No records available.</div> : null}
+      {items.length === 0 ? (
+        <div className="risk-enterprise-empty ceos-enterprise-table-empty">
+          Insufficient validated data · Human review required
+        </div>
+      ) : null}
       {items.length > 0 ? (
-        <div className="risk-table-scroll">
-          <table className="risk-enterprise-table">
+        <div className="risk-table-scroll ceos-enterprise-table-wrap">
+          <table className="risk-enterprise-table ceos-enterprise-table">
             <thead><tr>{columns.map((column) => <th key={column.key}>{column.label}</th>)}</tr></thead>
             <tbody>
               {items.map((item) => (

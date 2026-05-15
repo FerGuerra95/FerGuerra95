@@ -76,9 +76,13 @@ export function EnterpriseTable({ title, items = [], columns = [] }) {
   return (
     <Card className="pmi-enterprise-panel">
       <h3>{title}</h3>
-      {items.length === 0 ? <div className="pmi-enterprise-empty">No records available.</div> : null}
+      {items.length === 0 ? (
+        <div className="pmi-enterprise-empty ceos-enterprise-table-empty">
+          Insufficient validated data · Human review required
+        </div>
+      ) : null}
       {items.length > 0 ? (
-        <>
+        <div className="ceos-enterprise-table-wrap ceos-enterprise-div-table">
           <div className="pmi-enterprise-row pmi-enterprise-table-head">
             {columns.map((column) => <span key={column.key}>{column.label}</span>)}
           </div>
@@ -87,7 +91,7 @@ export function EnterpriseTable({ title, items = [], columns = [] }) {
               {columns.map((column) => <span key={column.key}>{column.render ? column.render(item) : item[column.key] || 'Not set'}</span>)}
             </div>
           ))}
-        </>
+        </div>
       ) : null}
     </Card>
   );

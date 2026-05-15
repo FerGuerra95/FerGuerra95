@@ -55,18 +55,28 @@ export function EnterpriseTable({ title, items = [], columns = [] }) {
   return (
     <Card className="bridge-enterprise-panel">
       <h3>{title}</h3>
-      {items.length === 0 ? <div className="bridge-enterprise-empty">No records available.</div> : null}
+      {items.length === 0 ? (
+        <div className="bridge-enterprise-empty ceos-enterprise-table-empty">
+          Insufficient validated data · Human review required
+        </div>
+      ) : null}
       {items.length > 0 ? (
-        <>
+        <div className="ceos-enterprise-table-wrap ceos-enterprise-div-table">
           <div className="bridge-enterprise-row bridge-enterprise-table-head">
-            {columns.map((column) => <span key={column.key}>{column.label}</span>)}
+            {columns.map((column) => (
+              <span key={column.key}>{column.label}</span>
+            ))}
           </div>
           {items.map((item) => (
             <div className="bridge-enterprise-row" key={item.id || item.title}>
-              {columns.map((column) => <span key={column.key}>{column.render ? column.render(item) : item[column.key] || 'Not set'}</span>)}
+              {columns.map((column) => (
+                <span key={column.key}>
+                  {column.render ? column.render(item) : item[column.key] || 'Not set'}
+                </span>
+              ))}
             </div>
           ))}
-        </>
+        </div>
       ) : null}
     </Card>
   );
@@ -119,15 +129,21 @@ function SimplePanel({ title, items = [], icon: Icon = RadioTower, valueKey = 's
   return (
     <Card className="bridge-enterprise-panel">
       <div className="bridge-enterprise-toolbar"><Icon size={18} /><h3>{title}</h3></div>
-      {items.length === 0 ? <div className="bridge-enterprise-empty">No records available.</div> : items.map((item) => (
-        <div className="bridge-enterprise-row" key={item.id || item.title}>
-          <strong>{item.title || item.linkLabel || item.id}</strong>
-          <span className="muted">{item[valueKey] ?? 'Not set'}</span>
-          <span className="muted">{item.sourceModule || item.owner || 'Human review required'}</span>
-          <span />
-          <span />
+      {items.length === 0 ? (
+        <div className="bridge-enterprise-empty ceos-enterprise-table-empty">
+          Insufficient validated data · Human review required
         </div>
-      ))}
+      ) : (
+        items.map((item) => (
+          <div className="bridge-enterprise-row" key={item.id || item.title}>
+            <strong>{item.title || item.linkLabel || item.id}</strong>
+            <span className="muted">{item[valueKey] ?? 'Not set'}</span>
+            <span className="muted">{item.sourceModule || item.owner || 'Human review required'}</span>
+            <span />
+            <span />
+          </div>
+        ))
+      )}
     </Card>
   );
 }

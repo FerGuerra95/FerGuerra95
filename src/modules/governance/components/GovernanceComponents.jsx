@@ -64,24 +64,32 @@ export function MetricCard({ icon: Icon = Scale, label, value, description = '' 
 }
 
 export function DecisionRegisterTable({ items = [], onSelect, onSubmit, onApprove, onEscalate, readOnly = false }) {
-  if (items.length === 0) return <div className="governance-enterprise-empty">No governance decisions registered.</div>;
+  if (items.length === 0) {
+    return (
+      <div className="governance-enterprise-empty ceos-enterprise-table-empty">
+        Insufficient validated data · Human review required
+      </div>
+    );
+  }
   return (
     <Card className="governance-enterprise-panel">
-      <div className="governance-enterprise-row governance-enterprise-table-head">
-        <span>Decision</span><span>Status</span><span>Owner</span><span>Actions</span>
-      </div>
-      {items.map((item) => (
-        <div className="governance-enterprise-row" key={item.id}>
-          <button type="button" className="governance-enterprise-button" onClick={() => onSelect?.(item)}>{item.title}</button>
-          <DecisionStatusBadge status={item.status} />
-          <span className="muted">{item.owner || 'Board Secretary'}</span>
-          <div className="governance-enterprise-toolbar">
-            <button className="governance-enterprise-button" type="button" disabled={readOnly} onClick={() => onSubmit?.(item)}>Submit</button>
-            <button className="governance-enterprise-button" type="button" disabled={readOnly} onClick={() => onApprove?.(item)}>Approve</button>
-            <button className="governance-enterprise-button" type="button" disabled={readOnly} onClick={() => onEscalate?.(item)}>Escalate</button>
-          </div>
+      <div className="ceos-enterprise-table-wrap ceos-enterprise-div-table">
+        <div className="governance-enterprise-row governance-enterprise-table-head">
+          <span>Decision</span><span>Status</span><span>Owner</span><span>Actions</span>
         </div>
-      ))}
+        {items.map((item) => (
+          <div className="governance-enterprise-row" key={item.id}>
+            <button type="button" className="governance-enterprise-button" onClick={() => onSelect?.(item)}>{item.title}</button>
+            <DecisionStatusBadge status={item.status} />
+            <span className="muted">{item.owner || 'Board Secretary'}</span>
+            <div className="governance-enterprise-toolbar">
+              <button className="governance-enterprise-button" type="button" disabled={readOnly} onClick={() => onSubmit?.(item)}>Submit</button>
+              <button className="governance-enterprise-button" type="button" disabled={readOnly} onClick={() => onApprove?.(item)}>Approve</button>
+              <button className="governance-enterprise-button" type="button" disabled={readOnly} onClick={() => onEscalate?.(item)}>Escalate</button>
+            </div>
+          </div>
+        ))}
+      </div>
     </Card>
   );
 }
@@ -107,14 +115,22 @@ function SimpleList({ title, items, labelKey, valueKey }) {
   return (
     <Card className="governance-enterprise-panel">
       <h3>{title}</h3>
-      {items.length === 0 ? <div className="governance-enterprise-empty">No records available.</div> : items.map((item) => (
-        <div className="governance-enterprise-row" key={item.id || item[labelKey]}>
-          <strong>{item[labelKey] || item.title || item.id}</strong>
-          <span className="muted">{item[valueKey] || 'Not set'}</span>
-          <span />
-          <span />
+      {items.length === 0 ? (
+        <div className="governance-enterprise-empty ceos-enterprise-table-empty">
+          Insufficient validated data · Human review required
         </div>
-      ))}
+      ) : (
+        <div className="ceos-enterprise-table-wrap ceos-enterprise-div-table">
+          {items.map((item) => (
+            <div className="governance-enterprise-row" key={item.id || item[labelKey]}>
+              <strong>{item[labelKey] || item.title || item.id}</strong>
+              <span className="muted">{item[valueKey] || 'Not set'}</span>
+              <span />
+              <span />
+            </div>
+          ))}
+        </div>
+      )}
     </Card>
   );
 }
