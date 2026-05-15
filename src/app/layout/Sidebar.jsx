@@ -279,19 +279,21 @@ const sidebarCss = `
   .ceos-brand-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: flex-start;
     margin-bottom: 17px;
   }
 
   .ceos-brand-mark {
     position: relative;
     overflow: visible;
-    width: min(108px, 44%);
-    height: 56px;
-    border-radius: 16px;
+    width: min(140px, 100%);
+    max-width: 150px;
+    min-height: 44px;
+    height: auto;
+    border-radius: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-shrink: 0;
     background: transparent;
     border: none;
@@ -305,29 +307,17 @@ const sidebarCss = `
   .ceos-brand-mark .ceos-brand-logo-root {
     position: relative;
     z-index: 1;
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    max-width: 140px;
+    max-height: 52px;
   }
 
-  .ceos-brand-title {
-    font-size: 19.5px;
-    font-weight: 950;
-    line-height: 1;
-    letter-spacing: -0.050em;
-    color: #ffffff;
-    text-shadow:
-      0 0 12px rgba(255,255,255,0.050),
-      0 0 16px rgba(212,175,55,0.085);
-  }
-
-  .ceos-brand-subtitle {
-    margin-top: 6px;
-    font-size: 10.5px;
-    color: rgba(226,232,240,0.42);
-    font-weight: 850;
-    text-transform: uppercase;
-    letter-spacing: 0.112em;
-    line-height: 1.35;
+  .ceos-brand-mark .ceos-brand-logo-root img {
+    width: 100%;
+    height: auto;
+    max-height: 52px;
+    object-fit: contain;
+    object-position: left center;
   }
 
   .ceos-workspace-card {
@@ -860,17 +850,13 @@ export function Sidebar() {
         <div className="ceos-brand-row">
           <div className="ceos-brand-mark">
             <BrandLogo
-              variant="emblem"
-              size="md"
+              variant="horizontal"
+              horizontalAsset="color"
+              size="lg"
               surface="transparent"
               loading="eager"
               alt="CEO's OS"
             />
-          </div>
-
-          <div>
-            <div className="ceos-brand-title">CEO's OS</div>
-
           </div>
         </div>
 
