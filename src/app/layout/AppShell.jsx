@@ -225,8 +225,8 @@ export function AppShell() {
                 fontWeight: 600
               }}
             >
-              M&A, Compliance, Funding y PMI consolidados en una capa privada
-              de decision ejecutiva
+              M&A, Compliance, Funding y PMI consolidados con Risk, Reporting
+              y Strategy en una capa privada de decision ejecutiva
             </div>
           </div>
 
@@ -309,7 +309,7 @@ export function AppShell() {
             >
               <div>
                 <div style={{ opacity: 0.7, marginBottom: 10 }}>CEO&apos;s OS</div>
-                <div>Loading workspace…</div>
+                <div>Loading workspace...</div>
               </div>
             </div>
           }

@@ -152,10 +152,10 @@ export function SecureShareViewerPage() {
           <h1 style={{ margin: '0 0 8px', fontSize: 22, letterSpacing: '-0.02em' }}>
             Secure share M&A no disponible
           </h1>
-          <p style={{ margin: 0, color: '#475569', lineHeight: 1.55 }}>{errorMessage}</p>
+          <p style={{ margin: 0, color: '#cbd5e1', lineHeight: 1.55 }}>{errorMessage}</p>
         </header>
 
-        <p style={{ color: '#64748b', fontSize: 14, lineHeight: 1.5 }}>
+        <p style={{ color: '#94a3b8', fontSize: 14, lineHeight: 1.5 }}>
           El modelo enterprise exige iniciar sesion en la organizacion correcta antes de usar un enlace secure share.
           Inicia sesion y vuelve a abrir el enlace desde la app, o navega al Data Room.
         </p>

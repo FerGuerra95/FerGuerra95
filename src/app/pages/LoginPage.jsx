@@ -8,7 +8,7 @@ import { getResolvedApiBaseUrl, httpClient } from '../../shared/services/httpCli
 
 const LOGIN_COPY = {
   title: 'Acceso privado',
-  subtitle: 'Inicia sesión para acceder al workspace de M&A, Compliance y Funding.',
+  subtitle: 'Executive operating layer para decisiones corporativas con supervisión humana.',
   emptyCredentials: 'Introduce email y contraseña.',
   invalidCredentials: 'Email o contraseña incorrectos.',
   genericError: 'No se pudo iniciar sesión.',
@@ -25,17 +25,10 @@ const LOGIN_COPY = {
   forgotSubmitting: 'Enviando...',
   forgotEmptyEmail: 'Introduce el email de tu cuenta.',
   forgotBack: 'Volver al inicio de sesión',
-  enterpriseNote: 'Sesión cifrada · MFA/SSO ready · Auditoría de acceso'
+  enterpriseNote: 'Private by design · Secure by architecture · Human review required'
 };
 
-function resolveInitialForm(isDemoAuthEnabled) {
-  if (isDemoAuthEnabled) {
-    return {
-      email: 'admin@ceoos.local',
-      password: 'admin123'
-    };
-  }
-
+function resolveInitialForm() {
   return {
     email: '',
     password: ''
@@ -71,7 +64,7 @@ export function LoginPage() {
   } = useAuth();
 
   const [form, setForm] = useState(() =>
-    resolveInitialForm(isDemoAuthEnabled)
+    resolveInitialForm()
   );
 
   const [error, setError] = useState('');
@@ -488,9 +481,9 @@ export function LoginPage() {
             <div className="row">
               <Lock size={16} />
               <div>
-                <strong>Credenciales demo</strong>
+                <strong>Acceso controlado</strong>
                 <p className="muted login-demo-copy">
-                  admin@ceoos.local - admin123
+                  Usa las credenciales internas autorizadas para este entorno.
                 </p>
               </div>
             </div>

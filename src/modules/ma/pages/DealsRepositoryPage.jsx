@@ -35,6 +35,8 @@ const dealsRepositoryCss = `
     display: flex;
     flex-direction: column;
     gap: 38px;
+    max-width: 100%;
+    overflow-x: clip;
   }
 
   .deals-hero {
@@ -51,6 +53,7 @@ const dealsRepositoryCss = `
     box-shadow:
       0 38px 120px rgba(0, 0, 0, 0.42),
       inset 0 1px 0 rgba(255, 255, 255, 0.055);
+    max-width: 100%;
   }
 
   .deals-hero::before {
@@ -69,7 +72,7 @@ const dealsRepositoryCss = `
   .deals-hero::after {
     content: "";
     position: absolute;
-    inset: auto -90px -120px auto;
+    inset: auto 0 -120px auto;
     width: 360px;
     height: 360px;
     border-radius: 999px;
@@ -484,6 +487,7 @@ const dealsRepositoryCss = `
 
   .deals-case-card {
     padding: 26px;
+    min-width: 0;
     transition:
       transform .18s ease,
       border-color .18s ease,
@@ -503,6 +507,7 @@ const dealsRepositoryCss = `
     justify-content: space-between;
     gap: 24px;
     align-items: flex-start;
+    min-width: 0;
   }
 
   .deals-case-title {
@@ -521,6 +526,7 @@ const dealsRepositoryCss = `
     gap: 12px;
     justify-content: flex-end;
     align-items: center;
+    min-width: 0;
   }
 
   .deals-case-metrics {
@@ -858,6 +864,11 @@ const dealsRepositoryCss = `
   }
 
   @media (max-width: 1280px) {
+    .deals-page {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
     .deals-hero {
       overflow: hidden;
     }
@@ -874,6 +885,23 @@ const dealsRepositoryCss = `
     .deals-grid-kpis,
     .deals-case-metrics {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 681px) and (max-width: 1100px) {
+    .deals-hero,
+    .deals-panel,
+    .deals-case-card {
+      max-width: 100%;
+    }
+
+    .deals-case-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .deals-case-actions {
+      justify-content: flex-start;
     }
   }
 

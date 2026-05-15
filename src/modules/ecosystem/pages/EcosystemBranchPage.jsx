@@ -519,12 +519,12 @@ export function EcosystemBranchPage({ branch }) {
               Connected OS
             </div>
 
-            <h3 className="ecosystem-panel-title">Connected to the current MVP</h3>
+            <h3 className="ecosystem-panel-title">Connected to the executive release</h3>
 
             <p className="muted ecosystem-panel-copy">
               Esta rama queda integrada visualmente en la arquitectura base, pero su
               desarrollo operativo queda reservado para la siguiente fase después de
-              validar datos, informes y coherencia del MVP actual.
+              validar datos, informes y coherencia del release actual.
             </p>
 
             <div className="ecosystem-link-row">

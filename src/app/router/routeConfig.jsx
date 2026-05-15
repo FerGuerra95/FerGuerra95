@@ -11,6 +11,7 @@ import {
   FolderLock,
   FolderOpen,
   Gem,
+  GitBranch,
   Landmark,
   Layers3,
   LineChart,
@@ -24,6 +25,7 @@ import {
   ShieldAlert,
   Sparkles,
   Target,
+  TrendingUp,
   Users
 } from 'lucide-react';
 
@@ -169,6 +171,36 @@ export const routeGroups = {
         to: '/pmi/dashboard',
         label: 'PMI & Synergies',
         icon: <Activity size={18} />
+      },
+      {
+        to: '/pmi/programs',
+        label: 'Programs',
+        icon: <Layers3 size={18} />
+      },
+      {
+        to: '/pmi/synergies',
+        label: 'Synergies',
+        icon: <TrendingUp size={18} />
+      },
+      {
+        to: '/pmi/milestones',
+        label: 'Milestones',
+        icon: <CheckCheck size={18} />
+      },
+      {
+        to: '/pmi/risks',
+        label: 'Risks',
+        icon: <ShieldAlert size={18} />
+      },
+      {
+        to: '/pmi/day-100',
+        label: '100-Day Plan',
+        icon: <Rocket size={18} />
+      },
+      {
+        to: '/pmi/reports',
+        label: 'PMI Reports',
+        icon: <FileSearch size={18} />
       }
     ]
   },
@@ -270,8 +302,33 @@ export const routeGroups = {
     items: [
       {
         to: '/bridge/dashboard',
-        label: 'Bridge Marketplace',
+        label: 'Bridge Dashboard',
         icon: <Network size={18} />
+      },
+      {
+        to: '/bridge/signals',
+        label: 'Signals',
+        icon: <Activity size={18} />
+      },
+      {
+        to: '/bridge/dependencies',
+        label: 'Dependencies',
+        icon: <GitBranch size={18} />
+      },
+      {
+        to: '/bridge/conflicts',
+        label: 'Conflicts',
+        icon: <ShieldAlert size={18} />
+      },
+      {
+        to: '/bridge/attention-queue',
+        label: 'Attention Queue',
+        icon: <ClipboardCheck size={18} />
+      },
+      {
+        to: '/bridge/reports',
+        label: 'Bridge Reports',
+        icon: <FileSearch size={18} />
       }
     ]
   },

@@ -2,13 +2,16 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   Calculator,
+  FileSearch,
   Landmark,
   Gem,
   Layers3,
   Network,
+  Radar,
   Scale,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  Target
 } from 'lucide-react';
 import { routeGroups } from '../router/routeConfig.jsx';
 import { BrandLogo } from '../../shared/components/brand/BrandLogo.jsx';
@@ -18,20 +21,64 @@ const MUTED_ICON = 'rgba(226,232,240,0.68)';
 
 const SIDEBAR_GROUP_ORDER = [
   'overview',
+  'bridge',
   'ma',
-  'compliance',
   'funding',
-  'pmi',
+  'compliance',
   'governance',
+  'risk',
+  'pmi',
+  'strategy',
+  'reporting',
   'heritage',
-  'bridge'
 ];
+
+const SIDEBAR_KEY_ROUTES = {
+  pmi: new Set([
+    '/pmi/dashboard',
+    '/pmi/programs',
+    '/pmi/synergies',
+    '/pmi/milestones',
+    '/pmi/risks',
+    '/pmi/day-100',
+    '/pmi/reports'
+  ]),
+  bridge: new Set([
+    '/bridge/dashboard',
+    '/bridge/signals',
+    '/bridge/dependencies',
+    '/bridge/conflicts',
+    '/bridge/attention-queue',
+    '/bridge/reports'
+  ]),
+  risk: new Set([
+    '/risk/dashboard',
+    '/risk/register',
+    '/risk/heatmap',
+    '/risk/controls',
+    '/risk/incidents',
+    '/risk/reports'
+  ]),
+  reporting: new Set([
+    '/reporting/dashboard',
+    '/reporting/library',
+    '/reporting/board-pack',
+    '/reporting/exports'
+  ]),
+  strategy: new Set([
+    '/strategy/dashboard',
+    '/strategy/objectives',
+    '/strategy/initiatives',
+    '/strategy/scenarios',
+    '/strategy/reports'
+  ])
+};
 
 const workspaceMeta = {
   overview: {
     icon: <Sparkles size={18} />,
     title: 'Executive Command Center',
-    description: 'Vista superior de señales ejecutivas, módulos premium y prioridades del MVP.'
+    description: 'Vista superior de señales ejecutivas, workspaces core y prioridades de decisión.'
   },
   ma: {
     icon: <Calculator size={18} />,
@@ -65,8 +112,23 @@ const workspaceMeta = {
   },
   bridge: {
     icon: <Network size={18} />,
-    title: 'The Bridge',
-    description: 'Red de liquidez, inversores, compradores verificados y oportunidades transaccionales.'
+    title: 'Enterprise Bridge',
+    description: 'Señales, dependencias, conflictos y cola de atención ejecutiva cross-module.'
+  },
+  risk: {
+    icon: <Radar size={18} />,
+    title: 'Enterprise Risk',
+    description: 'Risk register, heatmap, controles, incidentes, KRIs y appetite para comité.'
+  },
+  reporting: {
+    icon: <FileSearch size={18} />,
+    title: 'Enterprise Reporting',
+    description: 'Board packs, report library, export ledger, versioning y evidencias.'
+  },
+  strategy: {
+    icon: <Target size={18} />,
+    title: 'Strategy Execution',
+    description: 'Objetivos, iniciativas, escenarios, dependencias de capital y riesgos estratégicos.'
   }
 };
 
@@ -676,6 +738,9 @@ function getActiveWorkspace(pathname) {
   if (pathname.startsWith('/governance')) return 'governance';
   if (pathname.startsWith('/heritage')) return 'heritage';
   if (pathname.startsWith('/bridge')) return 'bridge';
+  if (pathname.startsWith('/risk')) return 'risk';
+  if (pathname.startsWith('/reporting')) return 'reporting';
+  if (pathname.startsWith('/strategy')) return 'strategy';
 
   return 'ma';
 }
@@ -689,7 +754,10 @@ const STABLE_SIDEBAR_SECTION_LABELS = {
   pmi: 'PMI',
   governance: 'GOVERNANCE & ESG',
   heritage: 'HERITAGE & LEGACY',
-  bridge: 'THE BRIDGE'
+  bridge: 'THE BRIDGE',
+  risk: 'ENTERPRISE RISK',
+  reporting: 'REPORTING',
+  strategy: 'STRATEGY'
 };
 
 function stableScrollSidebarToWorkspace(workspaceKey) {
@@ -744,7 +812,11 @@ function forceIconColor(icon, isHighlighted) {
 }
 
 function buildGroupItems(groupKey, items = []) {
-  return items;
+  const keyRoutes = SIDEBAR_KEY_ROUTES[groupKey];
+
+  if (!keyRoutes) return items;
+
+  return items.filter((item) => keyRoutes.has(item.to));
 }
 
 function SidebarNavItem({ item }) {
@@ -901,7 +973,7 @@ export function Sidebar() {
           </div>
 
           <p className="ceos-build-copy">
-            M&A, Compliance, Funding y PMI integrados como sistema ejecutivo privado.
+            M&A, Compliance, Funding, PMI, Risk, Reporting y Strategy integrados como sistema ejecutivo privado.
           </p>
         </div>
       </div>
