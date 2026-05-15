@@ -1,19 +1,11 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import {
-  Calculator,
-  FileSearch,
-  Landmark,
-  Gem,
-  Layers3,
-  Network,
-  Radar,
-  Scale,
-  ShieldCheck,
-  Sparkles,
-  Target
-} from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { routeGroups } from '../router/routeConfig.jsx';
+import {
+  WORKSPACES,
+  getWorkspaceByPathname
+} from '../router/workspaceConfig.jsx';
 import { BrandLogo } from '../../shared/components/brand/BrandLogo.jsx';
 
 const GOLD = '#d4af37';
@@ -95,58 +87,16 @@ const SIDEBAR_KEY_ROUTES = {
   ])
 };
 
-const workspaceMeta = {
-  overview: {
-    icon: <Sparkles size={18} />,
-    title: 'Executive Command Center',
-    description: 'Vista superior de señales ejecutivas, workspaces core y prioridades de decisión.'
-  },
-  ma: {
-    icon: <Calculator size={18} />,
-    title: 'M&A Intelligence',
-    description: 'Valoración, deal design, buyer matching y reporting ejecutivo.'
-  },
-  compliance: {
-    icon: <ShieldCheck size={18} />,
-    title: 'Compliance OS',
-    description: 'Proveedores, alertas, evidencias, revisión humana y reportes DSS.'
-  },
-  funding: {
-    icon: <Landmark size={18} />,
-    title: 'Funding Studio',
-    description: 'Readiness, estructura de capital, escenarios y data room inversor.'
-  },
-  pmi: {
-    icon: <Layers3 size={18} />,
-    title: 'PMI & Synergies',
-    description: 'Integración post-adquisición, sinergias, workstreams, riesgos y plan 30-60-90.'
-  },
-  governance: {
-    icon: <Scale size={18} />,
-    title: 'Governance',
-    description: 'Decisiones ejecutivas, board packs, políticas, comités y trazabilidad de gobierno.'
-  },
-  bridge: {
-    icon: <Network size={18} />,
-    title: 'Enterprise Bridge',
-    description: 'Señales, dependencias, conflictos y cola de atención ejecutiva cross-module.'
-  },
-  risk: {
-    icon: <Radar size={18} />,
-    title: 'Enterprise Risk',
-    description: 'Risk register, heatmap, controles, incidentes, KRIs y appetite para comité.'
-  },
-  reporting: {
-    icon: <FileSearch size={18} />,
-    title: 'Enterprise Reporting',
-    description: 'Board packs, report library, export ledger, versioning y evidencias.'
-  },
-  strategy: {
-    icon: <Target size={18} />,
-    title: 'Strategy Execution',
-    description: 'Objetivos, iniciativas, escenarios, dependencias de capital y riesgos estratégicos.'
-  }
-};
+const workspaceMeta = Object.fromEntries(
+  WORKSPACES.map((workspace) => [
+    workspace.key,
+    {
+      icon: workspace.icon,
+      title: workspace.title,
+      description: workspace.description
+    }
+  ])
+);
 
 const sidebarCss = `
   @keyframes ceosRgbRail {
@@ -740,25 +690,9 @@ const sidebarCss = `
 `;
 
 function getActiveWorkspace(pathname) {
-  if (
-    pathname.startsWith('/dashboard') ||
-    pathname.startsWith('/overview') ||
-    pathname.startsWith('/ceo/overview')
-  ) {
-    return 'overview';
-  }
-
-  if (pathname.startsWith('/compliance')) return 'compliance';
-  if (pathname.startsWith('/funding')) return 'funding';
-  if (pathname.startsWith('/pmi')) return 'pmi';
-  if (pathname.startsWith('/governance')) return 'governance';
   if (pathname.startsWith('/heritage')) return 'heritage';
-  if (pathname.startsWith('/bridge')) return 'bridge';
-  if (pathname.startsWith('/risk')) return 'risk';
-  if (pathname.startsWith('/reporting')) return 'reporting';
-  if (pathname.startsWith('/strategy')) return 'strategy';
 
-  return 'ma';
+  return getWorkspaceByPathname(pathname);
 }
 
 
@@ -911,7 +845,8 @@ export function Sidebar() {
   const { pathname } = useLocation();
 
   const activeWorkspace = getActiveWorkspace(pathname);
-  const activeMeta = workspaceMeta[activeWorkspace];
+  const activeMeta =
+    workspaceMeta[activeWorkspace] || workspaceMeta.overview;
 
   return (
     <aside className="sidebar ceos-sidebar">
@@ -925,20 +860,17 @@ export function Sidebar() {
         <div className="ceos-brand-row">
           <div className="ceos-brand-mark">
             <BrandLogo
-              variant="compact"
-              size="lg"
+              variant="emblem"
+              size="md"
               surface="transparent"
               loading="eager"
-              alt=""
+              alt="CEO's OS"
             />
           </div>
 
           <div>
             <div className="ceos-brand-title">CEO's OS</div>
 
-            <div className="ceos-brand-subtitle">
-              Executive Command Center
-            </div>
           </div>
         </div>
 

@@ -430,7 +430,7 @@ export const pageMetaMap = {
   '/dashboard': {
     title: 'Executive Command Center',
     description:
-      'Capa ejecutiva superior de CEO’s OS: señales clave de M&A, Compliance, Funding, PMI y ramas enterprise en una única vista de decisión.'
+      'Decision support layer for enterprise leadership.'
   },
 
   '/overview': {

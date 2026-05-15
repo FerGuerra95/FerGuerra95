@@ -89,56 +89,13 @@ const topbarBlackCss = `
     gap: 12px;
   }
 
-  .topbar.ceos-topbar-premium .workspace-switcher {
-    padding: 6px;
-    border-radius: 999px;
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.050), rgba(255,255,255,0.016)),
-      rgba(255,255,255,0.024);
-    border: 1px solid rgba(255,255,255,0.075);
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.050),
-      inset 0 -1px 0 rgba(255,255,255,0.015),
-      0 14px 36px rgba(0,0,0,0.34);
-    backdrop-filter: blur(18px) saturate(145%);
-    -webkit-backdrop-filter: blur(18px) saturate(145%);
-  }
-
-  .topbar.ceos-topbar-premium .workspace-switcher button {
-    border: 1px solid transparent;
-    border-radius: 999px;
-    color: rgba(226,232,240,0.62);
+  .topbar.ceos-topbar-premium .workspace-switcher.ceos-workspace-switcher {
+    padding: 0;
+    border: none;
     background: transparent;
-    font-weight: 850;
-    transition:
-      transform .18s ease,
-      color .18s ease,
-      background .18s ease,
-      border-color .18s ease,
-      box-shadow .18s ease;
-  }
-
-  .topbar.ceos-topbar-premium .workspace-switcher button:hover {
-    color: #f8fafc;
-    transform: translateY(-1px);
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.060), rgba(255,255,255,0.018));
-    border-color: rgba(255,255,255,0.085);
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.060),
-      0 10px 24px rgba(0,0,0,0.26);
-  }
-
-  .topbar.ceos-topbar-premium .workspace-switcher button.active {
-    color: #ffffff;
-    background:
-      radial-gradient(circle at 20% 0%, rgba(255,255,255,0.105), transparent 34%),
-      linear-gradient(135deg, rgba(16,185,129,0.22), rgba(59,130,246,0.060));
-    border-color: rgba(16,185,129,0.20);
-    box-shadow:
-      0 12px 30px rgba(0,0,0,0.36),
-      0 0 22px rgba(16,185,129,0.070),
-      inset 0 1px 0 rgba(255,255,255,0.085);
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .ceos-user-greeting {
