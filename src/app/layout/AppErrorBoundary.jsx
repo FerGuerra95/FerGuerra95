@@ -25,8 +25,8 @@ export class AppErrorBoundary extends React.Component {
             display: 'grid',
             placeItems: 'center',
             padding: 32,
-            background: '#0b1020',
-            color: '#e8edf7',
+            background: '#000000',
+            color: '#f8fafc',
             fontFamily: 'system-ui, sans-serif'
           }}
         >

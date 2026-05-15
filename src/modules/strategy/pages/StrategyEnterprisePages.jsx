@@ -45,7 +45,7 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
     <div className="page">
       <style>{strategyEnterpriseCss}</style>
       <div className="strategy-page">
-        <section className="strategy-hero">
+        <section className="strategy-hero ceos-ws-hero">
           <Badge>{badge}</Badge>
           <h1 className="strategy-title">{title}</h1>
           <p className="strategy-copy">{copy}</p>
@@ -79,7 +79,7 @@ export function StrategyDashboardPage() {
     <div className="page">
       <style>{strategyEnterpriseCss}</style>
       <div className="strategy-page">
-        <section className="strategy-hero">
+        <section className="strategy-hero ceos-ws-hero">
           <Badge>Enterprise Strategy</Badge>
           <h1 className="strategy-title">Strategic execution command center.</h1>
           <p className="strategy-copy">Objectives, initiatives, scenarios, competitive notes, strategic risks and board-ready strategy reporting. Decision support only.</p>

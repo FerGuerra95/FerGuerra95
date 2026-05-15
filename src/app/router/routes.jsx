@@ -389,8 +389,8 @@ function RouteFallback() {
         placeItems: 'center',
         padding: 24,
         background:
-          'radial-gradient(circle at top, rgba(16,185,129,0.08), transparent 42%), #0b1020',
-        color: '#e8edf7',
+          'radial-gradient(circle at top, rgba(255,255,255,0.04), transparent 46%), #000000',
+        color: '#f8fafc',
         fontSize: 13,
         fontWeight: 600,
         letterSpacing: '0.02em',

@@ -844,7 +844,7 @@ export function MADataRoomPage() {
     <main className="ma-data-room-page">
       <style>{maDataRoomCss}</style>
 
-      <section className="ma-data-room-hero">
+      <section className="ma-data-room-hero ceos-ws-hero">
         <div className="ma-data-room-hero-grid">
           <div>
             <div className="ma-data-room-kicker">

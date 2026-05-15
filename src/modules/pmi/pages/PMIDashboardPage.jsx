@@ -1280,7 +1280,7 @@ export function PMIDashboardPage() {
       <style>{pmiDashboardCss}</style>
 
       <div className="pmi-page">
-        <section className="pmi-hero">
+        <section className="pmi-hero ceos-ws-hero">
           <div className="pmi-hero-layout">
             <div>
               <div className="pmi-badge-row">

@@ -1055,7 +1055,7 @@ export function DealsRepositoryPage() {
       <style>{dealsRepositoryCss}</style>
 
       <div className="deals-page">
-        <section className="deals-hero">
+        <section className="deals-hero ceos-ws-hero">
           <div className="deals-hero-layout">
             <div className="deals-hero-main">
               <div className="deals-badge-row">

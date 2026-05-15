@@ -629,7 +629,7 @@ export function DataRoomPage() {
       <style>{dataRoomCss}</style>
 
       <div className="dataroom-page">
-        <section className="dataroom-hero">
+        <section className="dataroom-hero ceos-ws-hero">
           <div className="dataroom-hero-inner">
             <div className="dataroom-main-copy">
               <div className="dataroom-badges">

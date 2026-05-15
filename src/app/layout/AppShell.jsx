@@ -7,6 +7,7 @@ import { ExecutivePremiumStyle } from './ExecutivePremiumStyle.jsx';
 import { pageMetaMap } from '../router/routeConfig.jsx';
 import { Button } from '../../shared/components/ui/Button.jsx';
 import { useAuth } from '../providers/AuthProvider.jsx';
+import { useWorkspaceTheme } from '../../shared/hooks/useWorkspaceTheme.js';
 
 const appShellBlackCss = `
   html,
@@ -153,6 +154,7 @@ export function AppShell() {
   const { user, logout } = useAuth();
 
   const meta = getPageMeta(pathname);
+  const { cssVars, dataWorkspace } = useWorkspaceTheme();
 
   function handleLogout() {
     logout();
@@ -161,12 +163,14 @@ export function AppShell() {
 
   return (
     <div
-      className="app-shell"
+      className="app-shell ceos-ws-accent-root"
+      data-workspace={dataWorkspace}
       style={{
         background: '#000000',
         backgroundColor: '#000000',
         backgroundImage: 'none',
-        minHeight: '100vh'
+        minHeight: '100vh',
+        ...cssVars
       }}
     >
       <style>{appShellBlackCss}</style>
@@ -174,12 +178,14 @@ export function AppShell() {
       <Sidebar />
 
       <div
-        className="main-area"
+        className="main-area ceos-ws-accent-root"
+        data-workspace={dataWorkspace}
         style={{
           background: '#000000',
           backgroundColor: '#000000',
           backgroundImage: 'none',
-          minHeight: '100vh'
+          minHeight: '100vh',
+          ...cssVars
         }}
       >
         <div
@@ -223,15 +229,12 @@ export function AppShell() {
             }}
           >
             <div
+              className="ceos-ws-badge"
               style={{
                 padding: '8px 12px',
                 borderRadius: 999,
-                background: 'rgba(16,185,129,0.08)',
-                border: '1px solid rgba(16,185,129,0.24)',
-                color: '#34d399',
                 fontSize: 12,
-                fontWeight: 900,
-                boxShadow: '0 0 18px rgba(16,185,129,0.07)'
+                fontWeight: 900
               }}
             >
               Backend activo

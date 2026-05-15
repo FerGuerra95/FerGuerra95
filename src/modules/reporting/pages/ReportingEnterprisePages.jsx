@@ -49,7 +49,7 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
     <div className="page">
       <style>{reportingEnterpriseCss}</style>
       <div className="reporting-page">
-        <section className="reporting-hero">
+        <section className="reporting-hero ceos-ws-hero">
           <Badge>{badge}</Badge>
           <h1 className="reporting-title">{title}</h1>
           <p className="reporting-copy">{copy}</p>
@@ -85,7 +85,7 @@ export function ReportingDashboardPage() {
     <div className="page">
       <style>{reportingEnterpriseCss}</style>
       <div className="reporting-page">
-        <section className="reporting-hero">
+        <section className="reporting-hero ceos-ws-hero">
           <Badge>Enterprise Reporting</Badge>
           <h1 className="reporting-title">Board packs and executive reporting.</h1>
           <p className="reporting-copy">Report library, templates, board packs, export ledger, versioning, schedules and evidence-backed reporting. Human review required.</p>

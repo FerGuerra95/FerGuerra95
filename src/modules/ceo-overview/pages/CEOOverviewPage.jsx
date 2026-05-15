@@ -74,9 +74,9 @@ const ceoOverviewCss = `
     padding: 44px;
     border: 1px solid rgba(148, 163, 184, 0.18);
     background:
-      radial-gradient(circle at 8% 2%, rgba(37, 99, 235, 0.38), transparent 30%),
-      radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.18), transparent 27%),
-      radial-gradient(circle at 60% 110%, rgba(245, 158, 11, 0.10), transparent 30%),
+      radial-gradient(circle at 8% 2%, rgba(212, 175, 55, 0.14), transparent 32%),
+      radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.12), transparent 28%),
+      radial-gradient(circle at 60% 110%, rgba(245, 158, 11, 0.08), transparent 30%),
       linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97));
     box-shadow:
       0 38px 120px rgba(0, 0, 0, 0.42),
@@ -2066,7 +2066,7 @@ export function CEOOverviewPage() {
       <style>{ceoOverviewCss}</style>
 
       <div className="ceo-overview-page">
-        <section className="ceo-hero ceo-branch-surface ceo-glass-branch ceo-branch-overview">
+        <section className="ceo-hero ceos-ws-hero ceo-branch-surface ceo-glass-branch ceo-branch-overview">
           <div className="ceo-hero-layout">
             <div>
               <div className="ceo-badge-row">
@@ -2157,7 +2157,7 @@ export function CEOOverviewPage() {
               </div>
 
               <div className="ceo-deal-readiness-radar-grid">
-                <article className="ceo-deal-readiness-card ceo-branch-surface ceo-glass-branch ceo-branch-overview">
+                <article className="ceo-deal-readiness-card ceos-ws-card-accent ceo-branch-surface ceo-glass-branch ceo-branch-overview">
                   <div className="ceo-kicker">
                     <Target size={14} />
                     Deal readiness index
@@ -2258,7 +2258,7 @@ export function CEOOverviewPage() {
                   </p>
                 </article>
 
-                <article className="ceo-deal-readiness-card ceo-branch-surface ceo-glass-branch ceo-branch-overview ceo-radar-card-inner">
+                <article className="ceo-deal-readiness-card ceos-ws-card-accent ceo-branch-surface ceo-glass-branch ceo-branch-overview ceo-radar-card-inner">
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                     <div>
                       <div className="ceo-kicker">
@@ -2292,7 +2292,7 @@ export function CEOOverviewPage() {
               </div>
             </div>
 
-            <aside className="ceo-signal-card ceo-branch-surface ceo-glass-branch ceo-branch-overview">
+            <aside className="ceo-signal-card ceos-ws-card-accent ceo-branch-surface ceo-glass-branch ceo-branch-overview">
               <div className="ceo-signal-inner">
                 <div className="ceo-signal-top">
                   <div>

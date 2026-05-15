@@ -57,7 +57,7 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
     <div className="page">
       <style>{riskEnterpriseCss}</style>
       <div className="risk-enterprise-page">
-        <section className="risk-enterprise-hero">
+        <section className="risk-enterprise-hero ceos-ws-hero">
           <Badge>{badge}</Badge>
           <h1 className="risk-enterprise-title">{title}</h1>
           <p className="risk-enterprise-copy">{copy}</p>
@@ -99,7 +99,7 @@ export function RiskDashboardPage() {
     <div className="page">
       <style>{riskEnterpriseCss}</style>
       <div className="risk-enterprise-page">
-        <section className="risk-enterprise-hero">
+        <section className="risk-enterprise-hero ceos-ws-hero">
           <Badge>Enterprise Risk</Badge>
           <h1 className="risk-enterprise-title">Risk command center.</h1>
           <p className="risk-enterprise-copy">Risk register, heatmap, controls, mitigations, incidents, KRIs, risk appetite, reporting and executive signals. Human review required.</p>

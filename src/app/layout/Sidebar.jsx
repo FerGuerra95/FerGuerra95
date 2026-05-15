@@ -7,6 +7,7 @@ import {
   getWorkspaceByPathname
 } from '../router/workspaceConfig.jsx';
 import { BrandLogo } from '../../shared/components/brand/BrandLogo.jsx';
+import { useWorkspaceTheme } from '../../shared/hooks/useWorkspaceTheme.js';
 
 const GOLD = '#d4af37';
 const MUTED_ICON = 'rgba(226,232,240,0.68)';
@@ -21,7 +22,8 @@ const SIDEBAR_GROUP_ORDER = [
   'bridge',
   'risk',
   'reporting',
-  'strategy'
+  'strategy',
+  'heritage'
 ];
 
 const SIDEBAR_KEY_ROUTES = {
@@ -84,6 +86,15 @@ const SIDEBAR_KEY_ROUTES = {
     '/strategy/initiatives',
     '/strategy/scenarios',
     '/strategy/reports'
+  ]),
+  heritage: new Set([
+    '/heritage/dashboard',
+    '/heritage/assets',
+    '/heritage/successions',
+    '/heritage/protections',
+    '/heritage/documents',
+    '/heritage/reports',
+    '/heritage/audit-trail'
   ])
 };
 
@@ -693,6 +704,7 @@ const STABLE_SIDEBAR_SECTION_LABELS = {
   funding: 'FUNDING',
   pmi: 'PMI',
   governance: 'GOVERNANCE & ESG',
+  heritage: 'HERITAGE & LEGACY',
   bridge: 'THE BRIDGE',
   risk: 'ENTERPRISE RISK',
   reporting: 'REPORTING',
@@ -764,7 +776,9 @@ function SidebarNavItem({ item }) {
   return (
     <NavLink
       to={item.to}
-      className="ceos-nav-link"
+      className={({ isActive }) =>
+        `ceos-nav-link ${isActive ? 'is-active' : ''}`.trim()
+      }
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={({ isActive }) => {
@@ -773,19 +787,19 @@ function SidebarNavItem({ item }) {
         return {
           color: isHighlighted ? '#ffffff' : 'rgba(226,232,240,0.64)',
           border: isActive
-            ? '1px solid rgba(212,175,55,0.24)'
+            ? '1px solid var(--ws-accent-border)'
             : isHovered
-              ? '1px solid rgba(212,175,55,0.16)'
+              ? '1px solid color-mix(in srgb, var(--ws-accent-border) 70%, transparent)'
               : '1px solid transparent',
           background: isActive
-            ? 'linear-gradient(135deg, rgba(255,255,255,0.034), rgba(255,255,255,0.008)), rgba(0,0,0,0.988)'
+            ? 'linear-gradient(135deg, var(--ws-accent-soft), rgba(0,0,0,0.988))'
             : isHovered
-              ? 'linear-gradient(135deg, rgba(212,175,55,0.032), rgba(255,255,255,0.008)), rgba(0,0,0,0.978)'
+              ? 'linear-gradient(135deg, var(--ws-accent-soft), rgba(0,0,0,0.978))'
               : 'rgba(0,0,0,0.80)',
           boxShadow: isActive
-            ? '0 18px 50px rgba(0,0,0,0.86), 0 0 30px rgba(212,175,55,0.18), inset 0 1px 0 rgba(255,255,255,0.052), inset 0 -1px 0 rgba(255,255,255,0.014)'
+            ? '0 18px 50px rgba(0,0,0,0.86), 0 0 30px var(--ws-accent-glow), inset 0 1px 0 rgba(255,255,255,0.052)'
             : isHovered
-              ? '0 16px 38px rgba(0,0,0,0.78), 0 0 24px rgba(212,175,55,0.14), inset 0 1px 0 rgba(255,255,255,0.042), inset 0 -1px 0 rgba(255,255,255,0.012)'
+              ? '0 16px 38px rgba(0,0,0,0.78), 0 0 24px var(--ws-accent-glow), inset 0 1px 0 rgba(255,255,255,0.042)'
               : 'none',
           filter: isHovered ? 'brightness(1.05)' : 'none'
         };
@@ -793,7 +807,7 @@ function SidebarNavItem({ item }) {
     >
       {({ isActive }) => {
         const isHighlighted = isActive || isHovered;
-        const iconColor = isHighlighted ? GOLD : MUTED_ICON;
+        const iconColor = isHighlighted ? 'var(--ws-accent)' : MUTED_ICON;
 
         return (
           <>
@@ -806,9 +820,7 @@ function SidebarNavItem({ item }) {
               style={{
                 color: iconColor,
                 transform: isHighlighted ? 'scale(1.10)' : 'scale(1)',
-                filter: isHighlighted
-                  ? 'drop-shadow(0 0 13px rgba(212,175,55,0.42))'
-                  : 'none'
+                filter: isHighlighted ? 'drop-shadow(0 0 13px var(--ws-accent-glow))' : 'none'
               }}
             >
               {forceIconColor(item.icon, isHighlighted)}
@@ -818,7 +830,7 @@ function SidebarNavItem({ item }) {
               className="ceos-nav-label"
               style={{
                 textShadow: isHighlighted
-                  ? '0 0 16px rgba(255,255,255,0.08), 0 0 12px rgba(212,175,55,0.14)'
+                  ? '0 0 16px rgba(255,255,255,0.08), 0 0 12px var(--ws-accent-glow)'
                   : 'none'
               }}
             >
@@ -833,13 +845,18 @@ function SidebarNavItem({ item }) {
 
 export function Sidebar() {
   const { pathname } = useLocation();
+  const { cssVars, dataWorkspace } = useWorkspaceTheme();
 
   const activeWorkspace = getActiveWorkspace(pathname);
   const activeMeta =
     workspaceMeta[activeWorkspace] || workspaceMeta.overview;
 
   return (
-    <aside className="sidebar ceos-sidebar">
+    <aside
+      className="sidebar ceos-sidebar ceos-ws-accent-root"
+      data-workspace={dataWorkspace}
+      style={cssVars}
+    >
       <style>{sidebarCss}</style>
 
       <div className="ceos-glass-layer" />

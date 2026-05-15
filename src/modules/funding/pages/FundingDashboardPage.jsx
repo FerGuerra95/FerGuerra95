@@ -1585,7 +1585,7 @@ export function FundingDashboardPage() {
         />
 
         <div className="funding-dashboard-page">
-          <section className="funding-hero">
+          <section className="funding-hero ceos-ws-hero">
             <div className="funding-hero-layout">
               <div>
                 <div className="funding-badge-row">
@@ -2002,7 +2002,7 @@ export function FundingDashboardPage() {
                 totalAmountRaised: normalizedSummary.totalAmountRaised
               }}
               currency={reportCurrency}
-              className="funding-panel"
+              className="funding-panel ceos-ws-panel"
             />
 
             <FundingHeroCard derived={derived} settings={fundingSettings} />

@@ -34,7 +34,7 @@ export function GovernanceDashboardPage() {
     <div className="page">
       <style>{governanceCss}</style>
       <div className="governance-enterprise-page">
-        <section className="governance-enterprise-hero">
+        <section className="governance-enterprise-hero ceos-ws-hero">
           <Badge>Governance Enterprise</Badge>
           <h1 className="governance-enterprise-title">Governance Command Center.</h1>
           <p className="governance-enterprise-copy">

@@ -7,14 +7,12 @@ import {
   getWorkspaceByKey,
   getWorkspaceByPathname
 } from '../router/workspaceConfig.jsx';
+import { useWorkspaceTheme } from '../../shared/hooks/useWorkspaceTheme.js';
 
 const RAIL_SCROLL_STEP = 240;
 
 const workspaceRailCss = `
   .ceos-workspace-rail-shell {
-    --workspace-accent: rgba(16, 185, 129, 0.95);
-    --workspace-accent-soft: rgba(16, 185, 129, 0.18);
-    --workspace-accent-glow: rgba(16, 185, 129, 0.16);
     position: relative;
     z-index: 8;
     display: flex;
@@ -36,66 +34,6 @@ const workspaceRailCss = `
       inset 0 1px 0 rgba(255,255,255,0.055);
     backdrop-filter: blur(18px) saturate(140%);
     -webkit-backdrop-filter: blur(18px) saturate(140%);
-  }
-
-  .ceos-workspace-rail-shell.is-overview {
-    --workspace-accent: rgba(212, 175, 55, 0.96);
-    --workspace-accent-soft: rgba(212, 175, 55, 0.18);
-    --workspace-accent-glow: rgba(212, 175, 55, 0.20);
-  }
-
-  .ceos-workspace-rail-shell.is-ma {
-    --workspace-accent: rgba(16, 185, 129, 0.96);
-    --workspace-accent-soft: rgba(16, 185, 129, 0.18);
-    --workspace-accent-glow: rgba(16, 185, 129, 0.16);
-  }
-
-  .ceos-workspace-rail-shell.is-compliance {
-    --workspace-accent: rgba(59, 130, 246, 0.96);
-    --workspace-accent-soft: rgba(59, 130, 246, 0.17);
-    --workspace-accent-glow: rgba(59, 130, 246, 0.16);
-  }
-
-  .ceos-workspace-rail-shell.is-funding {
-    --workspace-accent: rgba(245, 158, 11, 0.96);
-    --workspace-accent-soft: rgba(245, 158, 11, 0.18);
-    --workspace-accent-glow: rgba(245, 158, 11, 0.18);
-  }
-
-  .ceos-workspace-rail-shell.is-governance {
-    --workspace-accent: rgba(14, 165, 233, 0.96);
-    --workspace-accent-soft: rgba(14, 165, 233, 0.17);
-    --workspace-accent-glow: rgba(14, 165, 233, 0.18);
-  }
-
-  .ceos-workspace-rail-shell.is-pmi {
-    --workspace-accent: rgba(168, 85, 247, 0.96);
-    --workspace-accent-soft: rgba(168, 85, 247, 0.18);
-    --workspace-accent-glow: rgba(168, 85, 247, 0.22);
-  }
-
-  .ceos-workspace-rail-shell.is-bridge {
-    --workspace-accent: rgba(34, 197, 94, 0.96);
-    --workspace-accent-soft: rgba(34, 197, 94, 0.17);
-    --workspace-accent-glow: rgba(34, 197, 94, 0.20);
-  }
-
-  .ceos-workspace-rail-shell.is-risk {
-    --workspace-accent: rgba(248, 113, 113, 0.96);
-    --workspace-accent-soft: rgba(248, 113, 113, 0.17);
-    --workspace-accent-glow: rgba(248, 113, 113, 0.18);
-  }
-
-  .ceos-workspace-rail-shell.is-reporting {
-    --workspace-accent: rgba(129, 140, 248, 0.96);
-    --workspace-accent-soft: rgba(129, 140, 248, 0.18);
-    --workspace-accent-glow: rgba(129, 140, 248, 0.18);
-  }
-
-  .ceos-workspace-rail-shell.is-strategy {
-    --workspace-accent: rgba(244, 114, 182, 0.96);
-    --workspace-accent-soft: rgba(244, 114, 182, 0.17);
-    --workspace-accent-glow: rgba(244, 114, 182, 0.18);
   }
 
   .ceos-workspace-rail-scroll-btn {
@@ -187,18 +125,22 @@ const workspaceRailCss = `
     background:
       linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012));
     transform: translateY(-1px);
+    box-shadow:
+      0 8px 20px rgba(0,0,0,0.32),
+      0 0 14px var(--ws-accent-glow);
   }
 
   .ceos-workspace-rail-item.is-active {
     color: #ffffff;
-    border-color: rgba(255,255,255,0.12);
+    border-color: var(--ws-border-strong);
     background:
-      radial-gradient(circle at 18% 0%, rgba(255,255,255,0.1), transparent 40%),
-      linear-gradient(135deg, var(--workspace-accent-soft), rgba(255,255,255,0.02));
+      radial-gradient(circle at 18% 0%, var(--ws-accent-glow), transparent 42%),
+      linear-gradient(135deg, var(--ws-surface-strong), rgba(0,0,0,0.58)),
+      linear-gradient(135deg, var(--ws-surface), rgba(255,255,255,0.018));
     box-shadow:
       0 10px 26px rgba(0,0,0,0.34),
-      0 0 20px var(--workspace-accent-glow),
-      inset 0 1px 0 rgba(255,255,255,0.07);
+      0 0 22px var(--workspace-accent-glow),
+      inset 0 1px 0 rgba(255,255,255,0.075);
   }
 
   .ceos-workspace-rail-item:focus-visible {
@@ -290,6 +232,7 @@ export function WorkspaceSwitcher() {
 
   const workspaceKey = getWorkspaceByPathname(pathname);
   const activeWorkspace = getWorkspaceByKey(workspaceKey);
+  const { cssVars } = useWorkspaceTheme();
 
   const syncScrollButtons = useCallback(() => {
     setScrollState(readRailScrollState(railRef.current));
@@ -348,9 +291,11 @@ export function WorkspaceSwitcher() {
 
   return (
     <nav
-      className={`workspace-switcher ceos-workspace-rail-shell is-${activeWorkspace.key}`.trim()}
+      className="workspace-switcher ceos-workspace-rail-shell ceos-ws-accent-root"
       aria-label="Workspace navigation"
       data-testid="workspace-rail"
+      data-workspace={activeWorkspace.key}
+      style={cssVars}
     >
       <style>{workspaceRailCss}</style>
 

@@ -1121,7 +1121,7 @@ export function MADashboardPage() {
       <style>{maDashboardCss}</style>
 
       <div className="ma-executive-page">
-        <section className="ma-hero">
+        <section className="ma-hero ceos-ws-hero">
           <div className="ma-hero-layout">
             <div>
               <div className="ma-eyebrow-row">

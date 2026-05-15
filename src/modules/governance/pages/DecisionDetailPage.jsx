@@ -16,7 +16,7 @@ export function DecisionDetailPage() {
     <div className="page">
       <style>{governanceCss}</style>
       <div className="governance-enterprise-page">
-        <section className="governance-enterprise-hero">
+        <section className="governance-enterprise-hero ceos-ws-hero">
           <Badge>Decision Memo</Badge>
           <h1 className="governance-enterprise-title">{decision?.title || 'Governance decision'}</h1>
           <p className="governance-enterprise-copy">Owner {decision?.owner || 'not assigned'} · Approver {decision?.approver || 'not assigned'}</p>

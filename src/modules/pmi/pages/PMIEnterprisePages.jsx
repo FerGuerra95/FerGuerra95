@@ -60,7 +60,7 @@ function EntityPage({
     <div className="page">
       <style>{pmiEnterpriseCss}</style>
       <div className="pmi-enterprise-page">
-        <section className="pmi-enterprise-hero">
+        <section className="pmi-enterprise-hero ceos-ws-hero">
           <Badge>{badge}</Badge>
           <h1 className="pmi-enterprise-title">{title}</h1>
           <p className="pmi-enterprise-copy">{copy}</p>
@@ -122,7 +122,7 @@ export function PMIDashboardPage() {
     <div className="page">
       <style>{pmiEnterpriseCss}</style>
       <div className="pmi-enterprise-page">
-        <section className="pmi-enterprise-hero">
+        <section className="pmi-enterprise-hero ceos-ws-hero">
           <Badge>PMI & Synergies Enterprise</Badge>
           <h1 className="pmi-enterprise-title">Post-merger integration command layer.</h1>
           <p className="pmi-enterprise-copy">Programs, synergy capture, Day 1 readiness, 30-60-90 execution, risks, TSA, operating model, people, technology and committee reporting.</p>

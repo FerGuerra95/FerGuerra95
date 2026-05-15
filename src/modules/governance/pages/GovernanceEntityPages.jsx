@@ -52,7 +52,7 @@ function EntityPage({
     <div className="page">
       <style>{governanceCss}</style>
       <div className="governance-enterprise-page">
-        <section className="governance-enterprise-hero">
+        <section className="governance-enterprise-hero ceos-ws-hero">
           <Badge>{badge}</Badge>
           <h1 className="governance-enterprise-title">{title}</h1>
           <p className="governance-enterprise-copy">{copy}</p>
@@ -194,7 +194,7 @@ export function GovernanceAuditTrailPage() {
     <div className="page">
       <style>{governanceCss}</style>
       <div className="governance-enterprise-page">
-        <section className="governance-enterprise-hero">
+        <section className="governance-enterprise-hero ceos-ws-hero">
           <Badge>Audit Trail</Badge>
           <h1 className="governance-enterprise-title">Governance audit trail.</h1>
           <p className="governance-enterprise-copy">Organization-scoped activity for governance decisions, board packs, committees, policies, actions, meetings and reports.</p>

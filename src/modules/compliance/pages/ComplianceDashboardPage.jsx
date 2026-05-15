@@ -1265,7 +1265,7 @@ export function ComplianceDashboardPage() {
       <style>{complianceDashboardCss}</style>
 
       <div className="compliance-page">
-        <section className="compliance-hero">
+        <section className="compliance-hero ceos-ws-hero">
           <div className="compliance-hero-layout">
             <div className="compliance-hero-main">
               <div className="compliance-badge-row">

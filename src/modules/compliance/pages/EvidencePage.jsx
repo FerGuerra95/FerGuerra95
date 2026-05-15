@@ -1092,7 +1092,7 @@ export function EvidencePage() {
       <style>{evidencePageCss}</style>
 
       <div className="evidence-page">
-        <section className="evidence-hero">
+        <section className="evidence-hero ceos-ws-hero">
           <div className="evidence-hero-layout">
             <div>
               <div className="evidence-badge-row">

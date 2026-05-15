@@ -1610,7 +1610,7 @@ export function ComplianceReportPage() {
       <style>{complianceReportCss}</style>
 
       <div className="compliance-report-page">
-        <section className="report-hero">
+        <section className="report-hero ceos-ws-hero">
           <div className="report-hero-layout">
             <div>
               <div className="report-badge-row">

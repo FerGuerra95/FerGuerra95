@@ -45,7 +45,7 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
     <div className="page">
       <style>{bridgeEnterpriseCss}</style>
       <div className="bridge-enterprise-page">
-        <section className="bridge-enterprise-hero">
+        <section className="bridge-enterprise-hero ceos-ws-hero">
           <Badge>{badge}</Badge>
           <h1 className="bridge-enterprise-title">{title}</h1>
           <p className="bridge-enterprise-copy">{copy}</p>
@@ -119,7 +119,7 @@ export function BridgeDashboardPage() {
     <div className="page">
       <style>{bridgeEnterpriseCss}</style>
       <div className="bridge-enterprise-page">
-        <section className="bridge-enterprise-hero">
+        <section className="bridge-enterprise-hero ceos-ws-hero">
           <Badge>Enterprise Bridge</Badge>
           <h1 className="bridge-enterprise-title">Cross-module intelligence layer.</h1>
           <p className="bridge-enterprise-copy">Signals, dependencies, conflicts, evidence links and executive attention queue across M&A, Compliance, Funding, Governance, PMI, Risk, Reporting, Strategy and CEO Overview.</p>

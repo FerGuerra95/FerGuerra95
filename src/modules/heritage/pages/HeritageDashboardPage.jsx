@@ -30,7 +30,7 @@ export function HeritageDashboardPage() {
     <div className="page">
       <style>{heritageEnterpriseCss}</style>
       <div className="heritage-enterprise-page">
-        <section className="heritage-enterprise-hero">
+        <section className="heritage-enterprise-hero ceos-ws-hero">
           <Badge>Heritage Enterprise</Badge>
           <h1 className="heritage-enterprise-title">Owner continuity command center.</h1>
           <p className="heritage-enterprise-copy">

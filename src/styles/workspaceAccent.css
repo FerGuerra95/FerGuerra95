@@ -1,0 +1,743 @@
+/* Workspace accent system — vars set on .app-shell / .main-area via useWorkspaceTheme */
+
+.ceos-ws-accent-root {
+  --ws-accent: rgba(212, 175, 55, 0.96);
+  --ws-accent-soft: rgba(212, 175, 55, 0.18);
+  --ws-accent-glow: rgba(212, 175, 55, 0.16);
+  --ws-accent-border: rgba(212, 175, 55, 0.28);
+  --ws-border: rgba(212, 175, 55, 0.28);
+  --ws-border-strong: rgba(212, 175, 55, 0.42);
+  --ws-accent-text: rgba(212, 175, 55, 0.92);
+  --ws-text: rgba(212, 175, 55, 0.92);
+  --ws-chart-accent: rgba(212, 175, 55, 0.85);
+  --ws-chart: rgba(212, 175, 55, 0.85);
+  --ws-accent-rgb: 212, 175, 55;
+  --ws-rgb: 212, 175, 55;
+  --ws-surface: rgba(212, 175, 55, 0.1);
+  --ws-surface-strong: rgba(212, 175, 55, 0.16);
+  --ws-glow: rgba(212, 175, 55, 0.16);
+  --ws-hero-gradient: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0.2) 0%,
+    rgba(3, 7, 18, 0.94) 48%,
+    rgba(15, 23, 42, 0.97) 100%
+  );
+  --ws-card-gradient: linear-gradient(
+    145deg,
+    rgba(212, 175, 55, 0.12) 0%,
+    rgba(15, 23, 42, 0.9) 55%,
+    rgba(2, 6, 23, 0.92) 100%
+  );
+  --ws-icon-surface: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0.22),
+    rgba(212, 175, 55, 0.06)
+  );
+}
+
+/* —— Shell: topbar accent line —— */
+.topbar.ceos-topbar-premium::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    var(--ws-accent-soft),
+    var(--ws-accent),
+    var(--ws-accent-soft),
+    transparent
+  ) !important;
+  height: 2px !important;
+  opacity: 0.95 !important;
+}
+
+.topbar.ceos-topbar-premium::after {
+  background:
+    radial-gradient(circle at 14% 0%, var(--ws-accent-glow), transparent 26%),
+    radial-gradient(circle at 88% 0%, rgba(255, 255, 255, 0.018), transparent 28%) !important;
+  opacity: 0.42 !important;
+}
+
+.topbar.ceos-topbar-premium .topbar-title h1 {
+  text-shadow:
+    0 0 16px rgba(255, 255, 255, 0.045),
+    0 0 14px var(--ws-accent-glow) !important;
+}
+
+/* —— Sidebar workspace card + nav —— */
+.ceos-sidebar.ceos-ws-accent-root .ceos-workspace-card {
+  border-color: var(--ws-accent-border);
+  background:
+    radial-gradient(circle at 12% 0%, var(--ws-accent-glow), transparent 34%),
+    linear-gradient(135deg, var(--ws-surface-strong), rgba(255, 255, 255, 0.007)),
+    rgba(0, 0, 0, 0.94);
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-workspace-card::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.075),
+    var(--ws-accent-soft),
+    transparent
+  );
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-workspace-title {
+  color: var(--ws-accent-text);
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-workspace-title svg {
+  color: var(--ws-accent) !important;
+  stroke: var(--ws-accent) !important;
+  filter: drop-shadow(0 0 10px var(--ws-accent-glow));
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-section-title.is-active {
+  text-shadow: 0 0 17px var(--ws-accent-glow), 0 0 12px rgba(255, 255, 255, 0.055);
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-section-title.is-active::after {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.11),
+    var(--ws-accent),
+    rgba(255, 255, 255, 0.065)
+  );
+  border-color: var(--ws-border-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 21px var(--ws-accent-glow),
+    0 10px 28px rgba(0, 0, 0, 0.66);
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link.is-active {
+  border-color: var(--ws-border-strong);
+  background:
+    radial-gradient(circle at 0% 0%, var(--ws-accent-glow), transparent 42%),
+    linear-gradient(135deg, var(--ws-surface-strong), rgba(255, 255, 255, 0.02)),
+    rgba(0, 0, 0, 0.55);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.42),
+    0 0 18px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-active-rail {
+  background: linear-gradient(180deg, var(--ws-accent) 0%, var(--ws-accent-soft) 100%);
+  box-shadow: 0 0 18px var(--ws-accent-glow);
+  animation: none;
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link:hover .ceos-nav-link-shine,
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link.is-active .ceos-nav-link-shine {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.07),
+    var(--ws-accent-soft),
+    transparent
+  );
+}
+
+/* —— Shared utilities inside authenticated shell —— */
+.main-area[data-workspace] .ceos-ws-divider {
+  border: 0;
+  height: 1px;
+  margin: 16px 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--ws-accent-soft),
+    var(--ws-accent-border),
+    var(--ws-accent-soft),
+    transparent
+  );
+  opacity: 0.85;
+}
+
+.main-area[data-workspace] .ceos-ws-panel {
+  border-radius: 18px;
+  border: 1px solid var(--ws-accent-border) !important;
+  background: var(--ws-card-gradient) !important;
+  box-shadow:
+    0 22px 56px rgba(0, 0, 0, 0.36),
+    0 0 22px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045) !important;
+}
+
+.main-area[data-workspace] .ceos-ws-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--ws-accent-border);
+  background:
+    linear-gradient(135deg, var(--ws-surface-strong), rgba(0, 0, 0, 0.52)),
+    linear-gradient(135deg, var(--ws-accent-soft), rgba(0, 0, 0, 0.35));
+  color: var(--ws-accent-text);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 0 18px var(--ws-accent-glow);
+}
+
+.main-area[data-workspace] .ceos-ws-kpi-icon {
+  color: var(--ws-accent) !important;
+  stroke: var(--ws-accent) !important;
+  filter: drop-shadow(0 0 10px var(--ws-accent-glow));
+}
+
+.main-area[data-workspace] .ceos-ws-card-accent {
+  border-color: var(--ws-border-strong) !important;
+  background: var(--ws-card-gradient) !important;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.38),
+    0 0 24px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045) !important;
+}
+
+/* Module KPI / signal stacks — interior tint (scoped per shell workspace) */
+.main-area[data-workspace]
+  :is(
+    .ma-kpi-card,
+    .ma-signal-card,
+    .compliance-kpi-card,
+    .compliance-signal-card,
+    .funding-kpi-card,
+    .funding-signal-card,
+    .pmi-kpi-card,
+    .pmi-signal-card
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  background: var(--ws-card-gradient) !important;
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.34),
+    0 0 18px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.main-area[data-workspace]
+  :is(
+    .bridge-enterprise-panel,
+    .governance-enterprise-panel,
+    .pmi-enterprise-panel,
+    .risk-enterprise-panel,
+    .reporting-panel,
+    .strategy-panel,
+    .heritage-enterprise-panel
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  background: var(--ws-card-gradient) !important;
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.32),
+    0 0 16px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+/* CEO Overview — hero radar / signals pick up gold veil without touching branch-colored chips */
+.main-area[data-workspace='overview']
+  :is(.ceo-deal-readiness-card, .ceo-signal-card).ceos-ws-card-accent {
+  border-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='overview'] .ceo-panel-icon,
+.main-area[data-workspace='overview'] .ceo-card-icon,
+.main-area[data-workspace='overview'] .ceo-icon-box {
+  background: var(--ws-icon-surface) !important;
+  border-color: var(--ws-accent-border) !important;
+  box-shadow: 0 0 14px var(--ws-accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* —— Heroes: interior gradient when marked ceos-ws-hero —— */
+.main-area[data-workspace] .ceos-ws-hero {
+  border-color: var(--ws-border-strong) !important;
+  background: var(--ws-hero-gradient) !important;
+  background-image: var(--ws-hero-gradient) !important;
+  box-shadow:
+    0 38px 120px rgba(0, 0, 0, 0.42),
+    0 0 20px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+}
+
+.main-area[data-workspace]
+  :is(
+    .ceo-hero,
+    .ma-hero,
+    .compliance-hero,
+    .funding-hero,
+    .pmi-hero,
+    .governance-enterprise-hero,
+    .heritage-enterprise-hero,
+    .bridge-enterprise-hero,
+    .risk-enterprise-hero,
+    .reporting-hero,
+    .strategy-hero,
+    .pmi-enterprise-hero
+  ):not(.ceos-ws-hero) {
+  border-color: var(--ws-accent-border) !important;
+  box-shadow:
+    0 38px 120px rgba(0, 0, 0, 0.42),
+    0 0 14px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+}
+
+.main-area[data-workspace] .tabs button[aria-selected='true'],
+.main-area[data-workspace] .tab.is-active {
+  border-color: var(--ws-border-strong) !important;
+  color: var(--ws-accent-text) !important;
+  background:
+    linear-gradient(180deg, var(--ws-surface-strong), rgba(0, 0, 0, 0.55)) !important;
+  box-shadow:
+    0 0 16px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.main-area[data-workspace] .button.button-secondary:hover {
+  border-color: var(--ws-accent-border);
+  box-shadow: 0 0 14px var(--ws-accent-glow);
+}
+
+/* ——— Workspace utilities (opt-in / semantic wrappers) ——— */
+
+.main-area[data-workspace] .ceos-ws-section {
+  border-radius: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-top-color: var(--ws-accent-border);
+  background:
+    linear-gradient(180deg, var(--ws-surface), transparent 42%),
+    rgba(0, 0, 0, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 0 14px var(--ws-accent-glow);
+}
+
+.main-area[data-workspace] .ceos-ws-section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 0 var(--ws-accent-soft);
+}
+
+.main-area[data-workspace] .ceos-ws-section-header::before {
+  content: '';
+  width: 4px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  align-self: stretch;
+  min-height: 26px;
+  margin-top: 2px;
+  background: linear-gradient(180deg, var(--ws-accent), var(--ws-accent-soft));
+  box-shadow: 0 0 12px var(--ws-accent-glow);
+  opacity: 0.88;
+}
+
+.main-area[data-workspace] .ceos-ws-card {
+  border-radius: 18px;
+  border: 1px solid var(--ws-accent-border);
+  background:
+    linear-gradient(145deg, var(--ws-surface), transparent 58%),
+    rgba(15, 23, 42, 0.74);
+  box-shadow:
+    0 16px 42px rgba(0, 0, 0, 0.3),
+    0 0 14px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.034);
+}
+
+.main-area[data-workspace] table.ceos-ws-table thead th {
+  background: linear-gradient(180deg, var(--ws-surface-strong), var(--ws-surface));
+  color: rgba(248, 250, 252, 0.94);
+  border-bottom: 1px solid var(--ws-accent-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.main-area[data-workspace] table.ceos-ws-table tbody tr:hover td {
+  background: var(--ws-surface);
+}
+
+.main-area[data-workspace] .ceos-ws-list {
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.11);
+  border-top-color: var(--ws-accent-border);
+  background: rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+}
+
+.main-area[data-workspace] .ceos-ws-list-item {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.main-area[data-workspace] .ceos-ws-list-item:hover {
+  background: var(--ws-surface);
+}
+
+.main-area[data-workspace] .ceos-ws-empty-state {
+  border-radius: 18px;
+  border: 1px dashed var(--ws-accent-border);
+  background:
+    radial-gradient(circle at 12% 0%, var(--ws-accent-glow), transparent 44%),
+    linear-gradient(145deg, var(--ws-surface), rgba(15, 23, 42, 0.48));
+  color: rgba(226, 232, 240, 0.8);
+}
+
+.main-area[data-workspace] .ceos-ws-action-row {
+  border-left: 3px solid var(--ws-accent-border);
+  padding-left: 14px;
+  border-radius: 0 12px 12px 0;
+}
+
+.main-area[data-workspace] .ceos-ws-action-row:hover {
+  background: var(--ws-surface);
+}
+
+.main-area[data-workspace] .ceos-ws-footer-strip {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 var(--ws-accent-soft);
+}
+
+.main-area[data-workspace] .ceos-ws-metric-row {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.09);
+}
+
+.main-area[data-workspace] .ceos-ws-metric-row:hover {
+  background: var(--ws-surface);
+}
+
+.main-area[data-workspace] .ceos-ws-report-block,
+.main-area[data-workspace] .ceos-ws-data-room-block {
+  border-radius: 16px;
+  border: 1px solid var(--ws-accent-border);
+  background:
+    linear-gradient(135deg, var(--ws-surface-strong), transparent 45%),
+    rgba(15, 23, 42, 0.62);
+  box-shadow:
+    0 12px 34px rgba(0, 0, 0, 0.3),
+    0 0 12px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.032);
+}
+
+/* Enterprise empty / queue continuity */
+.main-area[data-workspace]
+  :is(
+    .bridge-enterprise-empty,
+    .risk-enterprise-empty,
+    .governance-enterprise-empty,
+    .pmi-enterprise-empty,
+    .reporting-empty,
+    .strategy-empty
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  background:
+    linear-gradient(145deg, var(--ws-surface), transparent 55%),
+    rgba(15, 23, 42, 0.38) !important;
+}
+
+.main-area[data-workspace] .bridge-enterprise-row:hover,
+.main-area[data-workspace] .risk-enterprise-row:hover,
+.main-area[data-workspace] .governance-enterprise-row:hover {
+  background: var(--ws-surface);
+}
+
+/* ——— Per-workspace lower-page surfaces (scoped by data-workspace) ——— */
+
+.main-area[data-workspace='ma']
+  :is(
+    .deals-panel,
+    .deals-section,
+    .deals-case-card,
+    .deals-signal-card,
+    .deals-empty-wrap,
+    .ma-data-room-controls,
+    .ma-data-room-panel
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  background:
+    linear-gradient(145deg, var(--ws-surface-strong), transparent 52%),
+    rgba(15, 23, 42, 0.82) !important;
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.32),
+    0 0 14px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.034) !important;
+}
+
+.main-area[data-workspace='ma'] .ma-data-room-table thead th {
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  border-bottom-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='ma'] .ma-data-room-table tbody tr:hover td {
+  background: var(--ws-surface) !important;
+}
+
+.main-area[data-workspace='ma'] .ma-data-room-empty {
+  border-color: var(--ws-accent-border) !important;
+  background:
+    radial-gradient(circle at 10% 0%, var(--ws-accent-glow), transparent 46%),
+    rgba(15, 23, 42, 0.52) !important;
+}
+
+.main-area[data-workspace='ma'] .deals-signal-table thead th {
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+}
+
+.main-area[data-workspace='ma'] .deals-signal-table tbody tr:hover td {
+  background: var(--ws-surface) !important;
+}
+
+.main-area[data-workspace='ma']
+  .ma-executive-page
+  :is(
+    .ma-section,
+    .ma-bridge-panel,
+    .ma-pipeline-preview,
+    .ma-summary-card,
+    .ma-panel,
+    .ma-glass-block
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  background:
+    linear-gradient(145deg, var(--ws-surface-strong), transparent 48%),
+    rgba(15, 23, 42, 0.76) !important;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.3),
+    0 0 14px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.032) !important;
+}
+
+.main-area[data-workspace='ma'] .ma-executive-page .ma-signal-table thead th {
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  border-bottom-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='ma'] .ma-executive-page .ma-signal-table tbody tr:hover td {
+  background: var(--ws-surface) !important;
+}
+
+.main-area[data-workspace='compliance']
+  :is(
+    .suppliers-list-card,
+    .suppliers-kpi-card,
+    .suppliers-empty-wrap,
+    .evidence-list-card,
+    .evidence-kpi-card,
+    .suppliers-section,
+    .evidence-section
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  background:
+    linear-gradient(145deg, var(--ws-surface-strong), transparent 50%),
+    rgba(15, 23, 42, 0.78) !important;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.3),
+    0 0 14px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.032) !important;
+}
+
+.main-area[data-workspace='compliance'] .compliance-report-page :is(
+    .report-command-item,
+    .report-signal-card,
+    .report-score-module,
+    .report-section,
+    .report-list-card,
+    .report-kpi-card,
+    .report-panel,
+    .report-glass-block,
+    .report-premium-panel,
+    .report-premium-item,
+    .report-empty-wrap,
+    .report-list-panel,
+    .report-mini-metric
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  background:
+    linear-gradient(145deg, var(--ws-surface-strong), transparent 48%),
+    rgba(15, 23, 42, 0.76) !important;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.28),
+    0 0 12px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.main-area[data-workspace='compliance'] .compliance-report-page .report-signal-table thead th,
+.main-area[data-workspace='compliance'] .suppliers-page table thead th,
+.main-area[data-workspace='compliance'] .evidence-page table thead th {
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  border-bottom-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='compliance'] .compliance-report-page .report-signal-table thead th {
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  border-bottom-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='compliance'] .compliance-report-page .report-signal-table tbody tr:hover td {
+  background: var(--ws-surface) !important;
+}
+
+.main-area[data-workspace='compliance'] .compliance-report-page .report-signal-row:hover {
+  background: var(--ws-surface) !important;
+}
+
+.main-area[data-workspace='funding']
+  :is(
+    .funding-flow-card,
+    .funding-premium-panel,
+    .funding-glass-block,
+    .funding-panel,
+    .funding-section,
+    .funding-premium-memo,
+    .funding-premium-row
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  background:
+    linear-gradient(145deg, var(--ws-surface-strong), transparent 50%),
+    rgba(15, 23, 42, 0.78) !important;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.3),
+    0 0 14px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.032) !important;
+}
+
+.main-area[data-workspace='funding']
+  :is(
+    .dataroom-panel,
+    .dataroom-kpi-card,
+    .dataroom-mini-card,
+    .dataroom-checklist-panel,
+    .dataroom-signal-card,
+    .dataroom-section
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  background:
+    linear-gradient(145deg, var(--ws-surface-strong), transparent 52%),
+    rgba(15, 23, 42, 0.8) !important;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.3),
+    0 0 14px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.032) !important;
+}
+
+.main-area[data-workspace='funding'] table thead th {
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  border-bottom-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='funding'] table tbody tr:hover td {
+  background: var(--ws-surface) !important;
+}
+
+.main-area[data-workspace='pmi']
+  :is(.pmi-panel, .pmi-playbook-row, .pmi-ledger-row, .pmi-dependency-row) {
+  border-color: var(--ws-accent-border) !important;
+  background:
+    linear-gradient(145deg, var(--ws-surface-strong), transparent 52%),
+    rgba(15, 23, 42, 0.78) !important;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.3),
+    0 0 14px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.032) !important;
+}
+
+.main-area[data-workspace='pmi'] .pmi-page table thead th {
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  border-bottom-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='pmi'] .pmi-page table tbody tr:hover td {
+  background: var(--ws-surface) !important;
+}
+
+.main-area[data-workspace='bridge'] .bridge-enterprise-page :is(
+    .bridge-enterprise-toolbar,
+    .bridge-enterprise-field
+  ) {
+  border-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='reporting'] .reporting-page :is(
+    .reporting-toolbar,
+    .reporting-scroll,
+    .reporting-panel
+  ),
+.main-area[data-workspace='strategy'] .strategy-page :is(
+    .strategy-toolbar,
+    .strategy-scroll,
+    .strategy-panel
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  box-shadow:
+    0 0 12px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.main-area[data-workspace='reporting'] .reporting-table thead th,
+.main-area[data-workspace='strategy'] .strategy-table thead th {
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  border-bottom-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='reporting'] .reporting-table tbody tr:hover td,
+.main-area[data-workspace='strategy'] .strategy-table tbody tr:hover td {
+  background: var(--ws-surface) !important;
+}
+
+.main-area[data-workspace='risk'] .risk-enterprise-page table thead th {
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  border-bottom-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='risk'] .risk-enterprise-page table tbody tr:hover td {
+  background: var(--ws-surface) !important;
+}
+
+.main-area[data-workspace='overview']
+  .ceo-overview-page
+  :is(.ceo-module-card, .ceo-action-card) {
+  border-color: var(--ws-accent-border) !important;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.28),
+    0 0 14px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.032) !important;
+}

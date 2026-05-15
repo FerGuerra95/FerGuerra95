@@ -39,7 +39,7 @@ export function DecisionRegisterPage() {
     <div className="page">
       <style>{governanceCss}</style>
       <div className="governance-enterprise-page">
-        <section className="governance-enterprise-hero">
+        <section className="governance-enterprise-hero ceos-ws-hero">
           <Badge>Decision Register</Badge>
           <h1 className="governance-enterprise-title">Executive decisions.</h1>
           <p className="governance-enterprise-copy">Create, review, approve, escalate and implement governance decisions with audit history.</p>

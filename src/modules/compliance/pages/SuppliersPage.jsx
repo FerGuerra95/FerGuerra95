@@ -1410,7 +1410,7 @@ export function SuppliersPage() {
       <style>{suppliersPageCss}</style>
 
       <div className="suppliers-page">
-        <section className="suppliers-hero">
+        <section className="suppliers-hero ceos-ws-hero">
           <div className="suppliers-hero-layout">
             <div>
               <div className="suppliers-badge-row">

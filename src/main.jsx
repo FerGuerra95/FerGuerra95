@@ -7,6 +7,7 @@ import { AppErrorBoundary } from './app/layout/AppErrorBoundary.jsx';
 import './styles.css';
 import './modules/ma/styles/maExecutiveTheme.css';
 import './styles/executivePolish.css';
+import './styles/workspaceAccent.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

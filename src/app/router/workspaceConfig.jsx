@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Calculator,
   FileSearch,
+  Gem,
   Landmark,
   Layers3,
   Network,
@@ -102,6 +103,15 @@ export const WORKSPACES = [
     path: '/strategy/dashboard',
     sidebarLabel: 'STRATEGY',
     icon: <Target size={18} />
+  },
+  {
+    key: 'heritage',
+    label: 'Heritage',
+    title: 'Heritage & Legacy',
+    description: 'Patrimonio, sucesión, protección de activos y continuidad family-office.',
+    path: '/heritage/dashboard',
+    sidebarLabel: 'HERITAGE & LEGACY',
+    icon: <Gem size={18} />
   }
 ];
 
@@ -131,6 +141,7 @@ export function getWorkspaceByPathname(pathname = '') {
   if (path.startsWith('/compliance')) return 'compliance';
   if (path.startsWith('/funding')) return 'funding';
   if (path.startsWith('/governance')) return 'governance';
+  if (path.startsWith('/heritage')) return 'heritage';
   if (path.startsWith('/pmi')) return 'pmi';
   if (path.startsWith('/bridge')) return 'bridge';
   if (path.startsWith('/risk')) return 'risk';
