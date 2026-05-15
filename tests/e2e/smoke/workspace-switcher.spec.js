@@ -2,17 +2,23 @@ import { test, expect } from '@playwright/test';
 
 import { loginAsDemoAdmin } from '../helpers/auth.js';
 
-async function openWorkspaceMenu(page) {
-  await page.locator('.ceos-workspace-trigger').click();
-  await expect(page.locator('.ceos-workspace-menu')).toBeVisible();
+async function expectRailVisible(page) {
+  await expect(page.getByTestId('workspace-rail')).toBeVisible();
+  await expect(page.getByTestId('workspace-rail-track')).toBeVisible();
+  await expect(page.locator('.ceos-workspace-rail-item')).toHaveCount(10);
 }
 
-async function selectWorkspace(page, label) {
-  await openWorkspaceMenu(page);
-  await page
-    .getByRole('menuitem')
-    .filter({ has: page.getByText(label, { exact: true }) })
-    .click();
+async function expectActiveWorkspace(page, key) {
+  await expect(
+    page.getByTestId(`workspace-rail-item-${key}`)
+  ).toHaveAttribute('aria-current', 'page');
+}
+
+async function selectWorkspace(page, key) {
+  const item = page.getByTestId(`workspace-rail-item-${key}`);
+
+  await item.scrollIntoViewIfNeeded();
+  await item.click();
 }
 
 test.describe('Workspace switcher', () => {
@@ -24,45 +30,36 @@ test.describe('Workspace switcher', () => {
 
     await page.goto('/dashboard');
     await expect(page).toHaveURL(/\/dashboard/);
-    await expect(page.locator('.ceos-workspace-trigger-title')).toHaveText(
-      'CEO Overview'
-    );
+    await expectRailVisible(page);
+    await expectActiveWorkspace(page, 'overview');
 
-    await selectWorkspace(page, 'Risk');
+    await selectWorkspace(page, 'risk');
     await expect(page).toHaveURL(/\/risk\/dashboard/);
     await expect(
       page.getByRole('heading', { name: /Risk command center/i })
     ).toBeVisible();
-    await expect(page.locator('.ceos-workspace-trigger-title')).toHaveText(
-      'Risk'
-    );
+    await expectActiveWorkspace(page, 'risk');
 
-    await selectWorkspace(page, 'Reporting');
+    await selectWorkspace(page, 'reporting');
     await expect(page).toHaveURL(/\/reporting\/dashboard/);
     await expect(
       page.getByRole('heading', {
         name: /Board packs and executive reporting/i
       })
     ).toBeVisible();
-    await expect(page.locator('.ceos-workspace-trigger-title')).toHaveText(
-      'Reporting'
-    );
+    await expectActiveWorkspace(page, 'reporting');
 
-    await selectWorkspace(page, 'Strategy');
+    await selectWorkspace(page, 'strategy');
     await expect(page).toHaveURL(/\/strategy\/dashboard/);
     await expect(
       page.getByRole('heading', {
         name: /Strategic execution command center/i
       })
     ).toBeVisible();
-    await expect(page.locator('.ceos-workspace-trigger-title')).toHaveText(
-      'Strategy'
-    );
+    await expectActiveWorkspace(page, 'strategy');
 
-    await selectWorkspace(page, 'CEO Overview');
+    await selectWorkspace(page, 'overview');
     await expect(page).toHaveURL(/\/dashboard/);
-    await expect(page.locator('.ceos-workspace-trigger-title')).toHaveText(
-      'CEO Overview'
-    );
+    await expectActiveWorkspace(page, 'overview');
   });
 });

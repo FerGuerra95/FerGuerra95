@@ -89,13 +89,9 @@ const topbarBlackCss = `
     gap: 12px;
   }
 
-  .topbar.ceos-topbar-premium .workspace-switcher.ceos-workspace-switcher {
-    padding: 0;
-    border: none;
-    background: transparent;
-    box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+  .topbar.ceos-topbar-premium .workspace-switcher.ceos-workspace-rail-shell {
+    flex: 1 1 560px;
+    max-width: min(960px, 100%);
   }
 
   .ceos-user-greeting {
