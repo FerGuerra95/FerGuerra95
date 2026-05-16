@@ -299,7 +299,7 @@ textarea,
   gap: 28px !important;
 }
 
-.page:has(.funding-dashboard-page) .page-grid > :first-child {
+.page:has(.funding-dashboard-page) .page-grid > .funding-input-rail {
   max-width: 1320px !important;
   width: 100% !important;
   margin: 0 auto !important;

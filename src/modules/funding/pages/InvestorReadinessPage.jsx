@@ -516,11 +516,11 @@ export function InvestorReadinessPage() {
   const currency = fundingSettings?.reportCurrency || 'EUR';
 
   return (
-    <div className="page">
+    <div className="page ceos-page-shell">
       <style>{investorReadinessCss}</style>
 
       <div className="investor-page">
-        <section className="investor-hero">
+        <section className="investor-hero ceos-ws-hero">
           <div className="investor-hero-inner">
             <div className="investor-hero-main">
               <div className="investor-badges">

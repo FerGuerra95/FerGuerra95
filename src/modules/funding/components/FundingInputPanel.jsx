@@ -45,7 +45,7 @@ export function FundingInputPanel({
   onSettingsChange
 }) {
   return (
-    <div className="stack">
+    <div className="stack funding-input-rail ceos-ws-panel">
       <style>
         {`
           .funding-form-grid-2,

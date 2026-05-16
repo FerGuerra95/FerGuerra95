@@ -1573,17 +1573,10 @@ export function FundingDashboardPage() {
   }
 
   return (
-    <div className="page">
+    <div className="page ceos-page-shell">
       <style>{fundingDashboardCss}</style>
 
-      <div className="page-grid">
-        <FundingInputPanel
-          fundingInputs={fundingInputs}
-          fundingSettings={fundingSettings}
-          onFieldChange={updateField}
-          onSettingsChange={updateSetting}
-        />
-
+      <div className="page-grid funding-dashboard-page-grid">
         <div className="funding-dashboard-page">
           <section className="funding-hero ceos-ws-hero">
             <div className="funding-hero-layout">
@@ -2104,6 +2097,13 @@ export function FundingDashboardPage() {
             </Card>
           </section>
         </div>
+
+        <FundingInputPanel
+          fundingInputs={fundingInputs}
+          fundingSettings={fundingSettings}
+          onFieldChange={updateField}
+          onSettingsChange={updateSetting}
+        />
       </div>
     </div>
   );

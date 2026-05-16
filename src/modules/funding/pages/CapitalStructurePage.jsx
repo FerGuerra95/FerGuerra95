@@ -595,11 +595,11 @@ export function CapitalStructurePage() {
   });
 
   return (
-    <div className="page">
+    <div className="page ceos-page-shell">
       <style>{capitalStructureCss}</style>
 
       <div className="capital-page">
-        <section className="capital-hero">
+        <section className="capital-hero ceos-ws-hero">
           <div className="capital-hero-inner">
             <div>
               <div className="capital-badges">

@@ -625,7 +625,7 @@ export function DataRoomPage() {
   }
 
   return (
-    <div className="page">
+    <div className="page ceos-page-shell">
       <style>{dataRoomCss}</style>
 
       <div className="dataroom-page">

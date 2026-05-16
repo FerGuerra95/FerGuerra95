@@ -139,6 +139,62 @@
   );
 }
 
+/* Workspace shell rhythm + topbar / route title alignment */
+@media (min-width: 921px) {
+  .main-area[data-workspace] .topbar.ceos-topbar-premium {
+    display: grid;
+    grid-template-columns: minmax(200px, 0.42fr) minmax(320px, 0.58fr);
+    align-items: start;
+    column-gap: 22px;
+    row-gap: 12px;
+  }
+
+  .main-area[data-workspace] .topbar.ceos-topbar-premium .topbar-title {
+    padding-top: 2px;
+  }
+
+  .main-area[data-workspace] .topbar.ceos-topbar-premium .ceos-topbar-actions {
+    justify-self: end;
+    width: 100%;
+    max-width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+    align-self: start;
+    padding-top: 2px;
+  }
+}
+
+@media (max-width: 920px) {
+  .main-area[data-workspace] .topbar.ceos-topbar-premium {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .main-area[data-workspace] .topbar.ceos-topbar-premium .ceos-topbar-actions {
+    justify-self: stretch;
+    justify-content: flex-start;
+    padding-top: 0;
+  }
+}
+
+.main-area[data-workspace] .page.ceos-page-shell {
+  box-sizing: border-box;
+}
+
+.main-area[data-workspace='funding'] .fundraising-table-panel {
+  border-radius: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-top-color: var(--ws-accent-border);
+  padding: 22px 22px 18px;
+  background:
+    linear-gradient(180deg, var(--ws-surface), transparent 46%),
+    rgba(0, 0, 0, 0.26);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.032),
+    0 0 16px var(--ws-accent-glow);
+}
+
 /* —— Shared utilities inside authenticated shell —— */
 .main-area[data-workspace] .ceos-ws-divider {
   border: 0;

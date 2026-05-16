@@ -5,7 +5,9 @@ import { loginAsDemoAdmin } from '../helpers/auth.js';
 async function expectRailVisible(page) {
   await expect(page.getByTestId('workspace-rail')).toBeVisible();
   await expect(page.getByTestId('workspace-rail-track')).toBeVisible();
-  await expect(page.locator('.ceos-workspace-rail-item')).toHaveCount(10);
+  await expect(page.locator('[data-testid^="workspace-rail-item-"]')).toHaveCount(
+    11
+  );
 }
 
 async function expectActiveWorkspace(page, key) {

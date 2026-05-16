@@ -625,11 +625,11 @@ export function FundraisingScenariosPage() {
   });
 
   return (
-    <div className="page">
+    <div className="page ceos-page-shell">
       <style>{fundraisingScenariosCss}</style>
 
       <div className="fundraising-page">
-        <section className="fundraising-hero">
+        <section className="fundraising-hero ceos-ws-hero">
           <div className="fundraising-hero-inner">
             <div>
               <div className="fundraising-badges">
