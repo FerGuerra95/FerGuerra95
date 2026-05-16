@@ -174,7 +174,88 @@
 }
 
 .main-area[data-workspace] .ceos-main-build-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: clamp(14px, 1.6vw, 18px);
   margin-bottom: 0;
+  padding: 14px var(--ceos-content-pad);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-top-color: var(--ws-accent-border);
+  background:
+    linear-gradient(135deg, var(--ws-surface), rgba(255, 255, 255, 0.004)),
+    rgba(0, 0, 0, 0.92);
+  box-shadow:
+    0 18px 46px rgba(0, 0, 0, 0.88),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.main-area[data-workspace] .ceos-build-strip-tagline {
+  font-size: 14px;
+  color: rgba(226, 232, 240, 0.62);
+  font-weight: 600;
+  line-height: 1.45;
+  max-width: 72ch;
+}
+
+.main-area[data-workspace] .ceos-build-strip-actions {
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.main-area[data-workspace] .ceos-build-strip-badge {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.main-area[data-workspace] .ceos-build-strip-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.main-area[data-workspace] .topbar.ceos-topbar-premium .topbar-title h1 {
+  color: #f8fafc;
+  text-shadow:
+    0 0 16px rgba(255, 255, 255, 0.045),
+    0 0 14px var(--ws-accent-glow);
+}
+
+.main-area[data-workspace] .ceos-ws-loading-panel {
+  min-height: min(560px, calc(100dvh - 240px));
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  margin: 0 0 24px;
+  border-radius: 22px;
+  border: 1px solid var(--ws-accent-border);
+  background:
+    radial-gradient(circle at 50% 0%, var(--ws-accent-glow), transparent 45%),
+    rgba(0, 0, 0, 0.94);
+  color: rgba(232, 237, 247, 0.9);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.main-area[data-workspace] .ceos-ws-loading-branch {
+  opacity: 0.85;
+  margin-bottom: 10px;
+  color: var(--ws-accent-text);
+  font-weight: 850;
 }
 
 .main-area[data-workspace] .topbar.ceos-topbar-premium {
@@ -403,15 +484,53 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.034);
 }
 
-.main-area[data-workspace] table.ceos-ws-table thead th {
-  background: linear-gradient(180deg, var(--ws-surface-strong), var(--ws-surface));
+/* Legacy .table primitives inside authenticated workspaces */
+.main-area[data-workspace] .table-wrap:not(.ceos-enterprise-table-wrap) {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.11);
+  border-top: 2px solid var(--ws-accent-border);
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.38), rgba(2, 6, 23, 0.78));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.032),
+    0 0 18px var(--ws-accent-glow);
+}
+
+.main-area[data-workspace] table.table:not(.ceos-enterprise-table) {
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+}
+
+.main-area[data-workspace] table.table:not(.ceos-enterprise-table) thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 13px 12px;
+  font-size: 11px;
+  font-weight: 820;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: rgba(248, 250, 252, 0.94);
-  border-bottom: 1px solid var(--ws-accent-border);
+  background: linear-gradient(
+    180deg,
+    var(--ws-surface-strong),
+    var(--ws-surface)
+  ) !important;
+  border-bottom: 1px solid var(--ws-accent-border) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.main-area[data-workspace] table.ceos-ws-table tbody tr:hover td {
-  background: var(--ws-surface);
+.main-area[data-workspace] table.table:not(.ceos-enterprise-table) tbody td {
+  padding: 13px 12px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.09);
+  color: rgba(238, 243, 255, 0.86);
+  vertical-align: middle;
+}
+
+.main-area[data-workspace] table.table:not(.ceos-enterprise-table) tbody tr:hover td {
+  background: var(--ws-surface) !important;
 }
 
 .main-area[data-workspace] .ceos-ws-list {
@@ -1014,4 +1133,34 @@
     flex-direction: column;
     align-items: stretch;
   }
+}
+
+/* Module heroes + icon surfaces — workspace tint over executive polish */
+.main-area[data-workspace] .page :is(
+  [class*='-hero'],
+  .ceo-hero,
+  .suppliers-hero
+) {
+  background: var(--ws-hero-gradient) !important;
+  border-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace] .page :is(
+  [class*='icon-box'],
+  [class*='panel-icon'],
+  [class*='card-icon'],
+  [class*='item-icon']
+) {
+  background: var(--ws-icon-surface) !important;
+  border-color: var(--ws-accent-border) !important;
+  box-shadow: 0 0 12px var(--ws-accent-glow) !important;
+}
+
+.main-area[data-workspace] .page > .card,
+.main-area[data-workspace] .page .ceos-ws-card {
+  border-color: rgba(148, 163, 184, 0.12);
+  border-top-color: var(--ws-accent-border);
+  background:
+    linear-gradient(145deg, var(--ws-surface), transparent 62%),
+    rgba(15, 23, 42, 0.72) !important;
 }

@@ -17,10 +17,14 @@
 html,
 body,
 #root,
-.app-shell,
-.main-area,
-.page {
+.app-shell {
   background: var(--ceos-polish-bg) !important;
+  background-image: none !important;
+}
+
+.main-area.ceos-main-area,
+.main-area.ceos-main-area .page {
+  background: transparent !important;
   background-image: none !important;
 }
 

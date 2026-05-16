@@ -4,53 +4,37 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Sidebar } from './Sidebar.jsx';
 import { Topbar } from './Topbar.jsx';
 import { ExecutivePremiumStyle } from './ExecutivePremiumStyle.jsx';
-import { pageMetaMap } from '../router/routeConfig.jsx';
+import { getShellTopbarMeta } from './shellMeta.js';
 import { Button } from '../../shared/components/ui/Button.jsx';
 import { useAuth } from '../providers/AuthProvider.jsx';
 import { useWorkspaceTheme } from '../../shared/hooks/useWorkspaceTheme.js';
 
-const appShellBlackCss = `
+const appShellBaseCss = `
   html,
   body,
   #root {
-    background: #000000 !important;
+    background: #000000;
+    min-height: 100dvh;
   }
 
   .app-shell {
-    background: #000000 !important;
-  }
-
-  .main-area {
-    background: #000000 !important;
-    background-image: none !important;
+    background: #000000;
     min-height: 100vh;
   }
 
-  .main-area::before,
-  .main-area::after {
-    background: none !important;
-    background-image: none !important;
+  .main-area.ceos-main-area {
+    min-height: 100vh;
+    background: #000000;
+    background-image: radial-gradient(
+      circle at 50% -18%,
+      var(--ws-accent-glow, rgba(212, 175, 55, 0.08)),
+      transparent 46%
+    );
   }
 
-  .main-area .page {
-    background: #000000 !important;
-    background-image: none !important;
-  }
-
-  .topbar {
-    background: #000000 !important;
-    background-image: none !important;
-  }
-
-  .ceos-main-build-strip {
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.018), rgba(255,255,255,0.004)),
-      #000000 !important;
-    background-color: #000000 !important;
-    border: 1px solid rgba(255,255,255,0.055) !important;
-    box-shadow:
-      0 18px 46px rgba(0,0,0,0.88),
-      inset 0 1px 0 rgba(255,255,255,0.030) !important;
+  .main-area.ceos-main-area::before,
+  .main-area.ceos-main-area::after {
+    display: none;
   }
 
   .ceos-logout-btn {
@@ -120,41 +104,13 @@ const appShellBlackCss = `
   }
 `;
 
-function getPageMeta(pathname) {
-  if (pageMetaMap[pathname]) {
-    return pageMetaMap[pathname];
-  }
-
-  if (pathname.startsWith('/compliance/suppliers/')) {
-    return pageMetaMap['/compliance/suppliers/:id'] || {
-      title: 'Supplier Intelligence File',
-      description:
-        'Ficha individual del proveedor con riesgo, resiliencia, alertas asociadas, evidencias y revisiones humanas.'
-    };
-  }
-
-  if (pathname.startsWith('/compliance/audit-runs')) {
-    return pageMetaMap['/compliance/audit-runs'] || {
-      title: 'Compliance Audit Ledger',
-      description:
-        'Historial enterprise de auditorías deterministas, evidencias citadas y exportación JSON firmada para auditores externos.'
-    };
-  }
-
-  return {
-    title: 'CEO’s OS',
-    description:
-      'Plataforma ejecutiva para valoración M&A, compliance de proveedores y financiación corporativa.'
-  };
-}
-
 export function AppShell() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
-  const meta = getPageMeta(pathname);
-  const { cssVars, dataWorkspace } = useWorkspaceTheme();
+  const { cssVars, dataWorkspace, theme } = useWorkspaceTheme();
+  const shellMeta = getShellTopbarMeta(pathname, dataWorkspace);
 
   function handleLogout() {
     logout();
@@ -165,97 +121,32 @@ export function AppShell() {
     <div
       className="app-shell ceos-ws-accent-root"
       data-workspace={dataWorkspace}
-      style={{
-        background: '#000000',
-        backgroundColor: '#000000',
-        backgroundImage: 'none',
-        minHeight: '100vh',
-        ...cssVars
-      }}
+      style={{ minHeight: '100vh', ...cssVars }}
     >
-      <style>{appShellBlackCss}</style>
+      <style>{appShellBaseCss}</style>
 
       <Sidebar />
 
       <div
         className="main-area ceos-main-area ceos-ws-accent-root"
         data-workspace={dataWorkspace}
-        style={{
-          background: '#000000',
-          backgroundColor: '#000000',
-          backgroundImage: 'none',
-          minHeight: '100vh',
-          ...cssVars
-        }}
+        style={{ minHeight: '100vh', ...cssVars }}
       >
-        <div
-          className="ceos-content-shell ceos-main-build-strip"
-          style={{
-            marginTop: 18,
-            padding: '14px 18px',
-            borderRadius: 18,
-            border: '1px solid rgba(255,255,255,0.055)',
-            background: '#000000',
-            backgroundColor: '#000000',
-            backgroundImage:
-              'linear-gradient(135deg, rgba(255,255,255,0.018), rgba(255,255,255,0.004))',
-            boxShadow:
-              '0 18px 46px rgba(0,0,0,0.88), inset 0 1px 0 rgba(255,255,255,0.030)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 16,
-            flexWrap: 'wrap'
-          }}
-        >
-          <div>
-            <div
-              style={{
-                fontSize: 14,
-                color: 'rgba(226,232,240,0.62)',
-                fontWeight: 600
-              }}
-            >
-              M&A, Compliance, Funding y PMI consolidados con Risk, Reporting
-              y Strategy en una capa privada de decision ejecutiva
+        <div className="ceos-content-shell ceos-main-build-strip">
+          <div className="ceos-build-strip-copy">
+            <div className="ceos-build-strip-tagline">
+              M&A, Compliance, Funding y PMI consolidados con Risk, Reporting y
+              Strategy en una capa privada de decision ejecutiva
             </div>
           </div>
 
-          <div
-            className="row wrap"
-            style={{
-              alignItems: 'center',
-              justifyContent: 'flex-end'
-            }}
-          >
-            <div
-              className="ceos-ws-badge"
-              style={{
-                padding: '8px 12px',
-                borderRadius: 999,
-                fontSize: 12,
-                fontWeight: 900
-              }}
-            >
+          <div className="ceos-build-strip-actions row wrap">
+            <div className="ceos-ws-badge ceos-build-strip-badge">
               Backend activo
             </div>
 
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                padding: '8px 12px',
-                borderRadius: 999,
-                background: 'rgba(255,255,255,0.030)',
-                border: '1px solid rgba(255,255,255,0.070)',
-                color: 'rgba(255,255,255,0.82)',
-                fontSize: 12,
-                fontWeight: 800
-              }}
-            >
+            <div className="ceos-build-strip-user">
               <UserCircle size={16} />
-
               <span>
                 {user?.name || 'Usuario'} · {user?.role || 'user'}
               </span>
@@ -272,39 +163,23 @@ export function AppShell() {
           </div>
         </div>
 
-        <Topbar title={meta.title} description={meta.description} />
+        <Topbar
+          title={shellMeta.title}
+          description={shellMeta.description}
+          pageLabel={shellMeta.pageLabel}
+        />
 
         <div className="ceos-content-shell ceos-page-shell-host">
-        <Suspense
-          fallback={
-            <div
-              className="ceos-outlet-fallback"
-              style={{
-                minHeight: 'min(560px, calc(100dvh - 240px))',
-                display: 'grid',
-                placeItems: 'center',
-                padding: 32,
-                margin: '0 0 24px',
-                borderRadius: 22,
-                background:
-                  'radial-gradient(circle at 50% 0%, rgba(16,185,129,0.06), transparent 45%), #000000',
-                color: 'rgba(232, 237, 247, 0.9)',
-                fontSize: 13,
-                fontWeight: 600,
-                letterSpacing: '0.02em',
-                textAlign: 'center',
-                border: '1px solid rgba(148, 163, 184, 0.08)'
-              }}
-            >
-              <div>
-                <div style={{ opacity: 0.7, marginBottom: 10 }}>CEO&apos;s OS</div>
+          <Suspense
+            fallback={
+              <div className="ceos-outlet-fallback ceos-ws-loading-panel">
+                <div className="ceos-ws-loading-branch">{theme.label}</div>
                 <div>Loading workspace...</div>
               </div>
-            </div>
-          }
-        >
-          <Outlet />
-        </Suspense>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </div>
 
         <ExecutivePremiumStyle />
@@ -312,3 +187,5 @@ export function AppShell() {
     </div>
   );
 }
+
+

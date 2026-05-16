@@ -2,7 +2,7 @@ import React from 'react';
 import { WorkspaceSwitcher } from './WorkspaceSwitcher.jsx';
 import { useAuth } from '../providers/AuthProvider.jsx';
 
-const topbarBlackCss = `
+const topbarLayoutCss = `
   .topbar.ceos-topbar-premium {
     position: relative;
     overflow-x: clip;
@@ -11,46 +11,11 @@ const topbarBlackCss = `
     padding: 0;
     background:
       linear-gradient(180deg, rgba(255,255,255,0.010), rgba(255,255,255,0.000)),
-      #000000 !important;
-    background-color: #000000 !important;
-    background-image:
-      linear-gradient(180deg, rgba(255,255,255,0.010), rgba(255,255,255,0.000)) !important;
-    border-bottom: 1px solid rgba(255,255,255,0.050) !important;
+      rgba(0, 0, 0, 0.94);
+    border-bottom: 1px solid rgba(255,255,255,0.050);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.012),
-      0 20px 54px rgba(0,0,0,0.70) !important;
-  }
-
-  .topbar.ceos-topbar-premium::before,
-  .topbar.ceos-topbar-premium::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .topbar.ceos-topbar-premium::before {
-    left: var(--ceos-content-pad, 32px);
-    right: var(--ceos-content-pad, 32px);
-    bottom: -1px;
-    height: 1px;
-    background:
-      linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,0.08),
-        rgba(52,211,153,0.10),
-        rgba(212,175,55,0.055),
-        transparent
-      );
-    opacity: 0.9;
-  }
-
-  .topbar.ceos-topbar-premium::after {
-    inset: 0;
-    background:
-      radial-gradient(circle at 12% 0%, rgba(255,255,255,0.018), transparent 28%),
-      radial-gradient(circle at 88% 0%, rgba(16,185,129,0.030), transparent 26%);
-    opacity: 0.68;
+      0 20px 54px rgba(0,0,0,0.70);
   }
 
   .ceos-topbar-shell {
@@ -74,21 +39,34 @@ const topbarBlackCss = `
   .topbar.ceos-topbar-premium .topbar-title {
     flex: 1 1 280px;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .topbar.ceos-topbar-premium .ceos-topbar-page-label {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ws-accent-text, rgba(226, 232, 240, 0.72));
+    opacity: 0.92;
   }
 
   .topbar.ceos-topbar-premium .topbar-title h1 {
     margin: 0;
-    color: #f8fafc !important;
+    font-size: clamp(1.55rem, 2.4vw, 1.95rem);
+    line-height: 1.05;
+    color: #f8fafc;
     letter-spacing: -0.050em;
-    text-shadow:
-      0 0 16px rgba(255,255,255,0.045),
-      0 0 14px rgba(212,175,55,0.035);
   }
 
   .topbar.ceos-topbar-premium .topbar-title p {
-    margin-top: 8px;
-    color: rgba(226,232,240,0.58) !important;
+    margin: 0;
+    color: rgba(226,232,240,0.58);
     line-height: 1.55;
+    font-size: 14px;
   }
 
   .ceos-topbar-actions {
@@ -119,9 +97,9 @@ const topbarBlackCss = `
     border-radius: 999px;
     background:
       linear-gradient(135deg, rgba(255,255,255,0.045), rgba(255,255,255,0.014)),
-      rgba(255,255,255,0.025) !important;
-    border: 1px solid rgba(255,255,255,0.070) !important;
-    color: rgba(255,255,255,0.82) !important;
+      rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.070);
+    color: rgba(255,255,255,0.82);
     font-size: 12px;
     font-weight: 850;
     box-shadow:
@@ -168,23 +146,19 @@ const topbarBlackCss = `
   }
 `;
 
-export function Topbar({ title, description, actions = null }) {
+export function Topbar({ title, description, pageLabel = null, actions = null }) {
   const { user } = useAuth();
 
   return (
-    <header
-      className="topbar ceos-topbar-premium"
-      style={{
-        background: '#000000',
-        backgroundColor: '#000000',
-        borderBottom: '1px solid rgba(255,255,255,0.050)'
-      }}
-    >
-      <style>{topbarBlackCss}</style>
+    <header className="topbar ceos-topbar-premium">
+      <style>{topbarLayoutCss}</style>
 
       <div className="ceos-topbar-shell ceos-content-shell">
         <div className="ceos-topbar-main">
           <div className="topbar-title">
+            {pageLabel ? (
+              <p className="ceos-topbar-page-label">{pageLabel}</p>
+            ) : null}
             <h1>{title}</h1>
             <p>{description}</p>
           </div>
