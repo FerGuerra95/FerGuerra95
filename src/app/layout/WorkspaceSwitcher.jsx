@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { routeGroups } from '../router/routeConfig.jsx';
 import {
   WORKSPACES,
   getWorkspaceByKey,
   getWorkspaceByPathname
 } from '../router/workspaceConfig.jsx';
 import { useWorkspaceTheme } from '../../shared/hooks/useWorkspaceTheme.js';
+import { scrollSidebarToWorkspace } from './sidebarScroll.js';
 
 const RAIL_SCROLL_STEP = 240;
 
@@ -173,40 +173,6 @@ const workspaceRailCss = `
   }
 `;
 
-function scrollSidebarToWorkspace(workspaceKey) {
-  const sidebar = document.querySelector('.ceos-sidebar');
-
-  if (!sidebar) return;
-
-  const workspace = getWorkspaceByKey(workspaceKey);
-
-  if (workspace.key === 'overview') {
-    sidebar.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-    return;
-  }
-
-  const sectionLabel =
-    routeGroups[workspaceKey]?.label?.trim().toUpperCase() ||
-    workspace.sidebarLabel;
-
-  const targetTitle = Array.from(
-    sidebar.querySelectorAll('.ceos-nav-section-title')
-  ).find((title) => title.textContent?.trim().toUpperCase() === sectionLabel);
-
-  if (!targetTitle) return;
-
-  const maxScroll = Math.max(sidebar.scrollHeight - sidebar.clientHeight, 0);
-  const targetTop = Math.max(targetTitle.offsetTop - 16, 0);
-
-  sidebar.scrollTo({
-    top: Math.min(targetTop, maxScroll),
-    behavior: 'smooth'
-  });
-}
-
 function readRailScrollState(railEl) {
   if (!railEl) {
     return { canScrollLeft: false, canScrollRight: false };
@@ -285,8 +251,8 @@ export function WorkspaceSwitcher() {
   }
 
   function handleSelect(item) {
-    scrollSidebarToWorkspace(item.key);
     navigate(item.path);
+    requestAnimationFrame(() => scrollSidebarToWorkspace(item.key));
   }
 
   return (

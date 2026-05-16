@@ -8,6 +8,7 @@ import {
 } from '../router/workspaceConfig.jsx';
 import { BrandLogo } from '../../shared/components/brand/BrandLogo.jsx';
 import { useWorkspaceTheme } from '../../shared/hooks/useWorkspaceTheme.js';
+import { scrollSidebarToWorkspace } from './sidebarScroll.js';
 
 const GOLD = '#d4af37';
 const MUTED_ICON = 'rgba(226,232,240,0.68)';
@@ -424,6 +425,7 @@ const sidebarCss = `
 
   .ceos-nav-section-title {
     position: relative;
+    scroll-margin-top: 16px;
     padding: 0 10px 13px;
     margin-bottom: 10px;
     font-size: 14px;
@@ -697,54 +699,6 @@ function getActiveWorkspace(pathname) {
 }
 
 
-const STABLE_SIDEBAR_SECTION_LABELS = {
-  overview: 'EXECUTIVE OS',
-  ma: 'M&A',
-  compliance: 'COMPLIANCE',
-  funding: 'FUNDING',
-  pmi: 'PMI',
-  governance: 'GOVERNANCE & ESG',
-  heritage: 'HERITAGE & LEGACY',
-  bridge: 'THE BRIDGE',
-  risk: 'ENTERPRISE RISK',
-  reporting: 'REPORTING',
-  strategy: 'STRATEGY'
-};
-
-function stableScrollSidebarToWorkspace(workspaceKey) {
-  const sidebar = document.querySelector('.ceos-sidebar');
-
-  if (!sidebar) return;
-
-  const targetLabel = STABLE_SIDEBAR_SECTION_LABELS[workspaceKey];
-
-  if (!targetLabel || workspaceKey === 'overview') {
-    sidebar.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-    return;
-  }
-
-  const sectionTitles = Array.from(
-    sidebar.querySelectorAll('.ceos-nav-section-title')
-  );
-
-  const targetTitle = sectionTitles.find((title) => {
-    return title.textContent?.trim().toUpperCase() === targetLabel;
-  });
-
-  if (!targetTitle) return;
-
-  const maxScroll = Math.max(sidebar.scrollHeight - sidebar.clientHeight, 0);
-  const targetTop = Math.max(targetTitle.offsetTop - 16, 0);
-
-  sidebar.scrollTo({
-    top: Math.min(targetTop, maxScroll),
-    behavior: 'smooth'
-  });
-}
-// STABLE SIDEBAR SECTION JUMP
 function forceIconColor(icon, isHighlighted) {
   if (!React.isValidElement(icon)) return icon;
 
@@ -850,6 +804,14 @@ export function Sidebar() {
   const activeWorkspace = getActiveWorkspace(pathname);
   const activeMeta =
     workspaceMeta[activeWorkspace] || workspaceMeta.overview;
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      scrollSidebarToWorkspace(activeWorkspace);
+    }, 60);
+
+    return () => window.clearTimeout(timer);
+  }, [activeWorkspace, pathname]);
 
   return (
     <aside
