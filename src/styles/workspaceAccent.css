@@ -139,47 +139,46 @@
   );
 }
 
-/* Workspace shell rhythm + topbar / route title alignment */
-@media (min-width: 921px) {
-  .main-area[data-workspace] .topbar.ceos-topbar-premium {
-    display: grid;
-    grid-template-columns: minmax(200px, 0.42fr) minmax(320px, 0.58fr);
-    align-items: start;
-    column-gap: 22px;
-    row-gap: 12px;
-  }
-
-  .main-area[data-workspace] .topbar.ceos-topbar-premium .topbar-title {
-    padding-top: 2px;
-  }
-
-  .main-area[data-workspace] .topbar.ceos-topbar-premium .ceos-topbar-actions {
-    justify-self: end;
-    width: 100%;
-    max-width: 100%;
-    justify-content: flex-end;
-    align-items: center;
-    align-self: start;
-    padding-top: 2px;
-  }
+/* —— Shared content shell: topbar, rail, page body —— */
+.main-area.ceos-main-area[data-workspace] {
+  --ceos-content-max: 1540px;
+  --ceos-content-pad: clamp(18px, 2.2vw, 32px);
+  overflow-x: clip;
 }
 
-@media (max-width: 920px) {
-  .main-area[data-workspace] .topbar.ceos-topbar-premium {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .main-area[data-workspace] .topbar.ceos-topbar-premium .ceos-topbar-actions {
-    justify-self: stretch;
-    justify-content: flex-start;
-    padding-top: 0;
-  }
-}
-
-.main-area[data-workspace] .page.ceos-page-shell {
+.main-area[data-workspace] .ceos-content-shell {
   box-sizing: border-box;
+  width: 100%;
+  max-width: var(--ceos-content-max);
+  margin-inline: auto;
+  padding-inline: var(--ceos-content-pad);
+}
+
+.main-area[data-workspace] .ceos-page-shell-host {
+  min-width: 0;
+  padding-bottom: clamp(18px, 2vw, 28px);
+}
+
+.main-area[data-workspace] .ceos-page-shell-host > .page {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+  padding-top: clamp(14px, 1.8vw, 24px);
+  padding-bottom: var(--space-page);
+  box-sizing: border-box;
+}
+
+.main-area[data-workspace] .ceos-page-shell-host > .page.ceos-page-shell {
+  box-sizing: border-box;
+}
+
+.main-area[data-workspace] .ceos-main-build-strip {
+  margin-bottom: 0;
+}
+
+.main-area[data-workspace] .topbar.ceos-topbar-premium {
+  padding: 0 !important;
 }
 
 .main-area[data-workspace='funding'] .fundraising-table-panel {

@@ -206,8 +206,9 @@ textarea,
 .deals-page,
 .ma-deal-detail-page,
 .funding-dashboard-page {
-  width: min(1320px, 100%) !important;
-  margin: 0 auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
 }
 
 .ma-executive-page :is(.ma-hero),

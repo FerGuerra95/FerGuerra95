@@ -18,9 +18,9 @@ const workspaceRailCss = `
     display: flex;
     align-items: center;
     gap: 6px;
-    flex: 1 1 520px;
+    flex: 1 1 auto;
     min-width: 0;
-    max-width: min(960px, 100%);
+    max-width: 100%;
     padding: 5px;
     border-radius: 999px;
     background:

@@ -178,7 +178,7 @@ export function AppShell() {
       <Sidebar />
 
       <div
-        className="main-area ceos-ws-accent-root"
+        className="main-area ceos-main-area ceos-ws-accent-root"
         data-workspace={dataWorkspace}
         style={{
           background: '#000000',
@@ -189,9 +189,9 @@ export function AppShell() {
         }}
       >
         <div
-          className="ceos-main-build-strip"
+          className="ceos-content-shell ceos-main-build-strip"
           style={{
-            margin: '18px 24px 0',
+            marginTop: 18,
             padding: '14px 18px',
             borderRadius: 18,
             border: '1px solid rgba(255,255,255,0.055)',
@@ -274,6 +274,7 @@ export function AppShell() {
 
         <Topbar title={meta.title} description={meta.description} />
 
+        <div className="ceos-content-shell ceos-page-shell-host">
         <Suspense
           fallback={
             <div
@@ -283,7 +284,7 @@ export function AppShell() {
                 display: 'grid',
                 placeItems: 'center',
                 padding: 32,
-                margin: '0 24px 24px',
+                margin: '0 0 24px',
                 borderRadius: 22,
                 background:
                   'radial-gradient(circle at 50% 0%, rgba(16,185,129,0.06), transparent 45%), #000000',
@@ -304,6 +305,7 @@ export function AppShell() {
         >
           <Outlet />
         </Suspense>
+        </div>
 
         <ExecutivePremiumStyle />
       </div>
