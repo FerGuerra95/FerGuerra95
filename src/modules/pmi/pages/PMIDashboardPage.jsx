@@ -36,10 +36,19 @@ import { maDealsApi } from '../../ma/services/maDealsApi.js';
 const pmiDashboardCss = `
   .pmi-page {
     width: min(1540px, 100%);
+    max-width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 38px;
+    overflow-x: clip;
+    box-sizing: border-box;
+  }
+
+  .pmi-page .card {
+    max-width: 100%;
+    overflow: visible;
+    box-sizing: border-box;
   }
 
   .pmi-hero {
@@ -104,8 +113,10 @@ const pmiDashboardCss = `
     margin: 0;
     max-width: 940px;
     font-size: clamp(40px, 4.8vw, 68px);
-    line-height: 0.94;
+    line-height: 1.08;
     letter-spacing: 0;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   .pmi-title span {
@@ -149,8 +160,9 @@ const pmiDashboardCss = `
   .pmi-command-item strong {
     display: block;
     margin-top: 8px;
-    line-height: 1.25;
-    overflow-wrap: anywhere;
+    line-height: 1.35;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   .pmi-signal-card {
@@ -168,7 +180,7 @@ const pmiDashboardCss = `
     box-shadow:
       0 26px 70px rgba(0, 0, 0, 0.24),
       inset 0 1px 0 rgba(255,255,255,0.05);
-    overflow: hidden;
+    overflow: visible;
   }
 
   .pmi-signal-card::before {
@@ -190,9 +202,15 @@ const pmiDashboardCss = `
 
   .pmi-signal-top {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     gap: 18px;
     align-items: flex-start;
+  }
+
+  .pmi-signal-top > div:first-child {
+    flex: 1 1 12rem;
+    min-width: 0;
   }
 
   .pmi-icon-box,
@@ -220,8 +238,10 @@ const pmiDashboardCss = `
   .pmi-signal-title {
     margin-top: 10px;
     font-size: 23px;
-    line-height: 1.16;
+    line-height: 1.25;
     letter-spacing: 0;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   .pmi-score-module {
@@ -263,32 +283,51 @@ const pmiDashboardCss = `
     letter-spacing: 0;
   }
 
+  .pmi-score-copy {
+    min-width: 0;
+  }
+
   .pmi-score-copy strong {
     display: block;
     margin-bottom: 8px;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   .pmi-score-copy p {
     margin: 0;
     line-height: 1.58;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   .pmi-signal-table {
     display: grid;
+    gap: 0;
   }
 
   .pmi-signal-row {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: 14px;
-    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    align-items: start;
     padding: 12px 0;
     border-top: 1px solid rgba(148, 163, 184, 0.14);
   }
 
+  .pmi-signal-row span,
   .pmi-signal-row strong {
-    text-align: right;
-    overflow-wrap: anywhere;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: normal;
+    line-height: 1.45;
+    white-space: normal;
+  }
+
+  .pmi-signal-row strong {
+    text-align: left;
+    font-weight: 750;
   }
 
   .pmi-section {
@@ -353,6 +392,7 @@ const pmiDashboardCss = `
   .pmi-milestone-card {
     width: 100%;
     height: 100%;
+    overflow: visible;
     border-radius: 31px;
     border: 1px solid rgba(148, 163, 184, 0.16);
     background:
@@ -385,9 +425,10 @@ const pmiDashboardCss = `
     margin-top: 12px;
     font-size: 25px;
     font-weight: 790;
-    line-height: 1.12;
+    line-height: 1.25;
     letter-spacing: 0;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   .pmi-kpi-card p {
@@ -403,6 +444,15 @@ const pmiDashboardCss = `
     display: flex;
     flex-direction: column;
     gap: 18px;
+    min-width: 0;
+  }
+
+  .pmi-panel .pmi-control-grid,
+  .pmi-workstream-card .pmi-control-grid,
+  .pmi-risk-card .pmi-control-grid,
+  .pmi-milestone-card .pmi-control-grid {
+    width: 100%;
+    max-width: 100%;
   }
 
   .pmi-card-title,
@@ -441,7 +491,8 @@ const pmiDashboardCss = `
 
   .pmi-mini-row strong {
     text-align: right;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   .pmi-list {
@@ -501,21 +552,42 @@ const pmiDashboardCss = `
   .pmi-control-grid {
     display: grid;
     gap: 14px;
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
   }
 
   .pmi-control-row {
     display: grid;
-    grid-template-columns: minmax(160px, 1fr) minmax(150px, 0.8fr) minmax(120px, 0.6fr) auto;
-    gap: 14px;
-    align-items: center;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 0.85fr) auto;
+    gap: 12px;
+    align-items: start;
     padding: 14px 0;
     border-top: 1px solid rgba(148, 163, 184, 0.13);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .pmi-control-row > div:first-child,
+  .pmi-ledger-row > div:first-child,
+  .pmi-dependency-row > div:first-child {
+    min-width: 0;
   }
 
   .pmi-control-row strong,
-  .pmi-control-row span {
+  .pmi-control-row span,
+  .pmi-control-row .kpi-label,
+  .pmi-ledger-row strong,
+  .pmi-ledger-row .muted,
+  .pmi-dependency-row strong,
+  .pmi-dependency-row .muted,
+  .pmi-playbook-row strong {
     min-width: 0;
-    overflow-wrap: anywhere;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+    line-height: 1.4;
   }
 
   .pmi-ledger-row,
@@ -528,17 +600,45 @@ const pmiDashboardCss = `
   }
 
   .pmi-ledger-row {
-    grid-template-columns: minmax(190px, 1.2fr) minmax(110px, 0.7fr) minmax(120px, 0.8fr) minmax(110px, 0.7fr) auto;
-    align-items: center;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.75fr) minmax(0, 0.85fr) minmax(0, 0.75fr) auto;
+    align-items: start;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .pmi-dependency-row {
-    grid-template-columns: minmax(190px, 1fr) minmax(120px, 0.65fr) minmax(120px, 0.65fr) auto;
-    align-items: center;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 0.8fr) auto;
+    align-items: start;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .pmi-playbook-row {
-    grid-template-columns: minmax(150px, 0.7fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .pmi-control-row .pmi-select,
+  .pmi-control-row .pmi-range,
+  .pmi-control-row .pmi-inline-input,
+  .pmi-ledger-row .pmi-select,
+  .pmi-ledger-row .pmi-inline-input,
+  .pmi-dependency-row .pmi-select,
+  .pmi-dependency-row .pmi-inline-input {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .pmi-control-row .pmi-button-lite,
+  .pmi-ledger-row .pmi-button-lite,
+  .pmi-dependency-row .pmi-button-lite {
+    justify-self: start;
   }
 
   .pmi-checklist {
@@ -651,6 +751,21 @@ const pmiDashboardCss = `
     }
   }
 
+  @media (max-width: 1320px) {
+    .pmi-control-row,
+    .pmi-ledger-row,
+    .pmi-dependency-row,
+    .pmi-playbook-row,
+    .pmi-inline-form,
+    .pmi-inline-form-three {
+      grid-template-columns: 1fr;
+    }
+
+    .pmi-signal-row strong {
+      text-align: left;
+    }
+  }
+
   @media (max-width: 780px) {
     .pmi-command-bar,
     .pmi-grid-kpis {
@@ -668,24 +783,6 @@ const pmiDashboardCss = `
 
     .pmi-score-module {
       grid-template-columns: 1fr;
-    }
-
-    .pmi-control-row,
-    .pmi-ledger-row,
-    .pmi-dependency-row,
-    .pmi-playbook-row,
-    .pmi-inline-form,
-    .pmi-inline-form-three {
-      grid-template-columns: 1fr;
-    }
-
-    .pmi-signal-row {
-      grid-template-columns: 1fr;
-      gap: 7px;
-    }
-
-    .pmi-signal-row strong {
-      text-align: left;
     }
   }
 `;
