@@ -351,6 +351,68 @@ Opciones para A.1.2c:
 
 ---
 
+## A.1.2c–A.1.2e — Cierre de limpieza de huérfanos legacy
+
+**Fecha:** 17 mayo 2026  
+**Estado:** Cerrado en remoto.
+
+**Commits:**
+
+- `afe686b` — chore: remove confirmed orphan ecosystem pages and legacy constants
+- `3fcace0` — chore: remove unused ecosystem governance and heritage api clients
+
+### Eliminado
+
+| Archivo | Motivo |
+|---|---|
+| `src/modules/ecosystem/pages/EcosystemBranchPage.jsx` | Página legacy sin ruta ni imports activos |
+| `src/modules/ecosystem/pages/GovernanceESGPage.jsx` | Página legacy duplicada frente a governance enterprise |
+| `src/modules/ecosystem/pages/HeritageLegacyPage.jsx` | Página legacy duplicada frente a heritage enterprise |
+| `src/shared/config/constants.js` | Config antigua sin imports; WORKSPACES real vive en `workspaceConfig.jsx` |
+| `src/modules/ecosystem/services/governanceApi.js` | Cliente legacy sin consumidores tras eliminar GovernanceESGPage |
+| `src/modules/ecosystem/services/heritageApi.js` | Cliente legacy sin consumidores tras eliminar HeritageLegacyPage |
+
+### Conservado explícitamente
+
+| Archivo | Motivo |
+|---|---|
+| `src/modules/ecosystem/services/ecosystemApi.js` | Usado por Executive Overview / hub overview |
+| `src/modules/ecosystem/services/bridgeApi.js` | Usado por BridgeMarketplacePage; pendiente política A.1.5 |
+| `src/modules/ecosystem/pages/BridgeMarketplacePage.jsx` | Fuera de scope A.1.2; pendiente política A.1.5 |
+
+### Validación
+
+- A.1.2c: `npm run test:integration` PASS 53/53.
+- A.1.2e: build PASS.
+- A.1.2e: unit PASS 106/106.
+- A.1.2e: integration PASS 53/53.
+- Sin cambios en backend.
+- Sin cambios en rutas.
+- Sin cambios en CSS.
+- Sin cambios en auth.
+- Sin cambios en migraciones.
+- Sin cambios en secure share.
+
+### Decisión
+
+Fase A.1.2 queda cerrada.
+
+No quedan consumidores activos conocidos de las páginas y services eliminados.
+
+### Siguiente foco recomendado
+
+**A.1.5 — Política `/bridge/marketplace`:**
+
+- mantener como internal
+- ocultar
+- redirigir
+- dejar demo-only
+- documentar límites
+
+No tocar CSS ni configs todavía salvo necesidad.
+
+---
+
 ## 12. Próximo paso recomendado
 
 Después de A.1.1 y A.1.2:
