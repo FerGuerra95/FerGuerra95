@@ -267,11 +267,95 @@ Repetir smoke producción.
 
 ---
 
+## A.1.2 — Grep / Import Audit de huérfanos legacy
+
+**Fecha:** 17 mayo 2026  
+**Estado:** Solo lectura. Sin cambios de código.
+
+### Criterio de interpretación
+
+Estos archivos no se consideran desarrollo pendiente. Se consideran duplicidad legacy/paralela sin uso activo.
+
+No se deben desarrollar dentro de `src/modules/ecosystem/`.
+
+Si alguna idea funcional de estas páginas se quiere recuperar, debe migrarse de forma controlada a la rama enterprise real correspondiente:
+
+- Governance → `src/modules/governance/`
+- Heritage → `src/modules/heritage/`
+- Ecosystem genérico → revisar solo si aporta algo a Executive Overview o Bridge, no como rama nueva paralela.
+
+### Resultado resumido
+
+| Archivo | Estado | Referencias | Ruta activa | Interpretación | Recomendación |
+|---|---|---|---|---|---|
+| `src/modules/ecosystem/pages/EcosystemBranchPage.jsx` | Huérfano confirmado | Solo definición propia | No | Página genérica legacy del ecosistema | No desarrollar; archivar o eliminar en fase posterior |
+| `src/modules/ecosystem/pages/GovernanceESGPage.jsx` | Huérfano confirmado | Solo definición propia; usa `ecosystem/services/governanceApi.js` | No | Versión legacy/paralela de Governance ESG | No desarrollar aquí; si aporta algo, migrar a `governance/` |
+| `src/modules/ecosystem/pages/HeritageLegacyPage.jsx` | Huérfano confirmado | Solo definición propia; usa `ecosystem/services/heritageApi.js` | No | Versión legacy/paralela de Heritage | No desarrollar aquí; si aporta algo, migrar a `heritage/` |
+| `src/shared/config/constants.js` | Dead file confirmado | 0 imports; `WORKSPACES` obsoleto; `APP_NAME` sin uso | N/A | Config antigua reemplazada por `workspaceConfig.jsx` | Eliminar en commit atómico posterior |
+
+### Hallazgos
+
+- Ninguno de los tres JSX aparece en `routes.jsx`.
+- Ninguno aparece en `routeConfig.jsx`.
+- Ninguno aparece en `workspaceConfig.jsx`.
+- Ninguno tiene lazy import activo.
+- Ninguno aparece en navegación.
+- `constants.js` no tiene imports activos.
+- `WORKSPACES` canónico vive en `workspaceConfig.jsx`.
+- `Sidebar.jsx` y `WorkspaceSwitcher.jsx` usan `workspaceConfig.jsx`, no `constants.js`.
+- `CEOOverviewPage.jsx` usa `ecosystemApi.js`, pero no estas páginas huérfanas.
+- `BridgeMarketplacePage.jsx` sigue fuera del scope y **NO** debe tocarse todavía.
+- `ecosystemApi.js` debe mantenerse porque alimenta Executive Overview / board signals.
+
+### Decisión
+
+No borrar todavía.
+
+Estas páginas se documentan como legacy/huérfanas y se dejan para una fase posterior de limpieza controlada.
+
+### Próxima acción posible
+
+**A.1.2c** — preparar limpieza controlada de archivos huérfanos, solo si Fernando autoriza.
+
+Opciones para A.1.2c:
+
+1. Eliminar archivos huérfanos si no hay imports activos.
+2. Moverlos a `_archive` si se quiere conservar histórico.
+3. Mantenerlos con cabecera `@deprecated` si se prefiere no borrar todavía.
+
+**Recomendación actual:** No desarrollarlos. Archivar o eliminar en commit separado cuando se apruebe.
+
+### Reglas para A.1.2c
+
+**No tocar:**
+
+- `src/modules/ecosystem/pages/BridgeMarketplacePage.jsx`
+- `src/modules/ecosystem/services/ecosystemApi.js`
+- `/api/ecosystem`
+- `/dashboard`
+- `/bridge/marketplace` hasta A.1.5
+- rutas enterprise de `governance/` / `heritage/`
+- `backend/storage/migrations`
+- auth
+- secure share público
+- rail de 11 workspaces
+
+**Candidatos futuros:**
+
+- `src/modules/ecosystem/pages/EcosystemBranchPage.jsx`
+- `src/modules/ecosystem/pages/GovernanceESGPage.jsx`
+- `src/modules/ecosystem/pages/HeritageLegacyPage.jsx`
+- `src/shared/config/constants.js`
+- `src/modules/ecosystem/services/governanceApi.js` solo si no tiene más usos
+- `src/modules/ecosystem/services/heritageApi.js` solo si no tiene más usos
+
+---
+
 ## 12. Próximo paso recomendado
 
-Después de este documento:
+Después de A.1.1 y A.1.2:
 
-1. Commit documental.
-2. A.1.2: grep/import audit de páginas ecosystem huérfanas.
-3. No borrar todavía.
-4. Proponer commit de aislamiento si es seguro.
+1. Commit documental de esta sección (A.1.2b).
+2. Esperar autorización para A.1.2c (archivar o eliminar huérfanos).
+3. No borrar todavía sin commit atómico + build.
+4. Continuar A.1.5 (marketplace policy) en paralelo si hace falta antes de limpieza física.
