@@ -525,6 +525,97 @@ No tocar código ahora.
 
 ---
 
+## A.1.6 — Tests / Gates / CI
+
+**Fecha:** 18 mayo 2026  
+**Estado:** Auditoría solo lectura completada.
+
+### Objetivo
+
+Definir qué validaciones son obligatorias antes de commit, push, deploy y demo, sin modificar todavía tests ni scripts.
+
+### Scripts auditados
+
+| Script | Uso recomendado | Estado |
+|---|---|---|
+| `npm run build` | build de producción local | Estable |
+| `npm run test:unit` | gate pre-commit | Estable |
+| `npm run test:integration` | gate pre-push/pre-deploy | Estable |
+| `npm run quality` | gate pre-push oficial | Estable |
+| `npm run test:e2e` | gate pre-deploy | Útil, pesado, riesgo puerto 4000 |
+| `npm run test:e2e:online` | manual / legacy online | No gate automático |
+| `npm run test:a11y` | CI / pre-deploy opcional | Estable |
+| `npm run test:lighthouse` | CI | Medio/pesado |
+| `npm run test:lighthouse:perf` | CI | Medio/pesado |
+| `npm run check:bundle-budget` | dentro de quality | Estable |
+
+### Gates oficiales recomendados
+
+| Momento | Comando | Obligatorio | Motivo |
+|---|---|---|---|
+| Pre-commit | `npm run test:unit` | Sí | Rápido, sin puertos, alta señal |
+| Pre-push | `npm run quality` | Sí | build + budget + unit + integration |
+| Pre-deploy | `npm run quality && npm run test:e2e` | Sí | validación UI local completa |
+| Pre-demo | smoke producción autenticado | Sí | valida app real antes de enseñar |
+| CI remoto | GitHub Actions quality + e2e/a11y/lighthouse | Sí | control automático en main/PR |
+| Semanal | `browser-smoke-weekly.yml` | Opcional | cobertura adicional browsers |
+
+### Smoke producción autenticado
+
+Antes de demo externa, revisar en producción:
+
+- `/dashboard`
+- `/pmi/dashboard`
+- `/risk/register`
+- `/reporting/library`
+- `/ma/dashboard`
+- `/heritage/dashboard`
+
+Comprobar:
+
+- login correcto
+- rail 11 workspaces
+- Heritage visible
+- sidebar scroll
+- PMI sin tablas pisadas
+- Risk/Reporting con Limpiar filtros
+- sin errores JS críticos
+- sin 500
+- sin NaN / undefined / Infinity
+
+### Riesgos detectados
+
+- EADDRINUSE en puerto 4000 si hay procesos node/Playwright activos.
+- `tests/ceos-*.spec.js` están fuera del gate principal.
+- `test:e2e:online` no debe usarse como gate automático.
+- CI e2e/a11y/lighthouse puede fallar por entorno o thresholds.
+- No existe lint script.
+- Smoke hubs local no cubre todas las ramas enterprise.
+- `/bridge/marketplace` queda fuera de tests por política `INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK`.
+
+### Mejoras futuras A.1.6b+
+
+No aplicar todavía. Solo planificar:
+
+1. Crear script `test:smoke` para smoke local ligero.
+2. Crear script prod smoke opt-in con `CEOS_BASE_URL`.
+3. Documentar cómo liberar puerto 4000.
+4. Unificar o archivar `tests/ceos-*.spec.js`.
+5. Renombrar `compilanceFlow.spec.js`.
+6. Extender authenticated-hubs a Governance, Heritage, Bridge, Risk, Reporting y Strategy.
+7. Evaluar ESLint como gate futuro.
+8. No añadir tests de `/bridge/marketplace` hasta decidir harvest/futuro.
+
+### Decisión
+
+A.1.6 queda como auditoría de gates.
+
+No se modifican tests ni scripts en esta subfase.
+
+La prioridad siguiente será decidir si se implementa A.1.6b o si se pasa a A.1.3 configs duplicadas.
+
+---
+
 ## 12. Próximo paso recomendado
 
 Después de A.1.1 y A.1.2:
