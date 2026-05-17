@@ -413,6 +413,118 @@ No tocar CSS ni configs todavía salvo necesidad.
 
 ---
 
+## A.1.5 — Política `/bridge/marketplace`
+
+**Fecha:** 17 mayo 2026  
+**Estado:** Documentado. Sin cambios de código.
+
+### Decisión
+
+`/bridge/marketplace` queda congelado como estructura interna futura.
+
+No forma parte del producto enterprise actual, no se muestra en la demo principal y no se desarrolla en esta fase.
+
+### Estado actual
+
+| Elemento | Estado |
+|---|---|
+| Ruta `/bridge/marketplace` | Activa por URL directa |
+| Sidebar | No visible |
+| Workspace rail | No visible |
+| Navegación principal | No visible |
+| Auth | Protegida |
+| Producto actual | Fuera del MVP enterprise |
+| Demo principal | No se enseña |
+| Desarrollo activo | Congelado |
+| Futuro posible | Bridge Network / Private Opportunity Layer |
+
+### Interpretación
+
+El Bridge oficial del producto actual es Bridge Enterprise:
+
+- `/bridge/dashboard`
+- `/bridge/signals`
+- `/bridge/dependencies`
+- `/bridge/conflicts`
+- `/bridge/attention-queue`
+- `/bridge/reports`
+- `/bridge/snapshots`
+
+`/bridge/marketplace` no debe interpretarse como una segunda rama Bridge activa.
+
+Se considera una estructura futura para una posible capa posterior:
+
+- Bridge Network
+- Private Opportunity Layer
+- Strategic Opportunity Desk
+- Capital & Counterparty Network
+
+### Qué se puede rescatar en el futuro
+
+Antes de eliminar o desarrollar esta zona, hacer una auditoría de extracción para identificar funciones reutilizables:
+
+- opportunities
+- counterparties
+- introductions
+- documents
+- reports
+- matching
+- controlled opportunity sharing
+- audit trail
+
+Solo deben migrarse al Bridge Enterprise si aportan valor como señales internas, trazabilidad, reports o decision support.
+
+### Qué no debe trasladarse ahora
+
+No trasladar ni promover conceptos como:
+
+- Marketplace abierto
+- success fee
+- red de liquidez
+- compraventa abierta
+- deal marketplace
+- matching externo como producto activo
+
+### Política actual
+
+**Decisión:** `INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK`
+
+**Reglas:**
+
+- No añadir a sidebar.
+- No añadir al workspace rail.
+- No añadir a navegación principal.
+- No usar en demo externa.
+- No vender como módulo activo.
+- No desarrollar en esta fase.
+- No borrar todavía.
+- No tocar Bridge Enterprise.
+- No tocar backend ni migraciones.
+- Mantener como estructura interna futura hasta decisión posterior.
+
+### Decisión futura
+
+Cuando el producto core esté cerrado, se podrá decidir:
+
+1. Migrar funciones útiles a Bridge Enterprise.
+2. Convertirlo en Bridge Network / Private Opportunity Layer.
+3. Protegerlo con flag, por ejemplo: `VITE_BRIDGE_MARKETPLACE_ENABLED=true`
+4. Redirigir `/bridge/marketplace` a `/bridge/dashboard` para pilotos.
+5. Eliminar `BridgeMarketplacePage.jsx` y `ecosystem/services/bridgeApi.js` si ya no aportan valor.
+
+### Recomendación
+
+No tocar código ahora.
+
+**Siguiente acción recomendada:**
+
+- continuar limpieza estructural controlada
+- no abrir Marketplace
+- no tocar CSS/configs todavía
+- más adelante hacer "Feature Harvest Audit" de `/bridge/marketplace`
+
+---
+
 ## 12. Próximo paso recomendado
 
 Después de A.1.1 y A.1.2:
