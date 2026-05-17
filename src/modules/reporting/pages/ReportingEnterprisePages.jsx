@@ -11,12 +11,14 @@ import {
   reportingEnterpriseCss
 } from '../components/ReportingEnterpriseComponents.jsx';
 
+const EMPTY_REPORTING_FILTERS = { module: '', status: '', owner: '' };
+
 function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = [], render, permission = PERMISSIONS.CREATE_REPORTING }) {
   const { can } = useAuth();
   const canCreate = can(permission);
   const [items, setItems] = useState([]);
   const [form, setForm] = useState(defaults);
-  const [filters, setFilters] = useState({ module: '', status: '', owner: '' });
+  const [filters, setFilters] = useState(EMPTY_REPORTING_FILTERS);
   const [state, setState] = useState({ loading: true, error: null });
 
   async function refresh() {
@@ -45,6 +47,10 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
     return moduleOk && statusOk && ownerOk;
   }), [items, filters]);
 
+  const hasActiveFilters = Boolean(
+    filters.module || filters.status || filters.owner
+  );
+
   return (
     <div className="page">
       <style>{reportingEnterpriseCss}</style>
@@ -54,10 +60,18 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
           <h1 className="reporting-title">{title}</h1>
           <p className="reporting-copy">{copy}</p>
         </section>
-        <div className="reporting-toolbar">
+        <div className="reporting-toolbar ceos-enterprise-filter-toolbar">
           <label className="reporting-field"><span>Module filter</span><input aria-label="Module filter" className="reporting-input" value={filters.module} onChange={(event) => setFilters((current) => ({ ...current, module: event.target.value }))} /></label>
           <label className="reporting-field"><span>Status filter</span><input aria-label="Status filter" className="reporting-input" value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))} /></label>
           <label className="reporting-field"><span>Owner filter</span><input aria-label="Owner filter" className="reporting-input" value={filters.owner} onChange={(event) => setFilters((current) => ({ ...current, owner: event.target.value }))} /></label>
+          <button
+            type="button"
+            className="reporting-button ceos-enterprise-filter-clear"
+            onClick={() => setFilters(EMPTY_REPORTING_FILTERS)}
+            disabled={!hasActiveFilters}
+          >
+            Limpiar filtros
+          </button>
         </div>
         {create ? (
           <form className="reporting-toolbar" onSubmit={submit}>

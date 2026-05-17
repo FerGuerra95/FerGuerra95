@@ -17,6 +17,11 @@ export const reportingEnterpriseCss = `
   .reporting-input { width: 100%; min-height: 38px; border-radius: 8px; border: 1px solid rgba(148,163,184,.22); background: rgba(15,23,42,.86); color: #f8fafc; padding: 0 10px; }
   .reporting-button { min-height: 38px; border: 0; border-radius: 8px; padding: 0 14px; background: #e2e8f0; color: #020617; font-weight: 800; cursor: pointer; }
   .reporting-button:disabled { opacity: .48; cursor: not-allowed; }
+  .ceos-enterprise-filter-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; padding: 16px; border: 1px solid rgba(148,163,184,.14); border-radius: 8px; background: rgba(2,6,23,.32); }
+  .ceos-enterprise-filter-toolbar .reporting-field { flex: 1 1 160px; min-width: 140px; }
+  .ceos-enterprise-filter-clear { flex: 0 0 auto; min-height: 38px; border-radius: 8px; padding: 0 14px; border: 1px solid rgba(148,163,184,.28); background: rgba(15,23,42,.86); color: #f8fafc; font-weight: 800; cursor: pointer; }
+  .ceos-enterprise-filter-clear:hover:not(:disabled) { border-color: rgba(226,232,240,.42); background: rgba(30,41,59,.92); }
+  .ceos-enterprise-filter-clear:disabled { opacity: .42; cursor: not-allowed; }
   .reporting-empty { border: 1px dashed rgba(148,163,184,.24); border-radius: 8px; padding: 18px; color: rgba(226,232,240,.68); background: rgba(15,23,42,.42); }
   .reporting-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
   .reporting-table th,.reporting-table td { padding: 12px; border-bottom: 1px solid rgba(148,163,184,.12); text-align: left; color: rgba(226,232,240,.84); }

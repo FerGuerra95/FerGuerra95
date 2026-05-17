@@ -20,6 +20,11 @@ export const riskEnterpriseCss = `
   .risk-enterprise-input { width: 100%; min-height: 38px; border-radius: 8px; border: 1px solid rgba(148,163,184,.22); background: rgba(15,23,42,.86); color: #f8fafc; padding: 0 10px; }
   .risk-enterprise-button { min-height: 38px; border: 0; border-radius: 8px; padding: 0 14px; background: #e2e8f0; color: #020617; font-weight: 800; cursor: pointer; }
   .risk-enterprise-button:disabled { opacity: .48; cursor: not-allowed; }
+  .ceos-enterprise-filter-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; padding: 16px; border: 1px solid rgba(148,163,184,.14); border-radius: 8px; background: rgba(2,6,23,.32); }
+  .ceos-enterprise-filter-toolbar .risk-enterprise-field { flex: 1 1 160px; min-width: 140px; }
+  .ceos-enterprise-filter-clear { flex: 0 0 auto; min-height: 38px; border-radius: 8px; padding: 0 14px; border: 1px solid rgba(148,163,184,.28); background: rgba(15,23,42,.86); color: #f8fafc; font-weight: 800; cursor: pointer; }
+  .ceos-enterprise-filter-clear:hover:not(:disabled) { border-color: rgba(226,232,240,.42); background: rgba(30,41,59,.92); }
+  .ceos-enterprise-filter-clear:disabled { opacity: .42; cursor: not-allowed; }
   .risk-enterprise-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
   .risk-enterprise-table th, .risk-enterprise-table td { padding: 12px; border-bottom: 1px solid rgba(148,163,184,.12); text-align: left; color: rgba(226,232,240,.84); }
   .risk-enterprise-table th { color: rgba(248,250,252,.92); font-size: .72rem; text-transform: uppercase; letter-spacing: 0; }

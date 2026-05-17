@@ -19,13 +19,15 @@ import {
   riskEnterpriseCss
 } from '../components/RiskEnterpriseComponents.jsx';
 
+const EMPTY_RISK_FILTERS = { status: '', owner: '', category: '' };
+
 function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = [], render, permission = PERMISSIONS.CREATE_RISK }) {
   const { can } = useAuth();
   const canCreate = can(permission);
   const [items, setItems] = useState([]);
   const [form, setForm] = useState(defaults);
   const [status, setStatus] = useState({ loading: true, error: null });
-  const [filters, setFilters] = useState({ status: '', owner: '', category: '' });
+  const [filters, setFilters] = useState(EMPTY_RISK_FILTERS);
 
   async function refresh() {
     try {
@@ -53,6 +55,10 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
     return statusOk && ownerOk && categoryOk;
   }), [items, filters]);
 
+  const hasActiveFilters = Boolean(
+    filters.status || filters.owner || filters.category
+  );
+
   return (
     <div className="page">
       <style>{riskEnterpriseCss}</style>
@@ -62,10 +68,18 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
           <h1 className="risk-enterprise-title">{title}</h1>
           <p className="risk-enterprise-copy">{copy}</p>
         </section>
-        <div className="risk-enterprise-toolbar">
+        <div className="risk-enterprise-toolbar ceos-enterprise-filter-toolbar">
           <label className="risk-enterprise-field"><span>Status filter</span><input aria-label="Status filter" className="risk-enterprise-input" value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))} /></label>
           <label className="risk-enterprise-field"><span>Owner filter</span><input aria-label="Owner filter" className="risk-enterprise-input" value={filters.owner} onChange={(event) => setFilters((current) => ({ ...current, owner: event.target.value }))} /></label>
           <label className="risk-enterprise-field"><span>Category filter</span><input aria-label="Category filter" className="risk-enterprise-input" value={filters.category} onChange={(event) => setFilters((current) => ({ ...current, category: event.target.value }))} /></label>
+          <button
+            type="button"
+            className="risk-enterprise-button ceos-enterprise-filter-clear"
+            onClick={() => setFilters(EMPTY_RISK_FILTERS)}
+            disabled={!hasActiveFilters}
+          >
+            Limpiar filtros
+          </button>
         </div>
         {create ? (
           <form className="risk-enterprise-toolbar" onSubmit={submit}>
