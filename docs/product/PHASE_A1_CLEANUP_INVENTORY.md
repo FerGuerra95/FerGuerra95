@@ -616,6 +616,146 @@ La prioridad siguiente será decidir si se implementa A.1.6b o si se pasa a A.1.
 
 ---
 
+## A.1.3 — Configs duplicadas / navegación / metadatos
+
+**Fecha:** 18 mayo 2026  
+**Estado:** Auditoría solo lectura completada.
+
+### Objetivo
+
+Revisar duplicidades e incoherencias entre navegación, workspaces, títulos, temas y metadatos sin modificar código.
+
+### Archivos auditados
+
+| Archivo | Responsabilidad |
+|---|---|
+| `src/app/router/workspaceConfig.jsx` | Catálogo de workspaces, orden del rail, rutas principales, resolución por pathname |
+| `src/app/router/routeConfig.jsx` | Sidebar, routeGroups y pageMetaMap |
+| `src/app/layout/shellMeta.js` | Títulos y descripción del Topbar |
+| `src/shared/config/workspaceTheme.js` | Colores/acento por workspace |
+| `src/shared/hooks/useWorkspaceTheme.js` | Puente pathname → tema |
+| `src/app/layout/Sidebar.jsx` | Render del sidebar, orden, scroll |
+| `src/app/layout/WorkspaceSwitcher.jsx` | Rail horizontal de 11 workspaces |
+| `src/app/layout/Topbar.jsx` | Presentación de título/descripcion |
+| `src/app/layout/AppShell.jsx` | Orquestación layout/theme/meta |
+
+### Resultado
+
+Los 11 workspaces están alineados entre:
+
+- `WORKSPACES`
+- `routeGroups`
+- `WORKSPACE_THEMES`
+- `WORKSPACE_SHELL_TITLES`
+
+No se detectaron workspaces huérfanos ni workspaces sin theme.
+
+Heritage está correctamente visible.
+
+`/bridge/marketplace` sigue fuera del sidebar/rail/nav, coherente con A.1.5.
+
+### Duplicidades detectadas
+
+| Dato | Aparece en | Riesgo |
+|---|---|---|
+| Orden de workspaces | `WORKSPACE_ORDER` y `SIDEBAR_GROUP_ORDER` | Drift si se edita uno solo |
+| Keys de workspaces | `WORKSPACES`, `routeGroups`, `WORKSPACE_THEMES`, `WORKSPACE_SHELL_TITLES` | Requiere test de paridad |
+| Título de rama | workspace label/title/sidebarLabel y shellMeta | Diferencias de copy visibles |
+| Iconos | `WORKSPACES.icon` y `routeGroups.items.icon` | Duplicidad visual |
+| Rutas principales | `workspace.path` y primer item routeGroups | Riesgo bajo |
+| Metadata de rutas | pageMetaMap parcial | Algunas rutas profundas caen a descripción del workspace |
+
+### Rutas sin navegación principal
+
+Rutas activas sin nav visible:
+
+- `/bridge/marketplace`
+- `/bridge/snapshots`
+- `/governance/security-audit`
+- `/pmi/day1`
+- `/pmi/transition-services`
+- `/pmi/operating-model`
+- `/pmi/people-culture`
+- `/pmi/technology`
+- `/ma/deal/:dealId`
+- aliases overview: `/overview` y `/ceo/overview`
+
+**Interpretación:**
+
+- `/bridge/marketplace`: correcto por política A.1.5.
+- aliases overview: correcto.
+- rutas `:id`: correcto como deep links.
+- PMI extendidas y `governance/security-audit`: documentar, no tocar todavía.
+
+### Rutas sin pageMeta exacta
+
+- `/bridge/snapshots`
+- `/bridge/marketplace`
+- `/pmi/day1`
+- rutas PMI extendidas
+- `/ma/deal/:dealId`
+
+**Impacto:**
+
+Bajo. Topbar cae a descripción del workspace.
+
+### Riesgos
+
+**P0 — No tocar ahora:**
+
+- orden del rail
+- rutas principales
+- AppShell / Topbar / Sidebar / WorkspaceSwitcher
+- workspaceTheme colors
+- `/dashboard` y aliases
+- `/bridge/marketplace`
+- Heritage visible
+
+**P1 — Consolidación posible:**
+
+- derivar `SIDEBAR_GROUP_ORDER` desde `WORKSPACE_ORDER`
+- añadir tests unitarios de paridad entre configs
+- documentar mapping de shellTitle / title / label
+
+**P2 — Posponer:**
+
+- derivar shell titles desde workspaceConfig
+- unificar iconos
+- añadir pageMeta a rutas profundas
+- refactor routeGroups
+
+### Propuesta A.1.3b
+
+Consolidación mínima segura, solo si Fernando autoriza:
+
+1. Importar `WORKSPACE_ORDER` en `Sidebar.jsx` y usarlo como base de `SIDEBAR_GROUP_ORDER`.
+2. Añadir test unitario de paridad:
+   - `WORKSPACES` keys
+   - `routeGroups` keys
+   - `WORKSPACE_THEMES` keys
+   - `WORKSPACE_SHELL_TITLES` keys
+   - `workspace.path` existe en `routeGroups[key].items`
+3. No cambiar labels.
+4. No cambiar orden.
+5. No cambiar rutas.
+6. No cambiar CSS.
+7. No tocar `/bridge/marketplace`.
+
+**Validación necesaria si se aplica:**
+
+- `npm run test:unit`
+- `npm run build`
+- workspace-switcher e2e
+- smoke visual sidebar/rail
+
+### Decisión
+
+A.1.3 queda como auditoría documentada.
+
+No se modifica código en esta subfase.
+
+---
+
 ## 12. Próximo paso recomendado
 
 Después de A.1.1 y A.1.2:
