@@ -754,6 +754,49 @@ A.1.3 queda como auditoría documentada.
 
 No se modifica código en esta subfase.
 
+### A.1.3b — Cierre de consolidación mínima
+
+**Fecha:** 18 mayo 2026  
+**Estado:** Cerrado en remoto.
+
+**Commit:** `4a9a9df` — chore: derive sidebar group order from workspace order
+
+### Cambios aplicados
+
+| Archivo | Cambio |
+|---|---|
+| `src/app/layout/Sidebar.jsx` | `SIDEBAR_GROUP_ORDER` deriva desde `WORKSPACE_ORDER`; eliminado array literal duplicado |
+| `tests/unit/app/workspaceConfigParity.test.js` | Nuevo test de paridad entre workspaces, routeGroups, themes y shell titles |
+
+### Validación
+
+- `npm rebuild better-sqlite3` PASS.
+- `npm run quality` PASS.
+- build OK.
+- bundle budget OK.
+- unit PASS — 30 archivos / 113 tests.
+- integration PASS — 19 archivos / 53 tests.
+
+### Decisión
+
+A.1.3b queda cerrado.
+
+La fuente de verdad del orden del rail y sidebar pasa a ser `WORKSPACE_ORDER`.
+
+No hubo cambios visuales, rutas, labels, títulos, CSS ni backend.
+
+### Pendientes relacionados
+
+- No derivar todavía shell titles desde workspaceConfig.
+- No unificar iconos de routeGroups.
+- No tocar pageMetaMap de rutas profundas.
+- No tocar CSS.
+- No tocar `/bridge/marketplace`.
+
+### Siguiente foco recomendado
+
+A.1.4 — Auditoría CSS legacy solo lectura.
+
 ---
 
 ## 12. Próximo paso recomendado
