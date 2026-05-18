@@ -1039,3 +1039,138 @@ Determinar por cada workspace:
 - qué se puede enseñar
 - qué se puede vender
 - qué no debe entrar en demo
+
+---
+
+## C.1 — Auditoría funcional Executive Overview
+
+**Fecha:** 18 mayo 2026  
+**Estado:** Auditoría solo lectura completada.
+
+### Veredicto
+
+Executive Overview funciona y está demo-ready como Command Center.
+
+Debe presentarse como:
+
+- DSS
+- decision-support
+- capa ejecutiva de lectura transversal
+- sistema con revisión humana
+
+No debe venderse todavía como:
+
+- tiempo real 100% unificado
+- motor autónomo de decisión
+- fuente única certificada de todos los módulos
+
+### Rutas auditadas
+
+| Ruta | Estado |
+|---|---|
+| `/dashboard` | Canónica, protegida, con navegación |
+| `/overview` | Alias coherente |
+| `/ceo/overview` | Alias coherente |
+
+Workspace key:
+
+`overview`
+
+Topbar:
+
+`Executive Command Center`
+
+### Archivos principales auditados
+
+| Área | Archivos |
+|---|---|
+| Página | `CEOOverviewPage.jsx`, `ExecutiveOverviewer.jsx` |
+| Componentes | ReadinessIndexCard, ExecutiveModuleCard, ExecutiveSignalFeed, DecisionQueuePanel, BoardViewSnapshot, ExecutiveAlertsPanel, ExecutiveCalendarPanel, CorporateHealthRadar, BoardPackModal |
+| Frontend services | `executiveApi.js`, `boardPackApi.js` |
+| Backend | executive routes/controllers/services |
+| Migración | `020_executive_command_center.sql` |
+| Tests | e2e ceo overview, integration executive command center, unit executive metrics |
+
+### Clasificación funcional
+
+| Área | Estado | Nota |
+|---|---|---|
+| Visual shell | Cerrado | Validado en producción B.1 |
+| Demo readiness | Cerrado | `/dashboard` validado |
+| Datos reales | Parcial | Backend real + fallbacks/cálculos cliente |
+| Backend | Parcial | Agregador executive existe, Heritage no entra completo |
+| Multi-tenant | Parcial | APIs con organizationId, stores cliente pueden mezclar estado |
+| Tests | Parcial | Buen backend; E2E UI limitado |
+| Venta readiness | Parcial | Vendible como DSS con límites |
+| Enterprise readiness | Parcial | Faltan veracidad y estados error/empty más explícitos |
+
+### Fortalezas
+
+- Buena puerta de entrada a los 11 workspaces.
+- Backend enterprise real en `/api/executive/overview`.
+- Servicios de readiness, signals, decision queue, board view, calendar y reports.
+- Migración dedicada executive command center.
+- Tests unitarios, integración y e2e existentes.
+- Sin P0 detectados.
+- Producción validada en B.1.
+
+### Gaps P1
+
+- Board packs aparecen como “Ready” sin verificar siempre generación real.
+- Doble radar: hero cliente vs enterprise API.
+- Reporting puede aparecer con fallback.
+- Heritage visible en UI pero no está integrado en el agregador backend executive.
+- Governance/Heritage dependen de ecosystem hub, no de módulos enterprise dedicados.
+- Errores de API silenciados.
+- Riesgo de narrativa “real time” si hay módulos sin datos reales.
+
+### Gaps P2
+
+- `CEOOverviewPage.jsx` es monolítico.
+- KPIs estáticos como “Closing” / “7 + Overview”.
+- No existe carpeta `utils/`; helpers están inline.
+- `executiveApi.js` tiene endpoints expuestos no usados directamente en la página.
+- Falta contrato claro de hub-brief por rama.
+
+### Gaps P3
+
+- Unificar fuentes de radar/scores.
+- E2E de board pack generation.
+- Tests de permisos viewer/admin/board_member.
+- Datos demo transversales más sólidos.
+
+### Decisión demo
+
+Executive Overview se puede enseñar en demo.
+
+Narrativa recomendada:
+
+“Executive Overview es la capa de lectura ejecutiva que consolida señales del sistema y ayuda a priorizar decisiones. Es un DSS con revisión humana, no un motor autónomo ni una promesa de tiempo real absoluto.”
+
+### No tocar ahora
+
+- Visual de `/dashboard`
+- CSS de Overview
+- AppShell
+- Topbar
+- Sidebar
+- workspace accents
+- executivePolish
+- rutas `/dashboard`, `/overview`, `/ceo/overview`
+
+### Recomendación
+
+Usar Overview como hub de demo.
+
+Antes de piloto/venta enterprise:
+
+1. Alinear Heritage en agregador backend executive.
+2. Alinear Reporting sin fallback ambiguo.
+3. Hacer estados error/empty más honestos.
+4. Verificar board pack generation.
+5. Añadir tests E2E de board pack y permisos.
+6. Crear datos demo transversales reales.
+
+### Próxima subfase
+
+**C.2 — Auditoría funcional M&A.**
