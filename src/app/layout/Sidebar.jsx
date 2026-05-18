@@ -4,6 +4,7 @@ import { Sparkles } from 'lucide-react';
 import { routeGroups } from '../router/routeConfig.jsx';
 import {
   WORKSPACES,
+  WORKSPACE_ORDER,
   getWorkspaceByPathname
 } from '../router/workspaceConfig.jsx';
 import { BrandLogo } from '../../shared/components/brand/BrandLogo.jsx';
@@ -13,19 +14,8 @@ import { scrollSidebarToWorkspace } from './sidebarScroll.js';
 const GOLD = '#d4af37';
 const MUTED_ICON = 'rgba(226,232,240,0.68)';
 
-const SIDEBAR_GROUP_ORDER = [
-  'overview',
-  'ma',
-  'compliance',
-  'funding',
-  'governance',
-  'pmi',
-  'bridge',
-  'risk',
-  'reporting',
-  'strategy',
-  'heritage'
-];
+/** Same order as rail (WORKSPACE_ORDER); single source in workspaceConfig. */
+const SIDEBAR_GROUP_ORDER = WORKSPACE_ORDER;
 
 const SIDEBAR_KEY_ROUTES = {
   ma: new Set([
