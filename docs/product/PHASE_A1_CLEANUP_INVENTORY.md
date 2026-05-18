@@ -1174,3 +1174,192 @@ Antes de piloto/venta enterprise:
 ### Próxima subfase
 
 **C.2 — Auditoría funcional M&A.**
+
+---
+
+## C.2 — Auditoría funcional M&A
+
+**Fecha:** 18 mayo 2026
+
+**Estado:** Auditoría solo lectura completada.
+
+### Veredicto
+
+M&A sigue cerrada, intacta y demo-ready como rama premium.
+
+Se puede presentar como:
+
+- M&A Intelligence workspace
+- Decision Support System
+- workspace privado de análisis, valoración, pipeline, data room y reporting
+- herramienta con revisión humana
+
+No debe venderse todavía como:
+
+- asesoramiento financiero
+- asesoramiento legal
+- fairness opinion
+- valoración certificada
+- SaaS enterprise M&A completo sin límites
+
+### Rutas auditadas
+
+| Ruta | Estado |
+|---|---|
+| `/ma/dashboard` | OK — validada en producción B.1 |
+| `/ma/valuation` | OK |
+| `/ma/pipeline` | OK |
+| `/ma/waterfall` | OK |
+| `/ma/matching` | OK |
+| `/ma/cim` | OK |
+| `/ma/deals` | OK |
+| `/ma/data-room` | OK |
+| `/ma/deal/:dealId` | OK como deep link |
+| `/ma/secure-share` | OK como ruta pública tokenizada |
+
+**Workspace key:** `ma`
+
+**Topbar:** `M&A`
+
+### Fortalezas
+
+- Rama visualmente cerrada y estable.
+- Backend enterprise sólido en cases, deals, reports, data room, secure share y audit.
+- Secure share público y autenticado bien separados.
+- Data room con governance y audit.
+- Reports/export con disclaimers DSS.
+- Tests backend/integration fuertes.
+- E2E cubre rutas principales y secure share público.
+- No afectada por la limpieza A.1.2.
+- Demo readiness cerrado.
+
+### Backend / datos reales
+
+M&A tiene backend real para:
+
+- cases
+- deals
+- reports
+- secure shares
+- data room
+- audit logs
+
+También tiene motores cliente para:
+
+- valuation
+- waterfall
+- matching
+- scoring
+- report building
+
+### Demo / datos calculados
+
+La rama mezcla:
+
+- datos reales persistidos
+- cálculos en cliente
+- demo data explícita en valuation, pipeline y deal detail
+
+Esto es aceptable para demo si se explica correctamente, pero debe limpiarse o etiquetarse mejor antes de piloto enterprise.
+
+### Clasificación funcional
+
+| Área | Estado | Nota |
+|---|---|---|
+| Visual shell | Cerrado | No tocar CSS M&A |
+| Datos reales | Parcial | Backend real + engine cliente + demo data |
+| Backend | Parcial / maduro | Cases, deals, VDR, reports, share sólidos |
+| Multi-tenant | Parcial | Backend probado; revisar store/local edge cases |
+| Permisos | Parcial | API granular; validar UX viewer |
+| Secure share | Parcial / sólido | Público y autenticado separados |
+| Reports / export | Parcial | HTML cliente + persistencia API |
+| Data room | Parcial / sólido | Governance y audit |
+| Tests | Parcial | Backend fuerte, E2E UI parcial |
+| Demo readiness | Cerrado | Rama estrella de demo |
+| Venta readiness | Parcial | Vendible como piloto DSS |
+| Enterprise readiness | Parcial | Faltan P1/P2 |
+
+### Gaps P0
+
+Ninguno detectado.
+
+### Gaps P1
+
+- `demoData.js` aparece en valuation, pipeline y deal detail.
+- Riesgo de mezcla demo/real en demo comercial.
+- `maApi.test.js` es placeholder sin assertions reales.
+- Viewer read-only debe validarse mejor en UI.
+- Valoración se ejecuta principalmente en engine cliente frente a `POST /ma/valuation/run`.
+- Reforzar narrativa: no advisory, no legal opinion, no fairness opinion.
+
+### Gaps P2
+
+- Páginas monolíticas y CSS embebido masivo.
+- Pipeline dual: demo + backend.
+- `/ma/deal/:dealId` sin pageMeta dedicado.
+- Falta E2E completo de export/share/data room upload.
+- Falta test UI de permisos viewer.
+
+### Gaps P3
+
+- Consolidar tests legacy `ceos-ma-*`.
+- PDF/server-side export futuro.
+- Mejorar deep link metadata.
+- Datos demo org reales para reducir dependencia de seeds.
+
+### Decisión demo
+
+M&A se puede enseñar como rama premium.
+
+**Recorrido recomendado:**
+
+1. `/ma/dashboard`
+2. `/ma/valuation`
+3. `/ma/pipeline`
+4. `/ma/cim`
+5. `/ma/data-room`
+6. secure share controlado si procede
+
+**Narrativa recomendada:**
+
+“M&A Intelligence es un workspace privado de soporte a la decisión. Consolida valoración, pipeline, data room, reporting y trazabilidad, siempre sujeto a revisión humana. No sustituye asesoramiento financiero, legal ni una fairness opinion.”
+
+### Antes de piloto
+
+**Prioridades:**
+
+1. Poblar organización con 2–3 `ma_cases` reales.
+2. Crear deals reales en pipeline.
+3. Añadir 1 documento real en data room.
+4. Generar 1 report exportado real.
+5. Etiquetar claramente demo data.
+6. Convertir `maApi.test.js` en test real.
+7. Validar viewer UX.
+8. Reforzar disclaimers de human review / DSS.
+
+### No tocar ahora
+
+- Visual M&A.
+- `maExecutiveTheme.css`.
+- `ExecutivePremiumStyle`.
+- CSS embebido M&A.
+- Rutas M&A.
+- Shell / AppShell / Sidebar / Topbar.
+- Orden workspace.
+- Secure share si no hay P0.
+- Data room si no hay P0.
+
+### Recomendación
+
+Mantener M&A congelada en código.
+
+Usarla como rama principal de demo/piloto, pero con narrativa DSS y human review.
+
+No abrir refactor M&A antes de completar la auditoría funcional del resto de ramas.
+
+### Próxima subfase
+
+Después de documentar C.2:
+
+- actualizar Roadmap Enterprise de robustez/certificación
+- o continuar **C.3 — Auditoría funcional Compliance**
