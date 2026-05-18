@@ -795,7 +795,156 @@ No hubo cambios visuales, rutas, labels, títulos, CSS ni backend.
 
 ### Siguiente foco recomendado
 
-A.1.4 — Auditoría CSS legacy solo lectura.
+A.1.4 — Auditoría CSS legacy solo lectura (completada; ver sección A.1.4).
+
+---
+
+## A.1.4 — Auditoría CSS legacy / design system
+
+**Fecha:** 18 mayo 2026  
+**Estado:** Auditoría solo lectura completada.
+
+### Objetivo
+
+Auditar el sistema CSS actual para detectar riesgos visuales, duplicidades, selectores globales peligrosos, uso de `!important`, CSS embebido y posibles zonas que no deben tocarse antes de demo.
+
+### Mapa de capas CSS
+
+Orden de carga global en `src/main.jsx`: `styles.css` → `maExecutiveTheme.css` → `executivePolish.css` → `workspaceAccent.css`.
+
+| Capa | Archivo / origen | Propósito | Riesgo |
+|---|---|---|---|
+| L0 | `src/styles.css` | Tokens, reset, base global, `.page`, `.card`, `.table` | Medio |
+| L1 | `src/modules/ma/styles/maExecutiveTheme.css` | Tema M&A acotado por clases M&A | Medio-bajo |
+| L2 | `src/styles/executivePolish.css` | Polish enterprise global, flatten visual, cards/panels/heroes | P0 |
+| L3 | `src/styles/workspaceAccent.css` | Acentos por workspace, shell, tablas, heroes | P0–P1 |
+| L4 | `AppShell` / `Sidebar` / `Topbar` / `WorkspaceSwitcher` runtime styles | Layout shell, scroll, overflow | P0 |
+| L5 | `ExecutivePremiumStyle.jsx` | Premium M&A runtime layer (inyectado en AppShell) | P0 |
+| L6 | `*EnterpriseComponents.jsx` | CSS por módulo para heroes, panels, toolbars y tablas | P2 |
+| L7 | CSS embebido en páginas | Layout fino por dashboard/página | P1–P2 |
+
+**Conteo aproximado:** ~725 usos de `!important` en `src/`. Principales fuentes: `executivePolish.css` (~187), `ExecutivePremiumStyle.jsx` (~118), `workspaceAccent.css` (~108).
+
+**Bloques embebidos grandes (sin cambiar en demo):** `FundingDashboardPage` (~785 líneas), `PMIDashboardPage` (~753 líneas), más CSS embebido M&A y Compliance con muchos `!important`.
+
+### Hallazgo principal
+
+El sistema visual actual funciona, pero es frágil. Está compuesto por varias capas globales y muchas reglas con `!important`. Cambiar CSS global antes de demo puede romper visualmente workspaces ya validados.
+
+### Riesgos P0 — No tocar ahora
+
+- `executivePolish.css` con selectores globales:
+  - `.card`
+  - `[class*="card"]`
+  - `[class*="panel"]`
+  - `[class*="hero"]`
+  - `[class*="kpi"]`
+- `workspaceAccent.css` en acentos shell y variables `--ws-*`.
+- `ExecutivePremiumStyle.jsx` y stack M&A.
+- `AppShell`, `Topbar`, `Sidebar`, `WorkspaceSwitcher`.
+- `CEOOverviewPage.jsx` y reglas `data-workspace='overview'`.
+- Orden de imports en `src/main.jsx`.
+- Reglas PMI de tablas/overflow.
+- Risk/Reporting filtros validados.
+- Heritage visible y estable.
+- `/bridge/marketplace` congelado (A.1.5).
+
+### Riesgos P1 — Mejoras con cuidado
+
+- Triple/cuádruple stack M&A:
+  - `maExecutiveTheme`
+  - `executivePolish`
+  - `ExecutivePremiumStyle`
+  - CSS embebido por página
+- Doble sistema de tablas:
+  - `.table` legacy
+  - `ceos-enterprise-table`
+  - tablas nativas por módulo
+- Bloques CSS embebidos grandes:
+  - Funding dashboard
+  - PMI dashboard
+  - DealPipeline
+  - Compliance Suppliers
+- `.page { gap: ... !important }`
+- Sticky headers de tablas legacy
+
+### Deuda P2 / P3
+
+- `*EnterpriseComponents` con patrones CSS parecidos (Bridge, Governance, PMI, Risk, Reporting, Heritage, Strategy).
+- Empty states, badges y panels duplicados.
+- CSS de exports HTML (`fundingExportApi`, `complianceReportsApi`).
+- Landing pública aislada (`LandingPage.jsx`).
+- `styles.css` con primitivas legacy todavía activas (solo 2 `!important`; bajo riesgo de override).
+
+### Política CSS desde esta auditoría
+
+No tocar CSS global antes de demo salvo fallo crítico.
+
+Cualquier limpieza futura debe cumplir:
+
+1. Ser por módulo.
+2. No cambiar visual intencionadamente.
+3. No cambiar tokens `--ws-*`.
+4. No tocar shell.
+5. No tocar Executive Overview.
+6. No tocar M&A global.
+7. No tocar Risk/Reporting filtros.
+8. No tocar PMI tablas sin smoke específico.
+9. Requiere `npm run quality`.
+10. Requiere smoke visual por workspace afectado.
+
+### Candidatos futuros post-demo
+
+- Extraer `fundingDashboardCss` a archivo CSS del módulo.
+- Extraer `pmiDashboardCss` a archivo CSS del módulo.
+- Extraer CSS embebido M&A por página a archivos scoped.
+- Crear contrato visual `ceos-enterprise-table`.
+- Documentar cuándo usar `.table` legacy vs `ceos-enterprise-table`.
+- Crear componente shared `EnterpriseEmpty`.
+- Crear tokens de design system, sin cambiar valores iniciales.
+- Evaluar reducción gradual de `executivePolish.css` (scope bajo `.ceos-authenticated`, no global).
+
+### Propuesta A.1.4b futura
+
+**No hacer ahora.**
+
+Si se autoriza después de demo:
+
+**A.1.4b — CSS cleanup mínimo seguro**
+
+Reglas:
+
+- mover CSS embebido a archivos por módulo sin cambiar selectores ni valores
+- un workspace por commit
+- no tocar shell
+- no tocar Overview
+- no tocar M&A global
+- no tocar variables de workspace
+- smoke visual obligatorio
+
+### Validación necesaria si se toca CSS
+
+- `npm run quality`
+- e2e workspace-switcher
+- smoke manual:
+  - `/dashboard`
+  - `/ma/dashboard`
+  - `/funding/dashboard`
+  - `/pmi/dashboard`
+  - `/risk/register`
+  - `/reporting/library`
+  - `/heritage/dashboard`
+- verificar sin NaN / undefined / Infinity
+- verificar sin scroll horizontal global
+- verificar que rail/sidebar/topbar no cambian
+
+### Decisión
+
+A.1.4 queda como auditoría documentada.
+
+No se modifica CSS en esta subfase.
+
+El sistema visual queda congelado hasta que se decida una limpieza modular posterior (A.1.4b, solo post-demo y con autorización explícita).
 
 ---
 
