@@ -1363,3 +1363,347 @@ Después de documentar C.2:
 
 - actualizar Roadmap Enterprise de robustez/certificación
 - o continuar **C.3 — Auditoría funcional Compliance**
+
+---
+
+## Roadmap enterprise — Organización, limpieza, robustez y certificación
+
+**Fecha:** 18 mayo 2026
+
+**Estado:** Roadmap actualizado tras A.1, B.1, C.1 y C.2.
+
+### Objetivo
+
+Convertir CEO's OS / The Sovereign OS desde una plataforma demo-ready en un producto enterprise robusto, coherente, auditable y vendible para pilotos con empresas grandes o multinacionales.
+
+Esta fase no consiste en añadir más pantallas, sino en asegurar:
+
+- coherencia funcional
+- veracidad de datos
+- seguridad
+- multi-tenancy
+- permisos
+- trazabilidad
+- QA estricto
+- documentación legal/comercial
+- preparación para vendor due diligence
+- preparación para certificación futura
+
+### Estado actual
+
+| Área | Estado |
+|---|---|
+| Producción | Validada para demo en rutas críticas |
+| Visual | Congelado pre-demo |
+| Limpieza legacy | Cerrada en A.1.2 |
+| Configs | Auditadas y consolidación mínima cerrada |
+| CSS | Auditado, no tocar antes de demo |
+| Tests/gates | Documentados |
+| Executive Overview | Demo-ready, venta enterprise parcial |
+| M&A | Demo-ready, piloto DSS parcial, sin P0 |
+| Bridge Marketplace | Congelado como future private network |
+
+### Principio rector
+
+No abrir nuevas funcionalidades premium ni tocar CSS global hasta completar:
+
+1. auditoría funcional por ramas
+2. matriz real vs visual
+3. datos demo enterprise reales
+4. product truthfulness
+5. hardening de seguridad y multi-tenant
+6. QA enterprise
+7. paquete legal/compliance
+8. empaquetado de piloto enterprise
+
+---
+
+### FASE C — Auditoría funcional por ramas
+
+**Objetivo:** Saber exactamente qué funciona realmente, qué es visual, qué es parcial y qué se puede vender.
+
+**Estado:**
+
+| Subfase | Rama | Estado | Objetivo |
+|---|---|---|---|
+| C.1 | Executive Overview | Cerrada | Demo hub DSS / human review |
+| C.2 | M&A | Cerrada | M&A Intelligence / DSS, demo-ready sin P0 |
+| C.3 | Compliance | Pendiente | Auditar suppliers, evidence, reviews, reports, alerts |
+| C.4 | Funding | Pendiente | Auditar rounds, scenarios, data room, readiness, bridge |
+| C.5 | Governance | Pendiente | Auditar decisions, board packs, audit trail |
+| C.6 | PMI | Pendiente | Auditar synergies, milestones, risks, workstreams |
+| C.7 | Bridge | Pendiente | Auditar signals, dependencies, conflicts, reports, snapshots |
+| C.8 | Risk | Pendiente | Auditar register, scoring, filters, reports |
+| C.9 | Reporting | Pendiente | Auditar library, templates, board pack, exports |
+| C.10 | Strategy | Pendiente | Auditar objectives, initiatives, roadmap |
+| C.11 | Heritage | Pendiente | Auditar continuity, assets, succession, governance familiar |
+| C.12 | Informe global | Pendiente | Matriz real / parcial / visual / vendible / enterprise-ready |
+
+**Por cada rama documentar:**
+
+- rutas
+- backend real
+- endpoints
+- datos
+- fallbacks
+- tests
+- multi-tenant
+- permisos
+- demo readiness
+- venta readiness
+- enterprise readiness
+- P0/P1/P2/P3
+
+---
+
+### FASE D — Datos demo enterprise reales
+
+**Objetivo:** Crear una demo transversal coherente, no solo pantallas vacías.
+
+**Casos demo recomendados:**
+
+- empresa industrial rentable
+- SaaS en crecimiento
+- empresa familiar con sucesión
+- proveedor crítico con riesgo compliance
+- ronda funding con escenarios
+- operación M&A con valuation y report
+- PMI post-adquisición
+- board/reporting pack
+- risk register con riesgos reales
+- strategy roadmap
+- heritage continuity case
+
+**Criterio:** Los datos deben alimentar varios módulos a la vez, no vivir aislados.
+
+---
+
+### FASE E — Product truthfulness / veracidad del producto
+
+**Objetivo:** Eliminar o corregir todo lo que parezca más real de lo que es.
+
+**Acciones:**
+
+- diferenciar dato real, calculado, fallback y pendiente
+- eliminar "Ready" si no hay generación real
+- mostrar estados empty/error honestos
+- evitar narrativa "real time" si no todo es backend real
+- alinear Reporting y Heritage en agregador ejecutivo
+- verificar board pack generation
+- reducir fallbacks silenciosos
+- documentar disclaimers de DSS y human review
+- etiquetar demo data cuando no sea dato real de organización
+
+**Regla:** No vender una señal, score, report o board pack como real si no está respaldado por datos y prueba.
+
+---
+
+### FASE F — Security, permisos y multi-tenant hardening
+
+**Objetivo:** Preparar el producto para revisión enterprise y vendor due diligence.
+
+**Acciones:**
+
+- matriz de permisos por módulo
+- tests admin / user / viewer / board_member
+- tests de multi-tenant isolation por módulo
+- audit logs visibles/exportables
+- backup/restore probado
+- secret management
+- security headers
+- rate limiting donde aplique
+- revisión endpoints públicos
+- revisión de errores sin stack traces
+- evidencias de access control
+
+**Criterio:** Ningún dato de negocio debe poder cruzar `organizationId`.
+
+---
+
+### FASE G — QA enterprise / test strictness
+
+**Objetivo:** Elevar los gates actuales a nivel enterprise.
+
+**Base actual:**
+
+- pre-commit: `npm run test:unit`
+- pre-push: `npm run quality`
+- pre-deploy: `npm run quality && npm run test:e2e`
+- pre-demo: smoke producción autenticado
+
+**Mejoras futuras:**
+
+- ESLint
+- dependency audit formal
+- smoke producción opt-in automatizado
+- visual regression screenshots por workspace
+- tests de deep links
+- tests de board pack generation
+- tests de exports/reports
+- tests de permisos
+- tests de multi-tenant
+- resolver o archivar tests legacy `ceos-*`
+- reducir flakiness puerto 4000
+
+---
+
+### FASE H — Legal, compliance, DPA, SLA y AI governance
+
+**Objetivo:** Preparar paquete legal y de confianza para cliente enterprise.
+
+**Documentos necesarios:**
+
+- DPA
+- privacy policy
+- terms of service
+- subprocessors list
+- retention policy
+- deletion policy
+- incident response policy
+- security overview
+- SLA draft
+- backup policy
+- human review policy
+- AI governance note
+- AI system inventory
+- output disclaimer
+- data provenance policy
+
+**AI governance:** CEO's OS debe posicionarse como:
+
+- Decision Support System
+- Human reviewed
+- No autonomous decision-making
+
+**No como:**
+
+- IA que decide por la empresa
+- fuente única certificada sin revisión
+- scoring crítico opaco
+
+---
+
+### FASE I — Enterprise pilot packaging
+
+**Objetivo:** Convertir la plataforma en oferta vendible para piloto 30-60-90.
+
+**Paquetes necesarios:**
+
+- enterprise sales deck
+- trust & security pack
+- architecture overview
+- data flow diagram
+- pilot plan 30-60-90
+- demo script
+- board pack sample
+- M&A pilot sample
+- Compliance/Risk sample
+- Funding Readiness sample
+- pricing / packaging
+- onboarding checklist
+- human review statement
+
+**Criterio:** Vender primero piloto controlado, no SaaS enterprise completo.
+
+---
+
+### FASE J — Premium AI features
+
+**Objetivo:** Incorporar funciones premium una por una, después de cerrar core, seguridad y veracidad.
+
+**Funciones futuras ya identificadas:**
+
+1. M&A Blind Teaser Generator
+2. Compliance Whistleblowing Engine
+3. Funding Liquidation Preference Stress Tester
+4. Governance Minute Generator
+5. PMI Key Talent Retention Map
+6. Risk D&O Underwriting Pack
+7. Strategy Competitor Regulatory Radar
+8. Heritage Family Constitution Validator
+
+**Regla:**
+
+- No implementar las 8 juntas.
+- No mezclar ramas.
+- No abrir Whistleblowing sin seguridad/legal/rate limit.
+- No vender IA como decisión autónoma.
+
+---
+
+### FASE K — Bridge Network / Private Opportunity Layer
+
+**Objetivo:** Mantener Bridge Marketplace congelado como estructura futura.
+
+**Estado actual:**
+
+- `/bridge/marketplace` existe por URL directa
+- no aparece en sidebar
+- no aparece en rail
+- no se enseña en demo principal
+- no forma parte del MVP enterprise
+- política: `INTERNAL_UNLISTED_DEMO` / `FUTURE_PRIVATE_NETWORK`
+
+**Futuro posible:**
+
+- Bridge Network
+- Private Opportunity Layer
+- Strategic Opportunity Desk
+- Capital & Counterparty Network
+
+**Regla:**
+
+- No desarrollar ahora.
+- No vender ahora.
+- No mezclar con Bridge Enterprise principal.
+
+---
+
+### Criterio de vendibilidad a multinacional
+
+**Para demo:**
+
+- producción validada
+- rutas críticas OK
+- narrativa DSS / human review
+
+**Para piloto:**
+
+- Fase C completa
+- Fase D datos demo reales
+- Fase E product truthfulness
+- legal mínimo
+- security overview
+- pilot plan 30-60-90
+
+**Para venta enterprise formal:**
+
+- Fase F security hardening
+- Fase G QA enterprise
+- Fase H legal/compliance
+- audit logs/exportables
+- backup/restore probado
+- permisos y multi-tenant probados
+- SLA/DPA/retention/incident response
+
+**Para certificación:**
+
+- SOC2/ISO readiness
+- auditoría externa o checklist equivalente
+- evidencias de controles
+- observabilidad
+- incident response
+- documentación de cambios
+- controles de IA
+
+### Decisión
+
+CEO's OS está actualmente en estado:
+
+**Demo-ready y entrando en enterprise hardening.**
+
+No debe considerarse todavía certificable completo.
+
+El camino correcto es:
+
+**C → D → E → F → G → H → I → J/K**
