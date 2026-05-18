@@ -956,3 +956,86 @@ Después de A.1.1 y A.1.2:
 2. Esperar autorización para A.1.2c (archivar o eliminar huérfanos).
 3. No borrar todavía sin commit atómico + build.
 4. Continuar A.1.5 (marketplace policy) en paralelo si hace falta antes de limpieza física.
+
+---
+
+## B.1 — Smoke producción / demo readiness
+
+**Fecha:** 18 mayo 2026  
+**Estado:** Cerrado.
+
+### Objetivo
+
+Validar producción real antes de abrir nuevas fases de refactor, CSS o funcionalidad.
+
+### Baseline validado
+
+- `HEAD = origin/main = 2924a0d`
+- Target: `https://app.theceosos.com`
+- Health app: PASS
+- Health theceosos: PASS
+- Health Render: PASS
+- Smoke autenticado: PASS
+
+### Rutas críticas validadas
+
+| Ruta | Resultado |
+|---|---|
+| `/dashboard` | PASS — Executive Command Center carga |
+| `/pmi/dashboard` | PASS — PMI & Synergies Command Center carga |
+| `/risk/register` | PASS — Enterprise risk register carga |
+| `/reporting/library` | PASS — Report library carga |
+| `/ma/dashboard` | PASS — Private M&A Intelligence carga |
+| `/heritage/dashboard` | PASS — Owner continuity command center carga |
+
+### Checks específicos
+
+| Check | Resultado |
+|---|---|
+| Login producción | PASS |
+| Rail 11 workspaces | PASS |
+| Heritage visible en rail/sidebar | PASS |
+| Sidebar scroll | PASS |
+| PMI tablas / overflow | PASS |
+| Risk “Limpiar filtros” | PASS |
+| Reporting “Limpiar filtros” | PASS |
+| Errores JS críticos | Ninguno |
+| Errores 500 | Ninguno |
+| 401 inesperados post-login | Ninguno |
+| NaN / undefined / Infinity visibles | Ninguno |
+| `/bridge/marketplace` fuera de nav | PASS |
+
+### Nota sobre `/bridge/marketplace`
+
+`/bridge/marketplace` sigue accesible por URL directa con sesión, pero no aparece en rail ni sidebar.
+
+Esto es coherente con la política A.1.5:
+
+`INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK`
+
+No se validó ni se promocionó su contenido.
+
+### Decisión
+
+Producción queda validada para demo interna/externa en las 6 rutas críticas.
+
+No se abre A.1.4b ni limpieza CSS pre-demo.
+
+El sistema visual queda congelado según A.1.4.
+
+### Siguiente fase recomendada
+
+**Fase C — Auditoría funcional por ramas.**
+
+Objetivo:
+
+Determinar por cada workspace:
+
+- qué funciona realmente
+- qué es solo visual
+- qué endpoints usa
+- qué datos necesita
+- qué tests tiene
+- qué se puede enseñar
+- qué se puede vender
+- qué no debe entrar en demo
