@@ -1431,7 +1431,7 @@ No abrir nuevas funcionalidades premium ni tocar CSS global hasta completar:
 | C.3 | Compliance | Pendiente | Auditar suppliers, evidence, reviews, reports, alerts |
 | C.4 | Funding | Pendiente | Auditar rounds, scenarios, data room, readiness, bridge |
 | C.5 | Governance | Pendiente | Auditar decisions, board packs, audit trail |
-| C.6 | PMI | Pendiente | Auditar synergies, milestones, risks, workstreams |
+| C.6 | PMI | Cerrada | PMI Execution / DSS, demo-ready sin P0 |
 | C.7 | Bridge | Pendiente | Auditar signals, dependencies, conflicts, reports, snapshots |
 | C.8 | Risk | Pendiente | Auditar register, scoring, filters, reports |
 | C.9 | Reporting | Pendiente | Auditar library, templates, board pack, exports |
@@ -2344,4 +2344,224 @@ Antes de piloto enterprise, priorizar permisos/UX approve, datos seed, board pac
 
 ### Próxima subfase
 
-**C.6 — Auditoría funcional PMI.**
+**C.7 — Auditoría funcional Bridge.**
+
+---
+
+## C.6 — Auditoría funcional PMI
+
+**Fecha:** 19 mayo 2026
+
+**Estado:** Auditoría solo lectura completada.
+
+### Veredicto
+
+PMI funciona, está intacto y es enseñable en demo con narrativa DSS / human review.
+
+PMI es una de las ramas más completas del producto: tiene backend, E2E, producción validada y recorrido post-M&A.
+
+Se puede presentar como:
+
+- PMI Execution workspace
+- Post-Merger Integration workspace
+- Synergy Execution workspace
+- Integration Control Center
+- capa de seguimiento post-M&A
+- DSS con revisión humana
+
+No debe venderse todavía como:
+
+- garantía de captura de sinergias
+- certificación de integración exitosa
+- asesoramiento legal, laboral u operativo
+- sustituto de un integration management office
+- SaaS PMI enterprise completo sin límites
+- motor autónomo de integración
+
+### Rutas auditadas
+
+| Ruta | Estado |
+|---|---|
+| `/pmi/dashboard` | OK — Command Center principal |
+| `/pmi/programs` | OK — Programs |
+| `/pmi/programs/:id` | Parcial — deep link sin detalle real |
+| `/pmi/synergies` | OK |
+| `/pmi/milestones` | OK |
+| `/pmi/risks` | OK |
+| `/pmi/day1` | OK |
+| `/pmi/day-100` | OK |
+| `/pmi/transition-services` | OK |
+| `/pmi/operating-model` | OK |
+| `/pmi/people-culture` | OK |
+| `/pmi/technology` | OK |
+| `/pmi/reports` | Parcial |
+
+**Workspace key:** `pmi`
+
+**Topbar:** `PMI & Synergies`
+
+**Notas:**
+
+- No existen rutas dedicadas `/pmi/workstreams` ni `/pmi/dependencies`.
+- Workstreams y dependencies viven en el dashboard.
+- Solo `/pmi/dashboard` tiene pageMeta específico en routeConfig.
+- Existe un segundo `PMIDashboardPage` en `PMIEnterprisePages.jsx` que no está enrutado.
+
+### Fortalezas
+
+- Dashboard operativo.
+- Backend real para cases, programs, synergies, milestones, risks, day1, day100, TSA, operating model, people/culture, technology y reports.
+- Migraciones PMI enterprise existentes.
+- M&A handoff disponible.
+- Executive hub brief disponible.
+- Board memo export HTML con disclaimer.
+- E2E fuerte en happy path admin.
+- Producción B.1 validó `/pmi/dashboard`.
+- Sin NaN/overflow crítico detectado.
+- No hay P0.
+
+### Backend / datos reales
+
+PMI tiene backend real para:
+
+- `pmi_cases`
+- `pmi_programs`
+- `pmi_synergy_initiatives`
+- `pmi_milestones`
+- `pmi_risks`
+- `pmi_day1_checklist`
+- `pmi_100_day_plan`
+- `pmi_transition_services`
+- `pmi_operating_model_items`
+- `pmi_people_culture_items`
+- `pmi_technology_items`
+- `pmi_report_exports`
+- audit log compartido
+- executive summary / hub overview
+
+### Demo / datos calculados
+
+PMI mezcla:
+
+- datos reales SQLite enterprise
+- `pmi_cases` persistidos
+- engine cliente
+- board memo HTML cliente
+- `DEMO_PMI_CASE` local en `pmiStore.jsx`
+- `mergeWithDemo()` que fusiona demo Iberia con datos guardados
+
+Este punto es el principal riesgo de truthfulness antes de piloto.
+
+### Clasificación funcional
+
+| Área | Estado | Nota |
+|---|---|---|
+| Visual shell | Cerrado | B.1 validó dashboard y tablas |
+| Datos reales | Parcial | Enterprise tables reales; dashboard contaminado por demo |
+| Backend | Cerrado | Backend PMI sólido |
+| Multi-tenant | Parcial | Backend sí; UI sin pruebas org-switch |
+| Permisos | Parcial | Falta E2E viewer/read-only |
+| Synergies | Parcial | Doble modelo case vs enterprise |
+| Milestones | Parcial | API real; workflow ejecución visual |
+| Risks | Parcial | API real; vínculo compliance limitado |
+| Workstreams | Parcial | Solo dashboard, case JSON |
+| Dependencies | Parcial | Solo dashboard, sin ruta propia |
+| Integration controls | Parcial | Sliders + persistencia |
+| Reports / export | Parcial | HTML memo + pmi_report_exports |
+| Executive bridge | Cerrado | Summary + Overview + board pack branch |
+| Tests | Parcial | Fuerte admin E2E + integration; gaps permisos/demo |
+| Demo readiness | Cerrado | Se puede enseñar |
+| Venta readiness | Parcial | Piloto DSS sí |
+| Enterprise readiness | Parcial | Truthfulness y sync pendientes |
+
+### Gaps P0
+
+Ninguno detectado.
+
+### Gaps P1
+
+- `mergeWithDemo()` siempre fusiona `DEMO_PMI_CASE` sobre casos API.
+- Doble modelo de datos: `pmi_cases` del dashboard vs tablas enterprise sin sincronización.
+- Sin etiqueta visible de demo data cuando no hay cases o falla API.
+- `PMIProgramDetailPage` no es detalle real.
+- Rutas enterprise sin pageMeta específico.
+- Código duplicado `PMIDashboardPage` en `PMIEnterprisePages.jsx`, no enrutado.
+
+### Gaps P2
+
+- Workflows formales de milestones/synergies: aprobación, evidencia y finance validation.
+- E2E viewer read-only.
+- Multi-tenant UI.
+- Unificar o documentar explícitamente case vs enterprise.
+- PATCH/update completo en UI enterprise.
+- Trazabilidad dependencies ↔ milestones ↔ compliance.
+- Extraer CSS dashboard en fase posterior, no ahora.
+
+### Gaps P3
+
+- Rutas dedicadas `/pmi/workstreams` y `/pmi/dependencies`.
+- Key Talent Retention Map queda para Fase J.
+- PDF firmado / board pack server-side.
+- Sync bidireccional M&A valuation → synergy targets.
+- Tests E2E export memo.
+
+### Decisión demo
+
+PMI se puede enseñar en demo.
+
+**Recorrido recomendado:**
+
+1. `/pmi/dashboard`
+2. M&A handoff si procede
+3. Synergy ledger
+4. Workstreams
+5. Milestones
+6. Risks
+7. Dependencies
+8. Integration controls
+9. Export board memo
+
+**Narrativa recomendada:**
+
+“PMI es un workspace de soporte a integración post-M&A. Ayuda a priorizar sinergias, riesgos, hitos, dependencias y controles de integración. Es un DSS con revisión humana. No garantiza la captura de sinergias ni sustituye un integration management office.”
+
+### Antes de piloto
+
+**Prioridades:**
+
+1. Resolver o etiquetar `mergeWithDemo()`.
+2. Separar claramente demo vs datos reales.
+3. Alinear `pmi_cases` con tablas enterprise o documentar la dualidad.
+4. Crear caso PMI real coherente con M&A industrial.
+5. Crear programas enterprise reales.
+6. Añadir tests viewer/read-only.
+7. Añadir tests multi-tenant UI.
+8. Validar program detail real.
+9. Añadir test anti-demo-merge.
+10. Documentar límites del board memo.
+
+### No tocar ahora
+
+- Visual/CSS PMI.
+- AppShell / Topbar / Sidebar.
+- Executive Overview.
+- M&A.
+- Compliance.
+- Funding.
+- Governance.
+- Bridge Marketplace.
+- Premium AI / Key Talent Retention Map.
+- A.1.4b.
+- `backend-server.err`.
+
+### Recomendación
+
+Mantener PMI congelado en código.
+
+Usarlo en demo como PMI Execution / Post-Merger Integration DSS.
+
+Antes de piloto enterprise, priorizar product truthfulness sobre `mergeWithDemo()`, dual model, demo labeling, viewer tests y sincronización case ↔ enterprise.
+
+### Próxima subfase
+
+**C.7 — Auditoría funcional Bridge.**
