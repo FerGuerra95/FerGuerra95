@@ -2123,3 +2123,225 @@ Antes de piloto enterprise, priorizar truthfulness, datos reales, alineación in
 ### Próxima subfase
 
 **C.5 — Auditoría funcional Governance.**
+
+---
+
+## C.5 — Auditoría funcional Governance
+
+**Fecha:** 19 mayo 2026
+
+**Estado:** Auditoría solo lectura completada.
+
+### Veredicto
+
+Governance funciona, está intacto y es enseñable en demo con narrativa DSS / human review.
+
+Es una de las ramas más backend-first y coherentes del producto: tiene API real, workflow de decisiones, audit trail, integración con Executive Overview y board pack transversal.
+
+Se puede presentar como:
+
+- Board Governance workspace
+- Decision Support workspace
+- governance operating layer
+- decision register
+- audit trail
+- board pack preparation workspace
+- DSS con revisión humana
+
+No debe venderse todavía como:
+
+- gobierno corporativo certificado
+- actas legales oficiales
+- secretaría del consejo automatizada
+- asesoramiento legal
+- compliance board formal certificado
+- SaaS governance enterprise completo sin límites
+- sustituto de secretario del consejo o asesor jurídico
+
+### Rutas auditadas
+
+| Ruta | Estado |
+|---|---|
+| `/governance/dashboard` | OK — Governance Dashboard |
+| `/governance/decisions` | OK — Decision Register |
+| `/governance/decisions/:id` | OK — deep link, sin pageMeta dedicado |
+| `/governance/board-packs` | OK |
+| `/governance/committees` | OK |
+| `/governance/policies` | OK |
+| `/governance/actions` | OK |
+| `/governance/meetings` | OK |
+| `/governance/reports` | OK |
+| `/governance/audit-trail` | OK |
+| `/governance/security-audit` | OK como alias visual de audit trail |
+
+**Workspace key:** `governance`
+
+**Topbar:** `Governance`
+
+**Nota:** No existe ruta UI `/governance/esg`, aunque existen APIs de ESG/controls en backend.
+
+### Fortalezas
+
+- Rama muy backend-first.
+- No depende de demoData ni localStorage de negocio.
+- Dashboard real vía API.
+- Decision register con CRUD y workflow.
+- Decision detail real.
+- Board packs reales a nivel API.
+- Committees, policies, actions y meetings con APIs reales.
+- Reports backend.
+- Audit trail persistido.
+- Multi-tenant probado.
+- Buen E2E enterprise flow con 9 rutas.
+- Integración con Executive Overview.
+- Board pack transversal.
+- Empty states honestos si la organización no tiene datos.
+- Sin P0 detectados.
+
+### Backend / datos reales
+
+Governance tiene backend real para:
+
+- dashboard / summary
+- decisions
+- decision workflow
+- board packs
+- committees
+- policies
+- actions
+- meetings
+- reports
+- audit trail
+- hub overview / bridge signals
+- controls / ESG metrics a nivel API
+
+**Tablas principales:**
+
+- `governance_decisions`
+- `governance_board_packs`
+- `governance_committees`
+- `governance_policies`
+- `governance_action_items`
+- `governance_meetings`
+- `governance_approval_history`
+- `governance_report_exports`
+
+### Demo / datos calculados
+
+Governance no tiene una capa demo local masiva.
+
+Si la organización está vacía, muestra estados honestos como:
+
+- insufficient validated data
+- human review required
+- empty states
+
+Esto es positivo para product truthfulness.
+
+### Clasificación funcional
+
+| Área | Estado | Nota |
+|---|---|---|
+| Visual shell | Cerrado | No tocar CSS Governance |
+| Datos reales | Mayormente real | API SQLite, sin demo local masivo |
+| Backend | Parcial / sólido | API extensa y coherente |
+| Multi-tenant | Parcial / sólido | Probado en governanceEnterprise.test.js |
+| Permisos | Parcial | Viewer/board_member read-only; approve solo admin |
+| Decisions | Parcial / sólido | CRUD + workflow backend |
+| Decision workflow | Parcial | Submit/approve/escalate en lista; detail sin acciones |
+| Board packs | Parcial | Create/list real; finalize solo API |
+| Audit trail | Parcial / sólido | Persistencia real + tests |
+| Security audit | Visual / alias | Misma página que audit trail; copy confuso |
+| Reports / export | Parcial | Backend report generation básico |
+| Executive bridge | Parcial / sólido | Integrado con Overview |
+| Tests | Parcial / fuerte | E2E fuerte, faltan permisos/board_member |
+| Demo readiness | Cerrado con narrativa | Rama muy enseñable |
+| Venta readiness | Parcial | Board Governance DSS |
+| Enterprise readiness | Parcial | Legal, workflow UX, ESG UI y finalize pendientes |
+
+### Gaps P0
+
+Ninguno detectado.
+
+### Gaps P1
+
+- Botón Approve puede estar habilitado con `UPDATE_GOVERNANCE`, pero API exige `APPROVE_GOVERNANCE_DECISION`, generando 403 para rol user.
+- Validar UX board_member / viewer read-only.
+- No vender como gobierno corporativo certificado, actas legales ni compliance board formal.
+- Meeting “minutes lite” no equivale a acta legal.
+- `/governance/security-audit` puede confundir por copy/contenido.
+- Organización vacía sin seed: para demo hay que crear decisiones en vivo o tener datos demo controlados.
+
+### Gaps P2
+
+- `/governance/decisions/:id` sin pageMeta dedicado.
+- Detail sin workflow actions; `ApprovalFlowPanel` es informativo.
+- Sin UI para ESG/controls aunque la API existe.
+- Sin UI finalize board-pack / meeting minutes.
+- `governanceApi` incompleto frente a rutas backend.
+- Governance no estuvo en smoke B.1 hubs explícito.
+
+### Gaps P3
+
+- Governance Minute Generator queda para Fase J.
+- PDF export formal futuro.
+- Tests permisos board_member en UI.
+- Unificar `/governance/security-audit` vs `/governance/audit-trail`.
+
+### Decisión demo
+
+Governance se puede enseñar en demo.
+
+**Recorrido recomendado con admin:**
+
+1. `/governance/dashboard`
+2. `/governance/decisions`
+3. crear decisión
+4. submit
+5. approve
+6. `/governance/board-packs`
+7. `/governance/audit-trail`
+
+**Narrativa recomendada:**
+
+“Governance es un workspace de soporte a decisiones, trazabilidad, comités, políticas, acciones y preparación de board packs. Es un DSS con revisión humana. No sustituye asesoramiento legal, actas oficiales ni gobierno corporativo certificado.”
+
+### Antes de piloto
+
+**Prioridades:**
+
+1. Crear 2–3 decisiones con workflow cerrado.
+2. Crear 1 board pack.
+3. Crear 1 policy.
+4. Crear 1 action item.
+5. Crear 1 meeting.
+6. Crear 1 report.
+7. Revisar UX approve/permisos.
+8. Validar board_member UI.
+9. Añadir smoke hub Governance.
+10. Aclarar `/governance/security-audit` o unificarlo con audit trail.
+
+### No tocar ahora
+
+- Visual/CSS Governance.
+- AppShell / Topbar / Sidebar.
+- Executive Overview.
+- M&A.
+- Compliance.
+- Funding.
+- Bridge Marketplace.
+- Premium AI / Governance Minute Generator.
+- A.1.4b.
+- Legal automation.
+
+### Recomendación
+
+Mantener Governance congelado en código.
+
+Usarlo en demo como Board Governance / Decision Support workspace.
+
+Antes de piloto enterprise, priorizar permisos/UX approve, datos seed, board pack lifecycle, smoke explícito, disclaimers legales y claridad entre audit trail y security audit.
+
+### Próxima subfase
+
+**C.6 — Auditoría funcional PMI.**
