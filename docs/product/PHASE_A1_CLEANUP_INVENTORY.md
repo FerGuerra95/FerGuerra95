@@ -1920,3 +1920,206 @@ Antes de piloto enterprise, priorizar truthfulness, datos reales, tests API, UX 
 ### Próxima subfase
 
 **C.4 — Auditoría funcional Funding.**
+
+---
+
+## C.4 — Auditoría funcional Funding
+
+**Fecha:** 19 mayo 2026
+
+**Estado:** Auditoría solo lectura completada.
+
+### Veredicto
+
+Funding funciona, está intacto y es enseñable en demo con narrativa DSS / human review.
+
+Se puede presentar como:
+
+- Funding Intelligence workspace
+- Capital Planning workspace
+- Investor Readiness workspace
+- sistema de soporte a planificación de financiación
+- DSS con revisión humana
+
+No debe venderse todavía como:
+
+- asesoramiento financiero
+- recomendación de inversión
+- valoración certificada
+- placement o intermediación financiera
+- sustituto de banca, VC, legal o corporate finance advisor
+- SaaS funding enterprise completo sin límites
+
+### Rutas auditadas
+
+| Ruta | Estado |
+|---|---|
+| `/funding/dashboard` | OK — Funding Dashboard |
+| `/funding/readiness` | OK — Investor Readiness |
+| `/funding/capital-structure` | OK — Capital Structure |
+| `/funding/scenarios` | OK — Funding Scenarios |
+| `/funding/data-room` | OK — Investor Data Room checklist |
+
+**Nota:** La ruta real de investor readiness es `/funding/readiness`, no `/funding/investor-readiness`.
+
+**Workspace key:** `funding`
+
+**Topbar:** `Funding`
+
+**Deep links:** No hay rutas `:id` en Funding.
+
+### Fortalezas
+
+- Funding dashboard carga correctamente.
+- Engine cliente calcula runway, dilution, post-money y escenarios.
+- Backend real para funding rounds y funding summary.
+- Funding bridge con M&A / Compliance / Executive Overview.
+- Integración backend probada para rounds, multi-tenant, bridge y permisos viewer.
+- Widget ejecutivo de Funding probado.
+- Export memo HTML con disclaimers DSS.
+- No hay P0 detectados.
+- Encaja bien en el roadmap C → D → E.
+
+### Backend / datos reales
+
+Funding tiene backend real para:
+
+- funding rounds
+- funding summary
+- executive bridge snapshot
+- M&A / Compliance bridge
+- audit events
+- snapshots / ledger export a nivel API
+
+También tiene capa cliente para:
+
+- funding inputs
+- runway / burn / dilution calculations
+- capital structure
+- scenarios
+- investor readiness
+- data room checklist
+- funding narrative
+- export memo
+
+### Demo / datos calculados
+
+La rama mezcla:
+
+- rounds reales en SQLite
+- summary backend
+- bridge backend
+- inputs locales por organizationId
+- defaults tipo demo
+- scenarios calculados en cliente
+- investor readiness calculado
+- data room checklist visual
+- export memo en cliente
+
+Esto es aceptable para demo si se explica como DSS, pero debe alinearse mejor antes de piloto enterprise.
+
+### Clasificación funcional
+
+| Área | Estado | Nota |
+|---|---|---|
+| Visual shell | Cerrado | No tocar CSS Funding |
+| Datos reales | Parcial | Rounds/summary backend + inputs locales |
+| Backend | Parcial / sólido | Rounds, summary y bridge fuertes |
+| Multi-tenant | Parcial | Backend probado; drafts en localStorage por org |
+| Permisos | Parcial | API viewer read-only; validar UI |
+| Funding rounds | Parcial | Backend CRUD sólido; UI principalmente lectura |
+| Capital structure | Parcial / calculado | Engine cliente |
+| Scenarios | Parcial / calculado | Sensibilidad heurística |
+| Investor readiness | Parcial / calculado | No valida documentos reales |
+| Data room | Parcial / visual | Checklist, no VDR enterprise |
+| Reports / export | Parcial | HTML memo cliente |
+| Executive bridge | Parcial / sólido | Bridge M&A/Compliance real |
+| Tests | Parcial | Backend fuerte; E2E Funding débil |
+| Demo readiness | Cerrado con narrativa | Se puede enseñar |
+| Venta readiness | Parcial | Piloto Funding Intelligence DSS |
+| Enterprise readiness | Parcial | Truthfulness, UI rounds/snapshots, legal y E2E pendientes |
+
+### Gaps P0
+
+Ninguno detectado.
+
+### Gaps P1
+
+- Inputs/scenarios en localStorage frente a rounds en SQLite: riesgo de verdad dual.
+- No hay UI completa para crear/editar rounds ni snapshots aunque la API existe.
+- Defaults `DEFAULT_FUNDING_INPUTS` / Nova Industrial pueden parecer reales sin etiqueta.
+- No vender como asesoramiento financiero, inversión, placement ni valoración certificada.
+- Validar que viewer no persista drafts sensibles si solo tiene READ.
+- `enterprise.service` snapshots sin tests integration dedicados en suite actual.
+
+### Gaps P2
+
+- CSS embebido masivo en FundingDashboardPage.
+- Data room es checklist, no data room enterprise real.
+- No existe `tests/e2e/funding/`.
+- E2E Funding limitado al smoke hub.
+- Investor pipeline existe solo como narrativa/copy.
+- Falta E2E de export memo, scenarios, readiness y data room.
+
+### Gaps P3
+
+- PDF/server export futuro.
+- Liquidation Preference Stress Tester queda para Fase J.
+- UI para ledger-export snapshots.
+- Tests E2E export memo.
+- Posible evolución hacia investor pipeline real.
+
+### Decisión demo
+
+Funding se puede enseñar en demo.
+
+**Recorrido recomendado:**
+
+1. `/funding/dashboard`
+2. `/funding/readiness`
+3. `/funding/capital-structure`
+4. `/funding/scenarios`
+5. `/funding/data-room`
+6. export memo si procede
+
+**Narrativa recomendada:**
+
+“Funding Intelligence es un workspace de planificación de capital y preparación para financiación. Ayuda a simular escenarios, runway, dilución y readiness, siempre como DSS con revisión humana. No sustituye asesoramiento financiero, legal, bancario ni de inversión.”
+
+### Antes de piloto
+
+**Prioridades:**
+
+1. Crear 1–2 funding rounds reales en API.
+2. Alinear inputs locales con rounds persistidos.
+3. Crear 1 snapshot / ledger export.
+4. Generar un memo exportado.
+5. Etiquetar defaults y demo data.
+6. Validar viewer UX.
+7. Añadir tests integration dedicados para snapshots.
+8. Añadir E2E Funding mínimo.
+9. Diferenciar claramente checklist vs data room real.
+
+### No tocar ahora
+
+- Visual/CSS Funding.
+- AppShell / Topbar / Sidebar.
+- M&A.
+- Compliance.
+- Executive Overview.
+- Bridge Marketplace.
+- Premium AI / Liquidation Preference Stress Tester.
+- A.1.4b.
+- Rutas Funding si no hay P0.
+
+### Recomendación
+
+Mantener Funding congelado en código.
+
+Usarlo en demo como workspace de Capital Planning / Funding Intelligence DSS.
+
+Antes de piloto enterprise, priorizar truthfulness, datos reales, alineación inputs ↔ rounds, snapshots, E2E Funding y legal disclaimers.
+
+### Próxima subfase
+
+**C.5 — Auditoría funcional Governance.**
