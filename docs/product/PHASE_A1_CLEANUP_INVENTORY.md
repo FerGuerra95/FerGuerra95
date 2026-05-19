@@ -1707,3 +1707,216 @@ No debe considerarse todavía certificable completo.
 El camino correcto es:
 
 **C → D → E → F → G → H → I → J/K**
+
+---
+
+## C.3 — Auditoría funcional Compliance
+
+**Fecha:** 18 mayo 2026
+
+**Estado:** Auditoría solo lectura completada.
+
+### Veredicto
+
+Compliance funciona, está intacto y es enseñable en demo con narrativa DSS / human review.
+
+Se puede presentar como:
+
+- Third-Party Risk workspace
+- Compliance Intelligence workspace
+- sistema de soporte a revisión de proveedores
+- evidence hub
+- review queue
+- audit ledger
+- DSS con revisión humana
+
+No debe venderse todavía como:
+
+- certificación legal
+- auditoría certificada
+- asesoramiento GDPR/legal automatizado
+- whistleblowing enterprise
+- SaaS compliance completo sin límites
+- sustituto de departamento legal/compliance
+
+### Rutas auditadas
+
+| Ruta | Estado |
+|---|---|
+| `/compliance/dashboard` | OK — Compliance dashboard |
+| `/compliance/audit-runs` | OK — Audit Ledger enterprise |
+| `/compliance/audit-runs/:id` | OK — deep link ledger |
+| `/compliance/suppliers` | OK — Supplier Registry |
+| `/compliance/suppliers/:id` | OK — Supplier Detail |
+| `/compliance/risk-map` | OK |
+| `/compliance/alerts` | OK |
+| `/compliance/evidence` | OK |
+| `/compliance/reviews` | OK |
+| `/compliance/reports` | OK |
+
+**Workspace key:** `compliance`
+
+**Topbar:** `Compliance`
+
+**Ruta extra relevante:** `/compliance/audit-runs` como ledger enterprise con reglas deterministas, evidencia citada y export JSON firmado/simulado.
+
+### Fortalezas
+
+- Flujo completo suppliers → supplier detail → evidence → reviews → reports.
+- Backend CRUD real para suppliers, alerts, evidence, reviews y reports.
+- Audit runs reales con rule engine.
+- Migraciones enterprise 003/004.
+- Multi-tenant probado en tests de servicios.
+- Review workflow alineado con DSS / human review.
+- Evidence hub y report export HTML.
+- Audit ledger fuerte para narrativa enterprise.
+- No hay P0 detectados.
+- Compliance encaja con el roadmap enterprise C → D → E → F → H.
+
+### Backend / datos reales
+
+Compliance tiene backend real para:
+
+- suppliers
+- alerts
+- evidence
+- reviews
+- reports
+- audit runs
+- rule results
+- evidence links
+- M&A risk impacts
+- executive hub overview
+
+También tiene capa cliente para:
+
+- scoring
+- resilience
+- risk map
+- supplier memo
+- jurisdiction exposure
+- red flags / mitigants
+- evidence pack assembly
+- HTML report generation
+
+### Demo / datos calculados
+
+La rama mezcla:
+
+- datos reales persistidos
+- defaults locales
+- demo multinacional desde `demoData.js`
+- scoring cliente
+- reports HTML generados en frontend
+- risk map calculado en cliente
+
+Esto es aceptable para demo si se explica correctamente, pero debe etiquetarse mejor antes de piloto enterprise.
+
+### Clasificación funcional
+
+| Área | Estado | Nota |
+|---|---|---|
+| Visual shell | Cerrado | No tocar CSS Compliance |
+| Datos reales | Parcial | Backend CRUD + audit runs reales; defaults/demo locales |
+| Backend | Parcial / sólido | Audit ledger y CRUD reales |
+| Multi-tenant | Parcial | Backend probado; store/localStorage puede mezclar datos |
+| Permisos | Parcial | API granular; validar UX viewer |
+| Suppliers | Parcial | CRUD real + demo multinacional |
+| Evidence | Parcial | CRUD real + pack cliente |
+| Reviews | Parcial | Workflow DSS real |
+| Reports / export | Parcial | HTML cliente + persistencia API |
+| Alerts | Parcial | CRUD real + default alerts |
+| Risk map | Parcial / visual | Cliente; backend riskMap service stub |
+| Tests | Parcial | Servicios fuertes; API/E2E débiles |
+| Demo readiness | Cerrado con narrativa | Se puede enseñar |
+| Venta readiness | Parcial | Piloto DSS / third-party risk |
+| Enterprise readiness | Parcial | Legal, truthfulness y QA pendientes |
+
+### Gaps P0
+
+Ninguno detectado.
+
+### Gaps P1
+
+- Mezcla de datos default local, remoto y demo multinacional sin etiquetado uniforme.
+- `integration/api/complianceApi.test.js` es placeholder.
+- `complianceReportsApi.test.js` es placeholder.
+- `getExecutiveHubBrief` no se consume directamente en Compliance UI, solo vía Overview.
+- Risk scores recalculados en cliente pueden divergir de `riskScore` persistido.
+- Validar que viewer no pueda crear/decidir/editar desde UI.
+- No vender como certificación legal, auditoría certificada o asesoramiento GDPR.
+- Auto-sync local → backend cuando remoto vacío puede contaminar organización con seeds demo.
+
+### Gaps P2
+
+- Páginas monolíticas y CSS embebido masivo.
+- `riskMap.service.js` stub; risk map 100% cliente.
+- E2E solo URL checks; faltan flujos CRUD, export y audit ledger.
+- `suppliersApi.js` legacy localStorage redundante.
+- Módulo RAG existe pero no está cableado en UI.
+- Compliance no estuvo en el smoke producción B.1 explícito.
+- `/compliance/audit-runs/:id` sin pageMeta dedicado.
+
+### Gaps P3
+
+- Consolidar `ceos-compliance-crud.spec.js`.
+- Corregir typo `compilanceFlow.spec.js`.
+- PDF/server-side reports futuro.
+- Wiring RAG retrieval real futuro.
+
+### Decisión demo
+
+Compliance se puede enseñar en demo.
+
+**Recorrido recomendado:**
+
+1. `/compliance/dashboard`
+2. `/compliance/suppliers`
+3. `/compliance/suppliers/:id`
+4. `/compliance/evidence`
+5. `/compliance/reviews`
+6. `/compliance/reports`
+7. `/compliance/audit-runs` opcional como audit ledger
+
+**Narrativa recomendada:**
+
+“Compliance Intelligence es un workspace de soporte a revisión de terceros, evidencias, riesgos y auditoría. Es un DSS con revisión humana. No sustituye asesoramiento legal ni certifica automáticamente el cumplimiento normativo.”
+
+### Antes de piloto
+
+**Prioridades:**
+
+1. Crear 2–3 proveedores reales cross-módulo.
+2. Crear 1 audit run real.
+3. Añadir evidencia real tipo DPA/SOC2/ISO.
+4. Crear una review decidida.
+5. Generar un report exportado.
+6. Etiquetar demo data/defaults.
+7. Convertir tests API placeholder en tests reales.
+8. Validar viewer UX.
+9. Incluir Compliance en smoke producción explícito.
+10. Reducir fallback silencioso local → backend.
+
+### No tocar ahora
+
+- Visual/CSS Compliance.
+- AppShell / Topbar / Sidebar.
+- M&A.
+- Executive Overview.
+- Bridge Marketplace.
+- Premium AI / Whistleblowing.
+- A.1.4b.
+- RAG retrieval real.
+- Legal automation.
+
+### Recomendación
+
+Mantener Compliance congelado en código.
+
+Usarlo en demo como workspace de Third-Party Risk / Compliance Intelligence DSS.
+
+Antes de piloto enterprise, priorizar truthfulness, datos reales, tests API, UX viewer, smoke producción explícito y legal pack.
+
+### Próxima subfase
+
+**C.4 — Auditoría funcional Funding.**
