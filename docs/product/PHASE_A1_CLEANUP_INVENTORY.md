@@ -1432,7 +1432,7 @@ No abrir nuevas funcionalidades premium ni tocar CSS global hasta completar:
 | C.4 | Funding | Pendiente | Auditar rounds, scenarios, data room, readiness, bridge |
 | C.5 | Governance | Pendiente | Auditar decisions, board packs, audit trail |
 | C.6 | PMI | Cerrada | PMI Execution / DSS, demo-ready sin P0 |
-| C.7 | Bridge | Pendiente | Auditar signals, dependencies, conflicts, reports, snapshots |
+| C.7 | Bridge | Cerrada | Cross-Module Intelligence / DSS, demo-ready sin P0; marketplace congelado |
 | C.8 | Risk | Pendiente | Auditar register, scoring, filters, reports |
 | C.9 | Reporting | Pendiente | Auditar library, templates, board pack, exports |
 | C.10 | Strategy | Pendiente | Auditar objectives, initiatives, roadmap |
@@ -2564,4 +2564,243 @@ Antes de piloto enterprise, priorizar product truthfulness sobre `mergeWithDemo(
 
 ### Próxima subfase
 
-**C.7 — Auditoría funcional Bridge.**
+**C.8 — Auditoría funcional Risk.**
+
+---
+
+## C.7 — Auditoría funcional Bridge
+
+**Fecha:** 19 mayo 2026
+
+**Estado:** Auditoría solo lectura completada.
+
+### Veredicto
+
+Bridge funciona, está intacto y es enseñable en demo como capa cross-module de inteligencia ejecutiva.
+
+Bridge enterprise se puede presentar como:
+
+- Cross-Module Executive Intelligence
+- Enterprise Bridge
+- capa de señales entre módulos
+- sistema de dependencias, conflictos y prioridades
+- DSS con revisión humana
+
+No debe venderse todavía como:
+
+- red privada de deals
+- marketplace activo
+- matching garantizado de inversores
+- bolsa de oportunidades
+- sistema autónomo de recomendaciones
+- SaaS enterprise completo sin límites
+
+Marketplace sigue congelado como:
+
+`INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK`
+
+### Rutas auditadas
+
+| Ruta | Estado |
+|---|---|
+| `/bridge/dashboard` | OK — Bridge dashboard |
+| `/bridge/signals` | OK — signal lifecycle |
+| `/bridge/dependencies` | OK |
+| `/bridge/conflicts` | OK |
+| `/bridge/attention-queue` | OK — read-only |
+| `/bridge/reports` | OK |
+| `/bridge/snapshots` | OK — deep link sin sidebar |
+| `/bridge/marketplace` | Congelado — URL directa autenticada, fuera de nav |
+
+**Workspace key:** `bridge`
+
+**Topbar:** `Enterprise Bridge`
+
+### Política Marketplace
+
+| Check | Resultado |
+|---|---|
+| No aparece en sidebar | PASS |
+| No aparece en rail | PASS |
+| Ruta activa por URL directa autenticada | Sí |
+| Política A.1.5 | Vigente |
+| Badge demo fallback | Sí |
+| Promoción en demo principal | No |
+| E2E marketplace | Excluido a propósito |
+
+**Decisión:** Marketplace no se enseña, no se vende y no se desarrolla ahora.
+
+### Fortalezas
+
+- Bridge dashboard funcional.
+- Backend real para signals, dependencies, conflicts, attention queue, snapshots y reports.
+- Recalculate operativo.
+- Signal lifecycle disponible.
+- Executive bridge integrado con Overview.
+- Tests dedicados bridge enterprise.
+- Marketplace fuera de nav/rail.
+- WorkspaceConfig parity cubre que marketplace no entre en navegación.
+- Disclaimers de human review presentes.
+- No hay P0 detectados.
+
+### Backend / datos reales
+
+Bridge tiene backend real para:
+
+- bridge dashboard
+- bridge summary
+- hub overview
+- signals
+- signal workflow
+- dependencies
+- conflicts
+- attention queue
+- evidence links
+- snapshots
+- reports
+- report generation
+- audit logs
+
+**Tablas principales:**
+
+- `bridge_signals`
+- `bridge_dependencies`
+- `bridge_conflicts`
+- `bridge_attention_queue`
+- `bridge_evidence_links`
+- `bridge_snapshots`
+- `bridge_signal_history`
+- `bridge_reports`
+- `bridge_opportunities`
+- `bridge_counterparties`
+- `bridge_introductions`
+- `bridge_documents`
+
+### Demo / datos calculados
+
+Bridge enterprise es backend-first, pero las señales calculadas por recalculate son heurísticas cross-module.
+
+Marketplace tiene fallback demo local `DEMO_BRIDGE_*`.
+
+Esto es aceptable para demo si:
+
+- se enseña Bridge enterprise, no marketplace
+- se explica que las señales son DSS / human review
+- no se vende como red privada de deals
+- no se promete matching automático
+
+### Clasificación funcional
+
+| Área | Estado | Nota |
+|---|---|---|
+| Visual shell | Cerrado | No tocar CSS Bridge |
+| Datos reales | Parcial | Enterprise real; marketplace demo fallback |
+| Backend | Cerrado | Servicios Bridge sólidos |
+| Multi-tenant | Parcial | Backend sí; UI sin org-switch tests |
+| Permisos | Parcial | Viewer read-only sin E2E |
+| Dashboard | Cerrado | Cross-module dashboard |
+| Signals | Cerrado | Lifecycle + engine |
+| Dependencies | Parcial | Falta trazabilidad entidad fuente |
+| Conflicts | Parcial | CRUD/workflow básico |
+| Reports / snapshots | Parcial | Backend real; UI parcial |
+| Marketplace | Riesgo / congelado | Fuera de nav; no vender |
+| Executive bridge | Cerrado | Overview integrado |
+| Tests | Parcial | Backend/E2E buenos; faltan viewer/prod smoke |
+| Demo readiness | Cerrado sin marketplace | Se puede enseñar Bridge enterprise |
+| Venta readiness | Parcial | Piloto Bridge DSS sí |
+| Enterprise readiness | Parcial | Truthfulness, trazabilidad, permisos y smoke pendientes |
+
+### Gaps P0
+
+Ninguno detectado.
+
+### Gaps P1
+
+- Marketplace accesible por URL con narrativa “deal network” y demo Iberia.
+- `DEMO_BRIDGE_*` fallback sin bloqueo en prod piloto.
+- Señales recalculate pueden parecer reales sin etiqueta clara de calculated/heuristic.
+- `/bridge/snapshots` sin nav.
+- Dos `bridgeApi`: enterprise bridge y ecosystem marketplace; puede confundir si no se documenta.
+- B.1 no validó `/bridge/dashboard` en producción explícitamente.
+
+### Gaps P2
+
+- Viewer E2E.
+- Multi-tenant UI.
+- Trazabilidad dependency → entidad fuente.
+- Evidence links UI completa en snapshots.
+- PATCH/update en tablas enterprise desde UI.
+- Posible redirect marketplace → dashboard para pilotos.
+
+### Gaps P3
+
+- Feature Harvest Marketplace queda para futuro.
+- PDF server-side board packs Bridge.
+- Audit trail UI dedicada en workspace Bridge.
+- E2E export/report generate.
+
+### Decisión demo
+
+Bridge se puede enseñar en demo, pero solo como Bridge Enterprise.
+
+**Recorrido recomendado:**
+
+1. `/bridge/dashboard`
+2. `/bridge/signals`
+3. `/bridge/dependencies`
+4. `/bridge/conflicts`
+5. `/bridge/attention-queue`
+6. `/bridge/reports`
+7. `/bridge/snapshots` opcional
+
+**No enseñar:**
+
+- `/bridge/marketplace`
+
+**Narrativa recomendada:**
+
+“Bridge consolida señales, dependencias y conflictos entre M&A, Compliance, Funding, PMI y Governance. Recalcula prioridades ejecutivas con revisión humana obligatoria. No es una bolsa de deals ni garantiza matching de inversores.”
+
+### Antes de piloto
+
+**Prioridades:**
+
+1. No promocionar marketplace.
+2. Añadir smoke producción explícito de `/bridge/dashboard`.
+3. Etiquetar señales calculadas como heuristic / calculated / human review.
+4. Añadir viewer E2E.
+5. Añadir multi-tenant UI checks.
+6. Mejorar trazabilidad dependency → entidad fuente.
+7. Documentar doble `bridgeApi`.
+8. Evaluar redirect marketplace → dashboard en pilotos.
+
+### No tocar ahora
+
+- `/bridge/marketplace`.
+- Bridge Marketplace Page.
+- Ecosystem marketplace API.
+- Visual/CSS Bridge.
+- AppShell / Topbar / Sidebar.
+- Executive Overview.
+- M&A.
+- Compliance.
+- Funding.
+- Governance.
+- PMI.
+- Premium AI.
+- A.1.4b.
+- `backend-server.err`.
+
+### Recomendación
+
+Mantener Bridge congelado en código.
+
+Usarlo en demo como Cross-Module Executive Intelligence / Bridge DSS.
+
+No vender ni mostrar Marketplace.
+
+Antes de piloto enterprise, priorizar truthfulness de señales, marketplace hidden/redirect policy, smoke producción de Bridge, viewer tests y trazabilidad cross-module.
+
+### Próxima subfase
+
+**C.8 — Auditoría funcional Risk.**
