@@ -1,0 +1,123 @@
+---
+description: Quality gates, mandatory verification commands, and completion metrics before closing execution phases
+globs:
+  - "**/*"
+alwaysApply: false
+---
+
+# CEO's OS — Release Gates
+
+## Purpose
+
+Define minimum conditions to close a phase, stage files for commit, or recommend push to `origin/main`.
+
+Release gates protect CEO's OS from mixed commits, silent regressions, test weakening, and undocumented cross-module changes.
+
+## Mandatory Git Checks
+
+Before closing any execution phase, run:
+
+```text
+git status --short
+git diff --stat
+git diff --name-only
+git ls-files --others --exclude-standard
+git log --oneline -5
+git log --oneline origin/main..HEAD
+```
+
+Adapt commands to PowerShell on Windows or Bash/Zsh on macOS/Linux. The analytical result matters, not the shell syntax.
+
+## Forbidden Git Practices
+
+- `git add .`
+- Including `backend-server.err` in any commit
+- Committing unreviewed generated artifacts (dist, logs, local DB)
+- Mixed commits without justification (docs + unrelated code + tests)
+- Pushing with dirty working tree beyond approved noise (`backend-server.err` only when policy allows)
+- Amending pushed commits unless explicitly authorized and safe per project rules
+- Force push to `main` unless explicitly authorized
+
+## Validation by Change Type
+
+### Document-only phases
+
+- Only allowed documentation/rule files changed
+- No `src/`, `backend/`, `tests/`, CSS, `package.json`, or workflows touched
+- No extra untracked files outside whitelist
+- Markdown coherent; no duplicate sections from idempotent re-run
+- Atomic commit message matches scope
+- No commit/push in phase unless explicitly authorized
+
+### JSON files
+
+- `node -e "JSON.parse(...)"` or equivalent validation passes
+- No duplicate keys introduced on idempotent re-run
+- Golden Dataset expected outputs not changed without separate authorized task
+
+### Frontend code changes
+
+- `npm run build` passes when frontend touched
+- Relevant unit tests pass
+- E2E when critical route or auth flow affected
+- Visual smoke when UI layout affected
+- No NaN/Infinity/undefined in user-visible financial outputs
+- Demo/fallback labelled where user-facing
+
+### Backend/API changes
+
+- Relevant integration tests pass
+- Permission and organizationId review completed
+- Audit event behavior reviewed for mutations
+- No secret in logs or error responses
+- Migrations follow migration safety rule (new versioned file; no silent edit of applied migration)
+
+### Critical calculation changes
+
+- Compared against `docs/testing/golden_inputs.json`
+- Checked against `docs/testing/FORMULA_REGISTRY.md`
+- No tolerance widening to pass tests
+- No test weakening
+- Source-of-truth documented if changed
+- Human review required for financial/compliance positioning
+
+## Phase Closure Requirements
+
+Every closed phase must report:
+
+- files changed (full list)
+- files explicitly not touched
+- tests run (commands and result)
+- risks identified (P0/P1/P2/P3)
+- whether HANDOFF_STATE was generated
+- recommended next step and prompt
+- pending commit/push status
+
+## Multiplatform Validation
+
+Validation commands must be adapted to the host operating system when necessary.
+
+Do not treat shell syntax incompatibility as a project failure.
+
+Treat the analytical validation result as the source of truth.
+
+## Metrics for Phase Success
+
+| Metric | Pass condition |
+|---|---|
+| Scope adherence | Only allowed files modified |
+| Git hygiene | Atomic commits; no `git add .` |
+| Test integrity | No weakened assertions or golden outputs |
+| Security | organizationId and permissions reviewed if applicable |
+| Truthfulness | Demo/fallback not sold as real |
+| Idempotency | Re-run does not duplicate rules or sections |
+
+## Stop Conditions
+
+Stop before declaring phase complete if:
+
+- validation matrix not run for change type
+- unexpected files in diff
+- golden mismatch unresolved
+- cross-tenant or permission ambiguity open
+- high-risk diff without explicit approval

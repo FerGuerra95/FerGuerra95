@@ -1,0 +1,95 @@
+---
+description: Imposes mandatory pre-flight checklists, structured reasoning summaries, and strict communication protocols on the AI agent
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# CEO's OS — Prompt Discipline
+
+## Purpose
+
+Obligate structured execution. Prevent improvisation, placeholder patches, silent scope creep, and undocumented reasoning.
+
+Every agent working on CEO's OS must show what it will touch, what it will not touch, and how it will validate before and after changes.
+
+## Required PRE-FLIGHT CHECKLIST
+
+Before modifying any file, output a visible block:
+
+**PRE-FLIGHT CHECKLIST**
+
+| Item | Value |
+|---|---|
+| task scope | One sentence describing the authorized work |
+| files allowed | Explicit list |
+| files forbidden | Explicit list including src, backend, tests, blindaje v1 files if applicable |
+| module in scope | Single module or docs-only |
+| modules out of scope | All other modules |
+| source-of-truth | Which registry, API, table, or golden file applies |
+| Golden Dataset requirement | yes/no; which dataset IDs |
+| legacy/duplicate check | Planned search strategy |
+| test oracle check | Which tests must pass; no weakening allowed |
+| security/multi-tenant impact | yes/no; summary |
+| stop conditions | Which apply to this task |
+| why this approach is safe | Concise justification |
+
+Do not expose private chain-of-thought. Provide only the checklist and a concise reasoning summary.
+
+## Reasoning Summary Rule
+
+Allowed in responses:
+
+- concise reasoning summary
+- explicit assumptions labelled Assumed / Pending C.13 validation
+- verification evidence (commands run, files read)
+- risk classification P0/P1/P2/P3
+- decisions needing human review
+
+Forbidden:
+
+- claiming Confirmed without audit evidence
+- certifying legal/financial/compliance outcomes
+- hiding uncertainty behind confident language
+
+## Patch Discipline
+
+- No placeholders (`// ... existing code ...`, `omitted for brevity`, etc.)
+- No broad refactor outside scope
+- No adjacent cleanup ("while I'm here")
+- No unrequested formatting sweeps
+- No weakening tests or golden expected values
+- No wrapping full repository files in Markdown code fences when writing `.mdc`, `.md`, `.cursorignore`, or `AGENTS.md`
+- Complete blocks when code change is authorized
+
+## Plain Text File Writing Rule
+
+When writing `.mdc`, `.md`, `.cursorignore`, or `AGENTS.md` to disk:
+
+- File must start with real content (frontmatter `---` for `.mdc`)
+- Do not wrap entire file in triple-backtick fences
+- Inline code examples inside docs are allowed when teaching format
+
+## Required Final Summary
+
+End every execution phase with:
+
+| Section | Content |
+|---|---|
+| what was checked | Files, commands, registries |
+| what changed | Only if authorized; else "none" |
+| why | Risk reduced or documentation purpose |
+| risks reduced | Specific risks |
+| what was not touched | Explicit list |
+| validation run | Commands and outcomes |
+| remaining risks | Open P0/P1/P2/P3 |
+| next step | Recommended prompt or phase |
+| demo/pilot status | demo-ready / partial / not ready |
+
+## Handoff Trigger
+
+After completing a phase/subphase, or when context is long, generate HANDOFF_STATE per AGENTS.md and AI_OPERATING_MODEL.md.
+
+## Stop Conditions
+
+Stop before modifying if pre-flight cannot be completed honestly, or if task requires forbidden files.

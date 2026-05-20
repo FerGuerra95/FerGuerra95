@@ -1,0 +1,94 @@
+---
+description: Enforces isolation, domain boundaries, and anti-contamination rules between CEO's OS modules
+globs:
+  - "src/modules/**/*"
+  - "backend/services/**/*"
+  - "backend/api/**/*"
+alwaysApply: false
+---
+
+# CEO's OS — Module Boundaries
+
+## Purpose
+
+This rule prevents cross-module contamination, duplicate business logic, accidental collateral changes, and silent source-of-truth drift between CEO's OS workspaces.
+
+CEO's OS is modular by design. Each module owns its domain. Bridge aggregates signals; Executive Overview aggregates display; neither should become the master operational database for another module's data.
+
+## Core Boundary Rules
+
+- One module must not modify another module without explicit authorization in the task scope.
+- Do not create shared helpers if an equivalent current helper already exists in the project.
+- Do not duplicate calculations in frontend and backend with different formulas.
+- Do not move source-of-truth without documenting the change in SOURCE_OF_TRUTH_REGISTRY and FORMULA_REGISTRY.
+- Do not change public API contracts, route names, or response shapes without explicit authorization.
+- Do not open frozen audited branches outside the current task scope.
+- Do not modify Executive Overview to hide upstream module errors.
+- Do not modify Bridge to promote `/bridge/marketplace` as a live deal marketplace.
+- Do not fix a calculation in the UI layer when the backend source-of-truth is wrong without auditing both sides.
+- Do not import demo/fallback data from one module into another module's persisted path.
+
+## Module Ownership
+
+| Module | Owns | Must not own |
+|---|---|---|
+| M&A | Valuation, waterfall, buyer matching, CIM, data room, deal reports | Compliance scoring, funding runway |
+| Compliance | Suppliers, evidence, alerts, reviews, risk scoring, compliance reports | M&A valuation, PMI synergies |
+| Funding | Rounds, profiles, scenarios, runway, dilution, investor readiness | M&A buyer matching, governance approvals |
+| Governance | Board packs, approvals, minutes, governance state, audit trail | Operational synergy capture |
+| PMI | Synergy tracking, integration risks, milestones, Day 1/100, case workstreams | Bridge marketplace opportunities |
+| Bridge | Cross-module DSS signals, dependencies, conflicts, attention queue | Master storage for M&A deals or funding rounds |
+| Risk | Risk register, controls, heatmap, likelihood/impact | Compliance supplier master data |
+| Reporting | KPIs, board packs, library, exports metadata | Source-of-truth for module operational data |
+| Strategy | Initiatives, scenarios, strategic priorities | Funding round persistence |
+| Heritage | Continuity, legacy, succession, long-term ownership | M&A valuation formulas |
+| Executive Overview | Dashboard aggregation, module health display, executive signals | Master source for deals, suppliers, or synergies |
+
+## Executive Overview Rule
+
+Executive Overview may aggregate and display signals from other modules, but it must not become the source-of-truth for operational data.
+
+Status: Assumed / Pending C.13 validation until code audit confirms read-only aggregation paths.
+
+If Executive Overview writes or overwrites module data without an explicit authorized workflow, treat as P1 cross-module contamination risk.
+
+## Bridge Marketplace Rule
+
+`/bridge/marketplace` remains `INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK`.
+
+It must not be:
+
+- promoted in navigation
+- sold as a public deal marketplace
+- presented as guaranteed investor/buyer matching
+- used as the primary Bridge demo narrative
+
+The active Bridge enterprise surface is: dashboard, signals, dependencies, conflicts, attention queue, reports, snapshots.
+
+## Cross-Module Stop Condition
+
+Stop and report before modifying code if a task requires cross-module changes without explicit authorization.
+
+Examples that require stop:
+
+- Fixing Compliance score by changing M&A dashboard display only
+- Fixing PMI demo merge by changing Bridge recalculate only
+- Adding Funding logic inside Governance service without scope
+- Changing auth middleware to fix one module's permission bug without security review scope
+
+## Required Report
+
+For any cross-module finding, report:
+
+| Field | Content |
+|---|---|
+| source module | Where the data or signal originates |
+| target module | Where the change is being requested |
+| reason | Why the coupling exists |
+| risk | P0/P1/P2/P3 |
+| proposed safe boundary | How to isolate the fix |
+| human review needed | yes/no |
+
+## Documentation Truthfulness
+
+Do not mark cross-module architecture as Confirmed until C.13 validation reviews actual imports, API calls, and shared stores.

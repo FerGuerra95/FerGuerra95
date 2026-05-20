@@ -1,0 +1,107 @@
+---
+description: Security verification gate for multi-tenant isolation, role validation, auditability, and credential protection
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# CEO's OS — Security Review Rule
+
+## Purpose
+
+Security gate for authentication, authorization, organizationId scoping, multi-tenant isolation, secrets protection, safe logging, and auditability on enterprise state-changing actions.
+
+This rule applies to every change that touches APIs, auth, persistence, exports, sharing, or sensitive data paths.
+
+## Mandatory Security Gates
+
+Before accepting or implementing a sensitive change, verify:
+
+| Gate | Requirement |
+|---|---|
+| Endpoint protection | Route requires authenticated session/token unless explicitly public by design |
+| Token/session | Validated server-side; not trust client-only flags |
+| organizationId | Comes from backend/token/session; never chosen by frontend as authority |
+| Frontend ownership | Frontend must not decide organization ownership or tenant scope |
+| Role/permission | Enforced server-side on every mutating action |
+| Viewer role | Viewer cannot create/update/delete enterprise business data |
+| Mutations | POST/PATCH/DELETE protected with explicit permission checks |
+| Input validation | Payload schema validated; reject malformed or oversized input |
+| Cross-tenant | No query or mutation may return or modify another organization's data |
+| Error responses | No secrets, stack traces with credentials, or internal paths in client production errors |
+| Logs | No AUTH_SECRET, tokens, passwords, API keys, PII, or production DB dumps |
+| Audit events | State-changing enterprise actions preserve actor, organizationId, action, timestamp, safe metadata |
+| Environment files | Only `.env.example` for placeholders; never commit real `.env` values |
+
+## Role / Permission Rule
+
+Do not assume role names or permission strings from memory.
+
+Verify the current implementation in:
+
+- `backend/api/middlewares/auth.middleware.js`
+- `src/app/providers/AuthProvider.jsx` (for UI gating only; backend remains authoritative)
+
+If permission model is unclear, stop and escalate to human review.
+
+Status: Assumed / Pending C.13 validation for complete role matrix per module endpoint.
+
+## Multi-Tenant Rule
+
+Any business read, write, update, or delete must be scoped server-side by `organizationId`.
+
+Forbidden patterns:
+
+- Accepting `organizationId` from client body as authoritative without server validation
+- Using a global query without organization filter on tenant data tables
+- Returning list results from all organizations to admin without explicit super-admin design and audit
+
+## Auditability Rule
+
+State-changing enterprise actions should preserve:
+
+- actor (user id or system actor label)
+- organizationId
+- action type
+- timestamp
+- safe metadata (no secrets, no full payloads with PII unless required and approved)
+
+Examples: create deal, approve governance decision, export report, acknowledge bridge signal, update PMI case.
+
+Status: Assumed / Pending C.13 validation per module audit trail coverage.
+
+## Secrets and Sensitive Data Guard
+
+Never print, commit, generate, or expose:
+
+- AUTH_SECRET
+- session tokens
+- passwords
+- API keys
+- private URLs with credentials
+- production database contents
+- customer emails or personal data in logs
+- `.env` values
+
+## Stop Conditions
+
+Stop and report before changing code if:
+
+- organizationId source is unclear
+- permission model is unclear for the endpoint
+- viewer role may mutate data
+- endpoint may expose cross-tenant data
+- secrets may leak in logs or responses
+- production data may be copied into prompts or commits
+- auth/router/middleware changes are required without explicit authorization in task scope
+- migration may delete or rewrite tenant data without backup plan
+
+## Human Review Escalation
+
+Escalate when security impact is ambiguous:
+
+- new public endpoint
+- new export/share feature
+- permission reduction or expansion
+- cross-module auth change
+- audit log format change affecting compliance narrative
