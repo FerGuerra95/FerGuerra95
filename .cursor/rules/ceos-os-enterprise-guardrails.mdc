@@ -1,0 +1,460 @@
+---
+description: CEO's OS enterprise guardrails, logic integrity, anti-laziness, no legacy, no duplicate source-of-truth, test shielding, scope lock, multi-tenant gate
+globs:
+  - "**/*"
+alwaysApply: true
+---
+# CEO's OS / The Sovereign OS — Enterprise Guardrails
+This repository is an enterprise Decision Support System. Treat every change as potentially affecting security, multi-tenancy, calculations, legal positioning, product truthfulness and enterprise readiness.
+## Golden Rule — Logic Integrity
+Never consider a task complete only because:
+- the app compiles
+- tests pass
+- the screen renders
+- there is no visible NaN
+- there is no console error
+You must also verify:
+1. Business logic is correct.
+2. Calculations and formulas are understandable.
+3. The function/API/store/engine is current, not legacy.
+4. There are no duplicate sources of truth.
+5. Inputs, calculations and outputs are traceable.
+6. Tests validate expected results, not only render/happy path.
+7. Demo/fallback data cannot be mistaken for real enterprise data.
+8. Disclaimers are present for estimated/calculated outputs.
+9. The reasoning is explained like a tutor for future maintainers.
+## Scope Lock Rule
+Before making any change, explicitly identify:
+- files allowed to touch
+- files forbidden to touch
+- modules in scope
+- modules out of scope
+If a required change touches a forbidden file, stop and request explicit authorization.
+Never modify adjacent modules because they seem related.
+## Diff Risk Review
+After generating a diff, classify every changed file:
+- Safe documentation change
+- Low-risk isolated code change
+- Medium-risk shared logic change
+- High-risk auth/router/multi-tenant/calculation change
+High-risk changes require explicit approval before commit.
+## Source-of-Truth Lock
+Every business value must have one official source-of-truth.
+Before changing a calculation or data flow, identify whether the source-of-truth is:
+- backend
+- frontend engine
+- SQLite table
+- Golden Dataset
+- user input
+- demo seed
+- external document
+- localStorage draft
+If two sources disagree, mark P1 or P0 depending on impact.
+## Multi-tenant and Permission Gate
+Any business data access must be scoped server-side by organizationId.
+Frontend must never decide organization ownership.
+Verify:
+- organizationId is enforced server-side
+- role/permission is checked
+- viewer cannot mutate data
+- cross-tenant access is impossible
+- tests or documented gaps exist
+## Migration Safety Rule
+Never edit an already-applied migration unless explicitly approved.
+New schema changes require:
+- new versioned migration
+- affected table list
+- data risk note
+- backup/rollback awareness
+If a migration may delete or rewrite data, stop and request explicit approval.
+## Dependency and Version Awareness Rule
+Do not invent APIs.
+Before using a library API, framework pattern, helper, service, endpoint or engine:
+- verify it exists in the current project
+- verify it is already used successfully elsewhere
+- avoid deprecated APIs
+- avoid introducing new dependencies without approval
+- prefer existing project conventions
+## Secrets and Sensitive Data Guard
+Never print, commit, generate or expose:
+- AUTH_SECRET
+- tokens
+- passwords
+- API keys
+- private URLs with credentials
+- production DB contents
+- customer data
+- private emails
+- .env values
+Only use .env.example for non-secret placeholders.
+## Feature Flag / Demo Mode Guard
+Any demo, fallback, seed, mock, localStorage recovery or marketplace-like flow must be explicitly gated or labelled.
+Verify:
+- demo data is labelled
+- fallback data cannot be mistaken as real
+- production does not rely on demo-only flows
+- marketplace remains hidden/unlisted
+- premium AI features remain disabled unless explicitly opened
+## Observability / Auditability Rule
+Every enterprise state-changing action should preserve auditability:
+- actor
+- organizationId
+- action
+- timestamp
+- safe metadata
+Do not log secrets.
+## Golden Rule — No Legacy / No Duplicates
+Before creating or modifying any function, service, endpoint, component, store or helper, check for:
+- existing equivalent functionality
+- old wrappers
+- legacy APIs
+- localStorage stores
+- duplicate frontend/backend calculations
+- dead pages
+- endpoints not consumed
+- placeholder tests
+- demo data or DEFAULT/MOCK/stub values
+Do not create a new abstraction if an existing current one should be used.
+## Anti-Laziness Rule
+Never use placeholders such as:
+- // ... existing code ...
+- /* rest of function */
+- // unchanged
+- // same as before
+- TODO: keep existing logic
+- omitted for brevity
+When modifying code, output the complete function, complete block, or complete file section required for Cursor to apply the change safely.
+If the change is too large, stop and propose a smaller atomic patch instead of using placeholders.
+Never replace existing logic with placeholders.
+Never delete unknown logic because it was omitted from the response.
+## Structured Verification Rule
+Before outputting any report, table, audit result, or code modification, provide a concise visible verification block called:
+PRE-FLIGHT CHECKLIST
+It must include:
+- task scope
+- files allowed to touch
+- files forbidden to touch
+- source-of-truth checked
+- golden dataset requirement
+- legacy/duplicate check
+- test oracle check
+- stop conditions checked
+- why this approach is safe
+Do not expose private chain-of-thought.
+Provide only a concise reasoning summary and verification checklist.
+## Golden Rule — Product Truthfulness
+Always identify whether a value displayed in the product is:
+- real persisted data
+- calculated data
+- backend-derived data
+- frontend-derived data
+- demo data
+- fallback data
+- localStorage draft
+- seeded data
+- placeholder/mock data
+Do not let demo/fallback values appear as real enterprise outputs.
+## Test Shielding / Oracle Protection
+If a calculation fails an existing test or mismatches the Golden Dataset, you are strictly forbidden from modifying:
+- test expectations
+- test fixtures
+- Golden Dataset parameters
+- expected outputs
+- tolerances
+- snapshot baselines
+to make the test pass.
+You must instead:
+1. Fix the underlying business logic, or
+2. Prove that the Golden Dataset/test is wrong with manual calculation, or
+3. Trigger a Stop Condition and request human review.
+Any change to tests or Golden Datasets must be treated as a separate explicit task and must include:
+- reason for change
+- manual calculation
+- business justification
+- before/after expected output
+- reviewer note
+## Advanced Stability & Execution Guardrails
+### Infinite Loop Circuit Breaker
+If you fail to resolve a bug, lint error, compile failure, test failure, Golden Dataset mismatch, or runtime issue after 3 consecutive attempts, you MUST immediately stop.
+Do not attempt a 4th modification.
+When this circuit breaker triggers, report:
+- exact command executed
+- exact error log
+- the 3 attempted fixes
+- the 3 hypotheses tested
+- what each attempt changed
+- what each attempt proved or disproved
+- current repo status
+- files modified during the attempts
+- safest recommended next action
+Do not keep patching blindly.
+This rule exists to prevent AI drift, accidental rewrites, and cascading regressions.
+### Strict Type Lock / Zero-Bypass Policy
+Do not introduce weak typing or compiler bypasses.
+If touching or creating TypeScript / TSX files, you are strictly forbidden from introducing:
+- any
+- unnecessary unknown
+- // @ts-ignore
+- // @ts-expect-error without explicit written justification
+- broad object types when precise domain types are possible
+- unsafe casts to silence compiler errors
+Every parameter, return value and domain object must be typed precisely according to the project model.
+If the repository area is JS/JSX, do not simulate type safety by weakening validation, removing guards, accepting arbitrary object shapes, or bypassing runtime checks.
+For JS/JSX files, preserve or improve:
+- input validation
+- null guards
+- permission guards
+- organizationId guards
+- expected object shape checks
+- defensive parsing
+- safe fallbacks with explicit labelling
+Never convert a file to TypeScript or introduce new type tooling unless explicitly requested.
+If precise typing requires a wider refactor, stop and report instead of using a weak type or bypass.
+### Lint & Style Alignment
+All generated code must follow the existing repository style.
+Before modifying code, inspect nearby files and mimic:
+- import ordering
+- quote style
+- semicolon usage
+- spacing
+- component structure
+- helper naming
+- error handling style
+- test style
+- existing formatting conventions
+Do not introduce formatting that would fail ESLint, Prettier, Vitest, Playwright, build, or pre-commit hooks.
+Do not add a new formatter, linter, dependency, config or style rule unless explicitly requested.
+If unsure, preserve the local style of the file being edited.
+### Regression Shield & Idempotency
+Do not refactor, simplify, rename, reorganize, or clean up working historical code outside the explicit task scope.
+Elegance is secondary to proven stability.
+If code is working and verified by the current baseline, leave it intact unless the task explicitly asks for refactor or optimization.
+Any change must be:
+- minimal
+- scoped
+- reversible
+- explainable
+- idempotent where applicable
+- isolated to the approved files
+Do not modify adjacent modules just because they look related.
+Do not change public contracts, route names, API response shapes, storage keys, CSS selectors, migration behavior, or test oracles unless explicitly authorized.
+If the same prompt is run twice, it should not duplicate rules, duplicate files, duplicate sections, duplicate data, or create inconsistent state.
+Before creating a file or section, check whether it already exists.
+If it exists, update only the missing section.
+If the exact rule already exists, do not duplicate it.
+Report whether each file was:
+- created
+- updated
+- unchanged because already compliant
+- skipped because of a stop condition
+### Three-Layer Validation Rule
+For any non-documentation change, validation must cover three layers where applicable:
+1. Static validation:
+   - lint
+   - type safety where relevant
+   - build
+2. Logic validation:
+   - expected input
+   - expected output
+   - Golden Dataset if applicable
+   - source-of-truth confirmation
+3. Product validation:
+   - UI does not misrepresent demo/fallback as real
+   - permissions are respected
+   - organizationId is respected
+   - disclaimer remains correct
+   - no user-facing regression
+A task is not closed if only one layer passes.
+### No Silent Fallback Rule
+Do not hide failures behind silent fallbacks.
+A fallback is allowed only if:
+- it is already part of the project pattern, or explicitly requested
+- it is labelled as demo/fallback/estimated where user-facing
+- it does not override real persisted data
+- it does not hide API failures that should be visible
+- it does not contaminate executive reports, board packs, scores or calculations
+If a fallback is used for resilience, document:
+- why it exists
+- when it triggers
+- what data it returns
+- whether it is safe in production
+- whether it affects pilot readiness
+### No Test Weakening Rule
+Do not weaken tests to make a change pass.
+Forbidden actions unless explicitly requested as a separate test-maintenance task:
+- deleting assertions
+- reducing expected values
+- widening tolerances
+- replacing business assertions with smoke checks
+- skipping tests
+- using .only
+- using .skip
+- changing Golden Dataset expected outputs
+- changing fixtures to match broken logic
+- replacing deterministic tests with vague snapshots
+If a test fails because the test is genuinely wrong, stop and provide:
+- manual calculation
+- business explanation
+- before/after expected values
+- why the old test was wrong
+- reviewer note required
+### Current Function Verification Rule
+Before using any function, service, hook, endpoint, route, store, engine, helper or config, verify it is the current active implementation.
+Search for:
+- duplicate names
+- old wrappers
+- deprecated versions
+- unused files
+- old localStorage stores
+- dead routes
+- old demo helpers
+- frontend/backend duplicate logic
+- current imports
+- tests referencing it
+Do not build on a legacy implementation unless the task is specifically to audit or remove it.
+If current vs legacy cannot be determined, stop and report the ambiguity.
+### Repeatable Execution Rule
+All instructions must be safe to re-run.
+Before writing files:
+- create folders only if missing
+- create files only if missing, unless the prompt explicitly says replace
+- avoid duplicate markdown sections
+- avoid duplicate JSON keys
+- avoid duplicate Cursor rules
+- avoid duplicate examples
+- avoid duplicated checklist blocks
+If the same rule already exists with equivalent meaning, do not add a second version.
+Report whether each file was:
+- created
+- updated
+- unchanged because already compliant
+- skipped because of a stop condition
+### Human Review Escalation Rule
+Escalate to human review instead of guessing when there is ambiguity in:
+- legal positioning
+- financial logic
+- investment language
+- fairness opinion risk
+- compliance certification language
+- multi-tenant ownership
+- permissions
+- source-of-truth
+- Golden Dataset mismatch
+- destructive migration
+- production data exposure
+- security-sensitive behavior
+When escalating, provide:
+- exact ambiguity
+- files involved
+- business risk
+- safest options
+- recommended next action
+## Product Positioning
+CEO’s OS is:
+- DSS / decision-support
+- human-reviewed
+- enterprise intelligence workspace
+- not autonomous decision-making
+CEO’s OS is not:
+- legal advice
+- investment advice
+- financial advisory
+- fairness opinion
+- certified compliance audit
+- certified governance system
+- guarantee of synergies
+- private deal marketplace
+## Protected Areas
+Do not touch unless explicitly requested:
+- AppShell
+- Topbar
+- Sidebar
+- router
+- auth
+- workspaceConfig
+- routeConfig
+- shellMeta
+- workspaceAccent.css
+- executivePolish.css
+- audited branches outside the current task
+- /bridge/marketplace
+- backend-server.err
+## Audited Branches — Freeze by Default
+These branches have been audited/documented and should remain frozen unless explicitly targeted:
+- Executive Overview
+- M&A
+- Compliance
+- Funding
+- Governance
+- PMI
+- Bridge
+If a change touches any audited branch indirectly, report it before proceeding.
+## Git Discipline
+- Never use git add .
+- Stage only requested files.
+- Keep commits atomic.
+- Do not push unless explicitly authorized.
+- Never include backend-server.err.
+- Report git status before and after.
+## Required Explanation
+For every proposed change, explain:
+- why it is needed
+- what risk it reduces
+- what alternative was avoided
+- what source-of-truth is used
+- how QA should validate it
+- what future maintainers must know
+## Chat Refresh Tripwire / Handoff Protocol
+This is a long-running enterprise project with heavy context. To reduce context degradation, stale assumptions and AI drift, trigger a Chat Reset Warning:
+1. Immediately after completing any phase or subphase.
+2. If the chat exceeds approximately 7 major interaction turns since the last handoff.
+3. If a commit/push closes a phase.
+4. If logic integrity, security, multi-tenant, Golden Dataset or product truthfulness decisions were made.
+When triggered, print:
+CONTEXT SATURATION WARNING:
+Please copy the HANDOFF_STATE below, open a NEW CHAT session, and paste it to resume with maximum continuity and reduced context risk.
+Before the warning, generate:
+# HANDOFF_STATE
+It must include:
+- Current Phase/Subphase
+- Last File Audited
+- Verified Baseline Commit/HEAD
+- Working Tree Status
+- Summary of Discoveries/Bugs, max 3 bullets
+- Decisions Made
+- Exact Next Step
+- Files Allowed To Touch Next
+- Files Forbidden To Touch Next
+- Active Stop Conditions or Blocks
+- Pending Commit / Push Status
+- Recommended Prompt To Run Next
+Do not rely on memory alone across long sessions.
+## Final Tutor Summary
+At the end of every audit or change, explain:
+- what was checked
+- what was changed
+- why it was done this way
+- what risk it reduces
+- what was not touched
+- what QA should validate
+- what future maintainers must know
+- whether this is demo-ready, pilot-ready or still partial
+## Stop Conditions
+Stop and report before changing code if you find:
+- critical calculation without source
+- frontend/backend duplicate calculation with different logic
+- legacy function used as source-of-truth
+- demo/fallback contaminating real output
+- placeholder test pretending to validate logic
+- cross-tenant risk
+- permissions ambiguity
+- output presented as certified/legal/financial advice
+- Golden Dataset mismatch
+- CSS/global layout risk
+- attempt to modify tests/Golden Dataset to hide a business logic failure
+- migration destructive risk
+- secret exposure risk
+- more than 3 failed attempts to fix the same issue
+- need to touch forbidden files
+- unexpected git baseline
+- unexpected working tree changes

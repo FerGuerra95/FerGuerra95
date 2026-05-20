@@ -1,0 +1,333 @@
+{
+  "schemaVersion": "1.0.0",
+  "project": "CEO's OS / The Sovereign OS",
+  "purpose": "Golden datasets for calculation integrity, test oracle validation and AI safety.",
+  "status": "baseline_seed",
+  "updatedAt": "2026-05-20",
+  "importantNotice": "These datasets are not production data. They are manually resolved calculation anchors used to verify business logic. If code output differs from expected values beyond tolerance, trigger Stop Condition.",
+  "globalRules": {
+    "currency": "EUR",
+    "percentages": "Use decimal representation in calculations unless expected output explicitly says percentage points.",
+    "rounding": "Round only at presentation layer unless the dataset defines a rounded expected output.",
+    "toleranceDefault": 0.000001,
+    "humanReviewRequired": true,
+    "notAdvice": [
+      "not legal advice",
+      "not financial advice",
+      "not investment advice",
+      "not certified compliance audit",
+      "not fairness opinion",
+      "not autonomous decision-making"
+    ]
+  },
+  "datasets": {
+    "ma_valuation_ebitda_multiple_basic": {
+      "module": "ma",
+      "calculation": "enterprise_value_from_ebitda_multiple",
+      "description": "Simple EBITDA multiple valuation manually resolved.",
+      "inputs": {
+        "ebitda": 2000000,
+        "multiple": 7
+      },
+      "expected": {
+        "enterpriseValue": 14000000
+      },
+      "formula": "enterpriseValue = ebitda * multiple",
+      "manualCalculation": "2,000,000 * 7 = 14,000,000",
+      "tolerance": 0,
+      "edgeCase": false,
+      "riskIfMismatch": "M&A valuation output could be materially wrong.",
+      "disclaimer": "Indicative DSS valuation only. Not a fairness opinion."
+    },
+    "ma_valuation_equity_value_basic": {
+      "module": "ma",
+      "calculation": "equity_value_from_enterprise_value_net_debt",
+      "description": "Equity value after subtracting net debt from enterprise value.",
+      "inputs": {
+        "enterpriseValue": 14000000,
+        "cash": 500000,
+        "debt": 2500000
+      },
+      "expected": {
+        "netDebt": 2000000,
+        "equityValue": 12000000
+      },
+      "formula": "netDebt = debt - cash; equityValue = enterpriseValue - netDebt",
+      "manualCalculation": "netDebt = 2,500,000 - 500,000 = 2,000,000; equityValue = 14,000,000 - 2,000,000 = 12,000,000",
+      "tolerance": 0,
+      "edgeCase": false,
+      "riskIfMismatch": "Closing structure and valuation bridge could be wrong.",
+      "disclaimer": "Indicative DSS calculation only."
+    },
+    "ma_waterfall_simple_distribution": {
+      "module": "ma",
+      "calculation": "simple_waterfall_distribution",
+      "description": "Simple proceeds distribution after transaction costs and debt repayment.",
+      "inputs": {
+        "grossProceeds": 12000000,
+        "transactionCosts": 300000,
+        "debtRepayment": 2000000,
+        "sellerRollover": 1000000
+      },
+      "expected": {
+        "netCashToSeller": 8700000
+      },
+      "formula": "netCashToSeller = grossProceeds - transactionCosts - debtRepayment - sellerRollover",
+      "manualCalculation": "12,000,000 - 300,000 - 2,000,000 - 1,000,000 = 8,700,000",
+      "tolerance": 0,
+      "edgeCase": false,
+      "riskIfMismatch": "Seller proceeds could be overstated or understated.",
+      "disclaimer": "Indicative DSS waterfall only."
+    },
+    "funding_runway_basic": {
+      "module": "funding",
+      "calculation": "runway_months",
+      "description": "Basic runway calculation.",
+      "inputs": {
+        "cashBalance": 1000000,
+        "monthlyBurn": 100000
+      },
+      "expected": {
+        "runwayMonths": 10
+      },
+      "formula": "runwayMonths = cashBalance / monthlyBurn",
+      "manualCalculation": "1,000,000 / 100,000 = 10",
+      "tolerance": 0,
+      "edgeCase": false,
+      "riskIfMismatch": "Funding runway could mislead capital planning.",
+      "disclaimer": "Planning estimate only. Not investment advice."
+    },
+    "funding_runway_zero_burn": {
+      "module": "funding",
+      "calculation": "runway_months_zero_burn",
+      "description": "Edge case: zero burn should not produce Infinity in UI.",
+      "inputs": {
+        "cashBalance": 1000000,
+        "monthlyBurn": 0
+      },
+      "expected": {
+        "runwayMonths": null,
+        "presentation": "No burn / runway not meaningful",
+        "mustNotDisplay": [
+          "Infinity",
+          "NaN"
+        ]
+      },
+      "formula": "If monthlyBurn <= 0, runwayMonths must be null/not meaningful.",
+      "manualCalculation": "Division by zero is not a valid runway. UI must not display Infinity.",
+      "tolerance": 0,
+      "edgeCase": true,
+      "riskIfMismatch": "UI could show Infinity/NaN or misleading runway.",
+      "disclaimer": "Planning estimate only."
+    },
+    "funding_post_money_and_dilution_basic": {
+      "module": "funding",
+      "calculation": "post_money_and_investor_ownership",
+      "description": "Basic post-money and new investor ownership.",
+      "inputs": {
+        "preMoneyValuation": 8000000,
+        "newInvestment": 2000000
+      },
+      "expected": {
+        "postMoneyValuation": 10000000,
+        "newInvestorOwnershipDecimal": 0.2,
+        "newInvestorOwnershipPercent": 20,
+        "existingHolderOwnershipAfterRoundDecimal": 0.8,
+        "existingHolderOwnershipAfterRoundPercent": 80
+      },
+      "formula": "postMoney = preMoney + newInvestment; investorOwnership = newInvestment / postMoney",
+      "manualCalculation": "postMoney = 8,000,000 + 2,000,000 = 10,000,000; investorOwnership = 2,000,000 / 10,000,000 = 0.2 = 20%",
+      "tolerance": 0.000001,
+      "edgeCase": false,
+      "riskIfMismatch": "Dilution and ownership reporting could be materially wrong.",
+      "disclaimer": "Planning estimate only. Not investment advice."
+    },
+    "compliance_weighted_risk_score_basic": {
+      "module": "compliance",
+      "calculation": "weighted_supplier_risk_score",
+      "description": "Simple weighted supplier risk score using three dimensions.",
+      "inputs": {
+        "financialRisk": 70,
+        "jurisdictionRisk": 80,
+        "evidenceRisk": 40,
+        "weights": {
+          "financialRisk": 0.4,
+          "jurisdictionRisk": 0.4,
+          "evidenceRisk": 0.2
+        }
+      },
+      "expected": {
+        "weightedRiskScore": 68
+      },
+      "formula": "score = financialRisk*0.4 + jurisdictionRisk*0.4 + evidenceRisk*0.2",
+      "manualCalculation": "70*0.4 + 80*0.4 + 40*0.2 = 28 + 32 + 8 = 68",
+      "tolerance": 0.000001,
+      "edgeCase": false,
+      "riskIfMismatch": "Supplier risk prioritization could be wrong.",
+      "disclaimer": "DSS risk indicator only. Not legal/compliance certification."
+    },
+    "compliance_resilience_score_basic": {
+      "module": "compliance",
+      "calculation": "resilience_score",
+      "description": "Simple resilience score inverse to risk with mitigation bonus.",
+      "inputs": {
+        "riskScore": 68,
+        "mitigationBonus": 8
+      },
+      "expected": {
+        "resilienceScore": 40
+      },
+      "formula": "resilienceScore = clamp(100 - riskScore + mitigationBonus, 0, 100)",
+      "manualCalculation": "100 - 68 + 8 = 40",
+      "tolerance": 0,
+      "edgeCase": false,
+      "riskIfMismatch": "Resilience and supplier status could be overstated.",
+      "disclaimer": "DSS resilience indicator only."
+    },
+    "pmi_synergy_capture_rate_basic": {
+      "module": "pmi",
+      "calculation": "synergy_capture_rate",
+      "description": "Captured synergy as percentage of forecast synergy.",
+      "inputs": {
+        "forecastSynergies": 5000000,
+        "capturedSynergies": 1500000
+      },
+      "expected": {
+        "captureRateDecimal": 0.3,
+        "captureRatePercent": 30
+      },
+      "formula": "captureRate = capturedSynergies / forecastSynergies",
+      "manualCalculation": "1,500,000 / 5,000,000 = 0.3 = 30%",
+      "tolerance": 0.000001,
+      "edgeCase": false,
+      "riskIfMismatch": "PMI may overstate synergy execution.",
+      "disclaimer": "DSS tracking metric only. Not guarantee of synergy capture."
+    },
+    "pmi_synergy_zero_forecast": {
+      "module": "pmi",
+      "calculation": "synergy_capture_rate_zero_forecast",
+      "description": "Edge case: zero forecast should not produce Infinity or NaN.",
+      "inputs": {
+        "forecastSynergies": 0,
+        "capturedSynergies": 100000
+      },
+      "expected": {
+        "captureRateDecimal": null,
+        "presentation": "No forecast baseline",
+        "mustNotDisplay": [
+          "Infinity",
+          "NaN"
+        ]
+      },
+      "formula": "If forecastSynergies <= 0, captureRate must be null/not meaningful.",
+      "manualCalculation": "Division by zero is not valid.",
+      "tolerance": 0,
+      "edgeCase": true,
+      "riskIfMismatch": "UI could show invalid PMI execution metric.",
+      "disclaimer": "DSS tracking metric only."
+    },
+    "bridge_priority_score_basic": {
+      "module": "bridge",
+      "calculation": "priority_score",
+      "description": "Simple bridge priority score based on impact, urgency and confidence.",
+      "inputs": {
+        "impact": 80,
+        "urgency": 70,
+        "confidence": 60,
+        "weights": {
+          "impact": 0.5,
+          "urgency": 0.3,
+          "confidence": 0.2
+        }
+      },
+      "expected": {
+        "priorityScore": 73
+      },
+      "formula": "priorityScore = impact*0.5 + urgency*0.3 + confidence*0.2",
+      "manualCalculation": "80*0.5 + 70*0.3 + 60*0.2 = 40 + 21 + 12 = 73",
+      "tolerance": 0.000001,
+      "edgeCase": false,
+      "riskIfMismatch": "Bridge priority signals could mis-rank executive attention.",
+      "disclaimer": "DSS signal priority only. Human review required."
+    },
+    "risk_score_likelihood_impact_basic": {
+      "module": "risk",
+      "calculation": "risk_score_likelihood_impact",
+      "description": "Basic risk score from likelihood and impact on 1-5 scale.",
+      "inputs": {
+        "likelihood": 4,
+        "impact": 5
+      },
+      "expected": {
+        "riskScore": 20,
+        "severity": "critical"
+      },
+      "formula": "riskScore = likelihood * impact",
+      "manualCalculation": "4 * 5 = 20",
+      "tolerance": 0,
+      "edgeCase": false,
+      "severityScale": {
+        "low": "1-5",
+        "medium": "6-10",
+        "high": "11-15",
+        "critical": "16-25"
+      },
+      "riskIfMismatch": "Risk prioritization and heatmap could be wrong.",
+      "disclaimer": "DSS risk indicator only. Not insurance underwriting."
+    },
+    "reporting_kpi_variance_basic": {
+      "module": "reporting",
+      "calculation": "budget_variance_percent",
+      "description": "Variance between actual and budget.",
+      "inputs": {
+        "actual": 1100000,
+        "budget": 1000000
+      },
+      "expected": {
+        "varianceAmount": 100000,
+        "variancePercent": 10
+      },
+      "formula": "varianceAmount = actual - budget; variancePercent = varianceAmount / budget * 100",
+      "manualCalculation": "1,100,000 - 1,000,000 = 100,000; 100,000 / 1,000,000 * 100 = 10%",
+      "tolerance": 0.000001,
+      "edgeCase": false,
+      "riskIfMismatch": "Reporting KPIs could mislead board packs.",
+      "disclaimer": "Management reporting metric only."
+    },
+    "executive_module_health_average_basic": {
+      "module": "executive_overview",
+      "calculation": "module_health_average",
+      "description": "Average health across five module scores.",
+      "inputs": {
+        "moduleScores": {
+          "ma": 80,
+          "compliance": 70,
+          "funding": 60,
+          "pmi": 90,
+          "governance": 75
+        }
+      },
+      "expected": {
+        "averageHealth": 75
+      },
+      "formula": "averageHealth = sum(moduleScores) / count(moduleScores)",
+      "manualCalculation": "(80 + 70 + 60 + 90 + 75) / 5 = 375 / 5 = 75",
+      "tolerance": 0,
+      "edgeCase": false,
+      "riskIfMismatch": "Executive dashboard may misstate portfolio readiness.",
+      "disclaimer": "DSS executive signal only."
+    }
+  },
+  "futureDatasetsRequired": [
+    "ma_buyer_matching_score",
+    "ma_complex_waterfall_with_preferences",
+    "funding_liquidation_preference_future_phase_j",
+    "compliance_jurisdiction_exposure",
+    "pmi_integration_health",
+    "bridge_recalculate_cross_module_signal",
+    "risk_control_effectiveness",
+    "strategy_initiative_priority",
+    "heritage_continuity_readiness",
+    "reporting_board_pack_kpi_rollup"
+  ]
+}

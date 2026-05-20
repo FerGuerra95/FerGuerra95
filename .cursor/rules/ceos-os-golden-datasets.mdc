@@ -1,0 +1,78 @@
+---
+description: CEO's OS Golden Dataset rules for calculation integrity, test oracle validation and oracle protection
+globs:
+  - "src/modules/**/*.js"
+  - "src/modules/**/*.jsx"
+  - "backend/**/*.js"
+  - "tests/**/*.js"
+  - "tests/**/*.jsx"
+  - "docs/testing/**/*.json"
+alwaysApply: true
+---
+# CEO's OS — Golden Dataset Rule
+Critical calculations must be anchored to Golden Datasets.
+Default location:
+docs/testing/golden_inputs.json
+A calculation without a Golden Dataset is not pilot-ready.
+## Applies To
+For every:
+- M&A valuation
+- M&A waterfall
+- buyer matching score
+- risk score
+- compliance score
+- resilience score
+- funding runway
+- dilution
+- post-money valuation
+- investor readiness
+- PMI synergy forecast
+- PMI captured synergies
+- integration health
+- Bridge priority
+- Bridge recalculate signal
+- Risk heatmap
+- Reporting KPI
+- Executive Overview readiness radar
+- board pack metric
+you must:
+1. Check whether a Golden Dataset exists.
+2. Compare actual frontend output to expected output.
+3. Compare actual backend output to expected output.
+4. Verify tolerance.
+5. Document mismatch.
+6. Stop if mismatch affects business truthfulness.
+7. Mark missing Golden Dataset as P1 before pilot readiness.
+## Test Validity
+A test is not sufficient if it only checks:
+- render
+- smoke
+- happy path
+- no crash
+- no NaN
+- snapshot
+A valid calculation test must check expected business output.
+## Oracle Protection
+If code output mismatches a Golden Dataset, do not modify the Golden Dataset, test expectations, fixtures, tolerances or snapshots to make the code pass.
+First fix business logic.
+Only modify a Golden Dataset/test oracle in a separate explicit task with:
+- manual calculation
+- business justification
+- reviewer note
+- before/after expected values
+## Required Table
+When auditing calculations, produce this table:
+| Calculation | Golden Dataset ID | Inputs | Expected | Actual frontend | Actual backend | Match | Risk | Action |
+|---|---|---|---|---|---|---|---|---|
+## Stop Condition
+If actual output differs from expected output beyond tolerance, stop and report:
+- calculation affected
+- file/function responsible
+- input used
+- output obtained
+- expected output
+- difference
+- possible cause
+- business risk
+- recommended fix
+Do not continue and do not mark the phase as closed until the mismatch is resolved or formally documented.
