@@ -1426,18 +1426,20 @@ No abrir nuevas funcionalidades premium ni tocar CSS global hasta completar:
 
 | Subfase | Rama | Estado | Objetivo |
 |---|---|---|---|
-| C.1 | Executive Overview | Cerrada | Demo hub DSS / human review |
-| C.2 | M&A | Cerrada | M&A Intelligence / DSS, demo-ready sin P0 |
-| C.3 | Compliance | Pendiente | Auditar suppliers, evidence, reviews, reports, alerts |
-| C.4 | Funding | Pendiente | Auditar rounds, scenarios, data room, readiness, bridge |
-| C.5 | Governance | Pendiente | Auditar decisions, board packs, audit trail |
-| C.6 | PMI | Cerrada | PMI Execution / DSS, demo-ready sin P0 |
-| C.7 | Bridge | Cerrada | Cross-Module Intelligence / DSS, demo-ready sin P0; marketplace congelado |
-| C.8 | Risk | Pendiente | Auditar register, scoring, filters, reports |
-| C.9 | Reporting | Pendiente | Auditar library, templates, board pack, exports |
-| C.10 | Strategy | Pendiente | Auditar objectives, initiatives, roadmap |
-| C.11 | Heritage | Pendiente | Auditar continuity, assets, succession, governance familiar |
+| C.1 | Executive Overview | Cerrada funcional | Demo hub DSS / human review |
+| C.2 | M&A | Cerrada funcional | M&A Intelligence / DSS, demo-ready sin P0 |
+| C.3 | Compliance | Cerrada funcional | Third-Party Risk / Compliance Intelligence DSS |
+| C.4 | Funding | Cerrada funcional | Funding Command Center / bridge snapshots |
+| C.5 | Governance | Cerrada funcional | Governance workflow, board packs, audit trail |
+| C.6 | PMI | Cerrada funcional | PMI Execution / DSS, demo-ready sin P0 |
+| C.7 | Bridge | Cerrada funcional | Cross-Module Intelligence / DSS; marketplace congelado A.1.5 |
+| C.8 | Risk | Pendiente | Auditar register, scoring, filters, reports (Prompt Maestro nuevo) |
+| C.9 | Reporting | Pendiente | Auditar library, templates, board pack, exports (Prompt Maestro nuevo) |
+| C.10 | Strategy | Pendiente | Auditar objectives, initiatives, roadmap (Prompt Maestro nuevo) |
+| C.11 | Heritage | Pendiente | Auditar continuity, assets, succession, governance familiar (Prompt Maestro nuevo) |
 | C.12 | Informe global | Pendiente | Matriz real / parcial / visual / vendible / enterprise-ready |
+| C.13 | Logic Integrity C.1–C.7 | Pendiente | Reauditoría Logic Integrity / No Legacy / No Duplicidades |
+| C.14 | Informe Logic Integrity global | Pendiente | Consolidar hallazgos legacy, duplicidades, source-of-truth |
 
 **Por cada rama documentar:**
 
@@ -1453,6 +1455,185 @@ No abrir nuevas funcionalidades premium ni tocar CSS global hasta completar:
 - venta readiness
 - enterprise readiness
 - P0/P1/P2/P3
+
+---
+
+## Actualización de Fase C — Reauditoría Logic Integrity de ramas C.1–C.7
+
+**Fecha:** 20 mayo 2026
+
+**Estado:** Roadmap actualizado.
+
+### Decisión
+
+Las ramas C.1–C.7 ya fueron auditadas funcionalmente y documentadas, pero deberán pasar una segunda revisión con el nuevo Prompt Maestro de Logic Integrity / No Legacy / No Duplicidades.
+
+Esta reauditoría no invalida las auditorías anteriores.
+
+Las auditorías C.1–C.7 siguen cerradas como auditorías funcionales.
+
+La nueva revisión añade una capa superior de control:
+
+- integridad lógica
+- cálculo correcto
+- source-of-truth
+- funciones actuales
+- eliminación o documentación de duplicidades
+- trazabilidad input → cálculo → output
+- tests con resultado esperado
+- documentación técnica tipo tutor
+
+### Motivo
+
+El proyecto contiene muchas ramas con cálculos, scoring, engines, bridges, reports y señales ejecutivas.
+
+No basta con validar que:
+
+- la ruta carga
+- el test pasa
+- no hay NaN visible
+- la pantalla se ve bien
+
+También hay que validar que:
+
+- la lógica de negocio tiene sentido
+- los cálculos son correctos
+- la función usada sigue vigente
+- no hay funciones antiguas contaminando outputs
+- no hay dos fuentes de verdad
+- los tests prueban resultados esperados
+- los datos demo/fallback no se confunden con datos reales
+
+### Evidencias ya detectadas
+
+**PMI:**
+
+- `mergeWithDemo()` fusiona siempre `DEMO_PMI_CASE` con datos guardados.
+- Esto exige revisión de truthfulness antes de piloto.
+
+**Bridge:**
+
+- Las señales recalculadas son heurísticas.
+- Marketplace está congelado y no debe venderse ni promocionarse.
+- Hay doble API Bridge: enterprise bridge y ecosystem marketplace.
+
+**Funding:**
+
+- Inputs/scenarios viven en localStorage, mientras rounds/summary viven en backend.
+
+**Compliance:**
+
+- Scores cliente pueden divergir de `riskScore` persistido.
+
+**Governance:**
+
+- Backend real fuerte, pero algunos workflows/UI/permisos requieren validación más profunda.
+
+**M&A:**
+
+- Valuation, waterfall, matching y scoring requieren source-of-truth y test oracle.
+
+**Executive Overview:**
+
+- Radar, board packs y signals requieren verificación de fuentes reales vs fallback.
+
+### Nuevo orden de Fase C
+
+| Fase | Estado | Descripción |
+|---|---|---|
+| C.1 | Cerrada funcional | Executive Overview |
+| C.2 | Cerrada funcional | M&A |
+| C.3 | Cerrada funcional | Compliance |
+| C.4 | Cerrada funcional | Funding |
+| C.5 | Cerrada funcional | Governance |
+| C.6 | Cerrada funcional | PMI |
+| C.7 | Cerrada funcional | Bridge |
+| C.8 | Pendiente | Risk con Prompt Maestro nuevo |
+| C.9 | Pendiente | Reporting con Prompt Maestro nuevo |
+| C.10 | Pendiente | Strategy con Prompt Maestro nuevo |
+| C.11 | Pendiente | Heritage con Prompt Maestro nuevo |
+| C.12 | Pendiente | Informe global funcional real/parcial/visual/vendible |
+| C.13 | Pendiente | Reauditoría Logic Integrity de C.1–C.7 |
+| C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
+
+### Subfases C.13
+
+| Subfase | Rama | Objetivo |
+|---|---|---|
+| C.13.1 | Executive Overview | Radar, module health, board packs, signals, fallbacks |
+| C.13.2 | M&A | Valuation, waterfall, matching, scoring, reports |
+| C.13.3 | Compliance | Risk score, resilience, jurisdiction exposure, evidence pack |
+| C.13.4 | Funding | Runway, dilution, post-money, scenarios, readiness |
+| C.13.5 | Governance | Decision workflow, readiness, board packs, audit trail |
+| C.13.6 | PMI | Synergies, milestones, dependencies, mergeWithDemo, dual model |
+| C.13.7 | Bridge | Recalculate engine, signals, dependencies, marketplace boundary |
+| C.13.8 | Transversal | Duplicidades, legacy, source-of-truth, golden datasets |
+
+### C.13 debe revisar
+
+Para cada rama ya auditada:
+
+- cálculos visibles
+- fórmulas
+- engines
+- inputs
+- outputs
+- funciones actuales
+- funciones legacy
+- helpers duplicados
+- frontend vs backend source-of-truth
+- demo/fallback
+- tests placeholder
+- tests con expected results
+- documentación técnica
+- disclaimers
+- explicación tutor
+
+### Tabla obligatoria C.13
+
+Cada subfase C.13 debe entregar:
+
+| Métrica / función | Archivo | Inputs | Output | Fórmula / lógica | Source-of-truth | Frontend/backend | Test real | Legacy/duplicado | Riesgo | Explicación tutor |
+|---|---|---|---|---|---|---|---|---|---|---|
+
+### Stop conditions
+
+La subfase debe parar y reportar si detecta:
+
+- cálculo crítico incorrecto
+- función obsoleta usada como source-of-truth
+- dos fuentes de verdad contradictorias
+- demo/fallback contaminando output real
+- test que pasa pero valida la función equivocada
+- score visible sin fuente
+- output vendible sin disclaimer
+- duplicidad crítica entre frontend y backend
+
+### Criterio pilot-ready actualizado
+
+CEO's OS no se considera pilot-ready hasta cerrar:
+
+1. C.8–C.11
+2. C.12 Informe global funcional
+3. C.13 Reauditoría Logic Integrity C.1–C.7
+4. C.14 Informe final Logic Integrity / Legacy / Duplicidades
+
+Después de eso se podrá pasar a:
+
+- D Datos demo enterprise reales
+- E Product truthfulness
+- F Security / multi-tenant
+- G QA enterprise
+- H Legal / AI governance
+- I Pilot packaging
+
+### Decisión
+
+A partir de C.8, todos los prompts usarán el Prompt Maestro.
+
+Las ramas C.1–C.7 no se reabren funcionalmente salvo P0/P1 real.
+
+Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 
 ---
 
