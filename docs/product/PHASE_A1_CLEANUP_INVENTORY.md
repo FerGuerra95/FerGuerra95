@@ -1553,7 +1553,8 @@ También hay que validar que:
 | C.10 | Pendiente | Strategy con Prompt Maestro nuevo |
 | C.11 | Pendiente | Heritage con Prompt Maestro nuevo |
 | C.12 | Pendiente | Informe global funcional real/parcial/visual/vendible |
-| C.13 | Pendiente | Reauditoría Logic Integrity de C.1–C.7 |
+| C.13.0 | Cerrada (solo lectura) | Global Read-Only Audit — hallazgos documentados |
+| C.13 | Pendiente | Reauditoría Logic Integrity de C.1–C.7 (subfases C.13.1–C.13.8) |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -1634,6 +1635,154 @@ A partir de C.8, todos los prompts usarán el Prompt Maestro.
 Las ramas C.1–C.7 no se reabren funcionalmente salvo P0/P1 real.
 
 Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
+
+---
+
+## C.13.0 — Global Read-Only Audit
+
+**Fecha:** 20 mayo 2026  
+**Baseline:** `eae9048` — `chore: add cursor enterprise operating model`  
+**Modo:** Solo lectura — docs-only en C.13.0f (esta sección documenta la auditoría; no se modificó código en C.13.0).
+
+### 1. Estado
+
+| Item | Valor |
+|---|---|
+| Subfase | C.13.0 cerrada en modo solo lectura |
+| Archivos modificados en C.13.0 | Ninguno |
+| Commit C.13.0 | No |
+| Push C.13.0 | No |
+| Working tree al cerrar C.13.0 | Solo `?? backend-server.err` |
+| Referencias usadas | `docs/testing/golden_inputs.json`, `docs/testing/FORMULA_REGISTRY.md`, `docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md`, blindaje v1 + IA-2 (solo lectura) |
+
+### 2. Veredicto
+
+| Veredicto | **NOT READY** (pilot-ready) |
+|---|---|
+| Motivo | P1 pendientes en Golden tests, fórmulas/source-of-truth y demo/fallback |
+| Condición para PARTIAL | C.13.1A harness golden + cierre cluster P1 Funding/Compliance/Bridge/Risk/PMI/M&A |
+| Condición para READY | C.13.1B–C.13.8 + C.14 sin P1 abiertos en cálculos críticos |
+
+### 3. Executive summary
+
+- Blindaje IA v1 (`997d79f`) e IA-2 Cursor Enterprise Operating Model (`eae9048`) publicados en `main`.
+- Gobernanza documental sólida: reglas, registries, prompt library y checklists operativos.
+- Los 14 Golden Datasets en `docs/testing/golden_inputs.json` **no están conectados a tests** en CI (búsqueda en `tests/` sin referencias).
+- Varias fórmulas del `FORMULA_REGISTRY.md` **no coinciden** con la implementación vigente o no tienen ancla de código localizada.
+- Funding, Compliance, Bridge, Risk, PMI y M&A concentran gaps **P1** de logic integrity.
+- **Ningún P0 cross-tenant confirmado** en este barrido global (middleware asigna `organizationId` desde token; validación por endpoint = Pending C.13.8).
+- Permisos por endpoint y viewer-mutation quedan **Pending C.13 validation** (no elevar a P0 sin auditoría endpoint-by-endpoint).
+
+### 4. P0
+
+| ID | Hallazgo | Estado |
+|---|---|---|
+| — | Ningún P0 confirmado en C.13.0 | Cerrado sin P0 |
+| Nota | No elevar seguridad/multi-tenant a P0 sin C.13.8 endpoint sweep | Regla activa |
+
+### 5. P1
+
+| ID | Hallazgo | Evidencia (lectura) | Riesgo |
+|---|---|---|---|
+| C13-P1-01 | Golden datasets sin tests oráculo | `grep golden_inputs` en `tests/` → 0 matches | CI no detecta drift código vs golden |
+| C13-P1-02 | Funding zero burn: FE usa `999`, golden exige `null`; BE devuelve `null` | `src/modules/funding/engine/fundingFormulas.js`; `backend/services/funding/funding.service.js` `calculateCashRunway`; golden `funding_runway_zero_burn` | UI puede mostrar runway infinito/misleading |
+| C13-P1-03 | Funding FE `localStorage` vs backend API | `fundingStore.jsx`, `fundingApi.js`, `FUNDING_STORAGE_KEYS` | Duplicidad source-of-truth escenarios/drafts |
+| C13-P1-04 | Compliance weighted risk mismatch | Golden `compliance_weighted_risk_score_basic` (0.4/0.4/0.2); `complianceScoring.js` usa tier/region/alerts | Priorización proveedores vs oráculo |
+| C13-P1-05 | Compliance resilience mismatch | Golden `compliance_resilience_score_basic`; `resilienceScore.js` base 72 + penalizaciones | Resilience dashboard no alineado |
+| C13-P1-06 | Compliance FE recalcula `riskScore` vs backend persistido | `useComplianceEngine.js`; `suppliersApi.js` | Known duplicate risk FE/BE |
+| C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | Señales DSS mal priorizadas |
+| C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
+| C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
+| C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
+| C13-P1-11 | M&A EV simple (EBITDA×multiple) source unclear | Golden `ma_valuation_ebitda_multiple_basic`; FE principal `valuationFormulas.js` = DCF/core | Oráculo simple sin ancla clara |
+| C13-P1-12 | M&A waterfall simple source unclear | Golden `ma_waterfall_simple_distribution`; sin helper `netCashToSeller` localizado en `src/modules/ma` | Proceeds seller no verificables vs golden |
+
+### 6. P2
+
+| ID | Hallazgo | Nota |
+|---|---|---|
+| C13-P2-01 | Bridge marketplace ruta viva demo unlisted | `/bridge/marketplace` en `routes.jsx`; no en sidebar; `DEMO_BRIDGE_*` fallback |
+| C13-P2-02 | Bridge service acoplado a 8+ módulos | `bridge.service.js` imports cross-module summaries |
+| C13-P2-03 | Executive Overview aggregator, no master SoT | `executiveOverview.service.js`, `readinessIndex.service.js` |
+| C13-P2-04 | Reporting variance source unclear | Sin implementación `varianceAmount` localizada en `backend/services/reporting` |
+| C13-P2-05 | M&A localStorage cases | `valuationFormulas.js` `STORAGE_KEYS` |
+| C13-P2-06 | Compliance demo tools | `SHOW_DEMO_TOOLS` en `SuppliersPage.jsx` |
+| C13-P2-07 | AppShell outlet fallback (no lógica negocio) | `AppShell.jsx` loading panel |
+| C13-P2-08 | Duplicidad `workspaceConfig` / `routeConfig` / `shellMeta` | Ya documentada históricamente en §3 inventario |
+
+### 7. P3
+
+| ID | Hallazgo |
+|---|---|
+| C13-P3-01 | Monolitos `CEOOverviewPage.jsx` / `BridgeMarketplacePage.jsx` |
+| C13-P3-02 | Ecosystem huérfano histórico (`EcosystemBranchPage`, etc.) |
+| C13-P3-03 | CSS `!important` masivo histórico (`workspaceAccent.css`, `executivePolish.css`) |
+| C13-P3-04 | `backend/db/` vs `backend/storage/` legacy |
+
+### 8. Mini-informe por módulo
+
+| Módulo | SoT | Golden mapping | Demo/fallback | Tests | Estado C.13.0 |
+|---|---|---|---|---|---|
+| M&A | DCF + normalized EBITDA; localStorage cases | Parcial / **source unclear** (EV simple, waterfall) | localStorage, local fallback deals | `valuationFormulas.test.js` (sin golden) | Gaps P1 |
+| Compliance | BE persist + FE engine recalc | **Mismatch** weighted + resilience | `DEMO_COMPLIANCE_*`, report fallback | `useComplianceEngine.test.js` | Gaps P1 |
+| Funding | BE API + FE localStorage draft | **Mismatch** runway FE; BE OK zero burn | `DEMO_FUNDING_*` | Sin golden | Gaps P1 |
+| Governance | Backend services | Sin golden dedicado | Assumed OK funcional C.5 | Integration parcial | Pending subfase C.13.5 |
+| PMI | Dual: `pmi_cases` + enterprise tables | **Mismatch** zero forecast | **mergeWithDemo** | Sin golden | Gaps P1 |
+| Bridge | `bridge_signals` + heuristics | **Mismatch** priority | Marketplace DEMO, recalculate heuristic | `bridgeEngine.test.js` (sin golden) | Gaps P1 + P2 marketplace |
+| Risk | `risk.service.js` | **Mismatch** score formula | — | Sin golden | Gaps P1 |
+| Reporting | Backend reporting | **Source unclear** variance | — | boardPack integration | Pending C.13.7 |
+| Executive Overview | Aggregator only | Health avg **pending** | API fallback, localStorage board pack ts | `executiveMetrics.test.js` | Pending C.13.1 / C.13.7 |
+
+### 9. Golden Dataset vs implementación (14 datasets)
+
+| Golden Dataset ID | Resultado C.13.0 | Nota |
+|---|---|---|
+| `ma_valuation_ebitda_multiple_basic` | **source unclear** | No engine EV simple localizado |
+| `ma_valuation_equity_value_basic` | **partial** | `netDebt` en core; EV no simple |
+| `ma_waterfall_simple_distribution` | **source unclear** | Sin fórmula dedicada localizada |
+| `funding_runway_basic` | **likely match** | Si burn > 0 FE/BE |
+| `funding_runway_zero_burn` | **mismatch** | FE `999`; BE `null` |
+| `funding_post_money_and_dilution_basic` | **likely match** | `calculateFundingCore` |
+| `compliance_weighted_risk_score_basic` | **mismatch** | Fórmula distinta en FE |
+| `compliance_resilience_score_basic` | **mismatch** | Engine distinto |
+| `pmi_synergy_capture_rate_basic` | **partial** | Ratio existe |
+| `pmi_synergy_zero_forecast` | **mismatch** | Devuelve 0, no null |
+| `bridge_priority_score_basic` | **mismatch** | `calculateSignalPriority` distinto |
+| `risk_score_likelihood_impact_basic` | **mismatch** | `riskScoreFrom` distinto |
+| `reporting_kpi_variance_basic` | **source unclear** | Implementación no localizada |
+| `executive_module_health_average_basic` | **pending** | Múltiples agregadores |
+
+**Leyenda:** match = alineado con evidencia; partial = parte alineada; mismatch = diverge del golden; source unclear = sin ancla de código; pending = requiere subfase C.13.x.
+
+### 10. Plan de remediación (sin aplicar en C.13.0)
+
+| Subfase | Objetivo |
+|---|---|
+| **C.13.1A** | Golden harness seguro: estructura + import JSON sin romper CI |
+| **C.13.1B** | Tests de implementación por cluster **tras** decidir source-of-truth |
+| **C.13.2** | Funding: runway null, localStorage labeling, SoT |
+| **C.13.3** | Compliance: weighted/resilience, FE vs BE |
+| **C.13.4** | Bridge priority + Risk score |
+| **C.13.5** | PMI: mergeWithDemo opt-in, zero forecast null |
+| **C.13.6** | M&A: EV/waterfall golden anchors o registry update |
+| **C.13.7** | Reporting variance + Executive health |
+| **C.13.8** | Security endpoint sweep (organizationId, viewer, audit) |
+
+### 11. Decisión importante — tests y golden
+
+**No crear tests de implementación que rompan CI** hasta decidir explícitamente por cluster:
+
+1. **Alinear código** al Golden Dataset (cambio de producto autorizado), o  
+2. **Actualizar `FORMULA_REGISTRY.md`** (y registries) con la fórmula real vigente, o  
+3. **Modificar Golden Dataset** solo con revisión humana y cálculo manual documentado (prohibido silencioso).
+
+Orden recomendado: C.13.1A → decisión SoT por cluster → C.13.1B → C.13.2–C.13.8.
+
+### Próxima subfase recomendada
+
+**C.13.1A** — Golden harness (solo `tests/` autorizado) o **C.13.2** Funding si se prioriza UX runway.
+
+**Prompt:** `docs/ai/PROMPT_LIBRARY.md` → Calculation Verification (Funding zero-burn) o Module Logic Integrity Audit (Funding).
 
 ---
 
