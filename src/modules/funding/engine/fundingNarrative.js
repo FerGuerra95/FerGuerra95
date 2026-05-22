@@ -1,5 +1,13 @@
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 
+function formatRunwayMonthsLabel(value) {
+  if (value === null || value === undefined || !Number.isFinite(value)) {
+    return 'No burn / runway not meaningful';
+  }
+
+  return `${value.toFixed(1)} meses`;
+}
+
 export function buildInvestorTargets({ inputs, core, readinessScore }) {
   const targets = [];
 
@@ -19,7 +27,12 @@ export function buildInvestorTargets({ inputs, core, readinessScore }) {
     });
   }
 
-  if (inputs.debtCapacity > 0 && core.currentRunwayMonths >= 4) {
+  if (
+    inputs.debtCapacity > 0 &&
+    core.currentRunwayMonths !== null &&
+    Number.isFinite(core.currentRunwayMonths) &&
+    core.currentRunwayMonths >= 4
+  ) {
     targets.push({
       type: 'Venture Debt / Revenue Financing',
       fit: Math.round(Math.min(88, readinessScore)),
@@ -52,8 +65,16 @@ export function buildReadinessChecklist({ inputs, core, readinessLevel }) {
     },
     {
       label: 'Runway antes de salir al mercado',
-      status: core.currentRunwayMonths >= 6 ? 'ok' : 'risk',
-      detail: `Runway actual estimado: ${core.currentRunwayMonths.toFixed(1)} meses.`
+      status:
+        core.currentRunwayMonths !== null && Number.isFinite(core.currentRunwayMonths)
+          ? core.currentRunwayMonths >= 6
+            ? 'ok'
+            : 'risk'
+          : 'attention',
+      detail:
+        core.currentRunwayMonths !== null && Number.isFinite(core.currentRunwayMonths)
+          ? `Runway actual estimado: ${formatRunwayMonthsLabel(core.currentRunwayMonths)}.`
+          : 'Runway no significativo con burn cero o negativo.'
     },
     {
       label: 'Dilución controlada',
@@ -85,10 +106,10 @@ export function buildDataRoomChecklist(inputs) {
 
 export function buildFundingNarrative({ inputs, settings, derived }) {
   const currency = settings.reportCurrency;
-  const summary = `${inputs.companyName} prepara una ronda de ${formatCurrency(inputs.targetRaise, currency)} sobre una valoración pre-money de ${formatCurrency(inputs.preMoneyValuation, currency)}. En escenario base, la dilución estimada es del ${derived.dilutionPct.toFixed(1)}% y el runway post-ronda sube hasta ${derived.runwayAfterRaiseMonths.toFixed(1)} meses.`;
+  const summary = `${inputs.companyName} prepara una ronda de ${formatCurrency(inputs.targetRaise, currency)} sobre una valoración pre-money de ${formatCurrency(inputs.preMoneyValuation, currency)}. En escenario base, la dilución estimada es del ${derived.dilutionPct.toFixed(1)}% y el runway post-ronda es ${formatRunwayMonthsLabel(derived.runwayAfterRaiseMonths)}.`;
   const thesis = [
-    `La caja actual cubre aproximadamente ${derived.currentRunwayMonths.toFixed(1)} meses de runway.`,
-    `La ronda objetivo extiende el runway hasta ${derived.runwayAfterRaiseMonths.toFixed(1)} meses.`,
+    `La caja actual cubre ${formatRunwayMonthsLabel(derived.currentRunwayMonths)} de runway.`,
+    `La ronda objetivo extiende el runway a ${formatRunwayMonthsLabel(derived.runwayAfterRaiseMonths)}.`,
     `La preparación documental está al ${Math.round(inputs.dataRoomCompletion)}% y el readiness score se sitúa en ${Math.round(derived.readinessScore)}/100.`,
     `La dilución base estimada es del ${derived.dilutionPct.toFixed(1)}% con una valoración post-money de ${formatCurrency(derived.postMoneyValuation, currency)}.`
   ];

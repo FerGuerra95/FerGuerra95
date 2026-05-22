@@ -89,11 +89,18 @@ export function buildUseOfFunds(stage, targetRaise) {
 }
 
 export function calculateFundingCore(inputs) {
-  const currentRunwayMonths = inputs.monthlyBurn > 0 ? inputs.currentCash / inputs.monthlyBurn : 999;
+  const currentRunwayMonths =
+    inputs.monthlyBurn > 0 ? inputs.currentCash / inputs.monthlyBurn : null;
   const postMoneyValuation = inputs.preMoneyValuation + inputs.targetRaise;
   const dilutionPct = postMoneyValuation > 0 ? (inputs.targetRaise / postMoneyValuation) * 100 : 0;
-  const runwayAfterRaiseMonths = inputs.monthlyBurn > 0 ? (inputs.currentCash + inputs.targetRaise) / inputs.monthlyBurn : 999;
-  const bufferVsTargetMonths = runwayAfterRaiseMonths - inputs.runwayMonthsTarget;
+  const runwayAfterRaiseMonths =
+    inputs.monthlyBurn > 0
+      ? (inputs.currentCash + inputs.targetRaise) / inputs.monthlyBurn
+      : null;
+  const bufferVsTargetMonths =
+    runwayAfterRaiseMonths === null
+      ? null
+      : runwayAfterRaiseMonths - inputs.runwayMonthsTarget;
 
   const preRoundOwnershipTotal = inputs.founderOwnership + inputs.existingInvestorOwnership + inputs.optionPool;
   const normalizedFounderOwnership = preRoundOwnershipTotal > 0 ? (inputs.founderOwnership / preRoundOwnershipTotal) * 100 : 0;

@@ -13,7 +13,10 @@ export function buildReadinessLevel(score) {
 }
 
 export function calculateReadinessScore({ inputs, core }) {
-  const runwayComponent = clamp((core.currentRunwayMonths / inputs.runwayMonthsTarget) * 100, 0, 100);
+  const runwayComponent =
+    core.currentRunwayMonths === null || !Number.isFinite(core.currentRunwayMonths)
+      ? 0
+      : clamp((core.currentRunwayMonths / inputs.runwayMonthsTarget) * 100, 0, 100);
   const growthComponent = clamp(inputs.annualGrowthRate, 0, 100);
   const debtComponent = clamp((inputs.debtCapacity / Math.max(inputs.targetRaise, 1)) * 100, 0, 100);
   const dilutionPenalty = clamp(core.dilutionPct * 1.1, 0, 30);

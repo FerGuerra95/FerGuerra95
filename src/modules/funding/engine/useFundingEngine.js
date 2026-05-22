@@ -24,7 +24,8 @@ export function useFundingEngine({ fundingInputs, fundingSettings }) {
     ].map((scenario) => {
       const postMoney = scenario.preMoney + scenario.raise;
       const dilution = postMoney > 0 ? (scenario.raise / postMoney) * 100 : 0;
-      const runway = scenario.burn > 0 ? (inputs.currentCash + scenario.raise) / scenario.burn : 999;
+      const runway =
+        scenario.burn > 0 ? (inputs.currentCash + scenario.raise) / scenario.burn : null;
       return { ...scenario, postMoney, dilution, runway };
     });
 
