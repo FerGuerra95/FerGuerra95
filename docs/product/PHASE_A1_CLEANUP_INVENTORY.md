@@ -1574,7 +1574,9 @@ También hay que validar que:
 | C.13.1C-f8A | Cerrada | Golden resilience helper + test (`4414208`) |
 | C.13.1C-f8B | Cerrada | Labels/re-export operational resilience (`eb48db6`) |
 | C.13.1C-f8C | Cerrada (docs only) | Inventario cierre parcial C13-P1-05 |
-| C.13 | Pendiente | Compliance C.13.1C-f9A cierre global scoring chain |
+| C.13.1C-f9A | Cerrada (docs only) | Cierre global Compliance scoring chain |
+| C.13.1C | Cerrada (cadena scoring) | C13-P1-04/05/06 — reports/export/labels/tests/docs |
+| C.13 | Pendiente | C.13.2 Formula Approval Gate; otras ramas C.13 |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -2432,7 +2434,7 @@ Inventario usa **PARTIALLY RESOLVED** porque pendiente:
 
 ### 5. Siguiente paso (post f4B)
 
-Ver **C.13.1C-f8A/f8B/f8C** (resilience). Siguiente: **C.13.1C-f9A** (cierre global Compliance scoring chain).
+Ver **C.13.1C-f9A** (cierre global cadena scoring). Siguiente: **C.13.2** Formula Approval Gate.
 
 ---
 
@@ -2698,7 +2700,7 @@ Replica la arquitectura ya adoptada para Compliance scoring (Option C — f1B/f5
 | ID | Estado | Nota |
 |---|---|---|
 | C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export weighted complete; broader adoption pending |
-| C13-P1-05 | **OPEN** | Decision documented (f7B Option C); helper/test/fix pending (**f8A/f8B**) — **no RESOLVED** |
+| C13-P1-05 | **PARTIALLY RESOLVED** (histórico post-f7B) | Superseded por f8A/f8B/f8C — ver sección f8A/f8B |
 | C13-P1-06 | **PARTIALLY RESOLVED** | Labels/precedence risk (f6B); backend/model rename pending |
 
 ### 11. Siguiente paso recomendado
@@ -2820,18 +2822,91 @@ Prioridad: snapshot del report primero; store solo si falta (alineado con risk p
 | C13-P1-05 | **PARTIALLY RESOLVED** | Golden helper/test (f8A) + operational labels/re-export (f8B); **backend/API/model rename pending** — **no RESOLVED global** |
 | C13-P1-06 | **PARTIALLY RESOLVED** | Labels/precedence risk + CEO + re-export; backend/model rename pending |
 
-### 5. Siguiente paso recomendado
+### 5. Siguiente paso recomendado (histórico post-f8B)
 
-**C.13.1C-f9A — Cierre global documental Compliance scoring chain (docs only)**
+Superseded por **C.13.1C-f9A** — ver sección **Compliance scoring chain global closure** más abajo.
 
-| Objetivo f9A |
+---
+
+## C.13.1C-f9A — Compliance scoring chain global closure — DOCS CLOSED
+
+**Fecha cierre:** 20 mayo 2026  
+**Estado:** **DOCS CLOSED** — Compliance scoring chain closed for current scope.  
+**Baseline:** `HEAD = origin/main = e5c74b2` (post f8C `f4da19a` / `e5c74b2`, f8B `eb48db6`)
+
+### 1. Alcance cerrado (cadena C.13.1C)
+
+| Tema | Cerrado en alcance actual |
+|---|---|
+| **weightedRiskScore** (C13-P1-04) | Helper puro + test Golden; integración reports/export; label **Weighted risk (explicable)**; sin dashboards contaminados |
+| **operational risk score** (C13-P1-06) | Auditoría + decisión híbrida; tests precedence; label **Operational risk score**; re-export report-first; CEO Overview con `complianceEngine.suppliers` |
+| **operational resilience score** (C13-P1-05) | Decisión híbrida; helper Golden resilience; labels operational; re-export report-first; sin cambiar motor FE operativo |
+| **Golden oracles** | `compliance_weighted_risk_score_basic` (68); `compliance_resilience_score_basic` (40) |
+| **Reports/export** | Labels operativos + weighted condicional; política re-export snapshot-first |
+| **Product truthfulness** | Tres métricas separadas documentadas; no mezclar weighted/operational/golden sin inputs |
+
+### 2. Commits principales (cronología)
+
+| Commit | Descripción |
+|---|---|
+| `adcdf77` | `test(compliance): add weighted risk golden helper` |
+| `c7c567b` | `feat(compliance): surface weighted risk in reports` |
+| `1580d6f` | `test(compliance): add scoring precedence coverage` |
+| `1e82980` | `fix(compliance): clarify operational risk score precedence` |
+| `4414208` | `test(compliance): add golden resilience helper` |
+| `eb48db6` | `fix(compliance): clarify operational resilience score precedence` |
+| `fbe1d61` / `f4da19a` / `e5c74b2` | Cierres documentales f7B/f8C/f9A en inventario |
+
+### 3. Estado final C13-P1 (no marcar RESOLVED global)
+
+| ID | Estado | Cerrado | Pendiente |
+|---|---|---|---|
+| **C13-P1-04** | **PARTIALLY RESOLVED** | Helper/test weighted + reports/export + label explicable | Adopción modelo/demo/dashboards/backend con inputs `financialRisk`/`jurisdictionRisk`/`evidenceRisk` |
+| **C13-P1-05** | **PARTIALLY RESOLVED** | Golden helper/test + labels operational resilience + re-export report-first | Rename/modelo: `persistedResilienceScore` / `operationalResilienceScore`; Formula Approval metadata |
+| **C13-P1-06** | **PARTIALLY RESOLVED** | Tests + labels operational risk + re-export + CEO alignment + weighted separado | Rename/modelo: `persistedRiskScore` / `operationalRiskScore`; BE calculation SoT futuro |
+
+### 4. Product truthfulness (cierre cadena)
+
+- **weightedRiskScore** no se mezcla con operational risk score.
+- **Operational risk score** y **Operational resilience score** etiquetados en UI/export operativo.
+- **Re-export** prioriza snapshot del report: `report.riskScore ?? supplier?.riskScore` y `report.resilienceScore ?? supplier?.resilienceScore`.
+- **Golden resilience** y **weighted risk** quedan como benchmark/oracle separados; no se muestran si faltan inputs explícitos.
+- **CEO Overview** usa fuente operativa de risk (engine), no store crudo sin enriquecer.
+
+### 5. Límites actuales (explícitos)
+
+| Límite | Detalle |
+|---|---|
+| Backend | **Persistence SoT** — no calculation SoT para scoring Compliance |
+| Campos API/DB | Sin rename formal (`riskScore`/`resilienceScore` legacy) |
+| Cálculo en BE | No movido en esta cadena |
+| Formula Approval Gate | **No ejecutado** — pendiente C.13.2 |
+| C13-P1-04/05/06 | **PARTIALLY RESOLVED** — no promover a RESOLVED global sin modelo enterprise |
+
+### 6. Pendientes técnicos futuros (fuera C.13.1C)
+
+- `persistedRiskScore` / `operationalRiskScore` (campos y labels formales).
+- `persistedResilienceScore` / `operationalResilienceScore`.
+- Modelo backend/API y posible demo con dimensiones weighted explícitas.
+- **C.13.2 Formula Approval Gate:** owner, fuente, inputs, unidades, edge cases, Golden ID, test, status, fecha aprobación, límites de uso; posible `formulaRegistryCoverage.test.js`.
+
+### 7. Decisión de cierre
+
+La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
+
+- reports / export / labels / tests / documentación source-of-truth.
+
+**No seguir tocando Compliance scoring** antes de abrir **C.13.2**, salvo bug crítico de producción.
+
+### 8. Siguiente paso
+
+**C.13.2 — Formula Approval Gate**
+
+| Objetivo |
 |---|
-| Resumir C13-P1-04/05/06 en un cierre de cadena |
-| Declarar Compliance scoring chain cerrada a nivel reports/export/labels/tests |
-| Listar pendientes enterprise: `persistedRiskScore` / `operationalRiskScore`, `persistedResilienceScore` / `operationalResilienceScore` |
-| **No** abrir **C.13.2 Formula Approval Gate** hasta cerrar f9A |
+| Control formal de fórmulas críticas: Formula ID, owner, fuente, inputs, unidades, fórmula, edge cases, Golden Dataset, test, status, fecha, límites de uso |
 
-**Después de f9A:** C.13.2 — Formula Approval Gate.
+**No abrir C.13.2** antes de este cierre f9A (completado en inventario).
 
 ---
 
@@ -2944,7 +3019,7 @@ El usuario **no** debe ver "Risk Score" sin saber si es: persistido, operativo c
 
 ### 11. Siguiente paso recomendado (histórico f5B — superseded)
 
-Superseded por **C.13.1C-f6A/f6B/f6C**, **f7A/f7B**, **f8A/f8B/f8C** (cerradas). Siguiente: **C.13.1C-f9A** — cierre global Compliance scoring chain.
+Superseded por **C.13.1C-f6A–f9A** (cadena scoring cerrada). Siguiente: **C.13.2** — Formula Approval Gate.
 
 ---
 
