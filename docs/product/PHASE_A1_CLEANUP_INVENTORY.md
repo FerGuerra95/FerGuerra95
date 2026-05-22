@@ -1554,7 +1554,9 @@ También hay que validar que:
 | C.11 | Pendiente | Heritage con Prompt Maestro nuevo |
 | C.12 | Pendiente | Informe global funcional real/parcial/visual/vendible |
 | C.13.0 | Cerrada (solo lectura) | Global Read-Only Audit — hallazgos documentados |
-| C.13 | Pendiente | Reauditoría Logic Integrity de C.1–C.7 (subfases C.13.1–C.13.8) |
+| C.13.1A | Cerrada | Golden schema harness (`9916fe2`) |
+| C.13.1B | Cerrada / RESOLVED | Funding zero-burn fix (`e0054e8`) — C13-P1-02 |
+| C.13 | Pendiente | Reauditoría Logic Integrity C.1–C.7 (C.13.1C–C.13.8) |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -1685,7 +1687,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | ID | Hallazgo | Evidencia (lectura) | Riesgo |
 |---|---|---|---|
 | C13-P1-01 | Golden datasets sin tests oráculo | `grep golden_inputs` en `tests/` → 0 matches | CI no detecta drift código vs golden |
-| C13-P1-02 | Funding zero burn: FE usa `999`, golden exige `null`; BE devuelve `null` | `src/modules/funding/engine/fundingFormulas.js`; `backend/services/funding/funding.service.js` `calculateCashRunway`; golden `funding_runway_zero_burn` | UI puede mostrar runway infinito/misleading |
+| C13-P1-02 | Funding zero burn: FE usaba `999`, golden exige `null`; BE devolvía `null` | **RESOLVED** en `e0054e8` — ver sección C.13.1B | Cerrado |
 | C13-P1-03 | Funding FE `localStorage` vs backend API | `fundingStore.jsx`, `fundingApi.js`, `FUNDING_STORAGE_KEYS` | Duplicidad source-of-truth escenarios/drafts |
 | C13-P1-04 | Compliance weighted risk mismatch | Golden `compliance_weighted_risk_score_basic` (0.4/0.4/0.2); `complianceScoring.js` usa tier/region/alerts | Priorización proveedores vs oráculo |
 | C13-P1-05 | Compliance resilience mismatch | Golden `compliance_resilience_score_basic`; `resilienceScore.js` base 72 + penalizaciones | Resilience dashboard no alineado |
@@ -1780,9 +1782,100 @@ Orden recomendado: C.13.1A → decisión SoT por cluster → C.13.1B → C.13.2�
 
 ### Próxima subfase recomendada
 
-**C.13.1A** — Golden harness (solo `tests/` autorizado) o **C.13.2** Funding si se prioriza UX runway.
+**C.13.1C** — Compliance weighted risk source-of-truth audit (modo solo lectura primero).
 
-**Prompt:** `docs/ai/PROMPT_LIBRARY.md` → Calculation Verification (Funding zero-burn) o Module Logic Integrity Audit (Funding).
+**Prompt:** `docs/ai/PROMPT_LIBRARY.md` → Calculation Verification (Compliance weighted risk) o Module Logic Integrity Audit (Compliance).
+
+---
+
+## C.13.1B — Funding zero-burn calculation verification & controlled fix — CLOSED
+
+**Fecha cierre:** 20 mayo 2026  
+**Estado:** **CLOSED / RESOLVED**  
+**Commit:** `e0054e8` — `fix(funding): return null runway when monthly burn is zero`  
+**Baseline al cerrar:** `HEAD = origin/main = e0054e8`
+
+### 1. Issue resuelto
+
+| Campo | Valor |
+|---|---|
+| ID | **C13-P1-02** — Funding frontend zero-burn mismatch |
+| Golden Dataset | `funding_runway_zero_burn` |
+| Estado issue | **RESOLVED** |
+
+### 2. Bug detectado
+
+El frontend Funding devolvía **`999`** como proxy de runway cuando `monthlyBurn <= 0` en `calculateFundingCore` (`fundingFormulas.js`).
+
+Eso contradecía:
+
+- Golden Dataset: `runwayMonths: null`
+- Backend: `calculateCashRunway` ya devolvía `projectedRunwayMonths: null`
+
+Riesgo: la UI podía mostrar “999 meses” como métrica financiera real.
+
+### 3. Source of Truth (decisión C.13.1B)
+
+| Fuente | Regla |
+|---|---|
+| `docs/testing/golden_inputs.json` → `funding_runway_zero_burn` | `runwayMonths` debe ser `null` / not meaningful |
+| Backend `calculateCashRunway` | `null` cuando burn <= 0 — **ya alineado** |
+| Decisión de negocio | `monthlyBurn <= 0` → `runwayMonths = null`. **Nunca** `999`, `Infinity` ni `NaN` |
+
+### 4. Archivos corregidos
+
+| Archivo | Cambio |
+|---|---|
+| `src/modules/funding/engine/fundingFormulas.js` | `999` → `null` en `currentRunwayMonths` y `runwayAfterRaiseMonths`; `bufferVsTargetMonths` null-safe |
+| `src/modules/funding/engine/fundingNarrative.js` | `formatRunwayMonthsLabel`; checklist y narrative sin `.toFixed(null)` |
+| `src/modules/funding/engine/fundraisingScoring.js` | `runwayComponent = 0` si runway null (evita NaN en readiness) |
+| `src/modules/funding/engine/useFundingEngine.js` | Escenarios: `999` → `null` cuando `scenario.burn <= 0` |
+
+### 5. Test añadido
+
+| Archivo | Cobertura |
+|---|---|
+| `tests/unit/funding/fundingFormulas.test.js` | Zero-burn → `null`; post-raise zero-burn → `null`; burn positivo → 10 meses (golden `funding_runway_basic`) |
+
+### 6. Validaciones ejecutadas
+
+| Comando | Resultado |
+|---|---|
+| `vitest run tests/unit/funding/fundingFormulas.test.js` | **3/3 passed** |
+| `vitest run tests/unit/funding` | **12/12 passed** |
+| `npm run test:unit` | **123/123 passed** |
+| `npm run build` | **OK** |
+
+### 7. Scope confirmado
+
+| Área | Tocado en C.13.1B |
+|---|---|
+| Golden Dataset | **No** |
+| Backend | **No** (solo lectura de referencia) |
+| Docs (salvo inventario) | **No** |
+| CSS | **No** |
+| Otros módulos | **No** |
+| `backend-server.err` | **Fuera** (untracked, no staged) |
+
+### 8. Product truthfulness
+
+La UI ya no debe presentar “999 meses” como runway real.
+
+El caso zero-burn queda representado como **`null`** en el motor core; la narrativa usa **“No burn / runway not meaningful”** cuando el valor no es finito.
+
+### 9. Pendientes Funding (fuera de C.13.1B)
+
+| ID | Estado |
+|---|---|
+| C13-P1-03 | Pendiente — FE `localStorage` vs backend API (no abordado en esta subfase) |
+
+### 10. Siguiente paso recomendado
+
+**C.13.1C** — Compliance weighted risk source-of-truth audit.
+
+**Modo:** solo lectura primero.
+
+**No corregir Compliance** hasta decidir fórmula vigente vs golden `compliance_weighted_risk_score_basic` y resolver duplicidad FE recalc vs BE persistido (C13-P1-04 a C13-P1-06).
 
 ---
 
