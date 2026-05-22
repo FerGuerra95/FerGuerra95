@@ -1556,7 +1556,8 @@ También hay que validar que:
 | C.13.0 | Cerrada (solo lectura) | Global Read-Only Audit — hallazgos documentados |
 | C.13.1A | Cerrada | Golden schema harness (`9916fe2`) |
 | C.13.1B | Cerrada / RESOLVED | Funding zero-burn fix (`e0054e8`) — C13-P1-02 |
-| C.13 | Pendiente | Reauditoría Logic Integrity C.1–C.7 (C.13.1C–C.13.8) |
+| C.13.1C | Cerrada (solo lectura) | Compliance scoring audit — C13-P1-04/05/06 documentados |
+| C.13 | Pendiente | Logic Integrity — decisión fórmula Compliance + fixes (C.13.1C-f1B+) |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -1689,9 +1690,9 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-01 | Golden datasets sin tests oráculo | `grep golden_inputs` en `tests/` → 0 matches | CI no detecta drift código vs golden |
 | C13-P1-02 | Funding zero burn: FE usaba `999`, golden exige `null`; BE devolvía `null` | **RESOLVED** en `e0054e8` — ver sección C.13.1B | Cerrado |
 | C13-P1-03 | Funding FE `localStorage` vs backend API | `fundingStore.jsx`, `fundingApi.js`, `FUNDING_STORAGE_KEYS` | Duplicidad source-of-truth escenarios/drafts |
-| C13-P1-04 | Compliance weighted risk mismatch | Golden `compliance_weighted_risk_score_basic` (0.4/0.4/0.2); `complianceScoring.js` usa tier/region/alerts | Priorización proveedores vs oráculo |
-| C13-P1-05 | Compliance resilience mismatch | Golden `compliance_resilience_score_basic`; `resilienceScore.js` base 72 + penalizaciones | Resilience dashboard no alineado |
-| C13-P1-06 | Compliance FE recalcula `riskScore` vs backend persistido | `useComplianceEngine.js`; `suppliersApi.js` | Known duplicate risk FE/BE |
+| C13-P1-04 | Compliance weighted risk mismatch | Golden 0.4/0.4/0.2 **no implementado**; ver C.13.1C | **OPEN** — pendiente decisión f1B |
+| C13-P1-05 | Compliance resilience mismatch | Golden `100-risk+bonus` ≠ motor FE `base 72…` | **OPEN** — pendiente decisión f1B |
+| C13-P1-06 | Compliance FE recalcula `riskScore` vs BE persistido | `useComplianceEngine.js` pisa API | **OPEN** — pendiente decisión f1B |
 | C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | Señales DSS mal priorizadas |
 | C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
@@ -1869,13 +1870,120 @@ El caso zero-burn queda representado como **`null`** en el motor core; la narrat
 |---|---|
 | C13-P1-03 | Pendiente — FE `localStorage` vs backend API (no abordado en esta subfase) |
 
-### 10. Siguiente paso recomendado
+### 10. Siguiente paso recomendado (post C.13.1C)
 
-**C.13.1C** — Compliance weighted risk source-of-truth audit.
+**C.13.1C-f1B** — Compliance scoring Formula Decision / Source-of-Truth docs.
 
-**Modo:** solo lectura primero.
+**No** tests ni fix hasta decisión documental A/B/C (ver C.13.1C).
 
-**No corregir Compliance** hasta decidir fórmula vigente vs golden `compliance_weighted_risk_score_basic` y resolver duplicidad FE recalc vs BE persistido (C13-P1-04 a C13-P1-06).
+---
+
+## C.13.1C — Compliance weighted risk / riskScore / resilienceScore audit — CLOSED (READ ONLY)
+
+**Fecha cierre auditoría:** 20 mayo 2026  
+**Estado:** **CLOSED (READ ONLY)** — hallazgos documentados; **sin fix**  
+**Baseline auditoría:** `HEAD = origin/main = 13594b6`  
+**Modo:** Solo lectura — no código, no tests, no golden, no commit en C.13.1C
+
+### 1. Objetivo
+
+Auditar source-of-truth y fórmulas reales de Compliance para **C13-P1-04**, **C13-P1-05** y **C13-P1-06** antes de cualquier corrección.
+
+### 2. Golden Datasets Compliance
+
+| Golden ID | Fórmula documentada | Expected (ejemplo) | Tolerancia |
+|---|---|---|---|
+| `compliance_weighted_risk_score_basic` | `financial*0.4 + jurisdiction*0.4 + evidence*0.2` | `weightedRiskScore: 68` (70, 80, 40) | 0.000001 |
+| `compliance_resilience_score_basic` | `clamp(100 - riskScore + mitigationBonus, 0, 100)` | `resilienceScore: 40` (risk 68, bonus 8) | 0 |
+
+**GAP:** Inputs golden (`financialRisk`, `jurisdictionRisk`, `evidenceRisk`, `mitigationBonus`) **no existen** en modelo supplier ni en código producto.
+
+### 3. Formula Registry (lectura)
+
+| ID registry | Alineación texto con golden | Implementación en código |
+|---|---|---|
+| `COMPLIANCE_WEIGHTED_RISK` | Sí (definición) | **No** — Pending C.13 validation |
+| `COMPLIANCE_RESILIENCE` | Sí (definición) | **No** — Pending C.13 validation |
+
+### 4. Backend observado (solo lectura)
+
+| Archivo | Comportamiento |
+|---|---|
+| `backend/services/compliance/suppliers.service.js` | **Persiste** `riskScore` / `resilienceScore` del payload (default 50, clamp 0–100). **No calcula** weighted ni resilience golden. |
+| `auditRuns.service.js` | Score legal/compliance para auditorías M&A — **métrica distinta**, no supplier weighted risk. |
+
+**SoT backend:** almacenamiento autoritativo de valores enviados por cliente, no motor de fórmula golden.
+
+### 5. Frontend observado (solo lectura)
+
+| Función | Archivo | Fórmula real |
+|---|---|---|
+| **riskScore UI** | `complianceScoring.js` → `calculateSupplierRiskScore` | `criticality + tier + region + alertRisk + evidence/review adjustments` → clamp 0–100 |
+| **resilienceScore UI** | `resilienceScore.js` → `calculateResilienceScore` | `base 72 - penalties + bonuses` → clamp 0–100 |
+| **Orquestación** | `useComplianceEngine.js` | **Sobrescribe** campos `riskScore` / `resilienceScore` del supplier API con valores recalculados FE |
+
+**Búsqueda código:** `financialRisk`, `jurisdictionRisk`, `evidenceRisk`, `weightedRiskScore`, `mitigationBonus` aparecen **solo** en `golden_inputs.json` y `FORMULA_REGISTRY.md`.
+
+**Páginas que consumen motor FE:** `ComplianceDashboardPage`, `SuppliersPage`, `SupplierDetailPage`, `RiskMapPage`, `AlertsPage`, `EvidencePage`, `ReviewsPage`, `ComplianceReportPage`.
+
+### 6. Mismatch por métrica (confirmado)
+
+| Métrica | Golden | Backend persistido | Frontend calculado | Match golden | Match FE/BE |
+|---|---|---|---|---|---|
+| `weightedRiskScore` | 68 (3 dimensiones) | No existe | No implementado | **No** | N/A |
+| `riskScore` (campo supplier) | Input para resilience golden | Payload cliente | Motor operativo FE | **No** (fórmula distinta) | **No** (FE pisa BE) |
+| `resilienceScore` | 40 (`100-68+8`) | Payload cliente | Motor `base 72…` | **No** | **No** (FE pisa BE) |
+
+**Ejemplo ilustrativo (fixture `useComplianceEngine.test`):** proveedor Alta/Tier1/Europa + alert high → FE `riskScore` ≈ **87**, resilience ≈ **48** — no coincide con golden 68/40.
+
+### 7. Tests (gaps)
+
+| Cobertura | Estado |
+|---|---|
+| `useComplianceEngine.test.js` | Propiedades y rangos 0–100 — **sin golden** |
+| `goldenInputsSchema.test.js` | Solo esquema JSON |
+| Tests implementation vs `compliance_weighted_*` | **GAP — no existen** |
+
+### 8. Issues C.13.0 — estado post auditoría
+
+| ID | Hallazgo | Estado |
+|---|---|---|
+| C13-P1-04 | Weighted risk golden sin implementación | **OPEN** — requiere decisión f1B |
+| C13-P1-05 | Resilience golden ≠ motor FE | **OPEN** — requiere decisión f1B |
+| C13-P1-06 | FE recalcula y oculta scores persistidos BE | **OPEN** — requiere decisión f1B |
+
+**P0:** ninguno confirmado en esta subfase (scoring).
+
+### 9. Product truthfulness
+
+- La UI muestra `riskScore` / `resilienceScore` como si fueran únicos, pero en dashboard son **scores calculados en cliente**, no necesariamente los persistidos en SQLite.
+- Golden oracle **no valida** el motor operativo actual en CI.
+- Riesgo de confundir **tres conceptos** bajo nombres similares: `weightedRiskScore`, `operationalRiskScore` (FE), `resilienceScore` (dos fórmulas posibles).
+
+### 10. Decisión pendiente (A / B / C) — NO implementada
+
+| Opción | Descripción | Implicación |
+|---|---|---|
+| **A) Golden manda** | Implementar helper weighted 3 dimensiones + resilience golden | Nuevo código + tests golden; posible rename métricas |
+| **B) Motor operativo FE manda** | Golden/registry = modelo pedagógico simplificado, no oracle del motor actual | Actualizar golden o registry con revisión humana |
+| **C) Híbrido (recomendación auditoría)** | Separar métricas: weighted (informes/oracle), operational (UI DSS), persistido (BE); resolver C13-P1-06 con etiquetas y/o persist-on-save | Docs f1B + fix acotado en dos fases |
+
+**Condición para avanzar:** decisión documental explícita en **C.13.1C-f1B** antes de tests de implementación o controlled fix.
+
+### 11. Archivos clave (referencia lectura)
+
+- `docs/testing/golden_inputs.json` — datasets compliance
+- `src/modules/compliance/engine/complianceScoring.js`
+- `src/modules/compliance/engine/resilienceScore.js`
+- `src/modules/compliance/engine/useComplianceEngine.js`
+- `backend/services/compliance/suppliers.service.js`
+- `src/modules/compliance/services/suppliersApi.js`
+
+### 12. Siguiente paso
+
+**C.13.1C-f1B** — Formula Decision / Source-of-Truth en `FORMULA_REGISTRY.md` + `SOURCE_OF_TRUTH_REGISTRY.md` (y/o inventario).
+
+**Prohibido hasta f1B:** C.13.1C-f2 tests implementation, C.13.1C-f3 controlled fix.
 
 ---
 
