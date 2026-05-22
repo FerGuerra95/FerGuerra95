@@ -35,8 +35,11 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Funding rounds | round records | backend funding services/API | Assumed / Pending C.13 validation | | N/A | |
 | Funding summary | dashboard summary | backend funding summary | Assumed / Pending C.13 validation | | N/A | |
 | Funding scenarios | scenario inputs | Possible localStorage/client draft | Known duplicate risk | localStorage vs API | funding_* | Label in UI required |
-| Compliance supplier | riskScore persisted | backend compliance tables | Assumed / Pending C.13 validation | Client calc may diverge | compliance_weighted_* | |
-| Compliance scoring | displayed score | Unknown FE vs BE precedence | Known duplicate risk | | compliance_* | C.13.3 target |
+| Compliance weightedRiskScore | explicable 3-dimension score | Golden Dataset + Formula Registry (`COMPLIANCE_WEIGHTED_RISK`) | Canonical (docs) / Pending implementation | No helper in code yet | compliance_weighted_risk_score_basic | C.13.1C-f1B Option C |
+| Compliance operationalRiskScore | dashboard operational score | Frontend `calculateSupplierRiskScore` + `useComplianceEngine` (current) | Assumed / Pending hardening | Collides with field name `riskScore`; FE may override BE | N/A | Not golden oracle |
+| Compliance riskScore persisted | stored supplier fields | backend `compliance_suppliers` via payload clamp | Confirmed persistence SoT | Not calculation SoT; may differ from UI displayed score | N/A | Persistence only |
+| Compliance resilienceScore persisted | stored supplier fields | backend `compliance_suppliers` via payload clamp | Confirmed persistence SoT | FE recalculates on read; formula alignment pending | compliance_resilience_score_basic | C.13.1C-f1B |
+| Compliance resilienceScore calculated | UI resilience metric | Frontend `calculateResilienceScore` (current) | Assumed / Pending alignment | Differs from golden formula | compliance_resilience_score_basic | Subphase after naming |
 | Compliance evidence | evidence/reviews | backend compliance services | Assumed / Pending C.13 validation | | N/A | |
 | Governance decisions | decision workflow state | backend governance services | Assumed / Pending C.13 validation | Approve UX gaps | N/A | Strong backend per C.5 |
 | PMI case dashboard | workstreams, ledger in case | pmi_cases JSON payload | Assumed / Pending C.13 validation | mergeWithDemo contamination | N/A | C.13.6 target |
@@ -58,6 +61,43 @@ Do not mark Assumed entries as Confirmed before C.13.
 5. Do not treat demo/fallback/localStorage as real persisted enterprise data in reports or board packs.
 6. Do not mark Assumed architecture as Confirmed before C.13 code audit.
 7. Any change to source-of-truth requires registry update in same PR or follow-up doc commit.
+
+## Compliance Scoring Source-of-Truth (Decision C.13.1C-f1B — Option C Hybrid)
+
+### weightedRiskScore
+
+| Aspect | Decision |
+|---|---|
+| **Canonical definition** | `docs/testing/golden_inputs.json` + `docs/testing/FORMULA_REGISTRY.md` (`COMPLIANCE_WEIGHTED_RISK`) |
+| **Formula** | `financialRisk*0.4 + jurisdictionRisk*0.4 + evidenceRisk*0.2` |
+| **Implementation** | **Pending** — no production helper yet |
+| **Usage** | Reports, benchmarks, golden tests, explicable DSS |
+| **Must not** | Be confused with `operationalRiskScore` or legacy field `riskScore` |
+
+### operationalRiskScore
+
+| Aspect | Decision |
+|---|---|
+| **Current implementation** | Frontend engine (`complianceScoring.js`, orchestrated by `useComplianceEngine.js`) |
+| **Authoritative for** | Operational dashboard signals today (interim) |
+| **Not final** | Backend is not calculation SoT; naming/precedence cleanup pending (C13-P1-06) |
+| **Must not** | Be treated as Golden `weightedRiskScore` (68-style oracle) |
+
+### Persisted riskScore / resilienceScore (backend fields)
+
+| Aspect | Decision |
+|---|---|
+| **Backend role** | **Persistence SoT** — stores and clamps values from API payload |
+| **Backend does not** | Compute weighted or operational formulas today |
+| **UI risk** | Displayed values may be FE-recalculated, not equal to persisted SQLite values |
+
+### Future decisions required (documented, not implemented)
+
+1. Whether backend should become calculation SoT for `operationalRiskScore` / aligned `resilienceScore`.
+2. How UI labels **persisted** vs **calculated** scores (product truthfulness).
+3. Whether to add explicit `weightedRiskScore` on reports/API without renaming operational engine in same PR.
+
+Status: **Human review required** for pilot-facing exports until f2/f3 phases complete.
 
 ## Executive Overview Special Rule
 

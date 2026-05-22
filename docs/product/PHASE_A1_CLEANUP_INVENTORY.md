@@ -1557,7 +1557,8 @@ También hay que validar que:
 | C.13.1A | Cerrada | Golden schema harness (`9916fe2`) |
 | C.13.1B | Cerrada / RESOLVED | Funding zero-burn fix (`e0054e8`) — C13-P1-02 |
 | C.13.1C | Cerrada (solo lectura) | Compliance scoring audit — C13-P1-04/05/06 documentados |
-| C.13 | Pendiente | Logic Integrity — decisión fórmula Compliance + fixes (C.13.1C-f1B+) |
+| C.13.1C-f1B | Cerrada (docs only) | Compliance scoring SoT — Option C híbrida adoptada |
+| C.13 | Pendiente | Compliance helper/tests + precedence fixes (C.13.1C-f2+) |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -1690,9 +1691,9 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-01 | Golden datasets sin tests oráculo | `grep golden_inputs` en `tests/` → 0 matches | CI no detecta drift código vs golden |
 | C13-P1-02 | Funding zero burn: FE usaba `999`, golden exige `null`; BE devolvía `null` | **RESOLVED** en `e0054e8` — ver sección C.13.1B | Cerrado |
 | C13-P1-03 | Funding FE `localStorage` vs backend API | `fundingStore.jsx`, `fundingApi.js`, `FUNDING_STORAGE_KEYS` | Duplicidad source-of-truth escenarios/drafts |
-| C13-P1-04 | Compliance weighted risk mismatch | Golden 0.4/0.4/0.2 **no implementado**; ver C.13.1C | **OPEN** — pendiente decisión f1B |
-| C13-P1-05 | Compliance resilience mismatch | Golden `100-risk+bonus` ≠ motor FE `base 72…` | **OPEN** — pendiente decisión f1B |
-| C13-P1-06 | Compliance FE recalcula `riskScore` vs BE persistido | `useComplianceEngine.js` pisa API | **OPEN** — pendiente decisión f1B |
+| C13-P1-04 | Compliance weighted risk — helper/test pending | Decisión C híbrida f1B; ver C.13.1C-f1B | **OPEN** — decision documented; implementation/test pending |
+| C13-P1-05 | Compliance resilience alignment pending | Golden ≠ FE engine; subfase posterior | **OPEN** — decision documented; resilience alignment pending |
+| C13-P1-06 | FE/BE precedence + naming `riskScore` | `useComplianceEngine.js` pisa persistido | **OPEN** — decision documented; naming/precedence cleanup pending |
 | C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | Señales DSS mal priorizadas |
 | C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
@@ -1948,9 +1949,9 @@ Auditar source-of-truth y fórmulas reales de Compliance para **C13-P1-04**, **C
 
 | ID | Hallazgo | Estado |
 |---|---|---|
-| C13-P1-04 | Weighted risk golden sin implementación | **OPEN** — requiere decisión f1B |
-| C13-P1-05 | Resilience golden ≠ motor FE | **OPEN** — requiere decisión f1B |
-| C13-P1-06 | FE recalcula y oculta scores persistidos BE | **OPEN** — requiere decisión f1B |
+| C13-P1-04 | Weighted risk golden sin implementación | **OPEN** — decision documented (C.13.1C-f1B); helper/test pending |
+| C13-P1-05 | Resilience golden ≠ motor FE | **OPEN** — decision documented; resilience alignment pending |
+| C13-P1-06 | FE recalcula y oculta scores persistidos BE | **OPEN** — decision documented; naming/precedence cleanup pending |
 
 **P0:** ninguno confirmado en esta subfase (scoring).
 
@@ -1960,15 +1961,18 @@ Auditar source-of-truth y fórmulas reales de Compliance para **C13-P1-04**, **C
 - Golden oracle **no valida** el motor operativo actual en CI.
 - Riesgo de confundir **tres conceptos** bajo nombres similares: `weightedRiskScore`, `operationalRiskScore` (FE), `resilienceScore` (dos fórmulas posibles).
 
-### 10. Decisión pendiente (A / B / C) — NO implementada
+### 10. Decisión adoptada (C.13.1C-f1B) — Option C Hybrid
 
-| Opción | Descripción | Implicación |
+**Estado:** Documentada en `FORMULA_REGISTRY.md` y `SOURCE_OF_TRUTH_REGISTRY.md`. **No implementada en código.**
+
+| Métrica | Rol | SoT documental |
 |---|---|---|
-| **A) Golden manda** | Implementar helper weighted 3 dimensiones + resilience golden | Nuevo código + tests golden; posible rename métricas |
-| **B) Motor operativo FE manda** | Golden/registry = modelo pedagógico simplificado, no oracle del motor actual | Actualizar golden o registry con revisión humana |
-| **C) Híbrido (recomendación auditoría)** | Separar métricas: weighted (informes/oracle), operational (UI DSS), persistido (BE); resolver C13-P1-06 con etiquetas y/o persist-on-save | Docs f1B + fix acotado en dos fases |
+| **weightedRiskScore** | Golden 3-dimension explicable | Golden + Formula Registry |
+| **operationalRiskScore** | Motor FE actual (dashboard) | FE engine interim; pending hardening |
+| **resilienceScore** | Métrica separada | Alignment pending subphase |
+| **Persisted `riskScore`/`resilienceScore`** | SQLite payload | Backend persistence SoT only |
 
-**Condición para avanzar:** decisión documental explícita en **C.13.1C-f1B** antes de tests de implementación o controlled fix.
+Opciones A/B rechazadas para implementación inmediata: no forzar motor FE a golden 68; no deprecar motor operativo sin migración.
 
 ### 11. Archivos clave (referencia lectura)
 
@@ -1979,11 +1983,80 @@ Auditar source-of-truth y fórmulas reales de Compliance para **C13-P1-04**, **C
 - `backend/services/compliance/suppliers.service.js`
 - `src/modules/compliance/services/suppliersApi.js`
 
-### 12. Siguiente paso
+### 12. Siguiente paso (post C.13.1C audit)
 
-**C.13.1C-f1B** — Formula Decision / Source-of-Truth en `FORMULA_REGISTRY.md` + `SOURCE_OF_TRUTH_REGISTRY.md` (y/o inventario).
+Ver sección **C.13.1C-f1B** para decisión formal y siguiente fase f2.
 
-**Prohibido hasta f1B:** C.13.1C-f2 tests implementation, C.13.1C-f3 controlled fix.
+---
+
+## C.13.1C-f1B — Compliance scoring Formula Decision / Source-of-Truth — CLOSED (DOCS ONLY)
+
+**Fecha cierre:** 20 mayo 2026  
+**Estado:** **CLOSED (DOCS ONLY)**  
+**Baseline:** `HEAD = origin/main` al documentar (post-commit `57ca269` audit)  
+**Decisión adoptada:** **Option C — Controlled Hybrid**
+
+### 1. Resumen ejecutivo
+
+Compliance scoring queda con **tres métricas separadas**. El campo ambiguo `riskScore` no es SoT único. Golden Dataset **no modificado**. Motor operativo FE **no eliminado**. Ningún helper ni test creado en esta subfase.
+
+### 2. Métricas canónicas documentadas
+
+| Métrica | Fórmula / origen | Uso | Implementación |
+|---|---|---|---|
+| **weightedRiskScore** | `financial*0.4 + jurisdiction*0.4 + evidence*0.2` | Informes, benchmark, golden tests | **Pending** helper + f2A test |
+| **operationalRiskScore** | Motor FE `calculateSupplierRiskScore` | Dashboards, priorización operativa | **Existing** — pending naming/SoT cleanup |
+| **resilienceScore** | Golden: `clamp(100-risk+bonus)`; FE: modelo distinto | UI resilience | **Pending alignment** |
+
+### 3. Source-of-truth por capa
+
+| Capa | Rol |
+|---|---|
+| Golden + Formula Registry | Canonical para **weightedRiskScore** |
+| FE engine | Implementación actual de **operationalRiskScore** (interim display SoT) |
+| Backend SQLite fields | **Persistence SoT** para `riskScore`/`resilienceScore` — not calculation SoT |
+
+### 4. Issues — estado post f1B (no RESOLVED)
+
+| ID | Estado | Nota |
+|---|---|---|
+| C13-P1-04 | **OPEN** | Decision documented; weighted helper/test pending (C.13.1C-f2A) |
+| C13-P1-05 | **OPEN** | Decision documented; resilience alignment pending |
+| C13-P1-06 | **OPEN** | Decision documented; naming/precedence cleanup pending |
+
+### 5. Archivos documentales actualizados
+
+| Archivo | Cambio |
+|---|---|
+| `docs/testing/FORMULA_REGISTRY.md` | Sección Compliance Hybrid + filas WEIGHTED / OPERATIONAL / RESILIENCE |
+| `docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md` | Tabla Compliance ampliada + sección SoT híbrida |
+| `docs/product/PHASE_A1_CLEANUP_INVENTORY.md` | Esta sección + estados P1 |
+
+### 6. Scope confirmado (f1B)
+
+| Área | Tocado |
+|---|---|
+| `golden_inputs.json` | **No** |
+| `src/` | **No** |
+| `backend/` | **No** |
+| `tests/` | **No** |
+| Helper `calculateWeightedRiskScore` | **No creado** |
+| Golden expected outputs | **No** |
+
+### 7. Siguiente paso recomendado
+
+**C.13.1C-f2A** — Compliance `weightedRiskScore` golden helper + unit test.
+
+**Whitelist esperada f2A:** helper Compliance scoring + test file only (sin UI/BE en misma fase salvo autorización explícita).
+
+**Condiciones para f2A:**
+
+1. C.13.1C-f1B pusheada.
+2. C13-P1-04 OPEN con decisión clara.
+3. Golden intacto.
+4. `weightedRiskScore` ≠ `operationalRiskScore` documentado.
+
+**Prohibido hasta f2A validado:** C.13.1C-f3 controlled fix de UI/BE naming.
 
 ---
 
