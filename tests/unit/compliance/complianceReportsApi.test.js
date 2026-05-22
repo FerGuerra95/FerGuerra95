@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import {
+  OPERATIONAL_RISK_LABEL,
   WEIGHTED_RISK_LABEL,
   buildComplianceReportBoardRows,
   complianceReportsApi,
@@ -131,7 +132,7 @@ describe('complianceReportsApi weightedRiskScore', () => {
       expect(rows.find(([label]) => label === WEIGHTED_RISK_LABEL)?.[1]).toBe(
         '68/100'
       );
-      expect(rows.some(([label]) => label === 'Risk Score')).toBe(true);
+      expect(rows.some(([label]) => label === OPERATIONAL_RISK_LABEL)).toBe(true);
 
       complianceReportsApi.exportReport({
         supplierName: 'Weighted Test Supplier',
@@ -151,7 +152,7 @@ describe('complianceReportsApi weightedRiskScore', () => {
       const html = writeSpy.mock.calls.map((call) => call[0]).join('');
       expect(html).toContain('Weighted risk (explicable)');
       expect(html).toContain('68/100');
-      expect(html).toContain('Risk Score');
+      expect(html).toContain(OPERATIONAL_RISK_LABEL);
       expect(html).not.toContain('999/100');
       expect(html).not.toContain('NaN');
       expect(html).not.toContain('Infinity');
@@ -184,7 +185,7 @@ describe('complianceReportsApi weightedRiskScore', () => {
 
       const html = writeSpy.mock.calls.map((call) => call[0]).join('');
       expect(html).not.toContain('Weighted risk (explicable)');
-      expect(html).toContain('Risk Score');
+      expect(html).toContain(OPERATIONAL_RISK_LABEL);
     });
   });
 });

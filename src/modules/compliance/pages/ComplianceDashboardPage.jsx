@@ -1341,7 +1341,7 @@ export function ComplianceDashboardPage() {
 
                 <div className="compliance-signal-table">
                   <SignalRow label="Suppliers" value={supplierCount} />
-                  <SignalRow label="Average risk" value={riskValue} />
+                  <SignalRow label="Avg operational risk score" value={riskValue} />
                   <SignalRow label="Evidence coverage" value={evidenceValue} />
                   <SignalRow label="Human reviews" value={safeReviews.length} />
                 </div>

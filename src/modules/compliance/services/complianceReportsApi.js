@@ -4,6 +4,8 @@ const STORAGE_KEY = 'compliance_reports_api_v1';
 
 export const WEIGHTED_RISK_LABEL = 'Weighted risk (explicable)';
 
+export const OPERATIONAL_RISK_LABEL = 'Operational risk score';
+
 export function supplierHasExplicitWeightedRiskInputs(supplier) {
   if (!supplier || typeof supplier !== 'object') {
     return false;
@@ -422,7 +424,7 @@ export function buildComplianceReportBoardRows(report = {}) {
   });
 
   const boardRows = [
-    ['Risk Score', riskScore],
+    [OPERATIONAL_RISK_LABEL, riskScore],
     ['Risk Level', riskLevel],
     ['Resilience', resilienceScore],
     ['Resilience Level', resilienceLevel],

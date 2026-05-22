@@ -1247,7 +1247,7 @@ function buildMultinationalCompliancePack({
       ['Annual spend base', formatPremiumReportSpend(totalSpend)]
     ],
     controlRows: [
-      ['Risk score', activeSupplier ? `${activeRiskScore}/100` : 'N/A'],
+      ['Operational risk score', activeSupplier ? `${activeRiskScore}/100` : 'N/A'],
       ['Resilience score', activeSupplier ? `${activeResilienceScore}/100` : 'N/A'],
       ['Report posture', reportSignal?.posture || 'N/A'],
       ['Generated reports', safeReports.length],
@@ -1578,7 +1578,7 @@ export function ComplianceReportPage() {
         report.supplierSpend ||
         report.spend ||
         0,
-      riskScore: supplier?.riskScore ?? report.riskScore ?? 'N/A',
+      riskScore: report.riskScore ?? supplier?.riskScore ?? 'N/A',
       resilienceScore:
         supplier?.resilienceScore ?? report.resilienceScore ?? 'N/A',
       riskLevel: riskLevelLabel,
@@ -1709,7 +1709,7 @@ export function ComplianceReportPage() {
 
                 <div className="report-signal-table">
                   <SignalRow
-                    label="Risk score"
+                    label="Operational risk score"
                     value={`${engine.activeSupplier?.riskScore ?? 0}/100`}
                   />
 
@@ -1750,7 +1750,7 @@ export function ComplianceReportPage() {
             />
 
             <KpiCard
-              label="Risk Score"
+              label="Operational risk score"
               value={`${engine.activeSupplier?.riskScore ?? 0}/100`}
               description={engine.activeSupplier?.riskLevel?.label || 'Sin riesgo'}
               icon={Gauge}

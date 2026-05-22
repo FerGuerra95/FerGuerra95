@@ -1814,7 +1814,7 @@ export function CEOOverviewPage() {
     window.print();
   }
 
-  useComplianceEngine({
+  const complianceEngine = useComplianceEngine({
     suppliers: safeSuppliers,
     alerts: safeAlerts,
     evidenceItems: safeEvidenceItems,
@@ -1829,7 +1829,7 @@ export function CEOOverviewPage() {
 
   const maOverview = getMAOverview(maStore);
   const complianceOverview = getComplianceOverview({
-    suppliers: safeSuppliers,
+    suppliers: complianceEngine.suppliers,
     alerts: safeAlerts,
     evidenceItems: safeEvidenceItems,
     reviews: safeReviews

@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 
 /**
- * C.13.1C-f6A — Precedence / semantic separation tests (no product code changes).
- * Documents: persisted riskScore vs operational (engine) vs weightedRiskScore.
+ * C.13.1C-f6A/f6B — Precedence / semantic separation tests.
+ * persisted riskScore vs operational (engine) vs weightedRiskScore; labels and re-export policy.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -10,6 +10,7 @@ import { renderHook } from '@testing-library/react';
 import { calculateSupplierRiskScore } from '../../../src/modules/compliance/engine/complianceScoring.js';
 import { useComplianceEngine } from '../../../src/modules/compliance/engine/useComplianceEngine.js';
 import {
+  OPERATIONAL_RISK_LABEL,
   WEIGHTED_RISK_LABEL,
   buildComplianceReportBoardRows,
   complianceReportsApi,
@@ -78,9 +79,10 @@ function mirrorCeoOverviewAverageRisk(suppliers = []) {
 
 /**
  * Mirrors ComplianceReportPage.handleExportStoredReport riskScore merge (not exported).
+ * f6B: report snapshot wins over live store persisted riskScore.
  */
-function mirrorReExportOperationalRiskFromStore(supplier, report) {
-  return supplier?.riskScore ?? report.riskScore ?? 'N/A';
+function mirrorReExportStoredReportRiskScore(supplier, report) {
+  return report?.riskScore ?? supplier?.riskScore ?? 'N/A';
 }
 
 function boardRowValue(rows, label) {
@@ -153,7 +155,7 @@ describe('compliance scoring precedence (C.13.1C-f6A)', () => {
 
       expect(report.riskScore).toBe(operationalRiskScore);
       expect(report.weightedRiskScore).toBe(weightedRiskScore);
-      expect(boardRowValue(rows, 'Risk Score')).toBe('55/100');
+      expect(boardRowValue(rows, OPERATIONAL_RISK_LABEL)).toBe('55/100');
       expect(boardRowValue(rows, WEIGHTED_RISK_LABEL)).toBe('68/100');
       expect(report.riskScore).not.toBe(report.weightedRiskScore);
     });
@@ -195,9 +197,9 @@ describe('compliance scoring precedence (C.13.1C-f6A)', () => {
       });
 
       expect(generated.riskScore).toBe(55);
-      expect(boardRowValue(buildComplianceReportBoardRows(generated), 'Risk Score')).toBe(
-        '55/100'
-      );
+      expect(
+        boardRowValue(buildComplianceReportBoardRows(generated), OPERATIONAL_RISK_LABEL)
+      ).toBe('55/100');
     });
 
     it('documents report snapshot vs generated report can diverge on riskScore', () => {
@@ -220,14 +222,14 @@ describe('compliance scoring precedence (C.13.1C-f6A)', () => {
       };
 
       expect(
-        boardRowValue(buildComplianceReportBoardRows(generated), 'Risk Score')
+        boardRowValue(buildComplianceReportBoardRows(generated), OPERATIONAL_RISK_LABEL)
       ).toBe('55/100');
       expect(
-        boardRowValue(buildComplianceReportBoardRows(storedReport), 'Risk Score')
+        boardRowValue(buildComplianceReportBoardRows(storedReport), OPERATIONAL_RISK_LABEL)
       ).toBe('30/100');
     });
 
-    it('documents re-export stored report precedence gap (store supplier wins over report snapshot)', () => {
+    it('re-export stored report prefers report snapshot over store persisted riskScore', () => {
       const storedReport = {
         riskScore: 30,
         resilienceScore: 40
@@ -238,18 +240,29 @@ describe('compliance scoring precedence (C.13.1C-f6A)', () => {
         resilienceScore: 72
       };
 
-      const mergedForReExport = mirrorReExportOperationalRiskFromStore(
+      const mergedForReExport = mirrorReExportStoredReportRiskScore(
         storeSupplier,
         storedReport
       );
 
-      expect(mergedForReExport).toBe(PERSISTED_RISK_SNAPSHOT);
-      expect(mergedForReExport).not.toBe(storedReport.riskScore);
+      expect(mergedForReExport).toBe(storedReport.riskScore);
+      expect(mergedForReExport).not.toBe(storeSupplier.riskScore);
+      expect(
+        boardRowValue(
+          buildComplianceReportBoardRows({
+            ...storedReport,
+            riskLevel: 'Medio',
+            resilienceLevel: 'Media',
+            evidenceSummary: { coverageLabel: 'Media' }
+          }),
+          OPERATIONAL_RISK_LABEL
+        )
+      ).toBe('30/100');
     });
   });
 
-  describe('CEO overview source gap', () => {
-    it('documents CEO overview source gap without changing production', () => {
+  describe('CEO overview operational alignment (f6B)', () => {
+    it('CEO overview average risk matches engine-enriched suppliers (same as dashboards)', () => {
       const suppliersInput = [{ ...supplierFixture }];
 
       const { result } = renderHook(() =>
@@ -262,21 +275,31 @@ describe('compliance scoring precedence (C.13.1C-f6A)', () => {
         })
       );
 
-      const ceoStyleAverage = mirrorCeoOverviewAverageRisk(suppliersInput);
-      const dashboardStyleAverage = averagePersistedRiskScore(
-        result.current.suppliers
+      const persistedOnlyAverage = mirrorCeoOverviewAverageRisk(suppliersInput);
+      const operationalAverage = averagePersistedRiskScore(result.current.suppliers);
+
+      expect(persistedOnlyAverage).toBe(PERSISTED_RISK_SNAPSHOT);
+      expect(operationalAverage).not.toBe(PERSISTED_RISK_SNAPSHOT);
+      expect(mirrorCeoOverviewAverageRisk(result.current.suppliers)).toBe(
+        operationalAverage
       );
+    });
+  });
 
-      expect(ceoStyleAverage).toBe(PERSISTED_RISK_SNAPSHOT);
-      expect(dashboardStyleAverage).not.toBe(PERSISTED_RISK_SNAPSHOT);
-      expect(ceoStyleAverage).not.toBe(dashboardStyleAverage);
+  describe('export board labels (f6B)', () => {
+    it('uses Operational risk score label separate from weighted risk', () => {
+      const rows = buildComplianceReportBoardRows({
+        riskScore: 55,
+        resilienceScore: 70,
+        riskLevel: 'Medio',
+        resilienceLevel: 'Alta',
+        weightedRiskScore: 68,
+        evidenceSummary: { coverageLabel: 'Media' }
+      });
 
-      /**
-       * GAP (documented): CEOOverviewPage.getComplianceOverview is not exported.
-       * Production uses safeSuppliers from store without useComplianceEngine output.
-       * f6B should align CEO with operational source or label persisted snapshot explicitly.
-       */
-      expect(true).toBe(true);
+      expect(rows.some(([label]) => label === OPERATIONAL_RISK_LABEL)).toBe(true);
+      expect(rows.some(([label]) => label === 'Risk Score')).toBe(false);
+      expect(rows.some(([label]) => label === WEIGHTED_RISK_LABEL)).toBe(true);
     });
   });
 });
