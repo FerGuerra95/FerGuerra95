@@ -2389,7 +2389,7 @@ Proveedores demo actuales **no** muestran weighted en export (sin `financialRisk
 | ID | Estado |
 |---|---|
 | C13-P1-04 | **PARTIALLY RESOLVED** — RESOLVED FOR REPORTS/EXPORT SCOPE; broader model-data adoption pending |
-| C13-P1-05 | **OPEN** — f7B decision; f8A/f8B pending |
+| C13-P1-05 | **PARTIALLY RESOLVED** — f8A/f8B complete (ver f8C) |
 | C13-P1-06 | **PARTIALLY RESOLVED** |
 
 ---
@@ -2427,7 +2427,7 @@ Inventario usa **PARTIALLY RESOLVED** porque pendiente:
 
 | ID | Estado |
 |---|---|
-| C13-P1-05 | **OPEN** — decision documented (f7B); f8A/f8B pending |
+| C13-P1-05 | **PARTIALLY RESOLVED** — f8A/f8B complete (ver f8C) |
 | C13-P1-06 | **PARTIALLY RESOLVED** — labels/precedence fixed (f6B); backend/model rename pending |
 
 ### 5. Siguiente paso (post f4B)
