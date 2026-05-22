@@ -1562,7 +1562,9 @@ También hay que validar que:
 | C.13.1C-f2B | Cerrada (docs only) | Inventario cierre parcial C13-P1-04 |
 | C.13.1C-f3A | Cerrada (solo lectura) | Auditoría integración weightedRiskScore |
 | C.13.1C-f3B | Cerrada (docs only) | Decisión integración reports/export primero |
-| C.13 | Pendiente | Compliance f4A reports + resilience + precedence (C.13.1C-f4+) |
+| C.13.1C-f4A | Cerrada | weightedRiskScore en reports/export (`c7c567b`) |
+| C.13.1C-f4B | Cerrada (docs only) | Inventario cierre integración reports/export |
+| C.13 | Pendiente | Compliance precedence FE/BE + resilience (C.13.1C-f5+) |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -1695,7 +1697,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-01 | Golden datasets sin tests oráculo | `grep golden_inputs` en `tests/` → 0 matches | CI no detecta drift código vs golden |
 | C13-P1-02 | Funding zero burn: FE usaba `999`, golden exige `null`; BE devolvía `null` | **RESOLVED** en `e0054e8` — ver sección C.13.1B | Cerrado |
 | C13-P1-03 | Funding FE `localStorage` vs backend API | `fundingStore.jsx`, `fundingApi.js`, `FUNDING_STORAGE_KEYS` | Duplicidad source-of-truth escenarios/drafts |
-| C13-P1-04 | Compliance weighted risk — reports/export pending | Helper `adcdf77`; decisión f3B; ver C.13.1C-f3A/f3B | **PARTIALLY RESOLVED** — helper/test + integration decision; f4A pending |
+| C13-P1-04 | Compliance weighted risk — reports/export done | Helper `adcdf77` + integración `c7c567b`; ver C.13.1C-f4A/f4B | **PARTIALLY RESOLVED** — reports/export complete; model-data adoption pending |
 | C13-P1-05 | Compliance resilience alignment pending | Golden ≠ FE engine; subfase posterior | **OPEN** — decision documented; resilience alignment pending |
 | C13-P1-06 | FE/BE precedence + naming `riskScore` | `useComplianceEngine.js` pisa persistido | **OPEN** — decision documented; naming/precedence cleanup pending |
 | C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | Señales DSS mal priorizadas |
@@ -1877,7 +1879,7 @@ El caso zero-burn queda representado como **`null`** en el motor core; la narrat
 
 ### 10. Siguiente paso recomendado (post C.13.1C)
 
-Ver **C.13.1C-f3A/f3B** (auditoría + decisión integración) y **C.13.1C-f4A** (integración mínima reports/export).
+Ver **C.13.1C-f4B** (cierre integración reports/export) y **C.13.1C-f5A** (preflight C13-P1-06).
 
 ---
 
@@ -1951,7 +1953,7 @@ Auditar source-of-truth y fórmulas reales de Compliance para **C13-P1-04**, **C
 
 | ID | Hallazgo | Estado |
 |---|---|---|
-| C13-P1-04 | Weighted risk helper + golden test + decisión f3B | **PARTIALLY RESOLVED** — reports/export integration pending (f4A) |
+| C13-P1-04 | Weighted risk reports/export integrado | **PARTIALLY RESOLVED** — reports/export complete (`c7c567b`); broader adoption pending |
 | C13-P1-05 | Resilience golden ≠ motor FE | **OPEN** — decision documented; resilience alignment pending |
 | C13-P1-06 | FE recalcula y oculta scores persistidos BE | **OPEN** — decision documented; naming/precedence cleanup pending |
 
@@ -2121,7 +2123,7 @@ Implementación mínima de helper puro `weightedRiskScore` + test unitario contr
 
 | ID | Estado | Nota |
 |---|---|---|
-| C13-P1-04 | **PARTIALLY RESOLVED** | Helper + golden test; integración reporting/UI/benchmark pendiente |
+| C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export integrado; dashboards/model-data pendiente |
 | C13-P1-05 | **OPEN** | Resilience alignment pending |
 | C13-P1-06 | **OPEN** | FE/BE naming and precedence cleanup pending |
 
@@ -2154,11 +2156,11 @@ C.13.1C-f2A quedó cerrada y pusheada. `weightedRiskScore` tiene helper puro y t
 
 | ID | Estado | Criterio de cierre completo |
 |---|---|---|
-| C13-P1-04 | **PARTIALLY RESOLVED** | Helper/test + integration decision (f3B); reports/export pending (f4A) |
+| C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export complete (f4A); model-data/dashboards pending |
 | C13-P1-05 | **OPEN** | Resilience alignment pending |
 | C13-P1-06 | **OPEN** | FE/BE naming and precedence cleanup pending |
 
-**No marcar C13-P1-04 como RESOLVED completo** hasta que reporting/UI/benchmark consuman y etiqueten `weightedRiskScore` sin confundirlo con `operationalRiskScore`.
+**Reports/export cerrado en C.13.1C-f4A.** No marcar C13-P1-04 RESOLVED global hasta adopción en modelo de datos/demo, dashboards y naming C13-P1-06.
 
 ### 3. Confirmaciones de scope (f2B)
 
@@ -2285,11 +2287,11 @@ Si faltan inputs weighted: **no mostrar** la fila o mostrar `N/A` con nota “re
 
 | ID | Estado | Nota |
 |---|---|---|
-| C13-P1-04 | **PARTIALLY RESOLVED** | Helper/test + integration decision documented; reports/export integration pending (f4A) |
-| C13-P1-05 | **OPEN** | Resilience alignment pending — no abrir en f4A |
-| C13-P1-06 | **OPEN** | FE/BE naming/precedence pending — no abrir en f4A |
+| C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export complete (f4A); broader model-data adoption pending |
+| C13-P1-05 | **OPEN** | Resilience alignment pending |
+| C13-P1-06 | **OPEN** | FE/BE naming/precedence pending |
 
-**No marcar C13-P1-04 RESOLVED completo** hasta integración reports/export validada y etiquetada.
+**C13-P1-04 — alcance RESOLVED:** helper + golden test + reports/export. **Pendiente global:** dashboards, backend fields, demo suppliers con 3 dimensiones explícitas.
 
 ### 8. Scope confirmado (f3A/f3B)
 
@@ -2302,19 +2304,131 @@ Si faltan inputs weighted: **no mostrar** la fila o mostrar `N/A` con nota “re
 | `complianceReportsApi` / `ComplianceReportPage` | **No** (f4A) |
 | Helper `complianceWeightedRisk.js` | **No** |
 
-### 9. Siguiente paso recomendado
+### 9. Siguiente paso (post f3B)
 
-**C.13.1C-f4A** — Integración mínima weightedRiskScore en Compliance reports/export (whitelist §5).
+Ver secciones **C.13.1C-f4A** y **C.13.1C-f4B** para integración y cierre documental reports/export.
 
-**Condiciones para f4A:**
+---
 
-1. f3B pusheada.
-2. C13-P1-04 PARTIALLY RESOLVED (no RESOLVED completo).
-3. C13-P1-05 y C13-P1-06 OPEN.
-4. Golden intacto.
-5. Sin dashboards, sin backend, sin derivación de inputs.
+## C.13.1C-f4A — weightedRiskScore reports/export integration — CLOSED
 
-**Después de f4A (no en paralelo):** preflight/documentación C13-P1-06 o alineación resilience C13-P1-05 — fases separadas.
+**Fecha cierre:** 20 mayo 2026  
+**Estado:** **CLOSED — reports/export integration complete**  
+**Commit:** `c7c567b` — `feat(compliance): surface weighted risk in reports`  
+**Baseline:** `HEAD = origin/main = c7c567b`
+
+### 1. Alcance
+
+Integración mínima de `weightedRiskScore` en Compliance reports, export HTML/PDF, board pack y decision memo. Sin dashboards, sin backend, sin motor operativo.
+
+### 2. Archivos modificados
+
+| Archivo | Cambio |
+|---|---|
+| `src/modules/compliance/services/complianceReportsApi.js` | `resolveWeightedRiskScoreForSupplier`, `WEIGHTED_RISK_LABEL`, `buildComplianceReportBoardRows`, payload/export |
+| `src/modules/compliance/pages/ComplianceReportPage.jsx` | `buildCurrentReport`, persist/export con weighted opcional |
+| `tests/unit/compliance/complianceReportsApi.test.js` | 7 tests (nuevo) |
+
+### 3. Cálculo en report payload
+
+En `ComplianceReportPage.buildCurrentReport()`:
+
+- `resolveWeightedRiskScoreForSupplier(engine.activeSupplier)`
+- Solo si existen propiedades explícitas `financialRisk`, `jurisdictionRisk`, `evidenceRisk`
+- Llama a `calculateWeightedRiskScore` (helper `complianceWeightedRisk.js`)
+- Pasa `weightedRiskScore` a `buildSupplierReport` solo si es finito
+
+### 4. Regla de datos
+
+| Condición | Comportamiento |
+|---|---|
+| 3 inputs explícitos finitos | `weightedRiskScore` en informe + fila export |
+| Faltan inputs | `null` → propiedad omitida → **sin fila** "Weighted risk (explicable)" |
+| Derivación prohibida | No usar region, tier, spend, alerts, criticality, evidence gap, reviews, confidence |
+
+### 5. Label y separación
+
+| Métrica | Label export |
+|---|---|
+| Operativo | **Risk Score** (sin cambio) |
+| Explicable | **Weighted risk (explicable)** |
+
+No sustituye `riskScore`, `operationalRiskScore` ni `resilienceScore`.
+
+Fila weighted en board pack: **después** de "Risk Score", solo si valor finito.
+
+### 6. Tests y validaciones
+
+| Test / comando | Resultado |
+|---|---|
+| `complianceReportsApi.test.js` | 7/7 — golden 68, sin derivación, export HTML label/68, sin fila engañosa |
+| `tests/unit/compliance` | 46/46 |
+| `npm run test:unit` | 135/135 |
+| `npm run build` | OK |
+
+### 7. Scope confirmado (f4A)
+
+Golden, registries, backend, dashboards, Supplier Detail, CEO Overview, Reporting general, `useComplianceEngine`, `complianceScoring`, `resilienceScore` — **no tocados**.
+
+### 8. Nota operativa
+
+Proveedores demo actuales **no** muestran weighted en export (sin `financialRisk`/`jurisdictionRisk`/`evidenceRisk`). **Comportamiento correcto.** Fase posterior: modelo de datos o demo explícita.
+
+### 9. Estado C13-P1 post f4A
+
+| ID | Estado |
+|---|---|
+| C13-P1-04 | **PARTIALLY RESOLVED** — RESOLVED FOR REPORTS/EXPORT SCOPE; broader model-data adoption pending |
+| C13-P1-05 | **OPEN** |
+| C13-P1-06 | **OPEN** |
+
+---
+
+## C.13.1C-f4B — weightedRiskScore reports/export closure — CLOSED (DOCS ONLY)
+
+**Fecha cierre:** 20 mayo 2026  
+**Estado:** **CLOSED (DOCS ONLY)**  
+**Referencia técnica:** **C.13.1C-f4A** — commit `c7c567b`
+
+### 1. Resumen ejecutivo
+
+`weightedRiskScore` queda operativo en **informes Compliance y export** como métrica explicable opcional. Helper (`adcdf77`) + test golden + integración reports (`c7c567b`) completos para el alcance definido. **No** es score operativo global. **No** sustituye `riskScore` en dashboards.
+
+### 2. Product truthfulness
+
+- Puede aparecer en board pack / export con label **Weighted risk (explicable)**
+- **No** debe mostrarse sin inputs explícitos
+- **No** debe confundirse con Risk Score operativo
+- Demo actual: weighted ausente en export → esperado
+
+### 3. C13-P1-04 — estado documental
+
+**RESOLVED FOR REPORTS/EXPORT SCOPE.**
+
+Inventario usa **PARTIALLY RESOLVED** porque pendiente:
+
+- Adopción en modelo de datos / demo suppliers con 3 dimensiones
+- Dashboards, Supplier Detail, CEO Overview (fuera f4A)
+- Backend persistence de dimensiones weighted (futuro)
+
+**No** marcar RESOLVED global sin matiz.
+
+### 4. Issues no cerrados
+
+| ID | Estado |
+|---|---|
+| C13-P1-05 | **OPEN** — resilience alignment |
+| C13-P1-06 | **OPEN** — FE/BE naming/precedence |
+
+### 5. Siguiente paso recomendado
+
+**C.13.1C-f5A** — Auditoría read-only C13-P1-06 (FE/BE naming y precedence `riskScore` vs persistido).
+
+Objetivo: mapear si solución futura es BE calculation SoT, `operationalRiskScore` separado, mostrar ambos con labels, persistir FE en BE, u híbrido.
+
+**No** corregir C13-P1-06 en f5A. **No** abrir resilience (C13-P1-05) en la misma fase.
+
+**Recomendación:** f5A precedence **antes** que resilience — clarifica nombres antes de alinear fórmula resilience.
 
 ---
 
