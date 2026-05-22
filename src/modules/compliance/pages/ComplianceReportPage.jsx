@@ -28,7 +28,10 @@ import {
 import { useNotifications } from '../../../app/providers/NotificationsProvider.jsx';
 import { useComplianceStore } from '../store/complianceStore.js';
 import { useComplianceEngine } from '../engine/useComplianceEngine.js';
-import { complianceReportsApi } from '../services/complianceReportsApi.js';
+import {
+  complianceReportsApi,
+  resolveWeightedRiskScoreForSupplier
+} from '../services/complianceReportsApi.js';
 
 const complianceReportCss = `
   .compliance-report-page {
@@ -1408,10 +1411,15 @@ export function ComplianceReportPage() {
       evidenceSummary: engine.evidenceSummary
     });
 
+    const weightedRiskScore = resolveWeightedRiskScoreForSupplier(
+      engine.activeSupplier
+    );
+
     return complianceReportsApi.buildSupplierReport({
       supplier: engine.activeSupplier,
       riskScore: engine.activeSupplier.riskScore,
       resilienceScore: engine.activeSupplier.resilienceScore,
+      weightedRiskScore,
       riskLevel: engine.activeSupplier.riskLevel,
       resilienceLevel: engine.activeSupplier.resilienceLevel,
       executiveSummary: buildDynamicSupplierSummary(
@@ -1471,6 +1479,10 @@ export function ComplianceReportPage() {
       evidenceSummary: report.evidenceSummary,
       riskScore: report.riskScore,
       resilienceScore: report.resilienceScore,
+      ...(report.weightedRiskScore !== null &&
+      report.weightedRiskScore !== undefined
+        ? { weightedRiskScore: report.weightedRiskScore }
+        : {}),
       riskLevel: report.riskLevel,
       resilienceLevel: report.resilienceLevel
     });
@@ -1527,6 +1539,14 @@ export function ComplianceReportPage() {
       const status = String(review?.status || '').toLowerCase();
       return !status || status.includes('pending') || status.includes('open');
     }).length;
+
+    const resolvedWeighted =
+      resolveWeightedRiskScoreForSupplier(supplier) ??
+      (report.weightedRiskScore !== null &&
+      report.weightedRiskScore !== undefined &&
+      Number.isFinite(Number(report.weightedRiskScore))
+        ? Number(report.weightedRiskScore)
+        : null);
 
     const enrichedReport = {
       ...report,
@@ -1591,7 +1611,8 @@ export function ComplianceReportPage() {
         'Mantener trazabilidad de decisiones humanas y cambios de estado.',
         'Actualizar scoring cuando existan nuevas alertas o evidencias.',
         'Validar conclusiones con responsable interno antes de circulación externa.'
-      ]
+      ],
+      ...(resolvedWeighted !== null ? { weightedRiskScore: resolvedWeighted } : {})
     };
 
     complianceReportsApi.exportReport(enrichedReport);

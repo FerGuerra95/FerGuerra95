@@ -1,4 +1,41 @@
-﻿const STORAGE_KEY = 'compliance_reports_api_v1';
+﻿import { calculateWeightedRiskScore } from '../engine/complianceWeightedRisk.js';
+
+const STORAGE_KEY = 'compliance_reports_api_v1';
+
+export const WEIGHTED_RISK_LABEL = 'Weighted risk (explicable)';
+
+export function supplierHasExplicitWeightedRiskInputs(supplier) {
+  if (!supplier || typeof supplier !== 'object') {
+    return false;
+  }
+
+  return (
+    Object.prototype.hasOwnProperty.call(supplier, 'financialRisk') &&
+    Object.prototype.hasOwnProperty.call(supplier, 'jurisdictionRisk') &&
+    Object.prototype.hasOwnProperty.call(supplier, 'evidenceRisk')
+  );
+}
+
+export function resolveWeightedRiskScoreForSupplier(supplier) {
+  if (!supplierHasExplicitWeightedRiskInputs(supplier)) {
+    return null;
+  }
+
+  return calculateWeightedRiskScore({
+    financialRisk: supplier.financialRisk,
+    jurisdictionRisk: supplier.jurisdictionRisk,
+    evidenceRisk: supplier.evidenceRisk
+  });
+}
+
+function normalizeWeightedRiskScoreForReport(value) {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
 
 function safeRead(fallback = []) {
   try {
@@ -366,6 +403,47 @@ function buildBoardRows(rows = []) {
     .join('');
 }
 
+export function buildComplianceReportBoardRows(report = {}) {
+  const riskScore = formatScore(report.riskScore);
+  const resilienceScore = formatScore(report.resilienceScore);
+  const riskLevel = report.riskLevel || 'N/A';
+  const resilienceLevel = report.resilienceLevel || 'N/A';
+  const evidenceSummary = report.evidenceSummary || {};
+  const coverageLabel =
+    evidenceSummary.coverageLabel || evidenceSummary.coverage || 'N/A';
+  const decision = buildDecisionSignal({
+    riskScore: report.riskScore,
+    resilienceScore: report.resilienceScore,
+    riskLevel,
+    totalEvidence:
+      evidenceSummary.totalEvidence ?? evidenceSummary.total ?? 'N/A',
+    pendingReviews:
+      evidenceSummary.pendingReviews ?? evidenceSummary.pending ?? 'N/A'
+  });
+
+  const boardRows = [
+    ['Risk Score', riskScore],
+    ['Risk Level', riskLevel],
+    ['Resilience', resilienceScore],
+    ['Resilience Level', resilienceLevel],
+    ['Evidence Coverage', coverageLabel],
+    ['Board Decision', decision.boardDecision]
+  ];
+
+  const weightedNumeric = normalizeWeightedRiskScoreForReport(
+    report.weightedRiskScore
+  );
+
+  if (weightedNumeric !== null) {
+    boardRows.splice(1, 0, [
+      WEIGHTED_RISK_LABEL,
+      formatScore(weightedNumeric)
+    ]);
+  }
+
+  return boardRows;
+}
+
 export const complianceReportsApi = {
   list(fallback = []) {
     return safeRead(fallback);
@@ -406,6 +484,13 @@ export const complianceReportsApi = {
       status: payload.status || 'generated',
       riskScore: payload.riskScore ?? null,
       resilienceScore: payload.resilienceScore ?? null,
+      ...(normalizeWeightedRiskScoreForReport(payload.weightedRiskScore) !== null
+        ? {
+            weightedRiskScore: normalizeWeightedRiskScoreForReport(
+              payload.weightedRiskScore
+            )
+          }
+        : {}),
       riskLevel: payload.riskLevel || '',
       resilienceLevel: payload.resilienceLevel || '',
       summary: payload.summary || '',
@@ -473,6 +558,7 @@ export const complianceReportsApi = {
     supplier,
     riskScore,
     resilienceScore,
+    weightedRiskScore,
     riskLevel,
     resilienceLevel,
     executiveSummary,
@@ -484,7 +570,11 @@ export const complianceReportsApi = {
       return null;
     }
 
-    return {
+    const resolvedWeighted =
+      normalizeWeightedRiskScoreForReport(weightedRiskScore) ??
+      resolveWeightedRiskScoreForSupplier(supplier);
+
+    const report = {
       id: createId('report'),
       title: `Compliance Board Pack · ${supplier.name}`,
       supplierId: supplier.id,
@@ -519,6 +609,12 @@ export const complianceReportsApi = {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
+
+    if (resolvedWeighted !== null) {
+      report.weightedRiskScore = resolvedWeighted;
+    }
+
+    return report;
   },
 
   exportReport(report) {
@@ -580,14 +676,14 @@ export const complianceReportsApi = {
       ['Annual Spend', supplierSpend]
     ];
 
-    const boardRows = [
-      ['Risk Score', riskScore],
-      ['Risk Level', riskLevel],
-      ['Resilience', resilienceScore],
-      ['Resilience Level', resilienceLevel],
-      ['Evidence Coverage', coverageLabel],
-      ['Board Decision', decision.boardDecision]
-    ];
+    const boardRows = buildComplianceReportBoardRows({
+      ...report,
+      riskScore: report.riskScore,
+      resilienceScore: report.resilienceScore,
+      riskLevel,
+      resilienceLevel,
+      evidenceSummary
+    });
 
     const evidenceRows = [
       ['Linked Items', totalItems],
