@@ -2420,7 +2420,7 @@ Inventario usa **PARTIALLY RESOLVED** porque pendiente:
 | ID | Estado |
 |---|---|
 | C13-P1-05 | **OPEN** — resilience alignment |
-| C13-P1-06 | **OPEN** — FE/BE naming/precedence |
+| C13-P1-06 | **OPEN** — decision documented (f5B); f6A/f6B pending |
 
 ### 5. Siguiente paso (post f4B)
 
