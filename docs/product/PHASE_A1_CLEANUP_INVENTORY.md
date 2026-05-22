@@ -1569,7 +1569,9 @@ También hay que validar que:
 | C.13.1C-f6A | Cerrada | Tests precedencia Compliance scoring (`1580d6f`) |
 | C.13.1C-f6B | Cerrada | Labels/precedence operational risk score (`1e82980`) |
 | C.13.1C-f6C | Cerrada (docs only) | Inventario cierre parcial C13-P1-06 |
-| C.13 | Pendiente | Compliance C13-P1-05 resilience audit; model rename enterprise |
+| C.13.1C-f7A | Cerrada (solo lectura) | Auditoría C13-P1-05 resilienceScore |
+| C.13.1C-f7B | Cerrada (docs only) | Decisión resilienceScore Option C híbrido |
+| C.13 | Pendiente | Compliance f8A golden resilience helper + f8B labels/re-export |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -1703,7 +1705,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-02 | Funding zero burn: FE usaba `999`, golden exige `null`; BE devolvía `null` | **RESOLVED** en `e0054e8` — ver sección C.13.1B | Cerrado |
 | C13-P1-03 | Funding FE `localStorage` vs backend API | `fundingStore.jsx`, `fundingApi.js`, `FUNDING_STORAGE_KEYS` | Duplicidad source-of-truth escenarios/drafts |
 | C13-P1-04 | Compliance weighted risk — reports/export done | Helper `adcdf77` + integración `c7c567b`; ver C.13.1C-f4A/f4B | **PARTIALLY RESOLVED** — reports/export complete; model-data adoption pending |
-| C13-P1-05 | Compliance resilience alignment pending | Golden ≠ FE engine; subfase posterior | **OPEN** — decision documented; resilience alignment pending |
+| C13-P1-05 | Compliance resilience — Option C hybrid documented | Golden ≠ FE; ver C.13.1C-f7A/f7B | **OPEN** — decision documented (f7B); helper/test/fix pending (f8A/f8B) |
 | C13-P1-06 | FE/BE precedence — labels/precedence fix done | f5B + f6A + f6B (`1e82980`); ver C.13.1C-f6A/f6B/f6C | **PARTIALLY RESOLVED** — labels/precedence + re-export + CEO; backend/model rename pending |
 | C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | Señales DSS mal priorizadas |
 | C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
@@ -1959,7 +1961,7 @@ Auditar source-of-truth y fórmulas reales de Compliance para **C13-P1-04**, **C
 | ID | Hallazgo | Estado |
 |---|---|---|
 | C13-P1-04 | Weighted risk reports/export integrado | **PARTIALLY RESOLVED** — reports/export complete (`c7c567b`); broader adoption pending |
-| C13-P1-05 | Resilience golden ≠ motor FE | **OPEN** — decision documented; resilience alignment pending |
+| C13-P1-05 | Resilience Option C hybrid (f7B) | **OPEN** — decision documented; helper/test/fix pending (f8A/f8B) |
 | C13-P1-06 | Labels/precedence; persisted vs operational mejor separados | **PARTIALLY RESOLVED** — f6B fix; rename modelo/API pending |
 
 **P0:** ninguno confirmado en esta subfase (scoring).
@@ -2030,7 +2032,7 @@ Compliance scoring queda con **tres métricas separadas**. El campo ambiguo `ris
 | ID | Estado | Nota |
 |---|---|---|
 | C13-P1-04 | **OPEN** | Decision documented; weighted helper/test pending (C.13.1C-f2A) |
-| C13-P1-05 | **OPEN** | Decision documented; resilience alignment pending |
+| C13-P1-05 | **OPEN** | Decision documented (f7B Option C); helper/test/fix pending (f8A/f8B) |
 | C13-P1-06 | **PARTIALLY RESOLVED** | f6B labels/precedence + re-export + CEO; backend/model rename pending — ver C.13.1C-f6B |
 
 ### 5. Archivos documentales actualizados
@@ -2129,7 +2131,7 @@ Implementación mínima de helper puro `weightedRiskScore` + test unitario contr
 | ID | Estado | Nota |
 |---|---|---|
 | C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export integrado; dashboards/model-data pendiente |
-| C13-P1-05 | **OPEN** | Resilience alignment pending |
+| C13-P1-05 | **OPEN** | Decision documented (f7B); f8A/f8B pending |
 | C13-P1-06 | **PARTIALLY RESOLVED** | f6B labels/precedence + re-export + CEO; backend/model rename pending — ver C.13.1C-f6B |
 
 ### 8. Product truthfulness
@@ -2162,7 +2164,7 @@ C.13.1C-f2A quedó cerrada y pusheada. `weightedRiskScore` tiene helper puro y t
 | ID | Estado | Criterio de cierre completo |
 |---|---|---|
 | C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export complete (f4A); model-data/dashboards pending |
-| C13-P1-05 | **OPEN** | Resilience alignment pending |
+| C13-P1-05 | **OPEN** | Decision documented (f7B); f8A/f8B pending |
 | C13-P1-06 | **PARTIALLY RESOLVED** | f6B labels/precedence + re-export + CEO; backend/model rename pending — ver C.13.1C-f6B |
 
 **Reports/export cerrado en C.13.1C-f4A.** No marcar C13-P1-04 RESOLVED global hasta adopción en modelo de datos/demo, dashboards y naming C13-P1-06.
@@ -2293,7 +2295,7 @@ Si faltan inputs weighted: **no mostrar** la fila o mostrar `N/A` con nota “re
 | ID | Estado | Nota |
 |---|---|---|
 | C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export complete (f4A); broader model-data adoption pending |
-| C13-P1-05 | **OPEN** | Resilience alignment pending |
+| C13-P1-05 | **OPEN** | Decision documented (f7B); f8A/f8B pending |
 | C13-P1-06 | **PARTIALLY RESOLVED** | f6B labels/precedence + re-export + CEO; backend/model rename pending — ver C.13.1C-f6B |
 
 **C13-P1-04 — alcance RESOLVED:** helper + golden test + reports/export. **Pendiente global:** dashboards, backend fields, demo suppliers con 3 dimensiones explícitas.
@@ -2384,7 +2386,7 @@ Proveedores demo actuales **no** muestran weighted en export (sin `financialRisk
 | ID | Estado |
 |---|---|
 | C13-P1-04 | **PARTIALLY RESOLVED** — RESOLVED FOR REPORTS/EXPORT SCOPE; broader model-data adoption pending |
-| C13-P1-05 | **OPEN** |
+| C13-P1-05 | **OPEN** — f7B decision; f8A/f8B pending |
 | C13-P1-06 | **PARTIALLY RESOLVED** |
 
 ---
@@ -2422,12 +2424,12 @@ Inventario usa **PARTIALLY RESOLVED** porque pendiente:
 
 | ID | Estado |
 |---|---|
-| C13-P1-05 | **OPEN** — resilience alignment |
+| C13-P1-05 | **OPEN** — decision documented (f7B); f8A/f8B pending |
 | C13-P1-06 | **PARTIALLY RESOLVED** — labels/precedence fixed (f6B); backend/model rename pending |
 
 ### 5. Siguiente paso (post f4B)
 
-Ver **C.13.1C-f6C** (cierre documental f6B). Siguiente: **C.13.1C-f7A** (auditoría read-only C13-P1-05 resilienceScore).
+Ver **C.13.1C-f7A/f7B** (decisión resilience). Siguiente: **C.13.1C-f8A** (helper/test Golden resilience).
 
 ---
 
@@ -2554,7 +2556,7 @@ riskScore: report.riskScore ?? supplier?.riskScore
 | ID | Estado | Nota |
 |---|---|---|
 | C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export scope complete; broader model-data/dashboards/backend adoption pending |
-| C13-P1-05 | **OPEN** | Resilience alignment pending — siguiente auditoría read-only (f7A) |
+| C13-P1-05 | **OPEN** | Decision documented (f7B); f8A golden helper + f8B labels/re-export pending |
 | C13-P1-06 | **PARTIALLY RESOLVED** | Labels/precedence + re-export + CEO source aligned; **backend/API/model rename pending** (`persistedRiskScore` / `operationalRiskScore`) — **no RESOLVED global** |
 
 ### 11. Product truthfulness
@@ -2571,7 +2573,7 @@ riskScore: report.riskScore ?? supplier?.riskScore
 | B) C.13.1D | Auditoría read-only modelo `riskScore` / persisted vs operational |
 | C) C.13.2 | Formula Approval Gate — después de cerrar cadena Compliance scoring |
 
-**Recomendación:** **C.13.1C-f7A** — es el P1 abierto restante dentro de Compliance scoring; no abrir Formula Approval Gate hasta cerrar esta cadena.
+**Recomendación (histórico post-f6B):** superseded por **C.13.1C-f7A/f7B** — ver sección f7A/f7B.
 
 ---
 
@@ -2583,6 +2585,146 @@ riskScore: report.riskScore ?? supplier?.riskScore
 **Registra cierre de:** f6A `1580d6f` + f6B `1e82980`.
 
 **C13-P1-06 permanece PARTIALLY RESOLVED** — no marcar RESOLVED global hasta rename/modelo backend/API.
+
+---
+
+## C.13.1C-f7A/f7B — resilienceScore source-of-truth decision — READ-ONLY + DOCS CLOSED
+
+**Fecha cierre:** 20 mayo 2026  
+**Estados:** **C.13.1C-f7A CLOSED (READ ONLY)** · **C.13.1C-f7B CLOSED (DOCS ONLY)**  
+**Baseline auditado:** `HEAD = origin/main = ca95b61` (post f6C `ca95b61`, f6B `1e82980`)  
+**Sin modificaciones de código** en f7A/f7B · **Sin commit de código** en f7A
+
+### 1. Estado de fases
+
+| Fase | Estado |
+|---|---|
+| **f7A** | **CLOSED** — auditoría read-only C13-P1-05; cero archivos modificados |
+| **f7B** | **CLOSED** — decisión documental Option C híbrido; solo inventario |
+
+### 2. Hallazgos Golden (f7A)
+
+| Campo | Valor |
+|---|---|
+| **Golden ID** | `compliance_resilience_score_basic` |
+| **Fórmula** | `resilienceScore = clamp(100 - riskScore + mitigationBonus, 0, 100)` |
+| **Inputs** | `riskScore: 68`, `mitigationBonus: 8` |
+| **Expected** | `resilienceScore: 40` |
+| **manualCalculation** | `100 - 68 + 8 = 40` |
+| **tolerance** | `0` |
+| **edgeCase** | `false` |
+
+**GAP confirmado:** `mitigationBonus` **no existe** en modelo supplier, API ni FE — solo en `golden_inputs.json` y `FORMULA_REGISTRY.md`. El `riskScore: 68` del golden es **input abstracto** del oráculo (no el motor operativo FE).
+
+### 3. Hallazgos backend (f7A)
+
+| Aspecto | Hallazgo |
+|---|---|
+| **Archivo principal** | `backend/services/compliance/suppliers.service.js` |
+| **Cálculo** | **No calcula** `resilienceScore` |
+| **Comportamiento** | `normalizeSupplierPayload` → `clampScore(resilienceScore, 50)` en create/update |
+| **SoT** | **Persistence SoT** — snapshot histórico/legacy desde payload cliente |
+| **mitigationBonus** | **No existe** en backend |
+
+### 4. Hallazgos frontend (f7A)
+
+| Aspecto | Hallazgo |
+|---|---|
+| **Archivo** | `src/modules/compliance/engine/resilienceScore.js` → `calculateResilienceScore` |
+| **Fórmula FE (operativa)** | `base 72 - criticalityPenalty - tierPenalty - alertPenalty - concentrationPenalty + evidenceBonus + reviewBonus` → `clamp(round(score), 0, 100)` |
+| **Inputs reales** | `supplier`, `alerts`, `evidenceItems`, `reviews` (incl. `spend` vía supplier) |
+| **Orquestación** | `useComplianceEngine` **sobrescribe** `supplier.resilienceScore` con valor calculado FE |
+| **Ejemplo test** | Fixture `supplierBase` (Alta/Tier1/spend 420k) → **51/100** — no coincide con golden **40** |
+
+**Mismatch confirmado:** Golden y motor FE son **métricas distintas**, no error de redondeo.
+
+### 5. Hallazgos UI / reports / export (f7A)
+
+| Superficie | Valor | Fuente actual | Riesgo |
+|---|---|---|---|
+| Dashboards, Suppliers, Risk map, Supplier detail | `resilienceScore/100` | **Operativo FE** (engine) | Label genérico "Resilience" — confusión con golden/persistido |
+| Report generado (`buildCurrentReport`) | `engine.activeSupplier.resilienceScore` | **Operativo FE** | Coherente con generación viva |
+| Export board rows | `report.resilienceScore` | Del payload del report | Label `Resilience` — sin distinción operational vs golden |
+| Re-export stored (`handleExportStoredReport`) | `supplier?.resilienceScore ?? report.resilienceScore` | **Store primero** | **Invertido** respecto a `riskScore` post-f6B (`report` primero) — alinear en **f8B** |
+| CEO Overview | Sin métrica resilience directa | Agregado compliance usa risk operativo (f6B) | Bajo para resilience |
+
+### 6. Decisión adoptada — Option C (híbrido controlado)
+
+Replica la arquitectura ya adoptada para Compliance scoring (Option C — f1B/f5B/f6):
+
+| Métrica conceptual | Rol | Implementación actual (legacy) | SoT por capa |
+|---|---|---|---|
+| **persistedResilienceScore** | Snapshot histórico / payload API | Campo `resilienceScore` en BE/store | Backend persistence (clamp 0–100) |
+| **operationalResilienceScore** | DSS operativo vivo | `calculateResilienceScore` + `useComplianceEngine` | **Frontend engine** — UI e informes operativos |
+| **goldenResilienceScore** (benchmark) | Oráculo / informes explicables | `clamp(100 - riskScore + mitigationBonus, 0, 100)` | Golden + Formula Registry — **helper pendiente f8A** |
+
+**Prohibido en esta decisión:**
+- Sustituir motor FE por fórmula Golden sin Formula Approval y sin inputs reales en producto.
+- Inferir `mitigationBonus` desde alerts, evidence, reviews o spend.
+- Mover cálculo resilience al backend en f8.
+- Marcar C13-P1-05 como RESOLVED en f7B.
+
+### 7. Política futura (f8+)
+
+| Superficie | Política |
+|---|---|
+| **UI / dashboards / informes operativos** | Mostrar **operationalResilienceScore** con label explícito (**Operational resilience score** en f8B). No presentar persistido como score vivo. |
+| **Golden / benchmark** | Helper puro + test contra `compliance_resilience_score_basic` (**f8A**). Solo calcular si existen inputs explícitos `riskScore` + `mitigationBonus`. |
+| **Reports/export** | Mantener `resilienceScore` operativo en informes generados; golden/benchmark separado si inputs explícitos (patrón weighted f4A). |
+| **Re-export stored** | **f8B:** `report.resilienceScore ?? supplier?.resilienceScore` (alinear con risk post-f6B). |
+| **Backend** | Sigue **persistence SoT**; no calculation SoT hasta fase enterprise explícita. |
+
+### 8. Tests — estado y gaps (f7A)
+
+| Cobertura | Estado |
+|---|---|
+| `resilienceScore.test.js` | Motor FE (ej. 51 base) — **sin** golden 40 |
+| `useComplianceEngine.test.js` | Rangos 0–100 — **sin** precedence resilience |
+| `compliancePrecedence.test.js` | Risk/weighted — **sin** resilience |
+| `goldenInputsSchema.test.js` | Esquema ID — **sin** implementación oráculo |
+| Helper golden resilience | **No existe** (pendiente f8A) |
+
+### 9. Product truthfulness
+
+- La UI **no debe** presentar `resilienceScore` como métrica única universal.
+- Diferenciar: **operational resilience** vs **persisted snapshot** vs **golden benchmark**.
+- No confundir resilience operativo con `weightedRiskScore` ni con `operationalRiskScore` (f6B).
+
+### 10. Estado C13-P1 (post f7B)
+
+| ID | Estado | Nota |
+|---|---|---|
+| C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export weighted complete; broader adoption pending |
+| C13-P1-05 | **OPEN** | Decision documented (f7B Option C); helper/test/fix pending (**f8A/f8B**) — **no RESOLVED** |
+| C13-P1-06 | **PARTIALLY RESOLVED** | Labels/precedence risk (f6B); backend/model rename pending |
+
+### 11. Siguiente paso recomendado
+
+**C.13.1C-f8A — Helper + test Golden resilience (sin integración UI)**
+
+| Objetivo | Restricción |
+|---|---|
+| Helper puro (ej. `calculateBenchmarkResilienceScore` / `calculateGoldenResilienceScore`) | Solo `riskScore` + `mitigationBonus` explícitos |
+| Test vs `compliance_resilience_score_basic` → expected **40** | Tolerance **0** |
+| **No** tocar `resilienceScore.js` operativo | |
+| **No** tocar UI, backend, Golden Dataset, registries | |
+
+**C.13.1C-f8B — Labels + re-export resilience (post f8A)**
+
+- Label **Operational resilience score** donde el valor sea motor FE.
+- Re-export: `report.resilienceScore ?? supplier?.resilienceScore`.
+- Tests precedence resilience en `compliancePrecedence.test.js` / reports API.
+- **Sin** mover cálculo al backend.
+
+**No abrir C.13.2 Formula Approval Gate** hasta cerrar f8A + f8B de la cadena Compliance scoring.
+
+### 12. Scope confirmado (f7A/f7B)
+
+| Área | Tocado |
+|---|---|
+| `PHASE_A1_CLEANUP_INVENTORY.md` | **Sí** (f7B) |
+| `src/` / `backend/` / `tests/` | **No** |
+| Golden / `FORMULA_REGISTRY` / `SOURCE_OF_TRUTH_REGISTRY` | **No** (f7B) |
 
 ---
 
@@ -2684,7 +2826,7 @@ El usuario **no** debe ver "Risk Score" sin saber si es: persistido, operativo c
 
 ### 11. Siguiente paso recomendado (histórico f5B — superseded)
 
-Superseded por **C.13.1C-f6A/f6B/f6C** (cerradas). Siguiente: **C.13.1C-f7A** — auditoría read-only C13-P1-05 resilienceScore.
+Superseded por **C.13.1C-f6A/f6B/f6C** y **f7A/f7B** (cerradas). Siguiente: **C.13.1C-f8A** — helper/test Golden resilience.
 
 ---
 
