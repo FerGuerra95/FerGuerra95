@@ -1564,7 +1564,9 @@ También hay que validar que:
 | C.13.1C-f3B | Cerrada (docs only) | Decisión integración reports/export primero |
 | C.13.1C-f4A | Cerrada | weightedRiskScore en reports/export (`c7c567b`) |
 | C.13.1C-f4B | Cerrada (docs only) | Inventario cierre integración reports/export |
-| C.13 | Pendiente | Compliance precedence FE/BE + resilience (C.13.1C-f5+) |
+| C.13.1C-f5A | Cerrada (solo lectura) | Auditoría C13-P1-06 FE/BE precedence |
+| C.13.1C-f5B | Cerrada (docs only) | Decisión naming/precedence Option E |
+| C.13 | Pendiente | Compliance f6A tests + f6B labels/precedence fix |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -1699,7 +1701,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-03 | Funding FE `localStorage` vs backend API | `fundingStore.jsx`, `fundingApi.js`, `FUNDING_STORAGE_KEYS` | Duplicidad source-of-truth escenarios/drafts |
 | C13-P1-04 | Compliance weighted risk — reports/export done | Helper `adcdf77` + integración `c7c567b`; ver C.13.1C-f4A/f4B | **PARTIALLY RESOLVED** — reports/export complete; model-data adoption pending |
 | C13-P1-05 | Compliance resilience alignment pending | Golden ≠ FE engine; subfase posterior | **OPEN** — decision documented; resilience alignment pending |
-| C13-P1-06 | FE/BE precedence + naming `riskScore` | `useComplianceEngine.js` pisa persistido | **OPEN** — decision documented; naming/precedence cleanup pending |
+| C13-P1-06 | FE/BE precedence — tests/fix pending | Decisión f5B Option E; ver C.13.1C-f5A/f5B | **OPEN** — decision documented (f5B); tests/fix pending (f6A/f6B) |
 | C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | Señales DSS mal priorizadas |
 | C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
@@ -1879,7 +1881,7 @@ El caso zero-burn queda representado como **`null`** en el motor core; la narrat
 
 ### 10. Siguiente paso recomendado (post C.13.1C)
 
-Ver **C.13.1C-f4B** (cierre integración reports/export) y **C.13.1C-f5A** (preflight C13-P1-06).
+Ver **C.13.1C-f5B** (decisión precedence) y **C.13.1C-f6A** (tests precedencia).
 
 ---
 
@@ -1955,7 +1957,7 @@ Auditar source-of-truth y fórmulas reales de Compliance para **C13-P1-04**, **C
 |---|---|---|
 | C13-P1-04 | Weighted risk reports/export integrado | **PARTIALLY RESOLVED** — reports/export complete (`c7c567b`); broader adoption pending |
 | C13-P1-05 | Resilience golden ≠ motor FE | **OPEN** — decision documented; resilience alignment pending |
-| C13-P1-06 | FE recalcula y oculta scores persistidos BE | **OPEN** — decision documented; naming/precedence cleanup pending |
+| C13-P1-06 | FE recalcula y oculta scores persistidos BE | **OPEN** — decision documented (f5B); tests/fix pending |
 
 **P0:** ninguno confirmado en esta subfase (scoring).
 
@@ -2026,7 +2028,7 @@ Compliance scoring queda con **tres métricas separadas**. El campo ambiguo `ris
 |---|---|---|
 | C13-P1-04 | **OPEN** | Decision documented; weighted helper/test pending (C.13.1C-f2A) |
 | C13-P1-05 | **OPEN** | Decision documented; resilience alignment pending |
-| C13-P1-06 | **OPEN** | Decision documented; naming/precedence cleanup pending |
+| C13-P1-06 | **OPEN** | Decision documented (f5B); tests/fix pending (f6A/f6B) |
 
 ### 5. Archivos documentales actualizados
 
@@ -2125,7 +2127,7 @@ Implementación mínima de helper puro `weightedRiskScore` + test unitario contr
 |---|---|---|
 | C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export integrado; dashboards/model-data pendiente |
 | C13-P1-05 | **OPEN** | Resilience alignment pending |
-| C13-P1-06 | **OPEN** | FE/BE naming and precedence cleanup pending |
+| C13-P1-06 | **OPEN** | Decision documented (f5B); tests/fix pending (f6A/f6B) |
 
 ### 8. Product truthfulness
 
@@ -2158,7 +2160,7 @@ C.13.1C-f2A quedó cerrada y pusheada. `weightedRiskScore` tiene helper puro y t
 |---|---|---|
 | C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export complete (f4A); model-data/dashboards pending |
 | C13-P1-05 | **OPEN** | Resilience alignment pending |
-| C13-P1-06 | **OPEN** | FE/BE naming and precedence cleanup pending |
+| C13-P1-06 | **OPEN** | Decision documented (f5B); tests/fix pending (f6A/f6B) |
 
 **Reports/export cerrado en C.13.1C-f4A.** No marcar C13-P1-04 RESOLVED global hasta adopción en modelo de datos/demo, dashboards y naming C13-P1-06.
 
@@ -2289,7 +2291,7 @@ Si faltan inputs weighted: **no mostrar** la fila o mostrar `N/A` con nota “re
 |---|---|---|
 | C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export complete (f4A); broader model-data adoption pending |
 | C13-P1-05 | **OPEN** | Resilience alignment pending |
-| C13-P1-06 | **OPEN** | FE/BE naming/precedence pending |
+| C13-P1-06 | **OPEN** | Decision documented (f5B); tests/fix pending (f6A/f6B) |
 
 **C13-P1-04 — alcance RESOLVED:** helper + golden test + reports/export. **Pendiente global:** dashboards, backend fields, demo suppliers con 3 dimensiones explícitas.
 
@@ -2420,15 +2422,114 @@ Inventario usa **PARTIALLY RESOLVED** porque pendiente:
 | C13-P1-05 | **OPEN** — resilience alignment |
 | C13-P1-06 | **OPEN** — FE/BE naming/precedence |
 
-### 5. Siguiente paso recomendado
+### 5. Siguiente paso (post f4B)
 
-**C.13.1C-f5A** — Auditoría read-only C13-P1-06 (FE/BE naming y precedence `riskScore` vs persistido).
+Ver **C.13.1C-f5A/f5B** y **C.13.1C-f6A** (tests precedencia).
 
-Objetivo: mapear si solución futura es BE calculation SoT, `operationalRiskScore` separado, mostrar ambos con labels, persistir FE en BE, u híbrido.
+---
 
-**No** corregir C13-P1-06 en f5A. **No** abrir resilience (C13-P1-05) en la misma fase.
+## C.13.1C-f5A/f5B — C13-P1-06 FE/BE naming & precedence decision — READ-ONLY + DOCS CLOSED
 
-**Recomendación:** f5A precedence **antes** que resilience — clarifica nombres antes de alinear fórmula resilience.
+**Fecha cierre:** 20 mayo 2026  
+**Estados:** **C.13.1C-f5A CLOSED (READ ONLY)** · **C.13.1C-f5B CLOSED (DOCS ONLY)**  
+**Baseline auditado:** `HEAD = origin/main = ef06bc7` (post `c7c567b` reports integration)  
+**Sin modificaciones de código** en f5A/f5B
+
+### 1. Hallazgos f5A (auditoría read-only)
+
+| Capa | Hallazgo |
+|---|---|
+| **Backend** | Acepta, normaliza/clampa (0–100) y persiste `riskScore`/`resilienceScore` en SQLite. **No calcula** motor operativo. |
+| **Frontend** | `useComplianceEngine` recalcula con `calculateSupplierRiskScore` / `calculateResilienceScore` y **pisa** valores del store/API en el mismo campo `riskScore`. |
+| **Dashboards Compliance** | Muestran score **operativo calculado** (vía engine), label actual "Risk Score". |
+| **Reports generados** | `buildCurrentReport` usa `engine.activeSupplier` → **operativo**. |
+| **Re-export guardado** | `handleExportStoredReport` puede usar `supplier.riskScore` del **store persistido** → posible divergencia vs informe generado. |
+| **CEO Overview** | `getComplianceOverview` usa `safeSuppliers` **sin enriquecer** por engine → puede divergir de dashboards. |
+| **weightedRiskScore** | Separado en reports/export con label **Weighted risk (explicable)** — no mezclar con operativo. |
+
+### 2. Problema (C13-P1-06)
+
+El campo `riskScore` tiene **un solo nombre** pero **múltiples semánticas**: persistido (API/BD), operativo (motor FE), y confusión potencial con weighted explicable. El usuario puede asumir una única verdad.
+
+### 3. Decisión adoptada — Option E (híbrido por fases)
+
+| Fase | Alcance | Estado |
+|---|---|---|
+| **f5B (esta)** | Decisión documental | **CLOSED** |
+| **f6A** | Tests de precedencia antes de fix | Pendiente |
+| **f6B** | Labels + alineación fuentes (CEO/re-export) | Pendiente |
+| **Posterior** | BE calculation SoT / rename campos | Enterprise — no ahora |
+
+**No** mover cálculo completo al backend en f6. **No** renombrar campos en código en f5B. **No** resolver C13-P1-05 (resilience) en la misma cadena.
+
+### 4. Nombres conceptuales futuros (no implementados en código aún)
+
+| Concepto | Nombre legacy en código | Origen actual | Uso futuro |
+|---|---|---|---|
+| **Persisted risk snapshot** | `riskScore` (supplier/report BE) | Payload cliente + clamp BE + SQLite | Histórico, auditoría, snapshot inicial — **no** score operativo vivo |
+| **Operational risk score** | `riskScore` en UI tras `useComplianceEngine` | `calculateSupplierRiskScore` | Dashboards, priorización, informes operativos — label **Operational risk score** |
+| **Persisted resilience snapshot** | `resilienceScore` (BE) | Payload + clamp | C13-P1-05 — no tratar en f6 |
+| **Operational resilience score** | `resilienceScore` en UI tras engine | `calculateResilienceScore` | C13-P1-05 — no tratar en f6 |
+| **Weighted risk (explicable)** | `weightedRiskScore` | Helper golden + inputs explícitos | Reports/export — ya separado (f4A) |
+
+### 5. Política de precedence (futuras fases f6+)
+
+| Superficie | Política documentada |
+|---|---|
+| **Dashboards Compliance** | Mostrar **operationalRiskScore** con label claro. No presentar persistido como si fuera el score vivo. |
+| **Supplier Detail** | Score principal = operativo. Persistido solo con bloque/label separado (f6B+ opcional). |
+| **Reports generados** | Operativo desde `engine.activeSupplier` + `weightedRiskScore` separado si hay 3 inputs explícitos. |
+| **Re-export reports guardados** | Evitar divergencia silenciosa. Recomendación preliminar: usar **snapshot del report** al re-exportar y etiquetar fuente; o alinear con `buildCurrentReport` — decidir en f6A tests. |
+| **CEO Overview** | Alinear con **operationalRiskScore** (misma fuente que dashboards) o etiquetar explícitamente que usa persisted snapshot — recomendación: alinear con operativo en f6B. |
+| **Backend** | Mantener **persistence SoT** por ahora. Cálculo en BE = opción enterprise posterior (portar fórmulas + tests multi-tenant). |
+
+### 6. Product truthfulness
+
+El usuario **no** debe ver "Risk Score" sin saber si es: persistido, operativo calculado, o weighted explicable. La fase f6 debe blindar **labels y precedence con tests** antes de cambios visuales amplios.
+
+### 7. Tests recomendados — C.13.1C-f6A (no creados)
+
+| Test | Objetivo |
+|---|---|
+| Persistido vs operativo | Supplier con `riskScore: 68` persistido + alertas → enriched ≠ 68 o regla documentada |
+| Separación weighted | `operationalRiskScore` ≠ `weightedRiskScore` en report payload |
+| Report paths | `buildCurrentReport` vs `handleExportStoredReport` — política coherente |
+| CEO source | `getComplianceOverview` vs engine — divergencia o alineación |
+| Labels | Export/UI no usa "Risk Score" para weighted |
+
+**Whitelist f6A:** `tests/unit/compliance/compliancePrecedence.test.js` (nuevo), ampliar `useComplianceEngine.test.js`.
+
+### 8. Fix futuro — C.13.1C-f6B (no ejecutado)
+
+- Labels UI/export: **Operational risk score** vs **Weighted risk (explicable)**
+- Posible exposición `persistedRiskScore` junto a operativo (sin rename BD en misma PR)
+- Alineación CEO Overview + política re-export según tests f6A
+- **Sin** tocar fórmula resilience (C13-P1-05)
+- **Sin** mover cálculo al backend
+
+### 9. Estado C13-P1 (post f5B)
+
+| ID | Estado | Nota |
+|---|---|---|
+| C13-P1-04 | **PARTIALLY RESOLVED** | Reports/export scope complete; broader adoption pending |
+| C13-P1-05 | **OPEN** | Resilience alignment — no abrir en f6 |
+| C13-P1-06 | **OPEN** | Decision documented (f5B); tests/fix pending (f6A/f6B) — **no RESOLVED** |
+
+### 10. Scope confirmado (f5A/f5B)
+
+| Área | Tocado |
+|---|---|
+| `PHASE_A1_CLEANUP_INVENTORY.md` | **Sí** |
+| `src/` / `backend/` / `tests/` | **No** |
+| Golden / registries | **No** |
+
+### 11. Siguiente paso recomendado
+
+**C.13.1C-f6A** — Tests de precedencia Compliance scoring (sin fix de código).
+
+**Condición:** No iniciar f6B hasta tener tests o test strategy cerrada en f6A.
+
+**No** abrir C13-P1-05 (resilience) hasta cerrar naming/precedence operativo.
 
 ---
 
