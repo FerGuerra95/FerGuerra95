@@ -1560,7 +1560,9 @@ También hay que validar que:
 | C.13.1C-f1B | Cerrada (docs only) | Compliance scoring SoT — Option C híbrida adoptada |
 | C.13.1C-f2A | Cerrada | weightedRiskScore helper + golden test (`adcdf77`) |
 | C.13.1C-f2B | Cerrada (docs only) | Inventario cierre parcial C13-P1-04 |
-| C.13 | Pendiente | Compliance integración weighted + resilience + precedence (C.13.1C-f3+) |
+| C.13.1C-f3A | Cerrada (solo lectura) | Auditoría integración weightedRiskScore |
+| C.13.1C-f3B | Cerrada (docs only) | Decisión integración reports/export primero |
+| C.13 | Pendiente | Compliance f4A reports + resilience + precedence (C.13.1C-f4+) |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -1693,7 +1695,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-01 | Golden datasets sin tests oráculo | `grep golden_inputs` en `tests/` → 0 matches | CI no detecta drift código vs golden |
 | C13-P1-02 | Funding zero burn: FE usaba `999`, golden exige `null`; BE devolvía `null` | **RESOLVED** en `e0054e8` — ver sección C.13.1B | Cerrado |
 | C13-P1-03 | Funding FE `localStorage` vs backend API | `fundingStore.jsx`, `fundingApi.js`, `FUNDING_STORAGE_KEYS` | Duplicidad source-of-truth escenarios/drafts |
-| C13-P1-04 | Compliance weighted risk — integración pendiente | Helper + test golden en `adcdf77`; ver C.13.1C-f2A/f2B | **PARTIALLY RESOLVED** — helper/test complete; integration pending |
+| C13-P1-04 | Compliance weighted risk — reports/export pending | Helper `adcdf77`; decisión f3B; ver C.13.1C-f3A/f3B | **PARTIALLY RESOLVED** — helper/test + integration decision; f4A pending |
 | C13-P1-05 | Compliance resilience alignment pending | Golden ≠ FE engine; subfase posterior | **OPEN** — decision documented; resilience alignment pending |
 | C13-P1-06 | FE/BE precedence + naming `riskScore` | `useComplianceEngine.js` pisa persistido | **OPEN** — decision documented; naming/precedence cleanup pending |
 | C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | Señales DSS mal priorizadas |
@@ -1875,7 +1877,7 @@ El caso zero-burn queda representado como **`null`** en el motor core; la narrat
 
 ### 10. Siguiente paso recomendado (post C.13.1C)
 
-Ver **C.13.1C-f2B** (cierre parcial f2A) y **C.13.1C-f3A** (auditoría integración weighted en reporting/benchmark).
+Ver **C.13.1C-f3A/f3B** (auditoría + decisión integración) y **C.13.1C-f4A** (integración mínima reports/export).
 
 ---
 
@@ -1949,7 +1951,7 @@ Auditar source-of-truth y fórmulas reales de Compliance para **C13-P1-04**, **C
 
 | ID | Hallazgo | Estado |
 |---|---|---|
-| C13-P1-04 | Weighted risk helper + golden test | **PARTIALLY RESOLVED** — helper/test complete (f2A); integration pending |
+| C13-P1-04 | Weighted risk helper + golden test + decisión f3B | **PARTIALLY RESOLVED** — reports/export integration pending (f4A) |
 | C13-P1-05 | Resilience golden ≠ motor FE | **OPEN** — decision documented; resilience alignment pending |
 | C13-P1-06 | FE recalcula y oculta scores persistidos BE | **OPEN** — decision documented; naming/precedence cleanup pending |
 
@@ -2152,7 +2154,7 @@ C.13.1C-f2A quedó cerrada y pusheada. `weightedRiskScore` tiene helper puro y t
 
 | ID | Estado | Criterio de cierre completo |
 |---|---|---|
-| C13-P1-04 | **PARTIALLY RESOLVED** | Helper/test complete; integration pending |
+| C13-P1-04 | **PARTIALLY RESOLVED** | Helper/test + integration decision (f3B); reports/export pending (f4A) |
 | C13-P1-05 | **OPEN** | Resilience alignment pending |
 | C13-P1-06 | **OPEN** | FE/BE naming and precedence cleanup pending |
 
@@ -2173,13 +2175,146 @@ C.13.1C-f2A quedó cerrada y pusheada. `weightedRiskScore` tiene helper puro y t
 - **No** pasar a FE/BE precedence/naming (C13-P1-06).
 - **No** marcar C13-P1-04 RESOLVED completo sin integración documentada.
 
-### 5. Siguiente paso recomendado
+### 5. Siguiente paso (post f2B)
 
-**Opción A (recomendada): C.13.1C-f3A** — Auditoría read-only de dónde integrar `weightedRiskScore` (reporting/benchmark/export), **sin** tocar dashboards operativos todavía.
+Ver sección **C.13.1C-f3A/f3B** — auditoría read-only y decisión documental de integración.
 
-**Opción B: C.13.1C-f3B** — Preflight read-only C13-P1-06 (precedence FE/BE y naming `riskScore`).
+---
 
-**Recomendación:** f3A primero — ya existe helper + test; conviene decidir puntos de integración antes de resilience o precedence.
+## C.13.1C-f3A/f3B — weightedRiskScore integration decision — READ-ONLY + DOCS CLOSED
+
+**Fecha cierre:** 20 mayo 2026  
+**Estados:** **C.13.1C-f3A CLOSED (READ ONLY)** · **C.13.1C-f3B CLOSED (DOCS ONLY)**  
+**Baseline auditado:** `HEAD = origin/main = c925ad5`  
+**Sin modificaciones de código** en f3A/f3B · **Sin commit de implementación**
+
+### 1. C.13.1C-f3A — Auditoría read-only (resumen)
+
+| Hallazgo | Evidencia |
+|---|---|
+| Helper puro existe | `src/modules/compliance/engine/complianceWeightedRisk.js` → `calculateWeightedRiskScore` |
+| Test golden existe | `tests/unit/compliance/complianceWeightedRisk.test.js` → `compliance_weighted_risk_score_basic` (68) |
+| **No integrado** en producto | Sin imports en UI, `complianceReportsApi`, `ComplianceReportPage`, backend suppliers, CEO Overview, Reporting general |
+| `riskScore` en UI/informes | **Operativo** vía `useComplianceEngine` + `calculateSupplierRiskScore` (C13-P1-06) |
+| Inputs weighted en datos reales | **Ausentes** en `complianceStore`, BE `suppliers.service`, demo suppliers |
+
+**Recomendación auditoría:** integrar primero en **Compliance reports/export/benchmark**; no en dashboards ni Supplier Detail en esta oleada.
+
+### 2. Datos actuales — regla de inputs explícitos
+
+Los proveedores actuales (demo, store, backend SQLite) **no** contienen:
+
+- `financialRisk`
+- `jurisdictionRisk`
+- `evidenceRisk`
+
+Estos campos existen **solo** en `docs/testing/golden_inputs.json` y en el test unitario.
+
+**Regla de producto (obligatoria):**
+
+| Permitido | Prohibido |
+|---|---|
+| Calcular `weightedRiskScore` solo si los **3 inputs explícitos** están presentes y finitos | Derivar dimensiones desde `spend`, `region`, `tier`, `criticality`, `alerts`, `evidence gap`, `reviews`, `confidence` u otros señales operativas |
+| Omitir campo/fila o `null` con etiqueta clara si faltan inputs | Inventar valores para “rellenar” el golden 68 en producción |
+| Añadir inputs weighted en modelo de datos **solo** con decisión humana posterior | Sustituir `riskScore` operativo por weighted |
+
+Hoy `calculateWeightedRiskScore(supplierActual)` devolvería **`null`** para todo proveedor del sistema.
+
+### 3. Decisión de integración (C.13.1C-f3B)
+
+**Integrar primero** `weightedRiskScore` en:
+
+| Superficie | Rol |
+|---|---|
+| Compliance reports (`complianceReportsApi.buildSupplierReport`) | Campo opcional en payload |
+| Export HTML/PDF (`complianceReportsApi.exportReport`) | Fila board pack / decision memo |
+| `ComplianceReportPage` (`buildCurrentReport`) | Calcular solo con 3 inputs explícitos |
+| Benchmark / decision memo explicable | Métrica separada, no KPI operativo |
+
+**No integrar todavía** en:
+
+| Superficie | Motivo |
+|---|---|
+| `ComplianceDashboardPage`, `SuppliersPage`, `RiskMapPage` | Contamina priorización operativa |
+| `SupplierDetailPage` | Riesgo de confusión con `riskScore` del engine |
+| `CEOOverviewPage` | Agregados ejecutivos mezclarían scores sin precedence resuelta |
+| `src/modules/reporting/**` | Sin acoplamiento Compliance scoring hoy |
+| `useComplianceEngine`, `complianceScoring`, `resilienceScore` | C13-P1-06 / motor operativo — fase aparte |
+| Backend `suppliers.service` (f4A) | Fuera de whitelist f4A |
+
+**No usar** `weightedRiskScore` para sustituir `riskScore` / operational risk score.
+
+### 4. Label futuro (product truthfulness)
+
+| Métrica | Label UI/export futuro | No usar |
+|---|---|---|
+| `weightedRiskScore` | **Weighted risk (explicable)** | "Risk Score", "Supplier risk", score global oficial |
+| `riskScore` (motor FE actual) | **Operational risk score** / mantener "Risk Score" hasta C13-P1-06 | Mismo label que weighted |
+| `resilienceScore` | Sin cambio en f4A | — |
+
+Si faltan inputs weighted: **no mostrar** la fila o mostrar `N/A` con nota “requires explicit financial/jurisdiction/evidence risk inputs”.
+
+### 5. Futura fase — C.13.1C-f4A (no ejecutada)
+
+**Whitelist esperada f4A:**
+
+- `src/modules/compliance/services/complianceReportsApi.js`
+- `src/modules/compliance/pages/ComplianceReportPage.jsx`
+- `tests/unit/compliance/complianceReportsApi.test.js` (nuevo)
+- `tests/unit/compliance/complianceWeightedRisk.test.js` (solo ampliar edge cases si hace falta)
+
+**Reglas f4A:**
+
+1. Importar `calculateWeightedRiskScore` solo en report path.
+2. Pasar `weightedRiskScore` al report **solo** si los 3 inputs existen en supplier/report payload.
+3. No tocar dashboards, Supplier Detail, CEO Overview, backend, Golden.
+4. No derivar inputs.
+5. Test: report con inputs → fila weighted; sin inputs → sin fila / null; `riskScore` operativo intacto.
+
+**Prohibido en la misma PR que f4A:** resilience (C13-P1-05), precedence FE/BE (C13-P1-06).
+
+### 6. Riesgos evitados por esta decisión
+
+- No contaminar dashboards operativos.
+- No presentar weighted como score global oficial.
+- No sustituir `riskScore` operativo.
+- No mezclar oráculo Golden con motor FE sin etiquetas.
+- No inventar `financialRisk`/`jurisdictionRisk`/`evidenceRisk`.
+
+### 7. Estado C13-P1 (post f3B)
+
+| ID | Estado | Nota |
+|---|---|---|
+| C13-P1-04 | **PARTIALLY RESOLVED** | Helper/test + integration decision documented; reports/export integration pending (f4A) |
+| C13-P1-05 | **OPEN** | Resilience alignment pending — no abrir en f4A |
+| C13-P1-06 | **OPEN** | FE/BE naming/precedence pending — no abrir en f4A |
+
+**No marcar C13-P1-04 RESOLVED completo** hasta integración reports/export validada y etiquetada.
+
+### 8. Scope confirmado (f3A/f3B)
+
+| Área | Tocado |
+|---|---|
+| `PHASE_A1_CLEANUP_INVENTORY.md` | **Sí** |
+| `src/` / `backend/` / `tests/` | **No** |
+| `golden_inputs.json` | **No** |
+| `FORMULA_REGISTRY` / `SOURCE_OF_TRUTH_REGISTRY` | **No** (decisión ya en f1B; detalle integración aquí) |
+| `complianceReportsApi` / `ComplianceReportPage` | **No** (f4A) |
+| Helper `complianceWeightedRisk.js` | **No** |
+
+### 9. Siguiente paso recomendado
+
+**C.13.1C-f4A** — Integración mínima weightedRiskScore en Compliance reports/export (whitelist §5).
+
+**Condiciones para f4A:**
+
+1. f3B pusheada.
+2. C13-P1-04 PARTIALLY RESOLVED (no RESOLVED completo).
+3. C13-P1-05 y C13-P1-06 OPEN.
+4. Golden intacto.
+5. Sin dashboards, sin backend, sin derivación de inputs.
+
+**Después de f4A (no en paralelo):** preflight/documentación C13-P1-06 o alineación resilience C13-P1-05 — fases separadas.
 
 ---
 
