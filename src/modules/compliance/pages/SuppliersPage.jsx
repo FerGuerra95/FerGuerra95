@@ -1504,7 +1504,7 @@ export function SuppliersPage() {
 
                 <div className="suppliers-signal-table">
                   <SignalRow label="Avg operational risk score" value={`${averageRiskScore}/100`} />
-                  <SignalRow label="Avg resilience" value={`${averageResilienceScore}/100`} />
+                  <SignalRow label="Avg operational resilience score" value={`${averageResilienceScore}/100`} />
                   <SignalRow label="Evidence coverage" value={`${evidenceCoverage}%`} />
                   <SignalRow label="Active supplier" value={activeSupplierId ? 'Selected' : 'Pending'} />
                 </div>
@@ -1627,9 +1627,9 @@ export function SuppliersPage() {
               />
 
               <KpiCard
-                label="Resiliencia media"
+                label="Resiliencia operativa media"
                 value={`${averageResilienceScore}/100`}
-                description="Capacidad operativa estimada"
+                description="Operational resilience score — portfolio average"
                 icon={ShieldCheck}
                 tone="text-success"
               />

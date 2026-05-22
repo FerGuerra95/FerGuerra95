@@ -9,7 +9,9 @@ import { describe, expect, it } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { calculateSupplierRiskScore } from '../../../src/modules/compliance/engine/complianceScoring.js';
 import { useComplianceEngine } from '../../../src/modules/compliance/engine/useComplianceEngine.js';
+import { calculateGoldenResilienceScore } from '../../../src/modules/compliance/engine/complianceGoldenResilience.js';
 import {
+  OPERATIONAL_RESILIENCE_LABEL,
   OPERATIONAL_RISK_LABEL,
   WEIGHTED_RISK_LABEL,
   buildComplianceReportBoardRows,
@@ -83,6 +85,13 @@ function mirrorCeoOverviewAverageRisk(suppliers = []) {
  */
 function mirrorReExportStoredReportRiskScore(supplier, report) {
   return report?.riskScore ?? supplier?.riskScore ?? 'N/A';
+}
+
+/**
+ * Mirrors ComplianceReportPage.handleExportStoredReport resilienceScore merge (f8B).
+ */
+function mirrorReExportStoredReportResilienceScore(supplier, report) {
+  return report?.resilienceScore ?? supplier?.resilienceScore ?? 'N/A';
 }
 
 function boardRowValue(rows, label) {
@@ -286,7 +295,7 @@ describe('compliance scoring precedence (C.13.1C-f6A)', () => {
     });
   });
 
-  describe('export board labels (f6B)', () => {
+  describe('export board labels (f6B/f8B)', () => {
     it('uses Operational risk score label separate from weighted risk', () => {
       const rows = buildComplianceReportBoardRows({
         riskScore: 55,
@@ -300,6 +309,73 @@ describe('compliance scoring precedence (C.13.1C-f6A)', () => {
       expect(rows.some(([label]) => label === OPERATIONAL_RISK_LABEL)).toBe(true);
       expect(rows.some(([label]) => label === 'Risk Score')).toBe(false);
       expect(rows.some(([label]) => label === WEIGHTED_RISK_LABEL)).toBe(true);
+    });
+
+    it('uses Operational resilience score label and not generic Resilience (f8B)', () => {
+      const rows = buildComplianceReportBoardRows({
+        riskScore: 55,
+        resilienceScore: 70,
+        riskLevel: 'Medio',
+        resilienceLevel: 'Alta',
+        evidenceSummary: { coverageLabel: 'Media' }
+      });
+
+      expect(rows.some(([label]) => label === OPERATIONAL_RESILIENCE_LABEL)).toBe(
+        true
+      );
+      expect(boardRowValue(rows, OPERATIONAL_RESILIENCE_LABEL)).toBe('70/100');
+      expect(rows.some(([label]) => label === 'Resilience')).toBe(false);
+    });
+  });
+
+  describe('resilience precedence (f8B)', () => {
+    it('re-export stored report prefers report snapshot over store persisted resilienceScore', () => {
+      const storedReport = {
+        riskScore: 30,
+        resilienceScore: 40
+      };
+
+      const storeSupplier = {
+        riskScore: PERSISTED_RISK_SNAPSHOT,
+        resilienceScore: 72
+      };
+
+      const mergedForReExport = mirrorReExportStoredReportResilienceScore(
+        storeSupplier,
+        storedReport
+      );
+
+      expect(mergedForReExport).toBe(storedReport.resilienceScore);
+      expect(mergedForReExport).not.toBe(storeSupplier.resilienceScore);
+      expect(
+        boardRowValue(
+          buildComplianceReportBoardRows({
+            ...storedReport,
+            riskLevel: 'Medio',
+            resilienceLevel: 'Media',
+            evidenceSummary: { coverageLabel: 'Media' }
+          }),
+          OPERATIONAL_RESILIENCE_LABEL
+        )
+      ).toBe('40/100');
+    });
+
+    it('golden resilience stays separate from operational resilienceScore', () => {
+      const operationalFromEngine = calculateSupplierRiskScore({
+        supplier: supplierFixture,
+        alerts: operationalAlerts,
+        evidenceItems: operationalEvidence,
+        reviews: operationalReviews
+      });
+
+      const goldenResilience = calculateGoldenResilienceScore({
+        riskScore: 68,
+        mitigationBonus: 8
+      });
+
+      expect(goldenResilience).toBe(40);
+      expect(operationalFromEngine).not.toBe(68);
+      expect(goldenResilience).not.toBe(supplierFixture.resilienceScore);
     });
   });
 });

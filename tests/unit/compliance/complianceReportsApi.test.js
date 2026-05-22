@@ -1,6 +1,7 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import {
   OPERATIONAL_RISK_LABEL,
+  OPERATIONAL_RESILIENCE_LABEL,
   WEIGHTED_RISK_LABEL,
   buildComplianceReportBoardRows,
   complianceReportsApi,
@@ -133,6 +134,12 @@ describe('complianceReportsApi weightedRiskScore', () => {
         '68/100'
       );
       expect(rows.some(([label]) => label === OPERATIONAL_RISK_LABEL)).toBe(true);
+      expect(rows.some(([label]) => label === OPERATIONAL_RESILIENCE_LABEL)).toBe(
+        true
+      );
+      expect(rows.find(([label]) => label === OPERATIONAL_RESILIENCE_LABEL)?.[1]).toBe(
+        '76/100'
+      );
 
       complianceReportsApi.exportReport({
         supplierName: 'Weighted Test Supplier',
@@ -186,6 +193,7 @@ describe('complianceReportsApi weightedRiskScore', () => {
       const html = writeSpy.mock.calls.map((call) => call[0]).join('');
       expect(html).not.toContain('Weighted risk (explicable)');
       expect(html).toContain(OPERATIONAL_RISK_LABEL);
+      expect(html).toContain(OPERATIONAL_RESILIENCE_LABEL);
     });
   });
 });

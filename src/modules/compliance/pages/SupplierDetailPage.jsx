@@ -1490,7 +1490,7 @@ export function SupplierDetailPage() {
 
                 <div className="supplier-detail-signal-table">
                   <SignalRow label="Operational risk score" value={`${riskScore}/100`} />
-                  <SignalRow label="Resilience" value={`${resilienceScore}/100`} />
+                  <SignalRow label="Operational resilience score" value={`${resilienceScore}/100`} />
                   <SignalRow label="Linked alerts" value={activeSupplierAlerts.length} />
                   <SignalRow label="Evidence items" value={activeSupplierEvidence.length} />
                 </div>
@@ -1517,7 +1517,7 @@ export function SupplierDetailPage() {
             />
 
             <DetailMetric
-              label="Resilience Score"
+              label="Operational resilience score"
               value={`${resilienceScore}/100`}
               helper={supplier.resilienceLevel?.label || 'Sin clasificar'}
               color={supplier.resilienceLevel?.color || ''}

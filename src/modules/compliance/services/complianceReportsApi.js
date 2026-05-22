@@ -6,6 +6,8 @@ export const WEIGHTED_RISK_LABEL = 'Weighted risk (explicable)';
 
 export const OPERATIONAL_RISK_LABEL = 'Operational risk score';
 
+export const OPERATIONAL_RESILIENCE_LABEL = 'Operational resilience score';
+
 export function supplierHasExplicitWeightedRiskInputs(supplier) {
   if (!supplier || typeof supplier !== 'object') {
     return false;
@@ -426,7 +428,7 @@ export function buildComplianceReportBoardRows(report = {}) {
   const boardRows = [
     [OPERATIONAL_RISK_LABEL, riskScore],
     ['Risk Level', riskLevel],
-    ['Resilience', resilienceScore],
+    [OPERATIONAL_RESILIENCE_LABEL, resilienceScore],
     ['Resilience Level', resilienceLevel],
     ['Evidence Coverage', coverageLabel],
     ['Board Decision', decision.boardDecision]

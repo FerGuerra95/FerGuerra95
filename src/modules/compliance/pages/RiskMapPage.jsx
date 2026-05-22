@@ -1204,7 +1204,7 @@ export function RiskMapPage() {
 
                 <div className="risk-map-signal-table">
                   <SignalRow label="Avg operational risk score" value={`${selectedRegionStats?.avgRisk ?? averageRiskScore}/100`} />
-                  <SignalRow label="Avg resilience" value={`${selectedRegionStats?.avgResilience ?? averageResilienceScore}/100`} />
+                  <SignalRow label="Avg operational resilience score" value={`${selectedRegionStats?.avgResilience ?? averageResilienceScore}/100`} />
                   <SignalRow label="Severe alerts" value={highSeverityRegionAlerts.length} />
                   <SignalRow label="Exposed spend" value={formatCurrency(visibleSpend)} />
                 </div>
@@ -1230,9 +1230,9 @@ export function RiskMapPage() {
             />
 
             <KpiCard
-              label="Resiliencia media"
+              label="Resiliencia operativa media"
               value={`${averageResilienceScore}/100`}
-              description="Capacidad de continuidad"
+              description="Operational resilience score — portfolio average"
               icon={ShieldCheck}
             />
 

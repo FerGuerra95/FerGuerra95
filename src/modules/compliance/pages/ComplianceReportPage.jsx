@@ -1248,7 +1248,7 @@ function buildMultinationalCompliancePack({
     ],
     controlRows: [
       ['Operational risk score', activeSupplier ? `${activeRiskScore}/100` : 'N/A'],
-      ['Resilience score', activeSupplier ? `${activeResilienceScore}/100` : 'N/A'],
+      ['Operational resilience score', activeSupplier ? `${activeResilienceScore}/100` : 'N/A'],
       ['Report posture', reportSignal?.posture || 'N/A'],
       ['Generated reports', safeReports.length],
       ['Supplier reports', safeSupplierReports.length],
@@ -1579,8 +1579,7 @@ export function ComplianceReportPage() {
         report.spend ||
         0,
       riskScore: report.riskScore ?? supplier?.riskScore ?? 'N/A',
-      resilienceScore:
-        supplier?.resilienceScore ?? report.resilienceScore ?? 'N/A',
+      resilienceScore: report.resilienceScore ?? supplier?.resilienceScore ?? 'N/A',
       riskLevel: riskLevelLabel,
       resilienceLevel: resilienceLevelLabel,
       summary: supplier
@@ -1714,7 +1713,7 @@ export function ComplianceReportPage() {
                   />
 
                   <SignalRow
-                    label="Resilience"
+                    label="Operational resilience score"
                     value={`${engine.activeSupplier?.resilienceScore ?? 0}/100`}
                   />
 
@@ -1758,7 +1757,7 @@ export function ComplianceReportPage() {
             />
 
             <KpiCard
-              label="Resilience"
+              label="Operational resilience score"
               value={`${engine.activeSupplier?.resilienceScore ?? 0}/100`}
               description={engine.activeSupplier?.resilienceLevel?.label || 'Sin datos'}
               icon={ShieldCheck}
