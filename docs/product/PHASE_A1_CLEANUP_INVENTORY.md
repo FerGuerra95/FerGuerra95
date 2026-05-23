@@ -1578,7 +1578,8 @@ También hay que validar que:
 | C.13.1C | Cerrada (cadena scoring) | C13-P1-04/05/06 — reports/export/labels/tests/docs |
 | C.13.2A | Cerrada | Formula Approval Gate foundation — registry + protocol + coverage test |
 | C.13.2B | Cerrada (docs only) | Formula Approval Gate expansion / inventory por módulo |
-| C.13 | Pendiente | C.13.2C enforcement; C.13.3+ auditorías por módulo |
+| C.13.2C | Cerrada | Formula Approval Gate enforcement / CI hardening (coverage test) |
+| C.13 | Pendiente | C.13.3 Funding; C.13.x auditorías por módulo |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -3013,6 +3014,40 @@ La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
 3. Auditorías por módulo C.13.1–C.13.9 según tabla discovery.
 
 **Nota test:** C.13.2B no endureció el coverage test global; C.13.2C lo hará por lotes.
+
+---
+
+## C.13.2C — Formula Approval Gate enforcement / CI hardening — CLOSED
+
+**Fecha:** 20 mayo 2026  
+**Estado:** **CLOSED** — `formulaRegistryCoverage.test.js` endurecido por lote clasificado (16 fórmulas); sin producto ni Golden.
+
+### Qué se endureció
+
+| Regla | Comportamiento |
+|---|---|
+| Campos mínimos | `Formula ID`, `Module`, `Owner`, `Source`, `Status`, `Approval`, `Inputs`, `Formula`, `Usage limits` en los **16** bloques `###` |
+| Golden | Si `Golden ID` ≠ N/A → cada id declarado debe existir en `golden_inputs.json` |
+| Test file | Si `Test file` ≠ `pending` → ruta `tests/...` debe existir en disco |
+| Approval `Approved` | Solo con scope explícito (DSS/demo, reports/export, limited scope) |
+| Pending | Solo fragmentos permitidos (Golden, Owner, external, C.13.x, implementation, discovery, human, validation) |
+
+### Qué sigue permitido (sin fallar CI)
+
+- `Golden ID: N/A` justificado (operational compliance).
+- `Test file: pending` (M&A, PMI, Bridge, Risk, Reporting, Executive, post-money).
+- `Status` / `Approval` con Pending (no promoción a Approved global).
+- **12 áreas Pending discovery** — fuera del lote de 16; no exigidas en C.13.2C.
+- **No** cobertura 100% del Required Formula Table ni fórmulas sin bloque `###`.
+
+### Qué NO se tocó
+
+- `src/**`, `backend/**`, tests de módulos, `golden_inputs.json`, `FORMULA_REGISTRY.md` (sin inconsistencias detectadas).
+- Ninguna fórmula marcada como certificación legal/financiera externa.
+
+### Siguiente paso
+
+**C.13.3 — Funding broader formula coverage** (`POST_MONEY`, `INVESTOR_OWNERSHIP`, dilution, C13-P1-03 localStorage vs API según inventario).
 
 ---
 

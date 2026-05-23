@@ -3,15 +3,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /**
- * C.13.2A — Formula Approval Gate minimum coverage.
- * Validates metadata presence for explicitly covered formulas only.
- * Does NOT require full registry completeness.
+ * Formula Approval Gate coverage (C.13.2A foundation → C.13.2B inventory → C.13.2C enforcement).
+ * Validates classified formula blocks in FORMULA_REGISTRY.md by lot — not 100% global registry.
  */
 
 const REGISTRY_PATH = path.join(process.cwd(), 'docs/testing/FORMULA_REGISTRY.md');
 const GOLDEN_PATH = path.join(process.cwd(), 'docs/testing/golden_inputs.json');
 
-const MINIMUM_FORMULA_IDS = [
+/** C.13.2A — foundation lot */
+const LOT_A_FORMULA_IDS = [
   'FUNDING_RUNWAY_MONTHS',
   'COMPLIANCE_WEIGHTED_RISK',
   'COMPLIANCE_RESILIENCE',
@@ -19,29 +19,56 @@ const MINIMUM_FORMULA_IDS = [
   'COMPLIANCE_OPERATIONAL_RESILIENCE'
 ];
 
-const REQUIRED_BLOCK_FIELDS = [
+/** C.13.2B — expansion inventory lot */
+const LOT_B_FORMULA_IDS = [
+  'EV_EBITDA',
+  'NET_DEBT',
+  'EQUITY_VALUE',
+  'WATERFALL_SIMPLE',
+  'POST_MONEY',
+  'INVESTOR_OWNERSHIP',
+  'PMI_CAPTURE_RATE',
+  'BRIDGE_PRIORITY',
+  'RISK_LIKELIHOOD_IMPACT',
+  'REPORTING_VARIANCE',
+  'EXEC_MODULE_HEALTH_AVG'
+];
+
+/** C.13.2C — all classified approval blocks (16) */
+const ENFORCED_CLASSIFIED_FORMULA_IDS = [...LOT_A_FORMULA_IDS, ...LOT_B_FORMULA_IDS];
+
+const MINIMUM_BLOCK_FIELDS = [
+  'Formula ID',
+  'Module',
   'Owner',
   'Source',
   'Status',
+  'Approval',
   'Inputs',
   'Formula',
-  'Usage limits',
-  'Approval'
+  'Usage limits'
 ];
 
-const GOLDEN_BY_FORMULA = {
-  FUNDING_RUNWAY_MONTHS: ['funding_runway_zero_burn'],
-  COMPLIANCE_WEIGHTED_RISK: ['compliance_weighted_risk_score_basic'],
-  COMPLIANCE_RESILIENCE: ['compliance_resilience_score_basic']
-};
+const ALLOWED_PENDING_FRAGMENTS = [
+  'Pending Golden Dataset',
+  'Pending Formula Owner',
+  'Pending external validation',
+  'Pending C.13.x validation',
+  'Pending C.13 validation',
+  'Pending implementation',
+  'Pending discovery',
+  'Pending human approval',
+  'Pending validation'
+];
 
-const TEST_FILE_BY_FORMULA = {
-  FUNDING_RUNWAY_MONTHS: 'tests/unit/funding/fundingFormulas.test.js',
-  COMPLIANCE_WEIGHTED_RISK: 'tests/unit/compliance/complianceWeightedRisk.test.js',
-  COMPLIANCE_RESILIENCE: 'tests/unit/compliance/complianceGoldenResilience.test.js',
-  COMPLIANCE_OPERATIONAL_RISK: 'tests/unit/compliance/compliancePrecedence.test.js',
-  COMPLIANCE_OPERATIONAL_RESILIENCE: 'tests/unit/compliance/compliancePrecedence.test.js'
-};
+const APPROVED_SCOPE_PATTERNS = [
+  /Approved for DSS\/demo scope/i,
+  /Approved for reports\/export scope/i,
+  /Approved for limited scope/i
+];
+
+const GOLDEN_NA_PATTERN = /N\/A/i;
+const TEST_FILE_PENDING_PATTERN = /^pending\b/i;
 
 function loadRegistry() {
   return fs.readFileSync(REGISTRY_PATH, 'utf8');
@@ -60,8 +87,7 @@ function extractApprovalBlock(registryText, formulaId) {
 
   const afterHeader = registryText.slice(start + header.length);
   const nextHeader = afterHeader.search(/\n### [A-Z0-9_]+/);
-  const block = nextHeader === -1 ? afterHeader : afterHeader.slice(0, nextHeader);
-  return block;
+  return nextHeader === -1 ? afterHeader : afterHeader.slice(0, nextHeader);
 }
 
 function fieldPresent(block, fieldName) {
@@ -73,121 +99,164 @@ function fieldPresent(block, fieldName) {
   return patterns.some((re) => re.test(block));
 }
 
+function extractFieldLine(block, fieldName) {
+  const match = block.match(new RegExp(`\\*\\*${fieldName}:\\*\\*\\s*([^\\n]+)`, 'i'));
+  return match ? match[1].trim() : '';
+}
+
 function extractGoldenIds(block) {
-  const match = block.match(/\*\*Golden ID:\*\*\s*([^\n]+)/i);
-  if (!match) return [];
-  const value = match[1].trim();
-  if (/N\/A/i.test(value)) return [];
+  const value = extractFieldLine(block, 'Golden ID');
+  if (!value || GOLDEN_NA_PATTERN.test(value)) return [];
+
   const ids = [];
-  const backtickMatches = value.matchAll(/`([a-z0-9_]+)`/gi);
-  for (const m of backtickMatches) {
+  for (const m of value.matchAll(/`([a-z][a-z0-9_]*)`/gi)) {
     ids.push(m[1]);
   }
-  const plainMatches = value.match(/\b([a-z][a-z0-9_]*)\b/g) ?? [];
-  for (const token of plainMatches) {
-    if (token.includes('_') && !['also', 'edge', 'case'].includes(token)) {
+  for (const token of value.match(/\b([a-z][a-z0-9_]{4,})\b/g) ?? []) {
+    if (token.includes('_') && !['also', 'edge', 'case', 'pending'].includes(token)) {
       ids.push(token);
     }
   }
   return [...new Set(ids)];
 }
 
-/** C.13.2B — presence + Status/Approval only; no global golden/test mandate */
-const EXPANSION_LOT_B_FORMULA_IDS = [
-  'EV_EBITDA',
-  'NET_DEBT',
-  'EQUITY_VALUE',
-  'WATERFALL_SIMPLE',
-  'POST_MONEY',
-  'INVESTOR_OWNERSHIP',
-  'PMI_CAPTURE_RATE',
-  'BRIDGE_PRIORITY',
-  'RISK_LIKELIHOOD_IMPACT',
-  'REPORTING_VARIANCE',
-  'EXEC_MODULE_HEALTH_AVG'
-];
+function extractTestFilePath(block) {
+  const value = extractFieldLine(block, 'Test file');
+  if (!value || TEST_FILE_PENDING_PATTERN.test(value) || GOLDEN_NA_PATTERN.test(value)) {
+    return null;
+  }
+  const match = value.match(/`(tests\/[^`]+)`/);
+  return match ? match[1] : null;
+}
 
-const LIGHT_BLOCK_FIELDS = ['Status', 'Approval'];
+function assertPendingStatusOrApprovalAllowed(formulaId, status, approval) {
+  const combined = `${status} ${approval}`;
+  if (!/Pending/i.test(combined)) return;
 
-describe('formulaRegistryCoverage (C.13.2A)', () => {
+  const recognized = ALLOWED_PENDING_FRAGMENTS.some((fragment) => combined.includes(fragment));
+  expect(recognized, `${formulaId}: unrecognized Pending in Status/Approval — ${combined}`).toBe(
+    true
+  );
+}
+
+function assertApprovalScopes(formulaId, approval) {
+  const grantSegments = approval
+    .split('·')
+    .map((segment) => segment.trim())
+    .filter((segment) => /^Approved for /i.test(segment));
+
+  for (const segment of grantSegments) {
+    const hasScopedApproval = APPROVED_SCOPE_PATTERNS.some((re) => re.test(segment));
+    expect(
+      hasScopedApproval,
+      `${formulaId}: grant segment lacks recognized scope — ${segment}`
+    ).toBe(true);
+  }
+}
+
+describe('formulaRegistryCoverage — registry shell', () => {
   const registryText = loadRegistry();
-  const goldenIds = loadGoldenDatasetIds();
 
   it('FORMULA_REGISTRY.md exists and documents Formula Approval Gate', () => {
     expect(fs.existsSync(REGISTRY_PATH)).toBe(true);
     expect(registryText).toMatch(/Formula Approval Gate/i);
   });
 
-  it.each(MINIMUM_FORMULA_IDS)('registry contains Formula ID %s', (formulaId) => {
-    expect(registryText).toContain(formulaId);
-  });
-
-  describe('minimum metadata per covered formula', () => {
-    it.each(MINIMUM_FORMULA_IDS)('%s block has required fields', (formulaId) => {
-      const block = extractApprovalBlock(registryText, formulaId);
-      for (const field of REQUIRED_BLOCK_FIELDS) {
-        expect(fieldPresent(block, field), `${formulaId} missing ${field}`).toBe(true);
-      }
-    });
-  });
-
-  describe('Golden Dataset IDs for formulas with golden oracle', () => {
-    it.each(Object.entries(GOLDEN_BY_FORMULA))(
-      '%s golden ids exist in golden_inputs.json',
-      (formulaId, expectedIds) => {
-        const block = extractApprovalBlock(registryText, formulaId);
-        const declared = extractGoldenIds(block);
-        for (const expected of expectedIds) {
-          expect(declared, `${formulaId} should declare ${expected}`).toContain(expected);
-          expect(goldenIds.has(expected), `golden_inputs missing ${expected}`).toBe(true);
-        }
-      }
-    );
-  });
-
-  describe('operational formulas allow N/A golden', () => {
-    it('COMPLIANCE_OPERATIONAL_RISK documents N/A golden', () => {
-      const block = extractApprovalBlock(registryText, 'COMPLIANCE_OPERATIONAL_RISK');
-      expect(block).toMatch(/Golden ID:.*N\/A/is);
-    });
-
-    it('COMPLIANCE_OPERATIONAL_RESILIENCE documents N/A golden', () => {
-      const block = extractApprovalBlock(registryText, 'COMPLIANCE_OPERATIONAL_RESILIENCE');
-      expect(block).toMatch(/Golden ID:.*N\/A/is);
-    });
-  });
-
-  describe('declared test files exist on disk', () => {
-    it.each(Object.entries(TEST_FILE_BY_FORMULA))(
-      '%s test file exists',
-      (formulaId, relativePath) => {
-        const block = extractApprovalBlock(registryText, formulaId);
-        expect(block).toContain(relativePath.replace(/\//g, '/'));
-        const absolute = path.join(process.cwd(), relativePath);
-        expect(fs.existsSync(absolute), `missing ${relativePath}`).toBe(true);
-      }
-    );
-  });
-});
-
-describe('formulaRegistryCoverage (C.13.2B expansion lot)', () => {
-  const registryText = loadRegistry();
-
   it('documents C.13.2B inventory summary', () => {
     expect(registryText).toMatch(/Formula Approval Inventory summary \(C\.13\.2B\)/i);
   });
 
-  it.each(EXPANSION_LOT_B_FORMULA_IDS)('registry contains expansion Formula ID %s', (formulaId) => {
+  it.each(ENFORCED_CLASSIFIED_FORMULA_IDS)('registry contains classified Formula ID %s', (formulaId) => {
     expect(registryText).toContain(formulaId);
   });
+});
 
-  describe('expansion blocks have Status and Approval (pending allowed)', () => {
-    it.each(EXPANSION_LOT_B_FORMULA_IDS)('%s', (formulaId) => {
+describe('formulaRegistryCoverage (C.13.2C enforcement — classified lot)', () => {
+  const registryText = loadRegistry();
+  const goldenIds = loadGoldenDatasetIds();
+
+  describe('minimum metadata fields per classified formula', () => {
+    it.each(ENFORCED_CLASSIFIED_FORMULA_IDS)('%s', (formulaId) => {
       const block = extractApprovalBlock(registryText, formulaId);
-      for (const field of LIGHT_BLOCK_FIELDS) {
+      for (const field of MINIMUM_BLOCK_FIELDS) {
         expect(fieldPresent(block, field), `${formulaId} missing ${field}`).toBe(true);
       }
-      expect(block).toMatch(/Pending/i);
+      expect(extractFieldLine(block, 'Formula ID')).toContain(formulaId);
+    });
+  });
+
+  describe('Status and Approval rules (Pending allowed; Approved requires scope)', () => {
+    it.each(ENFORCED_CLASSIFIED_FORMULA_IDS)('%s', (formulaId) => {
+      const block = extractApprovalBlock(registryText, formulaId);
+      const status = extractFieldLine(block, 'Status');
+      const approval = extractFieldLine(block, 'Approval');
+
+      expect(status.length, `${formulaId} empty Status`).toBeGreaterThan(0);
+      expect(approval.length, `${formulaId} empty Approval`).toBeGreaterThan(0);
+
+      assertPendingStatusOrApprovalAllowed(formulaId, status, approval);
+      assertApprovalScopes(formulaId, approval);
+    });
+  });
+
+  describe('Golden IDs exist in golden_inputs.json when declared (N/A exempt)', () => {
+    it.each(ENFORCED_CLASSIFIED_FORMULA_IDS)('%s', (formulaId) => {
+      const block = extractApprovalBlock(registryText, formulaId);
+      const declared = extractGoldenIds(block);
+
+      for (const goldenId of declared) {
+        expect(goldenIds.has(goldenId), `${formulaId}: missing golden ${goldenId}`).toBe(true);
+      }
+
+      if (GOLDEN_NA_PATTERN.test(extractFieldLine(block, 'Golden ID'))) {
+        expect(declared.length, `${formulaId}: N/A golden must not list ids`).toBe(0);
+      }
+    });
+  });
+
+  describe('Test file paths exist when declared (pending exempt)', () => {
+    it.each(ENFORCED_CLASSIFIED_FORMULA_IDS)('%s', (formulaId) => {
+      const block = extractApprovalBlock(registryText, formulaId);
+      const testPath = extractTestFilePath(block);
+
+      if (TEST_FILE_PENDING_PATTERN.test(extractFieldLine(block, 'Test file'))) {
+        expect(testPath, `${formulaId}: pending test file must not require path`).toBeNull();
+        return;
+      }
+
+      if (testPath) {
+        const absolute = path.join(process.cwd(), testPath);
+        expect(fs.existsSync(absolute), `${formulaId}: missing ${testPath}`).toBe(true);
+      }
+    });
+  });
+
+  describe('operational compliance formulas document N/A golden', () => {
+    it('COMPLIANCE_OPERATIONAL_RISK', () => {
+      const block = extractApprovalBlock(registryText, 'COMPLIANCE_OPERATIONAL_RISK');
+      expect(extractFieldLine(block, 'Golden ID')).toMatch(GOLDEN_NA_PATTERN);
+    });
+
+    it('COMPLIANCE_OPERATIONAL_RESILIENCE', () => {
+      const block = extractApprovalBlock(registryText, 'COMPLIANCE_OPERATIONAL_RESILIENCE');
+      expect(extractFieldLine(block, 'Golden ID')).toMatch(GOLDEN_NA_PATTERN);
+    });
+  });
+
+  describe('lot A — golden anchors still declared (regression)', () => {
+    it('FUNDING_RUNWAY_MONTHS declares funding_runway_zero_burn', () => {
+      const block = extractApprovalBlock(registryText, 'FUNDING_RUNWAY_MONTHS');
+      expect(extractGoldenIds(block)).toContain('funding_runway_zero_burn');
+    });
+
+    it('COMPLIANCE_WEIGHTED_RISK declares compliance_weighted_risk_score_basic', () => {
+      const block = extractApprovalBlock(registryText, 'COMPLIANCE_WEIGHTED_RISK');
+      expect(extractGoldenIds(block)).toContain('compliance_weighted_risk_score_basic');
+    });
+
+    it('COMPLIANCE_RESILIENCE declares compliance_resilience_score_basic', () => {
+      const block = extractApprovalBlock(registryText, 'COMPLIANCE_RESILIENCE');
+      expect(extractGoldenIds(block)).toContain('compliance_resilience_score_basic');
     });
   });
 });
