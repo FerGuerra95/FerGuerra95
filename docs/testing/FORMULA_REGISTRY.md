@@ -285,18 +285,19 @@ Each approved or in-progress formula should document:
 **Formula ID:** POST_MONEY  
 **Module:** Funding  
 **Owner:** Product / Logic Integrity  
-**Source:** Golden Dataset  
-**Status:** Pending C.13.x validation (C.13.4 Funding audit)  
+**Source:** Golden Dataset + C.13.3B naming/SoT decision  
+**Status:** Pending Golden implementation test — **C.13.3C**  
 **Formula:** `postMoney = preMoney + newInvestment`  
-**Inputs:** `preMoney`, `newInvestment` (currency)  
+**FE equivalent:** `postMoneyValuation = preMoneyValuation + targetRaise` (`calculateFundingCore`)  
+**Inputs:** `preMoney` / `preMoneyValuation`, `newInvestment` / `targetRaise` (currency)  
 **Units:** currency  
-**Output:** `postMoney`  
-**Golden ID:** `funding_post_money_and_dilution_basic`  
-**Test file:** `pending` — no dedicated `fundingFormulas` golden test for post-money yet  
+**Output:** `postMoney` / `postMoneyValuation`  
+**Golden ID:** `funding_post_money_and_dilution_basic` (expected post-money 10_000_000)  
+**Test file:** `pending` → target `tests/unit/funding/fundingFormulas.test.js` in C.13.3C  
 **Edge cases:** Inputs must be finite; presentation rounding at UI layer  
-**Usage limits:** Planning estimate. Not investment advice.  
-**Approval:** Pending human approval · Approved for DSS/demo scope (documentation only until code audit)  
-**Last reviewed:** 2026-05-20  
+**Usage limits:** DSS/demo planning estimate. Not certified valuation or investment advice.  
+**Approval:** Pending validation until C.13.3C golden tests pass · Not approved for certified advice  
+**Last reviewed:** 2026-05-20 (C.13.3B)  
 
 ---
 
@@ -305,18 +306,42 @@ Each approved or in-progress formula should document:
 **Formula ID:** INVESTOR_OWNERSHIP  
 **Module:** Funding  
 **Owner:** Product / Logic Integrity  
-**Source:** Golden Dataset  
-**Status:** Pending C.13.x validation (C.13.4 Funding audit)  
-**Formula:** `investorOwnership = newInvestment / postMoney` (decimal and percent)  
-**Inputs:** `newInvestment`, `postMoney`  
+**Source:** Golden Dataset + C.13.3B decision (dilution simple = alias)  
+**Status:** Pending Golden implementation test — **C.13.3C**  
+**Formula:** `investorOwnership = newInvestment / postMoney`; `dilutionPct = investorOwnership * 100`  
+**FE equivalent:** `dilutionPct = targetRaise / postMoneyValuation * 100` when post-money > 0  
+**Extended (separate):** `postRoundOwnership` cap-table model in `calculateFundingCore` — not the golden simple round  
+**Inputs:** `newInvestment` / `targetRaise`, `postMoney` / `postMoneyValuation`  
 **Units:** ratio 0–1 and percent  
-**Output:** `investorOwnership`  
-**Golden ID:** `funding_post_money_and_dilution_basic`  
+**Output:** `investorOwnership`, `dilutionPct`  
+**Golden ID:** `funding_post_money_and_dilution_basic` (expected 0.2 / 20%)  
+**Test file:** `pending` → C.13.3C  
+**Edge cases:** `postMoney <= 0` => **`null`** (registry/BE/golden); FE must not return `0` — fix C.13.3D  
+**Usage limits:** Indicative capital structure / DSS. Not cap-table legal certification or investment advice.  
+**Approval:** Pending validation until C.13.3C · Not approved for investment advice  
+**Last reviewed:** 2026-05-20 (C.13.3B)  
+
+---
+
+### FUNDING_INVESTOR_READINESS (DSS signal)
+
+**Formula ID:** FUNDING_INVESTOR_READINESS (discovery)  
+**Module:** Funding  
+**Owner:** Pending Formula Owner  
+**Source:** C.13.3B — canonical engine only  
+**Status:** Pending Formula Approval / Pending C.13.x validation  
+**Canonical implementation:** `calculateReadinessScore` in `fundraisingScoring.js`  
+**Non-canonical (remove in C.13.3D):** duplicate averages in `FundingDashboardPage`, `InvestorReadinessPage`  
+**Golden ID:** N/A  
 **Test file:** `pending`  
-**Edge cases:** `postMoney <= 0` => `null`; never Infinity/NaN  
-**Usage limits:** Planning estimate. Not cap-table legal certification.  
-**Approval:** Pending human approval · Not approved for investment advice  
-**Last reviewed:** 2026-05-20  
+**Usage limits:** DSS readiness signal. Not fundraising advice or certified investor readiness.  
+**Approval:** Pending human approval  
+
+---
+
+### FUNDING_OPTIMAL_WINDOW / FUNDING_RISK (DSS signals)
+
+**Status:** Pending discovery — backend heuristics (`evaluateOptimalFundingWindow`, `fundingRiskStatus` in `getFundingSummary`). Not mathematical formulas. Pending C.13.x module audit. DSS only; human review required.  
 
 ---
 
