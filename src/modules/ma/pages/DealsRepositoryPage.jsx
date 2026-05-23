@@ -1154,7 +1154,7 @@ export function DealsRepositoryPage() {
                   />
 
                   <SignalRow
-                    label="Latest equity"
+                    label="Saved snapshot: adjusted equity"
                     value={latestEquityValue}
                   />
 
@@ -1197,9 +1197,9 @@ export function DealsRepositoryPage() {
             />
 
             <KpiCard
-              label="Último Equity Value"
+              label="Saved adjusted equity"
               value={latestEquityValue}
-              description="Snapshot guardado"
+              description="Saved valuation snapshot — not live engine"
               icon={TrendingUp}
               success
             />
@@ -1289,7 +1289,8 @@ export function DealsRepositoryPage() {
                         <h3 className="deals-case-title">{item.name}</h3>
 
                         <p className="muted deals-case-meta">
-                          {formatDate(item.createdAt)} · Equity Value {equityValue}
+                          {formatDate(item.createdAt)} · Saved adjusted equity{' '}
+                          {equityValue}
                         </p>
 
                         <p className="muted deals-case-meta">
@@ -1323,7 +1324,10 @@ export function DealsRepositoryPage() {
                     </div>
 
                     <div className="deals-case-metrics">
-                      <CaseMetric label="Enterprise Value" value={evBase} />
+                      <CaseMetric
+                        label="Saved adj. DSS EV"
+                        value={evBase}
+                      />
                       <CaseMetric label="EBITDA normalizado" value={normalizedEbitda} />
                       <CaseMetric label="Net Debt" value={netDebt} />
                       <CaseMetric label="Quality Score" value={`${qualityScore}/100`} />

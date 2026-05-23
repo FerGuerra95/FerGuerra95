@@ -942,9 +942,14 @@ export function BuyerMatchingPage() {
               </h1>
 
               <p className="buyer-copy">
-                Traduce la calidad del activo, la recurrencia de ingresos, el
-                riesgo operativo y la estructura financiera en perfiles de
-                comprador accionables para priorizar conversaciones de M&A.
+                Heuristic DSS fit scores from operating and financial signals.
+                Use to prioritize conversations — not certified buyer matching or
+                investment recommendations.
+              </p>
+
+              <p className="muted" style={{ marginTop: 12, maxWidth: 720 }}>
+                Indicative decision-support only. Human review required before
+                outreach or external circulation.
               </p>
 
               <div className="buyer-command-bar">
@@ -1013,7 +1018,7 @@ export function BuyerMatchingPage() {
                   />
 
                   <SignalRow
-                    label="Fit score"
+                    label="Heuristic DSS fit score"
                     value={hasTopBuyer ? `${topScore}/100` : 'N/A'}
                   />
 
@@ -1058,9 +1063,9 @@ export function BuyerMatchingPage() {
             />
 
             <KpiCard
-              label="Top Match"
+              label="Top heuristic fit"
               value={hasTopBuyer ? `${topScore}/100` : 'N/A'}
-              description="Mejor encaje estimado"
+              description="DSS heuristic — not certified matching"
               icon={Target}
             />
           </div>
@@ -1071,7 +1076,7 @@ export function BuyerMatchingPage() {
             kicker="Matching logic"
             icon={Target}
             title="Buyer prioritization model"
-            description="Priorización de perfiles con capacidad de pagar, ejecutar e integrar el activo."
+            description="Heuristic DSS prioritization — indicative fit only, not certified recommendations."
           />
 
           <div className="buyer-bridge-grid">

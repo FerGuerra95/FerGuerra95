@@ -1003,9 +1003,14 @@ export function WaterfallPage() {
               </h1>
 
               <p className="waterfall-copy">
-                Bridge ejecutivo desde Enterprise Value hasta Equity Value y Net
-                Proceeds, incorporando deuda, caja, ajustes de operación y reparto
-                económico entre accionistas.
+                Product waterfall: adjusted DSS enterprise value → net debt →
+                working capital → adjusted equity → fees/taxes → estimated net
+                proceeds. Not the simple Golden seller-cash benchmark.
+              </p>
+
+              <p className="muted" style={{ marginTop: 12, maxWidth: 720 }}>
+                Indicative DSS bridge for internal review — not a fairness
+                opinion.
               </p>
 
               <div className="waterfall-command-bar">
@@ -1015,7 +1020,7 @@ export function WaterfallPage() {
                 />
 
                 <CommandItem
-                  label="Enterprise value"
+                  label="Adjusted DSS EV (live)"
                   value={formatCurrency(derived.evBase, reportCurrency)}
                 />
 

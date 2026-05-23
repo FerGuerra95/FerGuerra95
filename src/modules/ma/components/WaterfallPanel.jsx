@@ -375,8 +375,8 @@ export function WaterfallPanel({ derived, financials, settings }) {
 
   const rows = [
     {
-      label: 'Enterprise Value',
-      description: 'Valor económico inicial antes de deuda, caja y ajustes.',
+      label: 'Adjusted DSS enterprise value',
+      description: 'Live engine EV before debt, cash and bridge adjustments.',
       value: evBase
     },
     {
@@ -390,8 +390,8 @@ export function WaterfallPanel({ derived, financials, settings }) {
       value: wcAdjustment
     },
     {
-      label: 'Equity Value',
-      description: 'Valor atribuible al equity después del puente económico.',
+      label: 'Adjusted equity value',
+      description: 'Includes net debt and working capital adjustment (not simple Golden equity).',
       value: equityBase,
       highlight: true
     },
@@ -406,8 +406,8 @@ export function WaterfallPanel({ derived, financials, settings }) {
       value: taxesVal
     },
     {
-      label: 'Net Proceeds',
-      description: 'Caja final estimada recibida tras ajustes y costes.',
+      label: 'Estimated net proceeds',
+      description: 'After transaction fees and taxes — product waterfall output, not simple seller-cash benchmark.',
       value: netProceeds,
       highlight: true
     }
@@ -428,12 +428,13 @@ export function WaterfallPanel({ derived, financials, settings }) {
               Exit waterfall
             </div>
 
-            <h3>Waterfall de salida</h3>
+            <h3>Product waterfall (adjusted DSS)</h3>
 
             <p className="muted">
-              Puente económico desde Enterprise Value hasta Net Proceeds,
-              mostrando cómo deuda, capital circulante, fees e impuestos afectan
-              a la caja final de la operación.
+              Product bridge: adjusted EV → net debt → working capital → equity
+              → fees/taxes → estimated net proceeds. Not the simple Golden
+              seller-cash benchmark. Indicative DSS bridge — not a fairness
+              opinion.
             </p>
           </div>
 
@@ -444,7 +445,7 @@ export function WaterfallPanel({ derived, financials, settings }) {
 
         <div className="ma-waterfall-summary">
           <SummaryCard
-            label="Enterprise Value"
+            label="Adjusted DSS EV"
             value={evBase}
             currency={currency}
           />
@@ -456,7 +457,7 @@ export function WaterfallPanel({ derived, financials, settings }) {
           />
 
           <SummaryCard
-            label="Net Proceeds"
+            label="Est. net proceeds"
             value={netProceeds}
             currency={currency}
             success
@@ -481,9 +482,9 @@ export function WaterfallPanel({ derived, financials, settings }) {
           <strong>Lectura ejecutiva</strong>
 
           <p>
-            Este waterfall permite explicar de forma defendible cómo una
-            valoración inicial se convierte en equity value y finalmente en caja
-            neta estimada para la operación.
+            Use this product waterfall to explain how adjusted enterprise value
+            becomes adjusted equity and estimated seller proceeds. Values are
+            indicative for internal decision-support review only.
           </p>
         </div>
       </div>

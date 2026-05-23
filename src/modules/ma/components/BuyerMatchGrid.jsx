@@ -362,11 +362,11 @@ function getBuyerIcon(type) {
 }
 
 function getScoreLabel(score) {
-  if (score >= 80) return 'High fit';
-  if (score >= 60) return 'Qualified fit';
-  if (score >= 40) return 'Moderate fit';
+  if (score >= 80) return 'High heuristic fit';
+  if (score >= 60) return 'Qualified heuristic fit';
+  if (score >= 40) return 'Moderate heuristic fit';
 
-  return 'Early signal';
+  return 'Early heuristic signal';
 }
 
 export function BuyerMatchGrid({ buyers }) {
@@ -384,12 +384,11 @@ export function BuyerMatchGrid({ buyers }) {
               Buyer pipeline
             </div>
 
-            <h2>Prioritized buyer universe</h2>
+            <h2>Buyer universe — heuristic DSS fit</h2>
 
             <p className="muted">
-              Perfiles de comprador priorizados por encaje estratégico,
-              capacidad financiera, probabilidad de ejecución y valor potencial
-              después de la adquisición.
+              Indicative fit from operating and financial signals. Not a
+              certified buyer recommendation or investment advice.
             </p>
           </div>
 
@@ -450,7 +449,7 @@ export function BuyerMatchGrid({ buyers }) {
                     <div className="buyer-match-score-copy">
                       <strong>{getScoreLabel(score)}</strong>
 
-                      <p>{score}/100 estimated match</p>
+                      <p>{score}/100 heuristic DSS fit score</p>
                     </div>
                   </div>
 
@@ -459,7 +458,7 @@ export function BuyerMatchGrid({ buyers }) {
                   <div className="buyer-match-footer">
                     <span className="buyer-match-chip">
                       <CheckCircle2 size={13} />
-                      Buyer fit
+                      Heuristic DSS fit
                     </span>
 
                     <span className="buyer-match-chip">

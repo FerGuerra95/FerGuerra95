@@ -1606,6 +1606,12 @@ export function ValuationPage() {
                 decisión interna.
               </p>
 
+              <p className="muted" style={{ marginTop: 12, maxWidth: 720 }}>
+                Live engine estimates only. Adjusted DSS valuation — indicative,
+                not a fairness opinion. Human review required before external
+                use.
+              </p>
+
               <div className="ma-valuation-actions">
                 {SHOW_DEMO_TOOLS && canEditCase ? (
                   <>
@@ -1990,9 +1996,9 @@ function PremiumDealStructureCard({ derived, settings }) {
             <h3>Estructura de cierre clara, amplia y defendible.</h3>
 
             <p className="muted">
-              Lectura ejecutiva del puente de valor: desde EBITDA normalizado
-              hasta Enterprise Value, ajuste por deuda neta, Equity Value y
-              caja estimada para el vendedor.
+              Live engine bridge: normalized EBITDA → adjusted DSS enterprise
+              value → net debt and working capital → adjusted equity → estimated
+              net proceeds after fees/taxes. Not simple Golden benchmarks.
             </p>
           </div>
 
@@ -2048,34 +2054,34 @@ function PremiumDealStructureCard({ derived, settings }) {
           <div className="ma-bridge-list">
             <BridgeRow
               number="01"
-              title="Enterprise Value"
-              description="Resultado de aplicar el múltiplo ajustado sobre el EBITDA normalizado."
+              title="Adjusted DSS enterprise value"
+              description="Normalized EBITDA × adjusted multiple (sector, risk, quality, compliance)."
               value={formatCurrencyValue(evBase, reportCurrency)}
               meta={`${formatCurrencyValue(normalizedEbitda, reportCurrency)} x ${formatMultipleValue(adjustedMultiple)}`}
             />
 
             <BridgeRow
               number="02"
-              title="Ajuste de deuda neta"
-              description="Puente entre valor de empresa y valor atribuible al accionista."
+              title="Net debt"
+              description="Bridge from enterprise value toward equity (debt minus cash)."
               value={formatCurrencyValue(netDebt, reportCurrency)}
               meta="Deuda financiera neta / caja"
             />
 
             <BridgeRow
               number="03"
-              title="Equity Value"
-              description="Valor estimado de las participaciones después de ajustar deuda y caja."
+              title="Adjusted equity value"
+              description="Includes net debt and working capital adjustment — not the simple Golden equity benchmark."
               value={formatCurrencyValue(equityBase, reportCurrency)}
-              meta="Base de negociación"
+              meta="Live engine · adjusted bridge"
             />
 
             <BridgeRow
               number="04"
-              title="Net proceeds estimados"
-              description="Lectura final orientada al vendedor, después de los supuestos económicos del deal."
+              title="Estimated net proceeds"
+              description="Product waterfall output after fees and taxes — not simple seller-cash distribution."
               value={formatCurrencyValue(netProceeds, reportCurrency)}
-              meta="Vista cierre"
+              meta="After fees/taxes · indicative DSS"
             />
           </div>
 
@@ -2084,8 +2090,9 @@ function PremiumDealStructureCard({ derived, settings }) {
               <strong>Uso recomendado</strong>
 
               <p className="muted">
-                Utilizar como resumen principal para explicar la operación a
-                comité, comprador, vendedor o inversor.
+                Internal decision-support summary only. Not a fairness opinion.
+                Validate assumptions before committee, buyer or seller
+                discussions.
               </p>
             </div>
 

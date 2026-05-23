@@ -430,7 +430,7 @@ export function EquityHeroCard({ derived, settings }) {
         <header className="ma-equity-safe-header">
           <div className="ma-equity-safe-kicker">
             <TrendingUp size={14} />
-            Equity base valuation
+            Adjusted equity value — DSS view
           </div>
 
           <div className="ma-equity-safe-badges">
@@ -444,8 +444,9 @@ export function EquityHeroCard({ derived, settings }) {
           </h2>
 
           <p className="ma-equity-safe-copy">
-            Valor atribuible al equity después de aplicar múltiplo ajustado,
-            deuda neta, calidad del activo y señales principales del deal.
+            Live engine estimate: adjusted multiple on normalized EBITDA, net
+            debt and working capital adjustment. Indicative DSS only — not a
+            fairness opinion or certified valuation.
           </p>
         </header>
 
@@ -485,9 +486,9 @@ export function EquityHeroCard({ derived, settings }) {
 
         <div className="ma-equity-safe-metrics">
           <MetricCard
-            label="Enterprise Value"
+            label="Adjusted DSS enterprise value"
             value={formatCurrencyTight(evBase, reportCurrency)}
-            description="Valor antes de deuda, caja y ajustes finales."
+            description="Normalized EBITDA × adjusted multiple (sector, risk, quality, compliance)."
             icon={BarChart3}
           />
 

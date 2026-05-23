@@ -1234,7 +1234,7 @@ export function MADashboardPage() {
                   <SignalRow label="Active target" value={activeCompanyName} />
 
                   <SignalRow
-                    label="Equity base"
+                    label="Live engine: adjusted equity"
                     value={equityLabel}
                   />
 
@@ -1270,9 +1270,9 @@ export function MADashboardPage() {
             />
 
             <KpiCard
-              label="Equity Value"
+              label="Live engine: adjusted equity"
               value={equityLabel}
-              description="Resumen del valor base estimado"
+              description="Current workspace — not a saved snapshot"
               icon={TrendingUp}
             />
 
@@ -1460,7 +1460,7 @@ export function MADashboardPage() {
 
             <div className="ma-summary-grid">
               <MiniMetric label="Target" value={activeCompanyName} />
-              <MiniMetric label="Equity base" value={equityLabel} />
+              <MiniMetric label="Adjusted equity (live)" value={equityLabel} />
               <MiniMetric label="Net debt" value={netDebtLabel} />
               <MiniMetric label="Multiple" value={adjustedMultiple === 'N/A' ? 'N/A' : `x${adjustedMultiple}`} />
             </div>
@@ -1536,8 +1536,8 @@ export function MADashboardPage() {
             <PanelHeader
               kicker="Private repository"
               icon={LockKeyhole}
-              title="Saved Deal Snapshot"
-              description="Último caso guardado en el repositorio privado de M&A."
+              title="Saved valuation snapshot"
+              description="Latest saved case — snapshot at save time, not the live engine."
             />
 
             {latestCase ? (
@@ -1548,7 +1548,8 @@ export function MADashboardPage() {
                       <strong>{latestCase.name}</strong>
 
                       <p className="muted ma-muted-tight" style={{ marginTop: 10 }}>
-                        Último snapshot disponible para continuidad de análisis.
+                        Saved snapshot · captured at save time. May differ from
+                        the current live engine if inputs changed.
                       </p>
                     </div>
 
@@ -1558,7 +1559,7 @@ export function MADashboardPage() {
                   </div>
 
                   <div className="ma-latest-grid">
-                    <MiniMetric label="Equity base" value={latestEquityLabel} />
+                    <MiniMetric label="Saved adjusted equity" value={latestEquityLabel} />
                     <MiniMetric label="Repository status" value="Disponible" />
                   </div>
                 </div>
