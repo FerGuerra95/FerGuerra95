@@ -13,6 +13,25 @@ Obligate structured execution. Prevent improvisation, placeholder patches, silen
 
 Every agent working on CEO's OS must show what it will touch, what it will not touch, and how it will validate before and after changes.
 
+## AI Operating Modes
+
+Declare the primary mode in PRE-FLIGHT: **READ-ONLY AUDIT**, **WRITE/FIX**, **PROPOSE ONLY**, or **QUARANTINE BEFORE DELETE**.
+
+| Mode | PRE-FLIGHT required | May write files |
+|---|---|---|
+| READ-ONLY AUDIT | Yes | No |
+| WRITE/FIX | Yes | Yes (whitelist) |
+| PROPOSE ONLY | Yes | No |
+| QUARANTINE BEFORE DELETE | Yes | No (mark only) |
+
+READ-ONLY AUDIT must deliver findings P0–P3 and whitelist/blacklist without stopping for debt alone.
+
+WRITE/FIX requires strict stop conditions, validation matrix, and selective git staging.
+
+PROPOSE ONLY delivers proposed changes and waits for human authorization.
+
+QUARANTINE BEFORE DELETE documents deletion candidates; no direct deletes in the same phase.
+
 ## Required PRE-FLIGHT CHECKLIST
 
 Before modifying any file, output a visible block:
@@ -22,6 +41,7 @@ Before modifying any file, output a visible block:
 | Item | Value |
 |---|---|
 | task scope | One sentence describing the authorized work |
+| operating mode | READ-ONLY AUDIT / WRITE/FIX / PROPOSE ONLY / QUARANTINE BEFORE DELETE |
 | files allowed | Explicit list |
 | files forbidden | Explicit list including src, backend, tests, blindaje v1 files if applicable |
 | module in scope | Single module or docs-only |
@@ -82,6 +102,7 @@ End every execution phase with:
 | risks reduced | Specific risks |
 | what was not touched | Explicit list |
 | validation run | Commands and outcomes |
+| docs reconciliation | Which docs changed vs intentionally unchanged |
 | remaining risks | Open P0/P1/P2/P3 |
 | next step | Recommended prompt or phase |
 | demo/pilot status | demo-ready / partial / not ready |
@@ -92,4 +113,8 @@ After completing a phase/subphase, or when context is long, generate HANDOFF_STA
 
 ## Stop Conditions
 
-Stop before modifying if pre-flight cannot be completed honestly, or if task requires forbidden files.
+Mode-aware policy applies.
+
+**READ-ONLY AUDIT:** stop only if pre-flight cannot be completed honestly, task requires forbidden writes, or real secrets are exposed. Do not stop for audit findings alone.
+
+**WRITE/FIX / QUARANTINE follow-up:** stop before modifying if pre-flight cannot be completed honestly, or if task requires forbidden files without authorization.

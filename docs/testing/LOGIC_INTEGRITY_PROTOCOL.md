@@ -2,6 +2,51 @@
 ## Purpose
 This protocol defines how CEO's OS audits business logic, calculations, legacy functions, duplicate sources of truth, Golden Datasets and test oracles.
 The goal is to reduce AI-generated code risk and make every critical calculation explainable, testable and auditable.
+
+## AI Operating Modes (C.14.0)
+
+Every audit or fix phase must declare one primary mode. See `docs/ai/AI_OPERATING_MODEL.md` for full definitions.
+
+| Mode | Writes allowed | Stop on debt found |
+|---|---|---|
+| READ-ONLY AUDIT | No | No — classify P0–P3 and continue |
+| WRITE/FIX | Yes (whitelist) | Yes when fix blocked |
+| PROPOSE ONLY | No | No — proposal only |
+| QUARANTINE BEFORE DELETE | No (mark only) | No — document candidates |
+
+**READ-ONLY AUDIT** must deliver whitelist/blacklist for a future phase without stopping for cross-imports, duplicates, legacy, or Pending documentation.
+
+**WRITE/FIX** keeps strict stop conditions: whitelist, tests/build, no `git add .`, no unauthorized Golden/backend changes.
+
+**PROPOSE ONLY** and **QUARANTINE BEFORE DELETE** must not delete or modify product code without a later authorized WRITE/FIX phase.
+
+## Modular Sandbox Audit Order (C.14)
+
+Do not start with a whole-repo audit unless explicitly global.
+
+1. Specific module
+2. Limited shared code
+3. Related backend
+4. Related tests
+5. Related docs
+6. Cross-cutting review only when authorized
+
+## Logs / SQLite Inspection Policy
+
+Do not permanently index `*.sqlite`, `*.db`, `*.log`, `backend-server.err`, `.env`, or secrets.
+
+Controlled inspection via human-directed sanitized commands is allowed. Never paste secrets into context or commits.
+
+Do not classify backend functions as dead without checking routes, services, tests, migrations, and dynamic references.
+
+## Documentation Reconciliation Pass
+
+When code/tests/source-of-truth change, update only affected documents.
+
+Allowed status labels include: CONFIRMED, IMPLEMENTED AND TESTED, PARTIALLY RESOLVED, PENDING VALIDATION, PENDING HUMAN APPROVAL, PENDING EXTERNAL VALIDATION, DEPRECATED, DO NOT USE, UNKNOWN / NOT AUDITED.
+
+Do not mark RESOLVED global for partial fixes. Phase closure must state what changed, what was verified, what remains pending, and which docs intentionally did not change.
+
 ## Core principle
 A module is not safe just because:
 - it compiles
@@ -260,7 +305,12 @@ Include:
 - Pending Commit / Push Status
 - Recommended Prompt To Run Next
 ## Stop Conditions
-Stop and report if you find:
+
+Mode-aware policy (C.14.0) applies.
+
+**READ-ONLY AUDIT:** stop only for git hygiene violations, write/delete attempts, commit/push attempts, or secret exposure — not for audit findings.
+
+**WRITE/FIX:** stop and report if you find:
 - critical calculation without source
 - Golden Dataset mismatch
 - frontend/backend logic mismatch

@@ -4812,3 +4812,59 @@ Antes de piloto enterprise, priorizar truthfulness de señales, marketplace hidd
 ### Próxima subfase
 
 **C.8 — Auditoría funcional Risk.**
+
+---
+
+## C.14.0 — AI Guardrails Anti-Paralysis Update — CLOSED
+
+**Commit baseline:** post-C.13.3J (`55a088a` and later guardrails commit).
+
+### Crítica recibida
+
+Durante C.13.x, los guardrails IA provocaban:
+
+- **Falsa parada:** READ-ONLY audits se detenían al encontrar deuda, duplicados o legacy en lugar de clasificar y continuar.
+- **Parálisis por análisis:** exceso de Stop Conditions aplicadas igual en auditoría y en fix.
+- **Ceguera por .cursorignore:** SQLite, logs y `backend-server.err` no indexados permanentemente, pero sin política de inspección controlada.
+- **Pending documental artificial:** riesgo de llenar docs con Pending masivo sin reconciliación.
+- **Refactor/borrado peligroso:** riesgo de eliminar código "muerto" sin validar rutas, tests y referencias dinámicas.
+
+### Decisión
+
+Separar **cuatro modos operativos IA:**
+
+1. **READ-ONLY AUDIT** — leer/mapear; Stop Conditions relajadas; entregar P0–P3 + whitelist/blacklist.
+2. **WRITE/FIX** — fixes controlados; Stop Conditions duras; tests/build; git selectivo.
+3. **PROPOSE ONLY** — refactors/limpieza propuestos sin tocar archivos.
+4. **QUARANTINE BEFORE DELETE** — marcar candidatos a borrado; borrar solo en fase posterior explícita.
+
+Añadidas también:
+
+- Política logs/SQLite/.cursorignore (inspección controlada, sin indexación permanente de secretos).
+- **Reconciliation Pass** — actualizar solo docs afectados; estados PARTIALLY RESOLVED vs RESOLVED global.
+- **Modular sandbox** — auditorías C.14 por módulo, no whole-repo por defecto.
+- **Refactor/delete safety** — no borrar por intuición; áreas especialmente protegidas documentadas.
+
+### Archivos actualizados (C.14.0)
+
+- `.cursorrules`
+- `.cursor/rules/ceos-os-enterprise-guardrails.mdc`
+- `.cursor/rules/ceos-os-prompt-discipline.mdc`
+- `.cursor/rules/ceos-os-release-gates.mdc`
+- `docs/ai/AI_OPERATING_MODEL.md`
+- `docs/ai/PROMPT_LIBRARY.md`
+- `docs/testing/LOGIC_INTEGRITY_PROTOCOL.md`
+- `docs/product/PHASE_A1_CLEANUP_INVENTORY.md` (esta sección)
+
+### Estado
+
+**Guardrails updated.** No se tocó código de producto, backend, tests, Golden ni fórmulas en C.14.0.
+
+### Siguiente fase recomendada
+
+**C.13.3K** — Documentar cierre parcial C13-P1-03 (Funding draft vs persisted; legacy migration fix en `55a088a`).
+
+Luego, según prioridad:
+
+- **C.14.1** — Modular Architecture Read-Only Audit by sandbox (ej. Funding), o
+- **C.13.4** — M&A valuation / waterfall integrity.

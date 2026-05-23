@@ -13,6 +13,17 @@ Define minimum conditions to close a phase, stage files for commit, or recommend
 
 Release gates protect CEO's OS from mixed commits, silent regressions, test weakening, and undocumented cross-module changes.
 
+## AI Operating Modes and Release Gates
+
+| Mode | Build/tests required | Commit allowed | Stop on findings |
+|---|---|---|---|
+| READ-ONLY AUDIT | No | No | No — report P0–P3 |
+| WRITE/FIX | Yes when code touched | Yes (selective) | Yes on validation failure |
+| PROPOSE ONLY | No | No | No |
+| QUARANTINE BEFORE DELETE | Build/tests when marking candidates | No in quarantine phase | No |
+
+Document-only phases (e.g. C.14.0) may run `npm run test:unit` and `npm run build` as regression smoke without implying product changes.
+
 ## Mandatory Git Checks
 
 Before closing any execution phase, run:
@@ -85,8 +96,10 @@ Adapt commands to PowerShell on Windows or Bash/Zsh on macOS/Linux. The analytic
 
 Every closed phase must report:
 
+- operating mode used
 - files changed (full list)
 - files explicitly not touched
+- docs/registries changed vs intentionally unchanged (reconciliation pass)
 - tests run (commands and result)
 - risks identified (P0/P1/P2/P3)
 - whether HANDOFF_STATE was generated

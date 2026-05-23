@@ -396,6 +396,146 @@ If a change touches any audited branch indirectly, report it before proceeding.
 - Do not push unless explicitly authorized.
 - Never include backend-server.err.
 - Report git status before and after.
+## AI Operating Modes
+
+Every task must declare one primary mode: **READ-ONLY AUDIT**, **WRITE/FIX**, **PROPOSE ONLY**, or **QUARANTINE BEFORE DELETE**.
+
+| Mode | May modify files | May commit | Stop on debt found |
+|---|---|---|---|
+| READ-ONLY AUDIT | No | No | No — classify P0–P3 and continue |
+| WRITE/FIX | Yes (whitelist only) | Yes (selective) | Yes when fix blocked |
+| PROPOSE ONLY | No | No | No — deliver proposal only |
+| QUARANTINE BEFORE DELETE | No (mark only) | No | No — document candidate |
+
+### READ-ONLY AUDIT
+
+Use for audits, inventories, debt detection, import mapping, modular review, sanitized logs, source-of-truth review.
+
+- May read and map; must not modify, commit, or push.
+- Must classify findings P0/P1/P2/P3 and deliver whitelist/blacklist for a future WRITE/FIX phase.
+- **Do not stop** for cross-imports, duplicates, legacy functions, Pending documentation, or dead-code suspicion — report and continue.
+- **Stop only for:** HEAD != origin/main; unexpected dirty working tree; attempted modify/delete; attempted commit/push; real secret exposure.
+
+### WRITE/FIX
+
+Use for controlled fixes, tests, labels/copy, authorized helpers, authorized docs.
+
+- Closed whitelist; strict stop conditions; tests/build when code touched; selective `git add`; no `git add .`; atomic commits; no scope creep.
+
+### PROPOSE ONLY
+
+Use for refactors, duplicate cleanup, suspected dead code, reorganization, potential deletions.
+
+- Must not modify or delete files.
+- Deliver proposed diff or change list, risk, required tests, and wait for human authorization.
+
+### QUARANTINE BEFORE DELETE
+
+Use before removing code, routes, legacy pages, unused services, marketplace/demo internals.
+
+- Never delete in the first pass.
+- Mark candidate; confirm imports, routes, tests, consumers; document deprecation; run build/tests; quarantine one phase; delete only in a later explicit WRITE/FIX phase.
+
+## Stop Conditions — Mode-Aware Policy
+
+### A) Hard stops in WRITE/FIX
+
+- File outside whitelist
+- Unauthorized backend, Golden, or expected-output changes
+- Cross-module change without authorization
+- `git add .`
+- Required tests or build fail
+- `backend-server.err` staged
+
+### B) Relaxed behavior in READ-ONLY AUDIT
+
+- Do not stop for debt, cross-imports, duplicates, legacy, or Pending docs
+- Report findings and continue to deliverable
+
+## Logs / SQLite / .cursorignore Policy
+
+Do not permanently index: `*.sqlite`, `*.db`, `*.log`, `backend-server.err`, `.env`, secrets.
+
+Controlled inspection via human-directed commands is allowed:
+
+- Sanitized `sqlite .schema`
+- `PRAGMA table_info(...)` on non-secret columns
+- Bounded excerpts from `backend-server.err` or logs pasted by the user without secrets
+
+Never paste secrets into context or commits.
+
+Do not delete backend functions for "no usage" without reviewing routes, services, tests, migrations, and dynamic references.
+
+## Documentation Truthfulness — Reconciliation Pass
+
+Allowed status labels:
+
+- CONFIRMED
+- IMPLEMENTED AND TESTED
+- PARTIALLY RESOLVED
+- PENDING VALIDATION
+- PENDING HUMAN APPROVAL
+- PENDING EXTERNAL VALIDATION
+- DEPRECATED
+- DO NOT USE
+- UNKNOWN / NOT AUDITED
+
+When a phase changes code, tests, or source-of-truth, update **only** affected documents — not a dozen files by routine.
+
+Do not mark RESOLVED global when only partial scope was fixed.
+
+Every phase closure must include:
+
+- what changed
+- what was verified
+- what remains pending
+- which docs/registries changed
+- which docs/registries intentionally did not change
+
+## Modular Sandbox (C.14 Audits)
+
+Do not audit the entire repo as a first action unless the phase is explicitly global.
+
+Recommended order:
+
+1. Specific module
+2. Limited shared code
+3. Related backend
+4. Related tests
+5. Related docs
+6. Cross-cutting audit only when authorized
+
+Example **C.14.1 Funding modular audit:**
+
+- `src/modules/funding/**`
+- `backend/services/funding/**`
+- `backend/api/*funding*`
+- `tests/unit/funding/**`
+- `tests/integration/api/fundingApi.test.js`
+
+## Refactor / Delete Safety
+
+AI must not delete or move code by intuition.
+
+Before any elimination, deliver:
+
+- candidate file
+- reason
+- imports found
+- routes affected
+- tests affected
+- commercial/demo risk
+- deprecation alternative
+- proposed follow-up phase
+
+Especially protected:
+
+- `/bridge/marketplace`
+- internal demos and fallbacks
+- secure share, reports/export
+- routes, auth, storage/migrations, audit logs, data room
+- closed enterprise modules (Executive Overview, M&A, Compliance, Funding, Governance, PMI, Bridge unless explicitly targeted)
+
 ## Required Explanation
 For every proposed change, explain:
 - why it is needed
@@ -440,7 +580,12 @@ At the end of every audit or change, explain:
 - what future maintainers must know
 - whether this is demo-ready, pilot-ready or still partial
 ## Stop Conditions
-Stop and report before changing code if you find:
+
+Mode-aware policy applies. See AI Operating Modes above.
+
+In **READ-ONLY AUDIT**: stop only for baseline/git hygiene violations, write/delete attempts, commit/push attempts, or secret exposure — not for audit findings themselves.
+
+In **WRITE/FIX**: stop and report before changing code if you find:
 - critical calculation without source
 - frontend/backend duplicate calculation with different logic
 - legacy function used as source-of-truth

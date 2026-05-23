@@ -8,18 +8,20 @@ Copy a template verbatim into Cursor. Replace bracketed placeholders.
 
 ## Rules For All Prompts
 
-1. Start with PRE-FLIGHT CHECKLIST (verifiable summary, no private chain-of-thought).
-2. Define allowed and forbidden files explicitly.
-3. No `git add .`
-4. No `backend-server.err` in commits
-5. No placeholders in deliverables
-6. No test weakening
-7. No Golden Dataset weakening
-8. No broad refactor
-9. Provide validation evidence and HANDOFF_STATE when phase closes
-10. Apply Documentation Truthfulness: Confirmed vs Assumed / Pending C.13 validation
-11. Use host-native terminal (PowerShell on Windows, Bash/Zsh on macOS/Linux)
-12. Write repository files as plain text (no wrapping whole .mdc/.md in Markdown code fences)
+1. Declare **operating mode**: READ-ONLY AUDIT, WRITE/FIX, PROPOSE ONLY, or QUARANTINE BEFORE DELETE.
+2. Start with PRE-FLIGHT CHECKLIST (verifiable summary, no private chain-of-thought).
+3. Define allowed and forbidden files explicitly.
+4. No `git add .`
+5. No `backend-server.err` in commits
+6. No placeholders in deliverables
+7. No test weakening
+8. No Golden Dataset weakening
+9. No broad refactor outside PROPOSE ONLY
+10. Provide validation evidence and HANDOFF_STATE when phase closes
+11. Apply Documentation Truthfulness and Reconciliation Pass
+12. Use host-native terminal (PowerShell on Windows, Bash/Zsh on macOS/Linux)
+13. Write repository files as plain text (no wrapping whole .mdc/.md in Markdown code fences)
+14. READ-ONLY AUDIT must not stop for debt/duplicates/legacy — classify and continue
 
 ---
 
@@ -28,15 +30,16 @@ Copy a template verbatim into Cursor. Replace bracketed placeholders.
 ```text
 Act as Principal Enterprise Architect and Logic Integrity Auditor for CEO's OS.
 
-MODE: READ-ONLY — NO FIX MODE
+MODE: READ-ONLY AUDIT — NO FIX MODE
 
 PRE-FLIGHT CHECKLIST (fill before work):
+- operating mode: READ-ONLY AUDIT
 - task scope: [describe audit scope]
 - baseline HEAD: [commit]
 - files allowed: read-only access to [list paths]
 - files forbidden: all writes; src/backend/tests/CSS/package.json unless later authorized
 - module in scope: [module]
-- stop conditions: any write attempt, secret exposure, scope creep
+- stop conditions: write/delete attempt, secret exposure, scope creep, git hygiene failure
 
 OBJECTIVE:
 Inventory only. Do not modify any file. Do not commit. Do not push.
@@ -44,10 +47,11 @@ Inventory only. Do not modify any file. Do not commit. Do not push.
 TASKS:
 1. Map routes, services, stores, and calculation engines in scope.
 2. Identify duplicates (frontend vs backend, multiple helpers).
-3. Identify legacy/dead code paths.
+3. Identify legacy/dead code paths — report only, do not stop audit.
 4. Identify demo/fallback/localStorage contamination risks.
 5. Classify findings P0/P1/P2/P3 with evidence (file paths, line references).
 6. Propose correction sequence without applying patches.
+7. Deliver whitelist/blacklist for future WRITE/FIX phase.
 
 FORBIDDEN:
 - No file edits
@@ -57,14 +61,19 @@ FORBIDDEN:
 
 DELIVERABLE:
 - Findings table P0-P3
-- Source-of-truth notes (Assumed / Pending C.13 validation where not proven)
-- Recommended next prompt (scoped fix or C.13 subphase)
+- Source-of-truth notes (status labels per AI_OPERATING_MODEL.md)
+- Whitelist/blacklist for next phase
+- Recommended next prompt (scoped fix or C.13/C.14 subphase)
 - HANDOFF_STATE
 
-STOP CONDITIONS:
-- Attempted write to repo
-- Cannot verify tenant/auth on sensitive endpoint
+STOP CONDITIONS (hard only):
+- Attempted write/delete to repo
+- HEAD != origin/main or unexpected dirty working tree
+- Real secret found in repo output
 - Three failed analysis passes on same blocker
+
+DO NOT STOP FOR:
+- Cross-imports, duplicates, legacy functions, Pending documentation, suspected dead code
 ```
 
 ---
@@ -363,14 +372,136 @@ STOP CONDITIONS:
 
 ---
 
+---
+
+## Prompt Template — C.14.0 AI Guardrails Anti-Paralysis (docs-only)
+
+```text
+Act as AI Governance Auditor for CEO's OS — Phase C.14.0.
+
+MODE: WRITE/FIX (documentation and rules only)
+
+PRE-FLIGHT:
+- scope: update AI operating modes, stop conditions, reconciliation pass, modular sandbox
+- files allowed: .cursorrules, .cursor/rules/*.mdc (listed), docs/ai/*, docs/testing/LOGIC_INTEGRITY_PROTOCOL.md, docs/product/PHASE_A1_CLEANUP_INVENTORY.md
+- files forbidden: src, backend, tests, golden, FORMULA_REGISTRY, SOURCE_OF_TRUTH_REGISTRY, package.json
+
+OBJECTIVE:
+Extend guardrails with READ-ONLY AUDIT, WRITE/FIX, PROPOSE ONLY, QUARANTINE BEFORE DELETE modes.
+Relax stop conditions for read-only audits; keep hard stops for writes.
+
+VALIDATION:
+- git diff --stat (allowed files only)
+- npm run test:unit
+- npm run build
+
+COMMIT:
+git commit -m "docs: update ai guardrails operating modes"
+Selective git add only. No git add .
+
+DELIVERABLE:
+- Summary of modes added
+- Stop condition policy A/B
+- Reconciliation pass rules
+- HANDOFF_STATE
+```
+
+---
+
+## Prompt Template — C.14.1 Modular Sandbox Read-Only Audit
+
+```text
+Act as Modular Architecture Auditor for CEO's OS — Phase C.14.1.
+
+MODULE: [e.g. Funding]
+
+MODE: READ-ONLY AUDIT
+
+PRE-FLIGHT:
+- sandbox paths only (module + related backend/tests/docs)
+- forbidden: whole-repo sweep unless explicitly authorized
+
+TASKS:
+1. Map module boundaries and imports within sandbox (then limited shared).
+2. Identify duplicates and legacy — report, do not stop.
+3. Classify P0-P3 with evidence.
+4. Deliver whitelist/blacklist for WRITE/FIX or PROPOSE ONLY follow-up.
+
+DO NOT STOP FOR:
+- debt, duplicates, legacy, Pending docs
+
+STOP CONDITIONS (hard only):
+- write attempt, git hygiene failure, secret exposure
+```
+
+---
+
+## Prompt Template — PROPOSE ONLY Refactor / Cleanup
+
+```text
+Act as Refactor Proposer for CEO's OS.
+
+MODE: PROPOSE ONLY
+
+PRE-FLIGHT:
+- candidate scope: [files/modules]
+- forbidden: all file writes and deletes
+
+OBJECTIVE:
+Propose refactor or cleanup without applying changes.
+
+DELIVERABLE:
+- Proposed diff or change list
+- Imports, routes, tests affected
+- Commercial/demo risk
+- Deprecation alternative
+- Required tests for WRITE/FIX follow-up
+- Risk P0-P3
+
+FORBIDDEN:
+- No file edits, commits, or deletions
+```
+
+---
+
+## Prompt Template — QUARANTINE BEFORE DELETE
+
+```text
+Act as Deletion Quarantine Auditor for CEO's OS.
+
+MODE: QUARANTINE BEFORE DELETE
+
+PRE-FLIGHT:
+- deletion candidates: [list suspected dead code/routes]
+- forbidden: actual deletes in this phase
+
+TASKS:
+1. Confirm imports, routes, tests, dynamic references.
+2. Document why code may be deprecated vs deleted.
+3. Run build/tests if marking candidates in inventory doc only.
+4. Propose explicit later WRITE/FIX delete phase.
+
+ESPECIALLY PROTECTED:
+- /bridge/marketplace, demos, fallbacks, auth, migrations, secure share, exports
+
+FORBIDDEN:
+- Direct file deletion in quarantine phase
+```
+
+---
+
 ## Index of Templates
 
 | Template | Use when |
 |---|---|
-| No Fix Mode | Inventory and classification only |
+| No Fix Mode | Inventory and classification only (READ-ONLY AUDIT) |
 | C.13.0 Global Read-Only Audit | Full logic integrity pass |
+| C.14.0 AI Guardrails Update | Docs/rules anti-paralysis update |
+| C.14.1 Modular Sandbox Audit | Single-module architecture read-only |
 | Module Logic Integrity Audit | Single module deep dive |
-| Controlled Bugfix | Authorized minimal fix |
+| PROPOSE ONLY Refactor | Refactor/cleanup proposal without writes |
+| QUARANTINE BEFORE DELETE | Mark deletion candidates; no deletes |
+| Controlled Bugfix | Authorized minimal fix (WRITE/FIX) |
 | Calculation Verification | One formula vs golden |
 | Security Review | API/auth/tenant change |
 | Release Closure | End of phase with evidence |

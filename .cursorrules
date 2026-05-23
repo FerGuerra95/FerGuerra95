@@ -38,7 +38,69 @@ CRITICAL ENGINEERING RULES:
 17. Before changing code, explain why the change is needed and what risk it reduces.
 18. After any change, report files changed, tests run, risks, and what was not touched.
 19. Explain technical decisions like a tutor for a future maintainer.
-20. If a P0/P1 issue is detected, stop and report before changing code.
+20. If a P0/P1 issue is detected during WRITE/FIX, stop and report before changing code. During READ-ONLY AUDIT, classify and continue — do not stop the audit for debt alone.
+
+AI OPERATING MODES:
+
+Every task must declare one primary mode. Modes are mutually exclusive unless the prompt explicitly combines them.
+
+1. READ-ONLY AUDIT
+   Use for: audits, inventories, debt detection, import mapping, modular review, sanitized log analysis, source-of-truth review.
+   Rules: may read and map; must not modify files; must not commit or push; must not stop for every inconsistency; classify findings P0/P1/P2/P3; deliver whitelist/blacklist for a future phase.
+   Relaxed stop conditions: do NOT stop for cross-imports, duplicates, legacy functions, or Pending documentation — report and continue.
+   Hard stop only for: HEAD != origin/main; unexpected dirty working tree; attempted file modify/delete; attempted commit/push; real secret exposure.
+
+2. WRITE/FIX
+   Use for: controlled fixes, tests, labels/copy, concrete bugs, authorized helpers, authorized documentation.
+   Rules: closed whitelist; strict stop conditions; tests/build mandatory when code touched; selective git add; no git add .; small traceable commits; no scope expansion.
+
+3. PROPOSE ONLY
+   Use for: refactors, duplicate cleanup, suspected dead code, modular reorganization, potential deletions, architecture changes.
+   Rules: must not modify or delete files; deliver proposed diff or change list; justify risk; list required tests; wait for human authorization before WRITE/FIX.
+
+4. QUARANTINE BEFORE DELETE
+   Use for: removing code, routes, legacy pages, unused services, marketplace/demo cleanup.
+   Rules: never delete directly in first pass; mark candidate; confirm imports/routes/tests/consumers; document deprecation rationale; run build/tests; quarantine one phase; delete only in a later explicit phase.
+
+STOP CONDITIONS — MODE-AWARE POLICY:
+
+A) Hard stops in WRITE/FIX:
+   - file outside whitelist
+   - unauthorized backend/Golden/expected-output changes
+   - cross-module change without authorization
+   - git add .
+   - tests or build fail when required
+   - backend-server.err staged
+
+B) Relaxed behavior in READ-ONLY AUDIT:
+   - report debt, cross-imports, duplicates, legacy, Pending docs — do not stop
+   - deliver findings table and recommended next phase
+
+LOGS / SQLITE / .cursorignore POLICY:
+
+Do not permanently index: *.sqlite, *.db, *.log, backend-server.err, .env, secrets.
+Controlled inspection is allowed via human-directed commands: sanitized sqlite .schema, PRAGMA table_info, bounded log excerpts without secrets.
+Never paste secrets into context or commits.
+Do not delete backend functions for "no usage" without reviewing routes, services, tests, migrations, and dynamic references.
+
+DOCUMENTATION TRUTHFULNESS — RECONCILIATION PASS:
+
+Allowed status labels: CONFIRMED, IMPLEMENTED AND TESTED, PARTIALLY RESOLVED, PENDING VALIDATION, PENDING HUMAN APPROVAL, PENDING EXTERNAL VALIDATION, DEPRECATED, DO NOT USE, UNKNOWN / NOT AUDITED.
+When a phase changes code/tests/source-of-truth, update ONLY affected documents — not 12 docs by routine.
+Do not mark RESOLVED global for partial scope fixes.
+Every phase closure must report: what changed, what was verified, what remains pending, which docs/registries changed, which intentionally did not change.
+
+MODULAR SANDBOX (C.14 AUDITS):
+
+Do not audit the entire repo as a first action unless explicitly global.
+Recommended order: specific module → limited shared → related backend → related tests → related docs → cross-cutting audit only when authorized.
+Example C.14.1 Funding: src/modules/funding/**, backend/services/funding/**, backend/api/*funding*, tests/unit/funding/**, tests/integration/api/fundingApi.test.js.
+
+REFACTOR / DELETE SAFETY:
+
+AI must not delete or move code by intuition.
+Before any elimination, deliver: candidate file, reason, imports found, routes affected, tests affected, commercial/demo risk, deprecation alternative, proposed follow-up phase.
+Especially protected: /bridge/marketplace, internal demos, fallbacks, secure share, reports/export, routes, auth, storage/migrations, audit logs, data room, closed enterprise modules.
 
 SCOPE LOCK RULE:
 
@@ -554,7 +616,11 @@ At the end of every audit or change, provide:
 
 STOP CONDITIONS:
 
-Stop and report before changing code if you find:
+Mode-aware policy applies. See AI OPERATING MODES above.
+
+In READ-ONLY AUDIT: stop only for baseline/git hygiene violations, write/delete attempts, commit/push attempts, or secret exposure — not for findings themselves.
+
+In WRITE/FIX: stop and report before changing code if you find:
 
 - critical calculation without source
 - frontend/backend duplicate calculation with different logic
