@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertTriangle, Gauge, WalletCards } from 'lucide-react';
 
+import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { Card } from '../../../shared/components/ui/Card.jsx';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import {
@@ -20,7 +21,9 @@ export function FundingExecutiveWidget({
   summary = {},
   currency = 'EUR',
   title = 'Liquidity & Runway',
-  className = ''
+  className = '',
+  sourceBadge = 'Enterprise rounds summary',
+  sourceHint = 'From backend summary and stored funding rounds.'
 }) {
   const runwayStatus = getRunwayStatusLabel(summary.projectedRunwayMonths);
   const monthlyBurnRate = toSafeNumber(summary.monthlyBurnRate);
@@ -32,6 +35,14 @@ export function FundingExecutiveWidget({
 
   return (
     <Card className={className}>
+      <div className="funding-badge-row" style={{ marginBottom: 10 }}>
+        <Badge>{sourceBadge}</Badge>
+      </div>
+
+      <p className="muted" style={{ marginTop: 0, marginBottom: 12, fontSize: 12, lineHeight: 1.5 }}>
+        {sourceHint}
+      </p>
+
       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
         <div>
           <div className="kpi-label">{title}</div>

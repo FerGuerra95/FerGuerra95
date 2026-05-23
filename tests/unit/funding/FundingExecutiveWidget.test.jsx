@@ -5,6 +5,15 @@ import { render, screen } from '@testing-library/react';
 import { FundingExecutiveWidget } from '../../../src/modules/funding/components/FundingExecutiveWidget.jsx';
 
 describe('FundingExecutiveWidget', () => {
+  it('renders persisted enterprise source labels', () => {
+    render(<FundingExecutiveWidget summary={{}} currency="EUR" />);
+
+    expect(screen.getByText('Enterprise rounds summary')).toBeTruthy();
+    expect(
+      screen.getByText(/From backend summary and stored funding rounds/i)
+    ).toBeTruthy();
+  });
+
   it('renders safe fallbacks for incomplete summary data', () => {
     render(<FundingExecutiveWidget summary={{}} currency="EUR" />);
 

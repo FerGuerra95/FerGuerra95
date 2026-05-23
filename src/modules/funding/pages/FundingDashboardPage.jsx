@@ -78,6 +78,26 @@ const EMPTY_FUNDING_SETTINGS = {
   scenarioMode: 'balanced'
 };
 
+const FUNDING_SOURCE_COPY = {
+  draftBadge: 'Scenario draft workspace',
+  draftHint:
+    'Based on current workspace inputs. Not persisted as an official funding round.',
+  persistedBadge: 'Enterprise rounds summary',
+  persistedHint: 'From backend summary and stored funding rounds.'
+};
+
+function FundingSourceHint({ variant = 'draft' }) {
+  const isDraft = variant === 'draft';
+
+  return (
+    <p className="muted funding-muted-tight" style={{ marginTop: 10, lineHeight: 1.5 }}>
+      <Badge>{isDraft ? FUNDING_SOURCE_COPY.draftBadge : FUNDING_SOURCE_COPY.persistedBadge}</Badge>
+      {' '}
+      {isDraft ? FUNDING_SOURCE_COPY.draftHint : FUNDING_SOURCE_COPY.persistedHint}
+    </p>
+  );
+}
+
 const fundingDashboardCss = `
   .funding-dashboard-page {
     width: min(1540px, 100%);
@@ -963,7 +983,7 @@ function SignalRow({ label, value }) {
   );
 }
 
-function SectionHeader({ kicker, icon: Icon, title, description, right }) {
+function SectionHeader({ kicker, icon: Icon, title, description, right, sourceBadge }) {
   return (
     <div className="funding-section-header">
       <div>
@@ -975,6 +995,12 @@ function SectionHeader({ kicker, icon: Icon, title, description, right }) {
         <h2>{title}</h2>
 
         <p className="muted">{description}</p>
+
+        {sourceBadge ? (
+          <div className="funding-badge-row" style={{ marginTop: 10 }}>
+            <Badge>{sourceBadge}</Badge>
+          </div>
+        ) : null}
       </div>
 
       {right ? <div>{right}</div> : null}
@@ -1588,7 +1614,7 @@ export function FundingDashboardPage() {
             <div className="funding-hero-layout">
               <div>
                 <div className="funding-badge-row">
-                  <Badge>Funding Workspace</Badge>
+                  <Badge>{FUNDING_SOURCE_COPY.draftBadge}</Badge>
                   <Badge>Capital Strategy</Badge>
                   <Badge>{stage}</Badge>
                   <Badge>{scenarioMode}</Badge>
@@ -1608,6 +1634,8 @@ export function FundingDashboardPage() {
                   Funding Intelligence is a decision-support layer. Financial, legal and investor
                   actions require human review.
                 </p>
+
+                <FundingSourceHint variant="draft" />
 
                 <div className="funding-actions">
                   {SHOW_DEMO_TOOLS ? (
@@ -1629,6 +1657,8 @@ export function FundingDashboardPage() {
                     Exportar memo
                   </Button>
                 </div>
+
+                <FundingSourceHint variant="persisted" />
 
                 <div className="funding-command-bar">
                   <CommandItem
@@ -1653,7 +1683,7 @@ export function FundingDashboardPage() {
                 <div className="funding-signal-inner">
                   <div className="funding-signal-top">
                     <div>
-                      <div className="kpi-label">Funding Signal</div>
+                      <div className="kpi-label">Funding Signal (scenario draft)</div>
                       <div className="funding-signal-title">
                         {fundingSignal.title}
                       </div>
@@ -1662,6 +1692,10 @@ export function FundingDashboardPage() {
                     <div className="funding-icon-box">
                       <Rocket size={21} />
                     </div>
+                  </div>
+
+                  <div className="funding-badge-row" style={{ marginBottom: 10 }}>
+                    <Badge>{FUNDING_SOURCE_COPY.draftBadge}</Badge>
                   </div>
 
                   <div className="funding-score-module">
@@ -1684,6 +1718,10 @@ export function FundingDashboardPage() {
                       </p>
                     </div>
                   </div>
+
+                  <p className="muted funding-muted-tight" style={{ marginBottom: 8 }}>
+                    {FUNDING_SOURCE_COPY.persistedHint}
+                  </p>
 
                   <div className="funding-signal-table">
                     <SignalRow
@@ -1757,14 +1795,15 @@ export function FundingDashboardPage() {
               kicker="Raise overview"
               icon={Activity}
               title="Funding metrics at a glance"
-              description="Una lectura rápida de capital objetivo, runway, dilución y readiness antes de preparar memo o conversación con inversores."
+              description="Aggregated KPIs from saved funding rounds and backend summary — not from the scenario draft workspace."
+              sourceBadge={FUNDING_SOURCE_COPY.persistedBadge}
             />
 
             <div className="funding-grid funding-grid-kpis">
               <KpiCard
                 label="Capital raised"
                 value={formatCurrency(normalizedSummary.totalAmountRaised, reportCurrency)}
-                description="Funding rounds aggregate"
+                description="Stored enterprise data — funding rounds aggregate"
                 icon={Banknote}
               />
 
@@ -1775,7 +1814,7 @@ export function FundingDashboardPage() {
                     ? 'Insufficient data'
                     : `${Math.round(normalizedSummary.projectedRunwayMonths)} meses`
                 }
-                description="Estimated from latest summary"
+                description="From backend summary — latest round"
                 icon={Gauge}
               />
 
@@ -1786,7 +1825,7 @@ export function FundingDashboardPage() {
                     ? 'Pending data'
                     : `${Math.round(normalizedSummary.estimatedDilution)}%`
                 }
-                description="Latest / average dilution"
+                description="From backend summary — latest / average dilution"
                 icon={PieChart}
                 tone={
                   normalizedSummary.estimatedDilution !== null &&
@@ -1803,7 +1842,7 @@ export function FundingDashboardPage() {
                     ? 'Pending data'
                     : `${Math.round(normalizedSummary.capitalEfficiencyScore)}/100`
                 }
-                description="Capital efficiency"
+                description="From backend summary — capital efficiency score"
                 icon={Target}
                 tone={runwayRiskTone === 'critical' ? 'text-warning' : 'text-success'}
               />
@@ -1815,7 +1854,8 @@ export function FundingDashboardPage() {
               kicker="Funding rounds"
               icon={BriefcaseBusiness}
               title="Round history"
-              description="Round type, amount raised, valuation, dilution, investor and closing date from enterprise backend."
+              description="Persisted funding rounds from enterprise backend — official round records per organization."
+              sourceBadge="Persisted rounds"
             />
             <Card className="funding-panel">
               {isLoadingFundingData ? (
@@ -1854,12 +1894,14 @@ export function FundingDashboardPage() {
             </Card>
           </section>
 
+          <FundingSourceHint variant="draft" />
+
           <section className="funding-multinational-grid">
             <FundingPremiumPanel
               kicker="Multinational funding"
               icon={BriefcaseBusiness}
               title="International Capital Stack"
-              description="Vista ejecutiva de capital, valoración, moneda, escenario y runway para presentar la ronda como caso de financiación institucional."
+              description="Scenario draft view from workspace inputs — not persisted as official round data."
             >
               <div className="funding-premium-row-grid">
                 {fundingMultinationalPack.capitalRows.map(([label, value]) => (
@@ -2017,7 +2059,8 @@ export function FundingDashboardPage() {
                 kicker="Use of funds"
                 icon={WalletCards}
                 title="Capital allocation"
-                description="Distribución del capital para explicar cómo la ronda se transforma en crecimiento operativo."
+                description="Scenario draft — distribution from current workspace inputs."
+                sourceBadge={FUNDING_SOURCE_COPY.draftBadge}
               />
 
               <UseOfFundsCard
@@ -2031,7 +2074,7 @@ export function FundingDashboardPage() {
                 kicker="Raise narrative"
                 icon={TrendingUp}
                 title="Raise Overview"
-                description="Resumen ejecutivo de la ronda y principales argumentos para inversores."
+                description="Scenario draft narrative — based on workspace inputs, not stored round records."
               />
 
               <div className="funding-glass-block">
@@ -2050,7 +2093,7 @@ export function FundingDashboardPage() {
                 kicker="Funding memo"
                 icon={FileText}
                 title="Funding Memo"
-                description="Lectura preparada para convertir los datos de financiación en una narrativa clara de inversión."
+                description="Scenario draft memo — exportable workspace output, not enterprise filing."
               />
 
               <div className="funding-mini-stack">
@@ -2088,7 +2131,7 @@ export function FundingDashboardPage() {
                 kicker="Investor readiness"
                 icon={ShieldCheck}
                 title="Investor Readiness"
-                description="Checklist de preparación para salir al mercado con data room, narrativa y señales de tracción."
+                description="Scenario draft readiness — from workspace engine, distinct from backend capital efficiency."
               />
 
               <ReadinessChecklistCard

@@ -368,11 +368,11 @@ export function FundingHeroCard({ derived, settings }) {
           <div>
             <div className="funding-hero-kicker">
               <TrendingUp size={14} />
-              Funding economics
+              Funding economics (scenario draft)
             </div>
 
             <div className="funding-hero-badges">
-              <Badge>Funding Workspace</Badge>
+              <Badge>Scenario draft workspace</Badge>
               <Badge>{readinessLabel}</Badge>
               <Badge>{signal.posture}</Badge>
             </div>
@@ -382,8 +382,8 @@ export function FundingHeroCard({ derived, settings }) {
             </h2>
 
             <p className="funding-hero-subcopy">
-              Resumen visual de la ronda: capital objetivo, valoración,
-              dilución, runway y preparación inversora en una lectura ejecutiva.
+              Based on current workspace inputs. Not persisted as an official funding round.
+              Capital target, valuation, dilution, runway and readiness are scenario estimates.
             </p>
           </div>
 
