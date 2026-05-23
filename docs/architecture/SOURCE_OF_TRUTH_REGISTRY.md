@@ -33,9 +33,9 @@ Do not mark Assumed entries as Confirmed before C.13.
 | M&A waterfall | seller proceeds | Pending C.13 audit | Source unclear | | ma_waterfall_simple_distribution | |
 | M&A buyer matching | match scores | Pending C.13 audit | Source unclear | | futureDatasetsRequired | |
 | Funding rounds | round records | backend funding services/API (`funding_rounds`) | Confirmed (C.13.3G) | FE draft must not replace | N/A | `GET/POST/PUT/DELETE /funding/rounds` |
-| Funding summary | dashboard summary | backend `getFundingSummary` | Confirmed (C.13.3G) | Dashboard may mix draft KPIs without label | N/A | Window/risk = DSS heuristics |
+| Funding summary | dashboard summary | backend `getFundingSummary` | Confirmed (C.13.3G) | Dashboard labels draft vs persisted (C.13.3H) | N/A | Window/risk = DSS heuristics |
 | Funding snapshots | persisted scenario snapshots | backend `funding_snapshots` / hub-overview | Confirmed (C.13.3G) | FE pages do not consume createSnapshot yet | N/A | Optional enterprise commit path |
-| Funding draft workspace | inputs, settings, scenario modelling | client localStorage (`funding_draft_by_org_v1_{organizationId}`) | Confirmed (C.13.3G) | Legacy global keys; cross-org migration risk | funding_* formulas on draft | Not enterprise persisted |
+| Funding draft workspace | inputs, settings, scenario modelling | client localStorage (`funding_draft_by_org_v1_{organizationId}`) | Confirmed (C.13.3G) | Legacy global keys consumed on migrate (C.13.3J) | funding_* formulas on draft | Not enterprise persisted |
 | Funding scenarios (UI) | Low/Base/High rows | FE `useFundingEngine` on draft inputs | Known duplicate risk | Differs from persisted rounds | funding_* | Label as scenario/draft required |
 | Compliance weightedRiskScore | explicable 3-dimension score | Golden Dataset + Formula Registry (`COMPLIANCE_WEIGHTED_RISK`) | Canonical (docs) / Pending implementation | No helper in code yet | compliance_weighted_risk_score_basic | C.13.1C-f1B Option C |
 | Compliance operationalRiskScore | dashboard operational score | Frontend `calculateSupplierRiskScore` + `useComplianceEngine` (current) | Assumed / Pending hardening | Collides with field name `riskScore`; FE may override BE | N/A | Not golden oracle |
@@ -103,7 +103,7 @@ Status: **Human review required** for pilot-facing exports until f2/f3 phases co
 
 ## Funding Source-of-Truth Policy (Decision C.13.3G — Option C Hybrid)
 
-Documented after C.13.3F read-only audit. **C13-P1-03 remains OPEN** until UI labels and consistency tests land (C.13.3H).
+Documented after C.13.3F read-only audit. **C13-P1-03 is PARTIALLY RESOLVED** (C.13.3K): SoT decision, dashboard labels, store tests, and legacy migration fix completed; dashboard runtime/e2e and optional broader migration remain pending. **Do not mark RESOLVED global.**
 
 ### Enterprise persisted data (backend authoritative)
 
@@ -124,35 +124,38 @@ Documented after C.13.3F read-only audit. **C13-P1-03 remains OPEN** until UI la
 | **Readiness (workspace)** | FE `fundraisingScoring.js` on draft | Canonical for UI formulas (C.13.3E); distinct from `capitalEfficiencyScore` in summary |
 | **Export memo (draft)** | Draft + derived | `fundingExportApi.js` — workspace output, not certified filing |
 
-### Legacy localStorage (risk — do not treat as SoT)
+### Legacy localStorage (migration-only — not SoT)
 
 | Key | Status |
 |---|---|
-| `funding_workspace_draft_v1` | Legacy global; read once for migration into org key |
-| `funding_workspace_settings_v1` | Legacy global; paired with draft v1 |
-| `funding_draft_by_org_v1_{organizationId}` | Active org-scoped draft key |
+| `funding_workspace_draft_v1` | Legacy global; **migration-only fallback**; consumed and removed after successful org-scoped migration (C.13.3J) |
+| `funding_workspace_settings_v1` | Legacy global; paired with draft v1; **consumed on migrate** (C.13.3J) |
+| `funding_draft_by_org_v1_{organizationId}` | Active org-scoped draft key — draft workspace only, not enterprise persisted |
 
-**Risk:** First load per browser may copy global legacy draft into current org bucket — test before enterprise pilot (C.13.3H).
+**Policy (C.13.3J):** Legacy global keys are not source-of-truth and not enterprise persisted data. After first successful migration to org-scoped key, legacy globals are deleted so a second organization in the same browser cannot inherit the same draft.
 
-### UI separation rule (pending implementation)
+**Residual risk (P2 optional):** Dashboard runtime/e2e consistency between draft engine metrics and API summary — labels added (C.13.3H); automated e2e optional.
+
+### UI separation rule (implemented C.13.3H)
 
 `FundingDashboardPage` must visually distinguish:
 
 - **Draft / scenario workspace metrics** (engine on `fundingInputs`) — labels: scenario, workspace, draft, DSS estimate.
 - **Persisted enterprise metrics** (rounds list, summary KPIs, executive widget) — labels: persisted rounds, backend summary, enterprise record.
 
-Mixing both without source labels is a **P1 product truthfulness** gap (documented; not fixed in C.13.3G).
+Mixing both without source labels was a **P1 product truthfulness** gap — **addressed on dashboard** in C.13.3H; optional extension to other Funding pages remains.
 
 ### Security boundary
 
 - **Authoritative `organizationId`:** backend token/session (`req.organizationId`).
 - **`organizationId` inside localStorage JSON:** metadata only; not a security or tenancy authority.
 
-### Future phases (not in C.13.3G scope)
+### Future phases (not in C.13.3G–K closed scope)
 
-1. C.13.3H — labels/copy + tests for draft vs persisted separation.
-2. Optional — persist workspace via `POST /funding/snapshots` with explicit user action.
-3. Optional — full backend migration of draft workspace (higher enterprise scope).
+1. Optional — dashboard runtime/e2e consistency tests (draft vs API).
+2. Optional — labels on other Funding pages beyond dashboard.
+3. Optional — persist workspace via `POST /funding/snapshots` with explicit user action.
+4. Optional — full backend migration of draft workspace (higher enterprise scope).
 
 ## Executive Overview Special Rule
 

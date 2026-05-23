@@ -105,11 +105,13 @@ Funding and any module with client draft + backend persistence must follow these
 
 2. **Dashboards mixing draft and backend data must label the source** on each metric group or section.
    - Example: Funding — hero/multinational panels = draft workspace; round history and summary KPIs = persisted backend.
-   - Unlabelled mixing is a **P1 product truthfulness** defect (C13-P1-03 remains OPEN until fixed).
+   - Unlabelled mixing is a **P1 product truthfulness** defect — **addressed on Funding dashboard** (C.13.3H); C13-P1-03 **PARTIALLY RESOLVED** (optional e2e/runtime checks remain).
 
-3. **Legacy localStorage migration must be tested before enterprise use.**
-   - Global keys (e.g. `funding_workspace_draft_v1`, `funding_workspace_settings_v1`) must not silently seed the wrong `organizationId` bucket.
-   - Add tests in C.13.3H or equivalent before pilot.
+3. **Legacy localStorage migration must not remain reusable across organizations after migration.**
+   - Global keys (e.g. `funding_workspace_draft_v1`, `funding_workspace_settings_v1`) must migrate once to org-scoped key and be **consumed/removed** (C.13.3J).
+   - Client-side `organizationId` in localStorage is metadata only, not authority.
+   - Backend `req.organizationId` remains the enterprise security and persistence boundary.
+   - Covered by `tests/unit/funding/fundingStore.test.js` (C.13.3I/J).
 
 4. **Backend `organizationId` remains the security and source-of-truth boundary** for persisted enterprise data.
    - All reads/writes on `funding_rounds`, `funding_snapshots`, and summary must be server-scoped.
