@@ -1584,7 +1584,9 @@ También hay que validar que:
 | C.13.3C | Cerrada | Golden tests Funding (`e0e200b`) |
 | C.13.3D | Cerrada | Controlled fix FE/dashboard (`eb97064`) |
 | C.13.3E | Cerrada (docs only) | Cierre documental Funding formulas |
-| C.13 | Pendiente | C.13.3F C13-P1-03 o C.13.4 M&A; C.14 informe final |
+| C.13.3F | Cerrada (solo lectura) | Auditoría C13-P1-03 localStorage vs API |
+| C.13.3G | Cerrada (docs only) | Decisión SoT persistencia Funding (Option C híbrido) |
+| C.13 | Pendiente | C.13.3H labels/tests o C.13.4 M&A; C.14 informe final |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -1716,7 +1718,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 |---|---|---|---|
 | C13-P1-01 | Golden datasets sin tests oráculo | `grep golden_inputs` en `tests/` → 0 matches | CI no detecta drift código vs golden |
 | C13-P1-02 | Funding zero burn: FE usaba `999`, golden exige `null`; BE devolvía `null` | **RESOLVED** en `e0054e8` — ver sección C.13.1B | Cerrado |
-| C13-P1-03 | Funding FE `localStorage` vs backend API | `fundingStore.jsx`, `fundingApi.js`, `FUNDING_STORAGE_KEYS` | Duplicidad source-of-truth escenarios/drafts |
+| C13-P1-03 | Funding FE `localStorage` vs backend API | `fundingStore.jsx`, `fundingApi.js`, `FUNDING_STORAGE_KEYS` | **OPEN** — decisión SoT documentada (C.13.3G); labels/tests/fix UI pendientes |
 | C13-P1-04 | Compliance weighted risk — reports/export done | Helper `adcdf77` + integración `c7c567b`; ver C.13.1C-f4A/f4B | **PARTIALLY RESOLVED** — reports/export complete; model-data adoption pending |
 | C13-P1-05 | Compliance resilience — golden + labels/re-export | f7B + f8A `4414208` + f8B `eb48db6`; ver f8A/f8B/f8C | **PARTIALLY RESOLVED** — golden helper/test + operational labels/re-export; backend/API/model rename pending |
 | C13-P1-06 | FE/BE precedence — labels/precedence fix done | f5B + f6A + f6B (`1e82980`); ver C.13.1C-f6A/f6B/f6C | **PARTIALLY RESOLVED** — labels/precedence + re-export + CEO; backend/model rename pending |
@@ -1895,7 +1897,7 @@ El caso zero-burn queda representado como **`null`** en el motor core; la narrat
 
 | ID | Estado |
 |---|---|
-| C13-P1-03 | Pendiente — FE `localStorage` vs backend API (no abordado en esta subfase) |
+| C13-P1-03 | **OPEN** — decisión SoT documentada (C.13.3G); labels/tests/fix UI pendientes (C.13.3H) |
 
 ### 10. Siguiente paso recomendado (post C.13.1C)
 
@@ -3136,7 +3138,7 @@ Cadena C.13.3 cerrada para el alcance acordado: fórmulas golden + edge cases + 
 | INVESTOR_OWNERSHIP / dilution | **RESOLVED** for current scope — tested; edge `postMoney <= 0` fixed |
 | Funding runway (engine + BE + dashboard) | **RESOLVED** for current scope — `null` / not meaningful, no `0` como runway real |
 | Readiness | **PARTIALLY RESOLVED** — UI alineada al engine; Formula Approval / human validation broader pending; `FUNDING_INVESTOR_READINESS` no fully approved |
-| C13-P1-03 | **OPEN** — localStorage vs API SoT; fase **C.13.3F** recomendada si se cierra Funding antes de M&A |
+| C13-P1-03 | **OPEN** — decisión SoT documentada (C.13.3G); labels/tests/fix UI pendientes (C.13.3H) |
 
 ### 8. GAPs documentados (no bloquean cierre 3.x fórmulas)
 
@@ -3151,10 +3153,10 @@ Cadena C.13.3 cerrada para el alcance acordado: fórmulas golden + edge cases + 
 
 | Ruta | Cuándo |
 |---|---|
-| **A — C.13.3F** | Read-only audit C13-P1-03 localStorage vs API — si el objetivo es dejar Funding limpio antes de M&A |
-| **B — C.13.4** | M&A valuation / waterfall integrity — si se prioriza fórmulas por módulo; C13-P1-03 como deuda técnica tracked |
+| **A — C.13.3H** | Labels/copy + tests strategy draft vs persisted (`FundingDashboardPage`, `fundingStore`) |
+| **B — C.13.4** | M&A valuation / waterfall integrity — si se prioriza fórmulas por módulo |
 
-**Recomendación:** Ruta A si se quiere cerrar persistencia Funding; Ruta B si se avanza cadena C.13 por módulos.
+**Recomendación (post C.13.3G):** Ruta A (C.13.3H) si se quiere cerrar product truthfulness Funding antes de M&A; Ruta B si se avanza cadena C.13 por módulos.
 
 ### 10. Qué NO se tocó (cadena C.13.3 completa)
 
@@ -3162,6 +3164,92 @@ Cadena C.13.3 cerrada para el alcance acordado: fórmulas golden + edge cases + 
 - `SOURCE_OF_TRUTH_REGISTRY.md`, `LOGIC_INTEGRITY_PROTOCOL.md`, `GOLDEN_DATASETS.md` (salvo este inventario + registry en 3E).
 - Backend en 3C/3D/3E.
 - C13-P1-03 **no** marcado RESOLVED.
+
+---
+
+## C.13.3F / C.13.3G — Funding persistence source-of-truth — READ-ONLY + DOCS CLOSED
+
+**Fechas:** 23 mayo 2026  
+**C.13.3F:** **CLOSED (READ ONLY)** — auditoría C13-P1-03 sin modificaciones de código.  
+**C.13.3G:** **CLOSED (DOCS ONLY)** — decisión SoT persistencia Funding (Option C híbrido por fases).  
+**Baseline:** `HEAD = origin/main = 520fbd1`
+
+### 1. Estado subfases
+
+| Subfase | Estado |
+|---|---|
+| C.13.3F | **CLOSED** — read-only audit |
+| C.13.3G | **CLOSED** — docs only |
+| C13-P1-03 | **OPEN** — decisión documentada; labels/tests/fix pendientes |
+
+**No marcar C13-P1-03 como RESOLVED** hasta completar separación UI y tests de consistencia.
+
+### 2. Mapa localStorage / draft workspace
+
+| Elemento | Detalle |
+|---|---|
+| **Store activo** | `src/modules/funding/store/fundingStore.jsx` |
+| **Clave activa** | `funding_draft_by_org_v1_{organizationId}` |
+| **Contenido** | `fundingInputs`, `fundingSettings`, `organizationId`, `userId`, `updatedAt` |
+| **Scoping client** | `organizationId` desde sesión Auth; fallback `org_demo` si ausente |
+| **Claves legacy (global)** | `funding_workspace_draft_v1`, `funding_workspace_settings_v1` (`fundingFormulas.js` / `fundingApi.js`) |
+| **Migración legacy** | Si no existe clave por org, importa draft global y reescribe en clave por org — **riesgo cross-org en primer uso por browser** |
+| **Alimenta** | `useFundingEngine`, scenario rows, readiness workspace, export memo (`fundingExportApi`), hero/panels en páginas Funding; también `CEOOverviewPage` vía `useFundingStore` |
+
+### 3. Mapa API / backend / SQLite
+
+| Elemento | Detalle |
+|---|---|
+| **Tablas** | `funding_rounds` (006), `funding_snapshots`, `funding_board_memos` (005) |
+| **Endpoints** | `GET/POST/PUT/DELETE /funding/rounds`, `GET /funding/summary`, `GET/POST /funding/snapshots`, `GET /funding/hub-overview` |
+| **Scoping server** | `req.organizationId` + `WHERE organization_id = @organizationId` |
+| **Calcula BE** | runway por round, dilution, summary agregado, optimal funding window, funding risk, capital efficiency, bridge signals |
+| **Consumidores UI** | `FundingDashboardPage` (`getExecutiveBridgeSnapshot`), `CEOOverviewPage`; CRUD rounds **sin UI** en módulo Funding (API client definido, no usado en páginas Funding) |
+| **Snapshots API** | Persistencia enterprise opcional; **no consumida** desde páginas Funding en baseline auditado |
+
+### 4. Decisión SoT — Option C (híbrido por fases)
+
+| Capa | Source-of-truth | Rol |
+|---|---|---|
+| **Funding rounds** | Backend API / SQLite `funding_rounds` | Registro enterprise oficial por organización |
+| **Funding summary** | Backend `getFundingSummary` | KPIs agregados, window, risk, executive signals |
+| **Funding snapshots / hub** | Backend `funding_snapshots` + `hub-overview` | Historial enterprise; fallback resiliente en bridge snapshot |
+| **Draft workspace** | Client `localStorage` solo | Scenario modelling, inputs panel, readiness/export draft — **no** dato enterprise persistido |
+| **Readiness / scenarios (draft)** | FE engine (`fundraisingScoring.js`, `useFundingEngine`) | DSS workspace hasta persistir vía snapshot/round en fase futura |
+| **FundingDashboardPage** | **Mezcla** draft + API hoy | Debe distinguir visualmente draft/scenario vs persisted (pendiente C.13.3H) |
+
+### 5. Riesgos documentados (C.13.3F)
+
+| Riesgo | Severidad | Notas |
+|---|---|---|
+| Dashboard dual SoT sin labels | **P1** | Hero/multinational = draft; KPI rounds/summary = API; mismo viewport |
+| Legacy global → org migration | **P1** | `funding_workspace_draft_v1` puede copiarse a org incorrecta una vez |
+| Falta tests localStorage/API | **P1** | Sin `fundingStore.test`; sin test consistencia dashboard |
+| Product truthfulness | **P1** | Usuario puede interpretar draft como registro oficial |
+| KPI divergence draft vs summary | **P2** | Runway/dilution/readiness usan inputs distintos |
+| Fallback `org_demo` compartido | **P2** | Varios usuarios sin org en Auth comparten bucket local |
+
+### 6. Estado C13-P1-03
+
+```
+C13-P1-03: OPEN — source-of-truth decision documented (C.13.3G);
+           labels / tests / UI fix pending (C.13.3H).
+```
+
+### 7. Siguiente paso recomendado
+
+| Ruta | Alcance |
+|---|---|
+| **C.13.3H** | Labels/copy en `FundingDashboardPage` + estrategia tests (`fundingStore`, draft vs API); sin migración backend completa |
+| **C.13.4** | M&A valuation / waterfall integrity — si se prioriza cadena fórmulas por módulo |
+
+**Recomendación:** C.13.3H si se quiere cerrar truthfulness Funding antes de M&A.
+
+### 8. Qué NO se tocó (3F + 3G)
+
+- `src/**`, `backend/**`, `tests/**`, `golden_inputs.json`, `FORMULA_REGISTRY.md`
+- Sin fix `fundingStore`, `FundingDashboardPage`, localStorage
+- C13-P1-03 **no** marcado RESOLVED
 
 ---
 

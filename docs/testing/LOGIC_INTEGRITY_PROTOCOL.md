@@ -51,6 +51,34 @@ Never expose secrets, tokens, passwords, private keys, production .env values or
 ## Demo/Fallback Guard
 Demo, fallback, seed, mock or localStorage recovery must be labelled or gated.
 Demo/fallback data must not appear as real enterprise data.
+## Draft vs Persisted Data Separation (Decision C.13.3G)
+
+Funding and any module with client draft + backend persistence must follow these rules:
+
+1. **UI must not present localStorage draft metrics as enterprise persisted data.**
+   - Draft inputs, scenario modelling, readiness workspace and export memos are **scenario/DSS workspace** outputs unless explicitly saved via backend API (e.g. funding round, funding snapshot).
+
+2. **Dashboards mixing draft and backend data must label the source** on each metric group or section.
+   - Example: Funding — hero/multinational panels = draft workspace; round history and summary KPIs = persisted backend.
+   - Unlabelled mixing is a **P1 product truthfulness** defect (C13-P1-03 remains OPEN until fixed).
+
+3. **Legacy localStorage migration must be tested before enterprise use.**
+   - Global keys (e.g. `funding_workspace_draft_v1`, `funding_workspace_settings_v1`) must not silently seed the wrong `organizationId` bucket.
+   - Add tests in C.13.3H or equivalent before pilot.
+
+4. **Backend `organizationId` remains the security and source-of-truth boundary** for persisted enterprise data.
+   - All reads/writes on `funding_rounds`, `funding_snapshots`, and summary must be server-scoped.
+
+5. **Client-side `organizationId` in localStorage is metadata only, not authority.**
+   - Frontend must not decide tenant ownership; Auth/session supplies org for API; localStorage org id is for key namespacing and traceability only.
+
+6. **Any formula calculated on draft data must be labelled as scenario/draft** where user-facing.
+   - Golden Dataset oracles apply to canonical formulas; draft workspace outputs are not automatic substitutes for persisted round/summary values.
+
+7. **Bridge/executive resilient fallbacks** (e.g. summary empty → hub `latestSnapshot`) must not be shown as equivalent to official round history without labelling.
+
+Applies first to **Funding** (`fundingStore.jsx`, `FundingDashboardPage`, `fundingEnterpriseApi`). Extend same pattern to other modules with localStorage vs API duplication during C.13.x.
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor

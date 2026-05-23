@@ -32,9 +32,11 @@ Do not mark Assumed entries as Confirmed before C.13.
 | M&A valuation | enterprise value, equity value | Pending C.13 audit | Source unclear | FE/BE duplicate possible | ma_valuation_* | Not pilot-ready until validated |
 | M&A waterfall | seller proceeds | Pending C.13 audit | Source unclear | | ma_waterfall_simple_distribution | |
 | M&A buyer matching | match scores | Pending C.13 audit | Source unclear | | futureDatasetsRequired | |
-| Funding rounds | round records | backend funding services/API | Assumed / Pending C.13 validation | | N/A | |
-| Funding summary | dashboard summary | backend funding summary | Assumed / Pending C.13 validation | | N/A | |
-| Funding scenarios | scenario inputs | Possible localStorage/client draft | Known duplicate risk | localStorage vs API | funding_* | Label in UI required |
+| Funding rounds | round records | backend funding services/API (`funding_rounds`) | Confirmed (C.13.3G) | FE draft must not replace | N/A | `GET/POST/PUT/DELETE /funding/rounds` |
+| Funding summary | dashboard summary | backend `getFundingSummary` | Confirmed (C.13.3G) | Dashboard may mix draft KPIs without label | N/A | Window/risk = DSS heuristics |
+| Funding snapshots | persisted scenario snapshots | backend `funding_snapshots` / hub-overview | Confirmed (C.13.3G) | FE pages do not consume createSnapshot yet | N/A | Optional enterprise commit path |
+| Funding draft workspace | inputs, settings, scenario modelling | client localStorage (`funding_draft_by_org_v1_{organizationId}`) | Confirmed (C.13.3G) | Legacy global keys; cross-org migration risk | funding_* formulas on draft | Not enterprise persisted |
+| Funding scenarios (UI) | Low/Base/High rows | FE `useFundingEngine` on draft inputs | Known duplicate risk | Differs from persisted rounds | funding_* | Label as scenario/draft required |
 | Compliance weightedRiskScore | explicable 3-dimension score | Golden Dataset + Formula Registry (`COMPLIANCE_WEIGHTED_RISK`) | Canonical (docs) / Pending implementation | No helper in code yet | compliance_weighted_risk_score_basic | C.13.1C-f1B Option C |
 | Compliance operationalRiskScore | dashboard operational score | Frontend `calculateSupplierRiskScore` + `useComplianceEngine` (current) | Assumed / Pending hardening | Collides with field name `riskScore`; FE may override BE | N/A | Not golden oracle |
 | Compliance riskScore persisted | stored supplier fields | backend `compliance_suppliers` via payload clamp | Confirmed persistence SoT | Not calculation SoT; may differ from UI displayed score | N/A | Persistence only |
@@ -98,6 +100,59 @@ Do not mark Assumed entries as Confirmed before C.13.
 3. Whether to add explicit `weightedRiskScore` on reports/API without renaming operational engine in same PR.
 
 Status: **Human review required** for pilot-facing exports until f2/f3 phases complete.
+
+## Funding Source-of-Truth Policy (Decision C.13.3G — Option C Hybrid)
+
+Documented after C.13.3F read-only audit. **C13-P1-03 remains OPEN** until UI labels and consistency tests land (C.13.3H).
+
+### Enterprise persisted data (backend authoritative)
+
+| Asset | Source of truth | Implementation |
+|---|---|---|
+| **Funding rounds** | Backend API / SQLite `funding_rounds` | `funding.service.js`, `/funding/rounds`; scoped by `organizationId` server-side |
+| **Funding summary** | Backend `getFundingSummary` | Aggregates rounds + compliance/M&A bridge signals; optimal window, funding risk |
+| **Funding snapshots** | Backend `funding_snapshots` | `enterprise.service.js`, `/funding/snapshots`; org-scoped |
+| **Executive bridge signals** | Backend summary + hub (`/funding/hub-overview`) | Preferred over draft; resilient fallback may use latest snapshot — must be labelled if shown |
+
+### Draft / scenario workspace (client only — not enterprise persisted)
+
+| Asset | Source of truth | Storage / code |
+|---|---|---|
+| **Funding inputs panel** | Client draft workspace | `fundingStore.jsx` → `funding_draft_by_org_v1_{organizationId}` |
+| **Funding settings** | Client draft workspace | Same bundle (`reportCurrency`, `scenarioMode`) |
+| **Scenario rows (Low/Base/High)** | FE engine on draft | `useFundingEngine.js` — scenario/DSS, not official round history |
+| **Readiness (workspace)** | FE `fundraisingScoring.js` on draft | Canonical for UI formulas (C.13.3E); distinct from `capitalEfficiencyScore` in summary |
+| **Export memo (draft)** | Draft + derived | `fundingExportApi.js` — workspace output, not certified filing |
+
+### Legacy localStorage (risk — do not treat as SoT)
+
+| Key | Status |
+|---|---|
+| `funding_workspace_draft_v1` | Legacy global; read once for migration into org key |
+| `funding_workspace_settings_v1` | Legacy global; paired with draft v1 |
+| `funding_draft_by_org_v1_{organizationId}` | Active org-scoped draft key |
+
+**Risk:** First load per browser may copy global legacy draft into current org bucket — test before enterprise pilot (C.13.3H).
+
+### UI separation rule (pending implementation)
+
+`FundingDashboardPage` must visually distinguish:
+
+- **Draft / scenario workspace metrics** (engine on `fundingInputs`) — labels: scenario, workspace, draft, DSS estimate.
+- **Persisted enterprise metrics** (rounds list, summary KPIs, executive widget) — labels: persisted rounds, backend summary, enterprise record.
+
+Mixing both without source labels is a **P1 product truthfulness** gap (documented; not fixed in C.13.3G).
+
+### Security boundary
+
+- **Authoritative `organizationId`:** backend token/session (`req.organizationId`).
+- **`organizationId` inside localStorage JSON:** metadata only; not a security or tenancy authority.
+
+### Future phases (not in C.13.3G scope)
+
+1. C.13.3H — labels/copy + tests for draft vs persisted separation.
+2. Optional — persist workspace via `POST /funding/snapshots` with explicit user action.
+3. Optional — full backend migration of draft workspace (higher enterprise scope).
 
 ## Executive Overview Special Rule
 
