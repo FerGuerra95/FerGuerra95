@@ -1593,7 +1593,11 @@ También hay que validar que:
 | C.14.0 | Cerrada (docs only) | AI guardrails anti-parálisis (`05b3520`) |
 | C.13.4A | Cerrada (solo lectura) | Auditoría M&A valuation / waterfall |
 | C.13.4B | Cerrada (docs only) | Decisión SoT fórmulas M&A |
-| C.13 | Pendiente | C.13.4C M&A golden tests |
+| C.13.4C | Cerrada | Golden benchmark tests (`maGoldenFormulas`) |
+| C.13.4D | Cerrada (solo lectura) | Alignment audit product truthfulness |
+| C.13.4E | Cerrada | Labels/copy DSS M&A UI |
+| C.13.4F | Cerrada | Report alignment tests (`maProductReportAlignment`) |
+| C.13.4G | Cerrada (docs only) | Docs closure snapshot policy / C13-P1-11 partial |
 | C.14 | Pendiente | C.14.1 modular sandbox audit (opcional) |
 
 ### Subfases C.13
@@ -1733,7 +1737,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
 | C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
-| C13-P1-11 | M&A EV simple vs adjusted engine | Golden `ma_valuation_ebitda_multiple_basic`; FE `useValuationEngine` adjusted EV | **PARTIALLY RESOLVED** — SoT decision documented (C.13.4B); Golden tests pending (C.13.4C) |
+| C13-P1-11 | M&A EV simple vs adjusted engine | Golden `ma_valuation_*`; FE `useValuationEngine` adjusted EV; report alignment tests | **PARTIALLY RESOLVED** — SoT + Golden tests + labels/copy + report alignment tests (C.13.4A–G); netProceeds fallback + backend snapshot policy pending |
 | C13-P1-12 | M&A waterfall simple source unclear | Golden `ma_waterfall_simple_distribution`; sin helper `netCashToSeller` localizado en `src/modules/ma` | Proceeds seller no verificables vs golden |
 
 ### 6. P2
@@ -5125,3 +5129,102 @@ C13-P1-11: PARTIALLY RESOLVED
 - WATERFALL_SIMPLE via pure helper if needed
 - document adjusted equity / product waterfall gaps
 - **no product fix** unless pure helper authorized
+
+---
+
+## C.13.4A–C.13.4G — M&A valuation / waterfall / report alignment — PARTIALLY CLOSED
+
+**Fechas:** 23 mayo 2026  
+**Baseline commit (C.13.4G):** `af44a97` (`test(ma): cover report valuation alignment`)  
+**Modo C.13.4G:** docs only — cero cambios en `src/`, `backend/`, `tests/`, Golden expected outputs.
+
+### 1. Estado general de la cadena
+
+| Fase | Estado | Entregable |
+|---|---|---|
+| **C.13.4A** | **CLOSED** (read-only) | Auditoría M&A valuation/waterfall; P1 documentados; no P0 |
+| **C.13.4B** | **CLOSED** (docs) | SoT: simple vs adjusted vs product waterfall vs buyer heuristic |
+| **C.13.4C** | **CLOSED** | `maGoldenFormulas.js` + `maGoldenFormulas.test.js` (Golden simple benchmarks) |
+| **C.13.4D** | **CLOSED** (read-only) | Alignment audit labels/snapshots/reports |
+| **C.13.4E** | **CLOSED** | Labels/copy UI: adjusted DSS, heuristic buyer fit, live vs saved snapshot |
+| **C.13.4F** | **CLOSED** | `maProductReportAlignment.test.js` — engine/report parity + policy mirror |
+| **C.13.4G** | **CLOSED** (docs) | Cierre parcial documental + snapshot policy |
+
+### 2. Qué queda resuelto (C.13.4A–F)
+
+- Golden simple formulas ancladas por tests (`EV_EBITDA`, `NET_DEBT`, `EQUITY_VALUE`, `WATERFALL_SIMPLE`).
+- Product DSS adjusted valuation **separado** de Golden simple (documentado + testeado como divergencia esperada).
+- UI labels/copy corregidos (adjusted DSS EV/equity, estimated net proceeds, heuristic buyer fit, live engine vs saved snapshot).
+- Buyer matching etiquetado como **heuristic DSS** — not certified buyer recommendation.
+- Report alignment tests: `formatMAReportData` preserva `evBase`, `equityBase`, `netProceeds`, `netDebt` desde `useValuationEngine` derived.
+- HTML report: disclaimers DSS / not fairness opinion cubiertos en test; sin `NaN` / `Infinity` / `999` en HTML bajo fixture default.
+- Backend snapshot = persisted record SoT; **no** live recalculation SoT (documentado C.13.4B, reconfirmado C.13.4G).
+
+### 3. Estado C13-P1-11
+
+```
+C13-P1-11: PARTIALLY RESOLVED
+           SoT decision (C.13.4B).
+           Golden benchmark tests (C.13.4C).
+           UI labels/copy (C.13.4E).
+           Report alignment unit tests (C.13.4F).
+           Snapshot policy documented (C.13.4G).
+           No RESOLVED global.
+```
+
+**No marcar RESOLVED global** porque siguen pendientes:
+
+- **netProceeds fallback** — si falta `derived.netProceeds`, `formatMAReportData` usa `equityBase` (legacy tolerado; P1 → C.13.4H).
+- **Backend snapshot drift policy** — integración/e2e no cubierta; re-export desde snapshot vs live engine no enforced en producto.
+- **Optional integration/e2e** snapshot tests.
+- **Server-side valuation calculation SoT** — fase enterprise futura (human review).
+
+### 4. Decisión snapshot / report policy (C.13.4G)
+
+| Flujo | Política |
+|---|---|
+| **Live export** | Debe usar **liveDerived** / output de `useValuationEngine` + `formatMAReportData` con derived completo. |
+| **Saved / re-export** | Debe **preservar savedSnapshot** capturado en save/export time. |
+| **Merge silencioso** | **Prohibido** mezclar live engine y saved snapshot salvo fallback **documentado campo a campo**. |
+| **netProceeds faltante** | Comportamiento actual: fallback a `equityBase` — **legacy tolerado temporalmente** (P1). No presentar como proceeds reales sin label. |
+
+**Fase futura C.13.4H** puede decidir:
+
+- **A)** `netProceeds` faltante → `null` / “not available”
+- **B)** Fallback permitido con label explícito (“Equity used as fallback”)
+- **C)** Recomputar product waterfall con inputs completos
+- **D)** Bloquear export si falta `netProceeds`
+
+### 5. Product truthfulness (reconfirmado)
+
+- **No fairness opinion.** M&A outputs = DSS / decision-support only.
+- Adjusted valuation **no** es certified valuation.
+- Buyer matching **no** es certified buyer recommendation.
+- Backend snapshot **no** es live recalculation.
+
+### 6. Tests (estado unitario)
+
+| Test file | Rol |
+|---|---|
+| `tests/unit/ma/maGoldenFormulas.test.js` | Golden simple benchmarks |
+| `tests/unit/ma/maProductReportAlignment.test.js` | Engine/report parity, disclaimers, Golden vs adjusted divergence, live/snapshot policy mirror, netProceeds fallback documented |
+| `tests/unit/ma/useValuationEngine.test.js` | Smoke engine (existente) |
+
+**GAP:** backend integration snapshot policy **not covered** at integration level.
+
+### 7. P1 abiertos post C.13.4G
+
+| ID | Notas |
+|---|---|
+| MA-P1-03 | Snapshot drift backend vs live engine; re-export policy not product-enforced |
+| MA-P1-05 | `netProceeds` fallback to `equityBase` when missing (C.13.4H candidate) |
+| MA-P1-06 | Optional M&A snapshot integration/e2e tests |
+
+### 8. Paso siguiente recomendado
+
+| Opción | Fase | Cuándo |
+|---|---|---|
+| **A (recomendada si cerrar M&A limpio)** | **C.13.4H** — controlled fix for `netProceeds` fallback | Priorizar truthfulness report terminal |
+| **B (deuda tracked aceptada)** | **C.13.5** — Bridge / marketplace signals audit | Si se acepta fallback como deuda documentada |
+
+**Recomendación:** **C.13.4H** si se prioriza cerrar cadena M&A valuation/report antes de Bridge.

@@ -139,12 +139,22 @@ For M&A and any module with live valuation engines plus backend snapshots:
    - Product `adjustedEnterpriseValue`, `adjustedEquityValue`, `MA_PRODUCT_WATERFALL` = separate DSS metrics.
 
 3. **Reports and exports must indicate source when relevant:**
-   - live engine derived values vs stored snapshot payload (label work pending C.13.4D+).
+   - live engine derived values vs stored snapshot payload (UI labels C.13.4E; policy C.13.4G).
 
 4. **No valuation output is a fairness opinion, certified valuation, or investment advice.**
    - Buyer matching fit scores are DSS heuristics, not certified matching.
 
 5. **Golden tests (C.13.4C) validate simple benchmarks first; product gaps documented before code fix.**
+
+6. **Report alignment (C.13.4F):** `maProductReportAlignment.test.js` anchors live engine → `formatMAReportData` parity for adjusted metrics when derived is complete.
+
+## M&A live vs snapshot report policy (Decision C.13.4G)
+
+1. **Live exports** must use live engine derived values (`useValuationEngine` output passed to `formatMAReportData`).
+2. **Saved / re-export flows** must preserve saved snapshot values captured at save or export time.
+3. **Silent merge** between live engine and saved snapshot is **prohibited** unless a field-by-field fallback is explicitly documented.
+4. **Missing terminal proceeds:** if `derived.netProceeds` is absent, current `formatMAReportData` falls back to `equityBase` — **legacy tolerated temporarily (P1)**. Must not be presented as real estimated proceeds without label; fix candidate **C.13.4H**.
+5. **Reports** must maintain DSS / not fairness opinion disclaimers (unit-tested in C.13.4F).
 
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
