@@ -349,16 +349,8 @@ function formatMoney(value, currency = 'EUR') {
   }).format(safeValue);
 }
 
-function calculateReadinessScore(fundingInputs) {
-  const dataRoom = toNumber(fundingInputs.dataRoomCompletion);
-  const founderMarketFit = toNumber(fundingInputs.founderMarketFit);
-  const investorInterest = toNumber(fundingInputs.investorInterest);
-
-  return Math.round((dataRoom + founderMarketFit + investorInterest) / 3);
-}
-
 function getReadinessLevel(score) {
-  if (score >= 80) {
+  if (score >= 78) {
     return {
       label: 'Alta',
       color: 'text-success',
@@ -367,7 +359,7 @@ function getReadinessLevel(score) {
     };
   }
 
-  if (score >= 60) {
+  if (score >= 58) {
     return {
       label: 'Media',
       color: 'text-warning',
@@ -385,7 +377,7 @@ function getReadinessLevel(score) {
 }
 
 function getReadinessSignal(score) {
-  if (score >= 80) {
+  if (score >= 78) {
     return {
       title: 'Investor-ready profile',
       posture: 'Start outreach',
@@ -394,7 +386,7 @@ function getReadinessSignal(score) {
     };
   }
 
-  if (score >= 60) {
+  if (score >= 58) {
     return {
       title: 'Qualified but improvable',
       posture: 'Refine materials',
@@ -502,8 +494,9 @@ export function InvestorReadinessPage() {
 
   const thesisItems = Array.isArray(derived.thesis) ? derived.thesis : [];
 
-  const readinessScore = calculateReadinessScore(fundingInputs);
-  const readinessLevel = getReadinessLevel(readinessScore);
+  const readinessScore = derived.readinessScore;
+  const readinessLevel =
+    derived.readinessLevel ?? getReadinessLevel(readinessScore);
   const readinessSignal = getReadinessSignal(readinessScore);
 
   const dataRoomCompletion = toNumber(fundingInputs.dataRoomCompletion);

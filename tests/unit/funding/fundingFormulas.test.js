@@ -122,13 +122,7 @@ describe('fundingFormulas post-money and ownership (golden funding_post_money_an
     expect(core.postRoundOwnership.newInvestors).toBe(20);
   });
 
-  it.todo(
-    'C.13.3D: postMoney <= 0 => dilutionPct and ownership null (registry); FE currently returns 0'
-  );
-});
-
-describe('fundingFormulas edge cases (known gaps — no product fix in C.13.3C)', () => {
-  it('documents current FE behavior when postMoneyValuation is 0', () => {
+  it('postMoney <= 0 => dilutionPct and ownership null (C.13.3D)', () => {
     const inputs = parseFundingInputs({
       ...DEFAULT_FUNDING_INPUTS,
       preMoneyValuation: '0',
@@ -137,7 +131,8 @@ describe('fundingFormulas edge cases (known gaps — no product fix in C.13.3C)'
     const core = calculateFundingCore(inputs);
 
     expect(core.postMoneyValuation).toBe(0);
-    expect(core.dilutionPct).toBe(0);
-    expect(core.postRoundOwnership.newInvestors).toBe(0);
+    expect(core.dilutionPct).toBeNull();
+    expect(core.postRoundOwnership.newInvestors).toBeNull();
+    expect(core.postRoundOwnership.founders).toBeNull();
   });
 });

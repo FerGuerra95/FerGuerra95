@@ -878,14 +878,6 @@ function clampScore(value) {
   return Math.max(0, Math.min(100, Math.round(value)));
 }
 
-function calculateReadinessScore(fundingInputs) {
-  const dataRoom = toNumber(fundingInputs.dataRoomCompletion);
-  const founderMarketFit = toNumber(fundingInputs.founderMarketFit);
-  const investorInterest = toNumber(fundingInputs.investorInterest);
-
-  return Math.round((dataRoom + founderMarketFit + investorInterest) / 3);
-}
-
 function getFundingSignal({
   targetRaise,
   runwayAfterRaise,
@@ -902,8 +894,14 @@ function getFundingSignal({
     };
   }
 
-  const runwayScore = clampScore((runwayAfterRaise / 24) * 100);
-  const dilutionScore = clampScore(100 - Math.max(0, impliedDilution - 10) * 3);
+  const runwayScore =
+    runwayAfterRaise === null || !Number.isFinite(runwayAfterRaise)
+      ? 0
+      : clampScore((runwayAfterRaise / 24) * 100);
+  const dilutionScore =
+    impliedDilution === null || !Number.isFinite(impliedDilution)
+      ? 0
+      : clampScore(100 - Math.max(0, impliedDilution - 10) * 3);
   const score = clampScore(
     readinessScore * 0.45 + runwayScore * 0.32 + dilutionScore * 0.23
   );
@@ -1161,7 +1159,12 @@ function getFundingDecisionMemo({ fundingSignal, readinessScore, runwayAfterRais
     };
   }
 
-  if (readinessScore < 50 || runwayAfterRaise < 12 || impliedDilution > 30) {
+  if (
+    readinessScore < 50 ||
+    runwayAfterRaise === null ||
+    (Number.isFinite(runwayAfterRaise) && runwayAfterRaise < 12) ||
+    (impliedDilution !== null && impliedDilution > 30)
+  ) {
     return {
       decision: 'Hold market outreach',
       tone: 'hold',
@@ -1209,7 +1212,7 @@ function buildFundingRiskItems({
     });
   }
 
-  if (impliedDilution > 25) {
+  if (impliedDilution !== null && impliedDilution > 25) {
     items.push({
       title: 'Dilution pressure',
       description:
@@ -1245,7 +1248,13 @@ function buildFundingRiskItems({
     });
   }
 
-  if (readinessScore >= 75 && runwayAfterRaise >= 18 && impliedDilution <= 25 && items.length === 0) {
+  if (
+    readinessScore >= 75 &&
+    runwayAfterRaise !== null &&
+    runwayAfterRaise >= 18 &&
+    (impliedDilution === null || impliedDilution <= 25) &&
+    items.length === 0
+  ) {
     items.push({
       title: 'Institutional-ready posture',
       description:
@@ -1320,7 +1329,7 @@ function buildMultinationalFundingPack({
       ['Founder ownership', formatPercentValue(founderOwnership)],
       ['Existing investors', formatPercentValue(existingInvestorOwnership)],
       ['Option pool', formatPercentValue(optionPool)],
-      ['Implied dilution', `${impliedDilution}%`],
+      ['Implied dilution', formatDilutionValue(impliedDilution)],
       ['Monthly burn', formatCurrency(monthlyBurn, reportCurrency)],
       ['Runway post-raise', formatMonthsValue(runwayAfterRaise)],
       ['Team size', teamSize > 0 ? teamSize : 'N/A'],
@@ -1433,17 +1442,14 @@ export function FundingDashboardPage() {
   const targetRaise = toNumber(fundingInputs.targetRaise);
   const monthlyBurn = toNumber(fundingInputs.monthlyBurn);
   const preMoneyValuation = toNumber(fundingInputs.preMoneyValuation);
-  const postMoneyValuation = preMoneyValuation + targetRaise;
-
+  const postMoneyValuation = derived.postMoneyValuation;
   const runwayAfterRaise =
-    monthlyBurn > 0 ? Math.round((currentCash + targetRaise) / monthlyBurn) : 0;
-
+    derived.runwayAfterRaiseMonths === null
+      ? null
+      : Math.round(derived.runwayAfterRaiseMonths);
   const impliedDilution =
-    postMoneyValuation > 0
-      ? Math.round((targetRaise / postMoneyValuation) * 100)
-      : 0;
-
-  const readinessScore = calculateReadinessScore(fundingInputs);
+    derived.dilutionPct === null ? null : Math.round(derived.dilutionPct);
+  const readinessScore = derived.readinessScore;
   const thesisItems = getSafeArray(derived.thesis);
   const readinessChecklist = getSafeArray(derived.readinessChecklist);
   const useOfFunds = getSafeArray(derived.useOfFunds);
@@ -1934,14 +1940,18 @@ export function FundingDashboardPage() {
 
                 <FundingPremiumItem
                   title="Runway impact"
-                  description={`La financiación dejaría aproximadamente ${runwayAfterRaise} meses de runway post-ronda con el burn mensual actual.`}
-                  tone={runwayAfterRaise >= 18 ? 'positive' : 'watch'}
+                  description={`La financiación dejaría ${formatMonthsValue(runwayAfterRaise)} de runway post-ronda con el burn mensual actual.`}
+                  tone={
+                    runwayAfterRaise !== null && runwayAfterRaise >= 18 ? 'positive' : 'watch'
+                  }
                 />
 
                 <FundingPremiumItem
                   title="Dilution control"
-                  description={`La dilución estimada es del ${impliedDilution}%, una señal clave para founders, inversores existentes y comité.`}
-                  tone={impliedDilution > 25 ? 'watch' : 'positive'}
+                  description={`La dilución estimada es ${formatDilutionValue(impliedDilution)}, una señal clave para founders, inversores existentes y comité.`}
+                  tone={
+                    impliedDilution !== null && impliedDilution > 25 ? 'watch' : 'positive'
+                  }
                 />
               </div>
             </FundingPremiumPanel>

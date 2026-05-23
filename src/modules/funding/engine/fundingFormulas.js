@@ -92,7 +92,8 @@ export function calculateFundingCore(inputs) {
   const currentRunwayMonths =
     inputs.monthlyBurn > 0 ? inputs.currentCash / inputs.monthlyBurn : null;
   const postMoneyValuation = inputs.preMoneyValuation + inputs.targetRaise;
-  const dilutionPct = postMoneyValuation > 0 ? (inputs.targetRaise / postMoneyValuation) * 100 : 0;
+  const dilutionPct =
+    postMoneyValuation > 0 ? (inputs.targetRaise / postMoneyValuation) * 100 : null;
   const runwayAfterRaiseMonths =
     inputs.monthlyBurn > 0
       ? (inputs.currentCash + inputs.targetRaise) / inputs.monthlyBurn
@@ -106,14 +107,24 @@ export function calculateFundingCore(inputs) {
   const normalizedFounderOwnership = preRoundOwnershipTotal > 0 ? (inputs.founderOwnership / preRoundOwnershipTotal) * 100 : 0;
   const normalizedExistingInvestorOwnership = preRoundOwnershipTotal > 0 ? (inputs.existingInvestorOwnership / preRoundOwnershipTotal) * 100 : 0;
   const normalizedOptionPool = preRoundOwnershipTotal > 0 ? (inputs.optionPool / preRoundOwnershipTotal) * 100 : 0;
-  const legacyFactor = 1 - dilutionPct / 100;
 
-  const postRoundOwnership = {
-    founders: normalizedFounderOwnership * legacyFactor,
-    existingInvestors: normalizedExistingInvestorOwnership * legacyFactor,
-    optionPool: normalizedOptionPool * legacyFactor,
-    newInvestors: dilutionPct
-  };
+  let postRoundOwnership;
+  if (dilutionPct === null) {
+    postRoundOwnership = {
+      founders: null,
+      existingInvestors: null,
+      optionPool: null,
+      newInvestors: null
+    };
+  } else {
+    const legacyFactor = 1 - dilutionPct / 100;
+    postRoundOwnership = {
+      founders: normalizedFounderOwnership * legacyFactor,
+      existingInvestors: normalizedExistingInvestorOwnership * legacyFactor,
+      optionPool: normalizedOptionPool * legacyFactor,
+      newInvestors: dilutionPct
+    };
+  }
 
   return {
     currentRunwayMonths,
