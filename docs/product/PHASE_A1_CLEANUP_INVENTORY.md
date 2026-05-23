@@ -1598,6 +1598,8 @@ También hay que validar que:
 | C.13.4E | Cerrada | Labels/copy DSS M&A UI |
 | C.13.4F | Cerrada | Report alignment tests (`maProductReportAlignment`) |
 | C.13.4G | Cerrada (docs only) | Docs closure snapshot policy / C13-P1-11 partial |
+| C.13.4H | Cerrada | Fix controlado netProceeds fallback (`cc6a52a`) |
+| C.13.4I | Cerrada (docs only) | Docs closure netProceeds fallback fix |
 | C.14 | Pendiente | C.14.1 modular sandbox audit (opcional) |
 
 ### Subfases C.13
@@ -1737,7 +1739,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
 | C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
-| C13-P1-11 | M&A EV simple vs adjusted engine | Golden `ma_valuation_*`; FE `useValuationEngine` adjusted EV; report alignment tests | **PARTIALLY RESOLVED** — SoT + Golden tests + labels/copy + report alignment tests (C.13.4A–G); netProceeds fallback + backend snapshot policy pending |
+| C13-P1-11 | M&A EV simple vs adjusted engine | Golden `ma_valuation_*`; FE `useValuationEngine` adjusted EV; report alignment tests | **PARTIALLY RESOLVED** — SoT + Golden tests + labels/copy + report alignment + netProceeds fallback fixed (C.13.4A–I); backend snapshot/re-export policy pending |
 | C13-P1-12 | M&A waterfall simple source unclear | Golden `ma_waterfall_simple_distribution`; sin helper `netCashToSeller` localizado en `src/modules/ma` | Proceeds seller no verificables vs golden |
 
 ### 6. P2
@@ -5228,3 +5230,97 @@ C13-P1-11: PARTIALLY RESOLVED
 | **B (deuda tracked aceptada)** | **C.13.5** — Bridge / marketplace signals audit | Si se acepta fallback como deuda documentada |
 
 **Recomendación:** **C.13.4H** si se prioriza cerrar cadena M&A valuation/report antes de Bridge.
+
+---
+
+## C.13.4H / C.13.4I — M&A netProceeds fallback controlled fix — CLOSED / DOCS CLOSED
+
+**Fechas:** 23 mayo 2026  
+**Baseline commit (C.13.4H):** `cc6a52a` (`fix(ma): avoid equity fallback for net proceeds`)  
+**Modo C.13.4H:** fix controlado mínimo — solo `formatMAReportData.js` + `maProductReportAlignment.test.js`.  
+**Modo C.13.4I:** docs only — cero cambios en `src/`, `backend/`, `tests/`, Golden expected outputs.
+
+### 1. Problema (P1 — product truthfulness)
+
+`formatMAReportData` podía resolver `summary.netProceeds` con fallback silencioso a `equityBase` cuando faltaba `derived.netProceeds`:
+
+```javascript
+// legacy (pre C.13.4H)
+const netProceeds = firstNumber(derived?.netProceeds, derived?.sellerProceeds, equityBase);
+```
+
+**Riesgo:** equity value (antes de fees/taxes) podía mostrarse como estimated net proceeds en report/export, sin etiqueta y sin representar el terminal real del product waterfall.
+
+### 2. Fix (C.13.4H)
+
+- Nuevo helper `resolveNetProceeds(derived)` en `formatMAReportData.js`.
+- Usa **solo** `derived.netProceeds` o `derived.sellerProceeds` si son finitos.
+- Si faltan → `summary.netProceeds = null` y `summary.netProceedsSource = 'missing'`.
+- Si presentes → `summary.netProceedsSource = 'derived'`.
+- `equityBase` permanece separado como `summary.equityValueBase` — **no** se usa como proceeds.
+
+**Archivos modificados (C.13.4H):**
+
+| Archivo | Cambio |
+|---|---|
+| `src/modules/ma/utils/formatMAReportData.js` | `resolveNetProceeds`; elimina fallback a `equityBase` |
+| `tests/unit/ma/maProductReportAlignment.test.js` | 13 tests; missing netProceeds ≠ equityValueBase; HTML safe |
+
+**No tocado:** engine, backend, UI, Golden Dataset, FORMULA_REGISTRY expected outputs, `buildMAReportHtml.js`.
+
+### 3. Tests y validaciones (C.13.4H)
+
+| Validación | Resultado |
+|---|---|
+| `maProductReportAlignment.test.js` | 13/13 pass |
+| `tests/unit/ma` | 50/50 pass |
+| `npm run test:unit` | 283/283 pass |
+| `npm run build` | OK |
+
+**Cobertura clave:**
+
+- Con `netProceeds` presente → usa valor derived; `netProceedsSource = 'derived'`.
+- Sin `netProceeds` → `null`; `netProceedsSource = 'missing'`; no iguala `equityValueBase`.
+- HTML seguro sin `NaN` / `Infinity` / `999` cuando falta netProceeds.
+
+### 4. Estado C13-P1-11 (post C.13.4I)
+
+```
+C13-P1-11: PARTIALLY RESOLVED
+           SoT decision documented (C.13.4B).
+           Golden benchmark tests (C.13.4C).
+           UI labels/copy DSS (C.13.4E).
+           Report alignment unit tests (C.13.4F).
+           Snapshot policy documented (C.13.4G).
+           netProceeds fallback fixed (C.13.4H).
+           Docs closure netProceeds fix (C.13.4I).
+           No RESOLVED global.
+```
+
+**Resuelto (C.13.4A–I):**
+
+- SoT M&A valuation/waterfall documentado.
+- Golden benchmark tests (`maGoldenFormulas`).
+- UI labels/copy DSS (adjusted EV, heuristic buyer fit, live vs saved).
+- Report alignment tests (`maProductReportAlignment`).
+- **netProceeds fallback silencioso eliminado** — `netProceedsSource` expuesto.
+
+**Pendiente (no RESOLVED global):**
+
+- **Backend snapshot/re-export policy** — integración/e2e no cubierta; re-export desde snapshot vs live engine no enforced en producto.
+- **Optional integration/e2e** snapshot tests (MA-P1-06).
+- **Server-side valuation calculation SoT** — fase enterprise futura (human review).
+
+### 5. P1 abiertos post C.13.4I
+
+| ID | Estado | Notas |
+|---|---|---|
+| MA-P1-03 | **OPEN** | Snapshot drift backend vs live engine; re-export policy not product-enforced |
+| MA-P1-05 | **RESOLVED (C.13.4H)** | netProceeds fallback to equityBase — legacy removed |
+| MA-P1-06 | **OPEN** | Optional M&A snapshot integration/e2e tests |
+
+### 6. Paso siguiente recomendado
+
+**C.13.5 — Bridge / marketplace signals audit** (READ-ONLY AUDIT).
+
+Objetivo: auditar bridge priority, marketplace signals, cross-module signals, source-of-truth y product truthfulness.

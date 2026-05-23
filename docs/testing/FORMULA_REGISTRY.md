@@ -289,15 +289,15 @@ Each approved or in-progress formula should document:
 **Module:** M&A  
 **Owner:** Pending Formula Owner  
 **Source:** Product code (`useValuationEngine.js`, `WaterfallPanel.jsx`)  
-**Status:** Product DSS; report alignment unit-tested (C.13.4F) · Pending Formula Approval  
+**Status:** Product DSS; report alignment unit-tested (C.13.4F/H) · Pending Formula Approval  
 **Formula:** `EV → (-netDebt) → (+workingCapitalAdjustment) → adjustedEquityValue → (-fees%) → (-taxes%) → netProceeds`  
 **Inputs:** evBase, netDebt, wcAdjustment, transactionFees %, taxRate %  
 **Output:** `netProceeds` (and intermediate equityBase)  
 **Golden ID:** N/A — distinct from `ma_waterfall_simple_distribution`  
 **Test file:** tests/unit/ma/maProductReportAlignment.test.js (product alignment; not golden oracle)  
-**Usage limits:** Product DSS waterfall only. Not WATERFALL_SIMPLE golden. Not certified proceeds opinion. netProceeds fallback to equityBase when missing — pending C.13.4H.  
+**Usage limits:** Product DSS waterfall only. Not WATERFALL_SIMPLE golden. Not certified proceeds opinion. netProceeds fallback to equityBase **removed C.13.4H** — missing proceeds → null + `netProceedsSource: 'missing'`.  
 **Approval:** Pending human approval · Not approved for certified advice  
-**Last reviewed:** 2026-05-23 (C.13.4G)  
+**Last reviewed:** 2026-05-23 (C.13.4I)  
 
 ---
 
@@ -490,7 +490,7 @@ Do not invent math. Classify for future module audits:
 | Area | Candidate metric | Classification | Target audit |
 |---|---|---|---|
 | M&A | Buyer matching score | **MA_BUYER_MATCH_FIT** — Pending Formula Approval (C.13.4B); DSS heuristic | C.13.4D+ labels |
-| M&A | Product waterfall | **MA_PRODUCT_WATERFALL** — report alignment tested (C.13.4F) | Gap vs WATERFALL_SIMPLE documented; netProceeds fallback pending C.13.4H |
+| M&A | Product waterfall | **MA_PRODUCT_WATERFALL** — report alignment tested (C.13.4F/H) | Gap vs WATERFALL_SIMPLE documented; netProceeds fallback fixed C.13.4H |
 | M&A | Complex waterfall with preferences | Pending discovery — stub `ma_complex_waterfall_with_preferences` | Future phase |
 | Funding | Liquidation preference | Pending discovery — stub `funding_liquidation_preference_future_phase_j` | C.13.4 Funding |
 | Funding | Funding window / readiness / risk aggregates | Pending discovery in C.13.4 | C.13.4 Funding |

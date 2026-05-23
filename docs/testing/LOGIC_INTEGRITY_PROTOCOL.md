@@ -146,15 +146,25 @@ For M&A and any module with live valuation engines plus backend snapshots:
 
 5. **Golden tests (C.13.4C) validate simple benchmarks first; product gaps documented before code fix.**
 
-6. **Report alignment (C.13.4F):** `maProductReportAlignment.test.js` anchors live engine → `formatMAReportData` parity for adjusted metrics when derived is complete.
+6. **Report alignment (C.13.4F/H):** `maProductReportAlignment.test.js` anchors live engine → `formatMAReportData` parity for adjusted metrics when derived is complete; missing `netProceeds` must not fallback to `equityBase` (C.13.4H).
 
-## M&A live vs snapshot report policy (Decision C.13.4G)
+## M&A live vs snapshot report policy (Decision C.13.4G — updated C.13.4I)
 
 1. **Live exports** must use live engine derived values (`useValuationEngine` output passed to `formatMAReportData`).
 2. **Saved / re-export flows** must preserve saved snapshot values captured at save or export time.
 3. **Silent merge** between live engine and saved snapshot is **prohibited** unless a field-by-field fallback is explicitly documented.
-4. **Missing terminal proceeds:** if `derived.netProceeds` is absent, current `formatMAReportData` falls back to `equityBase` — **legacy tolerated temporarily (P1)**. Must not be presented as real estimated proceeds without label; fix candidate **C.13.4H**.
+4. **Missing terminal proceeds (C.13.4H):** if `derived.netProceeds` and `derived.sellerProceeds` are absent or non-finite, `formatMAReportData` sets `summary.netProceeds = null` and `summary.netProceedsSource = 'missing'`. **No silent fallback to `equityBase`.**
 5. **Reports** must maintain DSS / not fairness opinion disclaimers (unit-tested in C.13.4F).
+
+## No silent terminal-value fallback (Decision C.13.4H/I)
+
+Terminal outputs such as **netProceeds** must not silently fallback to intermediate valuation metrics such as **equityBase**.
+
+1. If a terminal value is missing or non-finite, the report must mark it **missing / unavailable** (`null` + source flag).
+2. Intermediate values (e.g. adjusted equity) may remain available as **separate fields** — they must not substitute for terminal proceeds without explicit label.
+3. Product truthfulness requires **source/fallback flags** when values are missing (`netProceedsSource: 'derived' | 'missing'`).
+4. Do not present equity bridge values as estimated net proceeds in reports or exports.
+5. Applies first to M&A report/export (`formatMAReportData`); extend same pattern to other modules with terminal vs intermediate metric confusion during C.13.x.
 
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:

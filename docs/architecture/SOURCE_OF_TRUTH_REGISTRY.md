@@ -29,8 +29,8 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Tenant scope | organizationId | Backend token/session/auth context | Confirmed | Cross-tenant if bypassed | N/A | Frontend never authoritative |
 | Auth | roles/permissions | backend auth.middleware + AuthProvider mirror | Assumed / Pending C.13 validation | Viewer E2E gaps | N/A | Verify per endpoint |
 | Users | user records | Backend users storage / SQLite | Assumed / Pending C.13 validation | N/A | N/A | |
-| M&A valuation | enterprise value, equity metrics | FE `useValuationEngine` (live); Golden simple benchmarks separate | Partially resolved (C.13.4G) | netProceeds fallback; snapshot drift | ma_valuation_* | Not fairness opinion |
-| M&A waterfall | seller proceeds | FE product waterfall (`netProceeds`); Golden WATERFALL_SIMPLE separate | Partially resolved (C.13.4G) | Product ≠ golden simple bridge | ma_waterfall_simple_distribution | DSS only |
+| M&A valuation | enterprise value, equity metrics | FE `useValuationEngine` (live); Golden simple benchmarks separate | Partially resolved (C.13.4I) | snapshot drift; backend re-export policy | ma_valuation_* | Not fairness opinion |
+| M&A waterfall | seller proceeds | FE product waterfall (`netProceeds`); Golden WATERFALL_SIMPLE separate | Partially resolved (C.13.4I) | Product ≠ golden simple bridge; netProceeds fallback fixed C.13.4H | ma_waterfall_simple_distribution | DSS only |
 | M&A buyer matching | match scores | FE `buildBuyerMatches` heuristic | Partially resolved (C.13.4E labels) | Not certified matching | ma_buyer_matching_score (future) | DSS heuristic |
 | Funding rounds | round records | backend funding services/API (`funding_rounds`) | Confirmed (C.13.3G) | FE draft must not replace | N/A | `GET/POST/PUT/DELETE /funding/rounds` |
 | Funding summary | dashboard summary | backend `getFundingSummary` | Confirmed (C.13.3G) | Dashboard labels draft vs persisted (C.13.3H) | N/A | Window/risk = DSS heuristics |
@@ -172,26 +172,35 @@ Documented after C.13.4A read-only audit; chain C.13.4A–G closed at docs level
 | **netDebt** | Frontend `calculateCoreMetrics` (`debt - cash`) | Golden test implemented (C.13.4C) | Valuation bridge | Net cash (cash > debt) allowed |
 | **simpleEquityValue** (`EQUITY_VALUE`) | Golden + `maGoldenFormulas.js` | Golden test implemented (C.13.4C) | Benchmark / oracle simple equity | Does not include working capital adjustment |
 | **adjustedEquityValue** (`equityBase`) | Frontend `useValuationEngine.js` | Implemented; report alignment unit-tested (C.13.4F) | Product DSS equity bridge | `enterpriseValue - netDebt + workingCapitalAdjustment` |
-| **netProceeds** | Frontend `useValuationEngine.js` | Implemented; report alignment unit-tested when present | Post-fees/taxes seller cash estimate | **Not** the same as `equityValue` or `netCashToSeller` golden; see **netProceedsFallback** |
+| **netProceeds** | Frontend `useValuationEngine.js` (live); report via `formatMAReportData` | Implemented; report alignment unit-tested (C.13.4F/H) | Post-fees/taxes seller cash estimate | **Not** the same as `equityValue` or `netCashToSeller` golden; see **netProceedsFallback** |
 | **waterfallSimple** (`WATERFALL_SIMPLE`) | Golden + `maGoldenFormulas.js` | Golden test implemented (C.13.4C) | Simple seller cash bridge benchmark | **Not** implemented as product waterfall today |
 | **productWaterfall** (`MA_PRODUCT_WATERFALL`) | Frontend `useValuationEngine` + `WaterfallPanel.jsx` | Product DSS; alignment via derived in reports (C.13.4F) | Product DSS waterfall: EV → netDebt → WC → equity → fees → taxes → netProceeds | Not equivalent to WATERFALL_SIMPLE golden |
 | **buyerMatchScore** | Frontend `reportBuilder.js` → `buildBuyerMatches` | Heuristic DSS; UI labels (C.13.4E) | DSS heuristic buyer fit | Not certified buyer/investor matching |
 | **persistedValuationSnapshot** | Backend SQLite (`ma_cases` / snapshots via API) | Confirmed persistence SoT | Historical persisted record | **Not** live calculation SoT; client payload; snapshot drift vs engine possible |
 
-### Report and snapshot policy (Decision C.13.4G)
+### Report and snapshot policy (Decision C.13.4G — updated C.13.4I)
 
 | Policy key | SoT / behavior | Status |
 |---|---|---|
-| **liveValuationReport** | `useValuationEngine` derived + `formatMAReportData` + `buildMAReportHtml` for live export | Unit-tested alignment (C.13.4F) — `maProductReportAlignment.test.js` |
+| **liveValuationReport** | `useValuationEngine` derived + `formatMAReportData` + `buildMAReportHtml` for live export | Unit-tested alignment (C.13.4F/H) — `maProductReportAlignment.test.js` |
 | **savedValuationSnapshot** | Backend/client persisted snapshot captured at save/export time | Historical record SoT; **not** live recalculation |
-| **netProceedsFallback** | If `derived.netProceeds` missing, `formatMAReportData` falls back to `equityBase` | **Legacy fallback / pending C.13.4H** — must not be presented as real estimated proceeds without explicit label |
+| **netProceeds** | Product waterfall terminal value from `derived.netProceeds` or `derived.sellerProceeds` only | **Fixed C.13.4H** — `resolveNetProceeds(derived)` in `formatMAReportData` |
+| **netProceedsFallback** | Legacy silent fallback to `equityBase` when `netProceeds` missing | **Removed C.13.4H** — missing → `null` + `netProceedsSource: 'missing'` |
+
+**netProceeds report policy (C.13.4H/I):**
+
+| Field | SoT | Missing behavior |
+|---|---|---|
+| `summary.netProceeds` | `derived.netProceeds` or `derived.sellerProceeds` (finite only) | `null` |
+| `summary.netProceedsSource` | `'derived'` when finite proceeds present; `'missing'` otherwise | Always set |
+| `summary.equityValueBase` | `derived.equityBase` / adjusted equity bridge | Independent — **must not** substitute for netProceeds |
 
 **Rules:**
 
 1. **Live export** must use live engine derived values.
 2. **Saved / re-export** must preserve saved snapshot values.
 3. **No silent merge** between live engine and saved snapshot unless documented field-by-field fallback.
-4. Missing terminal proceeds must not silently appear as equity value without label (P1 → C.13.4H).
+4. **Missing terminal proceeds** must not silently fallback to intermediate valuation metrics (e.g. `equityBase`). Report marks missing via `netProceedsSource: 'missing'` (C.13.4H).
 
 ### Live calculation vs persisted snapshot
 
@@ -202,11 +211,12 @@ Documented after C.13.4A read-only audit; chain C.13.4A–G closed at docs level
 | **Reports / exports (live)** | Use live derived; DSS disclaimers required (unit-tested C.13.4F) |
 | **Reports / exports (re-export from snapshot)** | Must preserve saved snapshot; UI labels distinguish live vs saved (C.13.4E) |
 
-### Future phases (post C.13.4G)
+### Future phases (post C.13.4I)
 
-1. **C.13.4H** — Controlled fix for `netProceeds` fallback (options A–D documented in `PHASE_A1_CLEANUP_INVENTORY.md`).
-2. Optional — M&A snapshot integration/e2e tests.
+1. **Backend snapshot/re-export policy** — integration/e2e enforcement; re-export from snapshot vs live engine (MA-P1-03).
+2. Optional — M&A snapshot integration/e2e tests (MA-P1-06).
 3. Optional — server-side calculation SoT / snapshot recalc (enterprise phase; human review required).
+4. **C.13.5** — Bridge / marketplace signals audit (READ-ONLY).
 
 ## Executive Overview Special Rule
 
