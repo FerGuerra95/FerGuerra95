@@ -39,14 +39,154 @@ This registry defines intended formula anchors. It does not certify that current
 | RUNWAY_MONTHS | Funding | runwayMonths = cashBalance / monthlyBurn | cashBalance, monthlyBurn | runwayMonths | monthlyBurn <= 0 => null; never Infinity/NaN | funding_runway_basic, funding_runway_zero_burn | Pending C.13 validation | Pending C.13 validation | Planning estimate. Not investment advice. |
 | POST_MONEY | Funding | postMoney = preMoney + newInvestment | preMoney, newInvestment | postMoney | | funding_post_money_and_dilution_basic | Pending C.13 validation | Pending C.13 validation | Planning estimate. |
 | INVESTOR_OWNERSHIP | Funding | investorOwnership = newInvestment / postMoney | newInvestment, postMoney | decimal and percent | postMoney <= 0 => null | funding_post_money_and_dilution_basic | Pending C.13 validation | Pending C.13 validation | Planning estimate. |
-| COMPLIANCE_WEIGHTED_RISK | Compliance | weightedRiskScore = financialRisk*0.4 + jurisdictionRisk*0.4 + evidenceRisk*0.2 | financialRisk, jurisdictionRisk, evidenceRisk (each 0–100) | weightedRiskScore 0–100 | clamp 0–100 at presentation | compliance_weighted_risk_score_basic | Canonical for weightedRiskScore | Pending implementation helper/test | Benchmark/oracle. Not operational engine. |
-| COMPLIANCE_OPERATIONAL_RISK | Compliance | operationalRiskScore = f(criticality, tier, region, alerts, evidence gap, confidence, review adjustment) | supplier + alerts + evidence + reviews | operationalRiskScore 0–100 | clamp 0–100 | N/A (not golden oracle) | Existing FE operational model | Existing FE behavior; pending SoT cleanup | Dashboard DSS. Must not be confused with weightedRiskScore. |
-| COMPLIANCE_RESILIENCE | Compliance | resilienceScore = clamp(100 - riskScore + mitigationBonus, 0, 100) per golden anchor | riskScore input, mitigationBonus | resilienceScore 0–100 | clamp 0–100 | compliance_resilience_score_basic | Pending alignment | Pending alignment after naming cleanup | Golden formula differs from FE engine today. |
+| COMPLIANCE_WEIGHTED_RISK | Compliance | weightedRiskScore = financialRisk*0.4 + jurisdictionRisk*0.4 + evidenceRisk*0.2 | financialRisk, jurisdictionRisk, evidenceRisk (each 0–100) | weightedRiskScore 0–100 | clamp 0–100 at presentation | compliance_weighted_risk_score_basic | Implemented for limited scope | Helper + golden test + reports/export (C.13.2A) | Benchmark/oracle. Not operational engine. |
+| COMPLIANCE_OPERATIONAL_RISK | Compliance | operationalRiskScore = f(criticality, tier, region, alerts, evidence gap, confidence, review adjustment) | supplier + alerts + evidence + reviews | operationalRiskScore 0–100 | clamp 0–100 | N/A (not golden oracle) | Pending validation | Existing FE; Formula Approval C.13.2A | Operational DSS. Not certified compliance score. |
+| COMPLIANCE_RESILIENCE | Compliance | goldenResilienceScore = clamp(100 - riskScore + mitigationBonus, 0, 100) | riskScore input, mitigationBonus | goldenResilienceScore 0–100 | clamp 0–100 | compliance_resilience_score_basic | Implemented for limited scope | Golden helper/test only (C.13.2A); FE engine separate | Golden oracle. Not operational engine output. |
 | PMI_CAPTURE_RATE | PMI | captureRate = captured / forecast | capturedSynergies, forecastSynergies | rate decimal/percent | forecast <= 0 => null; never Infinity/NaN | pmi_synergy_capture_rate_basic, pmi_synergy_zero_forecast | Pending C.13 validation | Pending C.13 validation | Not guarantee of capture. |
 | BRIDGE_PRIORITY | Bridge | priority = impact*0.5 + urgency*0.3 + confidence*0.2 | three scores, weights | priorityScore | | bridge_priority_score_basic | Pending C.13 validation | Pending C.13 validation | DSS signal priority. Human review required. |
 | RISK_LIKELIHOOD_IMPACT | Risk | riskScore = likelihood * impact | likelihood 1-5, impact 1-5 | riskScore, severity band | scale must be documented in code | risk_score_likelihood_impact_basic | Pending C.13 validation | Pending C.13 validation | DSS risk indicator. |
 | REPORTING_VARIANCE | Reporting | varianceAmount = actual - budget; variancePercent = varianceAmount/budget*100 | actual, budget | amount and percent | budget = 0 => null for percent | reporting_kpi_variance_basic | Pending C.13 validation | Pending C.13 validation | Management reporting only. |
 | EXEC_MODULE_HEALTH_AVG | Executive Overview | averageHealth = sum(scores)/count(scores) | moduleScores map | averageHealth | empty map => define explicit behavior | executive_module_health_average_basic | Pending C.13 validation | Pending C.13 validation | Aggregator metric only. |
+| COMPLIANCE_OPERATIONAL_RESILIENCE | Compliance | operationalResilienceScore = calculateResilienceScore (FE engine) | supplier, alerts, evidence, reviews | operationalResilienceScore 0–100 | clamp 0–100 | N/A (not golden oracle) | Existing FE operational model | Existing FE behavior; pending SoT cleanup | Operational DSS signal. Not certified resilience rating. |
+
+## Formula Approval Gate (C.13.2A)
+
+First formal control layer for critical formulas. Metadata below is **minimum traceability** — not certification that all product paths match these definitions.
+
+### Standard metadata template
+
+Each approved or in-progress formula should document:
+
+| Field | Purpose |
+|---|---|
+| **Formula ID** | Stable registry key |
+| **Module** | Product module |
+| **Owner** | Human accountability (not AI-generated) |
+| **Source** | Golden Dataset, registry decision, documented phase, or pending external validation |
+| **Status** | Implementation / validation state |
+| **Formula** | Canonical expression |
+| **Inputs** | Named inputs with units/ranges |
+| **Units** | Input/output units |
+| **Output** | Result field and range |
+| **Golden ID** | `golden_inputs.json` dataset id, or `N/A` with justification |
+| **Test file** | Vitest path or `pending` |
+| **Edge cases** | Explicit null/clamp/divide-by-zero rules |
+| **Usage limits** | DSS scope; no legal/financial/certified advice |
+| **Approval** | Human approval scope (never auto-promoted by tooling) |
+| **Last reviewed** | Date of metadata review |
+
+**Allowed Status values:** Implemented and tested · Implemented for limited scope · Pending validation · Pending implementation · Deprecated / do not use
+
+**Allowed Approval values:** Pending human approval · Approved for DSS/demo scope · Approved for reports/export scope · Not approved for certified/legal/financial advice
+
+**Rules:** Do not change Golden expected to pass code. Do not use AI/Cursor as formula source. Do not mix metrics under one label. Pending formulas stay Pending until human review.
+
+---
+
+### FUNDING_RUNWAY_MONTHS
+
+**Formula ID:** FUNDING_RUNWAY_MONTHS  
+**Registry table alias:** `RUNWAY_MONTHS` (same formula; approval gate uses this ID)  
+**Module:** Funding  
+**Owner:** Product / Logic Integrity  
+**Source:** Golden Dataset  
+**Status:** Implemented and tested  
+**Formula:** `runwayMonths = cashBalance / monthlyBurn` when `monthlyBurn > 0`; else `null`  
+**Inputs:** `cashBalance` (currency), `monthlyBurn` (currency per month, must be > 0 for division)  
+**Units:** currency / (currency per month) → months (number or null)  
+**Output:** `runwayMonths` — finite number or `null`  
+**Golden ID:** `funding_runway_zero_burn` (edge case); also `funding_runway_basic`  
+**Test file:** `tests/unit/funding/fundingFormulas.test.js`  
+**Edge cases:** `monthlyBurn <= 0` => `runwayMonths = null`; never `Infinity` / `NaN` in user-facing output  
+**Usage limits:** Planning estimate only. Not investment advice. DSS/demo scope.  
+**Approval:** Approved for DSS/demo scope  
+**Last reviewed:** 2026-05-20  
+
+---
+
+### COMPLIANCE_WEIGHTED_RISK
+
+**Formula ID:** COMPLIANCE_WEIGHTED_RISK  
+**Module:** Compliance  
+**Owner:** Product / Logic Integrity  
+**Source:** Golden Dataset + C.13.1C documented decision  
+**Status:** Implemented for limited scope (helper + golden test + reports/export)  
+**Formula:** `weightedRiskScore = financialRisk*0.4 + jurisdictionRisk*0.4 + evidenceRisk*0.2`  
+**Inputs:** `financialRisk`, `jurisdictionRisk`, `evidenceRisk` — each 0–100  
+**Units:** dimensionless scores 0–100 → `weightedRiskScore` 0–100 (clamp at presentation)  
+**Output:** `weightedRiskScore`  
+**Golden ID:** `compliance_weighted_risk_score_basic`  
+**Test file:** `tests/unit/compliance/complianceWeightedRisk.test.js`  
+**Edge cases:** Missing/non-finite inputs => helper returns null; do not show weighted score without explicit dimension inputs  
+**Usage limits:** Benchmark/oracle and reports/export when inputs explicit. **Not** operational engine. **Not** certified compliance score. Label: Weighted risk (explicable).  
+**Approval:** Approved for reports/export scope  
+**Last reviewed:** 2026-05-20  
+
+---
+
+### COMPLIANCE_RESILIENCE
+
+**Formula ID:** COMPLIANCE_RESILIENCE  
+**Module:** Compliance  
+**Owner:** Product / Logic Integrity  
+**Source:** Golden Dataset + C.13.1C-f8A golden helper  
+**Status:** Implemented for limited scope (golden helper/test only; separate from operational FE engine)  
+**Formula:** `goldenResilienceScore = clamp(100 - riskScore + mitigationBonus, 0, 100)`  
+**Inputs:** `riskScore` (0–100, golden/oracle context), `mitigationBonus` (number)  
+**Units:** scores 0–100  
+**Output:** `goldenResilienceScore` 0–100  
+**Golden ID:** `compliance_resilience_score_basic`  
+**Test file:** `tests/unit/compliance/complianceGoldenResilience.test.js`  
+**Edge cases:** Missing/invalid inputs => null; clamp 0–100  
+**Usage limits:** Golden benchmark/oracle only. Do not substitute for `operationalResilienceScore` on dashboards without explicit label. Not certified resilience rating.  
+**Approval:** Approved for DSS/demo scope (oracle); not approved for certified/legal advice  
+**Last reviewed:** 2026-05-20  
+
+---
+
+### COMPLIANCE_OPERATIONAL_RISK
+
+**Formula ID:** COMPLIANCE_OPERATIONAL_RISK  
+**Module:** Compliance  
+**Owner:** Product / Logic Integrity  
+**Source:** C.13.1C documented decision (FE operational engine)  
+**Status:** Pending validation (existing FE engine; Formula Approval metadata added C.13.2A)  
+**Formula:** `operationalRiskScore = calculateSupplierRiskScore(supplier, alerts, evidence, reviews)` — criticality, tier, region, alerts, evidence gap, confidence, review adjustments → clamp 0–100  
+**Inputs:** `supplier`, `alerts`, `evidenceItems`, `reviews`  
+**Units:** dimensionless 0–100  
+**Output:** `operationalRiskScore` (often persisted/surfaced as `riskScore` pending rename)  
+**Golden ID:** N/A — operational engine pending Formula Approval; no golden oracle by design in C.13.2A  
+**Test file:** `tests/unit/compliance/compliancePrecedence.test.js` (precedence/labels; not full formula golden)  
+**Edge cases:** clamp 0–100; re-export `report.riskScore ?? supplier?.riskScore`  
+**Usage limits:** Operational DSS signal, not certified compliance score. Must not be confused with `weightedRiskScore`. Label: Operational risk score.  
+**Approval:** Pending human approval  
+**Last reviewed:** 2026-05-20  
+
+---
+
+### COMPLIANCE_OPERATIONAL_RESILIENCE
+
+**Formula ID:** COMPLIANCE_OPERATIONAL_RESILIENCE  
+**Module:** Compliance  
+**Owner:** Product / Logic Integrity  
+**Source:** C.13.1C documented decision (FE `resilienceScore.js` engine)  
+**Status:** Pending validation (existing FE engine; separate from golden resilience oracle)  
+**Formula:** `operationalResilienceScore = calculateResilienceScore(...)` — FE engine model (not golden clamp formula)  
+**Inputs:** `supplier`, `alerts`, `evidence`, `reviews` (per engine)  
+**Units:** dimensionless 0–100  
+**Output:** `operationalResilienceScore` (often persisted/surfaced as `resilienceScore` pending rename)  
+**Golden ID:** N/A — operational engine pending Formula Approval  
+**Test file:** `tests/unit/compliance/compliancePrecedence.test.js` (precedence/labels; not golden formula test)  
+**Edge cases:** clamp 0–100; re-export `report.resilienceScore ?? supplier?.resilienceScore`  
+**Usage limits:** Operational DSS signal, not certified resilience rating. Must not be confused with `COMPLIANCE_RESILIENCE` golden oracle. Label: Operational resilience score.  
+**Approval:** Pending human approval  
+**Last reviewed:** 2026-05-20  
+
+---
+
+### Other registry rows (C.13.2B+)
+
+Rows in **Required Formula Table** without a `###` block above remain **Pending C.13.2 validation** until C.13.2B inventory expansion.
 
 ## Compliance Scoring — Hybrid Model (Decision C.13.1C-f1B)
 
@@ -61,7 +201,7 @@ This registry defines intended formula anchors. It does not certify that current
 | **Inputs** | `financialRisk`, `jurisdictionRisk`, `evidenceRisk` — each normalized 0–100 |
 | **Output** | `weightedRiskScore` 0–100 |
 | **Golden Dataset ID** | `compliance_weighted_risk_score_basic` |
-| **Implementation status** | **Pending** — helper and golden test not yet in codebase |
+| **Implementation status** | **Implemented** — helper + golden test + reports/export (see C.13.2A approval block) |
 | **Usage** | Executive reports, benchmark, golden tests, explicable decision-support |
 | **Does not** | Replace `operationalRiskScore` automatically |
 
@@ -85,7 +225,7 @@ This registry defines intended formula anchors. It does not certify that current
 | **Golden formula** | `resilienceScore = clamp(100 - riskScore + mitigationBonus, 0, 100)` |
 | **Golden Dataset ID** | `compliance_resilience_score_basic` |
 | **Current FE formula** | `calculateResilienceScore` in `resilienceScore.js` — different model (`base 72` + penalties/bonuses) |
-| **Implementation status** | **Pending decision/fix** after naming and FE/BE precedence resolved |
+| **Implementation status** | **Golden helper implemented** — operational FE engine remains separate (C.13.2A) |
 | **Note** | Golden `riskScore` input refers to weighted/oracle context in pedagogical dataset, not operational engine output |
 
 ### Compliance naming rule (documentation only until code phase)
@@ -117,6 +257,7 @@ When auditing a formula, document:
 
 ## Next Step
 
-C.13 must locate implementation files (frontend engine, backend service) for each row and update Implementation Status to Matches golden, Mismatch, or Duplicate implementation found.
+- **C.13.2B:** Expand Formula Approval Gate to remaining Required Formula Table rows (inventory + Pending classification).
+- **C.13:** Continue implementation audit per module; update Implementation Status to Matches golden, Mismatch, or Duplicate implementation found.
 
 Do not change this registry to hide code bugs.

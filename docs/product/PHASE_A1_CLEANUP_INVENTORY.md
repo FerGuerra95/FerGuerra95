@@ -1576,7 +1576,8 @@ También hay que validar que:
 | C.13.1C-f8C | Cerrada (docs only) | Inventario cierre parcial C13-P1-05 |
 | C.13.1C-f9A | Cerrada (docs only) | Cierre global Compliance scoring chain |
 | C.13.1C | Cerrada (cadena scoring) | C13-P1-04/05/06 — reports/export/labels/tests/docs |
-| C.13 | Pendiente | C.13.2 Formula Approval Gate; otras ramas C.13 |
+| C.13.2A | Cerrada | Formula Approval Gate foundation — registry + protocol + coverage test |
+| C.13 | Pendiente | C.13.2B expansion; otras ramas C.13 |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -2907,6 +2908,48 @@ La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
 | Control formal de fórmulas críticas: Formula ID, owner, fuente, inputs, unidades, fórmula, edge cases, Golden Dataset, test, status, fecha, límites de uso |
 
 **No abrir C.13.2** antes de este cierre f9A (completado en inventario).
+
+---
+
+## C.13.2A — Formula Approval Gate foundation — CLOSED
+
+**Fecha:** 20 mayo 2026  
+**Estado:** **Foundation Added** — metadata mínima + protocolo + test de cobertura; sin cambios de producto ni Golden Dataset.
+
+### Qué se añadió
+
+| Artefacto | Detalle |
+|---|---|
+| `docs/testing/FORMULA_REGISTRY.md` | Sección **Formula Approval Gate (C.13.2A)** + bloques metadata para 5 fórmulas críticas |
+| `docs/testing/LOGIC_INTEGRITY_PROTOCOL.md` | Sección **Formula Approval Gate** con reglas de gate y estados |
+| `tests/unit/golden/formulaRegistryCoverage.test.js` | Cobertura mínima de campos + Golden IDs + test files declarados |
+
+### Fórmulas mínimas cubiertas
+
+| Formula ID | Golden | Test | Status documentado |
+|---|---|---|---|
+| `FUNDING_RUNWAY_MONTHS` | `funding_runway_zero_burn` (+ basic) | `fundingFormulas.test.js` | Implemented and tested |
+| `COMPLIANCE_WEIGHTED_RISK` | `compliance_weighted_risk_score_basic` | `complianceWeightedRisk.test.js` | Implemented for limited scope |
+| `COMPLIANCE_RESILIENCE` | `compliance_resilience_score_basic` | `complianceGoldenResilience.test.js` | Implemented for limited scope (golden oracle) |
+| `COMPLIANCE_OPERATIONAL_RISK` | N/A (operational) | `compliancePrecedence.test.js` | Pending validation |
+| `COMPLIANCE_OPERATIONAL_RESILIENCE` | N/A (operational) | `compliancePrecedence.test.js` | Pending validation |
+
+### Límites (C.13.2A)
+
+- No se tocó `src/**`, `backend/**`, tests de producto existentes, ni `golden_inputs.json`.
+- Filas del Required Formula Table fuera de las 5 anteriores siguen **Pending C.13.2 validation**.
+- Operational risk/resilience: **Pending human approval** — no certificación externa.
+- C13-P1-04/05/06 permanecen **PARTIALLY RESOLVED** (no reabierta cadena scoring en código).
+
+### Pendiente C.13.2B
+
+- Inventario de **todas** las fórmulas del registry: Approved for DSS/demo · Implemented and tested · Pending Golden · Pending Owner · Pending external validation · Deprecated.
+- Actualizar Implementation Status por módulo tras auditoría.
+- Posible ampliación de `formulaRegistryCoverage.test.js` por lotes (sin exigir completitud global en un solo paso).
+
+### Siguiente paso
+
+**C.13.2B — Formula Approval Gate expansion / inventory** (docs only; clasificar fórmulas restantes).
 
 ---
 

@@ -256,6 +256,46 @@ Every decision must explain:
 - what QA should validate
 - what future maintainers must know
 - what business users should not misunderstand
+## Formula Approval Gate (C.13.2A+)
+
+A **critical formula** is not production-ready until it has minimum traceability in `docs/testing/FORMULA_REGISTRY.md`:
+
+- Formula ID
+- owner (human accountability — not AI-generated)
+- source
+- inputs
+- units
+- formula
+- edge cases
+- Golden Dataset ID **or** documented `N/A` justification
+- associated test file **or** explicit pending test status
+- usage limits (DSS scope, no certified advice where applicable)
+- approval status
+- DSS / no-advice disclaimer when user-facing
+
+### Gate rules
+
+- **Do not** change Golden Dataset expected values to make failing code pass.
+- **Do not** widen tolerances without human review.
+- **Do not** use AI/Cursor output as the authoritative formula source.
+- **Do not** mix distinct metrics under the same user-facing label (e.g. weighted vs operational risk).
+- **Do not** present indicative or DSS calculations as certified, legal, or investment advice.
+- **Do not** promote `Pending` → `Approved` without human review; tooling may only verify metadata presence.
+
+### Coverage test
+
+`tests/unit/golden/formulaRegistryCoverage.test.js` validates minimum metadata for formulas explicitly covered in a C.13.2 subphase. It does **not** require every row in the Required Formula Table to be complete.
+
+### Status meanings (approval)
+
+| Status | Meaning |
+|---|---|
+| Implemented and tested | Golden and/or unit test evidence on record |
+| Implemented for limited scope | Helper/reports/export only; not full product SoT |
+| Pending validation | Exists in product; metadata/traceability incomplete |
+| Pending implementation | Defined; not yet in code |
+| Deprecated / do not use | Do not build new features on this path |
+
 ## C.13 relationship
 C.13 is the formal phase for:
 - Logic Integrity
