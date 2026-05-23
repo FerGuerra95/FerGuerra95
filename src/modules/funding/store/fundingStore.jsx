@@ -79,13 +79,27 @@ function safeReadOrganizationDraft(user) {
 
     /**
      * Compatibilidad con drafts antiguos:
-     * si existía un draft global previo de fundingApi, lo usamos como base
-     * para la organización actual y luego se guardará ya separado por org.
+     * si existían claves globales legacy, migramos una sola vez a la org actual,
+     * persistimos en clave org-scoped y consumimos las claves globales para evitar
+     * contaminación cross-org en el mismo browser.
      */
-    const legacyDraft = fundingApi.loadDraft?.();
+    if (fundingApi.hasLegacyDraft?.()) {
+      const legacyDraft = fundingApi.loadDraft?.();
+      const migrated = normalizeDraft(legacyDraft, user);
 
-    if (legacyDraft?.fundingInputs || legacyDraft?.fundingSettings) {
-      return normalizeDraft(legacyDraft, user);
+      safeWriteOrganizationDraft({
+        fundingInputs: migrated.fundingInputs,
+        fundingSettings: migrated.fundingSettings,
+        user
+      });
+
+      const migratedRaw = localStorage.getItem(storageKey);
+
+      if (migratedRaw) {
+        fundingApi.clearLegacyDraft?.();
+      }
+
+      return migrated;
     }
 
     return buildDefaultDraft(user);

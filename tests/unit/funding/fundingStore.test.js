@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 
 import {
+  DEFAULT_FUNDING_INPUTS,
   DEFAULT_FUNDING_SETTINGS,
   FUNDING_STORAGE_KEYS
 } from '../../../src/modules/funding/engine/fundingFormulas.js';
@@ -132,7 +133,7 @@ describe('funding draft localStorage conventions (C.13.3H)', () => {
   });
 });
 
-describe('funding store legacy migration and org isolation (C.13.3I)', () => {
+describe('funding store legacy migration and org isolation (C.13.3J)', () => {
   beforeEach(() => {
     localStorage.clear();
     authUser = { id: 'u_a', organizationId: 'org_a' };
@@ -161,7 +162,7 @@ describe('funding store legacy migration and org isolation (C.13.3I)', () => {
     expect(localStorage.getItem(orgKey)).toContain('Shared Legacy Workspace');
   });
 
-  it('documents cross-org risk: legacy global keys remain after org hydration', async () => {
+  it('removes legacy global keys after first successful org migration', async () => {
     fundingApi.saveDraft({ companyName: 'Still In Global Bucket' }, DEFAULT_FUNDING_SETTINGS);
 
     authUser = { id: 'u_hydrate', organizationId: 'org_hydrate' };
@@ -172,10 +173,14 @@ describe('funding store legacy migration and org isolation (C.13.3I)', () => {
       expect(localStorage.getItem(getOrganizationStorageKey('org_hydrate'))).toBeTruthy();
     });
 
-    expect(localStorage.getItem(FUNDING_STORAGE_KEYS.DRAFT)).toContain('Still In Global Bucket');
+    expect(localStorage.getItem(FUNDING_STORAGE_KEYS.DRAFT)).toBeNull();
+    expect(localStorage.getItem(FUNDING_STORAGE_KEYS.SETTINGS)).toBeNull();
+    expect(localStorage.getItem(getOrganizationStorageKey('org_hydrate'))).toContain(
+      'Still In Global Bucket'
+    );
   });
 
-  it('second org without org key can still read the same legacy global draft', async () => {
+  it('second org without org key does not inherit consumed legacy global draft', async () => {
     fundingApi.saveDraft({ companyName: 'Cross Org Legacy Seed' }, DEFAULT_FUNDING_SETTINGS);
 
     authUser = { id: 'u_one', organizationId: 'org_one' };
@@ -183,6 +188,7 @@ describe('funding store legacy migration and org isolation (C.13.3I)', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('company-name').textContent).toBe('Cross Org Legacy Seed');
+      expect(localStorage.getItem(FUNDING_STORAGE_KEYS.DRAFT)).toBeNull();
     });
     unmount();
 
@@ -190,8 +196,13 @@ describe('funding store legacy migration and org isolation (C.13.3I)', () => {
     renderFundingStoreProbe();
 
     await waitFor(() => {
-      expect(screen.getByTestId('company-name').textContent).toBe('Cross Org Legacy Seed');
+      expect(screen.getByTestId('company-name').textContent).toBe(
+        DEFAULT_FUNDING_INPUTS.companyName
+      );
     });
+
+    expect(localStorage.getItem(getOrganizationStorageKey('org_two'))).toBeTruthy();
+    expect(localStorage.getItem(FUNDING_STORAGE_KEYS.DRAFT)).toBeNull();
   });
 
   it('prefers org-scoped key over legacy global when both exist', async () => {

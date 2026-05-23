@@ -19,5 +19,29 @@ export const fundingApi = {
   saveDraft(fundingInputs, fundingSettings) {
     localStorage.setItem(FUNDING_STORAGE_KEYS.DRAFT, JSON.stringify(fundingInputs));
     localStorage.setItem(FUNDING_STORAGE_KEYS.SETTINGS, JSON.stringify(fundingSettings));
+  },
+  hasLegacyDraft() {
+    try {
+      if (typeof localStorage === 'undefined') {
+        return false;
+      }
+
+      return (
+        localStorage.getItem(FUNDING_STORAGE_KEYS.DRAFT) != null ||
+        localStorage.getItem(FUNDING_STORAGE_KEYS.SETTINGS) != null
+      );
+    } catch {
+      return false;
+    }
+  },
+  clearLegacyDraft() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem(FUNDING_STORAGE_KEYS.DRAFT);
+        localStorage.removeItem(FUNDING_STORAGE_KEYS.SETTINGS);
+      }
+    } catch {
+      // Si localStorage falla, no forzamos limpieza.
+    }
   }
 };
