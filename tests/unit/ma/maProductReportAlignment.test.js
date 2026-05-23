@@ -194,23 +194,37 @@ describe('maProductReportAlignment — live engine vs saved snapshot policy mirr
   });
 });
 
-describe('maProductReportAlignment — netProceeds fallback behavior (documented GAP if misleading)', () => {
+describe('maProductReportAlignment — netProceeds without equityBase fallback (C.13.4H)', () => {
   it('uses derived.netProceeds when present', () => {
     const derived = buildEngineDerived();
     const report = buildReportFromDerived(derived);
 
     expect(report.summary.netProceeds).toBeCloseTo(derived.netProceeds, 6);
     expect(report.summary.netProceeds).not.toBeCloseTo(derived.equityBase, 6);
+    expect(report.summary.netProceedsSource).toBe('derived');
   });
 
-  it('falls back to equityBase when derived.netProceeds is missing (current behavior — GAP C.13.4G candidate)', () => {
+  it('does not use equityBase when derived.netProceeds is missing', () => {
     const derived = buildEngineDerived();
     const { netProceeds: _removed, ...derivedWithoutNetProceeds } = derived;
 
     const report = buildReportFromDerived(derivedWithoutNetProceeds);
 
-    expect(report.summary.netProceeds).toBeCloseTo(derived.equityBase, 6);
-    expect(report.summary.netProceeds).not.toBeCloseTo(derived.netProceeds, 6);
+    expect(report.summary.netProceeds).toBeNull();
+    expect(report.summary.netProceedsSource).toBe('missing');
+    expect(report.summary.netProceeds).not.toBe(report.summary.equityValueBase);
+    expect(report.summary.equityValueBase).toBeCloseTo(derived.equityBase, 6);
+  });
+
+  it('keeps HTML safe when netProceeds is missing', () => {
+    const derived = buildEngineDerived();
+    const { netProceeds: _removed, ...derivedWithoutNetProceeds } = derived;
+    const reportData = buildReportFromDerived(derivedWithoutNetProceeds);
+    const html = buildMAReportHtml(reportData);
+
+    expect(html).not.toMatch(/\bNaN\b/i);
+    expect(html).not.toMatch(/\bInfinity\b/i);
+    expect(html).not.toMatch(/\b999\b/);
   });
 });
 

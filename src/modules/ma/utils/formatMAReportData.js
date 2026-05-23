@@ -45,6 +45,26 @@ function firstNumber(...values) {
   return 0;
 }
 
+function resolveNetProceeds(derived) {
+  const candidates = [derived?.netProceeds, derived?.sellerProceeds];
+
+  for (const value of candidates) {
+    if (value === null || value === undefined || value === '') continue;
+
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return { netProceeds: value, netProceedsSource: 'derived' };
+    }
+
+    const parsed = toNumber(value, Number.NaN);
+
+    if (Number.isFinite(parsed)) {
+      return { netProceeds: parsed, netProceedsSource: 'derived' };
+    }
+  }
+
+  return { netProceeds: null, netProceedsSource: 'missing' };
+}
+
 function toArray(value) {
   if (!value) return [];
   if (Array.isArray(value)) return value;
@@ -637,11 +657,7 @@ export function formatMAReportData({
     calculateEquity(evHigh)
   );
 
-  const netProceeds = firstNumber(
-    derived?.netProceeds,
-    derived?.sellerProceeds,
-    equityBase
-  );
+  const { netProceeds, netProceedsSource } = resolveNetProceeds(derived);
 
   const qualityScore = firstNumber(
     derived?.qualityScore,
@@ -961,6 +977,7 @@ export function formatMAReportData({
       equityValueBase: equityBase,
       equityValueHigh: equityHigh,
       netProceeds,
+      netProceedsSource,
       qualityScore,
       debtMode: debtMode.mode
     },
