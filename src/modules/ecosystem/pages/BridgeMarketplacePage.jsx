@@ -28,6 +28,13 @@ import { bridgeApi } from '../services/bridgeApi.js';
 import { maDealsApi } from '../../ma/services/maDealsApi.js';
 import { fundingEnterpriseApi } from '../../funding/services/fundingEnterpriseApi.js';
 
+export function isBridgeMarketplaceEnabled() {
+  return (
+    import.meta.env.VITE_ENABLE_BRIDGE_MARKETPLACE === 'true' ||
+    import.meta.env.MODE === 'development'
+  );
+}
+
 const DEMO_BRIDGE_RECORDS = [
   {
     id: 'demo-bridge-industrial',
@@ -857,6 +864,57 @@ function OpportunityCard({ record, onStageChange, onConfidentialityChange, onDel
 }
 
 export function BridgeMarketplacePage() {
+  if (!isBridgeMarketplaceEnabled()) {
+    return <BridgeMarketplaceQuarantine />;
+  }
+
+  return <BridgeMarketplaceEnabledPage />;
+}
+
+function BridgeMarketplaceQuarantine() {
+  return (
+    <div className="page">
+      <style>{bridgeCss}</style>
+      <div className="bridge-page">
+        <section className="bridge-hero">
+          <div className="bridge-badge-row">
+            <Badge>Internal future private network</Badge>
+            <Badge>Quarantined</Badge>
+            <Badge>Not a public marketplace</Badge>
+          </div>
+
+          <h1 className="bridge-title">
+            Bridge Marketplace is quarantined
+            <span>Internal future private network preview only.</span>
+          </h1>
+
+          <p className="bridge-copy">
+            This private-network preview is disabled in this environment. The transaction layer,
+            success-fee workflows and marketplace matching are not active. Use Bridge Enterprise
+            signals for DSS cross-module review.
+          </p>
+
+          <div className="bridge-command-bar">
+            <CommandItem label="Status" value="Disabled by default in production" />
+            <CommandItem label="Enable" value="VITE_ENABLE_BRIDGE_MARKETPLACE=true" />
+            <CommandItem label="Alternative" value="Bridge Enterprise DSS signals" />
+          </div>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 20 }}>
+            <Link className="bridge-button-lite" to="/bridge/dashboard">
+              Back to Bridge dashboard
+            </Link>
+            <span className="muted" style={{ alignSelf: 'center' }}>
+              Request internal access from your administrator to enable the preview flag.
+            </span>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function BridgeMarketplaceEnabledPage() {
   const { PERMISSIONS, can } = useAuth();
   const canManageBridge = can(PERMISSIONS.MANAGE_ECOSYSTEM_BRANCH);
   const [records, setRecords] = useState(DEMO_BRIDGE_RECORDS);
