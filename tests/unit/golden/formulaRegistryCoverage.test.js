@@ -92,6 +92,23 @@ function extractGoldenIds(block) {
   return [...new Set(ids)];
 }
 
+/** C.13.2B — presence + Status/Approval only; no global golden/test mandate */
+const EXPANSION_LOT_B_FORMULA_IDS = [
+  'EV_EBITDA',
+  'NET_DEBT',
+  'EQUITY_VALUE',
+  'WATERFALL_SIMPLE',
+  'POST_MONEY',
+  'INVESTOR_OWNERSHIP',
+  'PMI_CAPTURE_RATE',
+  'BRIDGE_PRIORITY',
+  'RISK_LIKELIHOOD_IMPACT',
+  'REPORTING_VARIANCE',
+  'EXEC_MODULE_HEALTH_AVG'
+];
+
+const LIGHT_BLOCK_FIELDS = ['Status', 'Approval'];
+
 describe('formulaRegistryCoverage (C.13.2A)', () => {
   const registryText = loadRegistry();
   const goldenIds = loadGoldenDatasetIds();
@@ -150,5 +167,27 @@ describe('formulaRegistryCoverage (C.13.2A)', () => {
         expect(fs.existsSync(absolute), `missing ${relativePath}`).toBe(true);
       }
     );
+  });
+});
+
+describe('formulaRegistryCoverage (C.13.2B expansion lot)', () => {
+  const registryText = loadRegistry();
+
+  it('documents C.13.2B inventory summary', () => {
+    expect(registryText).toMatch(/Formula Approval Inventory summary \(C\.13\.2B\)/i);
+  });
+
+  it.each(EXPANSION_LOT_B_FORMULA_IDS)('registry contains expansion Formula ID %s', (formulaId) => {
+    expect(registryText).toContain(formulaId);
+  });
+
+  describe('expansion blocks have Status and Approval (pending allowed)', () => {
+    it.each(EXPANSION_LOT_B_FORMULA_IDS)('%s', (formulaId) => {
+      const block = extractApprovalBlock(registryText, formulaId);
+      for (const field of LIGHT_BLOCK_FIELDS) {
+        expect(fieldPresent(block, field), `${formulaId} missing ${field}`).toBe(true);
+      }
+      expect(block).toMatch(/Pending/i);
+    });
   });
 });

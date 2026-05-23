@@ -1577,7 +1577,8 @@ También hay que validar que:
 | C.13.1C-f9A | Cerrada (docs only) | Cierre global Compliance scoring chain |
 | C.13.1C | Cerrada (cadena scoring) | C13-P1-04/05/06 — reports/export/labels/tests/docs |
 | C.13.2A | Cerrada | Formula Approval Gate foundation — registry + protocol + coverage test |
-| C.13 | Pendiente | C.13.2B expansion; otras ramas C.13 |
+| C.13.2B | Cerrada (docs only) | Formula Approval Gate expansion / inventory por módulo |
+| C.13 | Pendiente | C.13.2C enforcement; C.13.3+ auditorías por módulo |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -2950,6 +2951,68 @@ La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
 ### Siguiente paso
 
 **C.13.2B — Formula Approval Gate expansion / inventory** (docs only; clasificar fórmulas restantes).
+
+---
+
+## C.13.2B — Formula Approval Gate expansion / inventory — CLOSED
+
+**Fecha:** 20 mayo 2026  
+**Estado:** **CLOSED (DOCS ONLY)** — inventario ampliado; sin cambios de producto ni Golden Dataset.
+
+### Qué se inventarió
+
+| Artefacto | Detalle |
+|---|---|
+| `FORMULA_REGISTRY.md` | Bloques `###` de approval para **11 fórmulas nuevas** (M&A×4, Funding×2, PMI, Bridge, Risk, Reporting, Executive) + tabla resumen C.13.2B |
+| Required Formula Table | Estados actualizados a **Pending C.13.x validation** o enlace a C.13.2A (runway) |
+| Pending discovery | **12 áreas** sin fila en tabla (stubs Golden / heurísticas / Governance) |
+
+### Conteo
+
+| Métrica | Valor |
+|---|---|
+| Filas Required Formula Table | **16** |
+| Bloques approval (`###`) | **16** (5 C.13.2A + 11 C.13.2B) |
+| Implemented and tested (gate) | **1** (`FUNDING_RUNWAY_MONTHS`) |
+| Implemented for limited scope | **2** (compliance weighted + golden resilience) |
+| Pending validation (operational compliance) | **2** |
+| Pending C.13.x validation | **11** |
+| Pending discovery (fuera tabla) | **12** clasificadas |
+| Externally / production certified | **0** |
+
+### Por módulo (clasificación)
+
+| Módulo | Formula IDs | Estado predominante |
+|---|---|---|
+| Funding | `FUNDING_RUNWAY_MONTHS`, `POST_MONEY`, `INVESTOR_OWNERSHIP` | 1 tested; 2 pending audit |
+| M&A | `EV_EBITDA`, `NET_DEBT`, `EQUITY_VALUE`, `WATERFALL_SIMPLE` | Pending C.13.x + Pending external (valuation) |
+| Compliance | 5 IDs C.13.2A | Sin cambio; cadena cerrada |
+| PMI | `PMI_CAPTURE_RATE` | Pending C.13.6 |
+| Bridge | `BRIDGE_PRIORITY` | Pending C.13.7 |
+| Risk | `RISK_LIKELIHOOD_IMPACT` | Pending C.13.8 |
+| Reporting | `REPORTING_VARIANCE` | Pending C.13.9 |
+| Executive | `EXEC_MODULE_HEALTH_AVG` | Pending C.13.1 |
+
+### Qué NO se tocó
+
+- `src/**`, `backend/**`, tests de producto, `golden_inputs.json`, `LOGIC_INTEGRITY_PROTOCOL.md`, `SOURCE_OF_TRUTH_REGISTRY.md`.
+- C13-P1-04/05/06 — **PARTIALLY RESOLVED** (no reabierto).
+- No se promovió ninguna fórmula a **production-ready certified**.
+
+### Riesgos documentados
+
+- Golden existe pero **sin unit test dedicado** para M&A, post-money, PMI, Bridge, Risk, Reporting, Executive → riesgo de drift FE/BE hasta auditoría C.13.x.
+- M&A valuation/waterfall: **Pending external validation** (fairness / legal language).
+- Executive module health: **empty map** edge case aún por fijar en código (C.13.1).
+- Discovery rows: stubs en `golden_inputs.json` **future phase** — no inventar fórmulas.
+
+### Siguiente paso
+
+1. **C.13.2C** — Formula Approval Gate enforcement / CI hardening (lotes en `formulaRegistryCoverage.test.js`).  
+2. **C.13.3** — Funding broader formula coverage (post-money, dilution, tests).  
+3. Auditorías por módulo C.13.1–C.13.9 según tabla discovery.
+
+**Nota test:** C.13.2B no endureció el coverage test global; C.13.2C lo hará por lotes.
 
 ---
 
