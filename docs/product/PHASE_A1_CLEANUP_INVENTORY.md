@@ -1591,7 +1591,9 @@ También hay que validar que:
 | C.13.3J | Cerrada | Fix legacy migration consume-on-migrate (`55a088a`) |
 | C.13.3K | Cerrada (docs only) | Cierre parcial documental C13-P1-03 |
 | C.14.0 | Cerrada (docs only) | AI guardrails anti-parálisis (`05b3520`) |
-| C.13 | Pendiente | C.13.4 M&A valuation / waterfall integrity |
+| C.13.4A | Cerrada (solo lectura) | Auditoría M&A valuation / waterfall |
+| C.13.4B | Cerrada (docs only) | Decisión SoT fórmulas M&A |
+| C.13 | Pendiente | C.13.4C M&A golden tests |
 | C.14 | Pendiente | C.14.1 modular sandbox audit (opcional) |
 
 ### Subfases C.13
@@ -1731,7 +1733,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
 | C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
-| C13-P1-11 | M&A EV simple (EBITDA×multiple) source unclear | Golden `ma_valuation_ebitda_multiple_basic`; FE principal `valuationFormulas.js` = DCF/core | Oráculo simple sin ancla clara |
+| C13-P1-11 | M&A EV simple vs adjusted engine | Golden `ma_valuation_ebitda_multiple_basic`; FE `useValuationEngine` adjusted EV | **PARTIALLY RESOLVED** — SoT decision documented (C.13.4B); Golden tests pending (C.13.4C) |
 | C13-P1-12 | M&A waterfall simple source unclear | Golden `ma_waterfall_simple_distribution`; sin helper `netCashToSeller` localizado en `src/modules/ma` | Proceeds seller no verificables vs golden |
 
 ### 6. P2
@@ -5011,3 +5013,115 @@ C13-P1-03: PARTIALLY RESOLVED
 
 - EV_EBITDA, NET_DEBT, EQUITY_VALUE, WATERFALL_SIMPLE
 - valuation reports, buyer matching si aplica
+
+---
+
+## C.13.4A / C.13.4B — M&A valuation formula source-of-truth — READ-ONLY + DOCS CLOSED
+
+**Fechas:** 23 mayo 2026  
+**Baseline:** `HEAD = origin/main = a958ee2` (pre-commit C.13.4B)  
+**C.13.4A:** **CLOSED (READ ONLY)** — auditoría integridad M&A valuation/waterfall; cero modificaciones.  
+**C.13.4B:** **CLOSED (DOCS ONLY)** — decisiones source-of-truth documentales.
+
+### 1. C.13.4A — Resumen auditoría
+
+| Elemento | Resultado |
+|---|---|
+| Modificaciones | **Cero** (read-only) |
+| P0 | **Ninguno** |
+| P1 | EV simple vs adjusted engine; equity simple vs WC-adjusted; WATERFALL_SIMPLE vs product waterfall; sin golden oracle tests; snapshot drift FE/BE |
+| Engine SoT live | `src/modules/ma/engine/useValuationEngine.js` |
+| Backend | Persiste snapshots cliente; **no recalcula** engine |
+
+### 2. Fórmulas auditadas
+
+- EV_EBITDA (simple golden)
+- NET_DEBT
+- EQUITY_VALUE (simple golden)
+- WATERFALL_SIMPLE (golden)
+- Buyer matching (`buildBuyerMatches`)
+- Product metrics: adjusted EV, DCF, blended EV, adjusted equity, netProceeds, product waterfall
+
+### 3. Decisión EV (C.13.4B)
+
+| Métrica | SoT | Rol |
+|---|---|---|
+| **simpleEnterpriseValue** | Golden `EV_EBITDA` | Benchmark/oracle (`ebitda × multiple`) |
+| **adjustedEnterpriseValue** | `useValuationEngine` → `evBase` | Product DSS headline |
+| **dcfEnterpriseValue** | `calculateDcfEnterpriseValue` | Triangulation metric |
+| **blendedEnterpriseValue** | 65% evBase + 35% DCF | Secondary DSS |
+
+**No sustituir producto por Golden simple automáticamente.** C.13.4C crea tests simple EV vs Golden y documenta gap con adjusted EV.
+
+### 4. Decisión NET_DEBT
+
+- `netDebt = debt - cash` — **alineado** registry/golden/código (`calculateCoreMetrics`).
+- Test Golden pendiente **C.13.4C**.
+- Net cash (cash > debt) permitido; edge case golden futuro.
+
+### 5. Decisión EQUITY_VALUE
+
+| Métrica | Fórmula |
+|---|---|
+| **simpleEquityValue** | `enterpriseValue - netDebt` (Golden) |
+| **adjustedEquityValue** | `enterpriseValue - netDebt + workingCapitalAdjustment` (product `equityBase`) |
+| **netProceeds** | `adjustedEquityValue - fees - taxes` |
+
+**No mezclar** equityValue simple, adjusted equity, ni netProceeds.
+
+### 6. Decisión WATERFALL_SIMPLE
+
+- **WATERFALL_SIMPLE Golden** = simple seller cash bridge (`grossProceeds - costs - debtRepayment - sellerRollover`).
+- **Product waterfall** = `MA_PRODUCT_WATERFALL`: EV → netDebt → WC → equity → fees/taxes → netProceeds.
+- Product **no implementa** WATERFALL_SIMPLE exacto hoy.
+- No afirmar equivalencia hasta test/fase explícita.
+
+### 7. Decisión Buyer matching
+
+- Heurística DSS (`buildBuyerMatches`).
+- **Pending Formula Approval** (`MA_BUYER_MATCH_FIT`).
+- Label/copy DSS en fase posterior (C.13.4D+).
+- **Not certified buyer matching.**
+
+### 8. Decisión Frontend vs Backend
+
+| Capa | SoT |
+|---|---|
+| **Frontend engine** | Live calculation SoT |
+| **Backend SQLite snapshot** | Persisted record SoT — **not** calculation SoT |
+| **Riesgo** | Snapshot drift vs live engine |
+
+### 9. Estado C13-P1-11
+
+```
+C13-P1-11: PARTIALLY RESOLVED
+           SoT decision documented (C.13.4B).
+           Golden implementation tests pending (C.13.4C).
+           No RESOLVED global.
+```
+
+### 10. P1 abiertos (post-decisión)
+
+| ID | Notas |
+|---|---|
+| MA-P1-01 | Sin golden oracle tests M&A |
+| MA-P1-02 | Product adjusted metrics ≠ simple golden (documentado, no bug hasta C.13.4C) |
+| MA-P1-03 | Snapshot drift backend vs live engine |
+| MA-P1-04 | Buyer matching sin label DSS en páginas |
+
+### 11. Qué NO se tocó
+
+- `src/**`, `backend/**`, `tests/**`, `golden_inputs.json` expected outputs
+- No fix de código
+- No certified/fairness language
+
+### 12. Siguiente paso
+
+**C.13.4C — M&A golden tests:**
+
+- simple EV_EBITDA vs Golden
+- NET_DEBT vs Golden
+- simple EQUITY_VALUE vs Golden
+- WATERFALL_SIMPLE via pure helper if needed
+- document adjusted equity / product waterfall gaps
+- **no product fix** unless pure helper authorized

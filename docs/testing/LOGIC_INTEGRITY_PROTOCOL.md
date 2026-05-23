@@ -126,6 +126,26 @@ Funding and any module with client draft + backend persistence must follow these
 
 Applies first to **Funding** (`fundingStore.jsx`, `FundingDashboardPage`, `fundingEnterpriseApi`). Extend same pattern to other modules with localStorage vs API duplication during C.13.x.
 
+## Valuation Formulas and Persisted Snapshots (Decision C.13.4B — M&A)
+
+For M&A and any module with live valuation engines plus backend snapshots:
+
+1. **Live calculation SoT must be explicit.**
+   - M&A live SoT = frontend `useValuationEngine` (current product).
+   - Backend SQLite snapshots = **persisted historical record**, not automatic recalculation SoT.
+
+2. **Simple benchmark formulas must not be presented as equivalent to adjusted DSS product formulas.**
+   - Golden `EV_EBITDA`, `EQUITY_VALUE`, `WATERFALL_SIMPLE` = simple benchmarks.
+   - Product `adjustedEnterpriseValue`, `adjustedEquityValue`, `MA_PRODUCT_WATERFALL` = separate DSS metrics.
+
+3. **Reports and exports must indicate source when relevant:**
+   - live engine derived values vs stored snapshot payload (label work pending C.13.4D+).
+
+4. **No valuation output is a fairness opinion, certified valuation, or investment advice.**
+   - Buyer matching fit scores are DSS heuristics, not certified matching.
+
+5. **Golden tests (C.13.4C) validate simple benchmarks first; product gaps documented before code fix.**
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor

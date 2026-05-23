@@ -29,9 +29,9 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Tenant scope | organizationId | Backend token/session/auth context | Confirmed | Cross-tenant if bypassed | N/A | Frontend never authoritative |
 | Auth | roles/permissions | backend auth.middleware + AuthProvider mirror | Assumed / Pending C.13 validation | Viewer E2E gaps | N/A | Verify per endpoint |
 | Users | user records | Backend users storage / SQLite | Assumed / Pending C.13 validation | N/A | N/A | |
-| M&A valuation | enterprise value, equity value | Pending C.13 audit | Source unclear | FE/BE duplicate possible | ma_valuation_* | Not pilot-ready until validated |
-| M&A waterfall | seller proceeds | Pending C.13 audit | Source unclear | | ma_waterfall_simple_distribution | |
-| M&A buyer matching | match scores | Pending C.13 audit | Source unclear | | futureDatasetsRequired | |
+| M&A valuation | enterprise value, equity metrics | FE `useValuationEngine` (live); Golden simple benchmarks separate | Partially resolved (C.13.4B) | Snapshot drift; simple vs adjusted | ma_valuation_* | Not fairness opinion |
+| M&A waterfall | seller proceeds | FE product waterfall (`netProceeds`); Golden WATERFALL_SIMPLE separate | Partially resolved (C.13.4B) | Product ≠ golden simple bridge | ma_waterfall_simple_distribution | DSS only |
+| M&A buyer matching | match scores | FE `buildBuyerMatches` heuristic | Pending Formula Approval (C.13.4B) | Not certified matching | ma_buyer_matching_score (future) | DSS heuristic |
 | Funding rounds | round records | backend funding services/API (`funding_rounds`) | Confirmed (C.13.3G) | FE draft must not replace | N/A | `GET/POST/PUT/DELETE /funding/rounds` |
 | Funding summary | dashboard summary | backend `getFundingSummary` | Confirmed (C.13.3G) | Dashboard labels draft vs persisted (C.13.3H) | N/A | Window/risk = DSS heuristics |
 | Funding snapshots | persisted scenario snapshots | backend `funding_snapshots` / hub-overview | Confirmed (C.13.3G) | FE pages do not consume createSnapshot yet | N/A | Optional enterprise commit path |
@@ -156,6 +156,41 @@ Mixing both without source labels was a **P1 product truthfulness** gap — **ad
 2. Optional — labels on other Funding pages beyond dashboard.
 3. Optional — persist workspace via `POST /funding/snapshots` with explicit user action.
 4. Optional — full backend migration of draft workspace (higher enterprise scope).
+
+## M&A Valuation Source-of-Truth (Decision C.13.4B)
+
+Documented after C.13.4A read-only audit. **Do not mark M&A valuation as certified, externally approved, or fairness opinion.** Golden simple formulas are benchmarks/oracles; product uses adjusted DSS formulas that are intentionally different until C.13.4C tests and any later C.13.4D alignment.
+
+### Metric / formula table
+
+| Metric / Formula | Current SoT | Status | Usage | Limitations |
+|---|---|---|---|---|
+| **simpleEnterpriseValue** (`EV_EBITDA`) | Golden Dataset + `FORMULA_REGISTRY` (`enterpriseValue = ebitda × multiple`) | Pending C.13.4C Golden implementation test | Benchmark / oracle simple EV | Not product headline EV; negative EBITDA → human review |
+| **adjustedEnterpriseValue** (`evBase`) | Frontend `useValuationEngine.js` | Implemented in product; pending Formula Approval / golden scope | Product DSS valuation headline (base case) | Uses normalized EBITDA + adjusted multiple (sector, risk mode, quality, compliance) |
+| **dcfEnterpriseValue** | Frontend `valuationFormulas.js` → `calculateDcfEnterpriseValue` | Implemented; pending Formula Approval | Triangulation / committee view | Null if WACC ≤ terminal growth |
+| **blendedEnterpriseValue** | Frontend `useValuationEngine.js` (65% evBase + 35% DCF when finite) | Implemented; pending Formula Approval | Secondary DSS metric | Not golden oracle |
+| **netDebt** | Frontend `calculateCoreMetrics` (`debt - cash`) | Core aligned; pending C.13.4C Golden test | Valuation bridge | Net cash (cash > debt) allowed; edge case golden pending |
+| **simpleEquityValue** (`EQUITY_VALUE`) | Golden (`equityValue = enterpriseValue - netDebt`) | Pending C.13.4C Golden implementation test | Benchmark / oracle simple equity | Does not include working capital adjustment |
+| **adjustedEquityValue** (`equityBase`) | Frontend `useValuationEngine.js` | Implemented in product; pending approval | Product DSS equity bridge | `enterpriseValue - netDebt + workingCapitalAdjustment` |
+| **netProceeds** | Frontend `useValuationEngine.js` | Implemented in product; pending approval | Post-fees/taxes seller cash estimate | **Not** the same as `equityValue` or `netCashToSeller` golden |
+| **waterfallSimple** (`WATERFALL_SIMPLE`) | Golden (`grossProceeds - costs - debtRepayment - sellerRollover`) | Pending C.13.4C Golden implementation test | Simple seller cash bridge benchmark | **Not** implemented as product waterfall today |
+| **productWaterfall** (`MA_PRODUCT_WATERFALL`) | Frontend `useValuationEngine` + `WaterfallPanel.jsx` | Pending Formula Approval (C.13.4B) | Product DSS waterfall: EV → netDebt → WC → equity → fees → taxes → netProceeds | Not equivalent to WATERFALL_SIMPLE golden |
+| **buyerMatchScore** | Frontend `reportBuilder.js` → `buildBuyerMatches` | Pending Formula Approval (C.13.4B) | DSS heuristic buyer fit | Not certified buyer/investor matching |
+| **persistedValuationSnapshot** | Backend SQLite (`ma_cases` / snapshots via API) | Confirmed persistence SoT | Historical persisted record | **Not** live calculation SoT; client payload; snapshot drift vs engine possible |
+
+### Live calculation vs persisted snapshot
+
+| Layer | Role |
+|---|---|
+| **Frontend `useValuationEngine`** | **Live calculation SoT** for current UI, reports built from live derived state |
+| **Backend M&A API** | Persists snapshots/values sent by client; **does not recalculate** valuation engine server-side today |
+| **Reports / exports** | Must indicate whether values come from **live engine** or **stored snapshot** when both may appear (future C.13.4D+ label work) |
+
+### Future phases (not in C.13.4B scope)
+
+1. **C.13.4C** — Golden unit tests for simple EV, NET_DEBT, simple EQUITY_VALUE, WATERFALL_SIMPLE; document adjusted/product gaps without code fix.
+2. **C.13.4D** — Controlled fix only after tests and explicit authorization (labels, helpers, optional alignment).
+3. Optional — server-side calculation SoT / snapshot recalc (enterprise phase; human review required).
 
 ## Executive Overview Special Rule
 

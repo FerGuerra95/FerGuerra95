@@ -32,10 +32,10 @@ This registry defines intended formula anchors. It does not certify that current
 
 | Formula ID | Module | Formula | Inputs | Output | Edge Cases | Golden Dataset ID | Formula Status | Implementation Status | Disclaimer |
 |---|---|---|---|---|---|---|---|---|---|
-| EV_EBITDA | M&A | enterpriseValue = ebitda * multiple | ebitda, multiple | enterpriseValue | negative EBITDA needs human review | ma_valuation_ebitda_multiple_basic | Pending C.13.x validation | Golden mapped; code audit pending (C.13.2B) | Indicative DSS valuation only. Not fairness opinion. |
-| NET_DEBT | M&A | netDebt = debt - cash | debt, cash | netDebt | | ma_valuation_equity_value_basic | Pending C.13.x validation | Golden mapped; code audit pending (C.13.2B) | Indicative only. |
-| EQUITY_VALUE | M&A | equityValue = enterpriseValue - netDebt | enterpriseValue, netDebt | equityValue | | ma_valuation_equity_value_basic | Pending C.13.x validation | Golden mapped; code audit pending (C.13.2B) | Indicative only. |
-| WATERFALL_SIMPLE | M&A | netCashToSeller = grossProceeds - transactionCosts - debtRepayment - sellerRollover | four currency inputs | netCashToSeller | negative proceeds human review | ma_waterfall_simple_distribution | Pending C.13.x validation | Golden mapped; code audit pending (C.13.2B) | Indicative waterfall only. |
+| EV_EBITDA | M&A | enterpriseValue = ebitda * multiple (simple benchmark) | ebitda, multiple | enterpriseValue | negative EBITDA needs human review | ma_valuation_ebitda_multiple_basic | Pending C.13.4C Golden test | Simple benchmark only; product uses adjusted EV (C.13.4B) | Benchmark/oracle simple EV. Not fairness opinion. Not product headline EV. |
+| NET_DEBT | M&A | netDebt = debt - cash | debt, cash | netDebt | net cash when cash > debt | ma_valuation_equity_value_basic | Pending C.13.4C Golden test | Core aligned in `calculateCoreMetrics`; golden test pending | Core valuation bridge. Indicative DSS only. |
+| EQUITY_VALUE | M&A | simpleEquityValue = enterpriseValue - netDebt | enterpriseValue, netDebt | equityValue | product uses adjusted equity separately | ma_valuation_equity_value_basic | Pending C.13.4C Golden test | Simple benchmark; adjustedEquity adds WC adjustment | Simple equity oracle. Not netProceeds. Not fairness opinion. |
+| WATERFALL_SIMPLE | M&A | netCashToSeller = grossProceeds - transactionCosts - debtRepayment - sellerRollover | four currency inputs | netCashToSeller | negative proceeds human review | ma_waterfall_simple_distribution | Pending C.13.4C Golden test | Simple seller cash bridge; **not** current product waterfall | Simple benchmark waterfall. Not product MA_PRODUCT_WATERFALL. |
 | RUNWAY_MONTHS | Funding | runwayMonths = cashBalance / monthlyBurn | cashBalance, monthlyBurn | runwayMonths | monthlyBurn <= 0 => null; never Infinity/NaN | funding_runway_basic, funding_runway_zero_burn | Implemented and tested | See `FUNDING_RUNWAY_MONTHS` (C.13.2A) | Planning estimate. Not investment advice. |
 | POST_MONEY | Funding | postMoney = preMoney + newInvestment | preMoney, newInvestment | postMoney | | funding_post_money_and_dilution_basic | Implemented and tested | `tests/unit/funding/fundingFormulas.test.js` (C.13.3C) | Planning estimate. Not certified valuation. |
 | INVESTOR_OWNERSHIP | Funding | investorOwnership = newInvestment / postMoney | newInvestment, postMoney | decimal and percent | postMoney <= 0 => null | funding_post_money_and_dilution_basic | Implemented and tested | `tests/unit/funding/fundingFormulas.test.js` (C.13.3C/D edge) | Planning estimate. Not investment advice. |
@@ -86,7 +86,7 @@ Each approved or in-progress formula should document:
 | Module | Classified (approval blocks) | Primary gate status | Approval (typical) |
 |---|---:|---|---|
 | Funding | 3 (`FUNDING_RUNWAY_MONTHS`, `POST_MONEY`, `INVESTOR_OWNERSHIP`) | 3 implemented and tested (C.13.3C/D) | DSS/demo scope; not certified valuation/investment advice |
-| M&A | 4 (`EV_EBITDA`, `NET_DEBT`, `EQUITY_VALUE`, `WATERFALL_SIMPLE`) | Pending C.13.x validation | Pending human + external (valuation) |
+| M&A | 4 golden + 2 DSS pending (`MA_PRODUCT_WATERFALL`, buyer fit) | Pending C.13.4C Golden tests | DSS/demo scope; not certified valuation or buyer matching |
 | Compliance | 5 (C.13.2A set) | 2 limited scope; 2 Pending validation | Mixed (see blocks) |
 | PMI | 1 (`PMI_CAPTURE_RATE`) | Pending C.13.x validation | Pending human |
 | Bridge | 1 (`BRIDGE_PRIORITY`) | Pending C.13.x validation | Pending human |
@@ -206,17 +206,18 @@ Each approved or in-progress formula should document:
 **Module:** M&A  
 **Owner:** Pending Formula Owner (CFO/transaction advisor review)  
 **Source:** Golden Dataset + Formula Registry  
-**Status:** Pending C.13.x validation (M&A module audit)  
-**Formula:** `enterpriseValue = ebitda * multiple`  
+**Status:** Pending C.13.4C Golden implementation test (C.13.4B decision)  
+**Formula:** `enterpriseValue = ebitda * multiple` (**simple benchmark only**)  
 **Inputs:** `ebitda`, `multiple`  
 **Units:** currency × multiple → currency  
-**Output:** `enterpriseValue`  
+**Output:** `enterpriseValue` (simpleEnterpriseValue)  
 **Golden ID:** `ma_valuation_ebitda_multiple_basic`  
-**Test file:** `pending` — schema harness only via `goldenInputsSchema.test.js`  
+**Test file:** pending (C.13.4C — target tests/unit/ma/maGoldenFormulas.test.js)  
+**Product note (C.13.4B):** Product headline EV is **adjustedEnterpriseValue** (`evBase`) from `useValuationEngine` — normalized EBITDA × adjusted multiple. Do **not** substitute product with this simple golden automatically.  
 **Edge cases:** Negative EBITDA requires human review; not auto-certified  
-**Usage limits:** Indicative DSS valuation. Not fairness opinion. Not investment advice.  
+**Usage limits:** Benchmark/oracle simple EV only. Indicative DSS. Not fairness opinion. Not investment advice. Not product headline EV.  
 **Approval:** Pending external validation · Not approved for certified/legal/financial advice  
-**Last reviewed:** 2026-05-20  
+**Last reviewed:** 2026-05-23 (C.13.4B)  
 
 ---
 
@@ -225,18 +226,18 @@ Each approved or in-progress formula should document:
 **Formula ID:** NET_DEBT  
 **Module:** M&A  
 **Owner:** Pending Formula Owner  
-**Source:** Golden Dataset  
-**Status:** Pending C.13.x validation  
+**Source:** Golden Dataset + `calculateCoreMetrics` (aligned)  
+**Status:** Pending C.13.4C Golden implementation test (C.13.4B decision)  
 **Formula:** `netDebt = debt - cash`  
 **Inputs:** `debt`, `cash` (currency)  
 **Units:** currency  
 **Output:** `netDebt`  
 **Golden ID:** `ma_valuation_equity_value_basic` (shared valuation chain)  
-**Test file:** `pending`  
-**Edge cases:** Sign conventions must match deal model in code audit  
-**Usage limits:** Indicative only. DSS/demo.  
+**Test file:** pending (C.13.4C)  
+**Edge cases:** Net cash when cash > debt is allowed; document in golden edge case future phase  
+**Usage limits:** Core valuation bridge. Indicative DSS only.  
 **Approval:** Pending human approval · Not approved for certified advice  
-**Last reviewed:** 2026-05-20  
+**Last reviewed:** 2026-05-23 (C.13.4B)  
 
 ---
 
@@ -246,17 +247,18 @@ Each approved or in-progress formula should document:
 **Module:** M&A  
 **Owner:** Pending Formula Owner  
 **Source:** Golden Dataset  
-**Status:** Pending C.13.x validation  
-**Formula:** `equityValue = enterpriseValue - netDebt`  
+**Status:** Pending C.13.4C Golden implementation test (C.13.4B decision)  
+**Formula:** `simpleEquityValue = enterpriseValue - netDebt` (**simple benchmark only**)  
 **Inputs:** `enterpriseValue`, `netDebt`  
 **Units:** currency  
-**Output:** `equityValue`  
+**Output:** `equityValue` (simpleEquityValue)  
 **Golden ID:** `ma_valuation_equity_value_basic`  
-**Test file:** `pending`  
-**Edge cases:** Depends on EV and net debt SoT alignment  
-**Usage limits:** Indicative only. Not fairness opinion.  
+**Test file:** pending (C.13.4C)  
+**Product note (C.13.4B):** Product uses **adjustedEquityValue** (`equityBase = enterpriseValue - netDebt + workingCapitalAdjustment`). **netProceeds** is separate (after fees/taxes). Do not conflate simple equity, adjusted equity, or net proceeds.  
+**Edge cases:** Depends on EV and net debt SoT alignment; WC adjustment is product-only extension  
+**Usage limits:** Simple equity oracle. Indicative only. Not fairness opinion. Not netProceeds.  
 **Approval:** Pending external validation · Not approved for certified advice  
-**Last reviewed:** 2026-05-20  
+**Last reviewed:** 2026-05-23 (C.13.4B)  
 
 ---
 
@@ -266,17 +268,53 @@ Each approved or in-progress formula should document:
 **Module:** M&A  
 **Owner:** Pending Formula Owner  
 **Source:** Golden Dataset  
-**Status:** Pending C.13.x validation  
+**Status:** Pending C.13.4C Golden implementation test (C.13.4B decision)  
 **Formula:** `netCashToSeller = grossProceeds - transactionCosts - debtRepayment - sellerRollover`  
 **Inputs:** four currency line items  
 **Units:** currency  
 **Output:** `netCashToSeller`  
 **Golden ID:** `ma_waterfall_simple_distribution`  
-**Test file:** `pending`  
+**Test file:** pending (C.13.4C) (pure helper if needed)  
+**Product note (C.13.4B):** Current product waterfall is **MA_PRODUCT_WATERFALL** (separate). Product does **not** implement WATERFALL_SIMPLE exact inputs today.  
 **Edge cases:** Negative proceeds → human review  
-**Usage limits:** Indicative waterfall. Not legal/financial certification.  
+**Usage limits:** Simple seller cash bridge benchmark. Not legal/financial certification. Not product waterfall.  
 **Approval:** Pending human approval · Not approved for certified advice  
-**Last reviewed:** 2026-05-20  
+**Last reviewed:** 2026-05-23 (C.13.4B)  
+
+---
+
+### MA_PRODUCT_WATERFALL (Pending Formula Approval — C.13.4B)
+
+**Formula ID:** MA_PRODUCT_WATERFALL  
+**Module:** M&A  
+**Owner:** Pending Formula Owner  
+**Source:** Product code (`useValuationEngine.js`, `WaterfallPanel.jsx`)  
+**Status:** Pending Formula Approval · Pending C.13.4 validation  
+**Formula:** `EV → (-netDebt) → (+workingCapitalAdjustment) → adjustedEquityValue → (-fees%) → (-taxes%) → netProceeds`  
+**Inputs:** evBase, netDebt, wcAdjustment, transactionFees %, taxRate %  
+**Output:** `netProceeds` (and intermediate equityBase)  
+**Golden ID:** N/A — distinct from `ma_waterfall_simple_distribution`  
+**Test file:** pending — product unit tests exist; golden oracle N/A until policy decision  
+**Usage limits:** Product DSS waterfall only. Not WATERFALL_SIMPLE golden. Not certified proceeds opinion.  
+**Approval:** Pending human approval · Not approved for certified advice  
+**Last reviewed:** 2026-05-23 (C.13.4B)  
+
+---
+
+### MA_BUYER_MATCH_FIT (Pending Formula Approval — C.13.4B)
+
+**Formula ID:** MA_BUYER_MATCH_FIT  
+**Module:** M&A  
+**Owner:** Pending Formula Owner  
+**Source:** `reportBuilder.js` → `buildBuyerMatches` (heuristic)  
+**Status:** Pending Formula Approval · DSS heuristic  
+**Formula:** Clamped weighted heuristic on qualityScore, leverageRatio, recurringRevenue, ownerDependency, clientConcentration (strategic / PE / search fund profiles)  
+**Output:** `fit` score 0–100 per buyer profile  
+**Golden ID:** `ma_buyer_matching_score` (future — not in golden_inputs.json yet)  
+**Test file:** `pending`  
+**Usage limits:** DSS heuristic buyer universe prioritization. **Not** certified buyer/investor matching or recommendation. Requires UI label in future phase.  
+**Approval:** Pending human approval · Not approved for certified matching  
+**Last reviewed:** 2026-05-23 (C.13.4B)  
 
 ---
 
@@ -451,8 +489,9 @@ Do not invent math. Classify for future module audits:
 
 | Area | Candidate metric | Classification | Target audit |
 |---|---|---|---|
-| M&A | Buyer matching score | Pending discovery — Golden stub `ma_buyer_matching_score` | C.13.2 M&A |
-| M&A | Complex waterfall with preferences | Pending discovery — stub `ma_complex_waterfall_with_preferences` | C.13.2 M&A |
+| M&A | Buyer matching score | **MA_BUYER_MATCH_FIT** — Pending Formula Approval (C.13.4B); DSS heuristic | C.13.4D+ labels |
+| M&A | Product waterfall | **MA_PRODUCT_WATERFALL** — Pending Formula Approval (C.13.4B) | C.13.4C document gap vs WATERFALL_SIMPLE |
+| M&A | Complex waterfall with preferences | Pending discovery — stub `ma_complex_waterfall_with_preferences` | Future phase |
 | Funding | Liquidation preference | Pending discovery — stub `funding_liquidation_preference_future_phase_j` | C.13.4 Funding |
 | Funding | Funding window / readiness / risk aggregates | Pending discovery in C.13.4 | C.13.4 Funding |
 | Compliance | Jurisdiction exposure | Pending discovery — stub `compliance_jurisdiction_exposure` | C.13.3 Compliance |
