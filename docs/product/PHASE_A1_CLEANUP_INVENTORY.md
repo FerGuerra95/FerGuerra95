@@ -1581,7 +1581,10 @@ También hay que validar que:
 | C.13.2C | Cerrada | Formula Approval Gate enforcement / CI hardening (coverage test) |
 | C.13.3A | Cerrada (solo lectura) | Auditoría Funding formulas + persistence |
 | C.13.3B | Cerrada (docs only) | Decisiones SoT Funding formulas + naming |
-| C.13 | Pendiente | C.13.3C golden tests; C.13.3D fix; C.13.3E cierre |
+| C.13.3C | Cerrada | Golden tests Funding (`e0e200b`) |
+| C.13.3D | Cerrada | Controlled fix FE/dashboard (`eb97064`) |
+| C.13.3E | Cerrada (docs only) | Cierre documental Funding formulas |
+| C.13 | Pendiente | C.13.3F C13-P1-03 o C.13.4 M&A; C.14 informe final |
 | C.14 | Pendiente | Informe final Logic Integrity / Legacy / Duplicidades |
 
 ### Subfases C.13
@@ -2987,7 +2990,7 @@ La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
 
 | Módulo | Formula IDs | Estado predominante |
 |---|---|---|
-| Funding | `FUNDING_RUNWAY_MONTHS`, `POST_MONEY`, `INVESTOR_OWNERSHIP` | 1 tested; 2 pending audit |
+| Funding | `FUNDING_RUNWAY_MONTHS`, `POST_MONEY`, `INVESTOR_OWNERSHIP` | Implemented and tested (C.13.3C/D); readiness/window DSS pending |
 | M&A | `EV_EBITDA`, `NET_DEBT`, `EQUITY_VALUE`, `WATERFALL_SIMPLE` | Pending C.13.x + Pending external (valuation) |
 | Compliance | 5 IDs C.13.2A | Sin cambio; cadena cerrada |
 | PMI | `PMI_CAPTURE_RATE` | Pending C.13.6 |
@@ -3012,7 +3015,7 @@ La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
 ### Siguiente paso
 
 1. **C.13.2C** — Formula Approval Gate enforcement / CI hardening (lotes en `formulaRegistryCoverage.test.js`).  
-2. **C.13.3** — Funding broader formula coverage (post-money, dilution, tests).  
+2. **C.13.3** — Funding formulas **CLOSED** (ver C.13.3 — CLOSED); siguiente **C.13.3F** (C13-P1-03) o **C.13.4** M&A.  
 3. Auditorías por módulo C.13.1–C.13.9 según tabla discovery.
 
 **Nota test:** C.13.2B no endureció el coverage test global; C.13.2C lo hará por lotes.
@@ -3049,7 +3052,116 @@ La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
 
 ### Siguiente paso
 
-**C.13.3 — Funding broader formula coverage** — ver **C.13.3A/B** abajo; siguiente **C.13.3C** golden tests.
+**C.13.3 — Funding formula coverage** — **CLOSED** (C.13.3A–E). Ver sección **C.13.3 — CLOSED** abajo. Siguiente: **C.13.3F** (C13-P1-03 read-only) o **C.13.4** M&A.
+
+---
+
+## C.13.3 — Funding formula coverage and controlled fix — CLOSED
+
+**Fecha cierre:** 20 mayo 2026  
+**Estado:** **CLOSED** for current formula scope (POST_MONEY, INVESTOR_OWNERSHIP / dilution, runway zero-burn, dashboard runway not meaningful, readiness UI → canonical engine).  
+**Commits:** `e0e200b` (tests), `eb97064` (fix), cierre docs C.13.3E.
+
+### 1. Estado
+
+Cadena C.13.3 cerrada para el alcance acordado: fórmulas golden + edge cases + alineación dashboard/readiness con motor. **C13-P1-03** (localStorage draft vs API rounds/summary) permanece **OPEN** — fase separada.
+
+### 2. C.13.3A — Read-only audit (completada)
+
+| Hallazgo | Detalle |
+|---|---|
+| POST_MONEY | Semántica alineada con Golden/Registry; sin test dedicado en ese momento |
+| INVESTOR_OWNERSHIP | Alineado; edge `postMoney <= 0` devolvía `0` en FE — pendiente fix |
+| Dashboard runway | `FundingDashboardPage` reintroducía `0` cuando `monthlyBurn <= 0` |
+| Readiness | Tres definiciones: canónica `fundraisingScoring.js`; duplicadas en Dashboard e Investor Readiness |
+| C13-P1-03 | localStorage (draft) vs API (rounds/summary) — vigente, no resuelto |
+
+### 3. C.13.3B — Source-of-truth decisions (docs only)
+
+| Decisión | Valor |
+|---|---|
+| POST_MONEY | `postMoney = preMoney + newInvestment` |
+| FE naming | `preMoneyValuation + targetRaise` → `postMoneyValuation` |
+| INVESTOR_OWNERSHIP | `newInvestment / postMoney`; `dilutionPct = ownership * 100` |
+| Edge post-money | `postMoney <= 0` => **`null`** |
+| Readiness canónico | `src/modules/funding/engine/fundraisingScoring.js` |
+| Rounds / summary | API/BE = SoT enterprise |
+| Workspace draft | `localStorage` = draft/scenario, no persistencia enterprise |
+| C13-P1-03 | **No resuelto** en 3B |
+
+### 4. C.13.3C — Golden tests
+
+**Commit:** `e0e200b` — `test(funding): add golden formula coverage`
+
+| Cobertura | Resultado |
+|---|---|
+| POST_MONEY golden | 8M + 2M = **10M** |
+| INVESTOR_OWNERSHIP / dilution | **20%**; `postRoundOwnership.newInvestors = 20` |
+| Runway basic | Desde Golden |
+| Zero-burn regression | `null`; no `0` / `999` / `NaN` / `Infinity` |
+| Edge `postMoney <= 0` | Inicialmente **`it.todo`** (fix en 3D) |
+
+**Scope:** solo `tests/unit/funding/fundingFormulas.test.js`; sin fix de producto; sin tocar Golden expected.
+
+### 5. C.13.3D — Controlled fix
+
+**Commit:** `eb97064` — `fix(funding): align dashboard formulas with source of truth`
+
+| Cambio | Archivo / detalle |
+|---|---|
+| `postMoneyValuation <= 0` | `dilutionPct = null`; `postRoundOwnership` completo en `null` |
+| `it.todo` | Convertido en test activo (no devuelve `0`, `NaN`, `Infinity`) |
+| Dashboard métricas | `FundingDashboardPage` usa `derived` del engine (`useFundingEngine`) |
+| Runway post-raise | `null` si `monthlyBurn <= 0`; labels N/A / not meaningful |
+| Readiness dashboard | Eliminado `calculateReadinessScore` local duplicado |
+| Investor Readiness | `derived.readinessScore` / `readinessLevel` desde engine; umbrales **78 / 58** |
+| GAP menor | Sin test de página/`getFundingSignal` (no exportable); copy/señales locales opcionales |
+
+**Validaciones 3D:** `tests/unit/funding` 17/17 · `npm run test:unit` 245/245 · `npm run build` OK.
+
+**Qué NO se tocó en 3D:** `backend/**`, `docs/**`, `golden_inputs.json`, expected outputs, store/services, C13-P1-03; sin `git add .`.
+
+### 6. Product truthfulness (post C.13.3)
+
+- Funding **no** presenta `0` meses de runway como métrica real sin burn.
+- Dilution **no** muestra `0` cuando post-money no existe (`null`).
+- Readiness en Dashboard e Investor Readiness usa **una fuente canónica** (`fundraisingScoring.js`).
+- Métricas de `localStorage` siguen siendo **draft/scenario** — no registro enterprise oficial.
+
+### 7. Estado final recomendado
+
+| Item | Estado |
+|---|---|
+| POST_MONEY | **RESOLVED** for current scope — implemented and tested |
+| INVESTOR_OWNERSHIP / dilution | **RESOLVED** for current scope — tested; edge `postMoney <= 0` fixed |
+| Funding runway (engine + BE + dashboard) | **RESOLVED** for current scope — `null` / not meaningful, no `0` como runway real |
+| Readiness | **PARTIALLY RESOLVED** — UI alineada al engine; Formula Approval / human validation broader pending; `FUNDING_INVESTOR_READINESS` no fully approved |
+| C13-P1-03 | **OPEN** — localStorage vs API SoT; fase **C.13.3F** recomendada si se cierra Funding antes de M&A |
+
+### 8. GAPs documentados (no bloquean cierre 3.x fórmulas)
+
+| GAP | Notas |
+|---|---|
+| Dashboard `getFundingSignal` | Sin unit test dedicado (helper no exportado) |
+| Investor Readiness copy | `getReadinessSignal` puede seguir siendo copy local (umbrales ya 78/58) |
+| Funding window / funding risk | Backend heurísticas — Pending Formula Approval |
+| C13-P1-03 | Reconciliación UI draft vs API — fase aparte |
+
+### 9. Siguiente paso recomendado
+
+| Ruta | Cuándo |
+|---|---|
+| **A — C.13.3F** | Read-only audit C13-P1-03 localStorage vs API — si el objetivo es dejar Funding limpio antes de M&A |
+| **B — C.13.4** | M&A valuation / waterfall integrity — si se prioriza fórmulas por módulo; C13-P1-03 como deuda técnica tracked |
+
+**Recomendación:** Ruta A si se quiere cerrar persistencia Funding; Ruta B si se avanza cadena C.13 por módulos.
+
+### 10. Qué NO se tocó (cadena C.13.3 completa)
+
+- Golden Dataset expected outputs (sin cambios en 3C/3D).
+- `SOURCE_OF_TRUTH_REGISTRY.md`, `LOGIC_INTEGRITY_PROTOCOL.md`, `GOLDEN_DATASETS.md` (salvo este inventario + registry en 3E).
+- Backend en 3C/3D/3E.
+- C13-P1-03 **no** marcado RESOLVED.
 
 ---
 
@@ -3145,9 +3257,9 @@ No aprobar como fórmula certificada ni investment advice.
 - `src/**`, `backend/**`, `tests/**`, `golden_inputs.json`, expected outputs.
 - Sin fix Funding; sin tests nuevos; sin marcar C13-P1-03 RESOLVED.
 
-### 10. Siguiente paso
+### 10. Siguiente paso (histórico 3A/3B)
 
-**C.13.3C — Funding golden tests** (POST_MONEY 10M, INVESTOR_OWNERSHIP 20%, edges, runway regression). **No fix hasta tests verdes.**
+Completado en **C.13.3C/D/E** — ver sección **C.13.3 — CLOSED** arriba.
 
 ---
 

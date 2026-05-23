@@ -37,8 +37,8 @@ This registry defines intended formula anchors. It does not certify that current
 | EQUITY_VALUE | M&A | equityValue = enterpriseValue - netDebt | enterpriseValue, netDebt | equityValue | | ma_valuation_equity_value_basic | Pending C.13.x validation | Golden mapped; code audit pending (C.13.2B) | Indicative only. |
 | WATERFALL_SIMPLE | M&A | netCashToSeller = grossProceeds - transactionCosts - debtRepayment - sellerRollover | four currency inputs | netCashToSeller | negative proceeds human review | ma_waterfall_simple_distribution | Pending C.13.x validation | Golden mapped; code audit pending (C.13.2B) | Indicative waterfall only. |
 | RUNWAY_MONTHS | Funding | runwayMonths = cashBalance / monthlyBurn | cashBalance, monthlyBurn | runwayMonths | monthlyBurn <= 0 => null; never Infinity/NaN | funding_runway_basic, funding_runway_zero_burn | Implemented and tested | See `FUNDING_RUNWAY_MONTHS` (C.13.2A) | Planning estimate. Not investment advice. |
-| POST_MONEY | Funding | postMoney = preMoney + newInvestment | preMoney, newInvestment | postMoney | | funding_post_money_and_dilution_basic | Pending C.13.x validation | Golden mapped; dedicated unit test pending (C.13.2B) | Planning estimate. |
-| INVESTOR_OWNERSHIP | Funding | investorOwnership = newInvestment / postMoney | newInvestment, postMoney | decimal and percent | postMoney <= 0 => null | funding_post_money_and_dilution_basic | Pending C.13.x validation | Golden mapped; dedicated unit test pending (C.13.2B) | Planning estimate. |
+| POST_MONEY | Funding | postMoney = preMoney + newInvestment | preMoney, newInvestment | postMoney | | funding_post_money_and_dilution_basic | Implemented and tested | `tests/unit/funding/fundingFormulas.test.js` (C.13.3C) | Planning estimate. Not certified valuation. |
+| INVESTOR_OWNERSHIP | Funding | investorOwnership = newInvestment / postMoney | newInvestment, postMoney | decimal and percent | postMoney <= 0 => null | funding_post_money_and_dilution_basic | Implemented and tested | `tests/unit/funding/fundingFormulas.test.js` (C.13.3C/D edge) | Planning estimate. Not investment advice. |
 | COMPLIANCE_WEIGHTED_RISK | Compliance | weightedRiskScore = financialRisk*0.4 + jurisdictionRisk*0.4 + evidenceRisk*0.2 | financialRisk, jurisdictionRisk, evidenceRisk (each 0–100) | weightedRiskScore 0–100 | clamp 0–100 at presentation | compliance_weighted_risk_score_basic | Implemented for limited scope | Helper + golden test + reports/export (C.13.2A) | Benchmark/oracle. Not operational engine. |
 | COMPLIANCE_OPERATIONAL_RISK | Compliance | operationalRiskScore = f(criticality, tier, region, alerts, evidence gap, confidence, review adjustment) | supplier + alerts + evidence + reviews | operationalRiskScore 0–100 | clamp 0–100 | N/A (not golden oracle) | Pending validation | Existing FE; Formula Approval C.13.2A | Operational DSS. Not certified compliance score. |
 | COMPLIANCE_RESILIENCE | Compliance | goldenResilienceScore = clamp(100 - riskScore + mitigationBonus, 0, 100) | riskScore input, mitigationBonus | goldenResilienceScore 0–100 | clamp 0–100 | compliance_resilience_score_basic | Implemented for limited scope | Golden helper/test only (C.13.2A); FE engine separate | Golden oracle. Not operational engine output. |
@@ -85,7 +85,7 @@ Each approved or in-progress formula should document:
 
 | Module | Classified (approval blocks) | Primary gate status | Approval (typical) |
 |---|---:|---|---|
-| Funding | 3 (`FUNDING_RUNWAY_MONTHS`, `POST_MONEY`, `INVESTOR_OWNERSHIP`) | 1 tested; 2 Pending C.13.x | 1 DSS/demo; 2 Pending human |
+| Funding | 3 (`FUNDING_RUNWAY_MONTHS`, `POST_MONEY`, `INVESTOR_OWNERSHIP`) | 3 implemented and tested (C.13.3C/D) | DSS/demo scope; not certified valuation/investment advice |
 | M&A | 4 (`EV_EBITDA`, `NET_DEBT`, `EQUITY_VALUE`, `WATERFALL_SIMPLE`) | Pending C.13.x validation | Pending human + external (valuation) |
 | Compliance | 5 (C.13.2A set) | 2 limited scope; 2 Pending validation | Mixed (see blocks) |
 | PMI | 1 (`PMI_CAPTURE_RATE`) | Pending C.13.x validation | Pending human |
@@ -286,18 +286,18 @@ Each approved or in-progress formula should document:
 **Module:** Funding  
 **Owner:** Product / Logic Integrity  
 **Source:** Golden Dataset + C.13.3B naming/SoT decision  
-**Status:** Pending Golden implementation test — **C.13.3C**  
+**Status:** Implemented and tested (C.13.3C golden; C.13.3E closure)  
 **Formula:** `postMoney = preMoney + newInvestment`  
 **FE equivalent:** `postMoneyValuation = preMoneyValuation + targetRaise` (`calculateFundingCore`)  
 **Inputs:** `preMoney` / `preMoneyValuation`, `newInvestment` / `targetRaise` (currency)  
 **Units:** currency  
 **Output:** `postMoney` / `postMoneyValuation`  
 **Golden ID:** `funding_post_money_and_dilution_basic` (expected post-money 10_000_000)  
-**Test file:** `pending` → target `tests/unit/funding/fundingFormulas.test.js` in C.13.3C  
+**Test file:** `tests/unit/funding/fundingFormulas.test.js`  
 **Edge cases:** Inputs must be finite; presentation rounding at UI layer  
 **Usage limits:** DSS/demo planning estimate. Not certified valuation or investment advice.  
-**Approval:** Pending validation until C.13.3C golden tests pass · Not approved for certified advice  
-**Last reviewed:** 2026-05-20 (C.13.3B)  
+**Approval:** Approved for DSS/demo scope · Not approved for certified valuation/investment advice  
+**Last reviewed:** 2026-05-20 (C.13.3E)  
 
 ---
 
@@ -307,7 +307,7 @@ Each approved or in-progress formula should document:
 **Module:** Funding  
 **Owner:** Product / Logic Integrity  
 **Source:** Golden Dataset + C.13.3B decision (dilution simple = alias)  
-**Status:** Pending Golden implementation test — **C.13.3C**  
+**Status:** Implemented and tested (C.13.3C golden; C.13.3D FE edge; C.13.3E closure)  
 **Formula:** `investorOwnership = newInvestment / postMoney`; `dilutionPct = investorOwnership * 100`  
 **FE equivalent:** `dilutionPct = targetRaise / postMoneyValuation * 100` when post-money > 0  
 **Extended (separate):** `postRoundOwnership` cap-table model in `calculateFundingCore` — not the golden simple round  
@@ -315,11 +315,11 @@ Each approved or in-progress formula should document:
 **Units:** ratio 0–1 and percent  
 **Output:** `investorOwnership`, `dilutionPct`  
 **Golden ID:** `funding_post_money_and_dilution_basic` (expected 0.2 / 20%)  
-**Test file:** `pending` → C.13.3C  
-**Edge cases:** `postMoney <= 0` => **`null`** (registry/BE/golden); FE must not return `0` — fix C.13.3D  
+**Test file:** `tests/unit/funding/fundingFormulas.test.js`  
+**Edge cases:** `postMoney <= 0` => **`null`** for `dilutionPct` and `postRoundOwnership` (FE fixed C.13.3D); never `0` / `NaN` / `Infinity` as ownership signal  
 **Usage limits:** Indicative capital structure / DSS. Not cap-table legal certification or investment advice.  
-**Approval:** Pending validation until C.13.3C · Not approved for investment advice  
-**Last reviewed:** 2026-05-20 (C.13.3B)  
+**Approval:** Approved for DSS/demo scope · Not approved for certified investment advice  
+**Last reviewed:** 2026-05-20 (C.13.3E)  
 
 ---
 
@@ -329,13 +329,13 @@ Each approved or in-progress formula should document:
 **Module:** Funding  
 **Owner:** Pending Formula Owner  
 **Source:** C.13.3B — canonical engine only  
-**Status:** Pending Formula Approval / Pending C.13.x validation  
+**Status:** Pending Formula Approval / Pending human validation (C.13.3E)  
 **Canonical implementation:** `calculateReadinessScore` in `fundraisingScoring.js`  
-**Non-canonical (remove in C.13.3D):** duplicate averages in `FundingDashboardPage`, `InvestorReadinessPage`  
+**UI alignment (C.13.3D):** `FundingDashboardPage` and `InvestorReadinessPage` consume engine `derived.readinessScore` / `readinessLevel` — duplicate simple averages removed  
 **Golden ID:** N/A  
-**Test file:** `pending`  
+**Test file:** `pending` (no golden oracle for readiness composite)  
 **Usage limits:** DSS readiness signal. Not fundraising advice or certified investor readiness.  
-**Approval:** Pending human approval  
+**Approval:** Pending human approval · Not approved for certified investment advice  
 
 ---
 
