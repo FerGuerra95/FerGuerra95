@@ -46,8 +46,8 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Governance decisions | decision workflow state | backend governance services | Assumed / Pending C.13 validation | Approve UX gaps | N/A | Strong backend per C.5 |
 | PMI case dashboard | workstreams, ledger in case | pmi_cases JSON payload | Assumed / Pending C.13 validation | mergeWithDemo contamination | N/A | C.13.6 target |
 | PMI enterprise synergies | synergy initiatives table | pmi_synergy_initiatives | Assumed / Pending C.13 validation | Not synced with case ledger | pmi_synergy_* | Dual model |
-| Bridge signals | recalculated signals | bridge_signals + engine heuristics | Human review required | Heuristic not certified | bridge_priority_score_basic | |
-| Bridge marketplace | opportunities | bridge_opportunities + DEMO fallback | Known demo/fallback contamination risk | Unlisted route | N/A | Do not promote |
+| Bridge signals | recalculated signals | bridge_signals + `bridge.service.js` heuristics | Partially resolved (C.13.5B) | C13-P1-07 priority mismatch; heuristic not certified | bridge_priority_score_basic | DSS; human review required |
+| Bridge marketplace | opportunities / matches | BE bridge API + DEMO fallback | Partially resolved (C.13.5B labels) | Unlisted route; not pilot marketplace | N/A | INTERNAL_UNLISTED_DEMO |
 | Risk register | likelihood x impact | Pending C.13 audit | Source unclear | | risk_score_likelihood_impact_basic | |
 | Reporting KPIs | variance metrics | Pending C.13 audit | Source unclear | | reporting_kpi_variance_basic | |
 | Executive Overview | module health / radar | Aggregator from module summaries | Assumed / Pending C.13 validation | Fallback if API fails | executive_module_health_average_basic | Not master store |
@@ -216,7 +216,30 @@ Documented after C.13.4A read-only audit; chain C.13.4A–G closed at docs level
 1. **Backend snapshot/re-export policy** — integration/e2e enforcement; re-export from snapshot vs live engine (MA-P1-03).
 2. Optional — M&A snapshot integration/e2e tests (MA-P1-06).
 3. Optional — server-side calculation SoT / snapshot recalc (enterprise phase; human review required).
-4. **C.13.5** — Bridge / marketplace signals audit (READ-ONLY).
+4. **C.13.5C** — BRIDGE_PRIORITY golden/helper tests.
+5. Optional — marketplace integration/e2e; product priority formula alignment (C.13.5D).
+
+## Bridge / Marketplace Source-of-Truth (Decision C.13.5B)
+
+Documented after C.13.5A read-only audit. **Do not treat Bridge Marketplace as public product surface or certified matching.**
+
+| Metric / Surface | Source of Truth | Current status | Usage | Limitations |
+|---|---|---|---|---|
+| **enterpriseBridgeSignals** | `backend/services/bridge/bridge.service.js` — `buildEnterpriseBridgeSignals`, `recalculateEnterpriseBridge`, tenant-scoped `bridge_signals` | Implemented; integration-tested | Internal DSS cross-module signal layer | Heuristic; human-review-required; not autonomous decisions |
+| **bridgePriorityScoreGolden** | `docs/testing/FORMULA_REGISTRY.md` + `golden_inputs.json` (`bridge_priority_score_basic`) | Golden oracle defined; **pending helper/test C.13.5C** | Benchmark/oracle for impact/urgency/confidence weights | Not current product formula |
+| **bridgePriorityScoreProduct** | `calculateSignalPriority()` in `bridge.service.js` | Implemented; **not aligned to Golden** (C13-P1-07 OPEN) | Attention queue / signal ordering by severity/confidence/stale | Not certified prioritization; do not present as Golden-equivalent |
+| **bridgeMarketplaceOpportunities** | Backend `bridge_opportunities` (org-scoped) when present; else FE `DEMO_BRIDGE_*` | Internal unlisted demo / future private network | Private-network preview modelling only | Not public marketplace; not enterprise SoT when demo fallback |
+| **bridgeMarketplaceMatches** | `getMatchScore()` heuristic (FE page + BE service) | Heuristic DSS; Pending Formula Approval | Internal marketplace preview fit score | Not certified buyer/investor/funding recommendation |
+| **marketplaceDemoFallback** | `BridgeMarketplacePage.jsx` `DEMO_BRIDGE_*` constants | Active when API empty/error | Labelled demo fallback in UI (C.13.5B) | Must not be presented as live verified network |
+| **marketplaceSuccessFeeLogic** | None in product | **Future commercial strategy only** | Documented as future concept in UI | Not active billing, transaction layer or intermediation |
+| **bridgePersistedReports** | Backend bridge reports + network memos | Org-scoped persisted records | Internal DSS memos / previews | Not fairness opinion or certified deal advice |
+
+### Bridge Enterprise vs Marketplace
+
+| Layer | Route prefix | Nav | Role |
+|---|---|---|---|
+| **Bridge Enterprise** | `/bridge/dashboard`, `/signals`, … | Listed | Cross-module DSS intelligence |
+| **Bridge Marketplace** | `/bridge/marketplace` | **Unlisted** | INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK |
 
 ## Executive Overview Special Rule
 
@@ -228,9 +251,11 @@ Status: Assumed / Pending C.13 validation.
 
 ## Bridge Marketplace Special Rule
 
-`/bridge/marketplace` data may show DEMO_BRIDGE fallback.
+`/bridge/marketplace` data may show `DEMO_BRIDGE_*` fallback.
 
-Status: Known demo/fallback contamination risk.
+**Policy (C.13.5B):** `INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK` — not public marketplace; transaction layer and success-fee logic **not active** in product; heuristic matching only.
+
+Status: Partially resolved (quarantine labels C.13.5B). Known demo/fallback contamination risk if labels removed.
 
 Not a source-of-truth for production pilot narrative.
 

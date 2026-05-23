@@ -89,7 +89,7 @@ Each approved or in-progress formula should document:
 | M&A | 4 golden + 2 DSS pending (`MA_PRODUCT_WATERFALL`, buyer fit) | Golden benchmarks tested (C.13.4C); product report alignment (C.13.4F) | DSS/demo scope; not certified valuation or buyer matching |
 | Compliance | 5 (C.13.2A set) | 2 limited scope; 2 Pending validation | Mixed (see blocks) |
 | PMI | 1 (`PMI_CAPTURE_RATE`) | Pending C.13.x validation | Pending human |
-| Bridge | 1 (`BRIDGE_PRIORITY`) | Pending C.13.x validation | Pending human |
+| Bridge | 1 (`BRIDGE_PRIORITY`) | Pending C.13.5C Golden helper/test; product mismatch OPEN | Pending human |
 | Risk | 1 (`RISK_LIKELIHOOD_IMPACT`) | Pending C.13.x validation | Pending human |
 | Reporting | 1 (`REPORTING_VARIANCE`) | Pending C.13.x validation | Pending human |
 | Executive Overview | 1 (`EXEC_MODULE_HEALTH_AVG`) | Pending C.13.x validation | Pending human |
@@ -409,17 +409,35 @@ Each approved or in-progress formula should document:
 **Module:** Bridge  
 **Owner:** Pending Formula Owner  
 **Source:** Golden Dataset  
-**Status:** Pending C.13.x validation (C.13.7 Bridge audit)  
+**Status:** Pending C.13.5C Golden helper/test; **product formula mismatch confirmed** (C.13.5A/B — C13-P1-07 OPEN)  
 **Formula:** `priorityScore = impact*0.5 + urgency*0.3 + confidence*0.2`  
 **Inputs:** `impact`, `urgency`, `confidence` (normalized scores)  
 **Units:** weighted score  
 **Output:** `priorityScore`  
 **Golden ID:** `bridge_priority_score_basic`  
-**Test file:** `pending`  
-**Edge cases:** Weights fixed in registry; code must document scale  
-**Usage limits:** DSS signal priority. Human review required. Not autonomous decision.  
+**Test file:** `pending` (C.13.5C — `bridgeGoldenFormulas.test.js`)  
+**Edge cases:** Weights fixed in registry; product uses severity/confidence/stale — document divergence  
+**Usage limits:** DSS priority **benchmark/oracle only**. Not certified prioritization. **Current product `calculateSignalPriority` differs from Golden** — do not conflate.  
 **Approval:** Pending human approval  
-**Last reviewed:** 2026-05-20  
+**Last reviewed:** 2026-05-23 (C.13.5B)  
+
+---
+
+### BRIDGE_MARKETPLACE_MATCH_FIT (Pending Formula Approval — C.13.5B)
+
+**Formula ID:** BRIDGE_MARKETPLACE_MATCH_FIT  
+**Module:** Bridge / Marketplace (ecosystem preview)  
+**Owner:** Pending Formula Owner  
+**Source:** Heuristic `getMatchScore` (`BridgeMarketplacePage.jsx` FE; `bridge.service.js` BE)  
+**Status:** Pending discovery / Pending Formula Approval  
+**Formula:** Weighted heuristic on counterpartyType, sector, geography, ticket band, kycStatus (not identical FE/BE — audit C.13.5A)  
+**Inputs:** opportunity payload, counterparty profile  
+**Output:** fit score 0–100 (clamped)  
+**Golden ID:** N/A  
+**Test file:** `pending`  
+**Usage limits:** Internal marketplace **demo / private-network preview** only. DSS heuristic matching signal. Not certified buyer, seller, investor or funding recommendation. Not financing intermediation. Not investment advice.  
+**Approval:** Pending human approval  
+**Last reviewed:** 2026-05-23 (C.13.5B)  
 
 ---
 
@@ -497,7 +515,7 @@ Do not invent math. Classify for future module audits:
 | Compliance | Jurisdiction exposure | Pending discovery — stub `compliance_jurisdiction_exposure` | C.13.3 Compliance |
 | PMI | Integration health | Pending discovery — stub `pmi_integration_health` | C.13.6 PMI |
 | Bridge | Recalculate cross-module signal | Pending discovery — stub `bridge_recalculate_cross_module_signal` | C.13.7 Bridge |
-| Bridge | Branch opportunity / marketplace scoring | Pending discovery — formula-like heuristics; no registry row | C.13.7 Bridge |
+| Bridge | Branch opportunity / marketplace scoring | **BRIDGE_MARKETPLACE_MATCH_FIT** — heuristic; labels C.13.5B | Not certified matching; demo/unlisted surface |
 | Risk | Control effectiveness / heatmap severity rollup | Pending discovery — stub `risk_control_effectiveness` | C.13.8 Risk |
 | Reporting | Board pack KPI rollup | Pending discovery — stub `reporting_board_pack_kpi_rollup` | C.13.9 Reporting |
 | Executive | Module signal aggregation (compliance/funding/risk/M&A posture) | Pending discovery — composite DSS; not single formula | C.13.1 Executive |

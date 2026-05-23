@@ -56,7 +56,7 @@ const DEMO_BRIDGE_RECORDS = [
         { id: 'intro-iberia-2', counterparty: 'Atlas Strategic Holdings', status: 'sent', date: '2026-05-07' }
       ],
       nextStep: 'Shortlist two strategic buyers and confirm NDA package.',
-      posture: 'Verified liquidity network active'
+      posture: 'Private-network preview active (demo)'
     }
   },
   {
@@ -1275,27 +1275,37 @@ export function BridgeMarketplacePage() {
           <div className="bridge-hero-layout">
             <div>
               <div className="bridge-badge-row">
-                <Badge>Marketplace</Badge>
-                <Badge>Verified Network</Badge>
-                <Badge>M&A + Funding</Badge>
-                <Badge>{backendStatus.loading ? 'Syncing' : isFallback ? 'Demo fallback' : 'Enterprise synced'}</Badge>
+                <Badge>Internal demo</Badge>
+                <Badge>Private network preview</Badge>
+                <Badge>Not a public marketplace</Badge>
+                <Badge>M&A + Funding modelling</Badge>
+                <Badge>{backendStatus.loading ? 'Syncing' : isFallback ? 'Demo fallback data' : 'Tenant data (preview)'}</Badge>
               </div>
 
+              <p className="muted" style={{ marginBottom: 16, maxWidth: 720 }}>
+                Internal unlisted preview for a future private network layer. Transaction layer not
+                active. Success-fee workflows are a future commercial concept only — not billing or
+                intermediation in this product. Heuristic DSS match scores only; no certified buyer,
+                seller, investor or funding recommendation. Requires human and legal review before
+                any external circulation.
+              </p>
+
               <h1 className="bridge-title">
-                The Bridge Marketplace.
-                <span>Convert verified data into liquidity opportunities.</span>
+                Bridge Marketplace Preview.
+                <span>Model potential liquidity opportunities for internal review.</span>
               </h1>
 
               <p className="bridge-copy">
-                Capa enterprise para conectar oportunidades M&A y Funding con compradores,
-                inversores, bancos y advisors verificados. Bridge convierte datos ya
-                estructurados en pipeline transaccional trazable para el CEO y el board.
+                Internal preview layer to model M&A and Funding opportunities with counterparty
+                profiles for private-network planning. Counterparty entries are modelling drafts —
+                not live verified marketplace participants. Structured data supports internal
+                decision-support review for the CEO and board; not an active transaction platform.
               </p>
 
               <div className="bridge-command-bar">
-                <CommandItem label="Strategic role" value="Liquidity connection" />
-                <CommandItem label="Native source" value="M&A + Funding" />
-                <CommandItem label="Revenue logic" value="SaaS + success fee" />
+                <CommandItem label="Strategic role" value="Private-network modelling (DSS)" />
+                <CommandItem label="Native source" value="M&A + Funding inputs" />
+                <CommandItem label="Revenue logic" value="Future concept: SaaS + success fee (not active)" />
               </div>
             </div>
 
@@ -1303,7 +1313,7 @@ export function BridgeMarketplacePage() {
               <div className="bridge-signal-top">
                 <div>
                   <div className="kpi-label">Bridge Signal</div>
-                  <h2 className="bridge-panel-title">Verified network readiness</h2>
+                  <h2 className="bridge-panel-title">Private-network preview readiness</h2>
                 </div>
                 <div className="bridge-icon-box">
                   <Network size={24} />
@@ -1313,8 +1323,9 @@ export function BridgeMarketplacePage() {
               <div className="bridge-score">
                 <strong>{metrics.score}</strong>
                 <p className="muted">
-                  Pipeline verificado con {metrics.qualifiedCount} oportunidades cualificadas
-                  y {metrics.introductionsCount} introducciones trazadas.
+                  Internal modelling pipeline with {metrics.qualifiedCount} qualified draft
+                  opportunities and {metrics.introductionsCount} traced introduction drafts.
+                  {isFallback ? ' Demo fallback data — not enterprise persisted marketplace.' : ''}
                 </p>
               </div>
 
@@ -1333,38 +1344,38 @@ export function BridgeMarketplacePage() {
               <TrendingUp size={14} />
               Executive snapshot
             </div>
-            <h2>Liquidity network at a glance</h2>
+            <h2>Private-network preview snapshot</h2>
           </div>
 
           <div className="bridge-grid bridge-grid-four">
             <KpiCard
               label="Opportunity value"
               value={formatCurrency(metrics.totalOpportunityValue, 'EUR')}
-              description="Valor bruto de oportunidades disponibles para conexión."
+              description="Gross draft opportunity value for internal modelling — not live deal flow."
               icon={CircleDollarSign}
             />
             <KpiCard
               label="Weighted pipeline"
               value={formatCurrency(metrics.weightedPipelineValue, 'EUR')}
-              description="Pipeline ponderado por probabilidad operativa."
+              description="Probability-weighted internal pipeline estimate (DSS heuristic)."
               icon={Target}
             />
             <KpiCard
               label="Introductions"
               value={metrics.introductionsCount}
-              description="Introducciones verificadas con contraparte."
+              description="Introduction drafts for internal tracking — not verified live introductions."
               icon={Handshake}
             />
             <KpiCard
               label="Qualified"
               value={metrics.qualifiedCount}
-              description="Oportunidades listas para revisión o mandato."
+              description="Draft opportunities ready for internal review — not active mandates."
               icon={ShieldCheck}
             />
             <KpiCard
               label="Counterparties"
               value={metrics.counterpartiesCount}
-              description="Compradores, inversores, bancos y advisors verificados."
+              description="Counterparty profiles for private-network modelling — not verified live participants."
               icon={Users}
             />
             <KpiCard
@@ -1384,9 +1395,10 @@ export function BridgeMarketplacePage() {
                   <Plus size={14} />
                   Origination
                 </div>
-                <h3 className="bridge-panel-title">Create verified opportunity</h3>
+                <h3 className="bridge-panel-title">Create internal opportunity draft</h3>
                 <p className="muted">
-                  Registra oportunidades procedentes de M&A o Funding con valor, contraparte y ownership.
+                  Register draft opportunities from M&A or Funding with value, counterparty type and
+                  ownership. Internal preview only — not a live marketplace listing.
                 </p>
               </div>
               <div className="bridge-card-icon">
@@ -1540,9 +1552,10 @@ export function BridgeMarketplacePage() {
                   <Users size={14} />
                   Counterparty registry
                 </div>
-                <h3 className="bridge-panel-title">Verified network</h3>
+                <h3 className="bridge-panel-title">Counterparty modelling registry</h3>
                 <p className="muted">
-                  Registro de compradores, inversores, bancos y advisors con ticket, KYC y tesis.
+                  Draft registry of buyer, investor, bank and advisor profiles for private-network
+                  modelling. KYC fields are illustrative — not certified verification.
                 </p>
               </div>
               <div className="bridge-card-icon">
@@ -1600,11 +1613,12 @@ export function BridgeMarketplacePage() {
               <div>
                 <div className="bridge-kicker">
                   <Target size={14} />
-                  Matching engine
+                  Heuristic DSS matching
                 </div>
-                <h3 className="bridge-panel-title">Recommended counterparties</h3>
+                <h3 className="bridge-panel-title">Suggested counterparties (heuristic)</h3>
                 <p className="muted">
-                  Scoring por tipo, sector, geografía, ticket y verificación.
+                  Heuristic DSS fit score by type, sector, geography, ticket and KYC field — not
+                  certified buyer, investor or funding recommendation. No financing intermediation.
                 </p>
               </div>
               <div className="bridge-card-icon">
@@ -1711,7 +1725,7 @@ export function BridgeMarketplacePage() {
                 </div>
                 <h3 className="bridge-panel-title">Network memos</h3>
                 <p className="muted">
-                  Persisted board-ready reports with matches, circulation risks and recommendations.
+                  Persisted internal memos with heuristic matches, circulation risks and DSS recommendations.
                 </p>
               </div>
               <button
@@ -1768,9 +1782,9 @@ export function BridgeMarketplacePage() {
           <div>
             <div className="bridge-kicker">
               <Banknote size={14} />
-              Transaction pipeline
+              Transaction pipeline (preview)
             </div>
-            <h2>Verified opportunities</h2>
+            <h2>Internal opportunity drafts</h2>
           </div>
 
           <div className="bridge-grid bridge-grid-two">

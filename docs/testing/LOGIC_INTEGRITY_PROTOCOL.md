@@ -166,6 +166,14 @@ Terminal outputs such as **netProceeds** must not silently fallback to intermedi
 4. Do not present equity bridge values as estimated net proceeds in reports or exports.
 5. Applies first to M&A report/export (`formatMAReportData`); extend same pattern to other modules with terminal vs intermediate metric confusion during C.13.x.
 
+## Marketplace / transaction layer truthfulness (Decision C.13.5B)
+
+1. **Internal/unlisted marketplace surfaces** must clearly state if they are demo, future private-network preview, or not a public marketplace.
+2. **Success fee, transaction layer, buyer/seller/funding matching** must not be presented as active unless contracts, legal, permissions, billing and compliance are implemented in product.
+3. **Demo fallback data** must be labelled and must not be presented as enterprise persisted marketplace or verified live network participants.
+4. **Heuristic marketplace matching** must be labelled DSS heuristic — not certified recommendation; not investment or financing advice; no financing intermediation.
+5. **Public marketplace activation** requires explicit future phase, legal/trust review, and registry update — not implied by route existence alone.
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor

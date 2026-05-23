@@ -1600,6 +1600,8 @@ También hay que validar que:
 | C.13.4G | Cerrada (docs only) | Docs closure snapshot policy / C13-P1-11 partial |
 | C.13.4H | Cerrada | Fix controlado netProceeds fallback (`cc6a52a`) |
 | C.13.4I | Cerrada (docs only) | Docs closure netProceeds fallback fix |
+| C.13.5A | Cerrada (solo lectura) | Bridge / marketplace signals audit |
+| C.13.5B | Cerrada | Bridge SoT docs + marketplace quarantine labels |
 | C.14 | Pendiente | C.14.1 modular sandbox audit (opcional) |
 
 ### Subfases C.13
@@ -1735,7 +1737,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-04 | Compliance weighted risk — reports/export done | Helper `adcdf77` + integración `c7c567b`; ver C.13.1C-f4A/f4B | **PARTIALLY RESOLVED** — reports/export complete; model-data adoption pending |
 | C13-P1-05 | Compliance resilience — golden + labels/re-export | f7B + f8A `4414208` + f8B `eb48db6`; ver f8A/f8B/f8C | **PARTIALLY RESOLVED** — golden helper/test + operational labels/re-export; backend/API/model rename pending |
 | C13-P1-06 | FE/BE precedence — labels/precedence fix done | f5B + f6A + f6B (`1e82980`); ver C.13.1C-f6A/f6B/f6C | **PARTIALLY RESOLVED** — labels/precedence + re-export + CEO; backend/model rename pending |
-| C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | Señales DSS mal priorizadas |
+| C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | **OPEN** — mismatch confirmed C.13.5A/B; Golden helper/tests pending C.13.5C; product formula not changed |
 | C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
 | C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
@@ -5321,6 +5323,91 @@ C13-P1-11: PARTIALLY RESOLVED
 
 ### 6. Paso siguiente recomendado
 
-**C.13.5 — Bridge / marketplace signals audit** (READ-ONLY AUDIT).
+**C.13.5C — BRIDGE_PRIORITY golden/helper tests** (helper puro Golden; documentar divergencia product vs Golden; no tocar `calculateSignalPriority`).
 
-Objetivo: auditar bridge priority, marketplace signals, cross-module signals, source-of-truth y product truthfulness.
+---
+
+## C.13.5A / C.13.5B — Bridge / Marketplace source-of-truth and quarantine labels — READ-ONLY + CONTROLLED FIX
+
+**Fechas:** 23 mayo 2026  
+**Baseline commit (C.13.5B):** `3ea64f3` (pre-commit docs + copy)  
+**Modo C.13.5A:** read-only audit — cero modificaciones.  
+**Modo C.13.5B:** docs SoT + copy/labels en `BridgeMarketplacePage.jsx` únicamente.
+
+### 1. C.13.5A — Resumen auditoría (read-only)
+
+| Hallazgo | Clasificación |
+|---|---|
+| No P0 confirmado (auth + tenant scoping en Bridge Enterprise) | — |
+| `/bridge/marketplace` existe, protegido, **no** en nav | Coherente A.1.5 |
+| Marketplace copy sugería red/liquidez/verified network / success fee activo | **P1** |
+| Demo fallback puede presentarse como pipeline real | **P1** |
+| `BRIDGE_PRIORITY` product ≠ Golden/registry | **P1** — C13-P1-07 |
+| `getMatchScore` heurístico sin registry/test | **P1** |
+| Bridge Enterprise señales tenant-scoped + human review | OK DSS |
+
+### 2. Bridge Enterprise — decisión SoT
+
+| Elemento | Decisión |
+|---|---|
+| **Rol** | DSS internal executive **cross-module signal layer** — not automated decision engine |
+| **SoT actual** | `backend/services/bridge/bridge.service.js` + tenant-scoped stores (`bridge_signals`, dependencies, conflicts, attention queue) |
+| **Recalculate** | `recalculateEnterpriseBridge` — heurísticas desde summaries Compliance/Funding/M&A/PMI/Governance/Risk/Reporting/Strategy |
+| **Señales** | Heuristic DSS; `humanReviewStatus: 'required'` unless formula-approved |
+| **Rutas producto** | `/bridge/dashboard`, `/signals`, `/dependencies`, `/conflicts`, `/attention-queue`, `/reports`, `/snapshots` |
+| **No es** | Public marketplace, transaction layer, certified matching, investment/financing advice |
+
+### 3. Bridge Marketplace — decisión SoT
+
+| Elemento | Decisión |
+|---|---|
+| **Política** | `INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK` (A.1.5 reconfirmado) |
+| **Ruta** | `/bridge/marketplace` — activa por URL directa; **no** sidebar/rail |
+| **SoT datos** | Backend `/bridge/opportunities` etc. si existen; si vacío/error → `DEMO_BRIDGE_*` fallback FE |
+| **No es** | Public marketplace, active transaction platform, active success-fee engine, certified buyer/seller/funding matching |
+| **Demo fallback** | **Not** enterprise persisted marketplace data — must be labelled |
+| **Matching** | `getMatchScore` — heuristic DSS; Pending Formula Approval (`BRIDGE_MARKETPLACE_MATCH_FIT`) |
+| **C.13.5B copy** | Labels/disclaimers en `BridgeMarketplacePage.jsx` — internal preview, future private network, transaction layer not active |
+
+### 4. BRIDGE_PRIORITY — decisión (mismatch documentado)
+
+| Capa | Fórmula / comportamiento |
+|---|---|
+| **Registry / Golden** | `priorityScore = impact*0.5 + urgency*0.3 + confidence*0.2` → `bridge_priority_score_basic` expected **73** |
+| **Product (`calculateSignalPriority`)** | `severityRank*18 + confidenceLevel*0.2 + blockingBonus - stalePenalty` |
+| **Estado C13-P1-07** | **OPEN** — mismatch confirmed; **no product fix** in C.13.5B |
+| **Siguiente** | **C.13.5C** — Golden helper/test; **C.13.5D** — product formula decision/fix if authorized |
+
+### 5. Tests y validaciones (C.13.5B)
+
+| Validación | Resultado esperado |
+|---|---|
+| `formulaRegistryCoverage` | Pass (registry docs only) |
+| `npm run test:unit` | Pass |
+| `npm run build` | Pass |
+| Marketplace e2e | Not required (route still unlisted) |
+
+### 6. Estado resumen
+
+```
+C13-P1-07: OPEN — BRIDGE_PRIORITY product vs Golden mismatch; C.13.5C tests pending.
+Bridge Marketplace truthfulness: PARTIALLY RESOLVED — quarantine labels/copy C.13.5B.
+No RESOLVED global.
+```
+
+**Resuelto (C.13.5B):**
+
+- SoT Bridge Enterprise vs Marketplace documentado.
+- Marketplace internal demo / future private network labels.
+- Success fee / transaction layer explicitamente future-only.
+- Heuristic matching labelled DSS / not certified.
+
+**Pendiente:**
+
+- C.13.5C — `BRIDGE_PRIORITY` golden/helper tests.
+- C.13.5D — product priority formula decision (optional).
+- Backend marketplace policy / integration tests (optional).
+
+### 7. Paso siguiente recomendado
+
+**C.13.5C — BRIDGE_PRIORITY golden/helper tests.**
