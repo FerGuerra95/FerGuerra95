@@ -5885,7 +5885,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.12 — Global Logic Integrity Final Gate (CLOSED)
 
-**Commit:** pending — `docs: record global logic integrity final gate`
+**Commit:** 1c27d88 — `docs: record global logic integrity final gate`
 
 **Mode:** VALIDATION / DOCS — no product code changed.
 
