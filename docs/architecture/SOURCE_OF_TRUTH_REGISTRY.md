@@ -317,9 +317,9 @@ PMI does **not** have a single production capture formula today. It has multiple
 | Reporting library | Persisted report metadata CRUD | **OPERATIONAL DSS** — tenant-scoped |
 | Board Pack aggregator | Cross-module hub aggregation | **TRUTHFULNESS GATED** (C.13.8B) — preserves PMI null; Compliance null; scoringTruthfulness |
 | Executive Command Center | Module summary + readiness index | **TRUTHFULNESS GATED** (C.13.8B) — insufficient_data for empty modules; no silent readiness fallbacks |
-| REPORTING_VARIANCE | Golden KPI variance (`reportingVarianceGolden`) | **GOLDEN HELPER TESTED** (C.13.8D) — `reportingGoldenFormulas.js`; no product wiring |
+| REPORTING_VARIANCE | Golden KPI variance (`reportingVarianceGolden`) | **GOLDEN ORACLE ONLY** (C.13.8D) — **product alignment deferred** (C.13.8E OPTION C) |
 
-**Reporting status:** **AGGREGATOR RISK MITIGATED / REPORTING VARIANCE GOLDEN TESTED / PRODUCT ALIGNMENT PENDING** — not RESOLVED global until product alignment (C.13.8E).
+**Reporting status:** **AGGREGATOR RISK MITIGATED / VARIANCE GOLDEN TESTED / PRODUCT ALIGNMENT DEFERRED BY SOT** — not RESOLVED global until e2e/smoke (C.13.8F) and module-level variance ownership where applicable.
 
 ## REPORTING_VARIANCE — Source-of-Truth Decision (C.13.8C)
 
@@ -332,7 +332,8 @@ PMI does **not** have a single production capture formula today. It has multiple
 | Formula (oracle) | `absoluteVariance = actual - expected` (Golden JSON uses `budget` as expected); `variancePercent = expected !== 0 ? (absoluteVariance / expected) * 100 : null` |
 | Golden helper | `backend/services/reporting/reportingGoldenFormulas.js` — `calculateReportingVarianceGolden` | Oracle only (C.13.8D) |
 | Product owner | **None today** — Reporting is not the cross-module variance engine |
-| Board Pack / Executive / Reporting UI | **Must not use** until explicit product alignment phase (C.13.8E) |
+| Product alignment (C.13.8E) | **OPTION C — deferred / per-module ownership required** |
+| Board Pack / Executive / Reporting UI | **Prohibited** until module owner approves semantics + labels + truthfulness (future authorized phase) |
 | Certified KPI | **No** — DSS / management reporting only; human review required |
 
 **Options considered:** A defer entirely · B Golden helper/tests only (next) · **C selected** · D product implementation now (rejected — cross-module SoT risk)
@@ -347,7 +348,50 @@ PMI does **not** have a single production capture formula today. It has multiple
 | `reportingReadinessScore` | `calculateReportingMetrics` on metadata counts | Meta-reporting heuristic; null when no persisted data (C.13.8B) | **OPERATIONAL DSS** |
 | Board Pack | `generateBoardPack` hub aggregation | DSS pack draft; `scoringTruthfulness`; not certified board-ready | **TRUTHFULNESS GATED** (C.13.8B) |
 | Executive Command Center | `collectExecutiveModuleSummaries` + `readinessIndex` | DSS aggregation; `insufficient_data` for empty modules (C.13.8B) | **TRUTHFULNESS GATED** |
-| REPORTING_VARIANCE | `docs/testing/golden_inputs.json` + `reportingGoldenFormulas.js` | Golden benchmark oracle | **GOLDEN HELPER TESTED** (C.13.8D) — not product UI/Board Pack |
+| REPORTING_VARIANCE | `golden_inputs.json` + `reportingGoldenFormulas.js` | Golden benchmark oracle only | **GOLDEN TESTED / PRODUCT DEFERRED** (C.13.8E) |
+
+## REPORTING_VARIANCE — Product alignment decision (C.13.8E)
+
+**Decision:** **OPTION C — Product alignment deferred / per-module ownership required**
+
+`reportingVarianceGolden` remains a **Golden benchmark/oracle** (C.13.8C/D). Product **does not consume it yet** in Reporting UI, Board Pack, Executive, CEO Overview, report library, or exports.
+
+**Options considered:** A global use now (rejected) · B Board Pack variance now (rejected) · **C deferred per-module ownership (selected)** · D UI pilot (rejected without feature flag)
+
+### Product alignment rules
+
+1. Reporting **does not calculate** productive variance by default.
+2. Board Pack **does not compute** generic cross-module variance.
+3. Executive/CEO **does not consume** generic variance as executive signal.
+4. Reporting UI **does not display** generic Reporting variance.
+5. Each source module **retains ownership** of its variance semantics.
+6. `reportingVarianceGolden` may be used **only** as oracle/test until a future authorized implementation phase.
+7. Product may use variance **only when** the source module has approved: actual + expected semantics, `expected=0` behavior, favorable/unfavorable meaning, UI labels, truthfulness metadata, and tests.
+
+### Module variance ownership matrix
+
+| Module | Possible variance | Owner | Product status | Reporting usage |
+|---|---|---|---|---|
+| M&A | Valuation actual vs expected; base vs scenario bands | M&A module | Pending module decision | **No** generic Reporting variance |
+| Funding | Actual runway vs target; raise vs plan | Funding module | Pending module decision | **No** generic Reporting variance |
+| PMI | Captured vs forecast synergy | PMI module | Golden + operational capture layers documented (C.13.7) | **Display only** if PMI provides approved payload; Reporting must not recalculate |
+| Risk | Residual vs inherent; score movement | Risk module | Dual-layer model (Golden vs operational) | **No** generic Reporting variance |
+| Compliance | Health/resilience score delta | Compliance module | Pending module decision | **No** generic Reporting variance |
+| Bridge | Pipeline conversion vs target | Bridge module | Operational DSS only | **No** generic Reporting variance |
+| Reporting | Generic actual vs expected/budget | Reporting Golden | Helper tested (C.13.8D); alignment deferred (C.13.8E) | **Not product-aligned yet** |
+
+**Rule:** If no approved module owner, Reporting **must not calculate** variance.
+
+### Prohibited until authorized future phase
+
+| Surface | `reportingVarianceGolden` usage |
+|---|---|
+| Reporting UI | **Prohibited** |
+| Board Pack | **Prohibited** |
+| Executive Command Center | **Prohibited** |
+| CEO Overview | **Prohibited** |
+| Report library / exports | **Prohibited** |
+| Product import of `reportingGoldenFormulas.js` | **Prohibited** |
 
 ## Executive Overview Special Rule
 

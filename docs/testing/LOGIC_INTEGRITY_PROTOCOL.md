@@ -451,6 +451,47 @@ Reporting today remains:
 
 **Next:** C.13.8E product alignment · C.13.8F e2e/smoke.
 
+## C.13.8E — Reporting product alignment decision (DOCS ONLY)
+
+**Decision:** **OPTION C — Product alignment deferred / per-module ownership required**
+
+**Status:** Product **does not consume** `reportingVarianceGolden` in UI, Board Pack, Executive, CEO Overview, report library, or exports.
+
+**Options documented:** A global use now (rejected) · B Board Pack variance now (rejected) · **C deferred per-module ownership (selected)** · D UI pilot (rejected without feature flag)
+
+### Product alignment rules (Logic Integrity)
+
+1. Reporting variance Golden **must not** be used in product without module owner approval.
+2. Board Pack **must not** compute generic variance across modules.
+3. Executive **must not** consume generic variance as executive signal.
+4. `expected = 0` **must** preserve `variancePercent = null` (Golden oracle behavior).
+5. Variance **must** be labelled as Golden benchmark, operational DSS, or module-owned product metric — never certified KPI.
+6. Human review **required** for any future Board Pack/Executive variance use.
+7. **No product import** of `reportingGoldenFormulas.js` until an authorized implementation phase after C.13.8E.
+8. **No Reporting global RESOLVED** while product alignment is deferred and e2e/smoke pending.
+
+### Module variance ownership
+
+| Module | Possible variance | Owner | Reporting usage |
+|---|---|---|---|
+| M&A | Valuation vs expected / scenario bands | M&A | No generic Reporting variance |
+| Funding | Runway vs target / raise vs plan | Funding | No generic Reporting variance |
+| PMI | Captured vs forecast | PMI | Display only if PMI provides approved payload |
+| Risk | Residual vs inherent / movement | Risk | No generic Reporting variance |
+| Compliance | Health/resilience delta | Compliance | No generic Reporting variance |
+| Bridge | Conversion vs target | Bridge | No generic Reporting variance |
+| Reporting | Generic actual vs budget | Reporting Golden | Oracle only; not product-aligned |
+
+**C13-P1-20:** **PARTIALLY RESOLVED / REPORTING TRUTHFULNESS + VARIANCE DECISION ADDED**
+
+**C13-P2-REPORTING-01:** **PARTIALLY RESOLVED / REPORTING VARIANCE GOLDEN TESTED / PRODUCT ALIGNMENT DECIDED**
+
+**Reporting global:** **AGGREGATOR RISK MITIGATED / VARIANCE GOLDEN TESTED / PRODUCT ALIGNMENT DEFERRED BY SOT** — not RESOLVED global.
+
+**Not touched:** `reportingGoldenFormulas.js`, tests, product code, Golden Dataset, `FORMULA_REGISTRY.md`.
+
+**Next:** C.13.8F e2e/smoke closure · or C.13.9 Strategy/Governance audit if prioritized.
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor

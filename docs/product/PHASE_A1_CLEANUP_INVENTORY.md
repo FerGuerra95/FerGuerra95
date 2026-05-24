@@ -1751,7 +1751,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P2-01 | Bridge marketplace ruta viva demo unlisted | `/bridge/marketplace` en `routes.jsx`; no en sidebar; `DEMO_BRIDGE_*` fallback |
 | C13-P2-02 | Bridge service acoplado a 8+ módulos | `bridge.service.js` imports cross-module summaries |
 | C13-P2-03 | Executive Overview aggregator, no master SoT | `executiveOverview.service.js`, `readinessIndex.service.js` |
-| C13-P2-04 | Reporting variance source unclear | **GOLDEN HELPER TESTED (C.13.8D)** — OPTION C; oracle only; product alignment pending C.13.8E | C.13.8E |
+| C13-P2-04 | Reporting variance source unclear | **PRODUCT ALIGNMENT DECIDED (C.13.8E)** — OPTION C deferred; per-module ownership; Golden oracle only | C.13.8F |
 | C13-P2-05 | M&A localStorage cases | `valuationFormulas.js` `STORAGE_KEYS` |
 | C13-P2-06 | Compliance demo tools | `SHOW_DEMO_TOOLS` en `SuppliersPage.jsx` |
 | C13-P2-07 | AppShell outlet fallback (no lógica negocio) | `AppShell.jsx` loading panel |
@@ -3013,7 +3013,7 @@ La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
 | PMI | `PMI_CAPTURE_RATE` | Pending C.13.6 |
 | Bridge | `BRIDGE_PRIORITY` | Pending C.13.7 |
 | Risk | `RISK_LIKELIHOOD_IMPACT` | Pending C.13.8 |
-| Reporting | `REPORTING_VARIANCE` | **Golden helper tested (C.13.8D)** — `reportingGoldenFormulas.js`; product alignment pending C.13.8E |
+| Reporting | `REPORTING_VARIANCE` | **Golden tested + alignment deferred (C.13.8E)** — oracle only; per-module ownership required |
 | Executive | `EXEC_MODULE_HEALTH_AVG` | Pending C.13.1 |
 
 ### Qué NO se tocó
@@ -5880,6 +5880,34 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 **PMI global:** **RESOLVED PRODUCT LOGIC / MULTI-LAYER PMI MODEL CLOSED** (E2E-prod smoke / PDF renderer = P2/P3)
 
 ### Siguiente fase recomendada
+
+**C.13.8F — Reporting e2e/smoke closure + final Reporting status** (or C.13.9 Strategy/Governance audit if prioritized)
+
+### C.13.8E — Reporting product alignment decision — DOCS ONLY
+
+**Commit:** (pending) — `docs(reporting): record variance product alignment decision`
+
+**Decisión:** **OPTION C — Product alignment deferred / per-module ownership required**
+
+**Significado:** `reportingVarianceGolden` queda como oráculo Golden genérico. Producto **no lo usa** en Reporting UI, Board Pack, Executive, CEO Overview, report library ni exports hasta que un módulo fuente apruebe semántica, labels y truthfulness.
+
+**Opciones documentadas:** A global now (rechazada) · B Board Pack now (rechazada) · **C deferred per-module (aprobada)** · D UI pilot (rechazada sin feature flag)
+
+**Matriz ownership:** M&A/Funding/Compliance/Bridge — pending module decision, no generic variance · PMI — display only if PMI provides payload · Risk — dual-layer, no generic · Reporting Golden — oracle only
+
+**No tocado:** `reportingGoldenFormulas.js`, tests, `reporting.service.js`, `boardPack.service.js`, Executive, Reporting UI, `golden_inputs.json`, `FORMULA_REGISTRY.md`, módulos fuente.
+
+**No implementado:** variance productiva, Board Pack variance, Executive variance, UI variance, per-module variance product, PDF/HTML renderer.
+
+**C13-P1-20:** PARTIALLY RESOLVED / REPORTING TRUTHFULNESS + VARIANCE DECISION ADDED
+
+**C13-P2-REPORTING-01:** PARTIALLY RESOLVED / REPORTING VARIANCE GOLDEN TESTED / PRODUCT ALIGNMENT DECIDED
+
+**Reporting global:** AGGREGATOR RISK MITIGATED / VARIANCE GOLDEN TESTED / PRODUCT ALIGNMENT DEFERRED BY SOT — **no RESOLVED global**
+
+**Riesgos restantes:** e2e Reporting `:4000` · PDF/HTML renderer · per-module variance implementations · Board Pack M&A/Funding recalc not Golden · production smoke · global SoT closure
+
+**Siguiente:** C.13.8F e2e/smoke
 
 ### C.13.8D — Reporting variance Golden helper/tests
 
