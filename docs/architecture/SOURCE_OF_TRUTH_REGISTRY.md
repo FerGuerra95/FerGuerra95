@@ -48,7 +48,7 @@ Do not mark Assumed entries as Confirmed before C.13.
 | PMI enterprise synergies | synergy initiatives table | pmi_synergy_initiatives | Assumed / Pending C.13 validation | Not synced with case ledger | pmi_synergy_* | Dual model |
 | Bridge signals | recalculated signals | bridge_signals + `bridge.service.js` heuristics | Partially resolved (C.13.5E Option C) | Dual-layer: `bridgePriorityGolden` vs `operationalSignalPriority`; product unchanged | bridge_priority_score_basic | DSS; human review required |
 | Bridge marketplace | opportunities / matches | BE bridge API + DEMO fallback | Partially resolved (C.13.5B labels) | Unlisted route; not pilot marketplace | N/A | INTERNAL_UNLISTED_DEMO |
-| Risk register | likelihood x impact | Pending C.13 audit | Source unclear | | risk_score_likelihood_impact_basic | |
+| Risk register / enterprise scoring | `risk_register` + `risk.service.js` | Partially resolved (C.13.6B Option C) | Dual-layer: `riskLikelihoodImpactGolden` vs `operationalEnterpriseRiskScore`; UI heatmap gaps pending | risk_score_likelihood_impact_basic | DSS; human review required; not insurance/regulatory certification |
 | Reporting KPIs | variance metrics | Pending C.13 audit | Source unclear | | reporting_kpi_variance_basic | |
 | Executive Overview | module health / radar | Aggregator from module summaries | Assumed / Pending C.13 validation | Fallback if API fails | executive_module_health_average_basic | Not master store |
 | Golden Datasets | calculation oracles | docs/testing/golden_inputs.json | Confirmed baseline seed | Implementation may mismatch | All IDs in file | Oracle not product data |
@@ -219,6 +219,9 @@ Documented after C.13.4A read-only audit; chain C.13.4A–G closed at docs level
 4. **C.13.5D** — BRIDGE_PRIORITY golden/helper tests (`d11c831`).
 5. **C.13.5E** — Bridge priority dual-layer decision (Option C): `bridgePriorityGolden` vs `operationalSignalPriority`.
 6. **C.13.5F** — Bridge operational priority heuristic tests (`operationalSignalPriority` / `calculateSignalPriority`).
+7. **C.13.6B** — Risk dual-layer decision (Option C): `riskLikelihoodImpactGolden` vs `operationalEnterpriseRiskScore`.
+8. **C.13.6C** — RISK_LIKELIHOOD_IMPACT golden helper/tests (pending).
+9. **C.13.6D** — Risk operational score heuristic tests (pending).
 
 ## Bridge / Marketplace Source-of-Truth (Decision C.13.5B)
 
@@ -259,6 +262,29 @@ Bridge signal priority has **two intentional layers**. Do not treat them as inte
 4. Aligning product to Golden (Option B) or extracting a pure operational helper mirror requires **C.13.5G** or separate authorized phase — not implied by C.13.5F.
 
 **C13-P1-07 status:** PARTIALLY RESOLVED — dual-layer tests complete (Golden C.13.5D + operational C.13.5F); no global RESOLVED.
+
+## Risk Enterprise Dual-Layer Model (Decision C.13.6B — Option C)
+
+Risk Enterprise item scoring has **two intentional layers**. Do not treat them as interchangeable.
+
+| Layer | Logical name | Implementation (current) | Formula / inputs | Role |
+|---|---|---|---|---|
+| **Golden benchmark** | `riskLikelihoodImpactGolden` | **Pending** helper (C.13.6C) | `likelihood × impact` (1–5); severity bands per Golden | Oracle for logic integrity, Golden Dataset, CI tests |
+| **Operational DSS** | `operationalEnterpriseRiskScore` | `riskScoreFrom()` in `risk.service.js` (internal) | `(severityRank + likelihood + impact) / 15 × 100` with inherent/residual severity | Dashboard KPIs, readiness, portfolio posture, bridge signals |
+
+**Golden reference:** `risk_score_likelihood_impact_basic` — L=4, I=5 → **20**, severity **critical** (band 16–25).
+
+**Operational reference (same L/I, product defaults):** medium/medium severities → score **~80**; critical/critical → **~93** — **not** Golden 20.
+
+**Rules:**
+
+1. Golden benchmark validates mathematical oracle — **not** live dashboard/residual KPI unless explicitly authorized in a future phase.
+2. Operational score is a **DSS heuristic** — not regulatory risk certification, not insurance underwriting, not autonomous risk acceptance.
+3. UI, reports and exports must **not** present `operationalEnterpriseRiskScore` / residual KPI as Golden-equivalent or formula-certified.
+4. Separate Risk domains (M&A `riskScoring.js`, Compliance supplier risk, PMI/strategy risk entities) are **not** `RISK_LIKELIHOOD_IMPACT` — do not conflate in narrative.
+5. Aligning product to Golden (Option B), golden helper (C.13.6C), operational tests (C.13.6D), or UI heatmap alignment (C.13.6E) require **separate authorized phases** — not implied by C.13.6B.
+
+**C13-P1-08 status:** PARTIALLY RESOLVED / DECISION DOCUMENTED — mismatch separated; golden/operational tests pending; no global RESOLVED.
 
 ## Executive Overview Special Rule
 

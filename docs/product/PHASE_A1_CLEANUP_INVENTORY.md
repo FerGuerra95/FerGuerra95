@@ -1738,7 +1738,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-05 | Compliance resilience — golden + labels/re-export | f7B + f8A `4414208` + f8B `eb48db6`; ver f8A/f8B/f8C | **PARTIALLY RESOLVED** — golden helper/test + operational labels/re-export; backend/API/model rename pending |
 | C13-P1-06 | FE/BE precedence — labels/precedence fix done | f5B + f6A + f6B (`1e82980`); ver C.13.1C-f6A/f6B/f6C | **PARTIALLY RESOLVED** — labels/precedence + re-export + CEO; backend/model rename pending |
 | C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | **PARTIALLY RESOLVED** — Option C dual-layer (C.13.5E); Golden tests (C.13.5D); operational heuristic tests (C.13.5F); product formula unchanged; **no RESOLVED global** |
-| C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
+| C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | **PARTIALLY RESOLVED / DECISION DOCUMENTED (C.13.6B)** — Option C dual-layer: `riskLikelihoodImpactGolden` vs `operationalEnterpriseRiskScore`; audit C.13.6A; Golden helper/tests pending C.13.6C; product unchanged; **no RESOLVED global** |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
 | C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
 | C13-P1-11 | M&A EV simple vs adjusted engine | Golden `ma_valuation_*`; FE `useValuationEngine` adjusted EV; report alignment tests | **PARTIALLY RESOLVED** — SoT + Golden tests + labels/copy + report alignment + netProceeds fallback fixed (C.13.4A–I); backend snapshot/re-export policy pending |
@@ -1795,7 +1795,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | `pmi_synergy_capture_rate_basic` | **partial** | Ratio existe |
 | `pmi_synergy_zero_forecast` | **mismatch** | Devuelve 0, no null |
 | `bridge_priority_score_basic` | **mismatch (by design Option C)** | Golden oracle via `bridgeGoldenFormulas.js`; product `calculateSignalPriority` = separate `operationalSignalPriority` heuristic |
-| `risk_score_likelihood_impact_basic` | **mismatch** | `riskScoreFrom` distinto |
+| `risk_score_likelihood_impact_basic` | **mismatch (by design Option C)** | Golden oracle pending `riskGoldenFormulas` (C.13.6C); product `riskScoreFrom` = separate `operationalEnterpriseRiskScore` heuristic |
 | `reporting_kpi_variance_basic` | **source unclear** | Implementación no localizada |
 | `executive_module_health_average_basic` | **pending** | Múltiples agregadores |
 
@@ -5539,3 +5539,89 @@ C13-P1-07: PARTIALLY RESOLVED
 ### Paso siguiente recomendado
 
 Optional **C.13.5G** — extract pure operational helper mirror (only if refactor authorized), or **product→Golden alignment** (Option B) only with separate human-approved phase.
+
+---
+
+## C.13.6A — Risk Logic Integrity / Formula Audit — CLOSED (read-only)
+
+**Fecha:** 23 mayo 2026  
+**Baseline:** `fe45be0`  
+**Modo:** READ ONLY — cero modificaciones.
+
+### Hallazgos principales
+
+| Hallazgo | Clasificación |
+|---|---|
+| No P0 (auth + tenant scoping Risk Enterprise) | OK |
+| Golden `likelihood × impact = 20` ≠ product `riskScoreFrom` | **P1** — C13-P1-08 |
+| UI heatmap ignora `dashboard.heatmap` scores del backend | **P1** |
+| Copy heatmap vs implementación (impact×likelihood counts) | **P1** |
+| Register UI no captura likelihood/impact | **P1** |
+| Sin tests oráculo Golden Risk | **P1** |
+| `riskReadinessScore` composite sin golden | **P2** |
+| Múltiples dominios “risk” (M&A, Compliance, PMI, Strategy) | **P2** |
+
+### Fórmulas identificadas
+
+| Capa | Función | Fórmula product (actual) |
+|---|---|---|
+| Golden / Registry | `RISK_LIKELIHOOD_IMPACT` | `riskScore = likelihood × impact` → expected **20** (L=4, I=5), severity **critical** |
+| Product operativo | `riskScoreFrom()` en `risk.service.js` | `round(((severityRank + likelihood + impact) / 15) × 100)` con `inherentSeverity` / `residualRisk` |
+| Portfolio DSS | `calculateRiskMetrics()` | Heurística compuesta (readiness, posture, bridge signals) — **sin golden** |
+
+**Recomendación auditoría:** replicar **Option C dual-layer** (patrón Bridge C.13.5E).
+
+---
+
+## C.13.6B — Risk dual-layer decision — CLOSED (docs only)
+
+**Fecha:** 23 mayo 2026  
+**Baseline:** `fe45be0`  
+**Modo:** DOCUMENTAL / DECISIONAL — sin cambios de código productivo.
+
+### Decisión formal: **Option C — Dual-layer Risk Model**
+
+1. **`riskLikelihoodImpactGolden`**
+   - Benchmark/oracle lógico alineado a Golden Dataset `RISK_LIKELIHOOD_IMPACT`.
+   - Fórmula: `likelihood × impact` (escala 1–5).
+   - Golden ID: `risk_score_likelihood_impact_basic` — expected **20** (L=4, I=5), severity band **critical** (16–25).
+   - Uso: validación matemática, Formula Approval Gate, auditoría lógica, CI oracle futuro (C.13.6C).
+   - **No** representa el score operativo actual del producto Risk Enterprise.
+
+2. **`operationalEnterpriseRiskScore`**
+   - Score DSS operativo usado por Risk Enterprise hoy.
+   - Implementación actual: `riskScoreFrom()` interno en `risk.service.js` (sin rename en esta fase).
+   - Inputs: `inherentSeverity`, `residualRisk`, `likelihood`, `impact` → output 0–100.
+   - Uso: dashboard, residual risk KPI, `riskReadinessScore`, executive/bridge signals, heatmap operativo (cuando se alinee en fase posterior).
+   - Debe etiquetarse como **señal DSS operativa** — no oracle Golden, no scoring certificado, no underwriting.
+
+### Rechazado en C.13.6B (sin implementar)
+
+| Opción | Motivo |
+|---|---|
+| **A — Mantener sin documentar dualidad** | Insuficiente — mismatch confirmado en C.13.6A |
+| **B — Alinear product al Golden L×I** | Requiere fase controlada posterior; impacto en KPIs/readiness/heatmap |
+
+### Gaps documentados (pendientes post-decisión)
+
+| ID | Gap | Fase sugerida |
+|---|---|---|
+| C13-P1-08a | UI ignora `dashboard.heatmap` scores | C.13.6E (UI/copy controlado) |
+| C13-P1-08b | Copy heatmap engañoso | C.13.6E |
+| C13-P1-08c | Register sin campos likelihood/impact | C.13.6E |
+| C13-P1-08d | Sin golden/oracle tests | C.13.6C |
+
+### Estado C13-P1-08 (post C.13.6B)
+
+```
+C13-P1-08: PARTIALLY RESOLVED / DECISION DOCUMENTED
+           Option C dual-layer model formalized.
+           Golden helper/tests pending (C.13.6C).
+           Operational tests pending (C.13.6D).
+           Product riskScoreFrom unchanged.
+           No RESOLVED global.
+```
+
+### Paso siguiente recomendado
+
+**C.13.6C** — `RISK_LIKELIHOOD_IMPACT` golden helper + tests (`riskLikelihoodImpactGolden` vs `risk_score_likelihood_impact_basic` expected **20**).
