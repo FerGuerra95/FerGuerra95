@@ -5883,7 +5883,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.8D — Reporting variance Golden helper/tests
 
-**Commit:** (pending) — `test(reporting): add variance golden benchmark`
+**Commit:** `e899648` — `test(reporting): add variance golden benchmark`
 
 **Helper:** `backend/services/reporting/reportingGoldenFormulas.js` — `calculateReportingVarianceGolden`; Golden `reporting_kpi_variance_basic` (`budget` alias, percent ×100).
 
