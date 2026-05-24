@@ -342,4 +342,17 @@ describe('Unified Board Pack reporting', () => {
     expect(boardPack.scoringTruthfulness?.moduleLayers?.governance?.sourceModule).toBe('governance');
     expect(boardPack.scoringTruthfulness?.moduleLayers?.governance?.governanceBoardPacksTable).toBe('governance_board_packs');
   });
+
+  it('excluye Strategy del board pack hasta SoT/Golden aprobado', async () => {
+    const boardPack = await generateBoardPack({
+      organizationId: 'org_board_pack_strategy_exclusion',
+      userId: 'u_strategy'
+    });
+
+    expect(boardPack.branches.strategy).toBeUndefined();
+    expect(boardPack.scoringTruthfulness?.moduleLayers?.strategy?.boardPackBranchStatus).toBe(
+      'excluded_until_sot_golden'
+    );
+    expect(boardPack.scoringTruthfulness?.moduleLayers?.strategy?.certifiedRating).toBe(false);
+  });
 });

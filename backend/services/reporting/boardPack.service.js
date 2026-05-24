@@ -76,6 +76,15 @@ export function buildBoardPackScoringTruthfulness() {
         reportingBoardPackRole: 'cross_module_aggregator_not_governance_workflow_sot',
         certifiedRating: false,
         humanReviewRequired: true
+      },
+      strategy: {
+        boardPackBranchStatus: 'excluded_until_sot_golden',
+        sourceModule: 'strategy',
+        operationalMetrics: ['strategyReadinessScore'],
+        reportingBoardPackRole: 'excluded_by_design_pending_strategy_sot_golden',
+        certifiedRating: false,
+        humanReviewRequired: true,
+        note: 'Strategy branch absent from Board Pack until Strategy SoT/Golden branch is approved.'
       }
     }
   };

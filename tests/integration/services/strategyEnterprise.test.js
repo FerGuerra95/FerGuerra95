@@ -73,4 +73,17 @@ describe('enterprise strategy foundation', () => {
     await createStrategicObjective('org_strategy_a', { title: 'Tenant A objective' }, { userId: 'u' });
     expect((await listStrategicObjectives('org_strategy_b')).some((item) => item.title === 'Tenant A objective')).toBe(false);
   });
+
+  it('returns insufficient_data summary for empty strategy org without 60 defaults', async () => {
+    const summary = await getStrategySummary({ organizationId: 'org_strategy_empty' });
+
+    expect(summary.strategyReadinessScore).toBeNull();
+    expect(summary.metrics.strategyReadinessScore).toBeNull();
+    expect(summary.metrics.objectiveCompletion).toBeNull();
+    expect(summary.metrics.scenarioConfidence).toBeNull();
+    expect(summary.dataSource).toBe('insufficient_data');
+    expect(summary.executiveSignalEligible).toBe(false);
+    expect(summary.metrics.strategicRiskLevel).toBe('not_assessed');
+    expect(summary.scoringTruthfulness?.certifiedRating).toBe(false);
+  });
 });

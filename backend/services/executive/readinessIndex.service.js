@@ -13,6 +13,9 @@ function available(moduleSummary) {
 
 function scoreFrom(moduleSummary, paths = []) {
   if (!available(moduleSummary)) return null;
+  const eligibility =
+    moduleSummary.data?.metrics?.executiveSignalEligible ?? moduleSummary.data?.executiveSignalEligible;
+  if (eligibility === false) return null;
   for (const path of paths) {
     const value = path.split('.').reduce((current, key) => current?.[key], moduleSummary.data);
     if (value !== undefined && value !== null && Number.isFinite(Number(value))) {

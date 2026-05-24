@@ -1919,15 +1919,32 @@ export function CEOOverviewPage() {
     metrics: riskMetrics
   };
   const strategyMetrics = strategySummary?.metrics || {};
+  const strategyHasPersistedData =
+    strategySummary?.executiveSignalEligible === true ||
+    strategyMetrics.executiveSignalEligible === true ||
+    (strategySummary?.counts?.objectives || 0) > 0 ||
+    (strategySummary?.counts?.initiatives || 0) > 0;
+  const strategyScoreRaw = strategyMetrics.strategyReadinessScore ?? strategySummary?.strategyReadinessScore;
   const strategyOverview = {
-    score: clampScore(strategyMetrics.strategyReadinessScore || strategySummary?.strategyReadinessScore || 60),
+    score:
+      strategyHasPersistedData &&
+      strategyMetrics.executiveSignalEligible !== false &&
+      strategyScoreRaw !== null &&
+      strategyScoreRaw !== undefined &&
+      Number.isFinite(Number(strategyScoreRaw))
+        ? clampScore(strategyScoreRaw)
+        : null,
     title: 'Strategy Command',
-    posture: strategyMetrics.requiresExecutiveAttention ? 'executive_attention' : 'aligned',
+    posture: !strategyHasPersistedData
+      ? 'insufficient_data'
+      : strategyMetrics.requiresExecutiveAttention
+        ? 'executive_attention'
+        : 'aligned',
     description:
-      'Strategy connects objectives, initiatives, scenarios, market signals, capital dependencies and board decisions into the executive layer.',
+      'Strategy connects objectives, initiatives, scenarios, market signals, capital dependencies and board decisions into the executive layer. DSS only — human review required.',
     recordsCount: strategySummary?.counts?.objectives || 0,
     activeRecordsCount: strategyMetrics.blockedStrategicInitiatives || strategySummary?.blockedStrategicInitiatives || 0,
-    latestTitle: strategySummary?.latestObjective?.title || 'Strategic execution baseline',
+    latestTitle: strategySummary?.latestObjective?.title || 'Insufficient persisted strategy data',
     metrics: strategyMetrics
   };
 
@@ -2405,7 +2422,7 @@ export function CEOOverviewPage() {
                   { key: 'bridge', title: 'Bridge', route: '/bridge/dashboard', score: bridgeOverview.score, status: 'normal', keyMetric: `${bridgeOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
                   { key: 'risk', title: 'Risk', route: '/risk/dashboard', score: riskOverview.score, status: 'normal', keyMetric: `${riskOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
                   { key: 'reporting', title: 'Reporting', route: '/reporting/dashboard', score: 65, status: 'normal', keyMetric: 'Pending enterprise signal', cta: 'Open module', humanReviewRequired: true },
-                  { key: 'strategy', title: 'Strategy', route: '/strategy/dashboard', score: strategyOverview.score, status: 'normal', keyMetric: `${strategyOverview.score}/100`, cta: 'Open module', humanReviewRequired: true }
+                  { key: 'strategy', title: 'Strategy', route: '/strategy/dashboard', score: strategyOverview.score, status: strategyOverview.score == null ? 'insufficient_data' : 'normal', keyMetric: strategyOverview.score != null ? `${strategyOverview.score}/100` : 'Insufficient persisted strategy data', cta: 'Open module', humanReviewRequired: true }
                 ]).map((card) => (
               <ExecutiveModuleCard key={card.key || card.title} card={card} />
             ))}
@@ -2670,7 +2687,7 @@ export function CEOOverviewPage() {
                 { label: 'Blocked initiatives', value: strategyOverview.activeRecordsCount },
                 { label: 'Capital dependencies', value: strategyOverview.metrics?.capitalDependencyCount || 0 },
                 { label: 'Board decisions', value: strategyOverview.metrics?.boardDecisionsRequired || 0 },
-                { label: 'Strategic risk', value: strategyOverview.metrics?.strategicRiskLevel || 'controlled' },
+                { label: 'Strategic risk', value: strategyOverview.metrics?.strategicRiskLevel || 'not_assessed' },
                 { label: 'Latest', value: strategyOverview.latestTitle }
               ]}
               primaryLink={{ to: '/strategy/dashboard', label: 'Open Strategy' }}

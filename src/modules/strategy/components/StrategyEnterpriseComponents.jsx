@@ -25,7 +25,29 @@ export const strategyEnterpriseCss = `
 `;
 
 export function StrategyStatusBadge({ status }) {
-  return <Badge>{String(status || 'active').replaceAll('_', ' ')}</Badge>;
+  const normalized = String(status || 'active').toLowerCase();
+  const label =
+    normalized === 'generated'
+      ? 'draft metadata'
+      : normalized === 'not_assessed'
+        ? 'not assessed'
+        : normalized === 'insufficient_data'
+          ? 'insufficient data'
+          : normalized.replaceAll('_', ' ');
+  return <Badge>{label}</Badge>;
+}
+
+function formatStrategyScore(value) {
+  if (value === null || value === undefined || !Number.isFinite(Number(value))) {
+    return 'N/A';
+  }
+  return `${value}%`;
+}
+
+function formatStrategicRiskLevel(value) {
+  const normalized = String(value || 'not_assessed').toLowerCase();
+  if (normalized === 'controlled') return 'not assessed';
+  return normalized.replaceAll('_', ' ');
 }
 
 export function StrategyKpi({ label, value, description }) {
@@ -35,12 +57,14 @@ export function StrategyKpi({ label, value, description }) {
 export function StrategyExecutiveWidget({ summary = {} }) {
   const safe = summary && typeof summary === 'object' ? summary : {};
   const metrics = safe.metrics || safe || {};
+  const readinessScore = metrics.strategyReadinessScore ?? safe.strategyReadinessScore;
+  const riskLevel = metrics.strategicRiskLevel ?? safe.strategicRiskLevel ?? 'not_assessed';
   return (
     <section className="strategy-grid">
-      <StrategyKpi label="Strategic readiness" value={`${metrics.strategyReadinessScore || safe.strategyReadinessScore || 0}%`} description="Execution posture." />
+      <StrategyKpi label="Operational readiness signal" value={formatStrategyScore(readinessScore)} description="DSS heuristic — human review required." />
       <StrategyKpi label="Blocked initiatives" value={metrics.blockedStrategicInitiatives || safe.blockedStrategicInitiatives || 0} description="Executive attention." />
       <StrategyKpi label="Capital dependencies" value={metrics.capitalDependencyCount || safe.capitalDependencyCount || 0} description="Funding linkage." />
-      <StrategyKpi label="Strategic risk" value={metrics.strategicRiskLevel || safe.strategicRiskLevel || 'controlled'} description="Board visibility." />
+      <StrategyKpi label="Strategic risk posture" value={formatStrategicRiskLevel(riskLevel)} description="Not a certified risk rating." />
     </section>
   );
 }

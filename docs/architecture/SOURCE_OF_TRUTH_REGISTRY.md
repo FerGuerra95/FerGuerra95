@@ -432,6 +432,24 @@ PMI does **not** have a single production capture formula today. It has multiple
 
 **Not closed:** Golden helper/tests for governance readiness; workflow state-machine guards (P2); Controls/ESG UI gaps; CEO global fallbacks (C.13.10).
 
+## Strategy / Board Pack boundary (C.13.9C)
+
+**Strategy status:** **DSS OPERATIONAL / PRODUCT LOGIC BASELINE / TRUTHFULNESS GATED / GOLDEN PENDING**
+
+| Layer | Source-of-truth | Role | Status |
+|---|---|---|---|
+| Strategy persisted data | SQLite `strategic_*` / `strategy_report_exports` via `strategy.service.js` | Objectives, initiatives, scenarios, market notes, risks, report metadata | **OPERATIONAL DSS** |
+| `strategyReadinessScore` | `calculateStrategyMetrics` | Operational DSS heuristic — **not Golden**, **not certified** | **TRUTHFULNESS GATED** (C.13.9C) |
+| `objectiveCompletion` / `scenarioConfidence` | `calculateStrategyMetrics` | Operational components — **no 60 defaults** when empty | **TRUTHFULNESS GATED** (C.13.9C) |
+| `strategicRiskLevel` | `calculateStrategyMetrics` | Zero risks → `not_assessed` (not `controlled`) | **TRUTHFULNESS GATED** (C.13.9C) |
+| Strategy reports | `strategy_report_exports` | **Metadata-only** draft records — not generated export pipeline | **TRUTHFULNESS LABELLED** (C.13.9C) |
+| Reporting Board Pack — Strategy branch | `boardPack.service.js` | **Excluded by design** until Strategy SoT/Golden branch approved | **DOCUMENTED EXCLUSION** (C.13.9C) |
+| CEO Overview Strategy score | `CEOOverviewPage.jsx` | Respects null / `executiveSignalEligible: false` — no fallback 60 | **PARTIALLY GATED** (C.13.9C) |
+
+**Empty org:** readiness **null**; `strategyStatus: insufficient_data`; `executiveSignalEligible: false`. Defaults 60 **removed** as exported scores.
+
+**Not closed:** Golden helper/tests for strategy readiness; Strategy Board Pack branch (future); CRUD gaps (P2); CEO global fallback audit (C.13.10).
+
 ## Executive Overview Special Rule
 
 Executive Overview reads module summaries and may show blended scores.

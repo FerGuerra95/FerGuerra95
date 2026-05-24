@@ -85,5 +85,6 @@ describe('CEO command center enterprise foundation', () => {
     expect(overview.readiness.humanReviewRequired).toBe(true);
     expect(overview.readiness.executiveSignalEligible).toBe(false);
     expect(overview.signals.length).toBeGreaterThan(0);
+    expect(overview.moduleCards.find((item) => item.key === 'strategy')?.score).toBeNull();
   });
 });

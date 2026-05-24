@@ -148,38 +148,136 @@ async function listAll(organizationId) {
 }
 
 export function calculateStrategyMetrics({ objectives = [], initiatives = [], scenarios = [], marketNotes = [], risks = [] } = {}) {
-  const activeObjectives = normalizeArray(objectives).filter((item) => !['closed', 'archived'].includes(normalizeText(item.status).toLowerCase()));
-  const blockedStrategicInitiatives = normalizeArray(initiatives).filter((item) => normalizeText(item.status).toLowerCase() === 'blocked' || normalizeArray(item.blockers).length > 0).length;
-  const initiativeProgress = initiatives.length ? Math.round(initiatives.reduce((sum, item) => sum + normalizeNumber(item.progress), 0) / initiatives.length) : 0;
-  const capitalDependencyCount = initiatives.filter((item) => normalizeNumber(item.capitalNeed) > 0 || normalizeNumber(item.budgetNeed) > 0 || item.linkedFundingRoundId).length;
-  const boardDecisionsRequired = objectives.filter((item) => normalizeText(item.linkedBoardDecisionId)).length + initiatives.filter((item) => normalizeArray(item.dependencies).some((dep) => String(dep).toLowerCase().includes('board'))).length;
-  const highRiskCount = risks.filter((item) => impactRank(item.impact) >= 3 && !['closed', 'mitigated'].includes(normalizeText(item.status).toLowerCase())).length;
-  const scenarioConfidence = scenarios.length ? Math.round(scenarios.reduce((sum, item) => sum + normalizeNumber(item.confidence), 0) / scenarios.length) : 60;
+  const normalizedObjectives = normalizeArray(objectives);
+  const normalizedInitiatives = normalizeArray(initiatives);
+  const normalizedScenarios = normalizeArray(scenarios);
+  const normalizedMarketNotes = normalizeArray(marketNotes);
+  const normalizedRisks = normalizeArray(risks);
+  const hasPersistedStrategyData =
+    normalizedObjectives.length +
+      normalizedInitiatives.length +
+      normalizedScenarios.length +
+      normalizedMarketNotes.length +
+      normalizedRisks.length >
+    0;
+  const scoringTruthfulness = {
+    certifiedRating: false,
+    operationalDss: true,
+    goldenBenchmark: null,
+    humanReviewRequired: true,
+    note: 'Strategy readiness is an operational DSS heuristic — not a certified strategy rating.'
+  };
+
+  if (!hasPersistedStrategyData) {
+    return {
+      strategyReadinessScore: null,
+      objectiveCompletion: null,
+      scenarioConfidence: null,
+      executionConfidence: null,
+      objectivesByStatus: {},
+      initiativesProgress: null,
+      blockedStrategicInitiatives: 0,
+      strategicRisks: 0,
+      capitalDependencyCount: 0,
+      boardDecisionsRequired: 0,
+      strategicRiskLevel: 'not_assessed',
+      scenariosCount: 0,
+      marketSignalsCount: 0,
+      requiresExecutiveAttention: false,
+      humanReviewPosture: 'human_review_required',
+      strategyStatus: 'insufficient_data',
+      dataSource: 'insufficient_data',
+      executiveSignalEligible: false,
+      humanReviewRequired: true,
+      scoringTruthfulness
+    };
+  }
+
+  const activeObjectives = normalizedObjectives.filter(
+    (item) => !['closed', 'archived'].includes(normalizeText(item.status).toLowerCase())
+  );
+  const blockedStrategicInitiatives = normalizedInitiatives.filter(
+    (item) => normalizeText(item.status).toLowerCase() === 'blocked' || normalizeArray(item.blockers).length > 0
+  ).length;
+  const initiativeProgress = normalizedInitiatives.length
+    ? Math.round(
+        normalizedInitiatives.reduce((sum, item) => sum + normalizeNumber(item.progress), 0) /
+          normalizedInitiatives.length
+      )
+    : null;
+  const capitalDependencyCount = normalizedInitiatives.filter(
+    (item) => normalizeNumber(item.capitalNeed) > 0 || normalizeNumber(item.budgetNeed) > 0 || item.linkedFundingRoundId
+  ).length;
+  const boardDecisionsRequired =
+    normalizedObjectives.filter((item) => normalizeText(item.linkedBoardDecisionId)).length +
+    normalizedInitiatives.filter((item) =>
+      normalizeArray(item.dependencies).some((dep) => String(dep).toLowerCase().includes('board'))
+    ).length;
+  const highRiskCount = normalizedRisks.filter(
+    (item) => impactRank(item.impact) >= 3 && !['closed', 'mitigated'].includes(normalizeText(item.status).toLowerCase())
+  ).length;
+  const scenarioConfidence = normalizedScenarios.length
+    ? Math.round(
+        normalizedScenarios.reduce((sum, item) => sum + normalizeNumber(item.confidence), 0) /
+          normalizedScenarios.length
+      )
+    : null;
   const objectiveCompletion = activeObjectives.length
-    ? Math.round(activeObjectives.reduce((sum, item) => {
-        const target = normalizeNumber(item.targetMetric);
-        const current = normalizeNumber(item.currentMetric);
-        return sum + (target > 0 ? clampScore((current / target) * 100) : 50);
-      }, 0) / activeObjectives.length)
-    : 60;
-  const strategyReadinessScore = clampScore(objectiveCompletion * 0.3 + initiativeProgress * 0.25 + scenarioConfidence * 0.18 + Math.min(100, marketNotes.length * 10) * 0.08 + Math.max(0, 100 - blockedStrategicInitiatives * 18) * 0.1 + Math.max(0, 100 - highRiskCount * 15) * 0.09);
-  const requiresExecutiveAttention = blockedStrategicInitiatives > 0 || capitalDependencyCount > 0 || highRiskCount > 0 || boardDecisionsRequired > 0;
+    ? Math.round(
+        activeObjectives.reduce((sum, item) => {
+          const target = normalizeNumber(item.targetMetric);
+          const current = normalizeNumber(item.currentMetric);
+          return sum + (target > 0 ? clampScore((current / target) * 100) : 50);
+        }, 0) / activeObjectives.length
+      )
+    : null;
+  const canCalculateReadiness =
+    activeObjectives.length > 0 || normalizedInitiatives.length > 0 || normalizedScenarios.length > 0;
+  const strategyReadinessScore = canCalculateReadiness
+    ? clampScore(
+        (objectiveCompletion ?? 0) * 0.3 +
+          (initiativeProgress ?? 0) * 0.25 +
+          (scenarioConfidence ?? 0) * 0.18 +
+          Math.min(100, normalizedMarketNotes.length * 10) * 0.08 +
+          Math.max(0, 100 - blockedStrategicInitiatives * 18) * 0.1 +
+          Math.max(0, 100 - highRiskCount * 15) * 0.09
+      )
+    : null;
+  const requiresExecutiveAttention =
+    blockedStrategicInitiatives > 0 || capitalDependencyCount > 0 || highRiskCount > 0 || boardDecisionsRequired > 0;
+  const strategicRiskLevel =
+    highRiskCount > 0 ? 'high' : normalizedRisks.length > 0 ? 'watch' : 'not_assessed';
+
   return {
     strategyReadinessScore,
-    objectivesByStatus: objectives.reduce((acc, item) => {
+    objectiveCompletion,
+    scenarioConfidence,
+    executionConfidence: initiativeProgress,
+    objectivesByStatus: normalizedObjectives.reduce((acc, item) => {
       const key = normalizeText(item.status, 'active');
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {}),
-    initiativesProgress: clampScore(initiativeProgress),
+    initiativesProgress: initiativeProgress === null ? null : clampScore(initiativeProgress),
     blockedStrategicInitiatives,
-    strategicRisks: risks.length,
+    strategicRisks: normalizedRisks.length,
     capitalDependencyCount,
     boardDecisionsRequired,
-    strategicRiskLevel: highRiskCount > 0 ? 'high' : risks.length > 0 ? 'watch' : 'controlled',
-    scenariosCount: scenarios.length,
-    marketSignalsCount: marketNotes.length,
-    requiresExecutiveAttention
+    strategicRiskLevel,
+    scenariosCount: normalizedScenarios.length,
+    marketSignalsCount: normalizedMarketNotes.length,
+    requiresExecutiveAttention,
+    humanReviewPosture: 'human_review_required',
+    strategyStatus:
+      strategyReadinessScore === null
+        ? 'insufficient_data'
+        : requiresExecutiveAttention
+          ? 'watch'
+          : 'aligned',
+    dataSource: 'operational_dss',
+    executiveSignalEligible: strategyReadinessScore !== null,
+    humanReviewRequired: true,
+    scoringTruthfulness
   };
 }
 
@@ -209,7 +307,14 @@ export const createStrategyReport = (organizationId, payload = {}, actor = {}) =
   reportType: payload.reportType || 'strategy_board_memo',
   title: payload.title || 'Strategy Board Memo',
   status: 'generated',
-  payload: { reportTypes: ['Strategy Board Memo', 'Strategic Scenario Pack', 'Strategic Execution Report', 'Capital Allocation Memo'], humanReviewRequired: true, ...(payload.payload || {}) }
+  payload: {
+    reportTypes: ['Strategy Board Memo', 'Strategic Scenario Pack', 'Strategic Execution Report', 'Capital Allocation Memo'],
+    humanReviewRequired: true,
+    statusLabel: 'draft_metadata',
+    documentPipeline: 'metadata_only',
+    note: 'Strategy report metadata — not a generated export document.',
+    ...(payload.payload || {})
+  }
 }, actor, 'strategy.report.exported');
 
 export async function getStrategySummary(scope = {}) {
@@ -223,6 +328,11 @@ export async function getStrategySummary(scope = {}) {
     capitalDependencyCount: metrics.capitalDependencyCount,
     strategicRiskLevel: metrics.strategicRiskLevel,
     requiresExecutiveAttention: metrics.requiresExecutiveAttention,
+    strategyStatus: metrics.strategyStatus,
+    dataSource: metrics.dataSource,
+    executiveSignalEligible: metrics.executiveSignalEligible,
+    humanReviewRequired: metrics.humanReviewRequired,
+    scoringTruthfulness: metrics.scoringTruthfulness,
     counts: {
       objectives: data.objectives.length,
       initiatives: data.initiatives.length,

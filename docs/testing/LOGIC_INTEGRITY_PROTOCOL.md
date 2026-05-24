@@ -554,6 +554,28 @@ Reporting today remains:
 
 **Next:** C.13.9C Strategy SoT/truthfulness · C.13.10 CEO fallbacks.
 
+## C.13.9C — Strategy SoT decision + truthfulness fix
+
+**Fixes:** Empty org null readiness (no 60 defaults); `strategicRiskLevel` zero risks → `not_assessed`; Strategy report metadata labelled; CEO Strategy fallback 60 removed; Board Pack Strategy exclusion documented; `executiveSignalEligible` gating.
+
+**C13-P1-STRAT-01:** **PARTIALLY RESOLVED / STRATEGY READINESS CLASSIFIED AS OPERATIONAL DSS / GOLDEN PENDING**
+
+**C13-P1-STRAT-02:** **RESOLVED / EMPTY STRATEGY DEFAULTS GATED**
+
+**C13-P1-STRAT-03:** **RESOLVED / CEO STRATEGY FALLBACK GATED**
+
+**C13-P1-STRAT-04:** **RESOLVED / STRATEGY BOARD PACK EXCLUSION DOCUMENTED**
+
+**C13-P2-STRAT-01:** **RESOLVED / STRATEGY COPY TRUTHFULNESS UPDATED**
+
+**C13-P2-STRAT-02:** **RESOLVED / STRATEGY REPORT METADATA LABELLED**
+
+**C13-P2-STRAT-04:** **RESOLVED / STRATEGIC RISK EMPTY STATE GATED**
+
+**Strategy global:** **DSS OPERATIONAL / PRODUCT LOGIC BASELINE / TRUTHFULNESS GATED / GOLDEN PENDING** — not RESOLVED global.
+
+**Next:** C.13.10 CEO Overview / Executive Aggregator Audit.
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor

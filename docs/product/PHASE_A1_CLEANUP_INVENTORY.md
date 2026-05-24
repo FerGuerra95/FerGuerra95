@@ -5881,7 +5881,31 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### Siguiente fase recomendada
 
-**C.13.9C — Strategy SoT + truthfulness**
+**C.13.10 — CEO Overview / Executive Aggregator Audit**
+
+### C.13.9C — Strategy SoT decision + truthfulness fix
+
+**Commit:** (pending) — `fix(strategy): gate readiness fallbacks and clarify truthfulness`
+
+**Fixes:** Empty org null scores (no 60 defaults); CEO Strategy fallback gated; Board Pack Strategy exclusion; report metadata copy; `strategicRiskLevel` not_assessed when zero risks.
+
+**C13-P1-STRAT-01:** PARTIALLY RESOLVED / OPERATIONAL DSS / GOLDEN PENDING
+
+**C13-P1-STRAT-02:** RESOLVED / EMPTY STRATEGY DEFAULTS GATED
+
+**C13-P1-STRAT-03:** RESOLVED / CEO STRATEGY FALLBACK GATED
+
+**C13-P1-STRAT-04:** RESOLVED / STRATEGY BOARD PACK EXCLUSION DOCUMENTED
+
+**C13-P2-STRAT-01:** RESOLVED / STRATEGY COPY TRUTHFULNESS UPDATED
+
+**C13-P2-STRAT-02:** RESOLVED / STRATEGY REPORT METADATA LABELLED
+
+**C13-P2-STRAT-04:** RESOLVED / STRATEGIC RISK EMPTY STATE GATED
+
+**Strategy global:** DSS OPERATIONAL / TRUTHFULNESS GATED / GOLDEN PENDING — **no RESOLVED global**
+
+**Siguiente:** C.13.10 CEO Overview
 
 ### C.13.9B — Governance SoT decision + truthfulness fix
 
