@@ -5901,9 +5901,21 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 | CEO fallback scores | gated (C.13.10B) |
 | P1 logic blockers | **none known** |
 
-**P2 residuals:** Governance/Strategy Golden · Render smoke · PDF renderer · per-module variance · PMI `mergeWithDemo` stale reference · `executiveReports` readiness `\|\| 0` · Heritage audit · broader e2e.
+**P2 residuals:** Governance/Strategy Golden · Render smoke · PDF renderer · per-module variance · ~~PMI `mergeWithDemo` stale reference~~ **resolved C.13.12B** · `executiveReports` readiness `\|\| 0` · Heritage audit · broader e2e.
 
-**Siguiente:** Production Render smoke · C.14 Enterprise Hardening · optional C.13.12B PMI save-path fix.
+**Siguiente:** Production Render smoke · C.14 Enterprise Hardening
+
+### C.13.12B — PMI stale mergeWithDemo reference fix
+
+**Commit:** afc7f2a — `fix(pmi): remove stale demo merge reference`
+
+**Fix:** `savePmiCase` — `mergeWithDemo(saved)` → `normalizePersistedPmiCase(saved)` in `pmiStore.jsx`.
+
+**C13-P2-PMI-STALE-MERGE:** RESOLVED / normalizePersistedPmiCase used for persisted hydration
+
+**Validaciones:** PMI unit + integration + full suite + build pass.
+
+**Siguiente:** Production Render smoke / C.14
 
 ### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
 

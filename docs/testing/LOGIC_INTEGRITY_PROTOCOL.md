@@ -672,7 +672,7 @@ Reporting today remains:
 | CEO/Executive | Truthfulness gated aggregator | Yes (with data) | No |
 | Heritage | Not C.13 closed | Preview only | No |
 
-**Next:** Production Render smoke · C.14 Enterprise Hardening · optional C.13.12B PMI save-path fix.
+**Next:** Production Render smoke · C.14 Enterprise Hardening.
 
 ## C.13.12 — Global Logic Integrity Final Gate / Release Readiness Audit
 
@@ -701,7 +701,7 @@ Reporting today remains:
 
 ### P2 residuals
 
-Governance/Strategy Golden · Render smoke · PDF renderer · per-module variance · Compliance API rename · M&A snapshot policy · Heritage audit · Funding e2e · Bridge alignment · `pmiStore` stale `mergeWithDemo` · `executiveReports` readiness `\|\| 0` · broader e2e.
+Governance/Strategy Golden · Render smoke · PDF renderer · per-module variance · Compliance API rename · M&A snapshot policy · Heritage audit · Funding e2e · Bridge alignment · ~~`pmiStore` stale `mergeWithDemo`~~ **resolved C.13.12B** · `executiveReports` readiness `\|\| 0` · broader e2e.
 
 ### Commercial truthfulness (final)
 

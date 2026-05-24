@@ -569,4 +569,4 @@ Not a source-of-truth for production pilot narrative.
 
 **P2 residuals:** Governance/Strategy Golden · Render smoke · PDF renderer · per-module variance · ~~PMI `mergeWithDemo` stale reference~~ **resolved C.13.12B** · `executiveReports` readiness `\|\| 0` · Heritage audit · broader e2e.
 
-**Next:** Production Render smoke · C.14 Enterprise Hardening · optional C.13.12B PMI save-path fix.
+**Next:** Production Render smoke · C.14 Enterprise Hardening.
