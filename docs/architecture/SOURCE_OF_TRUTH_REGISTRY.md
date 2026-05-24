@@ -292,7 +292,7 @@ PMI does **not** have a single production capture formula today. It has multiple
 
 | Layer | Logical name | Formula / source | Role | Status |
 |---|---|---|---|---|
-| Golden benchmark | `pmiCaptureRateGolden` | `capturedSynergy / forecastSynergy`; if forecast = 0 => `null` | Oracle / Formula Approval benchmark | Documented (C.13.7B); helper/tests pending C.13.7C |
+| Golden benchmark | `pmiCaptureRateGolden` | `capturedSynergy / forecastSynergy`; if forecast = 0 => `null` | Oracle / Formula Approval benchmark | **IMPLEMENTED AND TESTED** (C.13.7C) — `backend/services/pmi/pmiGoldenFormulas.js` |
 | Case operational capture | `operationalPmiCaseCapture` | `synergyCaptured / synergyTarget` (case payload) | DSS case dashboard signal | OPEN — denominator differs from Golden (C13-P1-11) |
 | Ledger operational capture | `operationalPmiLedgerCapture` | `Σcaptured / Σforecast` (synergy ledger) | DSS ledger capture view | OPEN — zero-denominator handling pending (C13-P1-10) |
 | Enterprise operational capture | `operationalPmiEnterpriseCapture` | `capturedValue / targetValue` with case/ledger fallback in metrics pipeline | DSS enterprise initiatives view | OPEN — case/ledger/enterprise sync pending (C13-P1-13) |
@@ -308,8 +308,8 @@ PMI does **not** have a single production capture formula today. It has multiple
 4. Demo/template layer is not enterprise source-of-truth and must not be mixed into executive truth without explicit labeling/gating.
 5. CEO/Hub must distinguish persisted operational data vs demo/default/fallback states.
 
-**PMI status:** **MISMATCH CONFIRMED / SOT DECISION DOCUMENTED** (C.13.7B).  
-Do not mark PMI as APPROVED/RESOLVED until C.13.7C+ phases close test and truthfulness gaps.
+**PMI status:** **MISMATCH CONFIRMED / GOLDEN BENCHMARK TESTED** (C.13.7C). Golden oracle helper/tests exist; operational layers and demo/CEO gaps remain open.  
+Do not mark PMI as APPROVED/RESOLVED until C.13.7D+ phases close operational test and truthfulness gaps.
 
 ## Executive Overview Special Rule
 

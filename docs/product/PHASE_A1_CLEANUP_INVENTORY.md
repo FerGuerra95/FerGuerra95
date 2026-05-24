@@ -5777,7 +5777,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 | Layer | Logical name | Formula / source | Role | Status |
 |---|---|---|---|---|
-| Golden benchmark | `pmiCaptureRateGolden` | `captured / forecast`; `forecast=0 => null` | Oracle / Formula Approval benchmark | Pending helper/tests (C.13.7C) |
+| Golden benchmark | `pmiCaptureRateGolden` | `captured / forecast`; `forecast=0 => null` | Oracle / Formula Approval benchmark | **IMPLEMENTED AND TESTED** (C.13.7C) |
 | Case operational | `operationalPmiCaseCapture` | `synergyCaptured / synergyTarget` | DSS case dashboard | OPEN — denom distinto a Golden |
 | Ledger operational | `operationalPmiLedgerCapture` | `Σcaptured / Σforecast` | DSS ledger view | OPEN — null behavior pending |
 | Enterprise operational | `operationalPmiEnterpriseCapture` | `capturedValue / targetValue` + fallback case/ledger | DSS enterprise initiatives | OPEN — sync SoT pending |
@@ -5790,9 +5790,9 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 | ID | Estado | Decisión | Siguiente fase |
 |---|---|---|---|
 | C13-P1-09 | OPEN / SOT DECISION DOCUMENTED | `mergeWithDemo` = capa demo/template, no SoT ejecutivo | C.13.7E |
-| C13-P1-10 | OPEN / GOLDEN EDGE CASE DOCUMENTED | Golden exige `null` cuando forecast=0; 0% no equivale a Golden | C.13.7C o C.13.7D |
-| C13-P1-11 | OPEN / DUAL-LAYER DECISION DOCUMENTED | Golden (captured/forecast) separado de capture operacional case (captured/target) | C.13.7C + C.13.7D |
-| C13-P1-12 | OPEN / TEST GAP DOCUMENTED | Falta helper/tests oráculo `PMI_CAPTURE_RATE` | C.13.7C |
+| C13-P1-10 | PARTIALLY RESOLVED / GOLDEN ZERO FORECAST TESTED | Golden helper devuelve `null` si forecast≤0; producto operacional pendiente | C.13.7D |
+| C13-P1-11 | PARTIALLY RESOLVED / GOLDEN CAPTURE SEPARATED | Golden (captured/forecast) testeado aparte de target operacional | C.13.7D |
+| C13-P1-12 | PARTIALLY RESOLVED / GOLDEN HELPER TESTED | `pmiGoldenFormulas.js` + `pmiGoldenFormulas.test.js` | C.13.7D |
 | C13-P1-13 | OPEN / SOT GAP DOCUMENTED | Case/ledger/enterprise no son una única fuente sincronizada | C.13.7D o C.13.7E |
 | C13-P1-14 | OPEN / OPERATIONAL DSS CLASSIFIED | Readiness/integration = heurística DSS, no Golden | C.13.7D |
 | C13-P1-15 | OPEN / EXECUTIVE EXPOSURE DOCUMENTED | CEO/Hub debe distinguir persisted vs DSS vs demo/default | C.13.7E |
@@ -5815,12 +5815,23 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 2. No promover demo/fallback a executive truth sin gating/label.
 3. No presentar readiness/integration DSS como fórmula Golden certificada.
 
+### C.13.7C — PMI Golden helper/tests (COMPLETED)
+
+**Modo:** WRITE/FIX (helper + tests + docs de cierre)  
+**Estado:** **COMPLETED**  
+**PMI formula status:** **MISMATCH CONFIRMED / GOLDEN BENCHMARK TESTED**
+
+**Entregables:**
+- `backend/services/pmi/pmiGoldenFormulas.js` — `calculatePmiCaptureRateGolden`
+- `tests/unit/pmi/pmiGoldenFormulas.test.js` — oráculo `pmi_synergy_capture_rate_basic`, `pmi_synergy_zero_forecast`, edge cases, dual-layer truthfulness
+
+**No tocado:** `pmi.service.js`, PMI UI, `mergeWithDemo`, `golden_inputs.json`, `FORMULA_REGISTRY.md`, CEO/Hub.
+
 ### Siguiente fase recomendada
 
-**C.13.7C — PMI Golden helper/tests**
+**C.13.7D — PMI operational synergy/readiness tests**
 
 Objetivo:
-- crear `pmiGoldenFormulas.js`;
-- testear `pmi_synergy_capture_rate_basic` (0.3 / 30%);
-- testear `pmi_synergy_zero_forecast` (`null`);
-- sin tocar lógica productiva operacional.
+- testear `operationalPmiCaseCapture`, `operationalPmiLedgerCapture`, `operationalPmiEnterpriseCapture`, `operationalPmiReadinessScore`;
+- documentar que readiness no es Golden;
+- sin tocar demo fallback salvo fase separada.

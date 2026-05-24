@@ -277,6 +277,23 @@ PMI calculations are separated into multiple layers. Do not collapse them into o
 
 **PMI status after C.13.7B:** **MISMATCH CONFIRMED / SOT DECISION DOCUMENTED** (not approved, not globally resolved).
 
+## PMI Golden benchmark tests (C.13.7C)
+
+1. **Helper:** `backend/services/pmi/pmiGoldenFormulas.js` — `calculatePmiCaptureRateGolden` / `pmiCaptureRateGolden`.
+2. **Formula:** `captureRateDecimal = capturedSynergy / forecastSynergy`; `captureRatePercent = captureRateDecimal * 100`.
+3. **Zero/invalid denominator:** if `forecastSynergy <= 0` or inputs non-finite → `captureRateDecimal` / `captureRatePercent` = `null` (not `0%`).
+4. **Golden IDs covered:** `pmi_synergy_capture_rate_basic`, `pmi_synergy_zero_forecast`.
+5. **Tests:** `tests/unit/pmi/pmiGoldenFormulas.test.js` — oracle against `docs/testing/golden_inputs.json`; dual-layer test confirms Golden ignores `synergyTarget` as forecast.
+6. **Product untouched:** no changes to `pmi.service.js`, PMI UI, `mergeWithDemo`, CEO/Hub, or operational formulas.
+
+**C13-P1-10 status (C.13.7C):** **PARTIALLY RESOLVED / GOLDEN ZERO FORECAST TESTED** — Golden layer only; product zero-forecast may still return `0%` until C.13.7D+.
+
+**C13-P1-11 status (C.13.7C):** **PARTIALLY RESOLVED / GOLDEN CAPTURE SEPARATED** — Golden uses forecast; operational case uses target; documented in tests.
+
+**C13-P1-12 status (C.13.7C):** **PARTIALLY RESOLVED / GOLDEN HELPER TESTED** — helper + unit oracle exist; operational PMI tests pending C.13.7D.
+
+**PMI status after C.13.7C:** **MISMATCH CONFIRMED / GOLDEN BENCHMARK TESTED** (not approved, not globally resolved).
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor
