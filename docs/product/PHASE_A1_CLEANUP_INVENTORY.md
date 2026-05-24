@@ -5885,7 +5885,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
 
-**Commit:** pending — `docs: record cross-module source-of-truth closure`
+**Commit:** 1b39c9f — `docs: record cross-module source-of-truth closure`
 
 **Mode:** Documentation only — no product code, tests, Golden, or Formula Registry changes.
 
