@@ -1738,7 +1738,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-05 | Compliance resilience — golden + labels/re-export | f7B + f8A `4414208` + f8B `eb48db6`; ver f8A/f8B/f8C | **PARTIALLY RESOLVED** — golden helper/test + operational labels/re-export; backend/API/model rename pending |
 | C13-P1-06 | FE/BE precedence — labels/precedence fix done | f5B + f6A + f6B (`1e82980`); ver C.13.1C-f6A/f6B/f6C | **PARTIALLY RESOLVED** — labels/precedence + re-export + CEO; backend/model rename pending |
 | C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | **PARTIALLY RESOLVED** — Option C dual-layer (C.13.5E); Golden tests (C.13.5D); operational heuristic tests (C.13.5F); product formula unchanged; **no RESOLVED global** |
-| C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | **PARTIALLY RESOLVED** — Option C dual-layer (C.13.6B); Golden tests (C.13.6C); operational tests (C.13.6D); UI gaps pending C.13.6E; **no RESOLVED global** |
+| C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | **PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED** — Option C dual-layer (C.13.6B); Golden tests (C.13.6C); operational tests (C.13.6D); UI aligned (C.13.6E); report/export pending C.13.6F; **no RESOLVED global** |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
 | C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
 | C13-P1-11 | M&A EV simple vs adjusted engine | Golden `ma_valuation_*`; FE `useValuationEngine` adjusted EV; report alignment tests | **PARTIALLY RESOLVED** — SoT + Golden tests + labels/copy + report alignment + netProceeds fallback fixed (C.13.4A–I); backend snapshot/re-export policy pending |
@@ -5606,10 +5606,10 @@ Optional **C.13.5G** — extract pure operational helper mirror (only if refacto
 
 | ID | Gap | Fase sugerida |
 |---|---|---|
-| C13-P1-08a | UI ignora `dashboard.heatmap` scores | C.13.6E (UI/copy controlado) |
-| C13-P1-08b | Copy heatmap engañoso | C.13.6E |
-| C13-P1-08c | Register sin campos likelihood/impact | C.13.6E |
-| C13-P1-08d | Sin golden/oracle tests | C.13.6C |
+| C13-P1-08a | UI ignora `dashboard.heatmap` scores | **CLOSED** C.13.6E |
+| C13-P1-08b | Copy heatmap engañoso | **CLOSED** C.13.6E |
+| C13-P1-08c | Register sin campos likelihood/impact | **CLOSED** C.13.6E |
+| C13-P1-08d | Sin golden/oracle tests | **CLOSED** C.13.6C |
 
 ### Estado C13-P1-08 (post C.13.6B)
 
@@ -5681,4 +5681,44 @@ C13-P1-08: PARTIALLY RESOLVED
 
 ### Paso siguiente recomendado
 
-**C.13.6E** — UI/heatmap/copy/register fields (labels DSS, `dashboard.heatmap`, likelihood/impact fields).
+**C.13.6F** — Risk final closure / report-export truthfulness / e2e smoke.
+
+---
+
+## C.13.6E — Risk UI / Heatmap / Copy / Register Fields Alignment (2026-05-23)
+
+**Scope:** UI truthfulness only — no formula, Golden Dataset, or backend scoring changes.
+
+### Cambios
+
+| Área | Corrección |
+|---|---|
+| Heatmap dashboard | `RiskDashboardPage` pasa `dashboard.heatmap` enriquecido a `RiskHeatmap`; fallback defensivo a `dashboard.risks` |
+| Adaptador | `src/modules/risk/utils/riskHeatmapData.js` — `normalizeRiskHeatmapData`, referencia L×I display-only, max operational residual por celda |
+| Copy heatmap | Eliminado “severity vs likelihood”; labels: “Likelihood × impact matrix”, DSS decision-support, Golden solo validación |
+| Register | Campos visibles `likelihood` e `impact` (1–5) en formulario; columnas en tabla; payload via `prepareRiskRegisterPayload` |
+| KPI copy | Risk readiness / residual risk etiquetados como operational DSS posture |
+
+### Tests añadidos
+
+- `tests/unit/risk/riskHeatmapData.test.js`
+- `tests/unit/risk/riskRegisterPayload.test.js`
+- `tests/unit/risk/riskUiAlignment.test.jsx`
+- `tests/e2e/risk/risk-enterprise-flow.spec.js` — fill Likelihood/Impact en register
+
+### No tocado
+
+- `riskScoreFrom`, `riskGoldenFormulas.js`, Golden Dataset, migraciones, Bridge, Compliance, Funding, M&A, backend API (ya aceptaba likelihood/impact)
+
+### Estado C13-P1-08 (post C.13.6E)
+
+```
+C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
+           C13-P1-08a heatmap → dashboard.heatmap: CLOSED
+           C13-P1-08b copy heatmap fiel: CLOSED
+           C13-P1-08c register likelihood/impact: CLOSED
+           C13-P1-08d Golden tests: CLOSED (C.13.6C)
+           C13-P1-08e operational tests: CLOSED (C.13.6D)
+           Dual-layer mismatch by design (Option C) — no RESOLVED global
+           Report/export truthfulness pending C.13.6F
+```

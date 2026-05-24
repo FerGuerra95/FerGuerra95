@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { PERMISSIONS, useAuth } from '../../../app/providers/AuthProvider.jsx';
 import { riskApi } from '../services/riskApi.js';
+import { prepareRiskRegisterPayload } from '../utils/riskRegisterPayload.js';
 import {
   BoardRiskReadinessPanel,
   ControlsLibraryPanel,
@@ -21,7 +22,32 @@ import {
 
 const EMPTY_RISK_FILTERS = { status: '', owner: '', category: '' };
 
-function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = [], render, permission = PERMISSIONS.CREATE_RISK }) {
+function normalizeFieldConfig(field) {
+  if (typeof field === 'string') {
+    return { key: field, label: field, type: 'text' };
+  }
+  return {
+    key: field.key,
+    label: field.label || field.key,
+    type: field.type || 'text',
+    min: field.min,
+    max: field.max,
+    help: field.help
+  };
+}
+
+function EntityPage({
+  badge,
+  title,
+  copy,
+  load,
+  create,
+  defaults = {},
+  fields = [],
+  transformPayload,
+  render,
+  permission = PERMISSIONS.CREATE_RISK
+}) {
   const { can } = useAuth();
   const canCreate = can(permission);
   const [items, setItems] = useState([]);
@@ -43,7 +69,8 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
   async function submit(event) {
     event.preventDefault();
     if (!canCreate || !create) return;
-    await create(form);
+    const payload = transformPayload ? transformPayload(form) : form;
+    await create(payload);
     setForm(defaults);
     await refresh();
   }
@@ -83,12 +110,25 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
         </div>
         {create ? (
           <form className="risk-enterprise-toolbar" onSubmit={submit}>
-            {fields.map((field) => (
-              <label className="risk-enterprise-field" key={field}>
-                <span>{field}</span>
-                <input aria-label={field} className="risk-enterprise-input" disabled={!canCreate} value={form[field] || ''} onChange={(event) => setForm((current) => ({ ...current, [field]: event.target.value }))} />
-              </label>
-            ))}
+            {fields.map((fieldConfig) => {
+              const field = normalizeFieldConfig(fieldConfig);
+              return (
+                <label className="risk-enterprise-field" key={field.key}>
+                  <span>{field.label}</span>
+                  <input
+                    aria-label={field.label}
+                    className="risk-enterprise-input"
+                    disabled={!canCreate}
+                    type={field.type}
+                    min={field.min}
+                    max={field.max}
+                    value={form[field.key] ?? ''}
+                    onChange={(event) => setForm((current) => ({ ...current, [field.key]: event.target.value }))}
+                  />
+                  {field.help ? <span className="risk-muted">{field.help}</span> : null}
+                </label>
+              );
+            })}
             <button className="risk-enterprise-button" disabled={!canCreate}>{canCreate ? 'Create' : 'Read only'}</button>
           </form>
         ) : null}
@@ -122,7 +162,7 @@ export function RiskDashboardPage() {
         {status.error ? <div className="risk-enterprise-empty">Risk dashboard could not be loaded.</div> : null}
         <RiskExecutiveWidget summary={dashboard} />
         <section className="risk-enterprise-grid-two">
-          <RiskHeatmap items={dashboard?.risks || []} />
+          <RiskHeatmap heatmap={dashboard?.heatmap || []} risks={dashboard?.risks || []} />
           <BoardRiskReadinessPanel metrics={metrics} />
         </section>
         <RiskRegisterTable items={dashboard?.risks || []} />
@@ -137,11 +177,64 @@ export function RiskDashboardPage() {
 }
 
 export function RiskRegisterPage() {
-  return <EntityPage badge="Register" title="Enterprise risk register." copy="Inherent severity, likelihood, impact, residual risk, owners, status, mitigations, linked module and review date." load={riskApi.listRegister} create={riskApi.createRisk} defaults={{ title: '', category: 'operational', inherentSeverity: 'high', residualRisk: 'medium', owner: 'Risk Owner', status: 'open' }} fields={['title', 'category', 'inherentSeverity', 'residualRisk', 'owner', 'status']} render={(items) => <RiskRegisterTable items={items} />} />;
+  return (
+    <EntityPage
+      badge="Register"
+      title="Enterprise risk register."
+      copy="Capture likelihood, impact, inherent severity and residual posture. Scores are decision-support signals — not certified risk ratings. Human review required."
+      load={riskApi.listRegister}
+      create={riskApi.createRisk}
+      transformPayload={prepareRiskRegisterPayload}
+      defaults={{
+        title: '',
+        category: 'operational',
+        inherentSeverity: 'high',
+        likelihood: 3,
+        impact: 3,
+        residualRisk: 'medium',
+        owner: 'Risk Owner',
+        status: 'open'
+      }}
+      fields={[
+        'title',
+        'category',
+        'inherentSeverity',
+        {
+          key: 'likelihood',
+          label: 'Likelihood',
+          type: 'number',
+          min: 1,
+          max: 5,
+          help: 'Used to position the risk in the operational DSS matrix (1–5).'
+        },
+        {
+          key: 'impact',
+          label: 'Impact',
+          type: 'number',
+          min: 1,
+          max: 5,
+          help: 'Used to position the risk in the operational DSS matrix (1–5).'
+        },
+        'residualRisk',
+        'owner',
+        'status'
+      ]}
+      render={(items) => <RiskRegisterTable items={items} />}
+    />
+  );
 }
 
 export function RiskHeatmapPage() {
-  return <EntityPage badge="Heatmap" title="Risk heatmap." copy="Severity vs likelihood with category and owner filters, showing inherent and residual posture." load={riskApi.listRegister} create={null} render={(items) => <RiskHeatmap items={items} />} />;
+  return (
+    <EntityPage
+      badge="Heatmap"
+      title="Risk heatmap."
+      copy="Likelihood × impact portfolio distribution with category and owner filters. Operational DSS posture — human review required."
+      load={riskApi.listRegister}
+      create={null}
+      render={(items) => <RiskHeatmap risks={items} />}
+    />
+  );
 }
 
 export function RiskControlsPage() {

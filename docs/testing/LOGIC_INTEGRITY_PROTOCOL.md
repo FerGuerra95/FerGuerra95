@@ -217,12 +217,12 @@ Risk Enterprise item scoring uses **two separate models** by design:
 3. **Do not conflate layers** in UI, exports, docs or executive narrative:
    - Do not present residual risk KPI or readiness scores as Golden-validated L×I.
    - Do not imply Golden benchmark governs live portfolio posture without explicit product decision.
-   - Heatmap UI currently shows impact×likelihood **counts** — not golden score nor full operational scores (C.13.6A gap; fix in C.13.6E if authorized).
+   - Heatmap UI prefers backend-enriched `dashboard.heatmap` when present; shows L×I distribution reference and operational residual max per cell (C.13.6E). Does not compute `riskScoreFrom` on the client.
 
-4. **C13-P1-08** remains **PARTIALLY RESOLVED** — dual-layer separated and both layers unit-tested (Golden C.13.6C, operational C.13.6D); UI/heatmap gaps pending C.13.6E; no global RESOLVED.
+4. **C13-P1-08** remains **PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED** — dual-layer separated, both layers unit-tested (Golden C.13.6C, operational C.13.6D), UI heatmap/copy/register aligned (C.13.6E); dual-layer divergence by design; no global RESOLVED until report/export closure (C.13.6F).
 
 5. **Next controlled phases:**
-   - **C.13.6E** — UI/copy/heatmap alignment (optional; labels + fields likelihood/impact).
+   - **C.13.6F** — report-export truthfulness / e2e smoke / final Risk cluster closure.
    - Product→Golden alignment (Option B) only if separately authorized.
 
 6. **Operational heuristic tests (C.13.6D):** `tests/unit/risk/riskOperationalScore.test.js` locks current `riskScoreFrom` behavior. Tests document conceptual name `operationalEnterpriseRiskScore` and verify divergence from `riskLikelihoodImpactGolden`.

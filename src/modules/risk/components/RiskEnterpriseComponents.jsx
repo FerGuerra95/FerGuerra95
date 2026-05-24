@@ -2,6 +2,11 @@ import React from 'react';
 import { AlertTriangle, BarChart3, CheckCircle2, FileText, Gauge, Radar, ShieldAlert } from 'lucide-react';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { Card } from '../../../shared/components/ui/Card.jsx';
+import {
+  goldenMatrixReference,
+  maxOperationalScoreInCell,
+  normalizeRiskHeatmapData
+} from '../utils/riskHeatmapData.js';
 
 export const riskEnterpriseCss = `
   .risk-enterprise-page { width: min(1440px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
@@ -32,6 +37,8 @@ export const riskEnterpriseCss = `
   .risk-heatmap { display: grid; grid-template-columns: repeat(5, minmax(42px, 1fr)); gap: 8px; }
   .risk-heatmap-cell { min-height: 64px; border-radius: 8px; border: 1px solid rgba(148,163,184,.14); background: rgba(15,23,42,.72); padding: 8px; color: #e2e8f0; font-size: .72rem; }
   .risk-heatmap-cell[data-hot="true"] { background: rgba(239,68,68,.18); border-color: rgba(248,113,113,.34); }
+  .risk-heatmap-note { margin: 0 0 12px; color: rgba(226,232,240,.68); font-size: .78rem; line-height: 1.45; }
+  .risk-heatmap-cell-meta { margin-top: 4px; color: rgba(226,232,240,.62); font-size: .68rem; line-height: 1.35; }
   @media (max-width: 760px) { .risk-enterprise-hero { padding: 20px; } .risk-enterprise-table { min-width: 720px; } .risk-table-scroll { overflow-x: auto; } }
 `;
 
@@ -60,7 +67,7 @@ export function RiskExecutiveWidget({ summary = {} }) {
   const metrics = safeSummary?.metrics || safeSummary || {};
   return (
     <section className="risk-enterprise-grid">
-      <RiskKpiCard icon={Gauge} label="Risk readiness" value={`${metrics.riskReadinessScore || safeSummary.riskReadinessScore || 0}%`} description={metrics.riskPosture || 'controlled'} />
+      <RiskKpiCard icon={Gauge} label="Risk readiness" value={`${metrics.riskReadinessScore || safeSummary.riskReadinessScore || 0}%`} description={`Operational DSS posture · ${metrics.riskPosture || 'controlled'}`} />
       <RiskKpiCard icon={ShieldAlert} label="Critical risks" value={metrics.criticalRiskCount || safeSummary.criticalRiskCount || 0} description="Executive review threshold." />
       <RiskKpiCard icon={AlertTriangle} label="Overdue mitigations" value={metrics.overdueMitigations || safeSummary.overdueMitigations || 0} description="Actions past deadline." />
       <RiskKpiCard icon={Radar} label="Appetite breaches" value={metrics.appetiteBreaches || safeSummary.appetiteBreaches || 0} description="Committee attention." />
@@ -76,6 +83,8 @@ export function RiskRegisterTable({ items = [] }) {
       columns={[
         { key: 'title', label: 'Risk' },
         { key: 'category', label: 'Category' },
+        { key: 'likelihood', label: 'Likelihood', render: (item) => (item.likelihood != null && item.likelihood !== '' ? `${item.likelihood}/5` : 'N/A') },
+        { key: 'impact', label: 'Impact', render: (item) => (item.impact != null && item.impact !== '' ? `${item.impact}/5` : 'N/A') },
         { key: 'residualRisk', label: 'Residual', render: (item) => <RiskStatusBadge status={item.residualRisk} /> },
         { key: 'owner', label: 'Owner' },
         { key: 'status', label: 'Status', render: (item) => <RiskStatusBadge status={item.status} /> },
@@ -112,18 +121,47 @@ export function EnterpriseRiskTable({ title, items = [], columns = [] }) {
   );
 }
 
-export function RiskHeatmap({ items = [] }) {
-  const cells = Array.from({ length: 25 }, (_, index) => ({ likelihood: (index % 5) + 1, impact: Math.floor(index / 5) + 1 }));
+export function RiskHeatmap({ heatmap = [], risks = [], items = [] }) {
+  const rows = normalizeRiskHeatmapData({
+    heatmap,
+    risks: risks.length ? risks : items
+  });
+  const cells = Array.from({ length: 25 }, (_, index) => ({
+    likelihood: (index % 5) + 1,
+    impact: Math.floor(index / 5) + 1
+  }));
+
   return (
     <Card className="risk-enterprise-panel">
-      <h3>Risk heatmap</h3>
+      <h3>Likelihood × impact matrix</h3>
+      <p className="risk-heatmap-note">
+        Portfolio distribution by likelihood and impact. Operational residual scores are DSS decision-support signals — not certified risk ratings. Golden benchmark uses L×I for validation only.
+      </p>
+      {rows.length === 0 ? (
+        <div className="risk-enterprise-empty">Insufficient validated data · Human review required</div>
+      ) : null}
       <div className="risk-heatmap">
         {cells.map((cell) => {
-          const matches = items.filter((item) => Number(item.likelihood) === cell.likelihood && Number(item.impact) === cell.impact);
+          const matches = rows.filter(
+            (item) => item.likelihood === cell.likelihood && item.impact === cell.impact
+          );
+          const matrixReference = goldenMatrixReference(cell.likelihood, cell.impact);
+          const topOperationalScore = maxOperationalScoreInCell(matches);
+
           return (
-            <div className="risk-heatmap-cell" data-hot={matches.length > 0 ? 'true' : 'false'} key={`${cell.likelihood}-${cell.impact}`}>
-              <strong>{cell.impact}x{cell.likelihood}</strong>
+            <div
+              className="risk-heatmap-cell"
+              data-hot={matches.length > 0 ? 'true' : 'false'}
+              key={`${cell.likelihood}-${cell.impact}`}
+            >
+              <strong>L{cell.likelihood} · I{cell.impact}</strong>
               <div>{matches.length} risk(s)</div>
+              {matrixReference !== null ? (
+                <div className="risk-heatmap-cell-meta">L×I ref {matrixReference}</div>
+              ) : null}
+              {topOperationalScore !== null ? (
+                <div className="risk-heatmap-cell-meta">Op. residual max {topOperationalScore}</div>
+              ) : null}
             </div>
           );
         })}
@@ -227,7 +265,7 @@ export function BoardRiskReadinessPanel({ metrics = {} }) {
       <p className="risk-muted">Enterprise Risk is a decision-support system. CRO, audit committee and legal review remain required.</p>
       <div className="risk-enterprise-grid">
         <RiskKpiCard icon={CheckCircle2} label="Control coverage" value={`${metrics.controlCoverage || 0}%`} description="Mapped controls." />
-        <RiskKpiCard icon={BarChart3} label="Residual risk" value={`${metrics.residualRisk || 0}/100`} description="Portfolio average." />
+        <RiskKpiCard icon={BarChart3} label="Residual risk" value={`${metrics.residualRisk || 0}/100`} description="Operational DSS portfolio average." />
         <RiskKpiCard icon={FileText} label="Evidence coverage" value={`${metrics.evidenceCoverage || 0}%`} description="Board support." />
         <RiskKpiCard icon={CheckCircle2} label="Committee readiness" value={`${metrics.committeeReadiness || 0}%`} description="Formal review posture." />
       </div>
