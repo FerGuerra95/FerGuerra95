@@ -211,7 +211,59 @@ export function calculateRiskMetrics({
   committeeReviews = [],
   evidenceLinks = []
 } = {}) {
-  const activeRisks = normalizeArray(risks).filter((item) => !['closed', 'archived'].includes(normalizeText(item.status).toLowerCase()));
+  const normalizedRisks = normalizeArray(risks);
+  const normalizedControls = normalizeArray(controls);
+  const normalizedMitigations = normalizeArray(mitigations);
+  const normalizedIncidents = normalizeArray(incidents);
+  const normalizedKri = normalizeArray(kri);
+  const normalizedAppetite = normalizeArray(appetite);
+  const normalizedCommitteeReviews = normalizeArray(committeeReviews);
+  const normalizedEvidenceLinks = normalizeArray(evidenceLinks);
+  const hasPersistedRiskData =
+    normalizedRisks.length +
+      normalizedControls.length +
+      normalizedMitigations.length +
+      normalizedIncidents.length +
+      normalizedKri.length +
+      normalizedAppetite.length +
+      normalizedCommitteeReviews.length +
+      normalizedEvidenceLinks.length >
+    0;
+  const scoringTruthfulness = {
+    certifiedRating: false,
+    operationalDss: true,
+    goldenBenchmark: 'riskLikelihoodImpactGolden',
+    humanReviewRequired: true,
+    note: 'Operational DSS risk signal — not a certified risk rating.'
+  };
+
+  if (!hasPersistedRiskData) {
+    return {
+      riskReadinessScore: null,
+      riskPosture: 'not_assessed',
+      criticalRiskCount: 0,
+      risksByCategory: {},
+      residualRisk: null,
+      overdueMitigations: 0,
+      openIncidents: 0,
+      kriBreaches: 0,
+      appetiteBreaches: 0,
+      controlCoverage: null,
+      controlEffectiveness: null,
+      committeeReadiness: null,
+      evidenceCoverage: null,
+      evidenceQualityScore: null,
+      incidentSeverityTrend: 'insufficient_data',
+      requiresExecutiveAttention: false,
+      executiveAttention: false,
+      dataSource: 'insufficient_data',
+      executiveSignalEligible: false,
+      humanReviewRequired: true,
+      scoringTruthfulness
+    };
+  }
+
+  const activeRisks = normalizedRisks.filter((item) => !['closed', 'archived'].includes(normalizeText(item.status).toLowerCase()));
   const criticalRiskCount = activeRisks.filter((item) => riskScoreFrom(item) >= 78 || severityRank(item.residualRisk) >= 5).length;
   const overdueMitigations = normalizeArray(mitigations).filter((item) => !['completed', 'closed'].includes(normalizeText(item.status).toLowerCase()) && isPastDate(item.dueDate)).length;
   const openIncidents = normalizeArray(incidents).filter((item) => !['resolved', 'closed'].includes(normalizeText(item.status).toLowerCase())).length;
@@ -250,7 +302,9 @@ export function calculateRiskMetrics({
       ? 'critical'
       : overdueMitigations > 0 || kriBreaches > 0 || avgResidual >= 65
         ? 'watch'
-        : 'controlled';
+        : activeRisks.length > 0
+          ? 'controlled'
+          : 'not_assessed';
   return {
     riskReadinessScore,
     riskPosture,
@@ -272,7 +326,11 @@ export function calculateRiskMetrics({
     evidenceQualityScore,
     incidentSeverityTrend: openIncidents > 0 ? 'elevated' : 'stable',
     requiresExecutiveAttention,
-    executiveAttention: requiresExecutiveAttention
+    executiveAttention: requiresExecutiveAttention,
+    dataSource: 'operational_dss',
+    executiveSignalEligible: true,
+    humanReviewRequired: true,
+    scoringTruthfulness
   };
 }
 
@@ -480,6 +538,9 @@ export async function getRiskSummary(scope = {}) {
     appetiteBreaches: metrics.appetiteBreaches,
     incidentSeverityTrend: metrics.incidentSeverityTrend,
     requiresExecutiveAttention: metrics.requiresExecutiveAttention,
+    dataSource: metrics.dataSource,
+    executiveSignalEligible: metrics.executiveSignalEligible,
+    humanReviewRequired: metrics.humanReviewRequired,
     counts: {
       risks: data.risks.length,
       controls: data.controls.length,

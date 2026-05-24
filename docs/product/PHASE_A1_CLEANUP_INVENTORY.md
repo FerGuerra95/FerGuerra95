@@ -5883,6 +5883,38 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **C.13.10 — CEO Overview / Executive Aggregator Audit**
 
+### C.13.10B — CEO Overview truthfulness fix
+
+**Commit:** pending — `fix(ceo-overview): gate executive fallbacks and truthfulness`
+
+**Fixes:** CEO local calculators gated (no 64/60/58/62/65 fallbacks); `getExecutiveSignal` no longer averages insufficient modules; radar axes N/A labels; Command Center fallback cards insufficient_data; `boardView.service.js` null readiness preserved; Risk empty org null readiness; Compliance empty controlled posture removed; truthfulness tests added.
+
+**C13-P1-CEO-01:** RESOLVED / CEO LOCAL FALLBACKS GATED
+
+**C13-P1-CEO-02:** RESOLVED / EXECUTIVE SIGNAL NO LONGER SYNTHESIZED FROM FALLBACKS
+
+**C13-P1-CEO-03:** RESOLVED / GOVERNANCE ESG RADAR FALLBACK REMOVED
+
+**C13-P1-CEO-04:** RESOLVED / COMMAND CENTER FALLBACK CARDS GATED
+
+**C13-P1-EXEC-02:** RESOLVED / BOARD VIEW NULL READINESS PRESERVED
+
+**C13-P1-EXEC-03:** RESOLVED / RISK EMPTY STATE GATED
+
+**C13-P1-CEO-05:** RESOLVED / COMPLIANCE EMPTY CONTROLLED POSTURE REMOVED
+
+**C13-P1-TEST-CEO-01:** RESOLVED / CEO TRUTHFULNESS TESTS ADDED
+
+**CEO Overview global:** DSS AGGREGATOR / TRUTHFULNESS GATED / EXECUTIVE API ALIGNED / GOLDEN MODULES PENDING — **no fully enterprise complete**
+
+**Siguiente:** C.13.11 Cross-module Source-of-Truth Closure
+
+### C.13.10A — CEO Overview / Executive Aggregator Audit READ ONLY
+
+**Estado:** READ ONLY — P0=0, P1=8, P2=12, P3=4. Dual-path mismatch: backend defensive, CEO frontend legacy fallbacks.
+
+**Siguiente:** C.13.10B truthfulness fix
+
 ### C.13.9C — Strategy SoT decision + truthfulness fix
 
 **Commit:** 39f4076 — `fix(strategy): gate readiness fallbacks and clarify truthfulness`

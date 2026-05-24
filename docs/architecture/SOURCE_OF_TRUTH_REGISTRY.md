@@ -430,7 +430,24 @@ PMI does **not** have a single production capture formula today. It has multiple
 
 **Empty org:** readiness scores **null**; `governanceStatus: insufficient_data`; `executiveSignalEligible: false`. Hub baselines 55/58/50 **removed** as exported scores.
 
-**Not closed:** Golden helper/tests for governance readiness; workflow state-machine guards (P2); Controls/ESG UI gaps; CEO global fallbacks (C.13.10).
+**Not closed:** Golden helper/tests for governance readiness; workflow state-machine guards (P2); Controls/ESG UI gaps; CEO global fallbacks **gated C.13.10B**.
+
+## CEO Overview / Executive Aggregator (C.13.10B)
+
+**CEO Overview status:** **DSS AGGREGATOR / TRUTHFULNESS GATED / EXECUTIVE API ALIGNED / GOLDEN MODULES PENDING**
+
+| Layer | Source-of-truth | Role | Status |
+|---|---|---|---|
+| Executive API module summaries | `executiveOverview.service.js` | Backend aggregator for command center | **TRUTHFULNESS GATED** (C.13.8–C.13.9) |
+| CEO local overview helpers | `ceoOverviewTruthfulness.js` | Frontend DSS helpers — **no numeric fallbacks** when insufficient data | **TRUTHFULNESS GATED** (C.13.10B) |
+| `getExecutiveSignal` | `ceoOverviewTruthfulness.js` | Averages **eligible** modules only — no fallback synthesis | **TRUTHFULNESS GATED** (C.13.10B) |
+| Command Center fallback cards | `buildInsufficientFallbackModuleCards` | Empty API cards → `insufficient_data`, score null | **TRUTHFULNESS GATED** (C.13.10B) |
+| Board view readiness | `boardView.service.js` | Null readiness preserved — not coerced to 0 | **TRUTHFULNESS GATED** (C.13.10B) |
+| Risk empty org readiness | `risk.service.js` `calculateRiskMetrics` | No risks → `riskReadinessScore: null` | **TRUTHFULNESS GATED** (C.13.10B) |
+
+**Empty org:** CEO local calculators return null / `insufficient_data`; radar labels N/A; executive signal pending when no eligible modules.
+
+**Not closed:** Golden helpers for executive blend; CEO e2e empty org assertions; production smoke; cross-module SoT closure (C.13.11).
 
 ## Strategy / Board Pack boundary (C.13.9C)
 
@@ -444,11 +461,11 @@ PMI does **not** have a single production capture formula today. It has multiple
 | `strategicRiskLevel` | `calculateStrategyMetrics` | Zero risks → `not_assessed` (not `controlled`) | **TRUTHFULNESS GATED** (C.13.9C) |
 | Strategy reports | `strategy_report_exports` | **Metadata-only** draft records — not generated export pipeline | **TRUTHFULNESS LABELLED** (C.13.9C) |
 | Reporting Board Pack — Strategy branch | `boardPack.service.js` | **Excluded by design** until Strategy SoT/Golden branch approved | **DOCUMENTED EXCLUSION** (C.13.9C) |
-| CEO Overview Strategy score | `CEOOverviewPage.jsx` | Respects null / `executiveSignalEligible: false` — no fallback 60 | **PARTIALLY GATED** (C.13.9C) |
+| CEO Overview Strategy score | `CEOOverviewPage.jsx` + `ceoOverviewTruthfulness.js` | Respects null / `executiveSignalEligible: false` — no fallback 60 | **TRUTHFULNESS GATED** (C.13.9C / C.13.10B) |
 
 **Empty org:** readiness **null**; `strategyStatus: insufficient_data`; `executiveSignalEligible: false`. Defaults 60 **removed** as exported scores.
 
-**Not closed:** Golden helper/tests for strategy readiness; Strategy Board Pack branch (future); CRUD gaps (P2); CEO global fallback audit (C.13.10).
+**Not closed:** Golden helper/tests for strategy readiness; Strategy Board Pack branch (future); CRUD gaps (P2); CEO global fallback audit **closed C.13.10B**.
 
 ## Executive Overview Special Rule
 

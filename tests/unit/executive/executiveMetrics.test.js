@@ -69,4 +69,16 @@ describe('CEO command center enterprise metrics', () => {
     });
     expect(calendar.some((item) => item.title === 'Board pack evidence review')).toBe(true);
   });
+
+  it('preserva readiness null en board view sin convertir a cero', () => {
+    const board = buildBoardViewSnapshot({
+      moduleSummaries: {},
+      signals: [],
+      decisionQueue: [],
+      readiness: { score: null, confidence: null }
+    });
+    expect(board.readinessScore).toBeNull();
+    expect(board.readinessStatus).toBe('insufficient_data');
+    expect(board.dataSource).toBe('insufficient_data');
+  });
 });

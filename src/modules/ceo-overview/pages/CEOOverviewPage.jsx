@@ -40,6 +40,19 @@ import { bridgeApi } from '../../bridge/services/bridgeApi.js';
 import { riskApi } from '../../risk/services/riskApi.js';
 import { strategyApi } from '../../strategy/services/strategyApi.js';
 import { executiveApi } from '../services/executiveApi.js';
+import {
+  buildInsufficientFallbackModuleCards,
+  buildRadarAxis,
+  estimateMaFinancialRadar,
+  formatModuleSignalValue,
+  formatScoreLabel,
+  getComplianceOverview,
+  getEcosystemBranchOverview,
+  getExecutiveSignal,
+  getMAOverview,
+  getRiskOverview,
+  normalizeScoreOrNull
+} from '../utils/ceoOverviewTruthfulness.js';
 import { boardPackApi } from '../services/boardPackApi.js';
 import { BoardPackModal } from '../components/BoardPackModal.jsx';
 import { CorporateHealthRadar } from '../components/CorporateHealthRadar.jsx';
@@ -1069,38 +1082,6 @@ function clampScore(value) {
   return Math.max(0, Math.min(100, Math.round(value)));
 }
 
-/** Financial axis from synced M&A cases — uses persisted financial cues and compliance valuation drag. */
-function estimateMaFinancialRadar(cases = []) {
-  const list = Array.isArray(cases) ? cases.filter(Boolean) : [];
-
-  if (list.length === 0) return clampScore(58);
-
-  let total = 0;
-
-  list.forEach((caseItem) => {
-    let pts = 68;
-    const fin = caseItem?.financials || caseItem?.financialInputs || {};
-    const ebitLike =
-      Number(fin.normalizedEbitda ?? fin.ebitda ?? fin.ebitDa ?? fin.revenue) || 0;
-
-    if (ebitLike > 0) pts += 10;
-
-    const dirty =
-      Boolean(caseItem?.settings?.complianceRiskImpact?.valuationDirty) ||
-      caseItem?.settings?.valuationRecalculation?.status === 'dirty';
-
-    if (dirty) pts -= 15;
-
-    const legalTouch = Number(caseItem?.settings?.complianceRiskImpact?.legalRiskScore);
-
-    if (Number.isFinite(legalTouch) && legalTouch >= 55) pts -= 9;
-
-    total += clampScore(pts);
-  });
-
-  return clampScore(total / list.length);
-}
-
 function CorporateHealthRadarSVG({ axes }) {
   const cx = 120;
   const cy = 120;
@@ -1187,84 +1168,6 @@ function calculateFundingReadiness(fundingInputs = {}) {
   return clampScore((dataRoom + founderMarketFit + investorInterest) / 3);
 }
 
-function getMAOverview(maStore = {}) {
-  const deals = getSafeArray(
-    maStore.deals ||
-    maStore.savedDeals ||
-    maStore.cases ||
-    maStore.savedCases ||
-    maStore.maCases
-  );
-
-  const activeDeal =
-    maStore.activeDeal ||
-    maStore.currentDeal ||
-    maStore.selectedDeal ||
-    deals[0] ||
-    null;
-
-  const targetName =
-    activeDeal?.targetName ||
-    activeDeal?.name ||
-    activeDeal?.companyName ||
-    maStore.targetName ||
-    maStore.companyName ||
-    'M&A workspace';
-
-  const reportCount = getSafeArray(
-    maStore.reports ||
-    maStore.generatedReports ||
-    maStore.exportedReports
-  ).length;
-
-  const score = deals.length > 0 ? clampScore(72 + Math.min(18, deals.length * 3)) : 64;
-
-  return {
-    score,
-    title: deals.length > 0 ? 'M&A pipeline active' : 'M&A case ready',
-    posture: deals.length > 0 ? 'Review deal signals' : 'Prepare premium case',
-    targetName,
-    dealsCount: deals.length,
-    reportCount,
-    description:
-      deals.length > 0
-        ? 'M&A ya funciona como capa premium para valoración, deal intelligence y reporting ejecutivo.'
-        : 'M&A está preparado como primer módulo premium. Carga o revisa una demo para mostrar el flujo end-to-end.'
-  };
-}
-
-function getComplianceOverview({ suppliers, alerts, evidenceItems, reviews }) {
-  const safeSuppliers = getSafeArray(suppliers);
-  const safeAlerts = getSafeArray(alerts);
-  const safeEvidence = getSafeArray(evidenceItems);
-  const safeReviews = getSafeArray(reviews);
-
-  const openAlerts = getOpenAlertsCount(safeAlerts);
-  const averageRisk =
-    safeSuppliers.length > 0
-      ? safeSuppliers.reduce((total, supplier) => total + toNumber(supplier?.riskScore), 0) /
-        safeSuppliers.length
-      : 0;
-
-  const score = safeSuppliers.length > 0
-    ? clampScore(100 - averageRisk + Math.min(14, safeEvidence.length * 2) + Math.min(10, safeReviews.length * 2) - openAlerts * 4)
-    : 60;
-
-  return {
-    score,
-    title: openAlerts > 0 ? 'Compliance exposure monitored' : 'Compliance posture controlled',
-    posture: openAlerts > 0 ? 'Review open alerts' : 'Maintain controls',
-    supplierCount: safeSuppliers.length,
-    openAlerts,
-    evidenceCount: safeEvidence.length,
-    reviewCount: safeReviews.length,
-    description:
-      openAlerts > 0
-        ? 'Compliance ya centraliza proveedores, alertas, evidencias, revisión humana y reporting defendible.'
-        : 'Compliance presenta una base premium para control de proveedores, evidencias y Board Pack.'
-  };
-}
-
 function getFundingOverviewWithSummary({
   fundingInputs,
   fundingSettings,
@@ -1320,14 +1223,28 @@ function getFundingOverviewWithSummary({
     'not_available'
   );
 
-  const score = effectiveRaised > 0
-    ? clampScore(readiness * 0.44 + clampScore((runway / 24) * 100) * 0.34 + clampScore(100 - Math.max(0, dilution - 10) * 3) * 0.22)
-    : 58;
+  const hasFundingData =
+    effectiveRaised > 0 ||
+    Number(fundingSummary?.totalRounds ?? fundingSummary?.roundsCount ?? 0) > 0 ||
+    (Number.isFinite(summaryRunway) && summaryRunway > 0);
+
+  const score = hasFundingData
+    ? clampScore(
+        readiness * 0.44 +
+          clampScore((runway / 24) * 100) * 0.34 +
+          clampScore(100 - Math.max(0, dilution - 10) * 3) * 0.22
+      )
+    : null;
 
   return {
     score,
-    title: effectiveRaised > 0 ? 'Funding board case prepared' : 'Funding case pending',
-    posture: effectiveRaised > 0 ? 'Validate investor memo' : 'Build funding case',
+    dataSource: hasFundingData ? 'operational_dss' : 'insufficient_data',
+    truthfulnessStatus: hasFundingData ? 'operational_dss' : 'insufficient_data',
+    executiveSignalEligible: hasFundingData,
+    humanReviewRequired: true,
+    scoreDisplay: hasFundingData ? null : 'Insufficient persisted funding data — human review required',
+    title: hasFundingData ? 'Funding board case prepared' : 'Funding data pending',
+    posture: hasFundingData ? 'Validate investor memo' : 'insufficient_data',
     targetRaise: effectiveRaised,
     runway,
     dilution,
@@ -1395,6 +1312,7 @@ function getPmiOverview(pmiBrief = null) {
     humanReviewRequired: Boolean(
       pmiBrief?.humanReviewRequired ?? truthfulness.humanReviewRequired ?? !executiveSignalEligible
     ),
+    truthfulnessStatus: executiveSignalEligible ? 'operational_dss' : 'insufficient_data',
     title: executiveSignalEligible
       ? pmiBrief?.title || 'PMI integration signal'
       : pmiBrief?.title || 'PMI data pending',
@@ -1424,69 +1342,12 @@ function getPmiOverview(pmiBrief = null) {
   };
 }
 
-function getEcosystemBranchOverview(ecosystemBrief = null, branchKey, fallback = {}) {
-  const branch = getSafeArray(ecosystemBrief?.branches).find(
-    (item) => item?.branch === branchKey
-  );
-
-  return {
-    score: clampScore(branch?.score ?? fallback.score ?? 58),
-    title: branch?.title || fallback.title,
-    posture: branch?.posture || fallback.posture,
-    description: fallback.description,
-    route: branch?.route || fallback.route,
-    recordsCount: branch?.recordsCount ?? 0,
-    activeRecordsCount: branch?.activeRecordsCount ?? 0,
-    metrics: branch?.metrics || {},
-    latestTitle: branch?.latestRecord?.title || fallback.latestTitle
-  };
-}
-
-function getExecutiveSignal({ scores = [] }) {
-  const safeScores = scores
-    .map((score) => Number(score))
-    .filter((score) => Number.isFinite(score));
-  const score = clampScore(
-    safeScores.length
-      ? safeScores.reduce((sum, item) => sum + item, 0) / safeScores.length
-      : 0
-  );
-
-  if (score >= 82) {
-    return {
-      score,
-      title: 'Executive OS ready for demo',
-      posture: 'Prepare enterprise pitch',
-      description:
-        'M&A, Compliance, Funding, PMI and enterprise branches feed a unified CEO decision layer ready for commercial demo.'
-    };
-  }
-
-  if (score >= 68) {
-    return {
-      score,
-      title: 'Executive release in closing stage',
-      posture: 'Run final QA',
-      description:
-        'The core and expansion branches are connected. Priority is final QA, executive narrative and commercial materials.'
-    };
-  }
-
-  return {
-    score,
-    title: 'Executive OS in controlled rollout',
-    posture: 'Prioritize decision quality',
-    description:
-      'La capa ejecutiva consolida señales clave y prioriza las decisiones que requieren revisión antes de escalar.'
-  };
-}
-
 function buildExecutivePriorityRows({ pmiOverview, fundingOverview, complianceOverview }) {
   const rows = [
     { label: 'Decision quality', value: 'Active' },
     { label: 'Visual consistency', value: 'Active' },
     { label: 'Executive narrative', value: 'Active' },
-    { label: 'Board outputs', value: 'Ready' }
+    { label: 'Board outputs', value: 'Draft metadata pending' }
   ];
 
   if (pmiOverview.alerts.length > 0) {
@@ -1862,39 +1723,41 @@ export function CEOOverviewPage() {
   });
   const pmiOverview = getPmiOverview(pmiBrief);
   const governanceOverview = getEcosystemBranchOverview(ecosystemBrief, 'governance', {
-    score: 64,
-    title: 'Governance control foundation',
-    posture: 'Formalize board controls',
+    title: 'Governance data pending',
+    posture: 'insufficient_data',
     description:
-      'Governance & ESG connects board decisions, ESG reporting and enterprise controls with Compliance and Funding.',
+      'Governance & ESG connects board decisions, ESG reporting and enterprise controls with Compliance and Funding. DSS only — human review required.',
     route: '/governance/dashboard',
-    latestTitle: 'Board governance baseline'
+    latestTitle: 'Insufficient persisted governance data'
   });
   const heritageOverview = getEcosystemBranchOverview(ecosystemBrief, 'heritage', {
-    score: 58,
-    title: 'Legacy infrastructure foundation',
-    posture: 'Map owner legacy',
+    title: 'Heritage preview',
+    posture: 'insufficient_data',
     description:
-      'Heritage structures patrimony, succession, asset protection and family-office continuity as a premium retention layer.',
+      'Heritage structures patrimony, succession and asset protection. Preview module — insufficient data until persisted records exist.',
     route: '/heritage/dashboard',
-    latestTitle: 'Owner legacy map'
+    latestTitle: 'Insufficient persisted heritage data'
   });
   const legacyBridgeOverview = getEcosystemBranchOverview(ecosystemBrief, 'bridge', {
-    score: 62,
-    title: 'Liquidity network foundation',
-    posture: 'Curate verified network',
+    title: 'Bridge opportunity pipeline',
+    posture: 'insufficient_data',
     description:
-      'The Bridge connects validated M&A and Funding opportunities with investors, buyers, banks and advisors.',
+      'Bridge connects cross-module signals and counterparties. Preview pipeline — not a public marketplace certification.',
     route: '/bridge/dashboard',
-    latestTitle: 'Verified opportunity network'
+    latestTitle: 'Insufficient persisted bridge data'
   });
   const bridgeMetrics = bridgeSummary?.metrics || {};
+  const bridgeScore = normalizeScoreOrNull(bridgeMetrics.crossModuleReadiness);
   const bridgeOverview = bridgeSummary
     ? {
         ...legacyBridgeOverview,
-        score: clampScore(bridgeMetrics.crossModuleReadiness || legacyBridgeOverview.score),
-        title: 'Cross-module intelligence layer',
-        posture: bridgeMetrics.bridgeHealthStatus || legacyBridgeOverview.posture,
+        score: bridgeScore,
+        dataSource: bridgeScore === null ? 'insufficient_data' : 'operational_dss',
+        truthfulnessStatus: bridgeScore === null ? 'insufficient_data' : 'operational_dss',
+        executiveSignalEligible: bridgeScore !== null,
+        humanReviewRequired: true,
+        title: bridgeScore === null ? 'Bridge data pending' : 'Cross-module intelligence layer',
+        posture: bridgeScore === null ? 'insufficient_data' : bridgeMetrics.bridgeHealthStatus || legacyBridgeOverview.posture,
         description:
           'Bridge consolidates cross-module signals, dependencies, conflicts and executive attention items. Human review required.',
         metrics: {
@@ -1906,18 +1769,7 @@ export function CEOOverviewPage() {
         latestTitle: bridgeSummary.latestSignal?.title || legacyBridgeOverview.latestTitle
       }
     : legacyBridgeOverview;
-  const riskMetrics = riskSummary?.metrics || {};
-  const riskOverview = {
-    score: clampScore(riskMetrics.riskReadinessScore || riskSummary?.riskReadinessScore || 62),
-    title: 'Enterprise Risk Command',
-    posture: riskMetrics.riskPosture || 'controlled',
-    description:
-      'Enterprise Risk centralizes risk register, heatmap, controls, mitigations, incidents, KRIs and appetite breaches with human review required.',
-    recordsCount: riskSummary?.counts?.risks || 0,
-    activeRecordsCount: riskMetrics.criticalRiskCount || riskSummary?.criticalRiskCount || 0,
-    latestTitle: riskSummary?.latestRisk?.title || 'Enterprise risk posture',
-    metrics: riskMetrics
-  };
+  const riskOverview = getRiskOverview(riskSummary);
   const strategyMetrics = strategySummary?.metrics || {};
   const strategyHasPersistedData =
     strategySummary?.executiveSignalEligible === true ||
@@ -1925,15 +1777,16 @@ export function CEOOverviewPage() {
     (strategySummary?.counts?.objectives || 0) > 0 ||
     (strategySummary?.counts?.initiatives || 0) > 0;
   const strategyScoreRaw = strategyMetrics.strategyReadinessScore ?? strategySummary?.strategyReadinessScore;
+  const strategyScore =
+    strategyHasPersistedData &&
+    strategyMetrics.executiveSignalEligible !== false &&
+    strategyScoreRaw !== null &&
+    strategyScoreRaw !== undefined &&
+    Number.isFinite(Number(strategyScoreRaw))
+      ? clampScore(strategyScoreRaw)
+      : null;
   const strategyOverview = {
-    score:
-      strategyHasPersistedData &&
-      strategyMetrics.executiveSignalEligible !== false &&
-      strategyScoreRaw !== null &&
-      strategyScoreRaw !== undefined &&
-      Number.isFinite(Number(strategyScoreRaw))
-        ? clampScore(strategyScoreRaw)
-        : null,
+    score: strategyScore,
     title: 'Strategy Command',
     posture: !strategyHasPersistedData
       ? 'insufficient_data'
@@ -1945,22 +1798,25 @@ export function CEOOverviewPage() {
     recordsCount: strategySummary?.counts?.objectives || 0,
     activeRecordsCount: strategyMetrics.blockedStrategicInitiatives || strategySummary?.blockedStrategicInitiatives || 0,
     latestTitle: strategySummary?.latestObjective?.title || 'Insufficient persisted strategy data',
-    metrics: strategyMetrics
+    metrics: strategyMetrics,
+    dataSource: strategyHasPersistedData ? 'operational_dss' : 'insufficient_data',
+    truthfulnessStatus: strategyHasPersistedData ? 'operational_dss' : 'insufficient_data',
+    executiveSignalEligible:
+      strategyHasPersistedData && strategyMetrics.executiveSignalEligible !== false && strategyScore !== null,
+    humanReviewRequired: true
   };
 
-  const executiveSignal = getExecutiveSignal({
-    scores: [
-      maOverview.score,
-      complianceOverview.score,
-      fundingOverview.score,
-      pmiOverview.score,
-      governanceOverview.score,
-      heritageOverview.score,
-      bridgeOverview.score,
-      riskOverview.score,
-      strategyOverview.score
-    ]
-  });
+  const executiveSignal = getExecutiveSignal([
+    maOverview,
+    complianceOverview,
+    fundingOverview,
+    pmiOverview,
+    governanceOverview,
+    heritageOverview,
+    bridgeOverview,
+    riskOverview,
+    strategyOverview
+  ]);
 
   const casesForRadar =
     hydratedCases.length > 0
@@ -1982,82 +1838,86 @@ export function CEOOverviewPage() {
       : complianceOverview.score;
 
   const maValuationSignal = maOverview.score;
-  const dealReadinessCombined = clampScore(
-    Math.round(maValuationSignal * 0.52 + legalHealthRadar * 0.48)
-  );
-  const complianceDragPenalty = clampScore(maValuationSignal - dealReadinessCombined);
+  const dealReadinessCombined =
+    maValuationSignal != null && legalHealthRadar != null
+      ? clampScore(Math.round(maValuationSignal * 0.52 + legalHealthRadar * 0.48))
+      : null;
+  const complianceDragPenalty =
+    maValuationSignal != null && dealReadinessCombined != null
+      ? clampScore(maValuationSignal - dealReadinessCombined)
+      : null;
   const maFinancialRadar = estimateMaFinancialRadar(casesForRadar);
-  const operationalRadar =
-    pmiOverview.score != null
-      ? clampScore(pmiOverview.progress ?? pmiOverview.score)
-      : 0;
-  const esgRadar = clampScore(governanceOverview.score || 55);
-  const fundingRadar = clampScore(fundingOverview.readiness ?? 58);
+  const operationalRadarScore =
+    pmiOverview.score != null ? clampScore(pmiOverview.progress ?? pmiOverview.score) : null;
+  const fundingRadarScore =
+    fundingOverview.executiveSignalEligible && fundingOverview.score != null
+      ? normalizeScoreOrNull(fundingOverview.readiness)
+      : null;
 
   const radarAxes = [
-    {
+    buildRadarAxis({
       key: 'legal',
       label: 'Legal',
-      value: legalHealthRadar,
+      score: legalHealthRadar,
       route: '/compliance/audit-runs',
       tone: '#60a5fa'
-    },
-    {
+    }),
+    buildRadarAxis({
       key: 'financial',
       label: 'Financial · M&A',
-      value: maFinancialRadar,
+      score: maFinancialRadar.score,
       route: '/ma/valuation',
       tone: '#34d399'
-    },
-    {
+    }),
+    buildRadarAxis({
       key: 'ops',
       label: 'Operational',
-      value: operationalRadar,
+      score: operationalRadarScore,
       route: '/compliance/suppliers',
       tone: '#a78bfa'
-    },
-    {
+    }),
+    buildRadarAxis({
       key: 'esg',
       label: 'ESG & reputational risk',
-      value: esgRadar,
+      score: governanceOverview.score,
       route: '/compliance/dashboard',
       tone: '#4ade80'
-    },
-    {
+    }),
+    buildRadarAxis({
       key: 'funding',
       label: 'Funding',
-      value: fundingRadar,
+      score: fundingRadarScore,
       route: '/funding/dashboard',
       tone: '#fbbf24'
-    },
-    {
+    }),
+    buildRadarAxis({
       key: 'risk',
       label: 'Enterprise Risk',
-      value: riskOverview.score,
+      score: riskOverview.score,
       route: '/risk/dashboard',
       tone: '#f87171'
-    },
-    {
+    }),
+    buildRadarAxis({
       key: 'strategy',
       label: 'Strategy',
-      value: strategyOverview.score,
+      score: strategyOverview.score,
       route: '/strategy/dashboard',
       tone: '#38bdf8'
-    },
-    {
+    }),
+    buildRadarAxis({
       key: 'bridge',
       label: 'Bridge',
-      value: bridgeOverview.score,
+      score: bridgeOverview.score,
       route: '/bridge/dashboard',
       tone: '#22d3ee'
-    },
-    {
+    }),
+    buildRadarAxis({
       key: 'heritage',
       label: 'Heritage',
-      value: heritageOverview.score,
+      score: heritageOverview.score,
       route: '/heritage/dashboard',
       tone: '#d4af37'
-    }
+    })
   ];
 
   const executiveCommand = executiveOverview || {};
@@ -2085,7 +1945,7 @@ export function CEOOverviewPage() {
   const commandCalendar = Array.isArray(executiveCommand.calendar) ? executiveCommand.calendar : [];
   const commandModuleCards = Array.isArray(executiveCommand.moduleCards) ? executiveCommand.moduleCards : [];
 
-  const scoreAngle = `${executiveSignal.score * 3.6}deg`;
+  const scoreAngle = `${(executiveSignal.score ?? 0) * 3.6}deg`;
   const availablePacks = [
     'M&A Deal Brief / IC Memo / Data Room',
     'Compliance Board Pack',
@@ -2135,7 +1995,7 @@ export function CEOOverviewPage() {
                   disabled={!canGenerateBoardPack}
                 >
                   <FileText size={16} />
-                  Generate Board Pack
+                  Generate Board Review Draft
                 </Button>
                 <span className="ceo-report-trace">
                   Last Report Generated:{' '}
@@ -2208,16 +2068,16 @@ export function CEOOverviewPage() {
                   </h3>
 
                   <p className="muted muted-tight">
-                    Sintetiza el signal financiero ({maValuationSignal}/100) con la salud legal
-                    ejecutiva más reciente ({legalHealthRadar}/100). Compliance bajo muestra cómo{' '}
-                    <strong>{complianceDragPenalty > 0 ? 'lastra' : 'neutraliza'}</strong> la
-                    preparación comercial combinada (~{dealReadinessCombined}/100).
+                    Sintetiza el signal financiero ({formatScoreLabel(maValuationSignal)}) con la salud legal
+                    ejecutiva más reciente ({formatScoreLabel(legalHealthRadar)}). Compliance bajo muestra cómo{' '}
+                    <strong>{complianceDragPenalty != null && complianceDragPenalty > 0 ? 'lastra' : 'neutraliza'}</strong> la
+                    preparación comercial combinada ({formatScoreLabel(dealReadinessCombined)}).
                   </p>
 
                   <div className="ceo-deal-score-row">
                     <div className="ceo-deal-pill">
                       <div className="kpi-label">Valuation signal</div>
-                      <strong style={{ fontSize: 26 }}>{maValuationSignal}</strong>
+                      <strong style={{ fontSize: 26 }}>{formatScoreLabel(maValuationSignal).replace('%', '')}</strong>
                       <button
                         type="button"
                         className="ceo-link secondary"
@@ -2240,7 +2100,7 @@ export function CEOOverviewPage() {
 
                     <div className="ceo-deal-pill">
                       <div className="kpi-label">Legal / Compliance health</div>
-                      <strong style={{ fontSize: 26 }}>{legalHealthRadar}</strong>
+                      <strong style={{ fontSize: 26 }}>{formatScoreLabel(legalHealthRadar).replace('%', '')}</strong>
                       <button
                         type="button"
                         className="ceo-link secondary"
@@ -2263,9 +2123,9 @@ export function CEOOverviewPage() {
 
                     <div className="ceo-deal-pill">
                       <div className="kpi-label">Unified readiness</div>
-                      <strong style={{ fontSize: 26 }}>{dealReadinessCombined}</strong>
+                      <strong style={{ fontSize: 26 }}>{formatScoreLabel(dealReadinessCombined).replace('%', '')}</strong>
                       <div className="kpi-label" style={{ marginTop: 10 }}>
-                        Compliance drag Δ {complianceDragPenalty} pts
+                        Compliance drag Δ {complianceDragPenalty != null ? `${complianceDragPenalty} pts` : 'N/A'}
                       </div>
                     </div>
                   </div>
@@ -2277,16 +2137,20 @@ export function CEOOverviewPage() {
                     <div className="ceo-drag-bar-shell">
                       <div
                         className="ceo-drag-fill-valuation"
-                        style={{ width: `${dealReadinessCombined}%` }}
-                        title={`Ready ${dealReadinessCombined}%`}
+                        style={{ width: `${dealReadinessCombined ?? 0}%` }}
+                        title={dealReadinessCombined != null ? `Ready ${dealReadinessCombined}%` : 'Readiness N/A'}
                       />
                       <div
                         className="ceo-drag-fill-drag"
                         style={{
-                          width: `${complianceDragPenalty}%`,
-                          opacity: complianceDragPenalty > 6 ? 0.95 : 0.55
+                          width: `${complianceDragPenalty ?? 0}%`,
+                          opacity: complianceDragPenalty != null && complianceDragPenalty > 6 ? 0.95 : 0.55
                         }}
-                        title={`Legal drag absorbs ${complianceDragPenalty}% points`}
+                        title={
+                          complianceDragPenalty != null
+                            ? `Legal drag absorbs ${complianceDragPenalty}% points`
+                            : 'Legal drag N/A'
+                        }
                       />
                     </div>
                   </div>
@@ -2324,7 +2188,7 @@ export function CEOOverviewPage() {
                       <Link key={axis.key} to={axis.route}>
                         <span className="ceo-radar-swatch" style={{ backgroundColor: axis.tone }} />
                         <span>{axis.label}</span>
-                        <strong>{clampScore(axis.value)}%</strong>
+                        <strong>{axis.displayLabel}</strong>
                       </Link>
                     ))}
                   </div>
@@ -2353,7 +2217,7 @@ export function CEOOverviewPage() {
                     style={{ '--score-angle': scoreAngle }}
                   >
                     <div className="ceo-score-core">
-                      <strong>{executiveSignal.score}</strong>
+                      <strong>{executiveSignal.scoreDisplay || formatScoreLabel(executiveSignal.score)}</strong>
                     </div>
                   </div>
 
@@ -2367,11 +2231,14 @@ export function CEOOverviewPage() {
                 </div>
 
                 <div className="ceo-signal-table">
-                  <SignalRow label="M&A Signal" value={`${maOverview.score}/100`} />
-                  <SignalRow label="Compliance Signal" value={`${complianceOverview.score}/100`} />
-                  <SignalRow label="Funding Signal" value={`${fundingOverview.score}/100`} />
-                  <SignalRow label="PMI Signal" value={pmiOverview.scoreDisplay} />
-                  <SignalRow label="Ecosystem Signal" value={`${ecosystemBrief?.score ?? 61}/100`} />
+                  <SignalRow label="M&A Signal" value={formatModuleSignalValue(maOverview)} />
+                  <SignalRow label="Compliance Signal" value={formatModuleSignalValue(complianceOverview)} />
+                  <SignalRow label="Funding Signal" value={formatModuleSignalValue(fundingOverview)} />
+                  <SignalRow label="PMI Signal" value={pmiOverview.scoreDisplay || formatModuleSignalValue(pmiOverview)} />
+                  <SignalRow
+                    label="Ecosystem Signal"
+                    value={formatScoreLabel(normalizeScoreOrNull(ecosystemBrief?.score))}
+                  />
                 </div>
               </div>
             </aside>
@@ -2413,17 +2280,8 @@ export function CEOOverviewPage() {
           <div className="executive-module-grid">
             {(commandModuleCards.length
               ? commandModuleCards
-              : [
-                  { key: 'ma', title: 'M&A', route: '/ma/dashboard', score: maOverview.score, status: 'normal', keyMetric: `${maOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
-                  { key: 'compliance', title: 'Compliance', route: '/compliance/dashboard', score: complianceOverview.score, status: 'normal', keyMetric: `${complianceOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
-                  { key: 'funding', title: 'Funding', route: '/funding/dashboard', score: fundingOverview.score, status: 'normal', keyMetric: `${fundingOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
-                  { key: 'governance', title: 'Governance', route: '/governance/dashboard', score: governanceOverview.score, status: 'normal', keyMetric: `${governanceOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
-                  { key: 'pmi', title: 'PMI', route: '/pmi/dashboard', score: pmiOverview.score, status: 'normal', keyMetric: pmiOverview.scoreDisplay, cta: 'Open module', humanReviewRequired: pmiOverview.humanReviewRequired },
-                  { key: 'bridge', title: 'Bridge', route: '/bridge/dashboard', score: bridgeOverview.score, status: 'normal', keyMetric: `${bridgeOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
-                  { key: 'risk', title: 'Risk', route: '/risk/dashboard', score: riskOverview.score, status: 'normal', keyMetric: `${riskOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
-                  { key: 'reporting', title: 'Reporting', route: '/reporting/dashboard', score: 65, status: 'normal', keyMetric: 'Pending enterprise signal', cta: 'Open module', humanReviewRequired: true },
-                  { key: 'strategy', title: 'Strategy', route: '/strategy/dashboard', score: strategyOverview.score, status: strategyOverview.score == null ? 'insufficient_data' : 'normal', keyMetric: strategyOverview.score != null ? `${strategyOverview.score}/100` : 'Insufficient persisted strategy data', cta: 'Open module', humanReviewRequired: true }
-                ]).map((card) => (
+              : buildInsufficientFallbackModuleCards()
+            ).map((card) => (
               <ExecutiveModuleCard key={card.key || card.title} card={card} />
             ))}
           </div>

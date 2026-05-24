@@ -23,8 +23,10 @@ export function buildBoardViewSnapshot({ moduleSummaries = {}, signals = [], dec
   return {
     title: 'Board Executive Snapshot',
     generatedAt: new Date().toISOString(),
-    readinessScore: readiness.score || 0,
-    confidence: readiness.confidence || 0,
+    readinessScore: readiness.score ?? null,
+    readinessStatus:
+      readiness.score === null || readiness.score === undefined ? 'insufficient_data' : 'operational_dss',
+    confidence: readiness.confidence ?? null,
     topRisks: take(signals.filter((item) => ['critical', 'risk', 'blocked'].includes(item.severity)), 5),
     topDecisions: take(decisionQueue, 5),
     topOpportunities: [
@@ -46,7 +48,9 @@ export function buildBoardViewSnapshot({ moduleSummaries = {}, signals = [], dec
     governanceBottlenecks: metric(moduleSummaries.governance?.data, ['metrics.approvalBottlenecks', 'metrics.pendingCriticalDecisions'], 0),
     pmiValueCapture: metric(moduleSummaries.pmi?.data, ['metrics.synergyCaptureRatio', 'synergyCaptureRatio']),
     reportingReadiness: metric(moduleSummaries.reporting?.data, ['metrics.reportingReadinessScore', 'reportingReadinessScore']),
-    humanReviewPosture: 'human_review_required'
+    humanReviewPosture: 'human_review_required',
+    humanReviewRequired: true,
+    dataSource: readiness.score == null ? 'insufficient_data' : 'operational_dss'
   };
 }
 

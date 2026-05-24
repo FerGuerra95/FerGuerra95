@@ -574,7 +574,37 @@ Reporting today remains:
 
 **Strategy global:** **DSS OPERATIONAL / PRODUCT LOGIC BASELINE / TRUTHFULNESS GATED / GOLDEN PENDING** — not RESOLVED global.
 
-**Next:** C.13.10 CEO Overview / Executive Aggregator Audit.
+**Next:** C.13.11 Cross-module SoT closure.
+
+## C.13.10B — CEO Overview truthfulness fix
+
+**Fixes:** CEO local calculators gated (no 64/60/58/62/65); `getExecutiveSignal` eligible-modules only; radar N/A labels; Command Center fallback cards insufficient_data; board view null readiness; Risk empty org null readiness; Compliance empty controlled posture removed; truthfulness tests.
+
+**C13-P1-CEO-01:** **RESOLVED / CEO LOCAL FALLBACKS GATED**
+
+**C13-P1-CEO-02:** **RESOLVED / EXECUTIVE SIGNAL NO LONGER SYNTHESIZED FROM FALLBACKS**
+
+**C13-P1-CEO-03:** **RESOLVED / GOVERNANCE ESG RADAR FALLBACK REMOVED**
+
+**C13-P1-CEO-04:** **RESOLVED / COMMAND CENTER FALLBACK CARDS GATED**
+
+**C13-P1-EXEC-02:** **RESOLVED / BOARD VIEW NULL READINESS PRESERVED**
+
+**C13-P1-EXEC-03:** **RESOLVED / RISK EMPTY STATE GATED**
+
+**C13-P1-CEO-05:** **RESOLVED / COMPLIANCE EMPTY CONTROLLED POSTURE REMOVED**
+
+**C13-P1-TEST-CEO-01:** **RESOLVED / CEO TRUTHFULNESS TESTS ADDED**
+
+**CEO Overview global:** **DSS AGGREGATOR / TRUTHFULNESS GATED / EXECUTIVE API ALIGNED / GOLDEN MODULES PENDING** — not fully enterprise complete.
+
+**Next:** C.13.11 Cross-module Source-of-Truth Closure.
+
+## C.13.10A — CEO Overview / Executive Aggregator Audit READ ONLY
+
+**Verdict:** Dual-path mismatch — backend defensive, CEO frontend legacy fallbacks (P1=8).
+
+**Next:** C.13.10B truthfulness fix.
 
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
