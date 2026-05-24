@@ -5852,12 +5852,24 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 - `CEOOverviewPage.jsx` — PMI pending-data copy
 - Tests: `pmiDemoTruthfulness.test.js`, `pmiHubTruthfulness.test.js`
 
+### C.13.7F — PMI UI/copy labels + report truthfulness + cross-tenant tests (COMPLETED)
+
+**Modo:** WRITE/FIX (labels + report metadata + tests)  
+**Estado:** **COMPLETED**  
+**PMI formula status:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL + DEMO + UI TRUTHFULNESS GATED**
+
+**Entregables:**
+- Labels DSS en `PMIEnterpriseComponents.jsx`, `PMIEnterprisePages.jsx`, `PMIDashboardPage.jsx`
+- `generatePmiReport` — `scoringTruthfulness`, `boardReadyMemo`, `humanReviewRequired`
+- Tests: `pmiUiTruthfulness.test.js`, `pmiReportTruthfulness.test.js`, `pmiMultiTenant.test.js`
+
+**Pendiente documentado:** zero forecast productivo (0% operational vs Golden null); e2e env-dependent.
+
 ### Siguiente fase recomendada
 
-**C.13.7F — PMI UI/copy labels + report truthfulness + cross-tenant tests**
+**C.13.7G — PMI final smoke / zero forecast product behavior decision**
 
 Objetivo:
-- copy residual en enterprise pages;
-- report export truthfulness si aplica;
-- tests cross-tenant PMI;
-- no tocar Golden.
+- smoke/e2e con backend;
+- decisión explícita sobre alineación zero forecast productivo vs Golden null;
+- no tocar Golden sin fase autorizada.

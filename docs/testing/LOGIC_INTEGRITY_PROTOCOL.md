@@ -328,6 +328,25 @@ PMI calculations are separated into multiple layers. Do not collapse them into o
 
 **PMI status after C.13.7E:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL + DEMO GATED** (not approved, not globally resolved).
 
+## PMI UI/report labels + cross-tenant tests (C.13.7F)
+
+1. **Enterprise UI:** operational readiness/capture labels, DSS disclaimer, ledger status “Finance reviewed”, board pack draft copy, zero forecast/target N/A hints on case dashboard.
+2. **Report export:** `generatePmiReport` payload includes `scoringTruthfulness`, `boardReadyMemo`, `humanReviewRequired` (pattern aligned with Risk C.13.6F).
+3. **Cross-tenant:** `tests/integration/services/pmiMultiTenant.test.js` — cases, synergies, reports, hub brief scoped by `organizationId`.
+4. **Unit tests:** `pmiUiTruthfulness.test.js`, `pmiReportTruthfulness.test.js`.
+
+**C13-P1-10:** **PARTIALLY RESOLVED / GOLDEN ZERO FORECAST TESTED / PRODUCT BEHAVIOR PENDING** — UI documents operational 0% vs Golden null.
+
+**C13-P1-11:** **PARTIALLY RESOLVED / GOLDEN VS OPERATIONAL SEPARATED** — labels reinforce separation.
+
+**C13-P1-12:** **PARTIALLY RESOLVED / GOLDEN HELPER TESTED**.
+
+**C13-P1-13:** **PARTIALLY RESOLVED / OPERATIONAL SOURCES TESTED + TENANT SCOPED**.
+
+**C13-P1-14:** **PARTIALLY RESOLVED / OPERATIONAL READINESS LABELLED** — DSS readiness copy; not certified.
+
+**PMI status after C.13.7F:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL + DEMO + UI TRUTHFULNESS GATED** (not approved, not globally resolved).
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor

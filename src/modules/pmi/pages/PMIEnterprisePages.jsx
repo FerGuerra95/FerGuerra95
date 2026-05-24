@@ -4,6 +4,7 @@ import { Card } from '../../../shared/components/ui/Card.jsx';
 import { PERMISSIONS, useAuth } from '../../../app/providers/AuthProvider.jsx';
 import { pmiApi } from '../services/pmiApi.js';
 import {
+  PMI_ENTERPRISE_DSS_DISCLAIMER,
   DayOneReadinessPanel,
   EnterpriseTable,
   HundredDayPlanTimeline,
@@ -125,7 +126,11 @@ export function PMIDashboardPage() {
         <section className="pmi-enterprise-hero ceos-ws-hero">
           <Badge>PMI & Synergies Enterprise</Badge>
           <h1 className="pmi-enterprise-title">Post-merger integration command layer.</h1>
-          <p className="pmi-enterprise-copy">Programs, synergy capture, Day 1 readiness, 30-60-90 execution, risks, TSA, operating model, people, technology and committee reporting.</p>
+          <p className="pmi-enterprise-copy">
+            Programs, operational synergy capture, Day 1 readiness signals, 30-60-90 execution, risks, TSA,
+            operating model, people, technology and committee reporting.
+          </p>
+          <p className="pmi-enterprise-copy muted">{PMI_ENTERPRISE_DSS_DISCLAIMER}</p>
         </section>
         {status.loading ? <div className="pmi-enterprise-empty">Loading PMI dashboard.</div> : null}
         {status.error ? <div className="pmi-enterprise-empty">PMI dashboard could not be loaded.</div> : null}
@@ -138,8 +143,12 @@ export function PMIDashboardPage() {
             <Badge>{metrics.pmiStatus || 'insufficient_data'}</Badge>
           </Card>
           <Card className="pmi-enterprise-panel">
-            <h3>Value capture</h3>
-            <p className="muted">Captured {Number(metrics.capturedSynergy || 0).toLocaleString()} against target {Number(metrics.totalSynergyTarget || 0).toLocaleString()}.</p>
+            <h3>Operational value capture (DSS)</h3>
+            <p className="muted">
+              Operational captured {Number(metrics.capturedSynergy || 0).toLocaleString()} against enterprise
+              target {Number(metrics.totalSynergyTarget || 0).toLocaleString()}. Not a Golden benchmark or
+              certified outcome.
+            </p>
             <Badge>{metrics.valueCaptureStatus || 'building'}</Badge>
           </Card>
         </section>

@@ -1379,7 +1379,30 @@ export async function generatePmiReport(organizationId, payload = {}, actor = {}
     payload: {
       generatedAt: new Date().toISOString(),
       summary,
-      dssNotice: 'Decision support only. Requires human review before committee or board use.'
+      dssNotice:
+        'Decision support only. PMI outputs require human review before committee or board use and do not replace integration committees, CFO, HR, legal counsel, advisors or formal board approvals.',
+      boardReadyMemo: {
+        posture: summary.metrics?.pmiStatus || 'building',
+        operationalReadiness: summary.metrics?.pmiReadinessScore ?? null,
+        synergyCaptureRatio: summary.metrics?.synergyCaptureRatio ?? null,
+        requiredHumanReview: true,
+        disclaimer:
+          'Decision-support PMI integration memo. Operational capture and readiness signals may use target, forecast or initiative sources depending on layer. Not a certified rating. Golden benchmark pmiCaptureRateGolden (captured/forecast) is validation-only.'
+      },
+      scoringTruthfulness: {
+        goldenBenchmark: 'pmiCaptureRateGolden',
+        goldenFormula: 'captured / forecast',
+        operationalLayers: [
+          'operationalPmiCaseCapture',
+          'operationalPmiLedgerCapture',
+          'operationalPmiEnterpriseCapture',
+          'operationalPmiReadinessScore'
+        ],
+        humanReviewRequired: true,
+        certifiedRating: false,
+        note: 'Operational PMI metrics are decision-support signals and may differ from Golden benchmarks.'
+      },
+      humanReviewRequired: true
     }
   });
   await recordPmiAudit({ organizationId, userId: actorId(actor), action: 'pmi.report.exported', entityId: created.id, metadata: { reportType } });

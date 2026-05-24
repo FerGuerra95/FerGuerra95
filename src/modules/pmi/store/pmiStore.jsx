@@ -142,7 +142,7 @@ const DEMO_PMI_CASE = {
       forecast: 650000,
       captured: 310000,
       confidence: 84,
-      status: 'Validated',
+      status: 'Finance reviewed',
       dueDate: '2026-07-31'
     },
     {

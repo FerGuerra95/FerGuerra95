@@ -28,6 +28,23 @@ function safeNumber(value) {
   return Number.isFinite(number) ? number : 0;
 }
 
+export const PMI_ENTERPRISE_DSS_DISCLAIMER =
+  'Decision-support signals only — not certified ratings. Golden benchmark is validation-only. Human review required before executive or board use.';
+
+export function pmiEnterpriseCopyIsTruthful(text = '') {
+  const value = String(text).toLowerCase();
+
+  if (!value) return true;
+  if (/\bcertified\b/.test(value) && !/not certified/.test(value)) return false;
+  if (/\bgolden score\b/.test(value)) return false;
+  if (/\bvalidated formula\b/.test(value)) return false;
+  if (/\bboard-ready\b/.test(value) && !/draft|decision-support|human review/.test(value)) {
+    return false;
+  }
+
+  return true;
+}
+
 export function DecisionStatusBadge({ status }) {
   return <Badge>{String(status || 'draft').replace(/_/g, ' ')}</Badge>;
 }
@@ -36,8 +53,18 @@ export function PMIExecutiveWidget({ summary }) {
   const metrics = summary?.metrics || {};
   return (
     <section className="pmi-enterprise-grid">
-      <SynergyCaptureCard label="PMI readiness" value={`${safeNumber(metrics.pmiReadinessScore)}/100`} icon={ShieldCheck} />
-      <SynergyCaptureCard label="Synergy capture" value={`${safeNumber(metrics.synergyCaptureRatio)}%`} icon={TrendingUp} />
+      <SynergyCaptureCard
+        label="Operational readiness signal"
+        value={`${safeNumber(metrics.pmiReadinessScore)}/100`}
+        icon={ShieldCheck}
+        description="DSS heuristic · human review required"
+      />
+      <SynergyCaptureCard
+        label="Operational synergy capture"
+        value={`${safeNumber(metrics.synergyCaptureRatio)}%`}
+        icon={TrendingUp}
+        description="Enterprise initiatives / case · not Golden benchmark"
+      />
       <SynergyCaptureCard label="Delayed milestones" value={safeNumber(metrics.delayedMilestones)} icon={Clock} />
       <SynergyCaptureCard label="Critical risks" value={safeNumber(metrics.criticalIntegrationRisks)} icon={AlertTriangle} />
     </section>
@@ -78,7 +105,7 @@ export function EnterpriseTable({ title, items = [], columns = [] }) {
       <h3>{title}</h3>
       {items.length === 0 ? (
         <div className="pmi-enterprise-empty ceos-enterprise-table-empty">
-          Insufficient validated data · Human review required
+          Insufficient persisted data · Human review required
         </div>
       ) : null}
       {items.length > 0 ? (
@@ -102,7 +129,11 @@ export const SynergyInitiativesTable = ({ items }) => (
     { key: 'title', label: 'Initiative' },
     { key: 'status', label: 'Status', render: (item) => <DecisionStatusBadge status={item.status} /> },
     { key: 'targetValue', label: 'Target', render: (item) => safeNumber(item.targetValue).toLocaleString() },
-    { key: 'capturedValue', label: 'Captured', render: (item) => safeNumber(item.capturedValue).toLocaleString() },
+    {
+      key: 'capturedValue',
+      label: 'Captured (operational)',
+      render: (item) => safeNumber(item.capturedValue).toLocaleString()
+    },
     { key: 'owner', label: 'Owner' }
   ]} />
 );
@@ -127,7 +158,15 @@ export const IntegrationRiskMatrix = ({ items }) => (
   ]} />
 );
 
-export const DayOneReadinessPanel = ({ items }) => <SimplePanel title="Day 1 readiness" items={items} icon={CheckCircle2} valueKey="readinessScore" suffix="/100" />;
+export const DayOneReadinessPanel = ({ items }) => (
+  <SimplePanel
+    title="Day 1 readiness signal (DSS)"
+    items={items}
+    icon={CheckCircle2}
+    valueKey="readinessScore"
+    suffix="/100"
+  />
+);
 export const HundredDayPlanTimeline = ({ items }) => <SimplePanel title="30-60-90-100 plan" items={items} icon={GitBranch} valueKey="period" />;
 export const TransitionServicesTable = ({ items }) => <SimplePanel title="Transition services" items={items} icon={Layers} valueKey="risk" />;
 export const OperatingModelPanel = ({ items }) => <SimplePanel title="Operating model" items={items} icon={GitBranch} valueKey="status" />;

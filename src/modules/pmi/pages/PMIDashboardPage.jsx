@@ -1103,7 +1103,7 @@ function SynergyLedgerRow({ item, currency, onUpdate, onRemove, disabled = false
         <option value="Baseline">Baseline</option>
         <option value="Thesis linked">Thesis linked</option>
         <option value="Capturing">Capturing</option>
-        <option value="Validated">Validated</option>
+        <option value="Finance reviewed">Finance reviewed</option>
         <option value="At risk">At risk</option>
       </select>
 
@@ -1499,8 +1499,22 @@ export function PMIDashboardPage() {
                 </div>
 
                 <div className="pmi-signal-table">
-                  <SignalRow label="Synergy capture" value={`${engine.synergyCaptureRate}%`} />
-                  <SignalRow label="Ledger capture" value={`${engine.ledgerCaptureRate}%`} />
+                  <SignalRow
+                    label="Operational case capture (target)"
+                    value={
+                      pmiCase.synergyTarget > 0
+                        ? `${engine.synergyCaptureRate}%`
+                        : 'N/A · zero target (operational DSS)'
+                    }
+                  />
+                  <SignalRow
+                    label="Operational ledger capture (forecast)"
+                    value={
+                      engine.ledgerForecast > 0
+                        ? `${engine.ledgerCaptureRate}%`
+                        : 'N/A · zero forecast (operational DSS; Golden uses null)'
+                    }
+                  />
                   <SignalRow label="Playbook progress" value={`${engine.playbookProgress}%`} />
                   <SignalRow label="Workstream progress" value={`${engine.workstreamProgress}%`} />
                   <SignalRow label="Milestone progress" value={`${engine.milestoneProgress}%`} />
@@ -1772,7 +1786,7 @@ export function PMIDashboardPage() {
                     <ListChecks size={14} />
                     Integration playbooks
                   </div>
-                  <h3 className="pmi-panel-title">Board-ready execution checklist</h3>
+                  <h3 className="pmi-panel-title">Board review draft checklist</h3>
                   <p className="muted pmi-panel-copy">
                     Day 1, Day 30 y Day 90 con evidencia operativa trazable.
                   </p>
@@ -2313,8 +2327,8 @@ export function PMIDashboardPage() {
                 <h3 className="pmi-panel-title">Board Integration Memo</h3>
 
                 <p className="muted pmi-panel-copy">
-                  Resumen board-ready para comité con sinergias, riesgos,
-                  owners, costes y decisiones que requieren revisión humana.
+                  Decision-support memo draft para comité con sinergias operativas, riesgos,
+                  owners, costes y decisiones. Human review required — not a certified board pack.
                 </p>
               </div>
 
@@ -2324,9 +2338,9 @@ export function PMIDashboardPage() {
             </div>
 
             <div>
-              <MiniRow label="Memo status" value="Draft-ready" />
-              <MiniRow label="Inputs" value="Workstreams + risks + synergies" />
-              <MiniRow label="Executive action" value="Prepare board-ready export" />
+              <MiniRow label="Memo status" value="Board pack draft" />
+              <MiniRow label="Inputs" value="Workstreams + risks + synergies (DSS)" />
+              <MiniRow label="Executive action" value="Prepare decision-support export" />
             </div>
           </Card>
 

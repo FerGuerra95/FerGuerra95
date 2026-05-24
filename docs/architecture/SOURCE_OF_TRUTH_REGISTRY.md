@@ -308,8 +308,8 @@ PMI does **not** have a single production capture formula today. It has multiple
 4. Demo/template layer is not enterprise source-of-truth and must not be mixed into executive truth without explicit labeling/gating.
 5. CEO/Hub must distinguish persisted operational data vs demo/default/fallback states.
 
-**PMI status:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL + DEMO GATED** (C.13.7E). Golden (C.13.7C), operational tests (C.13.7D), and demo/CEO gating (C.13.7E) are in place; UI copy labels and cross-tenant/report gaps may remain.  
-Do not mark PMI as APPROVED/RESOLVED until C.13.7F+ closes residual truthfulness gaps.
+**PMI status:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL + DEMO + UI TRUTHFULNESS GATED** (C.13.7F). Golden (C.13.7C), operational tests (C.13.7D), demo/CEO gating (C.13.7E), UI/report labels and cross-tenant PMI tests (C.13.7F) are in place. Product zero-forecast operational behavior (0% vs Golden null) remains a documented intentional divergence until a controlled alignment phase.  
+Do not mark PMI as APPROVED/RESOLVED until C.13.7G+ or explicit global closure decision.
 
 ## Executive Overview Special Rule
 

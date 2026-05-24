@@ -64,7 +64,9 @@ describe('PMI synergies enterprise foundation', () => {
     await createPmiDayOneItem(organizationId, { programId: program.id, title: 'Finance handover', readinessScore: 80, status: 'ready' }, actor);
     await createPmiHundredDayItem(organizationId, { programId: program.id, title: 'Day 60 plan', period: 'day_60', valueCaptureProgress: 60 }, actor);
     await createPmiTransitionService(organizationId, { programId: program.id, title: 'ERP TSA', risk: 'high', endDate: '2099-01-01' }, actor);
-    await generatePmiReport(organizationId, { reportType: 'synergy_capture_report' }, actor);
+    const report = await generatePmiReport(organizationId, { reportType: 'synergy_capture_report' }, actor);
+    expect(report.payload?.scoringTruthfulness?.goldenBenchmark).toBe('pmiCaptureRateGolden');
+    expect(report.payload?.humanReviewRequired).toBe(true);
 
     const summary = await getPmiSummary({ organizationId });
     expect(summary.metrics.synergyCaptureRatio).toBe(62);
