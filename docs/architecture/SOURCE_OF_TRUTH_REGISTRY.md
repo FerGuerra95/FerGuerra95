@@ -319,7 +319,7 @@ PMI does **not** have a single production capture formula today. It has multiple
 | Executive Command Center | Module summary + readiness index | **TRUTHFULNESS GATED** (C.13.8B) — insufficient_data for empty modules; no silent readiness fallbacks |
 | REPORTING_VARIANCE | Golden KPI variance (`reportingVarianceGolden`) | **GOLDEN ORACLE ONLY** (C.13.8D) — **product alignment deferred** (C.13.8E OPTION C) |
 
-**Reporting status:** **AGGREGATOR RISK MITIGATED / VARIANCE GOLDEN TESTED / PRODUCT ALIGNMENT DEFERRED BY SOT** — not RESOLVED global until e2e/smoke (C.13.8F) and module-level variance ownership where applicable.
+**Reporting status:** **RESOLVED LOGIC BASELINE / PRODUCT VARIANCE DEFERRED / PDF-RENDERER PENDING** (C.13.8F) — not fully enterprise complete; e2e pass via `run-e2e.mjs` harness (local).
 
 ## REPORTING_VARIANCE — Source-of-Truth Decision (C.13.8C)
 
@@ -391,7 +391,29 @@ PMI does **not** have a single production capture formula today. It has multiple
 | Executive Command Center | **Prohibited** |
 | CEO Overview | **Prohibited** |
 | Report library / exports | **Prohibited** |
-| Product import of `reportingGoldenFormulas.js` | **Prohibited** |
+| Product import of `reportingGoldenFormulas.js` | **Prohibited** (confirmed C.13.8F — no product imports) |
+
+## C.13.8F — Reporting e2e/smoke closure + final status
+
+**Validation (C.13.8F):**
+- Product import check: `reportingGoldenFormulas` / `reportingVarianceGolden` — **only** in helper + unit tests + docs (no product wiring).
+- Unit: 391 tests pass (includes 12 `reportingGoldenFormulas` oracle tests + reporting truthfulness).
+- Integration: 61 tests pass — `executiveCommandCenter`, `boardPackReporting`, `reportingEnterprise` included.
+- Build: pass.
+- E2e: **pass** — `tests/e2e/reporting/reporting-enterprise-flow.spec.js` via `node scripts/run-e2e.mjs` (backend `:4000` + frontend `:5173` auto-started).
+
+**Final Reporting classification (C.13.8 block):**
+- Reporting library = **metadata DSS workflow** (tenant-scoped).
+- Board Pack = **board review draft** DSS aggregator; truthfulness gated (C.13.8B).
+- Executive = **DSS aggregation**; no silent numeric fallbacks (C.13.8B).
+- `REPORTING_VARIANCE` = **Golden oracle tested**; **product alignment deferred** per-module (C.13.8E).
+
+**Not closed / residual P2–P3:**
+- PDF/HTML renderer (metadata/exportType only today).
+- Per-module variance implementations (M&A, Funding, Compliance, Bridge pending owner).
+- Board Pack M&A/Funding branch recalculation (documented, not Golden).
+- Production smoke on deployed Render (separate from local e2e harness).
+- Global cross-module SoT closure (C.13.9+).
 
 ## Executive Overview Special Rule
 

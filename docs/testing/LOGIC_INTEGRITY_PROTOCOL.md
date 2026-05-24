@@ -490,7 +490,51 @@ Reporting today remains:
 
 **Not touched:** `reportingGoldenFormulas.js`, tests, product code, Golden Dataset, `FORMULA_REGISTRY.md`.
 
-**Next:** C.13.8F e2e/smoke closure · or C.13.9 Strategy/Governance audit if prioritized.
+**Next:** C.13.9 Strategy/Governance audit · production smoke when authorized.
+
+## C.13.8F — Reporting e2e/smoke closure + final Reporting status
+
+**Status:** **RESOLVED LOGIC BASELINE / PRODUCT VARIANCE DEFERRED / PDF-RENDERER PENDING**
+
+### Import check (product alignment)
+
+| Symbol | Product import? | Evidence |
+|---|---|---|
+| `reportingGoldenFormulas` | **No** | Only `reportingGoldenFormulas.js`, unit test, docs |
+| `calculateReportingVarianceGolden` | **No** | Same |
+| `reportingVarianceGolden` | **No** | Same |
+
+### Validation results
+
+| Command | Result |
+|---|---|
+| `npm run test:unit` (reporting + full) | **391 passed** |
+| `npm run test:integration` | **61 passed** |
+| `npm run build` | **pass** |
+| `node scripts/run-e2e.mjs tests/e2e/reporting/reporting-enterprise-flow.spec.js` | **1 passed** (32s) |
+
+### C.13.8 block summary
+
+| Subphase | Outcome |
+|---|---|
+| C.13.8A | Aggregator risk confirmed (read-only) |
+| C.13.8B | Executive/Board Pack truthfulness fixed |
+| C.13.8C | OPTION C — Golden benchmark / future capability |
+| C.13.8D | `reportingGoldenFormulas.js` + 12 oracle tests |
+| C.13.8E | OPTION C — product alignment deferred per-module |
+| C.13.8F | Logic baseline validated; e2e pass |
+
+**C13-P1-20:** **RESOLVED / REPORTING TRUTHFULNESS + VARIANCE GOLDEN + E2E VALIDATED**
+
+**C13-P2-REPORTING-01:** **RESOLVED AS GOLDEN BENCHMARK / PRODUCT DEFERRED**
+
+**Reporting global:** **RESOLVED LOGIC BASELINE / PRODUCT VARIANCE DEFERRED / PDF-RENDERER PENDING** — not fully enterprise complete.
+
+**Residual risks:** PDF/HTML renderer · per-module variance · Board Pack M&A/Funding recalc not Golden · production Render smoke · global SoT · sales/demo pack after C.13.
+
+**Not touched:** Golden Dataset, Formula Registry, product code, `reportingGoldenFormulas.js`.
+
+**Next:** **C.13.9 — Strategy/Governance Logic Integrity Audit READ ONLY**
 
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:

@@ -1751,7 +1751,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P2-01 | Bridge marketplace ruta viva demo unlisted | `/bridge/marketplace` en `routes.jsx`; no en sidebar; `DEMO_BRIDGE_*` fallback |
 | C13-P2-02 | Bridge service acoplado a 8+ módulos | `bridge.service.js` imports cross-module summaries |
 | C13-P2-03 | Executive Overview aggregator, no master SoT | `executiveOverview.service.js`, `readinessIndex.service.js` |
-| C13-P2-04 | Reporting variance source unclear | **PRODUCT ALIGNMENT DECIDED (C.13.8E)** — OPTION C deferred; per-module ownership; Golden oracle only | C.13.8F |
+| C13-P2-04 | Reporting variance source unclear | **RESOLVED AS GOLDEN BENCHMARK / PRODUCT DEFERRED (C.13.8F)** — logic baseline + e2e pass | C.13.9+ |
 | C13-P2-05 | M&A localStorage cases | `valuationFormulas.js` `STORAGE_KEYS` |
 | C13-P2-06 | Compliance demo tools | `SHOW_DEMO_TOOLS` en `SuppliersPage.jsx` |
 | C13-P2-07 | AppShell outlet fallback (no lógica negocio) | `AppShell.jsx` loading panel |
@@ -3013,7 +3013,7 @@ La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
 | PMI | `PMI_CAPTURE_RATE` | Pending C.13.6 |
 | Bridge | `BRIDGE_PRIORITY` | Pending C.13.7 |
 | Risk | `RISK_LIKELIHOOD_IMPACT` | Pending C.13.8 |
-| Reporting | `REPORTING_VARIANCE` | **Golden tested + alignment deferred (C.13.8E)** — oracle only; per-module ownership required |
+| Reporting | `REPORTING_VARIANCE` | **Logic baseline closed (C.13.8F)** — Golden tested; product deferred; e2e pass; PDF/renderer P2 |
 | Executive | `EXEC_MODULE_HEALTH_AVG` | Pending C.13.1 |
 
 ### Qué NO se tocó
@@ -5881,7 +5881,36 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### Siguiente fase recomendada
 
-**C.13.8F — Reporting e2e/smoke closure + final Reporting status** (or C.13.9 Strategy/Governance audit if prioritized)
+**C.13.9 — Strategy/Governance Logic Integrity Audit READ ONLY**
+
+### C.13.8F — Reporting e2e/smoke closure + final Reporting status
+
+**Commit:** (pending) — `docs(reporting): record final reporting logic baseline status`
+
+**Import check:** `reportingGoldenFormulas` / `reportingVarianceGolden` — **no product imports** (helper + unit test + docs only).
+
+**Validaciones:**
+
+| Comando | Resultado |
+|---|---|
+| `npm run test:unit` | 391 passed |
+| `npm run test:integration` | 61 passed |
+| `npm run build` | pass |
+| `node scripts/run-e2e.mjs tests/e2e/reporting/reporting-enterprise-flow.spec.js` | **1 passed** |
+
+**UI copy:** Board review draft / human review / decision-support — no "Certified" or generic variance in Reporting UI.
+
+**No tocado:** Golden Dataset, Formula Registry, product code, `reportingGoldenFormulas.js`, auth/router.
+
+**C13-P1-20:** RESOLVED / REPORTING TRUTHFULNESS + VARIANCE GOLDEN + E2E VALIDATED
+
+**C13-P2-REPORTING-01:** RESOLVED AS GOLDEN BENCHMARK / PRODUCT DEFERRED
+
+**Reporting global:** **RESOLVED LOGIC BASELINE / PRODUCT VARIANCE DEFERRED / PDF-RENDERER PENDING** — not fully enterprise complete
+
+**Riesgos restantes:** PDF/HTML renderer · per-module variance · Board Pack M&A/Funding recalc not Golden · production Render smoke · global SoT · sales/demo pack
+
+**Siguiente:** C.13.9 Strategy/Governance audit READ ONLY
 
 ### C.13.8E — Reporting product alignment decision — DOCS ONLY
 
