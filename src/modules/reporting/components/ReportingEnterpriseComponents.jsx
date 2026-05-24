@@ -38,8 +38,8 @@ export function ReportingExecutiveWidget({ summary = {} }) {
   const metrics = safeSummary?.metrics || safeSummary || {};
   return (
     <section className="reporting-grid">
-      <ReportingKpi label="Reporting readiness" value={`${metrics.reportingReadinessScore || safeSummary.reportingReadinessScore || 0}%`} description={metrics.executiveReportingStatus || 'ready'} />
-      <ReportingKpi label="Board pack completeness" value={`${metrics.boardPackCompleteness || safeSummary.boardPackCompleteness || 0}%`} description="Board-ready coverage." />
+      <ReportingKpi label="Reporting readiness" value={metrics.reportingReadinessScore ?? safeSummary.reportingReadinessScore ?? 'N/A'} description={metrics.executiveReportingStatus || safeSummary.executiveReportingStatus || 'insufficient_data'} />
+      <ReportingKpi label="Board pack completeness" value={`${metrics.boardPackCompleteness ?? safeSummary.boardPackCompleteness ?? 'N/A'}${metrics.boardPackCompleteness != null || safeSummary.boardPackCompleteness != null ? '%' : ''}`} description="Board review draft coverage." />
       <ReportingKpi label="Evidence gaps" value={metrics.missingEvidenceCount || safeSummary.missingEvidenceCount || 0} description="Human review required." />
       <ReportingKpi label="Outdated reports" value={metrics.outdatedReports || safeSummary.outdatedReports || 0} description="Refresh queue." />
     </section>
@@ -56,7 +56,7 @@ export function ReportingTable({ title, items = [], columns = [] }) {
       <h3>{title}</h3>
       {items.length === 0 ? (
         <div className="reporting-empty ceos-enterprise-table-empty">
-          Insufficient validated data · Human review required
+          Insufficient persisted evidence · Human review required
         </div>
       ) : null}
       {items.length > 0 ? (

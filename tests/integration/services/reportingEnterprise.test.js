@@ -1,10 +1,11 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { initializeDatabaseSchema } from '../../../backend/storage/databaseSchema.js';
 import { closeDatabase, getSql } from '../../../backend/storage/sqliteStorage.js';
+import * as boardPackModule from '../../../backend/services/reporting/boardPack.service.js';
 import {
   createBoardPack,
   createEnterpriseReport,
@@ -73,5 +74,27 @@ describe('enterprise reporting foundation', () => {
   it('bloquea lectura cross-tenant', async () => {
     await createEnterpriseReport('org_reporting_a', { title: 'Tenant A report' }, { userId: 'u' });
     expect((await listEnterpriseReports('org_reporting_b')).some((item) => item.title === 'Tenant A report')).toBe(false);
+  });
+
+  it('no infla reportingReadinessScore cuando no hay metadata persistida', async () => {
+    const summary = await getReportingSummary({ organizationId: 'org_reporting_empty' });
+
+    expect(summary.metrics.reportingReadinessScore).toBeNull();
+    expect(summary.hasPersistedReportingData).toBe(false);
+    expect(summary.dataSource).toBe('insufficient_data');
+    expect(summary.executiveSignalEligible).toBe(false);
+  });
+
+  it('marca generation_failed cuando generateBoardPack falla', async () => {
+    const spy = vi.spyOn(boardPackModule, 'generateBoardPack').mockRejectedValueOnce(new Error('aggregation_failed'));
+    const item = await createBoardPack('org_reporting_fail', {}, { userId: 'u_fail', role: 'admin' });
+
+    expect(item.status).toBe('generation_failed');
+    expect(item.payload.generationStatus).toBe('failed');
+    expect(item.payload.humanReviewRequired).toBe(true);
+    expect(item.payload.generatedBoardPack).toBeNull();
+    expect(item.payload.generationError).toMatch(/human review required/i);
+
+    spy.mockRestore();
   });
 });

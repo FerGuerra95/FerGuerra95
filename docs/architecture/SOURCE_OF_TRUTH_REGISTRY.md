@@ -310,6 +310,17 @@ PMI does **not** have a single production capture formula today. It has multiple
 
 **PMI status:** **RESOLVED PRODUCT LOGIC / MULTI-LAYER PMI MODEL CLOSED** (C.13.7G). Golden (C.13.7C), operational tests (C.13.7D), demo/CEO gating (C.13.7E), UI/report truthfulness (C.13.7F), zero-denominator alignment (C.13.7G Option B) are in place. Residual: E2E/prod smoke when backend unavailable; future PDF/HTML report renderer — P2/P3, not P1 logic blockers.
 
+## Reporting / Board Pack aggregation (C.13.8A–B)
+
+| Layer | Role | Status |
+|---|---|---|
+| Reporting library | Persisted report metadata CRUD | **OPERATIONAL DSS** — tenant-scoped |
+| Board Pack aggregator | Cross-module hub aggregation | **TRUTHFULNESS GATED** (C.13.8B) — preserves PMI null; Compliance null; scoringTruthfulness |
+| Executive Command Center | Module summary + readiness index | **TRUTHFULNESS GATED** (C.13.8B) — insufficient_data for empty modules; no silent readiness fallbacks |
+| REPORTING_VARIANCE | Golden KPI variance | **PENDING** — oracle exists; product code not implemented |
+
+**Reporting status:** **AGGREGATOR RISK MITIGATED / PENDING REPORTING VARIANCE SOT** — not RESOLVED global until variance SoT decision + implementation phase.
+
 ## Executive Overview Special Rule
 
 Executive Overview reads module summaries and may show blended scores.

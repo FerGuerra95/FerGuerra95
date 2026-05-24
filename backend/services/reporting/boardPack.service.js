@@ -25,6 +25,54 @@ function clamp(value, min = 0, max = 100) {
   return Math.max(min, Math.min(max, Math.round(toNumber(value))));
 }
 
+/** Preserve null/N/A capture rates — do not coerce null to 0% (C.13.7G / C.13.8B). */
+function preserveNullablePercent(value) {
+  if (value === null || value === undefined) {
+    return null;
+  }
+
+  return clamp(value);
+}
+
+function aggregateBranchScore(branches = {}) {
+  const values = Object.values(branches)
+    .map((branch) => branch?.score)
+    .filter((value) => value !== null && value !== undefined && Number.isFinite(Number(value)))
+    .map((value) => clamp(value));
+
+  return values.length ? clamp(values.reduce((sum, value) => sum + value, 0) / values.length) : null;
+}
+
+export function buildBoardPackScoringTruthfulness() {
+  return {
+    certifiedRating: false,
+    humanReviewRequired: true,
+    decisionSupportOnly: true,
+    note: 'Board pack aggregates operational DSS module signals — not Golden benchmarks or certified ratings.',
+    moduleLayers: {
+      pmi: {
+        goldenBenchmark: 'pmiCaptureRateGolden',
+        operationalMetrics: [
+          'operationalPmiCaseCapture',
+          'operationalPmiLedgerCapture',
+          'operationalPmiEnterpriseCapture',
+          'operationalPmiReadinessScore'
+        ],
+        preservesNullCapture: true,
+        zeroDenominatorOperational: 'null when target/forecast <= 0'
+      },
+      risk: {
+        goldenBenchmark: 'riskLikelihoodImpactGolden',
+        operationalMetrics: ['operationalEnterpriseRiskScore']
+      },
+      compliance: {
+        operationalScore: 'legalHealthScore',
+        nullMeansInsufficientData: true
+      }
+    }
+  };
+}
+
 function assertOrganizationId(organizationId) {
   if (!normalizeText(organizationId)) {
     throw createError('Scope de organizacion no definido.', 403, 'INVALID_ORGANIZATION_SCOPE');
@@ -89,10 +137,8 @@ function resolveMaValuation(cases = []) {
 
 function resolveCompliance(brief = {}) {
   const latestAudit = brief.latestAuditRun || null;
-  const healthScore =
-    brief.legalHealthScore === null || brief.legalHealthScore === undefined
-      ? 55
-      : clamp(brief.legalHealthScore);
+  const hasHealthScore = brief.legalHealthScore !== null && brief.legalHealthScore !== undefined;
+  const healthScore = hasHealthScore ? clamp(brief.legalHealthScore) : null;
   const criticalFindings = toNumber(
     brief.valuationDragSignals?.criticalFindings ?? latestAudit?.criticalFindings
   );
@@ -100,11 +146,15 @@ function resolveCompliance(brief = {}) {
   return {
     score: healthScore,
     healthScore,
+    insufficientData: !hasHealthScore,
+    dataSource: hasHealthScore ? 'compliance_hub' : 'insufficient_data',
+    humanReviewRequired: true,
     auditLedgerStatus: latestAudit?.status || 'not_started',
     latestAuditId: latestAudit?.id || null,
     criticalFindings,
-    riskStatus:
-      criticalFindings > 0 || healthScore < 70
+    riskStatus: !hasHealthScore
+      ? 'insufficient_data'
+      : criticalFindings > 0 || healthScore < 70
         ? 'attention_required'
         : 'controlled',
     rationale: brief.valuationDragSignals?.rationale || 'No compliance audit baseline available.'
@@ -149,14 +199,22 @@ function resolvePmi(brief = {}) {
     toNumber(metrics.workstreamProgress) * 0.55 +
       toNumber(metrics.milestoneProgress) * 0.45
   );
+  const synergyCaptureRate = preserveNullablePercent(metrics.synergyCaptureRate);
+  const ledgerCaptureRate = preserveNullablePercent(metrics.ledgerCaptureRate);
 
   return {
-    score: clamp(brief.score ?? progress),
+    score: brief.score === null || brief.score === undefined ? progress : clamp(brief.score),
     integrationProgress: progress,
     synergyCaptured: toNumber(latestCase?.synergyCaptured),
     synergyTarget: toNumber(latestCase?.synergyTarget),
-    synergyCaptureRate: clamp(metrics.synergyCaptureRate),
-    ledgerCaptureRate: clamp(metrics.ledgerCaptureRate),
+    synergyCaptureRate,
+    ledgerCaptureRate,
+    notCalculable:
+      synergyCaptureRate === null ||
+      (metrics.ledgerForecast > 0 ? false : ledgerCaptureRate === null && toNumber(metrics.ledgerForecast) === 0),
+    dataSource: brief.dataSource || 'operational_pmi_hub',
+    humanReviewRequired: brief.humanReviewRequired !== false,
+    executiveSignalEligible: brief.executiveSignalEligible !== false,
     ledgerForecast: toNumber(metrics.ledgerForecast),
     ledgerCaptured: toNumber(metrics.ledgerCaptured),
     playbookProgress: clamp(metrics.playbookProgress),
@@ -174,7 +232,7 @@ function resolveBridge(brief = {}) {
 
   return {
     score: clamp(branch.score ?? metrics.readinessScore ?? 0),
-    title: branch.title || 'Bridge liquidity network',
+    title: branch.title || 'Bridge internal pipeline',
     pipelineValue: toNumber(metrics.totalOpportunityValue),
     weightedPipelineValue: toNumber(metrics.weightedPipelineValue),
     introductionsCount: toNumber(metrics.introductionsCount),
@@ -257,12 +315,16 @@ export function generateExecutiveSummary({ ma, compliance, funding, pmi, bridge,
     strengths.push('valoracion M&A soportada por multiplos operativos');
   }
 
-  if (compliance?.criticalFindings > 0 || compliance?.healthScore < 70) {
+  if (compliance?.criticalFindings > 0 || (compliance?.healthScore !== null && compliance?.healthScore < 70)) {
     concerns.push('controles de Compliance y Audit Ledger pendientes de refuerzo');
   }
 
   if (
+    pmi?.synergyCaptureRate !== null &&
+    pmi?.synergyCaptureRate !== undefined &&
     pmi?.synergyCaptureRate >= 60 &&
+    pmi?.ledgerCaptureRate !== null &&
+    pmi?.ledgerCaptureRate !== undefined &&
     pmi?.ledgerCaptureRate >= 50 &&
     pmi?.playbookProgress >= 65
   ) {
@@ -336,16 +398,8 @@ export async function generateBoardPack(scope = {}) {
     governance: resolveGovernance(ecosystemBrief),
     heritage: resolveHeritage(ecosystemBrief)
   };
-  const score = clamp(
-    (branches.ma.score +
-      branches.compliance.score +
-      branches.funding.score +
-      branches.pmi.score +
-      branches.bridge.score +
-      branches.governance.score +
-      branches.heritage.score) /
-      7
-  );
+  const score = aggregateBranchScore(branches);
+  const scoringTruthfulness = buildBoardPackScoringTruthfulness();
 
   return {
     version: 'board-pack-v1',
@@ -354,6 +408,12 @@ export async function generateBoardPack(scope = {}) {
     generatedBy: scope.userId || null,
     title: 'Executive Board Pack',
     score,
+    humanReviewRequired: true,
+    decisionSupportOnly: true,
+    dataSource: 'operational_module_aggregation',
+    scoringTruthfulness,
+    dssNotice:
+      'Decision-support board pack draft only. Human review required. Not a certified rating or board-approved final report.',
     executiveSummary: generateExecutiveSummary(branches),
     branches,
     recommendations: [
@@ -383,5 +443,6 @@ export async function generateBoardPack(scope = {}) {
 
 export default {
   generateBoardPack,
-  generateExecutiveSummary
+  generateExecutiveSummary,
+  buildBoardPackScoringTruthfulness
 };

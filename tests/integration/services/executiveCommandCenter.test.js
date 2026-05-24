@@ -82,5 +82,8 @@ describe('CEO command center enterprise foundation', () => {
     const overview = await getExecutiveOverview({ organizationId: 'org_executive_empty', userId: 'u' });
     expect(overview.readiness.missingData.length).toBeGreaterThanOrEqual(0);
     expect(overview.signals.some((item) => item.title.includes('not available') || item.humanReviewRequired)).toBe(true);
+    expect(overview.readiness.humanReviewRequired).toBe(true);
+    expect(overview.readiness.executiveSignalEligible).toBe(false);
+    expect(overview.signals.length).toBeGreaterThan(0);
   });
 });

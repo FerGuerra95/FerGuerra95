@@ -42,9 +42,97 @@ async function safeModule(key, loader) {
   }
 }
 
+function hasPersistedExecutiveModuleData(key, data) {
+  if (!data || typeof data !== 'object') return false;
+
+  switch (key) {
+    case 'ma':
+      return Number(data.counts?.deals ?? data.totalDeals ?? 0) > 0 || Boolean(data.latestDeal?.id);
+    case 'compliance':
+      return (
+        (data.legalHealthScore !== null && data.legalHealthScore !== undefined) ||
+        Boolean(data.latestAuditRun?.id)
+      );
+    case 'funding':
+      return (
+        Number(data.totalAmountRaised ?? data.totalRaised ?? 0) > 0 ||
+        Number(data.totalRounds ?? data.roundsCount ?? 0) > 0 ||
+        Number(data.projectedRunwayMonths ?? data.runwayMonths ?? 0) > 0
+      );
+    case 'governance':
+      return Number(data.counts?.decisions ?? data.metrics?.decisionsCount ?? 0) > 0;
+    case 'pmi':
+      return Boolean(data.latestCase?.id) || Number(data.metrics?.casesCount ?? 0) > 0;
+    case 'bridge':
+      return (
+        Number(data.metrics?.counterpartiesCount ?? 0) > 0 ||
+        Number(data.metrics?.documentsCount ?? 0) > 0 ||
+        Number(data.metrics?.qualifiedOpportunitiesCount ?? 0) > 0
+      );
+    case 'risk':
+      return Number(data.counts?.risks ?? data.metrics?.totalRisks ?? 0) > 0;
+    case 'reporting':
+      return (
+        Number(data.counts?.reports ?? 0) > 0 ||
+        Number(data.counts?.boardPacks ?? 0) > 0 ||
+        Number(data.counts?.evidence ?? 0) > 0
+      );
+    case 'strategy':
+      return (
+        Number(data.counts?.objectives ?? 0) > 0 ||
+        Number(data.counts?.initiatives ?? 0) > 0
+      );
+    default:
+      return false;
+  }
+}
+
+function normalizeExecutiveModuleEntry(entry) {
+  if (entry.status !== 'available' || !entry.data) {
+    return {
+      ...entry,
+      humanReviewRequired: true,
+      executiveSignalEligible: false,
+      dataSource: entry.status === 'not_available' ? 'not_available' : 'insufficient_data'
+    };
+  }
+
+  if (hasPersistedExecutiveModuleData(entry.key, entry.data)) {
+    return {
+      ...entry,
+      humanReviewRequired: true,
+      executiveSignalEligible: true,
+      dataSource: 'persisted_operational_dss'
+    };
+  }
+
+  return {
+    ...entry,
+    status: 'insufficient_data',
+    reason: 'insufficient_persisted_data',
+    humanReviewRequired: true,
+    executiveSignalEligible: false,
+    dataSource: 'empty'
+  };
+}
+
 function summarizeMaDeals(deals = []) {
   const activeDeals = deals.filter((item) => !['archived', 'completed'].includes(text(item.status).toLowerCase()));
   const highPriority = activeDeals.filter((item) => ['high', 'review', 'watch'].includes(text(item.priority).toLowerCase())).length;
+
+  if (deals.length === 0) {
+    return {
+      readinessScore: null,
+      score: null,
+      counts: { deals: 0, activeDeals: 0, highPriority: 0 },
+      latestDeal: null,
+      requiresExecutiveAttention: true,
+      humanReviewPosture: 'human_review_required',
+      dataSource: 'empty',
+      executiveSignalEligible: false
+    };
+  }
+
   const readinessScore = clampScore(68 + Math.min(18, activeDeals.length * 3) - highPriority * 4);
   return {
     readinessScore,
@@ -52,7 +140,9 @@ function summarizeMaDeals(deals = []) {
     counts: { deals: deals.length, activeDeals: activeDeals.length, highPriority },
     latestDeal: deals[0] || null,
     requiresExecutiveAttention: highPriority > 0,
-    humanReviewPosture: 'human_review_required'
+    humanReviewPosture: 'human_review_required',
+    dataSource: 'persisted_operational_dss',
+    executiveSignalEligible: true
   };
 }
 
@@ -74,7 +164,15 @@ export async function collectExecutiveModuleSummaries(scope = {}) {
   ]);
 
   return entries.reduce((acc, entry) => {
-    acc[entry.key] = { status: entry.status, data: entry.data, reason: entry.reason };
+    const normalized = normalizeExecutiveModuleEntry(entry);
+    acc[normalized.key] = {
+      status: normalized.status,
+      data: normalized.data,
+      reason: normalized.reason,
+      dataSource: normalized.dataSource,
+      humanReviewRequired: normalized.humanReviewRequired,
+      executiveSignalEligible: normalized.executiveSignalEligible
+    };
     return acc;
   }, {});
 }
@@ -89,7 +187,7 @@ export function buildExecutiveAlerts({ signals = [], readiness = {} } = {}) {
       recommendedAction: item.recommendedAction,
       humanReviewRequired: true
     }));
-  if (readiness.score < 60) {
+  if (readiness.score !== null && readiness.score < 60) {
     alerts.unshift({
       module: 'Executive',
       status: 'risk',

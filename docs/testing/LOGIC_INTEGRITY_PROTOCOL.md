@@ -372,6 +372,30 @@ PMI calculations are separated into multiple layers. Do not collapse them into o
 
 **PMI status after C.13.7G:** **RESOLVED PRODUCT LOGIC / MULTI-LAYER PMI MODEL CLOSED** — E2E/prod smoke and PDF/HTML report renderer remain environment/future scope (P2/P3), not open P1 logic defects.
 
+## Reporting aggregator audit (C.13.8A — READ ONLY)
+
+**Status:** **AGGREGATOR RISK CONFIRMED / MISMATCH CONFIRMED / PENDING SOT** — Board Pack recalculates module metrics; Executive readiness used silent fallbacks; `REPORTING_VARIANCE` Golden mapped but not implemented.
+
+**Findings (P1):** C13-P1-16..20, C13-P1-EXEC-01 documented in inventory.
+
+## Reporting / Executive aggregation truthfulness (C.13.8B)
+
+1. **Executive:** `collectExecutiveModuleSummaries` downgrades empty modules to `insufficient_data`; `readinessIndex` removes silent numeric fallbacks; empty org emits defensive signals.
+2. **Board Pack:** `preserveNullablePercent` for PMI capture; Compliance null not defaulted to 55; `scoringTruthfulness` + `dssNotice` on pack payload.
+3. **Reporting meta:** `reportingReadinessScore` null when no persisted reports/board packs/evidence.
+4. **createBoardPack:** `generationStatus: failed` + `generation_failed` status when aggregation fails — not silent success.
+5. **Tests:** `reportingAggregatorTruthfulness.test.js`, extended integration tests for Executive, Board Pack, Reporting.
+
+**C13-P1-16:** **RESOLVED / BOARD PACK PMI NULL PRESERVED**
+**C13-P1-16a:** **RESOLVED / BOARD PACK TRUTHFULNESS PAYLOAD ADDED**
+**C13-P1-17:** **RESOLVED / EXECUTIVE EMPTY MODULE FALLBACKS GATED**
+**C13-P1-EXEC-01:** **RESOLVED / EXECUTIVE EMPTY ORG DEFENSIVE SIGNALS RESTORED**
+**C13-P1-18:** **RESOLVED / COMPLIANCE NULL SCORE NOT DEFAULTED**
+**C13-P1-19:** **RESOLVED / BOARD PACK GENERATION FAILURE FLAGGED**
+**C13-P1-20:** **PARTIALLY RESOLVED / REPORTING TRUTHFULNESS TESTS ADDED**
+
+**Reporting global:** **AGGREGATOR RISK MITIGATED / PENDING REPORTING VARIANCE SOT** — not RESOLVED global (`REPORTING_VARIANCE` still unimplemented).
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor

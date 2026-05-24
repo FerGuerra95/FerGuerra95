@@ -5881,4 +5881,16 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### Siguiente fase recomendada
 
-**C.13.8 — Reporting Logic Integrity / Variance Source-of-Truth Audit READ ONLY**
+**C.13.8C — Reporting SoT decision / variance decision docs-only** (or variance Golden helper if authorized)
+
+### C.13.8A — Reporting Logic Integrity Audit READ ONLY
+
+**Estado:** AGGREGATOR RISK CONFIRMED — sin cambios de código.
+
+### C.13.8B — ExecutiveCommandCenter + Board Pack aggregation truthfulness
+
+**Commit:** (pending) — `fix(reporting): align board pack and executive truthfulness`
+
+**Correcciones:** Executive empty org defensive signals; Board Pack PMI null preserved; Compliance null not 55; reportingReadinessScore null without metadata; createBoardPack generation_failed flag; scoringTruthfulness payload; tests.
+
+**Reporting global:** **AGGREGATOR RISK MITIGATED / PENDING REPORTING VARIANCE SOT**

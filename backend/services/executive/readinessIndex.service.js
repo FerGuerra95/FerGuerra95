@@ -11,7 +11,7 @@ function available(moduleSummary) {
   return moduleSummary?.status === 'available' && moduleSummary.data;
 }
 
-function scoreFrom(moduleSummary, paths = [], fallback = null) {
+function scoreFrom(moduleSummary, paths = []) {
   if (!available(moduleSummary)) return null;
   for (const path of paths) {
     const value = path.split('.').reduce((current, key) => current?.[key], moduleSummary.data);
@@ -19,19 +19,19 @@ function scoreFrom(moduleSummary, paths = [], fallback = null) {
       return clampScore(value);
     }
   }
-  return fallback === null ? null : clampScore(fallback);
+  return null;
 }
 
 export function calculateExecutiveReadinessIndex(moduleSummaries = {}) {
   const scores = {
-    ma: scoreFrom(moduleSummaries.ma, ['score', 'readinessScore', 'metrics.readinessScore'], 65),
-    compliance: scoreFrom(moduleSummaries.compliance, ['legalHealthScore', 'score', 'metrics.healthScore'], 60),
-    funding: scoreFrom(moduleSummaries.funding, ['readinessScore', 'capitalEfficiencyScore', 'summary.readinessScore'], 58),
-    governance: scoreFrom(moduleSummaries.governance, ['metrics.governanceReadinessScore', 'metrics.boardReadinessScore', 'governanceReadinessScore'], 60),
-    pmi: scoreFrom(moduleSummaries.pmi, ['metrics.pmiReadinessScore', 'pmiReadinessScore'], 60),
-    risk: scoreFrom(moduleSummaries.risk, ['metrics.riskReadinessScore', 'riskReadinessScore'], 62),
-    reporting: scoreFrom(moduleSummaries.reporting, ['metrics.reportingReadinessScore', 'reportingReadinessScore'], 65),
-    strategy: scoreFrom(moduleSummaries.strategy, ['metrics.strategyReadinessScore', 'strategyReadinessScore'], 60)
+    ma: scoreFrom(moduleSummaries.ma, ['score', 'readinessScore', 'metrics.readinessScore']),
+    compliance: scoreFrom(moduleSummaries.compliance, ['legalHealthScore', 'score', 'metrics.healthScore']),
+    funding: scoreFrom(moduleSummaries.funding, ['readinessScore', 'capitalEfficiencyScore', 'summary.readinessScore']),
+    governance: scoreFrom(moduleSummaries.governance, ['metrics.governanceReadinessScore', 'metrics.boardReadinessScore', 'governanceReadinessScore']),
+    pmi: scoreFrom(moduleSummaries.pmi, ['metrics.pmiReadinessScore', 'pmiReadinessScore']),
+    risk: scoreFrom(moduleSummaries.risk, ['metrics.riskReadinessScore', 'riskReadinessScore']),
+    reporting: scoreFrom(moduleSummaries.reporting, ['metrics.reportingReadinessScore', 'reportingReadinessScore']),
+    strategy: scoreFrom(moduleSummaries.strategy, ['metrics.strategyReadinessScore', 'strategyReadinessScore'])
   };
 
   const weights = {
@@ -48,21 +48,35 @@ export function calculateExecutiveReadinessIndex(moduleSummaries = {}) {
   const missingData = Object.entries(scores)
     .filter(([, value]) => value === null)
     .map(([key]) => key);
+  const insufficientModules = Object.entries(moduleSummaries)
+    .filter(([, envelope]) => envelope?.status === 'insufficient_data')
+    .map(([key]) => key);
   const weighted = availableScores.reduce((sum, [key, value]) => sum + value * weights[key], 0);
   const weightTotal = availableScores.reduce((sum, [key]) => sum + weights[key], 0);
-  const score = weightTotal > 0 ? clampScore(weighted / weightTotal) : 0;
+  const score = weightTotal > 0 ? clampScore(weighted / weightTotal) : null;
   const confidence = clampScore((availableScores.length / Object.keys(scores).length) * 100);
   const lowScores = availableScores.filter(([, value]) => value < 65).length;
-  const trend = lowScores >= 3 ? 'watch' : score >= 78 ? 'positive' : 'stable';
+  const trend =
+    availableScores.length === 0
+      ? 'insufficient_data'
+      : lowScores >= 3
+        ? 'watch'
+        : score !== null && score >= 78
+          ? 'positive'
+          : 'stable';
 
   return {
     score,
     trend,
     confidence,
     missingData,
+    insufficientModules,
     dataCompleteness: confidence,
     moduleScores: scores,
-    humanReviewPosture: 'human_review_required'
+    executiveSignalEligible: availableScores.length > 0 && missingData.length < Object.keys(scores).length,
+    dataSource: availableScores.length === 0 ? 'empty' : missingData.length > 0 ? 'partial_operational_dss' : 'operational_dss',
+    humanReviewPosture: 'human_review_required',
+    humanReviewRequired: true
   };
 }
 

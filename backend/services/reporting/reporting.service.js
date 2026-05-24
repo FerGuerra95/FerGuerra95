@@ -158,14 +158,24 @@ export function calculateReportingMetrics({ reports = [], templates = [], versio
   const draftBoardPacks = boardPacks.filter((item) => normalizeText(item.status).toLowerCase() === 'draft').length;
   const missingEvidenceCount = evidence.filter((item) => ['missing', 'gap', 'pending'].includes(normalizeText(item.evidenceStatus).toLowerCase())).length;
   const outdatedReports = reports.filter((item) => !item.lastExportedAt || normalizeText(item.status).toLowerCase() === 'stale').length;
+  const hasPersistedReportingData = reports.length > 0 || boardPacks.length > 0 || evidence.length > 0;
   const avgEvidence = reports.length
     ? Math.round(reports.reduce((sum, item) => sum + normalizeNumber(item.evidenceCompleteness), 0) / reports.length)
-    : 70;
+    : null;
   const boardPackCompleteness = boardPacks.length
     ? Math.round(boardPacks.reduce((sum, item) => sum + normalizeNumber(item.completenessScore), 0) / boardPacks.length)
-    : 65;
-  const reportFreshness = reports.length ? clampScore(100 - Math.round((outdatedReports / reports.length) * 100)) : 70;
-  const reportingReadinessScore = clampScore(avgEvidence * 0.32 + boardPackCompleteness * 0.28 + reportFreshness * 0.24 + Math.min(100, templates.length * 12) * 0.08 + Math.min(100, schedules.length * 12) * 0.08 - missingEvidenceCount * 3);
+    : null;
+  const reportFreshness = reports.length ? clampScore(100 - Math.round((outdatedReports / reports.length) * 100)) : null;
+  const reportingReadinessScore = hasPersistedReportingData
+    ? clampScore(
+        normalizeNumber(avgEvidence, 0) * 0.32 +
+          normalizeNumber(boardPackCompleteness, 0) * 0.28 +
+          normalizeNumber(reportFreshness, 0) * 0.24 +
+          Math.min(100, templates.length * 12) * 0.08 +
+          Math.min(100, schedules.length * 12) * 0.08 -
+          missingEvidenceCount * 3
+      )
+    : null;
   const requiresExecutiveAttention = missingEvidenceCount > 0 || pendingReview > 2 || draftBoardPacks > 0 || outdatedReports > 2;
   return {
     reportsByModule: reports.reduce((acc, item) => {
@@ -180,12 +190,19 @@ export function calculateReportingMetrics({ reports = [], templates = [], versio
     missingEvidenceCount,
     reportFreshness,
     reportingReadinessScore,
-    boardPackCompleteness: clampScore(boardPackCompleteness),
+    boardPackCompleteness: boardPackCompleteness === null ? null : clampScore(boardPackCompleteness),
     outdatedReports,
     scheduledReports: schedules.length,
     versionsCount: versions.length,
-    executiveReportingStatus: requiresExecutiveAttention ? 'watch' : 'ready',
-    requiresExecutiveAttention
+    hasPersistedReportingData,
+    dataSource: hasPersistedReportingData ? 'persisted_reporting_metadata' : 'insufficient_data',
+    executiveReportingStatus: hasPersistedReportingData
+      ? requiresExecutiveAttention
+        ? 'watch'
+        : 'ready'
+      : 'insufficient_data',
+    requiresExecutiveAttention: hasPersistedReportingData ? requiresExecutiveAttention : true,
+    humanReviewRequired: true
   };
 }
 
@@ -225,21 +242,33 @@ export async function listBoardPacks(organizationId) { return boardPacksStore.li
 export async function createBoardPack(organizationId, payload = {}, actor = {}) {
   assertOrganizationId(organizationId);
   let generated = null;
+  let generationError = null;
+
   try {
     generated = await generateBoardPack({ organizationId, userId: actorId(actor), role: actor.role || 'admin' });
-  } catch {
-    generated = null;
+  } catch (error) {
+    generationError = normalizeText(error?.message, 'board_pack_generation_failed');
   }
+
+  const generationStatus = generated ? 'completed' : 'failed';
   const sections = normalizeArray(payload.sections).length
     ? payload.sections
     : ['Executive Summary', 'Decisions', 'Risks', 'Financial Highlights', 'Compliance', 'Funding', 'M&A', 'PMI', 'Governance'];
-  const completenessScore = clampScore(payload.completenessScore ?? (generated ? 82 : 62));
+  const completenessScore =
+    generationStatus === 'completed'
+      ? clampScore(payload.completenessScore ?? 82)
+      : null;
   const item = await createWith(boardPacksStore, organizationId, {
     title: payload.title || 'Board Executive Snapshot',
-    status: payload.status || 'draft',
+    status: generationStatus === 'completed' ? payload.status || 'draft' : 'generation_failed',
     sections,
     sourceModules: payload.sourceModules || ['M&A', 'Compliance', 'Funding', 'PMI', 'Governance', 'Risk'],
-    executiveSummary: payload.executiveSummary || generated?.executiveSummary || 'Enterprise board pack prepared for human review.',
+    executiveSummary:
+      payload.executiveSummary ||
+      generated?.executiveSummary ||
+      (generationStatus === 'completed'
+        ? 'Enterprise board pack prepared for human review.'
+        : 'Board pack aggregation failed — human review required before circulation.'),
     decisions: payload.decisions || [],
     risks: payload.risks || [],
     financialHighlights: payload.financialHighlights || [],
@@ -248,8 +277,19 @@ export async function createBoardPack(organizationId, payload = {}, actor = {}) 
     maHighlights: payload.maHighlights || [],
     pmiHighlights: payload.pmiHighlights || [],
     governanceHighlights: payload.governanceHighlights || [],
-    completenessScore,
-    payload: { generatedBoardPack: generated, humanReviewRequired: true, ...(payload.payload || {}) }
+    completenessScore: completenessScore ?? 0,
+    payload: {
+      generatedBoardPack: generated,
+      generationStatus,
+      generationError: generationError ? 'Aggregation failed — human review required.' : null,
+      humanReviewRequired: true,
+      decisionSupportOnly: true,
+      scoringTruthfulness: generated?.scoringTruthfulness || null,
+      dssNotice:
+        generated?.dssNotice ||
+        'Decision-support board pack draft only. Not a certified rating or board-approved final report.',
+      ...(payload.payload || {})
+    }
   }, actor, 'reporting.board_pack.created');
   return item;
 }
@@ -265,6 +305,9 @@ export async function getReportingSummary(scope = {}) {
     missingEvidenceCount: metrics.missingEvidenceCount,
     outdatedReports: metrics.outdatedReports,
     requiresExecutiveAttention: metrics.requiresExecutiveAttention,
+    hasPersistedReportingData: metrics.hasPersistedReportingData,
+    dataSource: metrics.dataSource,
+    executiveSignalEligible: metrics.hasPersistedReportingData,
     counts: {
       reports: data.reports.length,
       templates: data.templates.length,

@@ -234,6 +234,7 @@ describe('Unified Board Pack reporting', () => {
     });
 
     expect(boardPack.version).toBe('board-pack-v1');
+    expect(boardPack.scoringTruthfulness?.decisionSupportOnly).toBe(true);
     expect(boardPack.branches.ma.valuation).toBe(9000000);
     expect(boardPack.branches.ma.appliedMultiple).toBe(7.5);
     expect(boardPack.branches.funding.capTableStatus).toContain('dilution');
@@ -288,5 +289,46 @@ describe('Unified Board Pack reporting', () => {
 
     expect(summary).toContain('salud financiera solida');
     expect(summary).toContain('Compliance');
+  });
+
+  it('preserva PMI null capture rates and expone scoringTruthfulness en board pack', async () => {
+    const organizationId = 'org_board_pack_null_pmi';
+    const userId = 'u_board_pack_null';
+
+    await createPmiCase(
+      organizationId,
+      {
+        dealName: 'Zero Target PMI',
+        synergyTarget: 0,
+        synergyCaptured: 500000,
+        synergyLedger: [{ forecast: 0, captured: 100000 }],
+        workstreams: [],
+        milestones: [],
+        risks: []
+      },
+      { userId }
+    );
+
+    const boardPack = await generateBoardPack({ organizationId, userId });
+
+    expect(boardPack.branches.pmi.synergyCaptureRate).toBeNull();
+    expect(boardPack.branches.pmi.ledgerCaptureRate).toBeNull();
+    expect(boardPack.scoringTruthfulness?.humanReviewRequired).toBe(true);
+    expect(boardPack.scoringTruthfulness?.decisionSupportOnly).toBe(true);
+    expect(boardPack.scoringTruthfulness?.moduleLayers?.pmi?.preservesNullCapture).toBe(true);
+    expect(boardPack.humanReviewRequired).toBe(true);
+    expect(Number.isNaN(boardPack.branches.pmi.synergyCaptureRate)).toBe(false);
+  });
+
+  it('no convierte compliance legalHealthScore null en score real 55', async () => {
+    const boardPack = await generateBoardPack({
+      organizationId: 'org_board_pack_no_compliance',
+      userId: 'u_none'
+    });
+
+    expect(boardPack.branches.compliance.healthScore).toBeNull();
+    expect(boardPack.branches.compliance.score).toBeNull();
+    expect(boardPack.branches.compliance.insufficientData).toBe(true);
+    expect(boardPack.branches.compliance.riskStatus).toBe('insufficient_data');
   });
 });
