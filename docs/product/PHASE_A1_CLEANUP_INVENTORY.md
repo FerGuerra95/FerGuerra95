@@ -5885,7 +5885,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.8E — Reporting product alignment decision — DOCS ONLY
 
-**Commit:** (pending) — `docs(reporting): record variance product alignment decision`
+**Commit:** `adaf770` — `docs(reporting): record variance product alignment decision`
 
 **Decisión:** **OPTION C — Product alignment deferred / per-module ownership required**
 
