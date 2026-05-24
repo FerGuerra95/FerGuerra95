@@ -1751,7 +1751,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P2-01 | Bridge marketplace ruta viva demo unlisted | `/bridge/marketplace` en `routes.jsx`; no en sidebar; `DEMO_BRIDGE_*` fallback |
 | C13-P2-02 | Bridge service acoplado a 8+ módulos | `bridge.service.js` imports cross-module summaries |
 | C13-P2-03 | Executive Overview aggregator, no master SoT | `executiveOverview.service.js`, `readinessIndex.service.js` |
-| C13-P2-04 | Reporting variance source unclear | **SOT DECISION DOCUMENTED (C.13.8C)** — OPTION C Golden benchmark; no product impl; pending C.13.8D helper | C.13.8D |
+| C13-P2-04 | Reporting variance source unclear | **GOLDEN HELPER TESTED (C.13.8D)** — OPTION C; oracle only; product alignment pending C.13.8E | C.13.8E |
 | C13-P2-05 | M&A localStorage cases | `valuationFormulas.js` `STORAGE_KEYS` |
 | C13-P2-06 | Compliance demo tools | `SHOW_DEMO_TOOLS` en `SuppliersPage.jsx` |
 | C13-P2-07 | AppShell outlet fallback (no lógica negocio) | `AppShell.jsx` loading panel |
@@ -3013,7 +3013,7 @@ La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
 | PMI | `PMI_CAPTURE_RATE` | Pending C.13.6 |
 | Bridge | `BRIDGE_PRIORITY` | Pending C.13.7 |
 | Risk | `RISK_LIKELIHOOD_IMPACT` | Pending C.13.8 |
-| Reporting | `REPORTING_VARIANCE` | **OPTION C documented (C.13.8C)** — Golden benchmark; pending C.13.8D helper/tests |
+| Reporting | `REPORTING_VARIANCE` | **Golden helper tested (C.13.8D)** — `reportingGoldenFormulas.js`; product alignment pending C.13.8E |
 | Executive | `EXEC_MODULE_HEALTH_AVG` | Pending C.13.1 |
 
 ### Qué NO se tocó
@@ -5881,7 +5881,23 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### Siguiente fase recomendada
 
-**C.13.8D — Reporting variance Golden helper/tests** (oracle only; no product)
+### C.13.8D — Reporting variance Golden helper/tests
+
+**Commit:** (pending) — `test(reporting): add variance golden benchmark`
+
+**Helper:** `backend/services/reporting/reportingGoldenFormulas.js` — `calculateReportingVarianceGolden`; Golden `reporting_kpi_variance_basic` (`budget` alias, percent ×100).
+
+**Tests:** `tests/unit/reporting/reportingGoldenFormulas.test.js` — 12 oracle cases; truthfulness separation from product readiness.
+
+**No tocado:** `reporting.service.js`, `boardPack.service.js`, Executive, Reporting UI, `golden_inputs.json`, `FORMULA_REGISTRY.md`.
+
+**C13-P1-20:** PARTIALLY RESOLVED / REPORTING TRUTHFULNESS TESTS ADDED / VARIANCE GOLDEN TESTED
+
+**C13-P2-REPORTING-01:** PARTIALLY RESOLVED / REPORTING VARIANCE GOLDEN HELPER TESTED
+
+**Reporting global:** AGGREGATOR RISK MITIGATED / REPORTING VARIANCE GOLDEN TESTED / PRODUCT ALIGNMENT PENDING — **no RESOLVED global**
+
+**Siguiente:** C.13.8E product alignment decision
 
 ### C.13.8C — Reporting SoT decision / variance decision — DOCS ONLY
 

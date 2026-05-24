@@ -317,9 +317,9 @@ PMI does **not** have a single production capture formula today. It has multiple
 | Reporting library | Persisted report metadata CRUD | **OPERATIONAL DSS** — tenant-scoped |
 | Board Pack aggregator | Cross-module hub aggregation | **TRUTHFULNESS GATED** (C.13.8B) — preserves PMI null; Compliance null; scoringTruthfulness |
 | Executive Command Center | Module summary + readiness index | **TRUTHFULNESS GATED** (C.13.8B) — insufficient_data for empty modules; no silent readiness fallbacks |
-| REPORTING_VARIANCE | Golden KPI variance (`reportingVarianceGolden`) | **OPTION C — GOLDEN BENCHMARK / FUTURE PRODUCT** (C.13.8C) — no product code; pending C.13.8D helper/tests |
+| REPORTING_VARIANCE | Golden KPI variance (`reportingVarianceGolden`) | **GOLDEN HELPER TESTED** (C.13.8D) — `reportingGoldenFormulas.js`; no product wiring |
 
-**Reporting status:** **AGGREGATOR RISK MITIGATED / REPORTING VARIANCE SOT DOCUMENTED / PENDING HELPER TESTS** — not RESOLVED global until Golden helper/tests (C.13.8D) and optional product alignment (C.13.8E).
+**Reporting status:** **AGGREGATOR RISK MITIGATED / REPORTING VARIANCE GOLDEN TESTED / PRODUCT ALIGNMENT PENDING** — not RESOLVED global until product alignment (C.13.8E).
 
 ## REPORTING_VARIANCE — Source-of-Truth Decision (C.13.8C)
 
@@ -329,7 +329,8 @@ PMI does **not** have a single production capture formula today. It has multiple
 |---|---|
 | Logical name | `reportingVarianceGolden` |
 | Golden ID | `reporting_kpi_variance_basic` |
-| Formula (oracle) | `absoluteVariance = actual - expected` (Golden JSON uses `budget` as expected); `variancePercent = expected !== 0 ? (actual - expected) / expected : null` |
+| Formula (oracle) | `absoluteVariance = actual - expected` (Golden JSON uses `budget` as expected); `variancePercent = expected !== 0 ? (absoluteVariance / expected) * 100 : null` |
+| Golden helper | `backend/services/reporting/reportingGoldenFormulas.js` — `calculateReportingVarianceGolden` | Oracle only (C.13.8D) |
 | Product owner | **None today** — Reporting is not the cross-module variance engine |
 | Board Pack / Executive / Reporting UI | **Must not use** until explicit product alignment phase (C.13.8E) |
 | Certified KPI | **No** — DSS / management reporting only; human review required |
@@ -346,7 +347,7 @@ PMI does **not** have a single production capture formula today. It has multiple
 | `reportingReadinessScore` | `calculateReportingMetrics` on metadata counts | Meta-reporting heuristic; null when no persisted data (C.13.8B) | **OPERATIONAL DSS** |
 | Board Pack | `generateBoardPack` hub aggregation | DSS pack draft; `scoringTruthfulness`; not certified board-ready | **TRUTHFULNESS GATED** (C.13.8B) |
 | Executive Command Center | `collectExecutiveModuleSummaries` + `readinessIndex` | DSS aggregation; `insufficient_data` for empty modules (C.13.8B) | **TRUTHFULNESS GATED** |
-| REPORTING_VARIANCE | `docs/testing/golden_inputs.json` | Golden benchmark candidate only | **PENDING HELPER/TESTS** (C.13.8D) |
+| REPORTING_VARIANCE | `docs/testing/golden_inputs.json` + `reportingGoldenFormulas.js` | Golden benchmark oracle | **GOLDEN HELPER TESTED** (C.13.8D) — not product UI/Board Pack |
 
 ## Executive Overview Special Rule
 

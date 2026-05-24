@@ -415,8 +415,8 @@ Reporting today remains:
 
 **Formula reference (oracle only):**
 - `absoluteVariance = actual - expected`
-- `variancePercent = expected !== 0 ? (actual - expected) / expected : null`
-- Golden JSON maps `budget` → expected input name.
+- `variancePercent = expected !== 0 ? (absoluteVariance / expected) * 100 : null`
+- Golden JSON maps `budget` → expected; `varianceAmount` → `absoluteVariance`.
 
 **Options documented:** A defer · B helper/tests only (recommended next: C.13.8D) · **C approved** · D product now (rejected).
 
@@ -432,6 +432,24 @@ Reporting today remains:
 - **C.13.8F** — Reporting e2e/smoke closure (backend `:4000`).
 
 **No code/tests/Golden Dataset changes in C.13.8C.**
+
+## C.13.8D — Reporting variance Golden helper/tests
+
+**Status:** **GOLDEN HELPER TESTED** — oracle only; product unchanged.
+
+**Helper:** `backend/services/reporting/reportingGoldenFormulas.js` — `calculateReportingVarianceGolden` / alias `reportingVarianceGolden`.
+
+**Tests:** `tests/unit/reporting/reportingGoldenFormulas.test.js` — asserts `reporting_kpi_variance_basic` from `golden_inputs.json` (tolerance per dataset).
+
+**C13-P1-20:** **PARTIALLY RESOLVED / REPORTING TRUTHFULNESS TESTS ADDED / VARIANCE GOLDEN TESTED**
+
+**C13-P2-REPORTING-01:** **PARTIALLY RESOLVED / REPORTING VARIANCE GOLDEN HELPER TESTED**
+
+**Reporting global:** **AGGREGATOR RISK MITIGATED / REPORTING VARIANCE GOLDEN TESTED / PRODUCT ALIGNMENT PENDING** — not RESOLVED global.
+
+**Not touched:** `reporting.service.js`, `boardPack.service.js`, Executive, Reporting UI, `golden_inputs.json`, `FORMULA_REGISTRY.md`.
+
+**Next:** C.13.8E product alignment · C.13.8F e2e/smoke.
 
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
