@@ -44,8 +44,8 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Compliance resilienceScore calculated | UI resilience metric | Frontend `calculateResilienceScore` (current) | Assumed / Pending alignment | Differs from golden formula | compliance_resilience_score_basic | Subphase after naming |
 | Compliance evidence | evidence/reviews | backend compliance services | Assumed / Pending C.13 validation | | N/A | |
 | Governance decisions | decision workflow state | backend governance services | Assumed / Pending C.13 validation | Approve UX gaps | N/A | Strong backend per C.5 |
-| PMI case dashboard | workstreams, ledger in case | pmi_cases JSON payload | Assumed / Pending C.13 validation | mergeWithDemo contamination | N/A | C.13.6 target |
-| PMI enterprise synergies | synergy initiatives table | pmi_synergy_initiatives | Assumed / Pending C.13 validation | Not synced with case ledger | pmi_synergy_* | Dual model |
+| PMI case dashboard | workstreams, ledger in case | `pmi_cases` JSON payload + FE store bridge | Partially resolved (C.13.7B docs) | mergeWithDemo contamination (C13-P1-09) | pmi_synergy_* (partial) | Multi-layer model documented; no code fix yet |
+| PMI enterprise synergies | synergy initiatives table | `pmi_synergy_initiatives` | Partially resolved (C.13.7B docs) | Not synced with case ledger (C13-P1-13) | pmi_synergy_* (partial) | Enterprise operational layer; no Golden helper yet |
 | Bridge signals | recalculated signals | bridge_signals + `bridge.service.js` heuristics | Partially resolved (C.13.5E Option C) | Dual-layer: `bridgePriorityGolden` vs `operationalSignalPriority`; product unchanged | bridge_priority_score_basic | DSS; human review required |
 | Bridge marketplace | opportunities / matches | BE bridge API + DEMO fallback | Partially resolved (C.13.5B labels) | Unlisted route; not pilot marketplace | N/A | INTERNAL_UNLISTED_DEMO |
 | Risk register / enterprise scoring | `risk_register` + `risk.service.js` | Partially resolved (C.13.6B Option C) | Dual-layer: `riskLikelihoodImpactGolden` vs `operationalEnterpriseRiskScore`; UI heatmap gaps pending | risk_score_likelihood_impact_basic | DSS; human review required; not insurance/regulatory certification |
@@ -285,6 +285,31 @@ Risk Enterprise item scoring has **two intentional layers**. Do not treat them a
 5. Aligning product to Golden (Option B), golden helper (C.13.6C), operational tests (C.13.6D), or UI heatmap alignment (C.13.6E) require **separate authorized phases** — not implied by C.13.6B.
 
 **C13-P1-08 status:** **RESOLVED / DUAL-LAYER RISK MODEL CLOSED** — dual-layer tests (Golden C.13.6C + operational C.13.6D); UI alignment (C.13.6E); report/export truthfulness (C.13.6F). Intentional operational vs Golden divergence documented under Option C.
+
+## PMI Multi-Layer Logic Model (Decision C.13.7B — Option C)
+
+PMI does **not** have a single production capture formula today. It has multiple intentional layers that must remain explicit in docs/UI/tests.
+
+| Layer | Logical name | Formula / source | Role | Status |
+|---|---|---|---|---|
+| Golden benchmark | `pmiCaptureRateGolden` | `capturedSynergy / forecastSynergy`; if forecast = 0 => `null` | Oracle / Formula Approval benchmark | Documented (C.13.7B); helper/tests pending C.13.7C |
+| Case operational capture | `operationalPmiCaseCapture` | `synergyCaptured / synergyTarget` (case payload) | DSS case dashboard signal | OPEN — denominator differs from Golden (C13-P1-11) |
+| Ledger operational capture | `operationalPmiLedgerCapture` | `Σcaptured / Σforecast` (synergy ledger) | DSS ledger capture view | OPEN — zero-denominator handling pending (C13-P1-10) |
+| Enterprise operational capture | `operationalPmiEnterpriseCapture` | `capturedValue / targetValue` with case/ledger fallback in metrics pipeline | DSS enterprise initiatives view | OPEN — case/ledger/enterprise sync pending (C13-P1-13) |
+| Readiness heuristic | `operationalPmiReadinessScore` | Weighted readiness/integration composite (`pmiReadinessScore`, `integrationReadinessScore`, `integrationScore`) | Operational DSS executive posture | OPEN — not Golden; `pmi_integration_health` still future |
+| Demo/template layer | `demoPmiCase` | `DEMO_PMI_CASE` + `mergeWithDemo` | Template/fallback only | OPEN — must not be executive truth (C13-P1-09) |
+| CEO / hub signal | `pmiExecutiveHubSignal` | Backend hub brief aggregation (`getPmiExecutiveHubBrief`) | Aggregated DSS signal for CEO layer | OPEN — demo/default gating verification pending (C13-P1-15) |
+
+### PMI source-of-truth rules (C.13.7B)
+
+1. Golden capture benchmark is validation-only; it does not automatically replace operational PMI dashboards.
+2. Operational capture layers with different denominators must be labelled separately; do not present them as one Golden capture rate.
+3. Readiness/integration metrics are DSS heuristics, not Golden formulas or certified outcomes.
+4. Demo/template layer is not enterprise source-of-truth and must not be mixed into executive truth without explicit labeling/gating.
+5. CEO/Hub must distinguish persisted operational data vs demo/default/fallback states.
+
+**PMI status:** **MISMATCH CONFIRMED / SOT DECISION DOCUMENTED** (C.13.7B).  
+Do not mark PMI as APPROVED/RESOLVED until C.13.7C+ phases close test and truthfulness gaps.
 
 ## Executive Overview Special Rule
 

@@ -5761,3 +5761,66 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
            Dual-layer mismatch by design (Option C) — no RESOLVED global
            Report/export truthfulness pending C.13.6F
 ```
+
+---
+
+## C.13.7B — PMI SoT / Dual-Layer Decision (docs-only)
+
+**Fecha:** 24 mayo 2026  
+**Modo:** DOCUMENTAL / DECISIONAL (sin cambios de código, sin tests nuevos)  
+**Estado:** **COMPLETED DOCS-ONLY**  
+**PMI formula status:** **MISMATCH CONFIRMED / SOT DECISION DOCUMENTED**
+
+### Decisión formalizada
+
+**OPTION C — Multi-layer PMI Logic Model**
+
+| Layer | Logical name | Formula / source | Role | Status |
+|---|---|---|---|---|
+| Golden benchmark | `pmiCaptureRateGolden` | `captured / forecast`; `forecast=0 => null` | Oracle / Formula Approval benchmark | Pending helper/tests (C.13.7C) |
+| Case operational | `operationalPmiCaseCapture` | `synergyCaptured / synergyTarget` | DSS case dashboard | OPEN — denom distinto a Golden |
+| Ledger operational | `operationalPmiLedgerCapture` | `Σcaptured / Σforecast` | DSS ledger view | OPEN — null behavior pending |
+| Enterprise operational | `operationalPmiEnterpriseCapture` | `capturedValue / targetValue` + fallback case/ledger | DSS enterprise initiatives | OPEN — sync SoT pending |
+| Readiness DSS | `operationalPmiReadinessScore` | Heurística compuesta (`pmiReadinessScore`, `integrationReadinessScore`, `integrationScore`) | DSS executive signal | OPEN — no Golden asociado |
+| Demo/template | `demoPmiCase` | `DEMO_PMI_CASE` / `mergeWithDemo` | Template/fallback only | OPEN — no truth ejecutiva |
+| CEO/Hub | `pmiExecutiveHubSignal` | Backend hub brief agregada | DSS signal agregada | OPEN — demo/default gating pending |
+
+### Estado P1 (C13-P1-09…15)
+
+| ID | Estado | Decisión | Siguiente fase |
+|---|---|---|---|
+| C13-P1-09 | OPEN / SOT DECISION DOCUMENTED | `mergeWithDemo` = capa demo/template, no SoT ejecutivo | C.13.7E |
+| C13-P1-10 | OPEN / GOLDEN EDGE CASE DOCUMENTED | Golden exige `null` cuando forecast=0; 0% no equivale a Golden | C.13.7C o C.13.7D |
+| C13-P1-11 | OPEN / DUAL-LAYER DECISION DOCUMENTED | Golden (captured/forecast) separado de capture operacional case (captured/target) | C.13.7C + C.13.7D |
+| C13-P1-12 | OPEN / TEST GAP DOCUMENTED | Falta helper/tests oráculo `PMI_CAPTURE_RATE` | C.13.7C |
+| C13-P1-13 | OPEN / SOT GAP DOCUMENTED | Case/ledger/enterprise no son una única fuente sincronizada | C.13.7D o C.13.7E |
+| C13-P1-14 | OPEN / OPERATIONAL DSS CLASSIFIED | Readiness/integration = heurística DSS, no Golden | C.13.7D |
+| C13-P1-15 | OPEN / EXECUTIVE EXPOSURE DOCUMENTED | CEO/Hub debe distinguir persisted vs DSS vs demo/default | C.13.7E |
+
+### No-acciones confirmadas (C.13.7B)
+
+- No se tocó `backend/services/pmi/pmi.service.js`.
+- No se tocó `src/modules/pmi/store/pmiStore.jsx`.
+- No se tocó `src/modules/pmi/engine/usePMIEngine.js`.
+- No se tocó UI PMI ni tests.
+- No se tocó `docs/testing/golden_inputs.json`.
+- No se tocó `docs/testing/FORMULA_REGISTRY.md`.
+- No se tocó `src/modules/ceo-overview/pages/CEOOverviewPage.jsx`.
+- No se aplicaron fixes de `mergeWithDemo`.
+- No se tocaron otros módulos.
+
+### Regla de continuidad
+
+1. No alinear product → Golden sin fase explícita y aprobación humana.
+2. No promover demo/fallback a executive truth sin gating/label.
+3. No presentar readiness/integration DSS como fórmula Golden certificada.
+
+### Siguiente fase recomendada
+
+**C.13.7C — PMI Golden helper/tests**
+
+Objetivo:
+- crear `pmiGoldenFormulas.js`;
+- testear `pmi_synergy_capture_rate_basic` (0.3 / 30%);
+- testear `pmi_synergy_zero_forecast` (`null`);
+- sin tocar lógica productiva operacional.

@@ -233,6 +233,50 @@ Risk Enterprise item scoring uses **two separate models** by design:
 
 9. **Separate risk domains:** M&A deal quality scoring, Compliance supplier risk, PMI integration risks, and Strategy strategic risks are **outside** this dual-layer model unless explicitly mapped in a future registry update.
 
+## PMI multi-layer truthfulness (Decision C.13.7B — Option C)
+
+PMI calculations are separated into multiple layers. Do not collapse them into one "capture rate" claim.
+
+1. **Golden benchmark (`pmiCaptureRateGolden`)**
+   - Formula: `captureRate = capturedSynergy / forecastSynergy`.
+   - Zero denominator rule: if `forecastSynergy <= 0`, result is `null` / not meaningful.
+   - Golden IDs: `pmi_synergy_capture_rate_basic`, `pmi_synergy_zero_forecast`.
+   - Role: oracle / Formula Approval benchmark only.
+
+2. **Operational capture layers (DSS)**
+   - Case capture may use `synergyCaptured / synergyTarget`.
+   - Ledger capture may use `Σcaptured / Σforecast`.
+   - Enterprise initiatives may use `capturedValue / targetValue` with fallback paths.
+   - These are operational DSS metrics and must be labelled as such.
+   - They must not be presented as Golden-certified capture unless denominators are aligned by explicit approved phase.
+
+3. **Operational readiness/integration health**
+   - `pmiReadinessScore`, `integrationReadinessScore`, `integrationScore` are composite heuristics.
+   - They are not `PMI_CAPTURE_RATE`.
+   - They are not certified readiness ratings.
+   - `pmi_integration_health` remains future/pending until dedicated phase.
+
+4. **Demo/template/fallback guard**
+   - `DEMO_PMI_CASE` / `mergeWithDemo` are template/fallback layers, not enterprise truth.
+   - Demo/template values must not be promoted to executive truth without explicit labeling/gating.
+
+5. **CEO/Hub exposure guard**
+   - CEO/Hub PMI signals must distinguish:
+     - persisted operational data,
+     - DSS heuristic outputs,
+     - demo/template/fallback/default states.
+   - Avoid presenting demo/fallback maturity as real operational progress.
+
+6. **No silent product→Golden alignment**
+   - Do not align operational product formulas to Golden capture without explicit human-approved phase.
+   - First lock Golden helper/tests, then evaluate product alignment separately.
+
+7. **Test order requirement**
+   - Golden helper/tests must exist before any PMI product formula changes.
+   - Operational tests must verify current DSS behavior separately from Golden benchmark tests.
+
+**PMI status after C.13.7B:** **MISMATCH CONFIRMED / SOT DECISION DOCUMENTED** (not approved, not globally resolved).
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor
