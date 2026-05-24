@@ -206,7 +206,7 @@ Risk Enterprise item scoring uses **two separate models** by design:
 1. **`riskLikelihoodImpactGolden`** — Golden/oracle benchmark only.
    - Formula: `likelihood × impact` (scale 1–5).
    - Golden ID: `risk_score_likelihood_impact_basic` (expected **20** for L=4, I=5; severity **critical** for band 16–25).
-   - Reference implementation: **pending** `riskGoldenFormulas.js` (C.13.6C).
+   - Reference implementation: `calculateRiskLikelihoodImpactGolden()` (`riskGoldenFormulas.js`, C.13.6C).
    - Use: validation, logic integrity audit, CI oracle — **not** operational dashboard/residual KPI unless future phase explicitly authorizes alignment.
 
 2. **`operationalEnterpriseRiskScore`** — Product DSS heuristic (implemented as internal `riskScoreFrom()` in `risk.service.js`).
@@ -219,14 +219,15 @@ Risk Enterprise item scoring uses **two separate models** by design:
    - Do not imply Golden benchmark governs live portfolio posture without explicit product decision.
    - Heatmap UI currently shows impact×likelihood **counts** — not golden score nor full operational scores (C.13.6A gap; fix in C.13.6E if authorized).
 
-4. **C13-P1-08** remains **PARTIALLY RESOLVED / DECISION DOCUMENTED** — mismatch acknowledged and separated; product formula unchanged in C.13.6B; no global RESOLVED.
+4. **C13-P1-08** remains **PARTIALLY RESOLVED** — dual-layer separated and both layers unit-tested (Golden C.13.6C, operational C.13.6D); UI/heatmap gaps pending C.13.6E; no global RESOLVED.
 
 5. **Next controlled phases:**
-   - **C.13.6C** — Golden helper + tests vs `risk_score_likelihood_impact_basic`.
-   - **C.13.6D** — operational `riskScoreFrom` / metrics heuristic tests (lock behavior, no Golden alignment).
    - **C.13.6E** — UI/copy/heatmap alignment (optional; labels + fields likelihood/impact).
+   - Product→Golden alignment (Option B) only if separately authorized.
 
-6. **Separate risk domains:** M&A deal quality scoring, Compliance supplier risk, PMI integration risks, and Strategy strategic risks are **outside** this dual-layer model unless explicitly mapped in a future registry update.
+6. **Operational heuristic tests (C.13.6D):** `tests/unit/risk/riskOperationalScore.test.js` locks current `riskScoreFrom` behavior. Tests document conceptual name `operationalEnterpriseRiskScore` and verify divergence from `riskLikelihoodImpactGolden`.
+
+7. **Separate risk domains:** M&A deal quality scoring, Compliance supplier risk, PMI integration risks, and Strategy strategic risks are **outside** this dual-layer model unless explicitly mapped in a future registry update.
 
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:

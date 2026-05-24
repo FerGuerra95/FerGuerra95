@@ -190,7 +190,7 @@ function severityRank(value) {
   return 1;
 }
 
-function riskScoreFrom(item = {}, mode = 'residual') {
+export function riskScoreFrom(item = {}, mode = 'residual') {
   const severity =
     mode === 'inherent'
       ? severityRank(item.inherentSeverity)
@@ -534,6 +534,7 @@ export async function listRiskAuditLogs(organizationId, options = {}) {
 
 export default {
   calculateRiskMetrics,
+  riskScoreFrom,
   getRiskSummary,
   getRiskDashboard,
   getRiskBridgeSignals,

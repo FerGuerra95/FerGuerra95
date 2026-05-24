@@ -269,8 +269,8 @@ Risk Enterprise item scoring has **two intentional layers**. Do not treat them a
 
 | Layer | Logical name | Implementation (current) | Formula / inputs | Role |
 |---|---|---|---|---|
-| **Golden benchmark** | `riskLikelihoodImpactGolden` | **Pending** helper (C.13.6C) | `likelihood × impact` (1–5); severity bands per Golden | Oracle for logic integrity, Golden Dataset, CI tests |
-| **Operational DSS** | `operationalEnterpriseRiskScore` | `riskScoreFrom()` in `risk.service.js` (internal) | `(severityRank + likelihood + impact) / 15 × 100` with inherent/residual severity | Dashboard KPIs, readiness, portfolio posture, bridge signals |
+| **Golden benchmark** | `riskLikelihoodImpactGolden` | `calculateRiskLikelihoodImpactGolden()` in `riskGoldenFormulas.js` | `likelihood × impact` (1–5); severity bands per Golden | Oracle for logic integrity, Golden Dataset, CI tests (C.13.6C) |
+| **Operational DSS** | `operationalEnterpriseRiskScore` | `riskScoreFrom()` in `risk.service.js` | `(severityRank + likelihood + impact) / 15 × 100` with inherent/residual severity | Dashboard KPIs, readiness, portfolio posture; unit-tested (C.13.6D) |
 
 **Golden reference:** `risk_score_likelihood_impact_basic` — L=4, I=5 → **20**, severity **critical** (band 16–25).
 
@@ -284,7 +284,7 @@ Risk Enterprise item scoring has **two intentional layers**. Do not treat them a
 4. Separate Risk domains (M&A `riskScoring.js`, Compliance supplier risk, PMI/strategy risk entities) are **not** `RISK_LIKELIHOOD_IMPACT` — do not conflate in narrative.
 5. Aligning product to Golden (Option B), golden helper (C.13.6C), operational tests (C.13.6D), or UI heatmap alignment (C.13.6E) require **separate authorized phases** — not implied by C.13.6B.
 
-**C13-P1-08 status:** PARTIALLY RESOLVED / DECISION DOCUMENTED — mismatch separated; golden/operational tests pending; no global RESOLVED.
+**C13-P1-08 status:** PARTIALLY RESOLVED — dual-layer tests complete (Golden C.13.6C + operational C.13.6D); UI gaps pending C.13.6E; no global RESOLVED.
 
 ## Executive Overview Special Rule
 

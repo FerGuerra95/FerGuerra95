@@ -1738,7 +1738,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-05 | Compliance resilience — golden + labels/re-export | f7B + f8A `4414208` + f8B `eb48db6`; ver f8A/f8B/f8C | **PARTIALLY RESOLVED** — golden helper/test + operational labels/re-export; backend/API/model rename pending |
 | C13-P1-06 | FE/BE precedence — labels/precedence fix done | f5B + f6A + f6B (`1e82980`); ver C.13.1C-f6A/f6B/f6C | **PARTIALLY RESOLVED** — labels/precedence + re-export + CEO; backend/model rename pending |
 | C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | **PARTIALLY RESOLVED** — Option C dual-layer (C.13.5E); Golden tests (C.13.5D); operational heuristic tests (C.13.5F); product formula unchanged; **no RESOLVED global** |
-| C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | **PARTIALLY RESOLVED / DECISION DOCUMENTED (C.13.6B)** — Option C dual-layer: `riskLikelihoodImpactGolden` vs `operationalEnterpriseRiskScore`; audit C.13.6A; Golden helper/tests pending C.13.6C; product unchanged; **no RESOLVED global** |
+| C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | **PARTIALLY RESOLVED** — Option C dual-layer (C.13.6B); Golden tests (C.13.6C); operational tests (C.13.6D); UI gaps pending C.13.6E; **no RESOLVED global** |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
 | C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
 | C13-P1-11 | M&A EV simple vs adjusted engine | Golden `ma_valuation_*`; FE `useValuationEngine` adjusted EV; report alignment tests | **PARTIALLY RESOLVED** — SoT + Golden tests + labels/copy + report alignment + netProceeds fallback fixed (C.13.4A–I); backend snapshot/re-export policy pending |
@@ -1795,7 +1795,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | `pmi_synergy_capture_rate_basic` | **partial** | Ratio existe |
 | `pmi_synergy_zero_forecast` | **mismatch** | Devuelve 0, no null |
 | `bridge_priority_score_basic` | **mismatch (by design Option C)** | Golden oracle via `bridgeGoldenFormulas.js`; product `calculateSignalPriority` = separate `operationalSignalPriority` heuristic |
-| `risk_score_likelihood_impact_basic` | **mismatch (by design Option C)** | Golden oracle pending `riskGoldenFormulas` (C.13.6C); product `riskScoreFrom` = separate `operationalEnterpriseRiskScore` heuristic |
+| `risk_score_likelihood_impact_basic` | **mismatch (by design Option C)** | Golden oracle via `riskGoldenFormulas.js` (C.13.6C); product `riskScoreFrom` = `operationalEnterpriseRiskScore` (C.13.6D tests) |
 | `reporting_kpi_variance_basic` | **source unclear** | Implementación no localizada |
 | `executive_module_health_average_basic` | **pending** | Múltiples agregadores |
 
@@ -5625,3 +5625,60 @@ C13-P1-08: PARTIALLY RESOLVED / DECISION DOCUMENTED
 ### Paso siguiente recomendado
 
 **C.13.6C** — `RISK_LIKELIHOOD_IMPACT` golden helper + tests (`riskLikelihoodImpactGolden` vs `risk_score_likelihood_impact_basic` expected **20**).
+
+---
+
+## C.13.6C — RISK_LIKELIHOOD_IMPACT golden helper/tests — CLOSED
+
+**Fecha:** 23 mayo 2026  
+**Commit:** `fbb6271` — `test(risk): add golden likelihood impact benchmark`  
+**Modo:** WRITE/FIX — helper puro Golden + tests.
+
+| Entregable | Detalle |
+|---|---|
+| Helper | `backend/services/risk/riskGoldenFormulas.js` |
+| Tests | `tests/unit/risk/riskGoldenFormulas.test.js` — 8 tests |
+| Golden ID | `risk_score_likelihood_impact_basic` — score **20**, severity **critical** |
+| Product | `riskScoreFrom` **sin cambios de fórmula** |
+
+---
+
+## C.13.6D — Risk operational score heuristic tests — CLOSED
+
+**Fecha:** 23 mayo 2026  
+**Baseline:** `fbb6271`  
+**Modo:** WRITE/FIX — tests operativos + export mínimo; **sin cambio de fórmula**.
+
+| Entregable | Detalle |
+|---|---|
+| Tests | `tests/unit/risk/riskOperationalScore.test.js` — 8 tests |
+| Export | `riskScoreFrom` exportado para test shield (sin cambio de lógica) |
+| Naming | `operationalEnterpriseRiskScore` documentado en tests |
+| Golden layer | **No tocado** |
+
+### Cobertura operativa
+
+| Área | Verificado |
+|---|---|
+| Severity + likelihood + impact → 0–100 | critical/critical 100; high/medium 67 |
+| Modo inherent | inherentSeverity driver |
+| Clamp L/I 1–5 | 0→1, 10→5 |
+| Defaults L/I = 2 | medium/medium → 47 |
+| Unknown severity label (`watch`) | rank default 1 → 33 |
+| `calculateRiskMetrics` integration | residualRisk, criticalRiskCount, posture |
+| Dual-layer divergence | operational 93 ≠ Golden 20 |
+
+### Estado C13-P1-08 (post C.13.6D)
+
+```
+C13-P1-08: PARTIALLY RESOLVED
+           Option C dual-layer maintained.
+           Golden tests complete (C.13.6C).
+           Operational tests complete (C.13.6D).
+           UI/heatmap gaps pending (C.13.6E).
+           No RESOLVED global.
+```
+
+### Paso siguiente recomendado
+
+**C.13.6E** — UI/heatmap/copy/register fields (labels DSS, `dashboard.heatmap`, likelihood/impact fields).
