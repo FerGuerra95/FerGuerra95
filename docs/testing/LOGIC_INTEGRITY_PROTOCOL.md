@@ -294,6 +294,26 @@ PMI calculations are separated into multiple layers. Do not collapse them into o
 
 **PMI status after C.13.7C:** **MISMATCH CONFIRMED / GOLDEN BENCHMARK TESTED** (not approved, not globally resolved).
 
+## PMI operational DSS tests (C.13.7D)
+
+1. **Harness:** `backend/services/pmi/pmiOperationalFormulas.js` — mirrors case capture and ledger capture from `pmi.service.js`; not imported by product.
+2. **Tests:** `tests/unit/pmi/pmiOperationalMetrics.test.js` — locks operational case/ledger/enterprise capture and readiness via `calculatePmiEnterpriseMetrics`.
+3. **Documented divergences (intentional):**
+   - Case/ledger zero denominator → operational `0%`; Golden → `null`.
+   - Case uses `synergyTarget`; Golden uses `forecastSynergy`.
+   - Readiness (`pmiReadinessScore`) is DSS composite — not `PMI_CAPTURE_RATE` and not Golden-certified.
+4. **Product untouched:** no formula changes; `pmi.service.js` behavior unchanged.
+
+**C13-P1-13 status (C.13.7D):** **PARTIALLY RESOLVED / OPERATIONAL SOURCES TESTED** — layers tested separately; full sync SoT still open.
+
+**C13-P1-14 status (C.13.7D):** **PARTIALLY RESOLVED / OPERATIONAL READINESS TESTED** — composite readiness bounded and sensitivity-tested; not Golden.
+
+**C13-P1-10 / C13-P1-11:** remain **PARTIALLY RESOLVED** (Golden tested; operational zero-forecast/target divergence documented).
+
+**C13-P1-09 / C13-P1-15:** remain **OPEN** — pending C.13.7E (demo/CEO Hub).
+
+**PMI status after C.13.7D:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL TESTED** (not approved, not globally resolved).
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor

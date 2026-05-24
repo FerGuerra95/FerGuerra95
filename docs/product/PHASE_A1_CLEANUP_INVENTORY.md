@@ -5793,8 +5793,8 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 | C13-P1-10 | PARTIALLY RESOLVED / GOLDEN ZERO FORECAST TESTED | Golden helper devuelve `null` si forecast≤0; producto operacional pendiente | C.13.7D |
 | C13-P1-11 | PARTIALLY RESOLVED / GOLDEN CAPTURE SEPARATED | Golden (captured/forecast) testeado aparte de target operacional | C.13.7D |
 | C13-P1-12 | PARTIALLY RESOLVED / GOLDEN HELPER TESTED | `pmiGoldenFormulas.js` + `pmiGoldenFormulas.test.js` | C.13.7D |
-| C13-P1-13 | OPEN / SOT GAP DOCUMENTED | Case/ledger/enterprise no son una única fuente sincronizada | C.13.7D o C.13.7E |
-| C13-P1-14 | OPEN / OPERATIONAL DSS CLASSIFIED | Readiness/integration = heurística DSS, no Golden | C.13.7D |
+| C13-P1-13 | PARTIALLY RESOLVED / OPERATIONAL SOURCES TESTED | Case/ledger/enterprise testeados por capa; sync SoT único pendiente | C.13.7E |
+| C13-P1-14 | PARTIALLY RESOLVED / OPERATIONAL READINESS TESTED | Readiness DSS testeado; no Golden | C.13.7E |
 | C13-P1-15 | OPEN / EXECUTIVE EXPOSURE DOCUMENTED | CEO/Hub debe distinguir persisted vs DSS vs demo/default | C.13.7E |
 
 ### No-acciones confirmadas (C.13.7B)
@@ -5827,11 +5827,24 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **No tocado:** `pmi.service.js`, PMI UI, `mergeWithDemo`, `golden_inputs.json`, `FORMULA_REGISTRY.md`, CEO/Hub.
 
+### C.13.7D — PMI operational synergy/readiness tests (COMPLETED)
+
+**Modo:** WRITE/TEST (harness + tests + docs de cierre)  
+**Estado:** **COMPLETED**  
+**PMI formula status:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL TESTED**
+
+**Entregables:**
+- `backend/services/pmi/pmiOperationalFormulas.js` — harness case/ledger/enterprise ratio (no product import)
+- `tests/unit/pmi/pmiOperationalMetrics.test.js` — oráculos operativos + `calculatePmiEnterpriseMetrics` readiness
+
+**No tocado:** `pmi.service.js` (sin cambio de fórmula), `mergeWithDemo`, CEO/Hub, Golden JSON, UI.
+
 ### Siguiente fase recomendada
 
-**C.13.7D — PMI operational synergy/readiness tests**
+**C.13.7E — PMI demo/fallback truthfulness + CEO/Hub gating**
 
 Objetivo:
-- testear `operationalPmiCaseCapture`, `operationalPmiLedgerCapture`, `operationalPmiEnterpriseCapture`, `operationalPmiReadinessScore`;
-- documentar que readiness no es Golden;
-- sin tocar demo fallback salvo fase separada.
+- abordar C13-P1-09 y C13-P1-15;
+- evitar demo mezclado como verdad ejecutiva;
+- revisar exposición CEO/Hub;
+- no tocar Golden.

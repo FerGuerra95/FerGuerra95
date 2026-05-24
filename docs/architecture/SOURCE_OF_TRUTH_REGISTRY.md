@@ -293,10 +293,10 @@ PMI does **not** have a single production capture formula today. It has multiple
 | Layer | Logical name | Formula / source | Role | Status |
 |---|---|---|---|---|
 | Golden benchmark | `pmiCaptureRateGolden` | `capturedSynergy / forecastSynergy`; if forecast = 0 => `null` | Oracle / Formula Approval benchmark | **IMPLEMENTED AND TESTED** (C.13.7C) — `backend/services/pmi/pmiGoldenFormulas.js` |
-| Case operational capture | `operationalPmiCaseCapture` | `synergyCaptured / synergyTarget` (case payload) | DSS case dashboard signal | OPEN — denominator differs from Golden (C13-P1-11) |
-| Ledger operational capture | `operationalPmiLedgerCapture` | `Σcaptured / Σforecast` (synergy ledger) | DSS ledger capture view | OPEN — zero-denominator handling pending (C13-P1-10) |
-| Enterprise operational capture | `operationalPmiEnterpriseCapture` | `capturedValue / targetValue` with case/ledger fallback in metrics pipeline | DSS enterprise initiatives view | OPEN — case/ledger/enterprise sync pending (C13-P1-13) |
-| Readiness heuristic | `operationalPmiReadinessScore` | Weighted readiness/integration composite (`pmiReadinessScore`, `integrationReadinessScore`, `integrationScore`) | Operational DSS executive posture | OPEN — not Golden; `pmi_integration_health` still future |
+| Case operational capture | `operationalPmiCaseCapture` | `synergyCaptured / synergyTarget` (case payload) | DSS case dashboard signal | **OPERATIONAL TESTED** (C.13.7D) — harness mirrors service; target≠forecast |
+| Ledger operational capture | `operationalPmiLedgerCapture` | `Σcaptured / Σforecast` (synergy ledger) | DSS ledger capture view | **OPERATIONAL TESTED** (C.13.7D) — zero forecast returns 0% operationally |
+| Enterprise operational capture | `operationalPmiEnterpriseCapture` | `capturedValue / targetValue` with case/ledger fallback in metrics pipeline | DSS enterprise initiatives view | **OPERATIONAL TESTED** (C.13.7D) — sync SoT still open (C13-P1-13 partial) |
+| Readiness heuristic | `operationalPmiReadinessScore` | Weighted readiness/integration composite (`pmiReadinessScore`, `integrationReadinessScore`, `integrationScore`) | Operational DSS executive posture | **OPERATIONAL TESTED** (C.13.7D) — not Golden; `pmi_integration_health` still future |
 | Demo/template layer | `demoPmiCase` | `DEMO_PMI_CASE` + `mergeWithDemo` | Template/fallback only | OPEN — must not be executive truth (C13-P1-09) |
 | CEO / hub signal | `pmiExecutiveHubSignal` | Backend hub brief aggregation (`getPmiExecutiveHubBrief`) | Aggregated DSS signal for CEO layer | OPEN — demo/default gating verification pending (C13-P1-15) |
 
@@ -308,8 +308,8 @@ PMI does **not** have a single production capture formula today. It has multiple
 4. Demo/template layer is not enterprise source-of-truth and must not be mixed into executive truth without explicit labeling/gating.
 5. CEO/Hub must distinguish persisted operational data vs demo/default/fallback states.
 
-**PMI status:** **MISMATCH CONFIRMED / GOLDEN BENCHMARK TESTED** (C.13.7C). Golden oracle helper/tests exist; operational layers and demo/CEO gaps remain open.  
-Do not mark PMI as APPROVED/RESOLVED until C.13.7D+ phases close operational test and truthfulness gaps.
+**PMI status:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL TESTED** (C.13.7D). Golden oracle (C.13.7C) and operational DSS harness/tests (C.13.7D) exist; demo/CEO gaps remain open.  
+Do not mark PMI as APPROVED/RESOLVED until C.13.7E+ phases close demo/Hub truthfulness gaps.
 
 ## Executive Overview Special Rule
 
