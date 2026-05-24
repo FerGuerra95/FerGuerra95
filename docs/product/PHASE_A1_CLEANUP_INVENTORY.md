@@ -5789,13 +5789,13 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 | ID | Estado | Decisión | Siguiente fase |
 |---|---|---|---|
-| C13-P1-09 | OPEN / SOT DECISION DOCUMENTED | `mergeWithDemo` = capa demo/template, no SoT ejecutivo | C.13.7E |
+| C13-P1-09 | RESOLVED / DEMO TRUTHFULNESS GATED | `mergeWithDemo` eliminado para persistidos; demo/template/fallback explícitos | C.13.7F copy residual |
 | C13-P1-10 | PARTIALLY RESOLVED / GOLDEN ZERO FORECAST TESTED | Golden helper devuelve `null` si forecast≤0; producto operacional pendiente | C.13.7D |
 | C13-P1-11 | PARTIALLY RESOLVED / GOLDEN CAPTURE SEPARATED | Golden (captured/forecast) testeado aparte de target operacional | C.13.7D |
 | C13-P1-12 | PARTIALLY RESOLVED / GOLDEN HELPER TESTED | `pmiGoldenFormulas.js` + `pmiGoldenFormulas.test.js` | C.13.7D |
 | C13-P1-13 | PARTIALLY RESOLVED / OPERATIONAL SOURCES TESTED | Case/ledger/enterprise testeados por capa; sync SoT único pendiente | C.13.7E |
 | C13-P1-14 | PARTIALLY RESOLVED / OPERATIONAL READINESS TESTED | Readiness DSS testeado; no Golden | C.13.7E |
-| C13-P1-15 | OPEN / EXECUTIVE EXPOSURE DOCUMENTED | CEO/Hub debe distinguir persisted vs DSS vs demo/default | C.13.7E |
+| C13-P1-15 | RESOLVED / CEO HUB GATING ADDED | Hub `executiveSignalEligible` + CEO `scoreDisplay` pending data | C.13.7F copy residual |
 
 ### No-acciones confirmadas (C.13.7B)
 
@@ -5839,12 +5839,25 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **No tocado:** `pmi.service.js` (sin cambio de fórmula), `mergeWithDemo`, CEO/Hub, Golden JSON, UI.
 
+### C.13.7E — PMI demo/fallback truthfulness + CEO/Hub gating (COMPLETED)
+
+**Modo:** WRITE/FIX (store + hub + CEO mínimo + tests)  
+**Estado:** **COMPLETED**  
+**PMI formula status:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL + DEMO GATED**
+
+**Entregables:**
+- `pmiStore.jsx` — `normalizePersistedPmiCase`, demo/template/fallback explícitos (sin `mergeWithDemo` silencioso)
+- `pmi.service.js` — hub truthfulness metadata; `buildPmiSignal(null)` → score `null`
+- `PMIDashboardPage.jsx` — banner truthfulness
+- `CEOOverviewPage.jsx` — PMI pending-data copy
+- Tests: `pmiDemoTruthfulness.test.js`, `pmiHubTruthfulness.test.js`
+
 ### Siguiente fase recomendada
 
-**C.13.7E — PMI demo/fallback truthfulness + CEO/Hub gating**
+**C.13.7F — PMI UI/copy labels + report truthfulness + cross-tenant tests**
 
 Objetivo:
-- abordar C13-P1-09 y C13-P1-15;
-- evitar demo mezclado como verdad ejecutiva;
-- revisar exposición CEO/Hub;
+- copy residual en enterprise pages;
+- report export truthfulness si aplica;
+- tests cross-tenant PMI;
 - no tocar Golden.

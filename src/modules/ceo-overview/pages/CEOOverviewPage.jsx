@@ -1356,7 +1356,14 @@ function getFundingOverviewWithSummary({
 function getPmiOverview(pmiBrief = null) {
   const metrics = pmiBrief?.metrics || {};
   const latestCase = pmiBrief?.latestCase || null;
-  const score = clampScore(pmiBrief?.score ?? 58);
+  const truthfulness = pmiBrief?.truthfulness || {};
+  const executiveSignalEligible = Boolean(
+    pmiBrief?.executiveSignalEligible ?? truthfulness.executiveSignalEligible ?? latestCase?.id
+  );
+  const score =
+    executiveSignalEligible && pmiBrief?.score != null
+      ? clampScore(pmiBrief.score)
+      : null;
   const synergyCaptureRate = clampScore(metrics.synergyCaptureRate ?? 0);
   const openRiskCount = Number(metrics.openRiskCount ?? 0);
   const blockedWorkstreamsCount = Number(metrics.blockedWorkstreamsCount ?? 0);
@@ -1381,11 +1388,24 @@ function getPmiOverview(pmiBrief = null) {
 
   return {
     score,
-    title: pmiBrief?.title || 'PMI enterprise layer ready',
-    posture: pmiBrief?.posture || 'Seed integration plan',
+    scoreDisplay:
+      score != null ? `${score}/100` : 'Insufficient persisted PMI data — human review required',
+    executiveSignalEligible,
+    dataSource: pmiBrief?.dataSource || truthfulness.dataSource || 'empty',
+    humanReviewRequired: Boolean(
+      pmiBrief?.humanReviewRequired ?? truthfulness.humanReviewRequired ?? !executiveSignalEligible
+    ),
+    title: executiveSignalEligible
+      ? pmiBrief?.title || 'PMI integration signal'
+      : pmiBrief?.title || 'PMI data pending',
+    posture: executiveSignalEligible
+      ? pmiBrief?.posture || 'Integration posture'
+      : pmiBrief?.posture || 'Insufficient persisted PMI data',
     description:
       pmiBrief?.description ||
-      'PMI connects post-close execution, synergies, risks, owners and 30-60-90 milestones into the CEO layer.',
+      (executiveSignalEligible
+        ? 'PMI connects post-close execution, synergies, risks, owners and 30-60-90 milestones into the CEO layer.'
+        : 'PMI DSS layer is available, but no persisted integration case is eligible for executive scoring yet.'),
     dealName: latestCase?.dealName || 'PMI integration file',
     casesCount: metrics.casesCount ?? 0,
     workstreamsCount: metrics.workstreamsCount ?? 0,
@@ -1950,7 +1970,10 @@ export function CEOOverviewPage() {
   );
   const complianceDragPenalty = clampScore(maValuationSignal - dealReadinessCombined);
   const maFinancialRadar = estimateMaFinancialRadar(casesForRadar);
-  const operationalRadar = clampScore(pmiOverview.progress || pmiOverview.score || 62);
+  const operationalRadar =
+    pmiOverview.score != null
+      ? clampScore(pmiOverview.progress ?? pmiOverview.score)
+      : 0;
   const esgRadar = clampScore(governanceOverview.score || 55);
   const fundingRadar = clampScore(fundingOverview.readiness ?? 58);
 
@@ -2330,7 +2353,7 @@ export function CEOOverviewPage() {
                   <SignalRow label="M&A Signal" value={`${maOverview.score}/100`} />
                   <SignalRow label="Compliance Signal" value={`${complianceOverview.score}/100`} />
                   <SignalRow label="Funding Signal" value={`${fundingOverview.score}/100`} />
-                  <SignalRow label="PMI Signal" value={`${pmiOverview.score}/100`} />
+                  <SignalRow label="PMI Signal" value={pmiOverview.scoreDisplay} />
                   <SignalRow label="Ecosystem Signal" value={`${ecosystemBrief?.score ?? 61}/100`} />
                 </div>
               </div>
@@ -2378,7 +2401,7 @@ export function CEOOverviewPage() {
                   { key: 'compliance', title: 'Compliance', route: '/compliance/dashboard', score: complianceOverview.score, status: 'normal', keyMetric: `${complianceOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
                   { key: 'funding', title: 'Funding', route: '/funding/dashboard', score: fundingOverview.score, status: 'normal', keyMetric: `${fundingOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
                   { key: 'governance', title: 'Governance', route: '/governance/dashboard', score: governanceOverview.score, status: 'normal', keyMetric: `${governanceOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
-                  { key: 'pmi', title: 'PMI', route: '/pmi/dashboard', score: pmiOverview.score, status: 'normal', keyMetric: `${pmiOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
+                  { key: 'pmi', title: 'PMI', route: '/pmi/dashboard', score: pmiOverview.score, status: 'normal', keyMetric: pmiOverview.scoreDisplay, cta: 'Open module', humanReviewRequired: pmiOverview.humanReviewRequired },
                   { key: 'bridge', title: 'Bridge', route: '/bridge/dashboard', score: bridgeOverview.score, status: 'normal', keyMetric: `${bridgeOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
                   { key: 'risk', title: 'Risk', route: '/risk/dashboard', score: riskOverview.score, status: 'normal', keyMetric: `${riskOverview.score}/100`, cta: 'Open module', humanReviewRequired: true },
                   { key: 'reporting', title: 'Reporting', route: '/reporting/dashboard', score: 65, status: 'normal', keyMetric: 'Pending enterprise signal', cta: 'Open module', humanReviewRequired: true },

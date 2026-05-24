@@ -282,10 +282,76 @@ function createLocalId(prefix) {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
-function mergeWithDemo(item) {
+function normalizePersistedPmiCase(item = {}) {
+  const hasPersistedData = Boolean(item?.id);
+
+  return {
+    ...item,
+    dealName: item.dealName ?? '',
+    buyerName: item.buyerName ?? '',
+    targetName: item.targetName ?? '',
+    closingDate: item.closingDate ?? '',
+    integrationDay: Number.isFinite(Number(item.integrationDay)) ? Number(item.integrationDay) : 0,
+    synergyTarget: Number(item.synergyTarget) || 0,
+    synergyCaptured: Number(item.synergyCaptured) || 0,
+    integrationBudget: Number(item.integrationBudget) || 0,
+    integrationCostUsed: Number(item.integrationCostUsed) || 0,
+    currency: item.currency || 'EUR',
+    status: item.status || 'draft',
+    workstreams: Array.isArray(item.workstreams) ? item.workstreams : [],
+    risks: Array.isArray(item.risks) ? item.risks : [],
+    milestones: Array.isArray(item.milestones) ? item.milestones : [],
+    synergyLedger: Array.isArray(item.synergyLedger) ? item.synergyLedger : [],
+    playbooks: Array.isArray(item.playbooks) ? item.playbooks : [],
+    dependencies: Array.isArray(item.dependencies) ? item.dependencies : [],
+    boardActions: Array.isArray(item.boardActions) ? item.boardActions : [],
+    dataSource: 'persisted',
+    isDemo: false,
+    isFallback: false,
+    isTemplate: false,
+    hasPersistedData,
+    humanReviewRequired: !hasPersistedData,
+    truthfulnessStatus: hasPersistedData ? 'persisted' : 'insufficient_data',
+    demoFields: []
+  };
+}
+
+function buildDemoPreviewCase() {
   return {
     ...DEMO_PMI_CASE,
-    ...item
+    id: undefined,
+    dataSource: 'demo',
+    isDemo: true,
+    isFallback: false,
+    isTemplate: false,
+    hasPersistedData: false,
+    humanReviewRequired: true,
+    truthfulnessStatus: 'demo_template',
+    demoFields: ['workstreams', 'risks', 'milestones', 'synergyLedger', 'synergyTarget', 'synergyCaptured']
+  };
+}
+
+function buildEmptyFallbackCase({ isApiFallback = false } = {}) {
+  return {
+    ...normalizePersistedPmiCase({}),
+    dataSource: isApiFallback ? 'fallback' : 'empty',
+    isFallback: isApiFallback,
+    humanReviewRequired: true,
+    truthfulnessStatus: isApiFallback ? 'fallback' : 'insufficient_data'
+  };
+}
+
+function annotateTemplateCase(templateCase) {
+  return {
+    ...templateCase,
+    dataSource: 'template',
+    isDemo: false,
+    isFallback: false,
+    isTemplate: true,
+    hasPersistedData: false,
+    humanReviewRequired: true,
+    truthfulnessStatus: 'demo_template',
+    demoFields: []
   };
 }
 
@@ -302,9 +368,7 @@ function buildTemplateCase(templateKey = 'industrial') {
     summary: 'Template workstream ready for owner assignment and execution tracking.'
   }));
 
-  return {
-    ...DEMO_PMI_CASE,
-    id: undefined,
+  return annotateTemplateCase({
     dealName: template.label,
     status: 'Draft review',
     integrationDay: 0,
@@ -402,12 +466,21 @@ function buildTemplateCase(templateKey = 'industrial') {
       'Validate integration budget and synergy baseline.',
       'Prepare first Board Integration Memo.'
     ]
-  };
+  });
 }
+
+export {
+  DEMO_PMI_CASE,
+  annotateTemplateCase,
+  buildDemoPreviewCase,
+  buildEmptyFallbackCase,
+  buildTemplateCase,
+  normalizePersistedPmiCase
+};
 
 export function PMIStoreProvider({ children }) {
   const { user } = useAuth();
-  const [pmiCase, setPmiCase] = useState(DEMO_PMI_CASE);
+  const [pmiCase, setPmiCase] = useState(() => buildEmptyFallbackCase());
   const [pmiCases, setPmiCases] = useState([]);
   const [auditLogs, setAuditLogs] = useState([]);
   const [backendStatus, setBackendStatus] = useState({
@@ -439,10 +512,11 @@ export function PMIStoreProvider({ children }) {
         if (cancelled) return;
 
         if (cases[0]) {
-          setPmiCases(cases.map(mergeWithDemo));
-          setPmiCase(mergeWithDemo(cases[0]));
+          setPmiCases(cases.map(normalizePersistedPmiCase));
+          setPmiCase(normalizePersistedPmiCase(cases[0]));
         } else {
           setPmiCases([]);
+          setPmiCase(buildEmptyFallbackCase());
         }
 
         setBackendStatus({
@@ -453,6 +527,7 @@ export function PMIStoreProvider({ children }) {
       } catch (error) {
         if (cancelled) return;
 
+        setPmiCase(buildEmptyFallbackCase({ isApiFallback: true }));
         setBackendStatus({
           loading: false,
           error,
@@ -535,8 +610,9 @@ export function PMIStoreProvider({ children }) {
 
   async function selectPmiCase(id) {
     if (!id) {
-      setPmiCase(DEMO_PMI_CASE);
-      return DEMO_PMI_CASE;
+      const demoPreview = buildDemoPreviewCase();
+      setPmiCase(demoPreview);
+      return demoPreview;
     }
 
     const existing = pmiCases.find((item) => item.id === id);
@@ -547,10 +623,10 @@ export function PMIStoreProvider({ children }) {
 
     try {
       const saved = await pmiApi.getCase(id);
-      const merged = mergeWithDemo(saved);
-      setPmiCase(merged);
-      setPmiCases((items) => [merged, ...items.filter((item) => item.id !== merged.id)]);
-      return merged;
+      const normalized = normalizePersistedPmiCase(saved);
+      setPmiCase(normalized);
+      setPmiCases((items) => [normalized, ...items.filter((item) => item.id !== normalized.id)]);
+      return normalized;
     } catch (error) {
       setBackendStatus({
         loading: false,
@@ -573,10 +649,10 @@ export function PMIStoreProvider({ children }) {
 
     try {
       const saved = await pmiApi.duplicateCase(id);
-      const merged = mergeWithDemo(saved);
-      setPmiCase(merged);
-      setPmiCases((items) => [merged, ...items]);
-      return merged;
+      const normalized = normalizePersistedPmiCase(saved);
+      setPmiCase(normalized);
+      setPmiCases((items) => [normalized, ...items]);
+      return normalized;
     } catch (error) {
       setBackendStatus({
         loading: false,
@@ -594,7 +670,7 @@ export function PMIStoreProvider({ children }) {
       const result = await pmiApi.deleteCase(id);
       const remaining = pmiCases.filter((item) => item.id !== id);
       setPmiCases(remaining);
-      setPmiCase(remaining[0] || DEMO_PMI_CASE);
+      setPmiCase(remaining[0] || buildEmptyFallbackCase());
       return result;
     } catch (error) {
       setBackendStatus({
@@ -611,10 +687,10 @@ export function PMIStoreProvider({ children }) {
 
     try {
       const saved = await pmiApi.createCaseFromMaDeal(dealId);
-      const merged = mergeWithDemo(saved);
-      setPmiCase(merged);
-      setPmiCases((items) => [merged, ...items]);
-      return merged;
+      const normalized = normalizePersistedPmiCase(saved);
+      setPmiCase(normalized);
+      setPmiCases((items) => [normalized, ...items]);
+      return normalized;
     } catch (error) {
       setBackendStatus({
         loading: false,

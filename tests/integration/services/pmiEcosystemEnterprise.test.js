@@ -210,6 +210,10 @@ describe('PMI and ecosystem enterprise foundations', () => {
     expect(brief.metrics.playbookProgress).toBe(50);
     expect(brief.metrics.blockedDependenciesCount).toBe(1);
     expect(brief.score).toBeGreaterThan(0);
+    expect(brief.executiveSignalEligible).toBe(true);
+    expect(brief.dataSource).toBe('persisted');
+    expect(brief.demoDataIncluded).toBe(false);
+    expect(brief.truthfulness?.hasPersistedData).toBe(true);
   });
 
   it('crea PMI desde un deal M&A y expone auditoria enterprise', async () => {

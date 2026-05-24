@@ -297,8 +297,8 @@ PMI does **not** have a single production capture formula today. It has multiple
 | Ledger operational capture | `operationalPmiLedgerCapture` | `Σcaptured / Σforecast` (synergy ledger) | DSS ledger capture view | **OPERATIONAL TESTED** (C.13.7D) — zero forecast returns 0% operationally |
 | Enterprise operational capture | `operationalPmiEnterpriseCapture` | `capturedValue / targetValue` with case/ledger fallback in metrics pipeline | DSS enterprise initiatives view | **OPERATIONAL TESTED** (C.13.7D) — sync SoT still open (C13-P1-13 partial) |
 | Readiness heuristic | `operationalPmiReadinessScore` | Weighted readiness/integration composite (`pmiReadinessScore`, `integrationReadinessScore`, `integrationScore`) | Operational DSS executive posture | **OPERATIONAL TESTED** (C.13.7D) — not Golden; `pmi_integration_health` still future |
-| Demo/template layer | `demoPmiCase` | `DEMO_PMI_CASE` + `mergeWithDemo` | Template/fallback only | OPEN — must not be executive truth (C13-P1-09) |
-| CEO / hub signal | `pmiExecutiveHubSignal` | Backend hub brief aggregation (`getPmiExecutiveHubBrief`) | Aggregated DSS signal for CEO layer | OPEN — demo/default gating verification pending (C13-P1-15) |
+| Demo/template layer | `demoPmiCase` | `DEMO_PMI_CASE` + explicit demo/template/fallback helpers in `pmiStore.jsx` | Template/fallback only | **DEMO GATED** (C.13.7E) — no silent `mergeWithDemo` into persisted cases |
+| CEO / hub signal | `pmiExecutiveHubSignal` | Backend hub brief aggregation (`getPmiExecutiveHubBrief`) | Aggregated DSS signal for CEO layer | **HUB GATED** (C.13.7E) — `executiveSignalEligible`, `dataSource`, null score when empty |
 
 ### PMI source-of-truth rules (C.13.7B)
 
@@ -308,8 +308,8 @@ PMI does **not** have a single production capture formula today. It has multiple
 4. Demo/template layer is not enterprise source-of-truth and must not be mixed into executive truth without explicit labeling/gating.
 5. CEO/Hub must distinguish persisted operational data vs demo/default/fallback states.
 
-**PMI status:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL TESTED** (C.13.7D). Golden oracle (C.13.7C) and operational DSS harness/tests (C.13.7D) exist; demo/CEO gaps remain open.  
-Do not mark PMI as APPROVED/RESOLVED until C.13.7E+ phases close demo/Hub truthfulness gaps.
+**PMI status:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL + DEMO GATED** (C.13.7E). Golden (C.13.7C), operational tests (C.13.7D), and demo/CEO gating (C.13.7E) are in place; UI copy labels and cross-tenant/report gaps may remain.  
+Do not mark PMI as APPROVED/RESOLVED until C.13.7F+ closes residual truthfulness gaps.
 
 ## Executive Overview Special Rule
 

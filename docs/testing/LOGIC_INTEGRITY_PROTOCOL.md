@@ -314,6 +314,20 @@ PMI calculations are separated into multiple layers. Do not collapse them into o
 
 **PMI status after C.13.7D:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL TESTED** (not approved, not globally resolved).
 
+## PMI demo/fallback + CEO hub gating (C.13.7E)
+
+1. **Store:** `normalizePersistedPmiCase` replaces silent `mergeWithDemo` for API cases; `buildDemoPreviewCase`, `buildTemplateCase`, `buildEmptyFallbackCase` are explicit layers with `dataSource` / `truthfulnessStatus`.
+2. **Dashboard:** `CaseTruthfulnessBanner` labels demo/template/fallback/insufficient persisted data.
+3. **Hub:** `getPmiExecutiveHubBrief` returns `executiveSignalEligible`, `truthfulness`, and `score: null` when no persisted case; `buildPmiSignal(null)` no longer returns score `58` as real maturity.
+4. **CEO Overview:** `getPmiOverview` uses `scoreDisplay` pending-data copy when hub signal is not eligible.
+5. **Tests:** `pmiDemoTruthfulness.test.js`, `pmiHubTruthfulness.test.js`.
+
+**C13-P1-09 status (C.13.7E):** **RESOLVED / DEMO TRUTHFULNESS GATED** — persisted cases no longer auto-merge `DEMO_PMI_CASE`.
+
+**C13-P1-15 status (C.13.7E):** **RESOLVED / CEO HUB GATING ADDED** — hub/CEO distinguish empty vs persisted; no default `58` as executive truth without data.
+
+**PMI status after C.13.7E:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL + DEMO GATED** (not approved, not globally resolved).
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor

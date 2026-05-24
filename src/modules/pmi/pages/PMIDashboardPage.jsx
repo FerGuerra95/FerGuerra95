@@ -870,7 +870,7 @@ function EnterpriseStatus({ backendStatus }) {
   }
 
   if (backendStatus?.error) {
-    return <span className="pmi-enterprise-status">Local fallback active</span>;
+    return <span className="pmi-enterprise-status">Local fallback active · Human review required</span>;
   }
 
   if (backendStatus?.hydrated) {
@@ -878,6 +878,30 @@ function EnterpriseStatus({ backendStatus }) {
   }
 
   return <span className="pmi-enterprise-status">Enterprise data contract ready</span>;
+}
+
+function CaseTruthfulnessBanner({ pmiCase, backendStatus }) {
+  if (pmiCase?.dataSource === 'persisted' && pmiCase?.hasPersistedData) {
+    return null;
+  }
+
+  const labels = [];
+
+  if (pmiCase?.isDemo) labels.push('Demo template');
+  if (pmiCase?.isTemplate) labels.push('PMI template');
+  if (pmiCase?.isFallback || backendStatus?.error) labels.push('Local fallback active');
+  if (pmiCase?.dataSource === 'empty' || !pmiCase?.hasPersistedData) {
+    labels.push('Insufficient persisted data');
+  }
+  if (pmiCase?.humanReviewRequired) labels.push('Human review required');
+
+  if (!labels.length) return null;
+
+  return (
+    <span className="pmi-enterprise-status pmi-truthfulness-banner" data-testid="pmi-truthfulness-banner">
+      {labels.join(' · ')}
+    </span>
+  );
 }
 
 function WorkstreamControl({ item, onUpdate, onRemove, disabled = false }) {
@@ -1422,6 +1446,7 @@ export function PMIDashboardPage() {
 
               <div className="pmi-enterprise-toolbar">
                 <EnterpriseStatus backendStatus={backendStatus} />
+                <CaseTruthfulnessBanner pmiCase={pmiCase} backendStatus={backendStatus} />
                 <button
                   type="button"
                   className="pmi-button-lite"

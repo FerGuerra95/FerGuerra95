@@ -491,14 +491,57 @@ function getPmiChangeEvents(existing = {}, updated = {}) {
   return events.slice(0, 12);
 }
 
-function buildPmiSignal(pmiCase) {
+export function resolvePmiExecutiveHubTruthfulness({
+  cases = [],
+  latestCase = null,
+  signal = {},
+  enterpriseMetrics = {}
+} = {}) {
+  const hasPersistedData = cases.length > 0 && Boolean(latestCase?.id);
+
+  if (!hasPersistedData) {
+    return {
+      dataSource: 'empty',
+      truthfulnessStatus: 'insufficient_data',
+      hasPersistedData: false,
+      isDemo: false,
+      isFallback: true,
+      isTemplate: false,
+      humanReviewRequired: true,
+      demoDataIncluded: false,
+      executiveSignalEligible: false
+    };
+  }
+
+  return {
+    dataSource: 'persisted',
+    truthfulnessStatus: 'persisted',
+    hasPersistedData: true,
+    isDemo: false,
+    isFallback: false,
+    isTemplate: false,
+    humanReviewRequired: Boolean(
+      enterpriseMetrics.requiresExecutiveAttention ?? signal.humanReviewRequired
+    ),
+    demoDataIncluded: false,
+    executiveSignalEligible: true
+  };
+}
+
+export function buildPmiSignal(pmiCase) {
   if (!pmiCase) {
     return {
-      score: 58,
-      posture: 'Seed integration plan',
-      title: 'PMI enterprise layer ready',
+      score: null,
+      posture: 'Insufficient persisted PMI data',
+      title: 'PMI data pending',
       description:
-        'PMI has an enterprise data contract. Create or sync an integration case to activate live synergy and execution signals.'
+        'No persisted PMI integration case is available for this organization. Create or sync a case before using PMI as an executive signal.',
+      dataSource: 'empty',
+      isFallback: true,
+      humanReviewRequired: true,
+      truthfulnessStatus: 'insufficient_data',
+      demoDataIncluded: false,
+      executiveSignalEligible: false
     };
   }
 
@@ -1414,15 +1457,35 @@ export async function getPmiExecutiveHubBrief(scope = {}) {
 
   const enterpriseSummary = await getPmiSummary(scope);
   const enterpriseMetrics = enterpriseSummary.metrics || {};
+  const truthfulness = resolvePmiExecutiveHubTruthfulness({
+    cases,
+    latestCase,
+    signal,
+    enterpriseMetrics
+  });
+  const score = truthfulness.executiveSignalEligible
+    ? enterpriseMetrics.pmiReadinessScore ?? signal.score ?? null
+    : null;
 
   return {
     version: 'pmi-executive-hub-v2',
     organizationId: scope.organizationId,
     generatedAt: new Date().toISOString(),
-    score: enterpriseMetrics.pmiReadinessScore || signal.score,
-    posture: enterpriseMetrics.requiresExecutiveAttention ? 'Executive attention required' : signal.posture,
+    score,
+    posture: truthfulness.executiveSignalEligible
+      ? enterpriseMetrics.requiresExecutiveAttention
+        ? 'Executive attention required'
+        : signal.posture
+      : signal.posture,
     title: signal.title,
     description: signal.description,
+    dataSource: truthfulness.dataSource,
+    truthfulnessStatus: truthfulness.truthfulnessStatus,
+    hasPersistedData: truthfulness.hasPersistedData,
+    humanReviewRequired: truthfulness.humanReviewRequired,
+    demoDataIncluded: truthfulness.demoDataIncluded,
+    executiveSignalEligible: truthfulness.executiveSignalEligible,
+    truthfulness,
     latestCase: latestCase && {
       id: latestCase.id,
       dealName: latestCase.dealName,
