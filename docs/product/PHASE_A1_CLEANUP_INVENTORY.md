@@ -5881,7 +5881,41 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### Siguiente fase recomendada
 
-**C.13.10 — CEO Overview / Executive Aggregator Audit**
+**C.13.12 — Global Logic Integrity Final Gate / Release Readiness Audit** (or Production Render smoke; or Governance/Strategy Golden helpers)
+
+### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
+
+**Commit:** pending — `docs: record cross-module source-of-truth closure`
+
+**Mode:** Documentation only — no product code, tests, Golden, or Formula Registry changes.
+
+**Global status:** **C.13 GLOBAL LOGIC BASELINE SUBSTANTIALLY CLOSED / P2–P3 ENTERPRISE HARDENING PENDING**
+
+**Deliverables:**
+- Cross-module SoT matrix in `SOURCE_OF_TRUTH_REGISTRY.md`
+- Module status table (below)
+- Commercial can-say / cannot-say in `LOGIC_INTEGRITY_PROTOCOL.md`
+- C.13 open items P1/P2/P3 documented
+
+**P1 after C.13.10B:** No known unresolved P1 logic blockers in inventory — pending C.13.12 verification + production smoke.
+
+#### C.13 module status table (final)
+
+| Module | C.13 status | Pilot DSS readiness | Enterprise complete? | Key closure | Remaining blockers |
+|---|---|---|---|---|---|
+| **M&A** | Strong pilot DSS / valuation chain closed at docs+tests level | Yes — controlled internal DSS | **No** | C.13.4A–I Golden + report alignment + netProceeds fix | Backend snapshot/re-export; not certified valuation |
+| **Compliance** | DSS operational / scoring chain advanced | Yes — with human review | **No** | C.13.1C weighted/resilience + labels/precedence | API/model rename; backend calc SoT future |
+| **Funding** | Formula baseline / persistence partial closure | Yes — draft vs persisted labelled | **No** | C.13.3 Golden + SoT + migration | Dashboard runtime/e2e optional; module variance |
+| **Bridge** | DSS signals / marketplace quarantined | Yes — enterprise signals | **No** | C.13.5 dual-layer + quarantine | Product alignment optional; no public marketplace |
+| **Risk** | **Resolved logic baseline** | Yes | **No** | C.13.6 dual-layer closed | Production smoke/e2e env |
+| **PMI** | **Resolved product logic baseline** | Yes | **No** | C.13.7 multi-layer closed | Production smoke; PDF renderer |
+| **Reporting** | **Resolved aggregator baseline** / variance deferred | Yes — metadata + board draft | **No** | C.13.8 truthfulness + variance Golden | PDF renderer; per-module variance |
+| **Governance** | Product logic baseline / truthfulness gated / Golden pending | Yes — DSS | **No** | C.13.9B approve + empty null | Golden helper/tests; state-machine P2 |
+| **Strategy** | Product logic baseline / truthfulness gated / Golden pending | Yes — DSS | **No** | C.13.9C empty gated + Board Pack exclusion | Golden helper/tests; Board Pack branch future |
+| **CEO / Executive** | DSS aggregator / truthfulness gated | Yes — when module data exists | **No** | C.13.10B fallbacks gated | CEO e2e empty org; Golden blend |
+| **Heritage** | Not C.13 logic-audited | Preview / partial only | **No** | N/A in C.13 chain | Full module audit future |
+
+**Siguiente:** C.13.12 Final Gate / Render smoke / Golden helpers
 
 ### C.13.10B — CEO Overview truthfulness fix
 

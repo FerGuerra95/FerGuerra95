@@ -598,7 +598,81 @@ Reporting today remains:
 
 **CEO Overview global:** **DSS AGGREGATOR / TRUTHFULNESS GATED / EXECUTIVE API ALIGNED / GOLDEN MODULES PENDING** — not fully enterprise complete.
 
-**Next:** C.13.11 Cross-module Source-of-Truth Closure.
+**Next:** C.13.12 Global Logic Integrity Final Gate / Release Readiness Audit.
+
+## C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
+
+**Mode:** READ-ONLY audit synthesis + documentation closure only. **No product code changed.**
+
+**Global decision:** **C.13 GLOBAL LOGIC BASELINE SUBSTANTIALLY CLOSED / P2–P3 ENTERPRISE HARDENING PENDING**
+
+| Criterion | Verdict |
+|---|---|
+| Known P1 logic blockers after C.13.10B | **None verified** — CEO/Executive fallbacks gated; Risk/Compliance empty states gated; unit 418 / integration 65 / build pass (C.13.10B baseline) |
+| Enterprise certified | **No** — DSS + human review only |
+| Procurement / SOC2 / ISO | **Not claimed** |
+| All modules Golden-complete | **No** — Governance, Strategy, Executive blend Golden pending |
+| Pilot DSS (controlled internal use) | **Yes — selected modules** with documented limits |
+
+### Commercial truthfulness — can say
+
+- Private **Executive Decision Support System (DSS)** for internal executive, board-prep, and operating-team workflows.
+- **Human review required** on calculated, aggregated, and heuristic outputs.
+- **Board review draft** / board-prep material — not board-approved output.
+- **Operational benchmarks** and **Golden-tested oracles** where documented (M&A simple benchmarks, Funding formulas, Bridge/Risk/PMI/Reporting variance oracles, Compliance weighted/resilience Golden paths).
+- **Pilot-ready for controlled internal use** in modules with closed logic baseline: Risk, PMI, Reporting aggregator, M&A valuation chain (DSS), CEO/Executive truthfulness gated.
+- **Marketplace quarantined** — internal unlisted demo / future private network only.
+
+### Commercial truthfulness — do not sell as
+
+- Certified enterprise SaaS or externally audited compliance/governance/risk rating.
+- Autonomous decision engine or guaranteed outcomes (synergies, funding, deal matching, risk elimination).
+- Legal advice, investment advice, fairness opinion, or certified audit.
+- Board-approved or regulator-ready output without human review.
+- Public deal marketplace or active transaction/success-fee layer.
+- SOC2 / ISO / full SLA-backed enterprise suite (unless separately achieved).
+- Complete PDF/HTML reporting suite (renderer future).
+- “All modules enterprise complete” or “fully certified” narrative.
+
+### C.13 final open items
+
+**P1 (must before final demo/sales pack):** No known unresolved P1 logic defects in inventory after C.13.10B — **pending verification** via C.13.12 final gate and production smoke.
+
+**P2 (enterprise hardening):**
+- Governance Golden helper/tests for readiness scores.
+- Strategy Golden helper/tests for readiness scores.
+- Per-module variance product implementations (Reporting OPTION C deferred).
+- CEO e2e empty-org / button copy assertions.
+- Production Render smoke.
+- PDF/HTML report renderer.
+- Governance workflow state-machine guards.
+- Governance Controls/ESG UI gaps.
+- Funding dashboard runtime consistency / optional e2e.
+- Bridge optional product→Golden alignment (C.13.5G).
+- Compliance backend calculation SoT / API rename (C13-P1-04/05/06 residual).
+- M&A backend snapshot/re-export policy integration.
+- Heritage module — not C.13 logic-audited; treat as preview/DSS partial.
+
+**P3 (polish / ops):**
+- Documentation polish, sales collateral alignment, broader e2e coverage, optional migrations.
+
+### Module baseline summary (C.13.11A)
+
+| Module | C.13 logic baseline | Pilot DSS | Enterprise complete? |
+|---|---|---|---|
+| M&A | Strong — Golden + product alignment tested | Yes (DSS) | No — not certified valuation |
+| Compliance | Operational — chain advanced; rename/API partial | Yes (DSS) | No — not certified compliance |
+| Funding | Formula baseline; persistence partial closure | Yes (DSS) | No — draft vs persisted separation |
+| Bridge | Dual-layer + quarantine | Yes (signals only) | No — marketplace not product |
+| Risk | **Resolved logic baseline** | Yes | No — not regulatory certification |
+| PMI | **Resolved product logic** | Yes | No — PDF/smoke pending |
+| Reporting | **Resolved aggregator baseline**; variance deferred | Yes (metadata/draft) | No — PDF renderer pending |
+| Governance | Truthfulness gated; Golden pending | Yes (DSS) | No |
+| Strategy | Truthfulness gated; Golden pending | Yes (DSS) | No |
+| CEO/Executive | Truthfulness gated aggregator | Yes (with data) | No |
+| Heritage | Not C.13 closed | Preview only | No |
+
+**Next:** C.13.12 Global Logic Integrity Final Gate / Release Readiness Audit — or Production Render smoke — or Governance/Strategy Golden helpers (authorized WRITE phase).
 
 ## C.13.10A — CEO Overview / Executive Aggregator Audit READ ONLY
 

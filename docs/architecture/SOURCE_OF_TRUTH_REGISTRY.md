@@ -37,7 +37,7 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Funding snapshots | persisted scenario snapshots | backend `funding_snapshots` / hub-overview | Confirmed (C.13.3G) | FE pages do not consume createSnapshot yet | N/A | Optional enterprise commit path |
 | Funding draft workspace | inputs, settings, scenario modelling | client localStorage (`funding_draft_by_org_v1_{organizationId}`) | Confirmed (C.13.3G) | Legacy global keys consumed on migrate (C.13.3J) | funding_* formulas on draft | Not enterprise persisted |
 | Funding scenarios (UI) | Low/Base/High rows | FE `useFundingEngine` on draft inputs | Known duplicate risk | Differs from persisted rounds | funding_* | Label as scenario/draft required |
-| Compliance weightedRiskScore | explicable 3-dimension score | Golden Dataset + Formula Registry (`COMPLIANCE_WEIGHTED_RISK`) | Canonical (docs) / Pending implementation | No helper in code yet | compliance_weighted_risk_score_basic | C.13.1C-f1B Option C |
+| Compliance weightedRiskScore | explicable 3-dimension score | Golden Dataset + `complianceWeightedRisk.js` + Formula Registry (`COMPLIANCE_WEIGHTED_RISK`) | Implemented + reports/export (C.13.1C-f2A/f4A) | Must not confuse with operationalRiskScore | compliance_weighted_risk_score_basic | Reports/export oracle; broader model adoption pending |
 | Compliance operationalRiskScore | dashboard operational score | Frontend `calculateSupplierRiskScore` + `useComplianceEngine` (current) | Assumed / Pending hardening | Collides with field name `riskScore`; FE may override BE | N/A | Not golden oracle |
 | Compliance riskScore persisted | stored supplier fields | backend `compliance_suppliers` via payload clamp | Confirmed persistence SoT | Not calculation SoT; may differ from UI displayed score | N/A | Persistence only |
 | Compliance resilienceScore persisted | stored supplier fields | backend `compliance_suppliers` via payload clamp | Confirmed persistence SoT | FE recalculates on read; formula alignment pending | compliance_resilience_score_basic | C.13.1C-f1B |
@@ -49,8 +49,8 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Bridge signals | recalculated signals | bridge_signals + `bridge.service.js` heuristics | Partially resolved (C.13.5E Option C) | Dual-layer: `bridgePriorityGolden` vs `operationalSignalPriority`; product unchanged | bridge_priority_score_basic | DSS; human review required |
 | Bridge marketplace | opportunities / matches | BE bridge API + DEMO fallback | Partially resolved (C.13.5B labels) | Unlisted route; not pilot marketplace | N/A | INTERNAL_UNLISTED_DEMO |
 | Risk register / enterprise scoring | `risk_register` + `risk.service.js` | Partially resolved (C.13.6B Option C) | Dual-layer: `riskLikelihoodImpactGolden` vs `operationalEnterpriseRiskScore`; UI heatmap gaps pending | risk_score_likelihood_impact_basic | DSS; human review required; not insurance/regulatory certification |
-| Reporting KPIs | variance metrics | Pending C.13 audit | Source unclear | | reporting_kpi_variance_basic | |
-| Executive Overview | module health / radar | Aggregator from module summaries | Assumed / Pending C.13 validation | Fallback if API fails | executive_module_health_average_basic | Not master store |
+| Reporting KPIs | variance metrics | `reportingGoldenFormulas.js` (Golden oracle only) | Golden tested; product deferred (C.13.8E) | Product must not consume generic variance | reporting_kpi_variance_basic | Per-module ownership required |
+| Executive Overview | module health / radar / executive signal | Backend `executiveOverview.service.js` + CEO `ceoOverviewTruthfulness.js` | **TRUTHFULNESS GATED** (C.13.10B) | Fallback risk gated C.13.10B | executive_module_health_average_basic (future) | Aggregator only; not master store |
 | Golden Datasets | calculation oracles | docs/testing/golden_inputs.json | Confirmed baseline seed | Implementation may mismatch | All IDs in file | Oracle not product data |
 | Formulas | formula definitions | docs/testing/FORMULA_REGISTRY.md | Created IA-2 / Pending C.13 validation | | Mapped IDs | |
 
@@ -467,13 +467,61 @@ PMI does **not** have a single production capture formula today. It has multiple
 
 **Not closed:** Golden helper/tests for strategy readiness; Strategy Board Pack branch (future); CRUD gaps (P2); CEO global fallback audit **closed C.13.10B**.
 
+## C.13.11A — Cross-Module Source-of-Truth Matrix
+
+Transversal closure map after C.13.1–C.13.10B. **Human review required** on all DSS outputs unless explicitly Golden-tested and labelled.
+
+| Module | Critical metric / signal | Owner | Type | Golden status | Product status | UI / report truthfulness | Executive / Board usage | Remaining risk |
+|---|---|---|---|---|---|---|---|---|
+| **M&A** | `adjustedEnterpriseValue` / `equityBase` / `netProceeds` | FE `useValuationEngine.js` | Operational DSS | Simple EV/equity/waterfall Golden tested (C.13.4C); product adjusted formulas intentionally diverge | Live engine + report alignment tested (C.13.4F/H) | DSS labels; no fairness opinion | Board Pack branch (draft); CEO M&A via API + local helpers gated | Backend snapshot/re-export policy; buyer match not certified |
+| **M&A** | `buyerMatchScore` | FE `buildBuyerMatches` | Heuristic DSS | Future Golden ID | Heuristic only | Labelled DSS | CEO when deals exist | Not certified matching |
+| **M&A** | `productWaterfall` / `WATERFALL_SIMPLE` | FE product vs Golden helper | Dual-layer | Golden oracle tested | Product waterfall separate | Unit-tested alignment | Reports use derived | Simple golden ≠ product waterfall |
+| **Compliance** | `weightedRiskScore` | Golden helper + reports/export | Golden benchmark + report integration | `compliance_weighted_risk_score_basic` tested | Reports/export (C.13.1C-f4A) | Separated from operational | Board Pack when data | Broader model/API adoption pending |
+| **Compliance** | `operationalRiskScore` | FE `useComplianceEngine` / `complianceScoring.js` | Operational DSS | N/A (not Golden) | Dashboard SoT interim | Labels/precedence (C.13.1C-f6B) | CEO via suppliers path | FE/BE field naming; persisted vs calculated |
+| **Compliance** | `resilienceScore` | FE calc + Golden helper | Hybrid | `compliance_resilience_score_basic` tested | Labels/re-export (C.13.1C-f8B) | Operational vs Golden labelled | Reports when data | Backend calc SoT future |
+| **Compliance** | `legalHealthScore` | Backend compliance summary | Operational DSS | Pending | Empty org null (C.13.8B/10B) | No “controlled” without data | Executive/Board Pack | CEO local helper gated |
+| **Funding** | `postMoney` / ownership / dilution | FE `useFundingEngine` + Golden tests | Operational DSS + Golden oracles | `funding_*` Golden tested (C.13.3C) | Draft workspace formulas | Draft vs persisted labels (C.13.3H) | Summary via API | Dashboard runtime/e2e optional |
+| **Funding** | `runway` / zero-burn | FE engine + BE summary | Operational DSS | Golden zero-burn aligned (C.13.1B) | null when zero burn | Labelled | Executive when rounds/data | localStorage draft not enterprise SoT |
+| **Funding** | `readinessScore` (workspace) | FE `fundraisingScoring.js` | Operational DSS | Partial Golden coverage | Draft only | Scenario/DSS labels | Widget uses API summary | C13-P1-03 partially resolved |
+| **Bridge** | `bridgePriorityGolden` | `bridgeGoldenFormulas.js` | Golden benchmark | `bridge_priority_score_basic` tested | Oracle only | Not shown as product priority | N/A in product | Do not conflate with operational |
+| **Bridge** | `operationalSignalPriority` | `calculateSignalPriority()` | Operational DSS | Intentionally separate (C.13.5E) | Attention queue ordering | Human review required | Bridge signals in Executive | Not certified prioritization |
+| **Bridge** | Marketplace opportunities/matches | BE + `DEMO_BRIDGE_*` fallback | Demo / future | N/A | **Quarantined** unlisted route | INTERNAL_UNLISTED_DEMO labels | Not executive SoT | Not public marketplace |
+| **Risk** | `riskLikelihoodImpactGolden` | `riskGoldenFormulas.js` | Golden benchmark | `risk_score_likelihood_impact_basic` tested | Oracle only | Separated in reports (C.13.6F) | N/A as Golden in UI | Not regulatory certification |
+| **Risk** | `operationalEnterpriseRiskScore` / `riskReadinessScore` | `risk.service.js` | Operational DSS | Dual-layer closed (C.13.6B) | Dashboard + readiness | Report truthfulness closed | CEO/Executive when risks exist | Empty org null (C.13.10B) |
+| **PMI** | `pmiCaptureRateGolden` | `pmiGoldenFormulas.js` | Golden benchmark | Tested (C.13.7C) | Oracle only | Separated from operational | Hub when eligible | Zero forecast → null |
+| **PMI** | `operationalPmiCaseCapture` / ledger / enterprise | `pmi.service.js` + FE | Operational DSS | Multi-layer documented | Zero denominator → null (C.13.7G) | UI/report labels (C.13.7F) | CEO hub gated (C.13.7E) | PDF renderer future |
+| **PMI** | `operationalPmiReadinessScore` | PMI metrics pipeline | Operational DSS | Not Golden | Composite heuristic | DSS labelled | Executive/Board when data | Not certified integration health |
+| **PMI** | `demoPmiCase` | `pmiStore.jsx` | Demo/template | N/A | Gated — no silent merge (C.13.7E) | Demo labelled | Not executive truth | Demo contamination if labels removed |
+| **Reporting** | `reportingVarianceGolden` | `reportingGoldenFormulas.js` | Golden benchmark | Tested (C.13.8D) | **Product deferred** (C.13.8E) | Prohibited in UI/Board/CEO | **Prohibited** | Per-module variance ownership required |
+| **Reporting** | Board Pack aggregator | `boardPack.service.js` | Aggregator DSS | N/A | Board **review draft** | Truthfulness gated (C.13.8B) | Executive path | Not certified board-ready |
+| **Reporting** | `reportingReadinessScore` | `calculateReportingMetrics` | Operational DSS | Pending module Golden | Null when empty (C.13.8B) | Metadata workflow | Executive/Board | PDF/HTML renderer future |
+| **Governance** | `governanceReadinessScore` / `boardReadinessScore` | `calculateGovernanceMetrics` | Operational DSS | **Golden pending** | Truthfulness gated (C.13.9B) | Empty → null | Executive/Board when data | Golden helper/tests pending |
+| **Governance** | `governance.board_pack_ready` | Bridge signal | Heuristic DSS | N/A | `certifiedRating: false` | Board review draft | Bridge/Executive signal | Not Governance workflow SoT |
+| **Governance** | Decision packs | `governance_board_packs` | Module SoT | N/A | Module-owned | Approve UI/API aligned | Distinct from Reporting Board Pack | State-machine guards P2 |
+| **Strategy** | `strategyReadinessScore` | `calculateStrategyMetrics` | Operational DSS | **Golden pending** | Truthfulness gated (C.13.9C) | Empty → null | Executive when data | Golden helper/tests pending |
+| **Strategy** | `strategicRiskLevel` | `calculateStrategyMetrics` | Operational DSS | N/A | Zero risks → `not_assessed` | Copy updated | CEO gated | Not certified risk posture |
+| **Strategy** | Strategy reports | `strategy_report_exports` | Report metadata | N/A | Metadata-only drafts | Human review required | Board Pack **excluded** by design | No export pipeline |
+| **CEO / Executive** | `executiveReadinessIndex` | `readinessIndex.service.js` | Aggregator DSS | Pending | Missing modules defensive | insufficient_data empty org | Command Center | Not certified enterprise rating |
+| **CEO / Executive** | `getExecutiveSignal` | `ceoOverviewTruthfulness.js` | Aggregator DSS | N/A | Eligible modules only (C.13.10B) | No fallback synthesis | CEO ring display | Golden blend pending |
+| **CEO / Executive** | `buildBoardViewSnapshot` readiness | `boardView.service.js` | Aggregator DSS | N/A | Null preserved (C.13.10B) | Board review draft copy | Board view panel | e2e empty org pending |
+| **Heritage** | Continuity / assets / succession | `heritage.service.js` (assumed) | Operational / future | **Not C.13 audited** | Module exists; logic baseline not closed in C.13 | Treat as DSS preview | CEO ecosystem branch when API data | Do not overstate; Golden pending |
+| **Heritage** | Ecosystem branch scores | Executive hub / ecosystem brief | Aggregator input | N/A | Null when no branch score | CEO gated via `getEcosystemBranchOverview` | CEO radar when eligible | Future module hardening |
+
+### Cross-module usage rules (C.13.11A)
+
+1. **Golden** metrics validate oracles in CI — they do not automatically become product headline scores unless explicitly authorized and labelled.
+2. **Operational DSS** metrics are decision-support heuristics — human review required; not certified advice.
+3. **Aggregators** (Reporting Board Pack, Executive, CEO) must not invent scores when module data is insufficient.
+4. **Demo/template** layers must never appear as enterprise persisted truth without explicit labelling.
+5. **Board Pack** outputs are **board review drafts** — not board-approved or certified filings.
+
 ## Executive Overview Special Rule
 
-Executive Overview reads module summaries and may show blended scores.
+Executive Overview reads module summaries and may show blended scores when modules are eligible.
 
 It must remain a read-mostly aggregation layer unless an explicit authorized workflow writes elsewhere.
 
-Status: Assumed / Pending C.13 validation.
+Status: **TRUTHFULNESS GATED** (C.13.10B) — DSS aggregator; not master operational store; not enterprise certified.
 
 ## Bridge Marketplace Special Rule
 
@@ -485,8 +533,17 @@ Status: Partially resolved (quarantine labels C.13.5B + guard C.13.5C). Known de
 
 Not a source-of-truth for production pilot narrative.
 
-## Next Step
+## C.13.11A — Global closure status
 
-C.13.0 and C.13.1–C.13.8 must validate this registry against actual code paths, stores, APIs, and tests.
+**C.13 global logic baseline:** **SUBSTANTIALLY CLOSED / P2–P3 ENTERPRISE HARDENING PENDING**
 
-Update status fields from Assumed to Confirmed, Mismatch, or Known duplicate risk only with audit evidence.
+| Verdict | Meaning |
+|---|---|
+| **Substantially closed** | C.13.1–C.13.10B logic integrity work documented; known P1 CEO/Executive fallbacks gated; unit/integration/build baseline green (418 unit / 65 integration as of C.13.10B) |
+| **Not enterprise certified** | No module is externally certified; DSS + human review positioning required |
+| **Not procurement-ready** | SOC2/ISO/SLA/legal certification not claimed |
+| **Pending hardening** | Golden helpers (Governance/Strategy/Executive blend), production Render smoke, PDF renderer, per-module variance, e2e gaps |
+
+**Do not use:** fully enterprise complete · production certified · SOC2 ready · certified compliance/risk/governance · autonomous decision engine · public marketplace · fairness opinion.
+
+**Next authorized phases:** C.13.12 Global Logic Integrity Final Gate / Release Readiness Audit · Production Render smoke · Governance/Strategy Golden helpers · Sales/demo pack (after explicit authorization).
