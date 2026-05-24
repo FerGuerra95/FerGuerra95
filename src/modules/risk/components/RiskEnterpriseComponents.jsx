@@ -7,6 +7,10 @@ import {
   maxOperationalScoreInCell,
   normalizeRiskHeatmapData
 } from '../utils/riskHeatmapData.js';
+import {
+  RISK_REPORT_PANEL_DISCLAIMER,
+  summarizeRiskReportPayloadTruthfulness
+} from '../utils/riskReportTruthfulness.js';
 
 export const riskEnterpriseCss = `
   .risk-enterprise-page { width: min(1440px, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
@@ -39,6 +43,7 @@ export const riskEnterpriseCss = `
   .risk-heatmap-cell[data-hot="true"] { background: rgba(239,68,68,.18); border-color: rgba(248,113,113,.34); }
   .risk-heatmap-note { margin: 0 0 12px; color: rgba(226,232,240,.68); font-size: .78rem; line-height: 1.45; }
   .risk-heatmap-cell-meta { margin-top: 4px; color: rgba(226,232,240,.62); font-size: .68rem; line-height: 1.35; }
+  .risk-report-disclaimer { margin: 0 0 12px; color: rgba(226,232,240,.68); font-size: .78rem; line-height: 1.45; }
   @media (max-width: 760px) { .risk-enterprise-hero { padding: 20px; } .risk-enterprise-table { min-width: 720px; } .risk-table-scroll { overflow-x: auto; } }
 `;
 
@@ -221,12 +226,47 @@ export function RiskAppetitePanel({ items = [] }) {
 }
 
 export function RiskReportsPanel({ items = [] }) {
-  return <EnterpriseRiskTable title="Risk reports" items={items} columns={[
-    { key: 'title', label: 'Report' },
-    { key: 'reportType', label: 'Type' },
-    { key: 'status', label: 'Status', render: (item) => <RiskStatusBadge status={item.status} /> },
-    { key: 'createdAt', label: 'Generated' }
-  ]} />;
+  const latestPayload = items.find((item) => item?.payload)?.payload;
+  const payloadTruthfulness = summarizeRiskReportPayloadTruthfulness(latestPayload || {});
+
+  return (
+    <Card className="risk-enterprise-panel">
+      <h3>Risk reports</h3>
+      <p className="risk-report-disclaimer">{payloadTruthfulness.disclaimer || RISK_REPORT_PANEL_DISCLAIMER}</p>
+      {items.length === 0 ? (
+        <div className="risk-enterprise-empty">No generated reports yet · Human review required before board use</div>
+      ) : null}
+      {items.length > 0 ? (
+        <div className="risk-table-scroll ceos-enterprise-table-wrap">
+          <table className="risk-enterprise-table ceos-enterprise-table">
+            <thead>
+              <tr>
+                <th>Report</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Scoring model</th>
+                <th>Generated</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item) => {
+                const rowTruthfulness = summarizeRiskReportPayloadTruthfulness(item?.payload || {});
+                return (
+                  <tr key={item.id}>
+                    <td>{item.title || 'N/A'}</td>
+                    <td>{item.reportType || 'N/A'}</td>
+                    <td><RiskStatusBadge status={item.status} /></td>
+                    <td>{rowTruthfulness.operationalModel} · DSS</td>
+                    <td>{item.createdAt || 'N/A'}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+    </Card>
+  );
 }
 
 export function RiskCommitteeReviewPanel({ items = [] }) {

@@ -451,7 +451,16 @@ export async function createRiskReport(organizationId, payload = {}, actor = {})
         committeeReadiness: summary.metrics.committeeReadiness,
         evidenceCoverage: summary.metrics.evidenceCoverage,
         requiredHumanReview: true,
-        disclaimer: 'Decision-support output. CRO, audit committee, legal and board review remain required.'
+        disclaimer:
+          'Decision-support output using operationalEnterpriseRiskScore heuristic. Not a certified risk rating. Golden L×I benchmark is separate and used for validation only. CRO, audit committee, legal and board review remain required.'
+      },
+      scoringTruthfulness: {
+        operationalModel: 'operationalEnterpriseRiskScore',
+        operationalLabel: 'Operational DSS risk signal',
+        goldenBenchmarkModel: 'riskLikelihoodImpactGolden',
+        goldenBenchmarkNote: 'Golden L×I benchmark is used for validation only — separate from operational scoring',
+        humanReviewRequired: true,
+        notCertifiedRiskRating: true
       },
       humanReviewRequired: true
     }

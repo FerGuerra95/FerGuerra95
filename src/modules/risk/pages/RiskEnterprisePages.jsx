@@ -3,6 +3,7 @@ import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { PERMISSIONS, useAuth } from '../../../app/providers/AuthProvider.jsx';
 import { riskApi } from '../services/riskApi.js';
 import { prepareRiskRegisterPayload } from '../utils/riskRegisterPayload.js';
+import { RISK_REPORT_PAGE_COPY } from '../utils/riskReportTruthfulness.js';
 import {
   BoardRiskReadinessPanel,
   ControlsLibraryPanel,
@@ -258,7 +259,19 @@ export function RiskAppetitePage() {
 }
 
 export function RiskReportsPage() {
-  return <EntityPage badge="Reports" title="Risk reports." copy="Enterprise Risk Brief, Risk Committee Pack, Control Effectiveness Report, Incident Summary and Appetite Breach Report." load={riskApi.listReports} create={riskApi.createReport} defaults={{ title: 'Enterprise Risk Brief', reportType: 'enterprise_risk_brief' }} fields={['title', 'reportType']} permission={PERMISSIONS.EXPORT_RISK_REPORT} render={(items) => <RiskReportsPanel items={items} />} />;
+  return (
+    <EntityPage
+      badge="Reports"
+      title="Risk reports."
+      copy={RISK_REPORT_PAGE_COPY}
+      load={riskApi.listReports}
+      create={riskApi.createReport}
+      defaults={{ title: 'Enterprise Risk Brief', reportType: 'enterprise_risk_brief' }}
+      fields={['title', 'reportType']}
+      permission={PERMISSIONS.EXPORT_RISK_REPORT}
+      render={(items) => <RiskReportsPanel items={items} />}
+    />
+  );
 }
 
 export function RiskCommitteeReviewsPage() {

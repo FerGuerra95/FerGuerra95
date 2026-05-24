@@ -219,15 +219,19 @@ Risk Enterprise item scoring uses **two separate models** by design:
    - Do not imply Golden benchmark governs live portfolio posture without explicit product decision.
    - Heatmap UI prefers backend-enriched `dashboard.heatmap` when present; shows L×I distribution reference and operational residual max per cell (C.13.6E). Does not compute `riskScoreFrom` on the client.
 
-4. **C13-P1-08** remains **PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED** — dual-layer separated, both layers unit-tested (Golden C.13.6C, operational C.13.6D), UI heatmap/copy/register aligned (C.13.6E); dual-layer divergence by design; no global RESOLVED until report/export closure (C.13.6F).
+4. **C13-P1-08** **RESOLVED / DUAL-LAYER RISK MODEL CLOSED** — dual-layer separated, both layers unit-tested (Golden C.13.6C, operational C.13.6D), UI aligned (C.13.6E), report/export truthfulness verified (C.13.6F). Intentional divergence documented; not a product defect.
 
 5. **Next controlled phases:**
-   - **C.13.6F** — report-export truthfulness / e2e smoke / final Risk cluster closure.
+   - **C.13.7** — PMI Logic Integrity / Synergy Formula Audit READ ONLY.
    - Product→Golden alignment (Option B) only if separately authorized.
 
 6. **Operational heuristic tests (C.13.6D):** `tests/unit/risk/riskOperationalScore.test.js` locks current `riskScoreFrom` behavior. Tests document conceptual name `operationalEnterpriseRiskScore` and verify divergence from `riskLikelihoodImpactGolden`.
 
-7. **Separate risk domains:** M&A deal quality scoring, Compliance supplier risk, PMI integration risks, and Strategy strategic risks are **outside** this dual-layer model unless explicitly mapped in a future registry update.
+7. **Report/export truthfulness (C.13.6F):** Risk reports are metadata exports (`POST /risk/reports`) with operational summary payload — no PDF/HTML renderer. UI (`RiskReportsPanel`) and export payload (`scoringTruthfulness`, enhanced `boardReadyMemo.disclaimer`) label operational DSS scoring separately from Golden L×I benchmark. Unit tests: `riskReportTruthfulness.test.js`, `riskReportPanel.test.jsx`.
+
+8. **C13-P1-08 status:** **RESOLVED / DUAL-LAYER RISK MODEL CLOSED** — decision documented (C.13.6B); Golden + operational tests (C.13.6C/D); UI alignment (C.13.6E); report/export truthfulness (C.13.6F). Dual-layer score divergence is intentional (Option C), not an open P1 defect.
+
+9. **Separate risk domains:** M&A deal quality scoring, Compliance supplier risk, PMI integration risks, and Strategy strategic risks are **outside** this dual-layer model unless explicitly mapped in a future registry update.
 
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:

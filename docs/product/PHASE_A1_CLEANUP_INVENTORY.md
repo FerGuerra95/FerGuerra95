@@ -1738,7 +1738,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-05 | Compliance resilience — golden + labels/re-export | f7B + f8A `4414208` + f8B `eb48db6`; ver f8A/f8B/f8C | **PARTIALLY RESOLVED** — golden helper/test + operational labels/re-export; backend/API/model rename pending |
 | C13-P1-06 | FE/BE precedence — labels/precedence fix done | f5B + f6A + f6B (`1e82980`); ver C.13.1C-f6A/f6B/f6C | **PARTIALLY RESOLVED** — labels/precedence + re-export + CEO; backend/model rename pending |
 | C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | **PARTIALLY RESOLVED** — Option C dual-layer (C.13.5E); Golden tests (C.13.5D); operational heuristic tests (C.13.5F); product formula unchanged; **no RESOLVED global** |
-| C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | **PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED** — Option C dual-layer (C.13.6B); Golden tests (C.13.6C); operational tests (C.13.6D); UI aligned (C.13.6E); report/export pending C.13.6F; **no RESOLVED global** |
+| C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | **RESOLVED / DUAL-LAYER RISK MODEL CLOSED** — Option C (C.13.6B); Golden tests (C.13.6C); operational tests (C.13.6D); UI (C.13.6E); report/export truthfulness (C.13.6F); dual-layer divergence by design |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
 | C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
 | C13-P1-11 | M&A EV simple vs adjusted engine | Golden `ma_valuation_*`; FE `useValuationEngine` adjusted EV; report alignment tests | **PARTIALLY RESOLVED** — SoT + Golden tests + labels/copy + report alignment + netProceeds fallback fixed (C.13.4A–I); backend snapshot/re-export policy pending |
@@ -5681,7 +5681,46 @@ C13-P1-08: PARTIALLY RESOLVED
 
 ### Paso siguiente recomendado
 
-**C.13.6F** — Risk final closure / report-export truthfulness / e2e smoke.
+**C.13.6F** — Risk final closure / report-export truthfulness / e2e smoke (2026-05-23)
+
+### Report/export review
+
+| Item | Result |
+|---|---|
+| Active feature | Yes — `POST /risk/reports` persists export metadata + operational summary payload |
+| UI | `RiskReportsPage`, `RiskReportsPanel` |
+| Backend | `createRiskReport()` — disclaimer + `scoringTruthfulness` metadata (no formula change) |
+| PDF/HTML download | **Not active** — list/create metadata only; no separate export renderer |
+
+### Copy/labels corrected
+
+- Reports page hero copy → decision-support / not certified
+- Reports panel disclaimer → operational DSS + Golden validation-only + human review
+- Table column **Scoring model** → `operationalEnterpriseRiskScore · DSS`
+- Export payload `boardReadyMemo.disclaimer` + `scoringTruthfulness` block
+
+### E2E
+
+| Item | Result |
+|---|---|
+| Playwright version | 1.59.1 |
+| `npx playwright install chromium` | ✅ Installed (no repo file changes) |
+| `npx playwright test tests/e2e/risk` | ❌ `ECONNREFUSED 127.0.0.1:4000` — backend API not running in test env |
+| Product impact | **None** — spec + browsers ready; smoke requires live backend (C.13.6G optional production smoke) |
+
+### Estado C13-P1-08 (post C.13.6F)
+
+```
+C13-P1-08: RESOLVED / DUAL-LAYER RISK MODEL CLOSED
+           All subgaps C13-P1-08a–e closed (C.13.6C–E).
+           Report/export truthfulness verified and aligned (C.13.6F).
+           Dual-layer divergence remains by design (Option C) — documented, not a product defect.
+           E2E: browsers installed; smoke blocked by missing backend server in env (not product defect).
+```
+
+### Paso siguiente recomendado
+
+**C.13.7** — PMI Logic Integrity / Synergy Formula Audit READ ONLY
 
 ---
 

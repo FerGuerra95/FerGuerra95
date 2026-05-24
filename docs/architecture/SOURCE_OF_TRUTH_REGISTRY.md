@@ -284,7 +284,7 @@ Risk Enterprise item scoring has **two intentional layers**. Do not treat them a
 4. Separate Risk domains (M&A `riskScoring.js`, Compliance supplier risk, PMI/strategy risk entities) are **not** `RISK_LIKELIHOOD_IMPACT` — do not conflate in narrative.
 5. Aligning product to Golden (Option B), golden helper (C.13.6C), operational tests (C.13.6D), or UI heatmap alignment (C.13.6E) require **separate authorized phases** — not implied by C.13.6B.
 
-**C13-P1-08 status:** PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED — dual-layer tests complete (Golden C.13.6C + operational C.13.6D); UI heatmap prefers `dashboard.heatmap`, copy/register aligned (C.13.6E); dual-layer divergence by design; report/export truthfulness pending C.13.6F; no global RESOLVED.
+**C13-P1-08 status:** **RESOLVED / DUAL-LAYER RISK MODEL CLOSED** — dual-layer tests (Golden C.13.6C + operational C.13.6D); UI alignment (C.13.6E); report/export truthfulness (C.13.6F). Intentional operational vs Golden divergence documented under Option C.
 
 ## Executive Overview Special Rule
 

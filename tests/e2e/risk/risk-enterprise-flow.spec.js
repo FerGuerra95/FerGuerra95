@@ -52,6 +52,10 @@ test('Risk enterprise routes load and expose register CRUD path', async ({ page 
   for (const [route, heading] of routes) {
     await page.goto(route);
     await expect(page.getByRole('heading', { name: heading })).toBeVisible();
+    if (route === '/risk/reports') {
+      await expect(page.getByText(/decision-support signals/i)).toBeVisible();
+      await expect(page.getByText(/not a certified risk rating/i)).toBeVisible();
+    }
     await assertNoSurfaceRegression(page);
   }
 });
