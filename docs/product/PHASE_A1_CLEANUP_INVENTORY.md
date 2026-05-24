@@ -5885,7 +5885,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.8F — Reporting e2e/smoke closure + final Reporting status
 
-**Commit:** (pending) — `docs(reporting): record final reporting logic baseline status`
+**Commit:** `9a89b58` — `docs(reporting): record final reporting logic baseline status`
 
 **Import check:** `reportingGoldenFormulas` / `reportingVarianceGolden` — **no product imports** (helper + unit test + docs only).
 
