@@ -28,12 +28,16 @@ export function DecisionStatusBadge({ status }) {
   return <Badge>{String(status || 'draft').replace(/_/g, ' ')}</Badge>;
 }
 
-export function GovernanceReadinessScore({ value = 0, label = 'Governance readiness' }) {
+function formatGovernanceScore(value) {
+  return Number.isFinite(Number(value)) ? `${Math.round(Number(value))}/100` : 'N/A';
+}
+
+export function GovernanceReadinessScore({ value = null, label = 'Governance readiness (DSS)' }) {
   return (
     <Card className="governance-enterprise-panel governance-enterprise-kpi">
       <div className="kpi-label">{label}</div>
-      <strong>{Number.isFinite(Number(value)) ? Math.round(Number(value)) : 0}/100</strong>
-      <p className="muted">Decision support score. Human review required for formal governance actions.</p>
+      <strong>{formatGovernanceScore(value)}</strong>
+      <p className="muted">Operational DSS heuristic. Not a certified governance rating. Human review required.</p>
     </Card>
   );
 }
@@ -45,7 +49,7 @@ export function GovernanceExecutiveWidget({ summary }) {
       <GovernanceReadinessScore value={metrics.governanceReadinessScore} />
       <MetricCard icon={Clock} label="Pending critical" value={metrics.pendingCriticalDecisions || 0} />
       <MetricCard icon={AlertTriangle} label="Approval bottlenecks" value={metrics.approvalBottlenecks || 0} />
-      <MetricCard icon={CheckCircle2} label="Board readiness" value={`${metrics.boardReadinessScore || 0}/100`} />
+      <MetricCard icon={CheckCircle2} label="Board review draft signal" value={formatGovernanceScore(metrics.boardReadinessScore)} description="Operational DSS — not certified board approval." />
     </section>
   );
 }
@@ -63,7 +67,7 @@ export function MetricCard({ icon: Icon = Scale, label, value, description = '' 
   );
 }
 
-export function DecisionRegisterTable({ items = [], onSelect, onSubmit, onApprove, onEscalate, readOnly = false }) {
+export function DecisionRegisterTable({ items = [], onSelect, onSubmit, onApprove, onEscalate, readOnly = false, canApprove = false }) {
   if (items.length === 0) {
     return (
       <div className="governance-enterprise-empty ceos-enterprise-table-empty">
@@ -84,7 +88,7 @@ export function DecisionRegisterTable({ items = [], onSelect, onSubmit, onApprov
             <span className="muted">{item.owner || 'Board Secretary'}</span>
             <div className="governance-enterprise-toolbar">
               <button className="governance-enterprise-button" type="button" disabled={readOnly} onClick={() => onSubmit?.(item)}>Submit</button>
-              <button className="governance-enterprise-button" type="button" disabled={readOnly} onClick={() => onApprove?.(item)}>Approve</button>
+              <button className="governance-enterprise-button" type="button" disabled={!canApprove} onClick={() => onApprove?.(item)}>Approve</button>
               <button className="governance-enterprise-button" type="button" disabled={readOnly} onClick={() => onEscalate?.(item)}>Escalate</button>
             </div>
           </div>
@@ -103,12 +107,12 @@ export function ApprovalFlowPanel({ decision }) {
   );
 }
 
-export function BoardPackCard({ item }) { return <MetricCard icon={FileText} label={item.title} value={item.status || 'draft'} description={`Readiness ${item.readinessScore || 0}/100`} />; }
+export function BoardPackCard({ item }) { return <MetricCard icon={FileText} label={item.title} value={item.status || 'draft'} description={`DSS pack draft · readiness ${formatGovernanceScore(item.readinessScore)}`} />; }
 export function CommitteeCalendar({ items = [] }) { return <SimpleList title="Committee calendar" items={items} labelKey="committeeName" valueKey="nextMeetingDate" />; }
 export function PolicyReviewPanel({ items = [] }) { return <SimpleList title="Policy review" items={items} labelKey="title" valueKey="reviewDate" />; }
 export function ActionItemsTable({ items = [] }) { return <SimpleList title="Action tracker" items={items} labelKey="title" valueKey="status" />; }
 export function GovernanceRiskPanel({ metrics = {} }) { return <MetricCard icon={AlertTriangle} label="Governance risks" value={metrics.governanceRisks || 0} description={metrics.requiresExecutiveAttention ? 'Executive attention required.' : 'No immediate escalation.'} />; }
-export function BoardReadinessPanel({ metrics = {} }) { return <MetricCard icon={CheckCircle2} label="Board readiness" value={`${metrics.boardReadinessScore || 0}/100`} />; }
+export function BoardReadinessPanel({ metrics = {} }) { return <MetricCard icon={CheckCircle2} label="Board review draft signal" value={formatGovernanceScore(metrics.boardReadinessScore)} description="Operational DSS — not certified board approval." />; }
 export function GovernanceAuditTimeline({ items = [] }) { return <SimpleList title="Audit timeline" items={items} labelKey="action" valueKey="createdAt" />; }
 
 function SimpleList({ title, items, labelKey, valueKey }) {

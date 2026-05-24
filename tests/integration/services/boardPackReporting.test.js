@@ -331,4 +331,15 @@ describe('Unified Board Pack reporting', () => {
     expect(boardPack.branches.compliance.insufficientData).toBe(true);
     expect(boardPack.branches.compliance.riskStatus).toBe('insufficient_data');
   });
+
+  it('documenta Governance como operational DSS en scoringTruthfulness del board pack', async () => {
+    const boardPack = await generateBoardPack({
+      organizationId: 'org_board_pack_governance_truthfulness',
+      userId: 'u_gov'
+    });
+
+    expect(boardPack.scoringTruthfulness?.moduleLayers?.governance?.certifiedRating).toBe(false);
+    expect(boardPack.scoringTruthfulness?.moduleLayers?.governance?.sourceModule).toBe('governance');
+    expect(boardPack.scoringTruthfulness?.moduleLayers?.governance?.governanceBoardPacksTable).toBe('governance_board_packs');
+  });
 });

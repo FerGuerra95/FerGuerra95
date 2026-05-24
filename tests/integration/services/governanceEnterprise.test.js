@@ -79,6 +79,15 @@ describe('governance enterprise foundation', () => {
     expect(logs.some((item) => item.action === 'governance.report.exported')).toBe(true);
   });
 
+  it('empty org summary returns insufficient_data without baseline readiness scores', async () => {
+    const summary = await getGovernanceSummary({ organizationId: 'org_governance_empty' });
+    expect(summary.metrics.governanceReadinessScore).toBeNull();
+    expect(summary.metrics.boardReadinessScore).toBeNull();
+    expect(summary.metrics.governanceStatus).toBe('insufficient_data');
+    expect(summary.executiveSignalEligible).toBe(false);
+    expect(summary.humanReviewRequired).toBe(true);
+  });
+
   it('mantiene aislamiento multi-tenant y soporta reject/defer/escalate', async () => {
     const decision = await createGovernanceDecision('org_governance_a', { title: 'Tenant A decision' }, { userId: 'u_a' });
     expect(await getGovernanceDecisionById('org_governance_b', decision.id)).toBeNull();

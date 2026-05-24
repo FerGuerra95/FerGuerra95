@@ -5881,9 +5881,27 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### Siguiente fase recomendada
 
-**C.13.9 — Strategy/Governance Logic Integrity Audit READ ONLY**
+**C.13.9C — Strategy SoT + truthfulness**
 
-### C.13.8F — Reporting e2e/smoke closure + final Reporting status
+### C.13.9B — Governance SoT decision + truthfulness fix
+
+**Commit:** (pending) — `fix(governance): align approval permissions and truthfulness signals`
+
+**Fixes:** Approve UI → `APPROVE_GOVERNANCE_DECISION`; empty org null scores; hub 55/58/50 gated; `board_pack_ready` DSS metadata; board pack SoT boundary.
+
+**C13-P1-GOV-01:** PARTIALLY RESOLVED / OPERATIONAL DSS / GOLDEN PENDING
+
+**C13-P1-GOV-02:** RESOLVED / APPROVE UI API ALIGNED
+
+**C13-P1-GOV-03:** RESOLVED / GOVERNANCE VS REPORTING BOARD PACK BOUNDARY
+
+**C13-P1-GOV-04:** RESOLVED / BOARD PACK READY SIGNAL DSS LABEL
+
+**Governance global:** DSS OPERATIONAL / TRUTHFULNESS GATED / GOLDEN PENDING — **no RESOLVED global**
+
+**Siguiente:** C.13.9C Strategy
+
+### C.13.9A — Strategy/Governance Logic Integrity Audit READ ONLY
 
 **Commit:** `9a89b58` — `docs(reporting): record final reporting logic baseline status`
 

@@ -100,8 +100,8 @@ export function BoardPacksPage() {
   return (
     <EntityPage
       badge="Board Packs"
-      title="Governance board packs."
-      copy="Agenda, executive summary, key decisions, risks, highlights and evidence for board readiness."
+      title="Governance decision packs."
+      copy="Module-owned governance decision packs (agenda, summary, decisions, risks). Not the Reporting Board Pack aggregator. DSS only — human review required."
       load={governanceApi.listBoardPacks}
       create={governanceApi.createBoardPack}
       defaults={{ title: '', executiveSummary: '' }}

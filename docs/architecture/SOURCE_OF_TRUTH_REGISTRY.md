@@ -43,7 +43,7 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Compliance resilienceScore persisted | stored supplier fields | backend `compliance_suppliers` via payload clamp | Confirmed persistence SoT | FE recalculates on read; formula alignment pending | compliance_resilience_score_basic | C.13.1C-f1B |
 | Compliance resilienceScore calculated | UI resilience metric | Frontend `calculateResilienceScore` (current) | Assumed / Pending alignment | Differs from golden formula | compliance_resilience_score_basic | Subphase after naming |
 | Compliance evidence | evidence/reviews | backend compliance services | Assumed / Pending C.13 validation | | N/A | |
-| Governance decisions | decision workflow state | backend governance services | Assumed / Pending C.13 validation | Approve UX gaps | N/A | Strong backend per C.5 |
+| Governance decisions | decision workflow state | backend governance services | **TRUTHFULNESS GATED** (C.13.9B) | Approve UX aligned; Golden pending | N/A | Strong backend per C.5 |
 | PMI case dashboard | workstreams, ledger in case | `pmi_cases` JSON payload + FE store bridge | Partially resolved (C.13.7B docs) | mergeWithDemo contamination (C13-P1-09) | pmi_synergy_* (partial) | Multi-layer model documented; no code fix yet |
 | PMI enterprise synergies | synergy initiatives table | `pmi_synergy_initiatives` | Partially resolved (C.13.7B docs) | Not synced with case ledger (C13-P1-13) | pmi_synergy_* (partial) | Enterprise operational layer; no Golden helper yet |
 | Bridge signals | recalculated signals | bridge_signals + `bridge.service.js` heuristics | Partially resolved (C.13.5E Option C) | Dual-layer: `bridgePriorityGolden` vs `operationalSignalPriority`; product unchanged | bridge_priority_score_basic | DSS; human review required |
@@ -414,6 +414,23 @@ PMI does **not** have a single production capture formula today. It has multiple
 - Board Pack M&A/Funding branch recalculation (documented, not Golden).
 - Production smoke on deployed Render (separate from local e2e harness).
 - Global cross-module SoT closure (C.13.9+).
+
+## Governance / Board Pack boundary (C.13.9B)
+
+**Governance status:** **DSS OPERATIONAL / PRODUCT LOGIC BASELINE / TRUTHFULNESS GATED / GOLDEN PENDING**
+
+| Layer | Source-of-truth | Role | Status |
+|---|---|---|---|
+| Governance persisted data | SQLite `governance_*` via `governance.service.js` | Decisions, committees, policies, actions, controls, ESG | **OPERATIONAL DSS** |
+| `governanceReadinessScore` / `boardReadinessScore` | `calculateGovernanceMetrics` | Operational DSS heuristics — **not Golden**, **not certified** | **TRUTHFULNESS GATED** (C.13.9B) |
+| Governance decision packs | `governance_board_packs` | Module-owned governance decision/evidence packs | **MODULE SoT** |
+| Reporting Board Pack | `boardPack.service.js` | Cross-module **board review draft** aggregator | **AGGREGATOR DSS** — not Governance workflow SoT |
+| `governance.board_pack_ready` | Bridge signal key (legacy) | **Board review draft signal** — heuristic, `certifiedRating: false` | **TRUTHFULNESS LABELLED** (C.13.9B) |
+| Approve workflow | API `APPROVE_GOVERNANCE_DECISION` | UI gated on same permission (C.13.9B) | **RESOLVED mismatch** |
+
+**Empty org:** readiness scores **null**; `governanceStatus: insufficient_data`; `executiveSignalEligible: false`. Hub baselines 55/58/50 **removed** as exported scores.
+
+**Not closed:** Golden helper/tests for governance readiness; workflow state-machine guards (P2); Controls/ESG UI gaps; CEO global fallbacks (C.13.10).
 
 ## Executive Overview Special Rule
 

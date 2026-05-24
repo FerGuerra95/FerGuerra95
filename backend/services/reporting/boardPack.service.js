@@ -68,6 +68,14 @@ export function buildBoardPackScoringTruthfulness() {
       compliance: {
         operationalScore: 'legalHealthScore',
         nullMeansInsufficientData: true
+      },
+      governance: {
+        operationalMetrics: ['governanceReadinessScore', 'boardReadinessScore'],
+        sourceModule: 'governance',
+        governanceBoardPacksTable: 'governance_board_packs',
+        reportingBoardPackRole: 'cross_module_aggregator_not_governance_workflow_sot',
+        certifiedRating: false,
+        humanReviewRequired: true
       }
     }
   };

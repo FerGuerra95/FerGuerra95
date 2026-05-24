@@ -9,6 +9,7 @@ export function DecisionRegisterPage() {
   const navigate = useNavigate();
   const { PERMISSIONS, can } = useAuth();
   const readOnly = !can(PERMISSIONS.UPDATE_GOVERNANCE);
+  const canApprove = can(PERMISSIONS.APPROVE_GOVERNANCE_DECISION);
   const [items, setItems] = useState([]);
   const [form, setForm] = useState({ title: '', owner: '', priority: 'medium' });
   const [filter, setFilter] = useState('all');
@@ -42,7 +43,7 @@ export function DecisionRegisterPage() {
         <section className="governance-enterprise-hero ceos-ws-hero">
           <Badge>Decision Register</Badge>
           <h1 className="governance-enterprise-title">Executive decisions.</h1>
-          <p className="governance-enterprise-copy">Create, review, approve, escalate and implement governance decisions with audit history.</p>
+          <p className="governance-enterprise-copy">Create, review, submit and escalate governance decisions. Approve requires explicit approval permission and audit history.</p>
         </section>
         <form className="governance-enterprise-toolbar" onSubmit={create}>
           <label className="governance-enterprise-field">
@@ -64,6 +65,7 @@ export function DecisionRegisterPage() {
         <DecisionRegisterTable
           items={filtered}
           readOnly={readOnly}
+          canApprove={canApprove}
           onSelect={(item) => navigate(`/governance/decisions/${item.id}`)}
           onSubmit={(item) => run(governanceApi.submitDecision, item)}
           onApprove={(item) => run(governanceApi.approveDecision, item)}

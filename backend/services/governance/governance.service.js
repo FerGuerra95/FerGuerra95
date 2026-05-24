@@ -611,6 +611,48 @@ export async function finalizeGovernanceMeetingMinutes(organizationId, id, actor
 }
 
 export function calculateGovernanceMetrics({ decisions = [], boardPacks = [], committees = [], policies = [], actions = [], meetings = [] } = {}) {
+  const hasPersistedGovernanceData =
+    decisions.length + boardPacks.length + committees.length + policies.length + actions.length + meetings.length > 0;
+  const scoringTruthfulness = {
+    certifiedRating: false,
+    operationalDss: true,
+    goldenBenchmark: null,
+    humanReviewRequired: true,
+    note: 'Governance readiness is an operational DSS heuristic — not a certified governance rating.'
+  };
+
+  if (!hasPersistedGovernanceData) {
+    return {
+      governanceReadinessScore: null,
+      boardReadinessScore: null,
+      pendingDecisions: 0,
+      pendingCriticalDecisions: 0,
+      criticalDecisions: 0,
+      overdueDecisions: 0,
+      escalatedDecisions: 0,
+      boardPacksDraft: 0,
+      boardPacksReview: 0,
+      boardPacksFinal: 0,
+      overdueBoardActions: 0,
+      actionItemsOverdue: 0,
+      policyReviewRisk: 0,
+      upcomingPolicyReviews: 0,
+      upcomingCommittees: 0,
+      committeeReadiness: null,
+      governanceRisks: 0,
+      approvalBottlenecks: 0,
+      decisionVelocity: null,
+      implementedDecisions: 0,
+      requiresExecutiveAttention: false,
+      humanReviewPosture: 'human_review_required',
+      governanceStatus: 'insufficient_data',
+      dataSource: 'insufficient_data',
+      executiveSignalEligible: false,
+      humanReviewRequired: true,
+      scoringTruthfulness
+    };
+  }
+
   const pending = decisions.filter((item) => ['draft', 'under_review', 'deferred'].includes(text(item.status)));
   const critical = decisions.filter((item) => ['critical', 'high'].includes(text(item.priority).toLowerCase()) || bool(item.blockingDecision));
   const overdueDecisions = decisions.filter((item) => isPastDate(item.deadlineAt || item.dueDate) && !['approved', 'implemented', 'archived', 'rejected'].includes(text(item.status)));
@@ -623,15 +665,16 @@ export function calculateGovernanceMetrics({ decisions = [], boardPacks = [], co
   const draftPacks = boardPacks.filter((item) => text(item.status) === 'draft').length;
   const reviewPacks = boardPacks.filter((item) => text(item.status) === 'review').length;
   const finalPacks = boardPacks.filter((item) => text(item.status) === 'final').length;
-  const decisionVelocity = decisions.length > 0 ? clampScore((approved.length + implemented.length) / decisions.length * 100) : 0;
+  const decisionVelocity = decisions.length > 0 ? clampScore((approved.length + implemented.length) / decisions.length * 100) : null;
   const approvalBottlenecks = decisions.filter((item) => text(item.status) === 'under_review' && isPastDate(item.deadlineAt || item.dueDate)).length + escalated.length;
-  const committeeReadiness = committees.length > 0 ? clampScore((upcomingCommittees.length / committees.length) * 100) : 50;
+  const committeeReadiness =
+    committees.length > 0 ? clampScore((upcomingCommittees.length / committees.length) * 100) : null;
   const boardReadinessScore = clampScore(
     (finalPacks * 20) +
-      decisionVelocity * 0.28 +
+      (decisionVelocity ?? 0) * 0.28 +
       (100 - Math.min(100, overdueActions.length * 15)) * 0.18 +
       (100 - Math.min(100, policyReviewRisk.length * 15)) * 0.18 +
-      committeeReadiness * 0.16
+      (committeeReadiness ?? 0) * 0.16
   );
   const governanceReadinessScore = clampScore(
     boardReadinessScore * 0.42 +
@@ -645,15 +688,13 @@ export function calculateGovernanceMetrics({ decisions = [], boardPacks = [], co
     approvalBottlenecks > 0 ||
     policyReviewRisk.some((item) => text(item.status) === 'expired');
   const governanceStatus =
-    decisions.length + boardPacks.length + committees.length + policies.length === 0
-      ? 'insufficient_data'
-      : governanceReadinessScore >= 78 && !requiresExecutiveAttention
-        ? 'strong'
-        : governanceReadinessScore >= 62
-          ? 'watch'
-          : approvalBottlenecks > 2 || overdueActions.length > 2
-            ? 'blocked'
-            : 'risk';
+    governanceReadinessScore >= 78 && !requiresExecutiveAttention
+      ? 'strong'
+      : governanceReadinessScore >= 62
+        ? 'watch'
+        : approvalBottlenecks > 2 || overdueActions.length > 2
+          ? 'blocked'
+          : 'risk';
 
   return {
     governanceReadinessScore,
@@ -678,7 +719,11 @@ export function calculateGovernanceMetrics({ decisions = [], boardPacks = [], co
     implementedDecisions: implemented.length,
     requiresExecutiveAttention,
     humanReviewPosture: requiresExecutiveAttention ? 'human_review_required' : 'human_review_available',
-    governanceStatus
+    governanceStatus,
+    dataSource: 'operational_dss',
+    executiveSignalEligible: true,
+    humanReviewRequired: true,
+    scoringTruthfulness
   };
 }
 
@@ -700,7 +745,11 @@ export async function getGovernanceSummary(scope = {}) {
     metrics,
     latestDecision: decisions[0] || null,
     latestBoardPack: boardPacks[0] || null,
-    latestPolicy: policies[0] || null
+    latestPolicy: policies[0] || null,
+    humanReviewRequired: true,
+    executiveSignalEligible: metrics.executiveSignalEligible === true,
+    dataSource: metrics.dataSource || 'operational_dss',
+    scoringTruthfulness: metrics.scoringTruthfulness
   };
 }
 
@@ -762,6 +811,51 @@ export async function listGovernanceAuditLogs(organizationId, filters = {}) {
   });
 }
 
+export const GOVERNANCE_BRIDGE_SIGNAL_META = {
+  'governance.decision_required_for_ma': {
+    label: 'Governance decision signal (M&A)',
+    signalType: 'operational_dss',
+    certifiedRating: false,
+    humanReviewRequired: true,
+    note: 'Heuristic governance signal — not a certified board approval.'
+  },
+  'governance.decision_blocking_pmi': {
+    label: 'Governance decision signal (PMI)',
+    signalType: 'operational_dss',
+    certifiedRating: false,
+    humanReviewRequired: true,
+    note: 'Heuristic governance signal — not a certified board approval.'
+  },
+  'governance.policy_overdue_affects_compliance': {
+    label: 'Policy review signal',
+    signalType: 'operational_dss',
+    certifiedRating: false,
+    humanReviewRequired: true,
+    note: 'Operational policy review signal — not compliance certification.'
+  },
+  'governance.board_approval_required_for_funding': {
+    label: 'Board review draft signal (Funding)',
+    signalType: 'operational_dss',
+    certifiedRating: false,
+    humanReviewRequired: true,
+    note: 'Board review draft signal — not certified funding approval.'
+  },
+  'governance.risk_committee_required': {
+    label: 'Risk committee review signal',
+    signalType: 'operational_dss',
+    certifiedRating: false,
+    humanReviewRequired: true,
+    note: 'Operational risk committee signal — not certified oversight.'
+  },
+  'governance.board_pack_ready': {
+    label: 'Governance board review draft signal',
+    signalType: 'operational_dss',
+    certifiedRating: false,
+    humanReviewRequired: true,
+    note: 'Heuristic governance signal based on boardReadinessScore — not a certified board approval.'
+  }
+};
+
 export function buildGovernanceBridgeSignals(summary = {}) {
   const metrics = summary.metrics || summary;
   const signals = [];
@@ -770,8 +864,23 @@ export function buildGovernanceBridgeSignals(summary = {}) {
   if (metrics.policyReviewRisk > 0) signals.push('governance.policy_overdue_affects_compliance');
   if (metrics.approvalBottlenecks > 0) signals.push('governance.board_approval_required_for_funding');
   if (metrics.governanceRisks > 2) signals.push('governance.risk_committee_required');
-  if (metrics.boardReadinessScore >= 75) signals.push('governance.board_pack_ready');
+  if (Number.isFinite(Number(metrics.boardReadinessScore)) && metrics.boardReadinessScore >= 75) {
+    signals.push('governance.board_pack_ready');
+  }
   return signals;
+}
+
+export function buildGovernanceBridgeSignalDetails(summary = {}) {
+  return buildGovernanceBridgeSignals(summary).map((key) => ({
+    key,
+    ...(GOVERNANCE_BRIDGE_SIGNAL_META[key] || {
+      label: key,
+      signalType: 'operational_dss',
+      certifiedRating: false,
+      humanReviewRequired: true,
+      note: 'Heuristic governance signal — not a certified board approval.'
+    })
+  }));
 }
 
 export async function getGovernanceBridgeSignals(scope = {}) {
@@ -780,7 +889,8 @@ export async function getGovernanceBridgeSignals(scope = {}) {
     version: 'governance-bridge-signals-v1',
     organizationId: scope.organizationId,
     generatedAt: new Date().toISOString(),
-    signals: buildGovernanceBridgeSignals(summary)
+    signals: buildGovernanceBridgeSignals(summary),
+    signalDetails: buildGovernanceBridgeSignalDetails(summary)
   };
 }
 
@@ -791,7 +901,7 @@ export function summarizeGovernance({ decisions = [], controls = [], esgMetrics 
   const controlEffectiveness =
     controls.length > 0
       ? clampScore(controls.reduce((sum, item) => sum + number(item.effectiveness), 0) / controls.length)
-      : 58;
+      : null;
   const esgReadiness =
     esgMetrics.length > 0
       ? clampScore(
@@ -800,8 +910,12 @@ export function summarizeGovernance({ decisions = [], controls = [], esgMetrics 
             return sum + (target > 0 ? Math.min(100, (number(item.value) / target) * 100) : 0);
           }, 0) / esgMetrics.length
         )
-      : 55;
+      : null;
   const enterprise = calculateGovernanceMetrics({ decisions, boardPacks, committees, policies, actions, meetings });
+  const fallbackScore =
+    enterprise.executiveSignalEligible && controlEffectiveness !== null && esgReadiness !== null
+      ? clampScore(controlEffectiveness * 0.4 + esgReadiness * 0.3)
+      : null;
   return {
     decisionsCount: decisions.length,
     openDecisionsCount: legacyOpen.length,
@@ -814,7 +928,7 @@ export function summarizeGovernance({ decisions = [], controls = [], esgMetrics 
     evidenceReadiness: decisions.length > 0 ? clampScore((evidenceReady.length / decisions.length) * 100) : 0,
     boardApprovalQueueCount: decisions.filter((item) => bool(item.boardApprovalRequired)).length,
     ...enterprise,
-    score: enterprise.governanceReadinessScore || clampScore(controlEffectiveness * 0.4 + esgReadiness * 0.3)
+    score: enterprise.governanceReadinessScore ?? fallbackScore
   };
 }
 
@@ -831,15 +945,26 @@ export async function getGovernanceExecutiveHubBrief(scope = {}) {
     listGovernanceMeetings(scope.organizationId)
   ]);
   const metrics = summarizeGovernance({ decisions, controls, esgMetrics, boardPacks, committees, policies, actions, meetings });
+  const hasSignal = metrics.executiveSignalEligible === true;
   return {
     version: 'governance-executive-hub-v2',
     organizationId: scope.organizationId,
     generatedAt: new Date().toISOString(),
-    score: metrics.governanceReadinessScore || metrics.score,
-    posture: metrics.requiresExecutiveAttention ? 'Executive attention required' : metrics.score >= 75 ? 'Board controls active' : 'Formalize board controls',
+    score: hasSignal ? (metrics.governanceReadinessScore ?? metrics.score ?? null) : null,
+    posture: !hasSignal
+      ? 'Insufficient persisted governance data'
+      : metrics.requiresExecutiveAttention
+        ? 'Executive attention required'
+        : Number.isFinite(Number(metrics.governanceReadinessScore)) && metrics.governanceReadinessScore >= 75
+          ? 'Operational governance signal — board review draft'
+          : 'Formalize board controls — DSS only',
     title: decisions[0]?.title || boardPacks[0]?.title || 'Governance control foundation',
     metrics,
-    latestDecision: decisions[0] || null
+    latestDecision: decisions[0] || null,
+    humanReviewRequired: true,
+    executiveSignalEligible: hasSignal,
+    dataSource: metrics.dataSource || (hasSignal ? 'operational_dss' : 'insufficient_data'),
+    scoringTruthfulness: metrics.scoringTruthfulness
   };
 }
 

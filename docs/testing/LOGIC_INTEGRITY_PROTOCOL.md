@@ -536,6 +536,24 @@ Reporting today remains:
 
 **Next:** **C.13.9 — Strategy/Governance Logic Integrity Audit READ ONLY**
 
+## C.13.9B — Governance SoT decision + truthfulness fix
+
+**Fixes:** Approve UI uses `APPROVE_GOVERNANCE_DECISION`; empty org null readiness; hub baselines 55/58/50 gated; `governance.board_pack_ready` signal metadata; Governance vs Reporting board pack boundary.
+
+**C13-P1-GOV-01:** **PARTIALLY RESOLVED / GOVERNANCE READINESS CLASSIFIED AS OPERATIONAL DSS / GOLDEN PENDING**
+
+**C13-P1-GOV-02:** **RESOLVED / APPROVE UI API PERMISSION ALIGNED**
+
+**C13-P1-GOV-03:** **RESOLVED / GOVERNANCE VS REPORTING BOARD PACK SOT BOUNDARY DOCUMENTED**
+
+**C13-P1-GOV-04:** **RESOLVED / BOARD PACK READY SIGNAL LABELLED AS DSS HEURISTIC**
+
+**C13-P2-GOV-04:** **RESOLVED / GOVERNANCE EMPTY BASELINES GATED**
+
+**Governance global:** **DSS OPERATIONAL / PRODUCT LOGIC BASELINE / TRUTHFULNESS GATED / GOLDEN PENDING** — not RESOLVED global.
+
+**Next:** C.13.9C Strategy SoT/truthfulness · C.13.10 CEO fallbacks.
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor
