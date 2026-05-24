@@ -5867,7 +5867,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.7G — PMI final smoke / zero forecast product behavior decision
 
-**Commit:** (pending) — `fix(pmi): align zero denominator capture semantics`
+**Commit:** `30869ca` — `fix(pmi): align zero denominator capture semantics`
 
 **Decisión:** **Option B** — operational case/ledger/enterprise capture return `null` when denominator ≤ 0; UI/export show N/A; Golden unchanged.
 
