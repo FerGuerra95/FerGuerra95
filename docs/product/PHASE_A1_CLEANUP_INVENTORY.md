@@ -1751,7 +1751,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P2-01 | Bridge marketplace ruta viva demo unlisted | `/bridge/marketplace` en `routes.jsx`; no en sidebar; `DEMO_BRIDGE_*` fallback |
 | C13-P2-02 | Bridge service acoplado a 8+ módulos | `bridge.service.js` imports cross-module summaries |
 | C13-P2-03 | Executive Overview aggregator, no master SoT | `executiveOverview.service.js`, `readinessIndex.service.js` |
-| C13-P2-04 | Reporting variance source unclear | Sin implementación `varianceAmount` localizada en `backend/services/reporting` |
+| C13-P2-04 | Reporting variance source unclear | **SOT DECISION DOCUMENTED (C.13.8C)** — OPTION C Golden benchmark; no product impl; pending C.13.8D helper | C.13.8D |
 | C13-P2-05 | M&A localStorage cases | `valuationFormulas.js` `STORAGE_KEYS` |
 | C13-P2-06 | Compliance demo tools | `SHOW_DEMO_TOOLS` en `SuppliersPage.jsx` |
 | C13-P2-07 | AppShell outlet fallback (no lógica negocio) | `AppShell.jsx` loading panel |
@@ -3013,7 +3013,7 @@ La cadena **C.13.1C Compliance scoring** queda **cerrada** para el alcance:
 | PMI | `PMI_CAPTURE_RATE` | Pending C.13.6 |
 | Bridge | `BRIDGE_PRIORITY` | Pending C.13.7 |
 | Risk | `RISK_LIKELIHOOD_IMPACT` | Pending C.13.8 |
-| Reporting | `REPORTING_VARIANCE` | Pending C.13.9 |
+| Reporting | `REPORTING_VARIANCE` | **OPTION C documented (C.13.8C)** — Golden benchmark; pending C.13.8D helper/tests |
 | Executive | `EXEC_MODULE_HEALTH_AVG` | Pending C.13.1 |
 
 ### Qué NO se tocó
@@ -5881,7 +5881,25 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### Siguiente fase recomendada
 
-**C.13.8C — Reporting SoT decision / variance decision docs-only** (or variance Golden helper if authorized)
+**C.13.8D — Reporting variance Golden helper/tests** (oracle only; no product)
+
+### C.13.8C — Reporting SoT decision / variance decision — DOCS ONLY
+
+**Commit:** (pending) — `docs(reporting): record variance source-of-truth decision`
+
+**Decisión:** **OPTION C** — `REPORTING_VARIANCE` = Golden benchmark / future product capability. Reporting **no** es motor transversal de varianzas productivas hoy.
+
+**Opciones documentadas:** A defer · B helper/tests (C.13.8D) · **C aprobada** · D product now (rechazada)
+
+**No tocado:** código, tests, `golden_inputs.json`, `FORMULA_REGISTRY.md`, Board Pack, Executive, UI.
+
+**C13-P1-20:** PARTIALLY RESOLVED / REPORTING TRUTHFULNESS TESTS ADDED / VARIANCE SOT DOCUMENTED
+
+**C13-P2-REPORTING-01:** REPORTING_VARIANCE MAPPED / NO PRODUCT IMPLEMENTATION / SOT DECISION DOCUMENTED
+
+**Reporting global:** AGGREGATOR RISK MITIGATED / REPORTING VARIANCE SOT DOCUMENTED / PENDING HELPER TESTS — **no RESOLVED global**
+
+**Roadmap:** C.13.8D Golden helper · C.13.8E product alignment · C.13.8F e2e/smoke
 
 ### C.13.8A — Reporting Logic Integrity Audit READ ONLY
 

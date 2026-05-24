@@ -317,9 +317,36 @@ PMI does **not** have a single production capture formula today. It has multiple
 | Reporting library | Persisted report metadata CRUD | **OPERATIONAL DSS** — tenant-scoped |
 | Board Pack aggregator | Cross-module hub aggregation | **TRUTHFULNESS GATED** (C.13.8B) — preserves PMI null; Compliance null; scoringTruthfulness |
 | Executive Command Center | Module summary + readiness index | **TRUTHFULNESS GATED** (C.13.8B) — insufficient_data for empty modules; no silent readiness fallbacks |
-| REPORTING_VARIANCE | Golden KPI variance | **PENDING** — oracle exists; product code not implemented |
+| REPORTING_VARIANCE | Golden KPI variance (`reportingVarianceGolden`) | **OPTION C — GOLDEN BENCHMARK / FUTURE PRODUCT** (C.13.8C) — no product code; pending C.13.8D helper/tests |
 
-**Reporting status:** **AGGREGATOR RISK MITIGATED / PENDING REPORTING VARIANCE SOT** — not RESOLVED global until variance SoT decision + implementation phase.
+**Reporting status:** **AGGREGATOR RISK MITIGATED / REPORTING VARIANCE SOT DOCUMENTED / PENDING HELPER TESTS** — not RESOLVED global until Golden helper/tests (C.13.8D) and optional product alignment (C.13.8E).
+
+## REPORTING_VARIANCE — Source-of-Truth Decision (C.13.8C)
+
+**Decision:** **OPTION C — Reporting variance as Golden benchmark / future product capability**
+
+| Item | Decision |
+|---|---|
+| Logical name | `reportingVarianceGolden` |
+| Golden ID | `reporting_kpi_variance_basic` |
+| Formula (oracle) | `absoluteVariance = actual - expected` (Golden JSON uses `budget` as expected); `variancePercent = expected !== 0 ? (actual - expected) / expected : null` |
+| Product owner | **None today** — Reporting is not the cross-module variance engine |
+| Board Pack / Executive / Reporting UI | **Must not use** until explicit product alignment phase (C.13.8E) |
+| Certified KPI | **No** — DSS / management reporting only; human review required |
+
+**Options considered:** A defer entirely · B Golden helper/tests only (next) · **C selected** · D product implementation now (rejected — cross-module SoT risk)
+
+**Module-specific variance remains owned by source modules** (M&A valuation bands, Funding runway, PMI capture vs forecast, Risk score movement, Compliance resilience, etc.). Reporting must not impose a single generic variance as enterprise truth.
+
+## Reporting SoT layers (C.13.8C)
+
+| Area | Source-of-truth | Product role | Status |
+|---|---|---|---|
+| Reporting library | SQLite `enterprise_reports`, templates, exports, evidence, schedules | Persisted **metadata** workflow; not Golden calculation engine | **OPERATIONAL DSS** |
+| `reportingReadinessScore` | `calculateReportingMetrics` on metadata counts | Meta-reporting heuristic; null when no persisted data (C.13.8B) | **OPERATIONAL DSS** |
+| Board Pack | `generateBoardPack` hub aggregation | DSS pack draft; `scoringTruthfulness`; not certified board-ready | **TRUTHFULNESS GATED** (C.13.8B) |
+| Executive Command Center | `collectExecutiveModuleSummaries` + `readinessIndex` | DSS aggregation; `insufficient_data` for empty modules (C.13.8B) | **TRUTHFULNESS GATED** |
+| REPORTING_VARIANCE | `docs/testing/golden_inputs.json` | Golden benchmark candidate only | **PENDING HELPER/TESTS** (C.13.8D) |
 
 ## Executive Overview Special Rule
 

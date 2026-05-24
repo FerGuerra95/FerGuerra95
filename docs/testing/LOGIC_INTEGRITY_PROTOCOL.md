@@ -396,6 +396,43 @@ PMI calculations are separated into multiple layers. Do not collapse them into o
 
 **Reporting global:** **AGGREGATOR RISK MITIGATED / PENDING REPORTING VARIANCE SOT** — not RESOLVED global (`REPORTING_VARIANCE` still unimplemented).
 
+## Reporting variance SoT decision (C.13.8C — DOCS ONLY)
+
+**Decision:** **OPTION C — Reporting variance as Golden benchmark / future product capability**
+
+Reporting today remains:
+- persisted reporting metadata workflow;
+- evidence/report library;
+- board pack DSS aggregator (truthfulness gated in C.13.8B);
+- executive reporting aggregation layer;
+- decision-support pack generator — **not** a cross-module calculation engine.
+
+**REPORTING_VARIANCE (`reportingVarianceGolden`):**
+- Golden benchmark / formula approval candidate (`reporting_kpi_variance_basic` in `golden_inputs.json`).
+- **No product implementation** in `backend/services/reporting/**` (confirmed C.13.8A).
+- **No use** in Board Pack, Executive Overview, or Reporting UI until C.13.8E product alignment is authorized.
+- Does **not** override module-specific variance semantics (M&A, Funding, PMI, Risk, Compliance).
+
+**Formula reference (oracle only):**
+- `absoluteVariance = actual - expected`
+- `variancePercent = expected !== 0 ? (actual - expected) / expected : null`
+- Golden JSON maps `budget` → expected input name.
+
+**Options documented:** A defer · B helper/tests only (recommended next: C.13.8D) · **C approved** · D product now (rejected).
+
+**C13-P1-20:** **PARTIALLY RESOLVED / REPORTING TRUTHFULNESS TESTS ADDED / VARIANCE SOT DOCUMENTED**
+
+**C13-P2-REPORTING-01:** **REPORTING_VARIANCE MAPPED / NO PRODUCT IMPLEMENTATION / SOT DECISION DOCUMENTED**
+
+**Reporting global:** **AGGREGATOR RISK MITIGATED / REPORTING VARIANCE SOT DOCUMENTED / PENDING HELPER TESTS** — not RESOLVED global.
+
+**Roadmap (not executed in C.13.8C):**
+- **C.13.8D** — Reporting variance Golden helper/tests (`reportingGoldenFormulas.js`, oracle only, no product).
+- **C.13.8E** — Reporting product alignment decision (per-module vs generic variance in UI/Board Pack).
+- **C.13.8F** — Reporting e2e/smoke closure (backend `:4000`).
+
+**No code/tests/Golden Dataset changes in C.13.8C.**
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor
