@@ -4,7 +4,7 @@ import { loginAsDemoAdmin } from '../helpers/auth.js';
 const GOVERNANCE_ENTERPRISE_ROUTES = [
   ['/governance/dashboard', 'Governance command center.'],
   ['/governance/decisions', 'Executive decisions.'],
-  ['/governance/board-packs', 'Governance board packs.'],
+  ['/governance/board-packs', 'Governance decision packs.'],
   ['/governance/policies', 'Corporate policy register.'],
   ['/governance/committees', 'Committee operations.'],
   ['/governance/actions', 'Governance action items.'],
