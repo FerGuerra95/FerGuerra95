@@ -5885,7 +5885,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.8C — Reporting SoT decision / variance decision — DOCS ONLY
 
-**Commit:** (pending) — `docs(reporting): record variance source-of-truth decision`
+**Commit:** `5e88266` — `docs(reporting): record variance source-of-truth decision`
 
 **Decisión:** **OPTION C** — `REPORTING_VARIANCE` = Golden benchmark / future product capability. Reporting **no** es motor transversal de varianzas productivas hoy.
 
