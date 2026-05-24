@@ -5885,7 +5885,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.9C — Strategy SoT decision + truthfulness fix
 
-**Commit:** (pending) — `fix(strategy): gate readiness fallbacks and clarify truthfulness`
+**Commit:** 39f4076 — `fix(strategy): gate readiness fallbacks and clarify truthfulness`
 
 **Fixes:** Empty org null scores (no 60 defaults); CEO Strategy fallback gated; Board Pack Strategy exclusion; report metadata copy; `strategicRiskLevel` not_assessed when zero risks.
 
