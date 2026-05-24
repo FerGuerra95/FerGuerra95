@@ -1673,8 +1673,16 @@ export function PMIDashboardPage() {
 
             <KpiCard
               label="Capture rate"
-              value={`${engine.synergyCaptureRate}%`}
-              description="Porcentaje de sinergias capturadas frente al objetivo."
+              value={
+                engine.synergyCaptureRate === null || engine.synergyCaptureRate === undefined
+                  ? 'N/A · zero target'
+                  : `${engine.synergyCaptureRate}%`
+              }
+              description={
+                engine.synergyCaptureRate === null || engine.synergyCaptureRate === undefined
+                  ? 'Insufficient denominator — operational DSS (not Golden).'
+                  : 'Porcentaje de sinergias capturadas frente al objetivo.'
+              }
               icon={Target}
             />
 

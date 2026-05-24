@@ -213,6 +213,18 @@ function clampScore(value) {
   return Math.max(0, Math.min(100, Math.round(normalizeNumber(value))));
 }
 
+/** Operational DSS capture % — null when denominator is zero/invalid (Golden uses null via pmiCaptureRateGolden). */
+function operationalCapturePercent(captured, denominator) {
+  const cap = normalizeNumber(captured);
+  const denom = normalizeNumber(denominator);
+
+  if (denom <= 0) {
+    return null;
+  }
+
+  return Math.max(0, Math.min(100, Math.round((cap / denom) * 100)));
+}
+
 function assertOrganizationId(organizationId) {
   if (!normalizeText(organizationId)) {
     throw createError('Scope de organizacion no definido.', 403, 'INVALID_SCOPE');
@@ -358,8 +370,7 @@ function getLedgerTotals(synergyLedger = []) {
   return {
     ledgerForecast: forecast,
     ledgerCaptured: captured,
-    ledgerCaptureRate:
-      forecast > 0 ? Math.max(0, Math.min(100, Math.round((captured / forecast) * 100))) : 0,
+    ledgerCaptureRate: operationalCapturePercent(captured, forecast),
     ledgerConfidenceScore:
       items.length > 0 ? Math.max(0, Math.min(100, Math.round(confidence / items.length))) : 0
   };
@@ -547,10 +558,7 @@ export function buildPmiSignal(pmiCase) {
 
   const synergyTarget = normalizeNumber(pmiCase.synergyTarget);
   const synergyCaptured = normalizeNumber(pmiCase.synergyCaptured);
-  const synergyCaptureRate =
-    synergyTarget > 0
-      ? Math.max(0, Math.min(100, Math.round((synergyCaptured / synergyTarget) * 100)))
-      : 0;
+  const synergyCaptureRate = operationalCapturePercent(synergyCaptured, synergyTarget);
   const workstreamProgress = getAverageProgress(pmiCase.workstreams);
   const milestoneProgress = getAverageProgress(pmiCase.milestones);
   const highRiskCount = getHighRiskCount(pmiCase.risks);
@@ -564,8 +572,8 @@ export function buildPmiSignal(pmiCase) {
       Math.round(
         workstreamProgress * 0.24 +
           milestoneProgress * 0.18 +
-          synergyCaptureRate * 0.18 +
-          ledger.ledgerCaptureRate * 0.12 +
+          (synergyCaptureRate ?? 0) * 0.18 +
+          (ledger.ledgerCaptureRate ?? 0) * 0.12 +
           playbookProgress * 0.12 +
           dependencyRiskScore * 0.08 +
           Math.max(0, 100 - highRiskCount * 18) * 0.08
@@ -1242,7 +1250,8 @@ export function calculatePmiEnterpriseMetrics({
   const legacyRisks = cases.flatMap((item) => normalizeArray(item.risks));
   const totalSynergyTarget = synergies.reduce((sum, item) => sum + normalizeNumber(item.targetValue), 0) || cases.reduce((sum, item) => sum + normalizeNumber(item.synergyTarget), 0) || legacyLedger.reduce((sum, item) => sum + normalizeNumber(item.forecast), 0);
   const capturedSynergy = synergies.reduce((sum, item) => sum + normalizeNumber(item.capturedValue), 0) || cases.reduce((sum, item) => sum + normalizeNumber(item.synergyCaptured), 0) || legacyLedger.reduce((sum, item) => sum + normalizeNumber(item.captured), 0);
-  const synergyCaptureRatio = totalSynergyTarget > 0 ? clampScore((capturedSynergy / totalSynergyTarget) * 100) : 0;
+  const synergyCaptureRatio = operationalCapturePercent(capturedSynergy, totalSynergyTarget);
+  const captureForReadiness = synergyCaptureRatio ?? 0;
   const allMilestones = [...milestones, ...legacyMilestones];
   const delayedMilestones = allMilestones.filter((item) => {
     const status = normalizeText(item.status).toLowerCase();
@@ -1267,7 +1276,7 @@ export function calculatePmiEnterpriseMetrics({
   const riskControlScore = clampScore(100 - criticalIntegrationRisks.length * 18 - delayedMilestones.length * 8 - tsaRisk * 8 - peopleRisk * 8 - technologyRisk * 8);
   const integrationReadinessScore = clampScore(
     day1ReadinessScore * 0.2 +
-      synergyCaptureRatio * 0.25 +
+      captureForReadiness * 0.25 +
       milestoneProgress * 0.2 +
       riskControlScore * 0.25 +
       Math.max(0, 100 - blockedSynergies.length * 15) * 0.1
@@ -1278,7 +1287,14 @@ export function calculatePmiEnterpriseMetrics({
     blockedSynergies.length > 0 ||
     tsaRisk > 0 ||
     day1ReadinessScore < 70;
-  const valueCaptureStatus = synergyCaptureRatio >= 75 ? 'on_track' : blockedSynergies.length > 0 ? 'at_risk' : 'building';
+  const valueCaptureStatus =
+    synergyCaptureRatio === null
+      ? 'not_calculable'
+      : synergyCaptureRatio >= 75
+        ? 'on_track'
+        : blockedSynergies.length > 0
+          ? 'at_risk'
+          : 'building';
   const pmiStatus =
     cases.length + programs.length + synergies.length + milestones.length === 0
       ? 'insufficient_data'
@@ -1400,7 +1416,9 @@ export async function generatePmiReport(organizationId, payload = {}, actor = {}
         ],
         humanReviewRequired: true,
         certifiedRating: false,
-        note: 'Operational PMI metrics are decision-support signals and may differ from Golden benchmarks.'
+        note: 'Operational PMI metrics are decision-support signals and may differ from Golden benchmarks.',
+        zeroDenominatorOperational: 'null when target/forecast <= 0 (aligned with Golden null semantics)',
+        zeroDenominatorGolden: 'pmiCaptureRateGolden returns null when forecast <= 0'
       },
       humanReviewRequired: true
     }
@@ -1417,7 +1435,12 @@ export async function listPmiReports(organizationId) {
 export function buildPmiBridgeSignals(summary = {}) {
   const metrics = summary.metrics || summary;
   const signals = [];
-  if (metrics.delayedMilestones > 0 || metrics.synergyCaptureRatio < 50) signals.push('pmi.synergy_delay_affects_ma_value');
+  if (
+    metrics.delayedMilestones > 0 ||
+    (metrics.synergyCaptureRatio != null && metrics.synergyCaptureRatio < 50)
+  ) {
+    signals.push('pmi.synergy_delay_affects_ma_value');
+  }
   if (metrics.criticalBlockers > 0 || metrics.requiresExecutiveAttention) signals.push('pmi.governance_decision_required');
   if (metrics.criticalIntegrationRisks > 0) signals.push('pmi.integration_risk_critical');
   if (metrics.blockedSynergies > 0 || metrics.valueCaptureStatus === 'at_risk') signals.push('pmi.value_capture_at_risk');
@@ -1467,10 +1490,7 @@ export async function getPmiExecutiveHubBrief(scope = {}) {
   const synergyCaptured = normalizeNumber(latestCase?.synergyCaptured);
   const integrationBudget = normalizeNumber(latestCase?.integrationBudget);
   const integrationCostUsed = normalizeNumber(latestCase?.integrationCostUsed);
-  const synergyCaptureRate =
-    synergyTarget > 0
-      ? Math.max(0, Math.min(100, Math.round((synergyCaptured / synergyTarget) * 100)))
-      : 0;
+  const synergyCaptureRate = operationalCapturePercent(synergyCaptured, synergyTarget);
   const budgetUsedRate =
     integrationBudget > 0
       ? Math.max(0, Math.min(100, Math.round((integrationCostUsed / integrationBudget) * 100)))

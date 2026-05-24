@@ -30,13 +30,13 @@ describe('operationalPmiCaseCapture — synergyCaptured / synergyTarget (DSS cas
     expect(result.isCalculable).toBe(true);
   });
 
-  it('returns 0% when target is zero (operational current behavior — differs from Golden null)', () => {
+  it('returns null when target is zero (aligned with Golden null semantics)', () => {
     const result = calculateOperationalPmiCaseCapture({
       synergyTarget: 0,
       synergyCaptured: 100_000
     });
 
-    expect(result.captureRatePercent).toBe(0);
+    expect(result.captureRatePercent).toBeNull();
     expect(result.isCalculable).toBe(false);
     expect(result.reason).toBe('target_zero_or_invalid');
   });
@@ -50,14 +50,14 @@ describe('operationalPmiCaseCapture — synergyCaptured / synergyTarget (DSS cas
     expect(result.captureRatePercent).toBe(25);
   });
 
-  it('does not return NaN or Infinity for invalid numeric strings', () => {
+  it('returns null for invalid target string (normalizes to zero denominator)', () => {
     const result = calculateOperationalPmiCaseCapture({
       synergyTarget: 'bad',
       synergyCaptured: 1_000_000
     });
 
-    expect(Number.isFinite(result.captureRatePercent)).toBe(true);
-    expect(result.captureRatePercent).toBe(0);
+    expect(result.captureRatePercent).toBeNull();
+    expect(result.isCalculable).toBe(false);
   });
 });
 
@@ -73,19 +73,19 @@ describe('operationalPmiLedgerCapture — Σcaptured / Σforecast (DSS ledger)',
     expect(result.captureRatePercent).toBe(30);
   });
 
-  it('returns 0% when forecast sum is zero (operational — Golden zero forecast requires null)', () => {
+  it('returns null when forecast sum is zero (aligned with Golden zero forecast)', () => {
     const result = calculateOperationalPmiLedgerCapture([
       { forecast: 0, captured: 100_000 }
     ]);
 
-    expect(result.captureRatePercent).toBe(0);
+    expect(result.captureRatePercent).toBeNull();
     expect(result.isCalculable).toBe(false);
   });
 
-  it('returns 0% for empty ledger without NaN', () => {
+  it('returns null for empty ledger without NaN', () => {
     const result = calculateOperationalPmiLedgerCapture([]);
 
-    expect(result.captureRatePercent).toBe(0);
+    expect(result.captureRatePercent).toBeNull();
     expect(result.ledgerForecast).toBe(0);
     expect(result.ledgerCaptured).toBe(0);
     expect(Number.isNaN(result.captureRatePercent)).toBe(false);
@@ -111,13 +111,21 @@ describe('operationalPmiEnterpriseCapture — capturedValue / targetValue (DSS e
     expect(result.source).toBe('synergies');
   });
 
-  it('returns 0% when total targetValue is zero', () => {
+  it('returns null when total targetValue is zero', () => {
     const result = calculateOperationalPmiEnterpriseCaptureRatio({
       synergies: [{ targetValue: 0, capturedValue: 620_000 }]
     });
 
-    expect(result.synergyCaptureRatio).toBe(0);
-    expect(Number.isFinite(result.synergyCaptureRatio)).toBe(true);
+    expect(result.synergyCaptureRatio).toBeNull();
+  });
+
+  it('calculatePmiEnterpriseMetrics sets not_calculable when enterprise target is zero', () => {
+    const metrics = calculatePmiEnterpriseMetrics({
+      synergies: [{ targetValue: 0, capturedValue: 620_000, status: 'in_progress' }]
+    });
+
+    expect(metrics.synergyCaptureRatio).toBeNull();
+    expect(metrics.valueCaptureStatus).toBe('not_calculable');
   });
 
   it('prefers enterprise synergies over case targets when synergy sums are positive', () => {
@@ -226,11 +234,11 @@ describe('PMI dual-layer truthfulness — Golden vs operational DSS', () => {
     expect(operational.captureRatePercent).not.toBe(golden.captureRatePercent);
   });
 
-  it('ledger operational zero forecast returns 0%; Golden returns null', () => {
+  it('ledger operational zero forecast returns null; Golden returns null', () => {
     const operational = calculateOperationalPmiLedgerCapture([{ forecast: 0, captured: 100_000 }]);
     const golden = calculatePmiCaptureRateGolden({ forecastSynergy: 0, capturedSynergy: 100_000 });
 
-    expect(operational.captureRatePercent).toBe(0);
+    expect(operational.captureRatePercent).toBeNull();
     expect(golden.captureRatePercent).toBeNull();
     expect(golden.isCalculable).toBe(false);
   });

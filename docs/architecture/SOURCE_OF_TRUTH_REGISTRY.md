@@ -294,7 +294,7 @@ PMI does **not** have a single production capture formula today. It has multiple
 |---|---|---|---|---|
 | Golden benchmark | `pmiCaptureRateGolden` | `capturedSynergy / forecastSynergy`; if forecast = 0 => `null` | Oracle / Formula Approval benchmark | **IMPLEMENTED AND TESTED** (C.13.7C) — `backend/services/pmi/pmiGoldenFormulas.js` |
 | Case operational capture | `operationalPmiCaseCapture` | `synergyCaptured / synergyTarget` (case payload) | DSS case dashboard signal | **OPERATIONAL TESTED** (C.13.7D) — harness mirrors service; target≠forecast |
-| Ledger operational capture | `operationalPmiLedgerCapture` | `Σcaptured / Σforecast` (synergy ledger) | DSS ledger capture view | **OPERATIONAL TESTED** (C.13.7D) — zero forecast returns 0% operationally |
+| Ledger operational capture | `operationalPmiLedgerCapture` | `Σcaptured / Σforecast` (synergy ledger) | DSS ledger capture view | **ALIGNED** (C.13.7G) — zero forecast returns `null` (N/A in UI) |
 | Enterprise operational capture | `operationalPmiEnterpriseCapture` | `capturedValue / targetValue` with case/ledger fallback in metrics pipeline | DSS enterprise initiatives view | **OPERATIONAL TESTED** (C.13.7D) — sync SoT still open (C13-P1-13 partial) |
 | Readiness heuristic | `operationalPmiReadinessScore` | Weighted readiness/integration composite (`pmiReadinessScore`, `integrationReadinessScore`, `integrationScore`) | Operational DSS executive posture | **OPERATIONAL TESTED** (C.13.7D) — not Golden; `pmi_integration_health` still future |
 | Demo/template layer | `demoPmiCase` | `DEMO_PMI_CASE` + explicit demo/template/fallback helpers in `pmiStore.jsx` | Template/fallback only | **DEMO GATED** (C.13.7E) — no silent `mergeWithDemo` into persisted cases |
@@ -308,8 +308,7 @@ PMI does **not** have a single production capture formula today. It has multiple
 4. Demo/template layer is not enterprise source-of-truth and must not be mixed into executive truth without explicit labeling/gating.
 5. CEO/Hub must distinguish persisted operational data vs demo/default/fallback states.
 
-**PMI status:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL + DEMO + UI TRUTHFULNESS GATED** (C.13.7F). Golden (C.13.7C), operational tests (C.13.7D), demo/CEO gating (C.13.7E), UI/report labels and cross-tenant PMI tests (C.13.7F) are in place. Product zero-forecast operational behavior (0% vs Golden null) remains a documented intentional divergence until a controlled alignment phase.  
-Do not mark PMI as APPROVED/RESOLVED until C.13.7G+ or explicit global closure decision.
+**PMI status:** **RESOLVED PRODUCT LOGIC / MULTI-LAYER PMI MODEL CLOSED** (C.13.7G). Golden (C.13.7C), operational tests (C.13.7D), demo/CEO gating (C.13.7E), UI/report truthfulness (C.13.7F), zero-denominator alignment (C.13.7G Option B) are in place. Residual: E2E/prod smoke when backend unavailable; future PDF/HTML report renderer — P2/P3, not P1 logic blockers.
 
 ## Executive Overview Special Rule
 

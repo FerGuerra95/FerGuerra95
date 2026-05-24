@@ -347,6 +347,31 @@ PMI calculations are separated into multiple layers. Do not collapse them into o
 
 **PMI status after C.13.7F:** **MISMATCH CONFIRMED / GOLDEN + OPERATIONAL + DEMO + UI TRUTHFULNESS GATED** (not approved, not globally resolved).
 
+## PMI zero denominator alignment (C.13.7G — Option B)
+
+**Decision:** **Option B** — operational capture layers return `null` when target/forecast/denominator ≤ 0 (aligned with Golden `pmiCaptureRateGolden` null semantics). Composite readiness/integration scores use `(rate ?? 0)` only inside weighted formulas — not as displayed capture truth.
+
+1. **Product:** `operationalCapturePercent` in `pmi.service.js`; mirrored in `usePMIEngine.js` and `pmiOperationalFormulas.js` harness.
+2. **Layers aligned:** case capture, ledger capture, enterprise `synergyCaptureRatio`, hub brief case rate, `buildPmiSignal`.
+3. **UI/export:** KPI card and enterprise widget show `N/A · insufficient denominator`; board memo HTML export uses N/A copy; signal rows already gated on target/forecast > 0.
+4. **Reports:** `scoringTruthfulness.zeroDenominatorOperational` / `zeroDenominatorGolden` metadata on export payload.
+5. **Enterprise status:** `valueCaptureStatus: not_calculable` when capture ratio is null.
+6. **Golden untouched:** `pmiGoldenFormulas.js`, `golden_inputs.json`, Formula Registry unchanged.
+
+**C13-P1-10 status (C.13.7G):** **RESOLVED / ZERO DENOMINATOR ALIGNED TO NULL**.
+
+**C13-P1-11 status (C.13.7G):** **RESOLVED / GOLDEN VS OPERATIONAL SEPARATED** — same null edge for zero denominator; case still uses target vs Golden forecast (intentional layer difference).
+
+**C13-P1-12:** **RESOLVED / GOLDEN HELPER TESTED** (unchanged from C.13.7C).
+
+**C13-P1-13:** **RESOLVED / OPERATIONAL SOURCES TESTED + TENANT SCOPED**.
+
+**C13-P1-14:** **RESOLVED / OPERATIONAL READINESS LABELLED** — DSS heuristic; not Golden.
+
+**C13-P1-09 / C13-P1-15:** **RESOLVED** (C.13.7E).
+
+**PMI status after C.13.7G:** **RESOLVED PRODUCT LOGIC / MULTI-LAYER PMI MODEL CLOSED** — E2E/prod smoke and PDF/HTML report renderer remain environment/future scope (P2/P3), not open P1 logic defects.
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor

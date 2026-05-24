@@ -12,8 +12,15 @@ function normalizeNumber(value, fallback = 0) {
   return Number.isFinite(number) ? number : fallback;
 }
 
-function clampScore(value) {
-  return Math.max(0, Math.min(100, Math.round(normalizeNumber(value))));
+function operationalCapturePercent(captured, denominator) {
+  const cap = normalizeNumber(captured);
+  const denom = normalizeNumber(denominator);
+
+  if (denom <= 0) {
+    return null;
+  }
+
+  return Math.max(0, Math.min(100, Math.round((cap / denom) * 100)));
 }
 
 /**
@@ -23,10 +30,7 @@ function clampScore(value) {
 export function calculateOperationalPmiCaseCapture({ synergyTarget, synergyCaptured } = {}) {
   const target = normalizeNumber(synergyTarget);
   const captured = normalizeNumber(synergyCaptured);
-  const captureRatePercent =
-    target > 0
-      ? Math.max(0, Math.min(100, Math.round((captured / target) * 100)))
-      : 0;
+  const captureRatePercent = operationalCapturePercent(captured, target);
 
   return {
     synergyTarget: target,
@@ -46,8 +50,7 @@ export function calculateOperationalPmiLedgerCapture(synergyLedger = []) {
   const items = Array.isArray(synergyLedger) ? synergyLedger : [];
   const forecast = items.reduce((sum, item) => sum + normalizeNumber(item?.forecast), 0);
   const captured = items.reduce((sum, item) => sum + normalizeNumber(item?.captured), 0);
-  const captureRatePercent =
-    forecast > 0 ? Math.max(0, Math.min(100, Math.round((captured / forecast) * 100))) : 0;
+  const captureRatePercent = operationalCapturePercent(captured, forecast);
 
   return {
     ledgerForecast: forecast,
@@ -78,8 +81,7 @@ export function calculateOperationalPmiEnterpriseCaptureRatio({
     cases.reduce((sum, item) => sum + normalizeNumber(item.synergyCaptured), 0) ||
     legacyLedger.reduce((sum, item) => sum + normalizeNumber(item.captured), 0);
 
-  const synergyCaptureRatio =
-    totalSynergyTarget > 0 ? clampScore((capturedSynergy / totalSynergyTarget) * 100) : 0;
+  const synergyCaptureRatio = operationalCapturePercent(capturedSynergy, totalSynergyTarget);
 
   return {
     totalSynergyTarget,

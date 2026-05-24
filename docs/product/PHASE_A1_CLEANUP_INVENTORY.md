@@ -5863,13 +5863,22 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 - `generatePmiReport` — `scoringTruthfulness`, `boardReadyMemo`, `humanReviewRequired`
 - Tests: `pmiUiTruthfulness.test.js`, `pmiReportTruthfulness.test.js`, `pmiMultiTenant.test.js`
 
-**Pendiente documentado:** zero forecast productivo (0% operational vs Golden null); e2e env-dependent.
+**Pendiente documentado (post C.13.7F):** zero forecast productivo (0% operational vs Golden null); e2e env-dependent.
+
+### C.13.7G — PMI final smoke / zero forecast product behavior decision
+
+**Commit:** (pending) — `fix(pmi): align zero denominator capture semantics`
+
+**Decisión:** **Option B** — operational case/ledger/enterprise capture return `null` when denominator ≤ 0; UI/export show N/A; Golden unchanged.
+
+**Archivos:** `pmi.service.js`, `pmiOperationalFormulas.js`, `usePMIEngine.js`, `PMIDashboardPage.jsx`, `PMIEnterpriseComponents.jsx`, `pmiExportApi.js`, `tests/unit/pmi/*`, docs (3).
+
+**Tests:** PMI unit + integration; full unit suite + build. E2E: document if `ECONNREFUSED :4000`.
+
+**C13-P1-10:** **RESOLVED / ZERO DENOMINATOR ALIGNED TO NULL**
+
+**PMI global:** **RESOLVED PRODUCT LOGIC / MULTI-LAYER PMI MODEL CLOSED** (E2E-prod smoke / PDF renderer = P2/P3)
 
 ### Siguiente fase recomendada
 
-**C.13.7G — PMI final smoke / zero forecast product behavior decision**
-
-Objetivo:
-- smoke/e2e con backend;
-- decisión explícita sobre alineación zero forecast productivo vs Golden null;
-- no tocar Golden sin fase autorizada.
+**C.13.8 — Reporting Logic Integrity / Variance Source-of-Truth Audit READ ONLY**

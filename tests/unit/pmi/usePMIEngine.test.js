@@ -55,4 +55,18 @@ describe('usePMIEngine enterprise metrics', () => {
     expect(engine.blockedDependencies.map((item) => item.id)).toEqual(['systems-finance']);
     expect(engine.executionVelocity).toBeGreaterThan(0);
   });
+
+  it('returns null capture rates when synergy target or ledger forecast is zero', () => {
+    const engine = usePMIEngine({
+      pmiCase: {
+        synergyTarget: 0,
+        synergyCaptured: 500_000,
+        synergyLedger: [{ forecast: 0, captured: 100_000 }]
+      }
+    });
+
+    expect(engine.synergyCaptureRate).toBeNull();
+    expect(engine.ledgerCaptureRate).toBeNull();
+    expect(Number.isNaN(engine.integrationScore)).toBe(false);
+  });
 });

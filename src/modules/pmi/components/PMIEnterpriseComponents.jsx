@@ -28,6 +28,14 @@ function safeNumber(value) {
   return Number.isFinite(number) ? number : 0;
 }
 
+export function formatOperationalSynergyCaptureDisplay(ratio) {
+  if (ratio === null || ratio === undefined) {
+    return 'N/A · insufficient denominator';
+  }
+
+  return `${safeNumber(ratio)}%`;
+}
+
 export const PMI_ENTERPRISE_DSS_DISCLAIMER =
   'Decision-support signals only — not certified ratings. Golden benchmark is validation-only. Human review required before executive or board use.';
 
@@ -61,7 +69,7 @@ export function PMIExecutiveWidget({ summary }) {
       />
       <SynergyCaptureCard
         label="Operational synergy capture"
-        value={`${safeNumber(metrics.synergyCaptureRatio)}%`}
+        value={formatOperationalSynergyCaptureDisplay(metrics.synergyCaptureRatio)}
         icon={TrendingUp}
         description="Enterprise initiatives / case · not Golden benchmark"
       />

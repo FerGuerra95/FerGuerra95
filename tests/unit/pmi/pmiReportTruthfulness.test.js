@@ -57,5 +57,7 @@ describe('PMI report export truthfulness', () => {
     expect(serialized).not.toMatch(/golden score/);
     expect(serialized).not.toMatch(/certified synergy/);
     expect(payload.scoringTruthfulness?.note).toMatch(/decision-support/i);
+    expect(payload.scoringTruthfulness?.zeroDenominatorOperational).toMatch(/null when target/i);
+    expect(payload.scoringTruthfulness?.zeroDenominatorGolden).toMatch(/pmiCaptureRateGolden/i);
   });
 });

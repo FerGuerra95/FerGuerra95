@@ -8,6 +8,22 @@ function clampScore(value) {
   return Math.max(0, Math.min(100, Math.round(value)));
 }
 
+/** Operational DSS capture % — null when denominator ≤ 0 (aligned with backend operationalCapturePercent). */
+function operationalCapturePercent(captured, denominator) {
+  const cap = toNumber(captured);
+  const denom = toNumber(denominator);
+
+  if (denom <= 0) {
+    return null;
+  }
+
+  return clampScore((cap / denom) * 100);
+}
+
+export function formatOperationalCapturePercent(value) {
+  return value === null || value === undefined ? 'N/A' : `${value}%`;
+}
+
 function getAverageProgress(items = []) {
   if (!Array.isArray(items) || items.length === 0) return 0;
 
@@ -60,7 +76,7 @@ function getLedgerTotals(synergyLedger = []) {
   return {
     ledgerForecast: forecast,
     ledgerCaptured: captured,
-    ledgerCaptureRate: forecast > 0 ? clampScore((captured / forecast) * 100) : 0,
+    ledgerCaptureRate: operationalCapturePercent(captured, forecast),
     ledgerConfidenceScore: items.length > 0 ? clampScore(confidenceTotal / items.length) : 0
   };
 }
@@ -98,8 +114,7 @@ export function usePMIEngine({ pmiCase }) {
   const integrationBudget = toNumber(pmiCase?.integrationBudget);
   const integrationCostUsed = toNumber(pmiCase?.integrationCostUsed);
 
-  const synergyCaptureRate =
-    synergyTarget > 0 ? clampScore((synergyCaptured / synergyTarget) * 100) : 0;
+  const synergyCaptureRate = operationalCapturePercent(synergyCaptured, synergyTarget);
 
   const budgetUsedRate =
     integrationBudget > 0 ? clampScore((integrationCostUsed / integrationBudget) * 100) : 0;
@@ -127,8 +142,8 @@ export function usePMIEngine({ pmiCase }) {
   const integrationScore = clampScore(
     workstreamProgress * 0.24 +
       milestoneProgress * 0.18 +
-      synergyCaptureRate * 0.18 +
-      ledgerMetrics.ledgerCaptureRate * 0.12 +
+      (synergyCaptureRate ?? 0) * 0.18 +
+      (ledgerMetrics.ledgerCaptureRate ?? 0) * 0.12 +
       playbookProgress * 0.12 +
       dependencyRiskScore * 0.08 +
       Math.max(0, 100 - highRiskCount * 18) * 0.08

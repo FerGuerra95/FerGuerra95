@@ -12,6 +12,14 @@ function toNumber(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function formatOperationalCaptureForExport(value) {
+  if (value === null || value === undefined) {
+    return 'N/A · insufficient denominator (operational DSS)';
+  }
+
+  return `${toNumber(value)}%`;
+}
+
 function clamp(value, min = 0, max = 100) {
   return Math.max(min, Math.min(max, value));
 }
@@ -60,7 +68,10 @@ function buildReportId(dealName = '') {
 function buildDecisionSignal({ integrationScore, highRiskCount, synergyCaptureRate }) {
   const score = toNumber(integrationScore);
   const risks = toNumber(highRiskCount);
-  const capture = toNumber(synergyCaptureRate);
+  const capture =
+    synergyCaptureRate === null || synergyCaptureRate === undefined
+      ? null
+      : toNumber(synergyCaptureRate);
 
   if (score >= 82 && risks === 0) {
     return {
@@ -218,7 +229,12 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
   const integrationScore = toNumber(engine.integrationScore);
   const synergyTarget = toNumber(engine.synergyTarget ?? pmiCase.synergyTarget);
   const synergyCaptured = toNumber(engine.synergyCaptured ?? pmiCase.synergyCaptured);
-  const synergyCaptureRate = toNumber(engine.synergyCaptureRate);
+  const synergyCaptureRateRaw = engine.synergyCaptureRate;
+  const synergyCaptureRateDisplay = formatOperationalCaptureForExport(synergyCaptureRateRaw);
+  const synergyCaptureRate =
+    synergyCaptureRateRaw === null || synergyCaptureRateRaw === undefined
+      ? null
+      : toNumber(synergyCaptureRateRaw);
   const integrationBudget = toNumber(engine.integrationBudget ?? pmiCase.integrationBudget);
   const integrationCostUsed = toNumber(engine.integrationCostUsed ?? pmiCase.integrationCostUsed);
   const budgetUsedRate = toNumber(engine.budgetUsedRate);
@@ -818,7 +834,7 @@ function buildBoardMemoHtml({ pmiCase = {}, engine = {} }) {
 
                 <div class="kpi">
                   <div class="kpi-label">Capture rate</div>
-                  <div class="kpi-value purple">${escapeHtml(`${synergyCaptureRate}%`)}</div>
+                  <div class="kpi-value purple">${escapeHtml(synergyCaptureRateDisplay)}</div>
                   <div class="kpi-note">Porcentaje capturado frente al objetivo.</div>
                 </div>
 
