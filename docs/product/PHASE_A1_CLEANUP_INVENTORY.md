@@ -5885,7 +5885,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.10B — CEO Overview truthfulness fix
 
-**Commit:** pending — `fix(ceo-overview): gate executive fallbacks and truthfulness`
+**Commit:** 3fcc71f — `fix(ceo-overview): gate executive fallbacks and truthfulness`
 
 **Fixes:** CEO local calculators gated (no 64/60/58/62/65 fallbacks); `getExecutiveSignal` no longer averages insufficient modules; radar axes N/A labels; Command Center fallback cards insufficient_data; `boardView.service.js` null readiness preserved; Risk empty org null readiness; Compliance empty controlled posture removed; truthfulness tests added.
 
