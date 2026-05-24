@@ -5885,7 +5885,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.9B — Governance SoT decision + truthfulness fix
 
-**Commit:** (pending) — `fix(governance): align approval permissions and truthfulness signals`
+**Commit:** c3187c8 — `fix(governance): align approval permissions and truthfulness signals`
 
 **Fixes:** Approve UI → `APPROVE_GOVERNANCE_DECISION`; empty org null scores; hub 55/58/50 gated; `board_pack_ready` DSS metadata; board pack SoT boundary.
 
