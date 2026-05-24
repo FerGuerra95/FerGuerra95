@@ -1737,7 +1737,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-04 | Compliance weighted risk — reports/export done | Helper `adcdf77` + integración `c7c567b`; ver C.13.1C-f4A/f4B | **PARTIALLY RESOLVED** — reports/export complete; model-data adoption pending |
 | C13-P1-05 | Compliance resilience — golden + labels/re-export | f7B + f8A `4414208` + f8B `eb48db6`; ver f8A/f8B/f8C | **PARTIALLY RESOLVED** — golden helper/test + operational labels/re-export; backend/API/model rename pending |
 | C13-P1-06 | FE/BE precedence — labels/precedence fix done | f5B + f6A + f6B (`1e82980`); ver C.13.1C-f6A/f6B/f6C | **PARTIALLY RESOLVED** — labels/precedence + re-export + CEO; backend/model rename pending |
-| C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | **PARTIALLY RESOLVED / DECISION DOCUMENTED (C.13.5E)** — mismatch confirmed; Golden benchmark tests complete (C.13.5D); **Option C** separates `bridgePriorityGolden` vs `operationalSignalPriority`; product formula unchanged; no RESOLVED global |
+| C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | **PARTIALLY RESOLVED** — Option C dual-layer (C.13.5E); Golden tests (C.13.5D); operational heuristic tests (C.13.5F); product formula unchanged; **no RESOLVED global** |
 | C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
 | C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
@@ -5479,6 +5479,63 @@ C13-P1-07: PARTIALLY RESOLVED / DECISION DOCUMENTED
            No RESOLVED global.
 ```
 
+### Paso siguiente recomendado (post C.13.5E — histórico)
+
+**C.13.5F** — Bridge operational priority alignment tests / naming (completado — ver sección C.13.5F).
+
+---
+
+## C.13.5F — Bridge operational priority alignment tests / naming — CLOSED
+
+**Fecha:** 23 mayo 2026  
+**Baseline:** `45c101a`  
+**Modo:** WRITE/FIX — tests dedicados + docs; **sin cambio de comportamiento productivo**.
+
+### Enfoque
+
+Blindar la heurística operativa actual (`calculateSignalPriority`) **sin alinearla al Golden** (Option C mantenida).
+
+| Entregable | Detalle |
+|---|---|
+| Tests | `tests/unit/bridge/bridgeOperationalPriority.test.js` — 8 tests |
+| Naming conceptual | `operationalSignalPriority` documentado en tests (alias de `calculateSignalPriority`) |
+| Golden layer | `bridgePriorityGolden` / `calculateBridgePriorityGolden` — **no tocado** |
+| Product code | `bridge.service.js`, `calculateSignalPriority` — **sin cambios** |
+| Helper mirror | **No creado** — export pública existente suficiente para test directo |
+
+### Cobertura operativa (comportamiento actual bloqueado)
+
+| Área | Verificado |
+|---|---|
+| Severity rank ordering | blocked > critical > risk > watch > info |
+| Confidence contribution | `confidenceLevel * 0.2` (clamped) |
+| Blocking bonus | +12 when severity = blocked |
+| Stale penalty | -8 when `staleFlag` true |
+| Clamp 0–100 | High/low edge scores |
+| Unknown severity default | watch rank (36 base) |
+| Dual-layer divergence | operational ≠ Golden 73 |
+| Summary integration | `topRecommendedActions` sorted by operational priority |
+
+### Validaciones
+
+| Comando | Resultado |
+|---|---|
+| `npx vitest run tests/unit/bridge/bridgeOperationalPriority.test.js` | 8/8 ✅ |
+| `npx vitest run tests/unit/bridge` | 16/16 ✅ |
+| `npm run test:unit` | 300/300 ✅ |
+| `npm run build` | ✅ |
+
+### Estado C13-P1-07 (post C.13.5F)
+
+```
+C13-P1-07: PARTIALLY RESOLVED
+           Option C dual-layer maintained.
+           Golden benchmark tests (C.13.5D).
+           Operational heuristic tests (C.13.5F).
+           Product formula unchanged.
+           No RESOLVED global — intentional mismatch remains by design.
+```
+
 ### Paso siguiente recomendado
 
-**C.13.5F — Bridge operational priority alignment tests / naming**
+Optional **C.13.5G** — extract pure operational helper mirror (only if refactor authorized), or **product→Golden alignment** (Option B) only with separate human-approved phase.

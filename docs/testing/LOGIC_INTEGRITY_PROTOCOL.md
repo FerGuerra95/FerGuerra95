@@ -193,9 +193,11 @@ Bridge signal priority uses **two separate models** by design:
    - Do not present operational priority scores as Golden-validated or formula-certified.
    - Do not imply Golden benchmark governs live attention-queue ordering without explicit product decision.
 
-4. **C13-P1-07** remains **PARTIALLY RESOLVED / DECISION DOCUMENTED** — mismatch acknowledged and separated; product formula unchanged in C.13.5E; no global RESOLVED.
+4. **C13-P1-07** remains **PARTIALLY RESOLVED** — dual-layer separated and both layers unit-tested (Golden C.13.5D, operational C.13.5F); product formula unchanged; no global RESOLVED.
 
-5. **Next controlled phase:** C.13.5F — operational priority alignment tests / naming (optional rename or dedicated operational tests; alignment to Golden only if separately authorized).
+5. **Next controlled phase:** optional C.13.5G — extract pure operational helper mirror if product refactor authorized; or product→Golden alignment only if separately authorized (Option B).
+
+6. **Operational heuristic tests (C.13.5F):** `tests/unit/bridge/bridgeOperationalPriority.test.js` locks current `calculateSignalPriority` behavior without changing product code. Tests document conceptual name `operationalSignalPriority` and verify divergence from `bridgePriorityGolden`.
 
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:

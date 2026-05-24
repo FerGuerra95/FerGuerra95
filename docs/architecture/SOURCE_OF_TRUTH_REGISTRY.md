@@ -218,7 +218,7 @@ Documented after C.13.4A read-only audit; chain C.13.4A–G closed at docs level
 3. Optional — server-side calculation SoT / snapshot recalc (enterprise phase; human review required).
 4. **C.13.5D** — BRIDGE_PRIORITY golden/helper tests (`d11c831`).
 5. **C.13.5E** — Bridge priority dual-layer decision (Option C): `bridgePriorityGolden` vs `operationalSignalPriority`.
-6. **C.13.5F** — Bridge operational priority alignment tests / naming (optional controlled code phase).
+6. **C.13.5F** — Bridge operational priority heuristic tests (`operationalSignalPriority` / `calculateSignalPriority`).
 
 ## Bridge / Marketplace Source-of-Truth (Decision C.13.5B)
 
@@ -228,7 +228,7 @@ Documented after C.13.5A read-only audit. **Do not treat Bridge Marketplace as p
 |---|---|---|---|---|
 | **enterpriseBridgeSignals** | `backend/services/bridge/bridge.service.js` — `buildEnterpriseBridgeSignals`, `recalculateEnterpriseBridge`, tenant-scoped `bridge_signals` | Implemented; integration-tested | Internal DSS cross-module signal layer | Heuristic; human-review-required; not autonomous decisions |
 | **bridgePriorityGolden** | `docs/testing/FORMULA_REGISTRY.md` + `golden_inputs.json` (`bridge_priority_score_basic`) + `backend/services/bridge/bridgeGoldenFormulas.js` (`calculateBridgePriorityGolden`) | Golden oracle implemented + unit-tested (C.13.5D) | Benchmark/oracle for impact/urgency/confidence weights; logic integrity reference | **Not** current product operational priority; do not conflate with attention-queue ordering |
-| **operationalSignalPriority** | `calculateSignalPriority()` in `bridge.service.js` | Implemented; **intentionally separate from Golden** (C.13.5E Option C) | Attention queue / signal ordering by severity/confidence/stale heuristics | DSS operational heuristic; not certified prioritization; not Golden-equivalent; human review required |
+| **operationalSignalPriority** | `calculateSignalPriority()` in `bridge.service.js` | Implemented; **intentionally separate from Golden** (C.13.5E Option C); unit-tested (C.13.5F) | Attention queue / signal ordering by severity/confidence/stale heuristics | DSS operational heuristic; not certified prioritization; not Golden-equivalent; human review required |
 | **bridgeMarketplaceOpportunities** | Backend `bridge_opportunities` (org-scoped) when present; else FE `DEMO_BRIDGE_*` | Internal unlisted demo / future private network | Private-network preview modelling only | Not public marketplace; not enterprise SoT when demo fallback |
 | **bridgeMarketplaceMatches** | `getMatchScore()` heuristic (FE page + BE service) | Heuristic DSS; Pending Formula Approval | Internal marketplace preview fit score | Not certified buyer/investor/funding recommendation |
 | **marketplaceDemoFallback** | `BridgeMarketplacePage.jsx` `DEMO_BRIDGE_*` constants | Active when API empty/error | Labelled demo fallback in UI (C.13.5B) | Must not be presented as live verified network |
@@ -249,16 +249,16 @@ Bridge signal priority has **two intentional layers**. Do not treat them as inte
 | Layer | Logical name | Implementation (current) | Formula / inputs | Role |
 |---|---|---|---|---|
 | **Golden benchmark** | `bridgePriorityGolden` | `calculateBridgePriorityGolden()` in `bridgeGoldenFormulas.js` | `impact*0.5 + urgency*0.3 + confidence*0.2` | Oracle for logic integrity, Golden Dataset, CI tests |
-| **Operational DSS** | `operationalSignalPriority` | `calculateSignalPriority()` in `bridge.service.js` | severity rank + confidenceLevel + blocking/stale heuristics | Product attention queue / signal ordering |
+| **Operational DSS** | `operationalSignalPriority` | `calculateSignalPriority()` in `bridge.service.js` | severity rank + confidenceLevel + blocking/stale heuristics | Product attention queue / signal ordering; tested in `bridgeOperationalPriority.test.js` |
 
 **Rules:**
 
 1. Golden benchmark validates mathematical oracle/searchability — **not** live operational ordering unless explicitly authorized in a future phase.
 2. Operational priority is a **DSS heuristic** — not certified prioritization, not investment/governance advice, not autonomous decision output.
 3. UI, reports and exports must **not** present operational priority as Golden-equivalent or formula-certified.
-4. Aligning product to Golden (Option B) or renaming exports (Option C follow-up) requires **C.13.5F** or separate authorized phase — not implied by C.13.5E.
+4. Aligning product to Golden (Option B) or extracting a pure operational helper mirror requires **C.13.5G** or separate authorized phase — not implied by C.13.5F.
 
-**C13-P1-07 status:** PARTIALLY RESOLVED / DECISION DOCUMENTED — no global RESOLVED.
+**C13-P1-07 status:** PARTIALLY RESOLVED — dual-layer tests complete (Golden C.13.5D + operational C.13.5F); no global RESOLVED.
 
 ## Executive Overview Special Rule
 
