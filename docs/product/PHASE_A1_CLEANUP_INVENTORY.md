@@ -5889,7 +5889,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### C.13.8B — ExecutiveCommandCenter + Board Pack aggregation truthfulness
 
-**Commit:** (pending) — `fix(reporting): align board pack and executive truthfulness`
+**Commit:** `33e12c6` — `fix(reporting): align board pack and executive truthfulness`
 
 **Correcciones:** Executive empty org defensive signals; Board Pack PMI null preserved; Compliance null not 55; reportingReadinessScore null without metadata; createBoardPack generation_failed flag; scoringTruthfulness payload; tests.
 
