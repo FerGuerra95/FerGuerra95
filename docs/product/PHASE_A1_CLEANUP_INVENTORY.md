@@ -5881,7 +5881,29 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 ### Siguiente fase recomendada
 
-**C.13.12 — Global Logic Integrity Final Gate / Release Readiness Audit** (or Production Render smoke; or Governance/Strategy Golden helpers)
+**C.13.12 — Global Logic Integrity Final Gate / Release Readiness Audit**
+
+### C.13.12 — Global Logic Integrity Final Gate (CLOSED)
+
+**Commit:** pending — `docs: record global logic integrity final gate`
+
+**Mode:** VALIDATION / DOCS — no product code changed.
+
+**Final status:** **C.13 GLOBAL LOGIC BASELINE CLOSED / P2–P3 ENTERPRISE HARDENING PENDING**
+
+| Validation | Result |
+|---|---|
+| `npm run test:unit` | 418 passed |
+| `npm run test:integration` | 65 passed |
+| `npm run build` | pass |
+| Reporting / Governance / Strategy / CEO e2e | 4 passed (local harness) |
+| Golden → product imports | none in `src/` |
+| CEO fallback scores | gated (C.13.10B) |
+| P1 logic blockers | **none known** |
+
+**P2 residuals:** Governance/Strategy Golden · Render smoke · PDF renderer · per-module variance · PMI `mergeWithDemo` stale reference · `executiveReports` readiness `\|\| 0` · Heritage audit · broader e2e.
+
+**Siguiente:** Production Render smoke · C.14 Enterprise Hardening · optional C.13.12B PMI save-path fix.
 
 ### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
 
@@ -5889,7 +5911,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Mode:** Documentation only — no product code, tests, Golden, or Formula Registry changes.
 
-**Global status:** **C.13 GLOBAL LOGIC BASELINE SUBSTANTIALLY CLOSED / P2–P3 ENTERPRISE HARDENING PENDING**
+**Global status:** **C.13 GLOBAL LOGIC BASELINE CLOSED / P2–P3 ENTERPRISE HARDENING PENDING** (confirmed C.13.12)
 
 **Deliverables:**
 - Cross-module SoT matrix in `SOURCE_OF_TRUTH_REGISTRY.md`
@@ -5897,7 +5919,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 - Commercial can-say / cannot-say in `LOGIC_INTEGRITY_PROTOCOL.md`
 - C.13 open items P1/P2/P3 documented
 
-**P1 after C.13.10B:** No known unresolved P1 logic blockers in inventory — pending C.13.12 verification + production smoke.
+**P1 after C.13.10B:** None known — confirmed C.13.12 final gate.
 
 #### C.13 module status table (final)
 
@@ -5915,7 +5937,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 | **CEO / Executive** | DSS aggregator / truthfulness gated | Yes — when module data exists | **No** | C.13.10B fallbacks gated | CEO e2e empty org; Golden blend |
 | **Heritage** | Not C.13 logic-audited | Preview / partial only | **No** | N/A in C.13 chain | Full module audit future |
 
-**Siguiente:** C.13.12 Final Gate / Render smoke / Golden helpers
+**Siguiente:** C.13.12 closed — Production Render smoke / C.14 / Golden helpers
 
 ### C.13.10B — CEO Overview truthfulness fix
 

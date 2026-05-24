@@ -535,11 +535,11 @@ Not a source-of-truth for production pilot narrative.
 
 ## C.13.11A — Global closure status
 
-**C.13 global logic baseline:** **SUBSTANTIALLY CLOSED / P2–P3 ENTERPRISE HARDENING PENDING**
+**C.13 global logic baseline:** **CLOSED / P2–P3 ENTERPRISE HARDENING PENDING** (C.13.12 final gate)
 
 | Verdict | Meaning |
 |---|---|
-| **Substantially closed** | C.13.1–C.13.10B logic integrity work documented; known P1 CEO/Executive fallbacks gated; unit/integration/build baseline green (418 unit / 65 integration as of C.13.10B) |
+| **Logic baseline closed** | C.13.1–C.13.12 documented and verified (418 unit / 65 integration / build / 4 priority e2e) |
 | **Not enterprise certified** | No module is externally certified; DSS + human review positioning required |
 | **Not procurement-ready** | SOC2/ISO/SLA/legal certification not claimed |
 | **Pending hardening** | Golden helpers (Governance/Strategy/Executive blend), production Render smoke, PDF renderer, per-module variance, e2e gaps |
@@ -547,3 +547,26 @@ Not a source-of-truth for production pilot narrative.
 **Do not use:** fully enterprise complete · production certified · SOC2 ready · certified compliance/risk/governance · autonomous decision engine · public marketplace · fairness opinion.
 
 **Next authorized phases:** C.13.12 Global Logic Integrity Final Gate / Release Readiness Audit · Production Render smoke · Governance/Strategy Golden helpers · Sales/demo pack (after explicit authorization).
+
+## C.13.12 — Global Logic Integrity Final Gate (CLOSED)
+
+**Final status:** **C.13 GLOBAL LOGIC BASELINE CLOSED / P2–P3 ENTERPRISE HARDENING PENDING**
+
+| Gate | Result |
+|---|---|
+| Unit tests | 418 passed |
+| Integration tests | 65 passed |
+| Build | pass |
+| Reporting e2e | pass |
+| Governance e2e | pass |
+| Strategy e2e | pass |
+| CEO command center e2e | pass |
+| Golden product imports | none verified in `src/` |
+| CEO fallback scores | gated (C.13.10B) |
+| P1 logic blockers | **none known** |
+
+**Not claimed:** enterprise certified · procurement-ready · SOC2/ISO · all modules complete · production certified.
+
+**P2 residuals:** Governance/Strategy Golden · Render smoke · PDF renderer · per-module variance · PMI `mergeWithDemo` stale reference · `executiveReports` readiness `\|\| 0` · Heritage audit · broader e2e.
+
+**Next:** Production Render smoke · C.14 Enterprise Hardening · optional C.13.12B PMI save-path fix.

@@ -604,7 +604,7 @@ Reporting today remains:
 
 **Mode:** READ-ONLY audit synthesis + documentation closure only. **No product code changed.**
 
-**Global decision:** **C.13 GLOBAL LOGIC BASELINE SUBSTANTIALLY CLOSED / P2–P3 ENTERPRISE HARDENING PENDING**
+**Global decision:** **C.13 GLOBAL LOGIC BASELINE CLOSED / P2–P3 ENTERPRISE HARDENING PENDING** (confirmed C.13.12)
 
 | Criterion | Verdict |
 |---|---|
@@ -672,7 +672,44 @@ Reporting today remains:
 | CEO/Executive | Truthfulness gated aggregator | Yes (with data) | No |
 | Heritage | Not C.13 closed | Preview only | No |
 
-**Next:** C.13.12 Global Logic Integrity Final Gate / Release Readiness Audit — or Production Render smoke — or Governance/Strategy Golden helpers (authorized WRITE phase).
+**Next:** Production Render smoke · C.14 Enterprise Hardening · optional C.13.12B PMI save-path fix.
+
+## C.13.12 — Global Logic Integrity Final Gate / Release Readiness Audit
+
+**Mode:** VALIDATION / DOCS — no product code changed.
+
+**Final status:** **C.13 GLOBAL LOGIC BASELINE CLOSED / P2–P3 ENTERPRISE HARDENING PENDING**
+
+### Validation matrix
+
+| Layer | Command / check | Result |
+|---|---|---|
+| Unit | `npm run test:unit` | **418 passed** |
+| Integration | `npm run test:integration` | **65 passed** |
+| Build | `npm run build` | **pass** |
+| E2E Reporting | `reporting-enterprise-flow.spec.js` | **1 passed** |
+| E2E Governance | `governance-enterprise-flow.spec.js` | **1 passed** |
+| E2E Strategy | `strategy-enterprise-flow.spec.js` | **1 passed** |
+| E2E CEO | `ceo-command-center.spec.js` | **1 passed** |
+| Golden → product import | grep `src/` | **none** |
+| CEO fallback scores | C.13.10B + tests | **gated** |
+| BoardView null readiness | C.13.10B | **preserved** |
+
+### P1 after final gate
+
+**None known.**
+
+### P2 residuals
+
+Governance/Strategy Golden · Render smoke · PDF renderer · per-module variance · Compliance API rename · M&A snapshot policy · Heritage audit · Funding e2e · Bridge alignment · `pmiStore` stale `mergeWithDemo` · `executiveReports` readiness `\|\| 0` · broader e2e.
+
+### Commercial truthfulness (final)
+
+**Can say:** Private Executive DSS · human review · board review draft · Golden oracles where documented · pilot-ready selected modules · marketplace quarantined.
+
+**Cannot say:** Certified enterprise · autonomous engine · legal/investment advice · certified ratings · board-approved · public marketplace · SOC2/ISO/SLA · complete PDF reporting · all modules complete · production certified.
+
+**Next:** Production Render smoke · C.14 · Governance/Strategy Golden · C.13.12B PMI fix · demo/sales pack (authorized).
 
 ## C.13.10A — CEO Overview / Executive Aggregator Audit READ ONLY
 
