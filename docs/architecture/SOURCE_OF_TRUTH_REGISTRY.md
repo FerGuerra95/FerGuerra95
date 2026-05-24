@@ -46,7 +46,7 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Governance decisions | decision workflow state | backend governance services | Assumed / Pending C.13 validation | Approve UX gaps | N/A | Strong backend per C.5 |
 | PMI case dashboard | workstreams, ledger in case | pmi_cases JSON payload | Assumed / Pending C.13 validation | mergeWithDemo contamination | N/A | C.13.6 target |
 | PMI enterprise synergies | synergy initiatives table | pmi_synergy_initiatives | Assumed / Pending C.13 validation | Not synced with case ledger | pmi_synergy_* | Dual model |
-| Bridge signals | recalculated signals | bridge_signals + `bridge.service.js` heuristics | Partially resolved (C.13.5B) | C13-P1-07 priority mismatch; heuristic not certified | bridge_priority_score_basic | DSS; human review required |
+| Bridge signals | recalculated signals | bridge_signals + `bridge.service.js` heuristics | Partially resolved (C.13.5E Option C) | Dual-layer: `bridgePriorityGolden` vs `operationalSignalPriority`; product unchanged | bridge_priority_score_basic | DSS; human review required |
 | Bridge marketplace | opportunities / matches | BE bridge API + DEMO fallback | Partially resolved (C.13.5B labels) | Unlisted route; not pilot marketplace | N/A | INTERNAL_UNLISTED_DEMO |
 | Risk register | likelihood x impact | Pending C.13 audit | Source unclear | | risk_score_likelihood_impact_basic | |
 | Reporting KPIs | variance metrics | Pending C.13 audit | Source unclear | | reporting_kpi_variance_basic | |
@@ -216,8 +216,9 @@ Documented after C.13.4A read-only audit; chain C.13.4A–G closed at docs level
 1. **Backend snapshot/re-export policy** — integration/e2e enforcement; re-export from snapshot vs live engine (MA-P1-03).
 2. Optional — M&A snapshot integration/e2e tests (MA-P1-06).
 3. Optional — server-side calculation SoT / snapshot recalc (enterprise phase; human review required).
-4. **C.13.5C** — BRIDGE_PRIORITY golden/helper tests.
-5. Optional — marketplace integration/e2e; product priority formula alignment (C.13.5D).
+4. **C.13.5D** — BRIDGE_PRIORITY golden/helper tests (`d11c831`).
+5. **C.13.5E** — Bridge priority dual-layer decision (Option C): `bridgePriorityGolden` vs `operationalSignalPriority`.
+6. **C.13.5F** — Bridge operational priority alignment tests / naming (optional controlled code phase).
 
 ## Bridge / Marketplace Source-of-Truth (Decision C.13.5B)
 
@@ -226,8 +227,8 @@ Documented after C.13.5A read-only audit. **Do not treat Bridge Marketplace as p
 | Metric / Surface | Source of Truth | Current status | Usage | Limitations |
 |---|---|---|---|---|
 | **enterpriseBridgeSignals** | `backend/services/bridge/bridge.service.js` — `buildEnterpriseBridgeSignals`, `recalculateEnterpriseBridge`, tenant-scoped `bridge_signals` | Implemented; integration-tested | Internal DSS cross-module signal layer | Heuristic; human-review-required; not autonomous decisions |
-| **bridgePriorityScoreGolden** | `docs/testing/FORMULA_REGISTRY.md` + `golden_inputs.json` (`bridge_priority_score_basic`) | Golden oracle defined; **pending helper/test C.13.5C** | Benchmark/oracle for impact/urgency/confidence weights | Not current product formula |
-| **bridgePriorityScoreProduct** | `calculateSignalPriority()` in `bridge.service.js` | Implemented; **not aligned to Golden** (C13-P1-07 OPEN) | Attention queue / signal ordering by severity/confidence/stale | Not certified prioritization; do not present as Golden-equivalent |
+| **bridgePriorityGolden** | `docs/testing/FORMULA_REGISTRY.md` + `golden_inputs.json` (`bridge_priority_score_basic`) + `backend/services/bridge/bridgeGoldenFormulas.js` (`calculateBridgePriorityGolden`) | Golden oracle implemented + unit-tested (C.13.5D) | Benchmark/oracle for impact/urgency/confidence weights; logic integrity reference | **Not** current product operational priority; do not conflate with attention-queue ordering |
+| **operationalSignalPriority** | `calculateSignalPriority()` in `bridge.service.js` | Implemented; **intentionally separate from Golden** (C.13.5E Option C) | Attention queue / signal ordering by severity/confidence/stale heuristics | DSS operational heuristic; not certified prioritization; not Golden-equivalent; human review required |
 | **bridgeMarketplaceOpportunities** | Backend `bridge_opportunities` (org-scoped) when present; else FE `DEMO_BRIDGE_*` | Internal unlisted demo / future private network | Private-network preview modelling only | Not public marketplace; not enterprise SoT when demo fallback |
 | **bridgeMarketplaceMatches** | `getMatchScore()` heuristic (FE page + BE service) | Heuristic DSS; Pending Formula Approval | Internal marketplace preview fit score | Not certified buyer/investor/funding recommendation |
 | **marketplaceDemoFallback** | `BridgeMarketplacePage.jsx` `DEMO_BRIDGE_*` constants | Active when API empty/error | Labelled demo fallback in UI (C.13.5B) | Must not be presented as live verified network |
@@ -241,6 +242,24 @@ Documented after C.13.5A read-only audit. **Do not treat Bridge Marketplace as p
 | **Bridge Enterprise** | `/bridge/dashboard`, `/signals`, … | Listed | Cross-module DSS intelligence |
 | **Bridge Marketplace** | `/bridge/marketplace` | **Unlisted** | INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK |
 
+## Bridge Priority Dual-Layer Model (Decision C.13.5E — Option C)
+
+Bridge signal priority has **two intentional layers**. Do not treat them as interchangeable.
+
+| Layer | Logical name | Implementation (current) | Formula / inputs | Role |
+|---|---|---|---|---|
+| **Golden benchmark** | `bridgePriorityGolden` | `calculateBridgePriorityGolden()` in `bridgeGoldenFormulas.js` | `impact*0.5 + urgency*0.3 + confidence*0.2` | Oracle for logic integrity, Golden Dataset, CI tests |
+| **Operational DSS** | `operationalSignalPriority` | `calculateSignalPriority()` in `bridge.service.js` | severity rank + confidenceLevel + blocking/stale heuristics | Product attention queue / signal ordering |
+
+**Rules:**
+
+1. Golden benchmark validates mathematical oracle/searchability — **not** live operational ordering unless explicitly authorized in a future phase.
+2. Operational priority is a **DSS heuristic** — not certified prioritization, not investment/governance advice, not autonomous decision output.
+3. UI, reports and exports must **not** present operational priority as Golden-equivalent or formula-certified.
+4. Aligning product to Golden (Option B) or renaming exports (Option C follow-up) requires **C.13.5F** or separate authorized phase — not implied by C.13.5E.
+
+**C13-P1-07 status:** PARTIALLY RESOLVED / DECISION DOCUMENTED — no global RESOLVED.
+
 ## Executive Overview Special Rule
 
 Executive Overview reads module summaries and may show blended scores.
@@ -253,9 +272,9 @@ Status: Assumed / Pending C.13 validation.
 
 `/bridge/marketplace` data may show `DEMO_BRIDGE_*` fallback.
 
-**Policy (C.13.5B):** `INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK` — not public marketplace; transaction layer and success-fee logic **not active** in product; heuristic matching only.
+**Policy (C.13.5B/C):** `INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK` — not public marketplace; transaction layer and success-fee logic **not active** in product; heuristic matching only; production quarantine guard `VITE_ENABLE_BRIDGE_MARKETPLACE` (C.13.5C).
 
-Status: Partially resolved (quarantine labels C.13.5B). Known demo/fallback contamination risk if labels removed.
+Status: Partially resolved (quarantine labels C.13.5B + guard C.13.5C). Known demo/fallback contamination risk if labels removed.
 
 Not a source-of-truth for production pilot narrative.
 

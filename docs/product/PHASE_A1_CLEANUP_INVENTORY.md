@@ -1737,7 +1737,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | C13-P1-04 | Compliance weighted risk — reports/export done | Helper `adcdf77` + integración `c7c567b`; ver C.13.1C-f4A/f4B | **PARTIALLY RESOLVED** — reports/export complete; model-data adoption pending |
 | C13-P1-05 | Compliance resilience — golden + labels/re-export | f7B + f8A `4414208` + f8B `eb48db6`; ver f8A/f8B/f8C | **PARTIALLY RESOLVED** — golden helper/test + operational labels/re-export; backend/API/model rename pending |
 | C13-P1-06 | FE/BE precedence — labels/precedence fix done | f5B + f6A + f6B (`1e82980`); ver C.13.1C-f6A/f6B/f6C | **PARTIALLY RESOLVED** — labels/precedence + re-export + CEO; backend/model rename pending |
-| C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | **OPEN** — mismatch confirmed C.13.5A/B; Golden helper/tests pending C.13.5C; product formula not changed |
+| C13-P1-07 | Bridge priority mismatch | Golden `bridge_priority_score_basic`; `calculateSignalPriority` en `bridge.service.js` | **PARTIALLY RESOLVED / DECISION DOCUMENTED (C.13.5E)** — mismatch confirmed; Golden benchmark tests complete (C.13.5D); **Option C** separates `bridgePriorityGolden` vs `operationalSignalPriority`; product formula unchanged; no RESOLVED global |
 | C13-P1-08 | Risk score mismatch | Golden `risk_score_likelihood_impact_basic` (likelihood×impact); `riskScoreFrom` en `risk.service.js` | Register/heatmap incoherente con oráculo |
 | C13-P1-09 | PMI `mergeWithDemo` mezcla demo siempre | `pmiStore.jsx` `mergeWithDemo` + `DEMO_PMI_CASE` | Demo contamina casos reales |
 | C13-P1-10 | PMI zero forecast devuelve `0` vs golden `null` | `pmi.service.js` `synergyCaptureRatio` cuando target≤0 | Edge case golden `pmi_synergy_zero_forecast` |
@@ -1794,7 +1794,7 @@ Se reauditan con foco en lógica, cálculos, legacy y duplicidades.
 | `compliance_resilience_score_basic` | **mismatch** | Engine distinto |
 | `pmi_synergy_capture_rate_basic` | **partial** | Ratio existe |
 | `pmi_synergy_zero_forecast` | **mismatch** | Devuelve 0, no null |
-| `bridge_priority_score_basic` | **mismatch** | `calculateSignalPriority` distinto |
+| `bridge_priority_score_basic` | **mismatch (by design Option C)** | Golden oracle via `bridgeGoldenFormulas.js`; product `calculateSignalPriority` = separate `operationalSignalPriority` heuristic |
 | `risk_score_likelihood_impact_basic` | **mismatch** | `riskScoreFrom` distinto |
 | `reporting_kpi_variance_basic` | **source unclear** | Implementación no localizada |
 | `executive_module_health_average_basic` | **pending** | Múltiples agregadores |
@@ -5321,9 +5321,9 @@ C13-P1-11: PARTIALLY RESOLVED
 | MA-P1-05 | **RESOLVED (C.13.4H)** | netProceeds fallback to equityBase — legacy removed |
 | MA-P1-06 | **OPEN** | Optional M&A snapshot integration/e2e tests |
 
-### 6. Paso siguiente recomendado
+### 6. Paso siguiente recomendado (post C.13.4I — histórico)
 
-**C.13.5C — BRIDGE_PRIORITY golden/helper tests** (helper puro Golden; documentar divergencia product vs Golden; no tocar `calculateSignalPriority`).
+**C.13.5A** — Bridge / Marketplace read-only audit (completado).
 
 ---
 
@@ -5333,6 +5333,14 @@ C13-P1-11: PARTIALLY RESOLVED
 **Baseline commit (C.13.5B):** `3ea64f3` (pre-commit docs + copy)  
 **Modo C.13.5A:** read-only audit — cero modificaciones.  
 **Modo C.13.5B:** docs SoT + copy/labels en `BridgeMarketplacePage.jsx` únicamente.
+
+### 0. Contexto (post C.13.5C–E)
+
+| Subfase | Commit / estado | Resultado |
+|---|---|---|
+| C.13.5C | `91c1b25` | Marketplace quarantine guard (`VITE_ENABLE_BRIDGE_MARKETPLACE`) |
+| C.13.5D | `d11c831` | Golden helper `bridgeGoldenFormulas.js` + tests vs `bridge_priority_score_basic` (expected **73**) |
+| C.13.5E | docs | **Option C** — separación documental `bridgePriorityGolden` vs `operationalSignalPriority` |
 
 ### 1. C.13.5A — Resumen auditoría (read-only)
 
@@ -5369,14 +5377,15 @@ C13-P1-11: PARTIALLY RESOLVED
 | **Matching** | `getMatchScore` — heuristic DSS; Pending Formula Approval (`BRIDGE_MARKETPLACE_MATCH_FIT`) |
 | **C.13.5B copy** | Labels/disclaimers en `BridgeMarketplacePage.jsx` — internal preview, future private network, transaction layer not active |
 
-### 4. BRIDGE_PRIORITY — decisión (mismatch documentado)
+### 4. BRIDGE_PRIORITY — decisión (Option C — C.13.5E)
 
-| Capa | Fórmula / comportamiento |
-|---|---|
-| **Registry / Golden** | `priorityScore = impact*0.5 + urgency*0.3 + confidence*0.2` → `bridge_priority_score_basic` expected **73** |
-| **Product (`calculateSignalPriority`)** | `severityRank*18 + confidenceLevel*0.2 + blockingBonus - stalePenalty` |
-| **Estado C13-P1-07** | **OPEN** — mismatch confirmed; **no product fix** in C.13.5B |
-| **Siguiente** | **C.13.5C** — Golden helper/test; **C.13.5D** — product formula decision/fix if authorized |
+| Capa | Nombre lógico | Fórmula / comportamiento | Rol |
+|---|---|---|---|
+| **Golden / benchmark** | `bridgePriorityGolden` | `priorityScore = impact*0.5 + urgency*0.3 + confidence*0.2` → `bridge_priority_score_basic` expected **73** | Oracle matemático; validación; auditoría lógica; **no** fórmula operativa del producto |
+| **Product / DSS operativo** | `operationalSignalPriority` (implementado hoy como `calculateSignalPriority`) | `severityRank*18 + confidenceLevel*0.2 + blockingBonus - stalePenalty` | Heurística DSS para cola de atención / orden de señales; **no** oracle Golden; **no** priorización certificada |
+| **Estado C13-P1-07** | **PARTIALLY RESOLVED / DECISION DOCUMENTED** | Mismatch **intencionalmente coexisten** bajo Option C; Golden tests completos (C.13.5D); **sin cambio de código product** en C.13.5E |
+| **No es** | — | Presentar product priority como equivalente Golden; vender como fórmula certificada | Product truthfulness |
+| **Siguiente** | **C.13.5F** | Naming/labels/tests operativos o alineación controlada — **solo tras autorización explícita** | No refactor ni rename en C.13.5E |
 
 ### 5. Tests y validaciones (C.13.5B)
 
@@ -5390,9 +5399,12 @@ C13-P1-11: PARTIALLY RESOLVED
 ### 6. Estado resumen
 
 ```
-C13-P1-07: OPEN — BRIDGE_PRIORITY product vs Golden mismatch; C.13.5C tests pending.
-Bridge Marketplace truthfulness: PARTIALLY RESOLVED — quarantine labels/copy C.13.5B.
-No RESOLVED global.
+C13-P1-07: PARTIALLY RESOLVED / DECISION DOCUMENTED (C.13.5E Option C).
+           Golden benchmark tests complete (C.13.5D).
+           bridgePriorityGolden vs operationalSignalPriority separated in docs.
+           Product calculateSignalPriority unchanged.
+           No RESOLVED global.
+Bridge Marketplace truthfulness: PARTIALLY RESOLVED — quarantine labels C.13.5B + guard C.13.5C.
 ```
 
 **Resuelto (C.13.5B):**
@@ -5404,10 +5416,69 @@ No RESOLVED global.
 
 **Pendiente:**
 
-- C.13.5C — `BRIDGE_PRIORITY` golden/helper tests.
-- C.13.5D — product priority formula decision (optional).
+- C.13.5F — Bridge operational priority alignment tests / naming (optional controlled code phase).
 - Backend marketplace policy / integration tests (optional).
 
 ### 7. Paso siguiente recomendado
 
-**C.13.5C — BRIDGE_PRIORITY golden/helper tests.**
+**C.13.5F — Bridge operational priority alignment tests / naming** (documentar/heuristic tests para `operationalSignalPriority`; rename opcional; **no** alinear product a Golden sin fase autorizada separada).
+
+---
+
+## C.13.5D — BRIDGE_PRIORITY golden/helper tests — CLOSED
+
+**Fecha:** 23 mayo 2026  
+**Commit:** `d11c831` — `test(bridge): add golden priority benchmark`  
+**Modo:** WRITE/FIX — helper puro + tests controlados.
+
+| Entregable | Detalle |
+|---|---|
+| Helper | `backend/services/bridge/bridgeGoldenFormulas.js` → `calculateBridgePriorityGolden` |
+| Tests | `tests/unit/bridge/bridgeGoldenFormulas.test.js` — oracle **73**, edge cases, divergencia product documentada |
+| Golden ID | `bridge_priority_score_basic` |
+| Product | `calculateSignalPriority` **no modificado** |
+
+---
+
+## C.13.5E — Bridge priority product formula decision — CLOSED (docs only)
+
+**Fecha:** 23 mayo 2026  
+**Baseline:** `d11c831`  
+**Modo:** DOCUMENTAL / DECISIONAL — sin cambios de código productivo.
+
+### Decisión formal: **Option C — Dual-layer priority model**
+
+1. **`bridgePriorityGolden`**
+   - Benchmark/oracle lógico alineado a Golden Dataset `BRIDGE_PRIORITY`.
+   - Fórmula: `impact * 0.5 + urgency * 0.3 + confidence * 0.2`.
+   - Implementación de referencia: `calculateBridgePriorityGolden()` en `bridgeGoldenFormulas.js` (C.13.5D).
+   - Uso: validación, referencia matemática, auditoría lógica, CI oracle.
+   - **No** representa la prioridad operativa del producto Bridge.
+
+2. **`operationalSignalPriority`**
+   - Prioridad operativa DSS usada por el producto Bridge hoy.
+   - Implementación actual: `calculateSignalPriority()` en `bridge.service.js` (sin rename en esta fase).
+   - Inputs operativos: severity, confidenceLevel, blocking/stale heuristics — **no** impact/urgency Golden weights.
+   - Uso: attention queue, signal ordering, executive bridge heuristics.
+   - Debe etiquetarse como **señal operativa DSS**, no oracle matemático ni priorización certificada.
+
+### Rechazado en C.13.5E (sin implementar)
+
+| Opción | Motivo de no aplicar ahora |
+|---|---|
+| **A — Mantener sin documentar dualidad** | Insuficiente — mismatch ya confirmado; requiere separación explícita |
+| **B — Alinear product al Golden** | Requiere fase controlada posterior; impacto operativo en señales existentes; human review |
+
+### Estado C13-P1-07 (post C.13.5E)
+
+```
+C13-P1-07: PARTIALLY RESOLVED / DECISION DOCUMENTED
+           Option C dual-layer model formalized.
+           Golden tests complete (C.13.5D).
+           Product formula unchanged.
+           No RESOLVED global.
+```
+
+### Paso siguiente recomendado
+
+**C.13.5F — Bridge operational priority alignment tests / naming**

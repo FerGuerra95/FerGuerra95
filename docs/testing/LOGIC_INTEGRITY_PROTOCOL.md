@@ -174,6 +174,29 @@ Terminal outputs such as **netProceeds** must not silently fallback to intermedi
 4. **Heuristic marketplace matching** must be labelled DSS heuristic — not certified recommendation; not investment or financing advice; no financing intermediation.
 5. **Public marketplace activation** requires explicit future phase, legal/trust review, and registry update — not implied by route existence alone.
 
+## Bridge priority dual-layer truthfulness (Decision C.13.5E — Option C)
+
+Bridge signal priority uses **two separate models** by design:
+
+1. **`bridgePriorityGolden`** — Golden/oracle benchmark only.
+   - Formula: `impact * 0.5 + urgency * 0.3 + confidence * 0.2`.
+   - Golden ID: `bridge_priority_score_basic` (expected **73** for sample inputs).
+   - Reference implementation: `calculateBridgePriorityGolden()` (`bridgeGoldenFormulas.js`, C.13.5D).
+   - Use: validation, logic integrity audit, CI oracle — **not** operational product ordering unless future phase explicitly authorizes alignment.
+
+2. **`operationalSignalPriority`** — Product DSS heuristic (implemented as `calculateSignalPriority()`).
+   - Uses severity/confidence/blocking/stale heuristics — **not** Golden impact/urgency weights.
+   - Use: attention queue, signal ordering, cross-module bridge heuristics.
+   - Must be labelled **operational DSS signal** — not certified prioritization, not Golden oracle, not autonomous decision output.
+
+3. **Do not conflate layers** in UI, exports, docs or executive narrative:
+   - Do not present operational priority scores as Golden-validated or formula-certified.
+   - Do not imply Golden benchmark governs live attention-queue ordering without explicit product decision.
+
+4. **C13-P1-07** remains **PARTIALLY RESOLVED / DECISION DOCUMENTED** — mismatch acknowledged and separated; product formula unchanged in C.13.5E; no global RESOLVED.
+
+5. **Next controlled phase:** C.13.5F — operational priority alignment tests / naming (optional rename or dedicated operational tests; alignment to Golden only if separately authorized).
+
 ## Auditability Rule
 Enterprise state-changing actions should preserve auditability:
 - actor
