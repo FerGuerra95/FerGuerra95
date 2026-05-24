@@ -709,7 +709,13 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Cannot say:** Certified enterprise · autonomous engine · legal/investment advice · certified ratings · board-approved · public marketplace · SOC2/ISO/SLA · complete PDF reporting · all modules complete · production certified.
 
-**Next:** Production Render smoke · C.14 · Governance/Strategy Golden · C.13.12B PMI fix · demo/sales pack (authorized).
+**Next:** Production Render smoke · C.14 · Governance/Strategy Golden · demo/sales pack (authorized).
+
+## C.13.12B — PMI stale mergeWithDemo reference fix
+
+**Fix:** `pmiStore.jsx` `savePmiCase` — `mergeWithDemo(saved)` → `normalizePersistedPmiCase(saved)`.
+
+**C13-P2-PMI-STALE-MERGE:** **RESOLVED** — no demo merge reintroduced; C.13.7E/G truthfulness preserved.
 
 ## C.13.10A — CEO Overview / Executive Aggregator Audit READ ONLY
 

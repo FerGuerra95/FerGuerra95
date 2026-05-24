@@ -557,7 +557,7 @@ export function PMIStoreProvider({ children }) {
         : await pmiApi.createCase(nextCase);
 
       if (saved) {
-        const merged = mergeWithDemo(saved);
+        const merged = normalizePersistedPmiCase(saved);
         setPmiCase(merged);
         setPmiCases((items) => {
           const exists = items.some((item) => item.id === merged.id);
