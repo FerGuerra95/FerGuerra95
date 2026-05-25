@@ -27,7 +27,7 @@
 - [ ] `AUTH_SECRET` and secrets in platform store (not repo)
 - [ ] CORS origins match pilot SPA URL only
 - [x] C14-P1-CREDENTIAL-01: exposed prod test password **rotated** (**RESOLVED OPS** — C.14.7b; new value not in git/docs/chat)
-- [ ] Post-rotation authenticated smoke documented (**PENDING** — `CEOS_E2E_*` in secret store only)
+- [x] Post-rotation authenticated smoke documented (**DONE** — operator attestation; `CEOS_E2E_*` in secret store only; no credentials logged)
 - [ ] Backup taken (`scripts/backup-sqlite.js`) — see `BACKUP_RESTORE_RUNBOOK.md`
 - [ ] Review `SECURITY_PRIVACY_PILOT_PACK.md` with sponsor
 - [ ] Complete `PILOT_ONBOARDING_CHECKLIST.md` pre-pilot section

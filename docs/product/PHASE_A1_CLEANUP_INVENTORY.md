@@ -6118,7 +6118,24 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Not closed:** OIDC id_token verification · final DPA/legal · credential rotation (ops)
 
-**Siguiente:** P2 Funding e2e · Compliance radar · demo/sales pack honest wording · post-rotation smoke (`CEOS_E2E_*`)
+**Siguiente:** P2 Funding e2e · Compliance radar · demo/sales pack honest wording
+
+### Post-rotation auth smoke closure
+
+**Commit:** `docs(security): record post-rotation auth smoke`
+
+**Mode:** DOCS ONLY — operator attestation; no code, secrets, or credential values.
+
+**C14-P1-CREDENTIAL-01:** **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO / POST-ROTATION AUTH SMOKE DONE**
+
+**Recorded (no secrets):**
+- Login with rotated credential succeeded.
+- Old password rejected.
+- New value not stored in git/docs/chat.
+- Future smoke: `CEOS_E2E_USER` / `CEOS_E2E_PASSWORD` from shell or secret manager only.
+- No credentials logged.
+
+**Validaciones:** unit **435** · integration **74** · build pass (docs-only)
 
 ### C.14.7b — Credential rotation closure / RESOLVED OPS
 
@@ -6132,7 +6149,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 - Old prod test password considered compromised and rotated outside repo (Render shell + `scripts/ops/reset-user-password.js`).
 - New value not stored in git/docs/chat.
 - Future smoke credentials: `CEOS_E2E_USER` / `CEOS_E2E_PASSWORD` in local shell or secret manager only.
-- **POST-ROTATION AUTH SMOKE:** **PENDING**
+- **POST-ROTATION AUTH SMOKE:** **DONE** (documented in post-rotation smoke closure section above)
 
 **Validaciones:** unit **435** · integration **74** · build pass (docs-only)
 

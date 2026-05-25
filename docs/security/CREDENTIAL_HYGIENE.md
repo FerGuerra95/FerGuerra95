@@ -9,8 +9,8 @@
 
 | Field | Value |
 |---|---|
-| **Status** | **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO** |
-| **Phase** | C.14.7b — Credential rotation closure (2026-05-25) |
+| **Status** | **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO / POST-ROTATION AUTH SMOKE DONE** |
+| **Phase** | C.14.7b + post-rotation smoke closure (2026-05-25) |
 | **Operator confirmation** | **Received** — prod test password rotated outside repo; new value not stored in git/docs/chat |
 | **Reason** | Previous production test password was exposed outside secret stores (e.g. chat). Treated as **compromised**; rotation completed via ops path (`scripts/ops/reset-user-password.js` on Render shell). |
 | **New password in repo/docs/chat** | **No** — must remain no |
@@ -46,13 +46,19 @@ After run: verify login with new password and that the old password fails. Then 
 
 > Rotated outside repo on 2026-05-25. New value not in git/docs/chat. Post-rotation smoke pending.
 
-**C14-P1-CREDENTIAL-01:** **RESOLVED OPS** (rotation). Post-rotation smoke tracked separately below.
+**C14-P1-CREDENTIAL-01:** **RESOLVED OPS** — rotation and post-rotation smoke complete (no credential values in repo/docs/chat).
 
 ### Post-rotation auth smoke
 
 | Item | Status |
 |---|---|
-| **POST-ROTATION AUTH SMOKE** | **PENDING** — run with `CEOS_E2E_USER` / `CEOS_E2E_PASSWORD` from secret store only |
+| **POST-ROTATION AUTH SMOKE** | **DONE** (operator attestation — 2026-05-25) |
+
+**Recorded (no secrets):**
+- Login with rotated credential succeeded (`CEOS_E2E_*` from shell/secret manager only).
+- Old password rejected.
+- New value not stored in git/docs/chat.
+- No credentials or tokens logged during smoke.
 
 Run only with variables in shell/secret manager — never in committed files:
 

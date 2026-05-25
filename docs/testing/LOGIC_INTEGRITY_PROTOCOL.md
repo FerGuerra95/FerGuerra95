@@ -759,7 +759,19 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Do-not-claim (pilot):** GDPR fully compliant · SOC2/ISO ready · procurement-ready · legal reviewed · production certified.
 
-**Next:** P2 fixes · demo pack · post-rotation smoke (`CEOS_E2E_*`).
+**Next:** P2 fixes · demo pack.
+
+## Post-rotation auth smoke closure
+
+**C14-P1-CREDENTIAL-01:** **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO / POST-ROTATION AUTH SMOKE DONE**
+
+**Operator attestation (no secrets):** Post-rotation smoke passed. New value not in git/docs/chat. Old password rejected.
+
+**Recorded:** Login with rotated credential succeeded · old password rejected · no credentials logged · future smoke via `CEOS_E2E_*` only.
+
+**POST-ROTATION AUTH SMOKE:** **DONE**
+
+**Validaciones:** unit **435** · integration **74** · build pass (docs-only)
 
 ## C.14.7b — Credential rotation closure / RESOLVED OPS
 
@@ -777,7 +789,7 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Rules:** No password/token values in docs/commits/chat. Compromised credential must be rotated outside repo only.
 
-**POST-ROTATION AUTH SMOKE:** **PENDING** (local `CEOS_E2E_*` only).
+**POST-ROTATION AUTH SMOKE:** **DONE** (operator attestation; `CEOS_E2E_*` local/secret store only).
 
 **To close:** Operator attests rotation (no value) → re-run smoke → mark **RESOLVED OPS** in follow-up docs commit.
 

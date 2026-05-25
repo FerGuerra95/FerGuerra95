@@ -140,7 +140,7 @@ All calculated scores, matches, readiness indicators, board-pack drafts, and com
 
 | ID | Topic | Status |
 |---|---|---|
-| C14-P1-CREDENTIAL-01 | Prod/test password rotation after exposure | **RESOLVED OPS** (C.14.7b) — rotated outside repo; new value not in git/docs/chat; post-rotation smoke **PENDING** |
+| C14-P1-CREDENTIAL-01 | Prod/test password rotation after exposure | **RESOLVED OPS** — rotated outside repo; post-rotation smoke **DONE**; new value not in git/docs/chat |
 | C14-P1-DPA-RGPD-PRIVACY-01 | Legal privacy pack | **PARTIALLY RESOLVED** — pilot drafts; legal review required |
 | C14-P1-SECURE-SHARE-01 | Secure share | **RESOLVED** (C.14.6 technical + C.14.4 ops) |
 | C14-P1-OIDC-IDTOKEN-01 | OIDC `id_token` verification | **RESOLVED** (C.14.6) when SSO configured |
