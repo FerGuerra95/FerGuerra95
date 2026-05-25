@@ -1609,7 +1609,7 @@ export function FundingDashboardPage() {
       <style>{fundingDashboardCss}</style>
 
       <div className="page-grid funding-dashboard-page-grid">
-        <div className="funding-dashboard-page">
+        <div className="funding-dashboard-page" data-testid="funding-dashboard-root">
           <section className="funding-hero ceos-ws-hero">
             <div className="funding-hero-layout">
               <div>
@@ -1620,7 +1620,7 @@ export function FundingDashboardPage() {
                   <Badge>{scenarioMode}</Badge>
                 </div>
 
-                <h1 className="funding-title">
+                <h1 className="funding-title" data-testid="funding-dashboard-title">
                   Funding Command Center.
                   <span>Raise capital with a sharper story.</span>
                 </h1>

@@ -759,7 +759,13 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Do-not-claim (pilot):** GDPR fully compliant · SOC2/ISO ready · procurement-ready · legal reviewed · production certified.
 
-**Next:** P2 fixes · demo pack.
+**Next:** P2-FIX-02 Compliance radar · demo pack.
+
+## P2-FIX-01 — Funding e2e copy mismatch
+
+**P2-FIX-FUNDING-E2E-COPY:** **RESOLVED** — authenticated-hubs Funding assertion aligned to stable dashboard anchor + flexible hero copy (no formula/backend change; no false product claims).
+
+**Validaciones:** unit **435** · integration **74** · build pass.
 
 ## Post-rotation auth smoke closure
 

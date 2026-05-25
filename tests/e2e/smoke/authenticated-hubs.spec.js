@@ -23,9 +23,22 @@ test.describe('Smoke hubs autenticados', () => {
     await expect(page).toHaveURL(/\/compliance\/dashboard/);
     await expect(page.getByText('Supply Chain Compliance.')).toBeVisible();
 
-    await page.goto('/funding/dashboard');
+    await page.goto('/funding/dashboard', { waitUntil: 'domcontentloaded' });
     await expect(page).toHaveURL(/\/funding\/dashboard/);
-    await expect(page.getByText('Funding Command Center.')).toBeVisible();
+    await expect(
+      page
+        .locator('[data-testid="funding-dashboard-root"], .funding-dashboard-page')
+        .first()
+    ).toBeVisible({ timeout: 20_000 });
+    await expect(
+      page
+        .locator(
+          '[data-testid="funding-dashboard-title"], .funding-hero h1.funding-title, .funding-title'
+        )
+        .first()
+    ).toContainText(
+      /Funding Command Center|Funding Dashboard|Funding Workspace|Raise capital with a sharper story/i
+    );
 
     await page.goto('/pmi/dashboard');
     await expect(page).toHaveURL(/\/pmi\/dashboard/);

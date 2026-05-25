@@ -22,6 +22,8 @@ describe('resetUserPasswordByEmailForOps', () => {
     process.env.DB_PATH = tmpDb;
     process.env.AUTH_SECRET = 'b'.repeat(40);
     process.env.NODE_ENV = 'development';
+    delete process.env.CEOS_E2E;
+    delete process.env.BOOTSTRAP_SYNC_USERS;
     delete process.env.BOOTSTRAP_ADMIN_EMAIL;
     delete process.env.BOOTSTRAP_ADMIN_PASSWORD;
 

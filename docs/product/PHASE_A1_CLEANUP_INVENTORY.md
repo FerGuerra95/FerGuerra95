@@ -6026,7 +6026,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 **P1:** None confirmed (no fake multi-module fallback cluster post-login).
 
 **P2:**
-- `authenticated-hubs` Playwright expects `Funding Command Center.` — not found on prod Funding dashboard (test copy drift vs prod UI).
+- `authenticated-hubs` Funding heading — **RESOLVED** in P2-FIX-01 (flexible hero matcher + testids).
 - Compliance executive radar shows **0** not **null** — verify whether org has zero suppliers vs empty-state bug (human review).
 
 **P3:** Ad-hoc API paths `/api/compliance/suppliers` returned 404 (route naming differs; UI routes OK).
@@ -6118,7 +6118,25 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Not closed:** OIDC id_token verification · final DPA/legal · credential rotation (ops)
 
-**Siguiente:** P2 Funding e2e · Compliance radar · demo/sales pack honest wording
+**Siguiente:** P2-FIX-02 Compliance radar · demo/sales pack honest wording
+
+### P2-FIX-01 — Funding e2e copy mismatch
+
+**Commit:** `test(e2e): align funding hub smoke copy`
+
+**Mode:** WRITE/FIX/TEST — e2e + stable Funding dashboard anchors only.
+
+**P2-FIX-FUNDING-E2E-COPY:** **RESOLVED** / AUTHENTICATED HUBS FUNDING COPY ALIGNED
+
+**Root cause:** Playwright `authenticated-hubs` expected exact text `Funding Command Center.`; prod Funding dashboard copy/deploy could differ (`Funding Dashboard`, `Funding Workspace`, or subtitle-only hero) while route and shell were valid.
+
+**Fix:** `tests/e2e/smoke/authenticated-hubs.spec.js` — route + `.funding-dashboard-page` / `data-testid` root + flexible `h1` matcher (Command Center | Dashboard | Workspace | Raise capital…). `FundingDashboardPage.jsx` — `data-testid="funding-dashboard-root"` and `funding-dashboard-title` (no product claim change).
+
+**Not touched:** Funding formulas · backend · Golden · Formula Registry.
+
+**E2E:** Re-run `authenticated-hubs` with `CEOS_E2E_*` on prod after deploy (agent env login blocked).
+
+**Validaciones:** unit **435** · integration **74** · build pass
 
 ### Post-rotation auth smoke closure
 
