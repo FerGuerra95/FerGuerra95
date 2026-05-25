@@ -759,7 +759,17 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Do-not-claim (pilot):** GDPR fully compliant · SOC2/ISO ready · procurement-ready · legal reviewed · production certified.
 
-**Next:** credential rotation ops · P2 fixes · demo pack.
+**Next:** C.14.7 credential closure when operator confirms · P2 fixes · demo pack.
+
+## C.14.7 — Credential rotation closure (OPS / DOCS)
+
+**C14-P1-CREDENTIAL-01:** **OPEN / ROTATION REQUIRED OUTSIDE REPO** — operator confirmation of prod test password rotation **not received** in C.14.7 execution.
+
+**Rules:** No password/token values in docs/commits/chat. Compromised credential must be rotated outside repo only.
+
+**POST-ROTATION AUTH SMOKE:** **PENDING** (local `CEOS_E2E_*` only).
+
+**To close:** Operator attests rotation (no value) → re-run smoke → mark **RESOLVED OPS** in follow-up docs commit.
 
 ## C.14.6 — OIDC + Secure Share technical hardening
 

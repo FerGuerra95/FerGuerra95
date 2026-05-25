@@ -193,7 +193,7 @@ Follow `PILOT_OFFBOARDING_CHECKLIST.md`:
 
 | Limitation | Phase / owner |
 |---|---|
-| C14-P1-CREDENTIAL-01 password rotation | Ops — **OPEN** until confirmed |
+| C14-P1-CREDENTIAL-01 password rotation | Ops — **OPEN** (C.14.7); blocks expanded pilot until operator confirms rotation outside repo |
 | Final DPA / privacy policy | Legal — pending |
 | OIDC id_token verification | C.14.6 if SSO required |
 | Secure share operational discipline | Customer + ops |

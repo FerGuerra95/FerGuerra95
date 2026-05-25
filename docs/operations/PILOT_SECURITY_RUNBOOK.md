@@ -26,7 +26,8 @@
 - [ ] Users created with least privilege (avoid shared passwords)
 - [ ] `AUTH_SECRET` and secrets in platform store (not repo)
 - [ ] CORS origins match pilot SPA URL only
-- [ ] C14-P1-CREDENTIAL-01: exposed test passwords **rotated**
+- [ ] C14-P1-CREDENTIAL-01: exposed prod test password **rotated** (operator attestation — **OPEN** as of C.14.7)
+- [ ] Post-rotation authenticated smoke documented (**PENDING**)
 - [ ] Backup taken (`scripts/backup-sqlite.js`) — see `BACKUP_RESTORE_RUNBOOK.md`
 - [ ] Review `SECURITY_PRIVACY_PILOT_PACK.md` with sponsor
 - [ ] Complete `PILOT_ONBOARDING_CHECKLIST.md` pre-pilot section

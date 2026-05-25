@@ -115,12 +115,17 @@ After any prod change:
 
 ## 12. Credential rotation (C14-P1-CREDENTIAL-01)
 
+**Current status (C.14.7):** **OPEN** — operator attestation of rotation **not received**. Previous prod test password treated as **compromised**.
+
 If test password was exposed:
 
-1. Rotate in admin/bootstrap path (outside repo).  
-2. Update Render secret / `CEOS_E2E_PASSWORD` only in secret store.  
-3. Re-run authenticated smoke.  
-4. Mark **RESOLVED OPS** in inventory when confirmed.
+1. Rotate in admin/bootstrap path (outside repo). **Never** commit or document the new value.  
+2. Update Render / CI secrets and local `CEOS_E2E_PASSWORD` **only** in secret store.  
+3. Re-run authenticated smoke (see `CREDENTIAL_HYGIENE.md` § post-rotation).  
+4. Operator attests rotation without revealing password.  
+5. Mark **RESOLVED OPS** in inventory only after steps 1–4.
+
+**POST-ROTATION AUTH SMOKE:** **PENDING** until rotation confirmed and smoke executed.
 
 ---
 

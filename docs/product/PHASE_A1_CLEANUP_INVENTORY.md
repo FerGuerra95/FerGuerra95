@@ -6118,7 +6118,26 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Not closed:** OIDC id_token verification · final DPA/legal · credential rotation (ops)
 
-**Siguiente:** credential rotation ops · P2 Funding e2e · demo pack
+**Siguiente:** operator confirms prod password rotation → C.14.7b RESOLVED OPS · P2 Funding e2e · demo pack
+
+### C.14.7 — Credential rotation closure / prod test password hygiene
+
+**Commit:** `docs(security): reinforce production credential hygiene`
+
+**Mode:** OPS / DOCS only — no code, tests, secrets, or credential values.
+
+**C14-P1-CREDENTIAL-01:** **OPEN / ROTATION REQUIRED OUTSIDE REPO**
+
+**Operator confirmation:** **Not received** — cannot mark RESOLVED OPS without explicit attestation (no password in message).
+
+**Actions documented:**
+- Compromised prod test password policy reinforced in `CREDENTIAL_HYGIENE.md`
+- Post-rotation smoke procedure (`CEOS_E2E_*` local only) — **POST-ROTATION AUTH SMOKE PENDING**
+- Blocks expanded pilot / “credential hygiene closed” until rotation confirmed
+
+**To close P1:** Operator confirms: “rotated outside repo, no value stored” → optional smoke → follow-up commit marking **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO**
+
+**Validaciones:** unit **431** · integration **74** · build pass (docs-only)
 
 ### C.14.6 — OIDC id_token verification + Secure Share technical hardening
 
