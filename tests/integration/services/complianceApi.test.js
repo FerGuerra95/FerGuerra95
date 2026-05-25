@@ -8,19 +8,26 @@ import {
   closeDatabase,
   getSql
 } from '../../../backend/storage/sqliteStorage.js';
+import { listAuditLogs } from '../../../backend/services/audit/auditLog.service.js';
 import {
   createSupplier,
   deleteSupplier,
-  getSupplierById
+  getSupplierById,
+  updateSupplier
 } from '../../../backend/services/compliance/suppliers.service.js';
 import {
   createAlert,
   listAlerts
 } from '../../../backend/services/compliance/alerts.service.js';
-import { createEvidence } from '../../../backend/services/compliance/evidence.service.js';
-import { listEvidence } from '../../../backend/services/compliance/evidence.service.js';
+import {
+  createEvidence,
+  deleteEvidence,
+  listEvidence,
+  updateEvidence
+} from '../../../backend/services/compliance/evidence.service.js';
 import {
   createReviewDecision,
+  decideReview,
   listReviews
 } from '../../../backend/services/compliance/reviews.service.js';
 import {
@@ -376,5 +383,168 @@ describe('compliance enterprise audit services', () => {
     ).rejects.toMatchObject({
       code: 'MA_CASE_NOT_FOUND'
     });
+  });
+
+  it('registra audit logs en CRUD de suppliers, evidence, reviews y reports', async () => {
+    const orgA = 'org_compliance_audit_a';
+    const orgB = 'org_compliance_audit_b';
+    const userA = 'u_compliance_audit_a';
+
+    const supplier = await createSupplier({
+      organizationId: orgA,
+      userId: userA,
+      name: 'Audit Trail Supplier',
+      country: 'Spain',
+      region: 'Europa'
+    });
+
+    const createdLogs = await listAuditLogs({
+      organizationId: orgA,
+      action: 'compliance.supplier.created',
+      entityId: supplier.id,
+      limit: 5
+    });
+
+    expect(createdLogs).toHaveLength(1);
+    expect(createdLogs[0].userId).toBe(userA);
+    expect(createdLogs[0].metadata?.name).toBe('Audit Trail Supplier');
+    expect(createdLogs[0].metadata?.excerpt).toBeUndefined();
+
+    const crossTenantLogs = await listAuditLogs({
+      organizationId: orgB,
+      entityId: supplier.id,
+      limit: 5
+    });
+
+    expect(crossTenantLogs).toHaveLength(0);
+
+    await updateSupplier(
+      supplier.id,
+      { status: 'watchlist', userId: userA },
+      { organizationId: orgA }
+    );
+
+    const updatedLogs = await listAuditLogs({
+      organizationId: orgA,
+      action: 'compliance.supplier.updated',
+      entityId: supplier.id,
+      limit: 5
+    });
+
+    expect(updatedLogs.length).toBeGreaterThan(0);
+    expect(updatedLogs[0].metadata?.changedFields).toContain('status');
+
+    const alert = await createAlert({
+      organizationId: orgA,
+      userId: userA,
+      supplierId: supplier.id,
+      title: 'Audit alert',
+      severity: 'medium',
+      category: 'General Risk'
+    });
+
+    const evidence = await createEvidence({
+      organizationId: orgA,
+      userId: userA,
+      supplierId: supplier.id,
+      alertId: alert.id,
+      title: 'Audit evidence',
+      sourceType: 'document',
+      excerpt: 'Must not appear in audit metadata',
+      confidence: 0.9
+    });
+
+    const evidenceLogs = await listAuditLogs({
+      organizationId: orgA,
+      action: 'compliance.evidence.created',
+      entityId: evidence.id,
+      limit: 5
+    });
+
+    expect(evidenceLogs).toHaveLength(1);
+    expect(evidenceLogs[0].metadata?.excerpt).toBeUndefined();
+
+    await updateEvidence(
+      evidence.id,
+      { confidence: 0.95, userId: userA },
+      { organizationId: orgA }
+    );
+
+    const review = await createReviewDecision({
+      organizationId: orgA,
+      userId: userA,
+      supplierId: supplier.id,
+      alertId: alert.id,
+      status: 'pending'
+    });
+
+    await decideReview(
+      review.id,
+      {
+        reviewer: 'Compliance Lead',
+        decision: 'validated',
+        notes: 'Sensitive review notes',
+        userId: userA
+      },
+      { organizationId: orgA, userId: userA }
+    );
+
+    const statusLogs = await listAuditLogs({
+      organizationId: orgA,
+      action: 'compliance.review.status_changed',
+      entityId: review.id,
+      limit: 5
+    });
+
+    expect(statusLogs.length).toBeGreaterThan(0);
+    expect(statusLogs[0].metadata?.previousStatus).toBe('pending');
+    expect(statusLogs[0].metadata?.newStatus).toBe('decided');
+    expect(statusLogs[0].metadata?.notes).toBeUndefined();
+
+    const report = await createComplianceReport({
+      organizationId: orgA,
+      userId: userA,
+      supplierId: supplier.id,
+      title: 'Audit compliance report'
+    });
+
+    const reportLogs = await listAuditLogs({
+      organizationId: orgA,
+      action: 'compliance.report.created',
+      entityId: report.id,
+      limit: 5
+    });
+
+    expect(reportLogs).toHaveLength(1);
+
+    await deleteEvidence(evidence.id, {
+      organizationId: orgA,
+      userId: userA
+    });
+
+    const evidenceDeletedLogs = await listAuditLogs({
+      organizationId: orgA,
+      action: 'compliance.evidence.deleted',
+      entityId: evidence.id,
+      limit: 5
+    });
+
+    expect(evidenceDeletedLogs.length).toBeGreaterThan(0);
+
+    const deleteResult = await deleteSupplier(supplier.id, {
+      organizationId: orgA,
+      userId: userA
+    });
+
+    expect(deleteResult.deleted).toBe(true);
+
+    const deletedLogs = await listAuditLogs({
+      organizationId: orgA,
+      action: 'compliance.supplier.deleted',
+      entityId: supplier.id,
+      limit: 5
+    });
+
+    expect(deletedLogs.length).toBeGreaterThan(0);
   });
 });

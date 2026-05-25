@@ -8,8 +8,23 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import request from 'supertest';
 
 import { buildHttpApp } from '../../../backend/httpApp.js';
+import {
+  listAuditLogs,
+  PLATFORM_AUDIT_ORG_ID
+} from '../../../backend/services/audit/auditLog.service.js';
 import { initializeDatabaseSchema } from '../../../backend/storage/databaseSchema.js';
 import { closeDatabase } from '../../../backend/storage/sqliteStorage.js';
+
+function assertNoSecretsInAuditMetadata(metadata = {}) {
+  const serialized = JSON.stringify(metadata).toLowerCase();
+
+  expect(serialized).not.toContain('admin123');
+  expect(serialized).not.toContain('user123');
+  expect(metadata.password).toBeUndefined();
+  expect(metadata.token).toBeUndefined();
+  expect(metadata.accessToken).toBeUndefined();
+  expect(metadata.refreshToken).toBeUndefined();
+}
 
 describe('API auth', () => {
   let app;
@@ -136,6 +151,79 @@ describe('API auth', () => {
     },
     30_000
   );
+
+  it('login exitoso registra auth.login.succeeded sin password ni token', async () => {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({
+        email: 'admin@ceoos.local',
+        password: 'admin123'
+      });
+
+    expect(res.status).toBe(200);
+
+    const logs = await listAuditLogs({
+      organizationId: 'org_demo',
+      action: 'auth.login.succeeded',
+      limit: 5
+    });
+
+    expect(logs.length).toBeGreaterThan(0);
+    expect(logs[0].userId).toBeTruthy();
+    expect(logs[0].metadata?.method).toBe('password');
+    assertNoSecretsInAuditMetadata(logs[0].metadata);
+  });
+
+  it('login fallido registra auth.login.failed y mantiene 401', async () => {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({
+        email: 'no-such-user@ceoos.local',
+        password: 'wrong-password-xyz'
+      });
+
+    expect(res.status).toBe(401);
+
+    const logs = await listAuditLogs({
+      organizationId: PLATFORM_AUDIT_ORG_ID,
+      action: 'auth.login.failed',
+      limit: 5
+    });
+
+    expect(logs.length).toBeGreaterThan(0);
+    expect(logs[0].metadata?.reason).toBe('user_not_found');
+    assertNoSecretsInAuditMetadata(logs[0].metadata);
+  });
+
+  it('logout registra auth.logout.succeeded sin token en metadata', async () => {
+    const login = await request(app)
+      .post('/api/auth/login')
+      .send({
+        email: 'admin@ceoos.local',
+        password: 'admin123'
+      });
+
+    expect(login.status).toBe(200);
+    const token = login.body.data.token;
+
+    const logout = await request(app)
+      .post('/api/auth/logout')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(logout.status).toBe(200);
+
+    const logs = await listAuditLogs({
+      organizationId: 'org_demo',
+      action: 'auth.logout.succeeded',
+      limit: 5
+    });
+
+    expect(logs.length).toBeGreaterThan(0);
+    assertNoSecretsInAuditMetadata(logs[0].metadata);
+    expect(String(logs[0].metadata?.sessionIdPrefix || '')).not.toMatch(
+      /^[A-Za-z0-9_-]{20,}$/
+    );
+  });
 
   it('oidc/start sin configuración responde 503 JSON', async () => {
     delete process.env.OIDC_ISSUER;

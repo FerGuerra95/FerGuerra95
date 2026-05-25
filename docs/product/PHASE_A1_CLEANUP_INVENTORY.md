@@ -6094,7 +6094,29 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Validaciones:** unit **420** · integration **69** · build pass
 
-**Siguiente:** C.14.3 audit logs (Compliance CRUD + auth login/logout) · credential rotation ops
+**Siguiente:** C.14.4 security/privacy/RGPD · credential rotation ops
+
+### C.14.3 — Audit logs Compliance CRUD + Auth login/logout
+
+**Commit:** `fix(audit): record auth and compliance events`
+
+**Mode:** WRITE/FIX/TEST — backend audit only; no schema migration; no UI.
+
+**C14-P1-AUDIT-COMPLIANCE-01:** **RESOLVED** / COMPLIANCE CRUD ACTIONS AUDITED
+
+**C14-P1-AUDIT-AUTH-01:** **RESOLVED** / AUTH LOGIN LOGOUT EVENTS AUDITED
+
+**C14-P1-CREDENTIAL-01:** **OPEN** (unchanged — ops rotation outside repo)
+
+**Pattern:** Reused `backend/services/audit/auditLog.service.js` + `audit_logs` table; `recordAuthAuditLog` for platform-scoped failures; `recordComplianceAudit` wrapper; `backend/utils/auditMetadata.js` sanitizes metadata (no password/token/excerpt/notes).
+
+**Auth events:** `auth.login.succeeded`, `auth.login.failed`, `auth.logout.succeeded`
+
+**Compliance events:** `compliance.supplier.*`, `compliance.evidence.*`, `compliance.review.*` / `compliance.review.status_changed`, `compliance.report.created`
+
+**Tests:** `tests/unit/audit/auditMetadata.test.js`; auth audit cases in `tests/integration/api/authApi.test.js`; compliance CRUD audit in `tests/integration/services/complianceApi.test.js`
+
+**Not closed:** DPA/RGPD · OIDC id_token verification · secure share operational secrecy · credential rotation
 
 ### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
 

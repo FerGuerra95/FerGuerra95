@@ -1,4 +1,8 @@
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
+import {
+  complianceChangedFields,
+  recordComplianceAudit
+} from './complianceAudit.service.js';
 
 const suppliersStore = createSqliteEntityStore('compliance_suppliers', 'supplier', {
   status: 'active',
@@ -326,7 +330,23 @@ export const createEvidence = async (payload = {}) => {
     }
   );
 
-  return evidenceStore.create(item);
+  const created = await evidenceStore.create(item);
+
+  await recordComplianceAudit({
+    organizationId: payload.organizationId,
+    userId: payload.userId,
+    action: 'compliance.evidence.created',
+    entityType: 'compliance_evidence',
+    entityId: created.id,
+    metadata: {
+      supplierId: created.supplierId,
+      alertId: created.alertId,
+      sourceType: created.sourceType,
+      language: created.language
+    }
+  });
+
+  return created;
 };
 
 export const updateEvidence = async (id, patch = {}, scope = {}) => {
@@ -386,6 +406,20 @@ export const deleteEvidence = async (id, scope = {}) => {
     id,
     scope.organizationId
   );
+
+  if (result.deleted) {
+    await recordComplianceAudit({
+      organizationId: scope.organizationId,
+      userId: scope.userId || existing.userId,
+      action: 'compliance.evidence.deleted',
+      entityType: 'compliance_evidence',
+      entityId: id,
+      metadata: {
+        supplierId: existing.supplierId,
+        alertId: existing.alertId
+      }
+    });
+  }
 
   return {
     deleted: result.deleted,

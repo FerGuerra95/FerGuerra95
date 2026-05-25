@@ -1,5 +1,9 @@
+import { sanitizeAuditMetadata, emailAuditHint } from '../../utils/auditMetadata.js';
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
 import { allSql } from '../../storage/sqliteStorage.js';
+
+export const PLATFORM_AUDIT_ORG_ID = 'org_platform';
+export const SYSTEM_AUDIT_ACTOR_ID = 'system_audit';
 
 const auditLogStore = createSqliteEntityStore('audit_logs', 'audit_log', {
   metadata: {}
@@ -46,14 +50,44 @@ export async function recordAuditLog({
       action: safeAction,
       entityType: safeEntityType,
       entityId: normalizeText(entityId),
-      metadata:
-        metadata && typeof metadata === 'object' && !Array.isArray(metadata)
-          ? metadata
-          : {}
+      metadata: sanitizeAuditMetadata(metadata)
     });
   } catch {
     return null;
   }
+}
+
+/**
+ * Auth/security events — allows platform org + system actor when user unknown.
+ * Never pass passwords or tokens in metadata.
+ */
+export async function recordAuthAuditLog({
+  organizationId = PLATFORM_AUDIT_ORG_ID,
+  userId = SYSTEM_AUDIT_ACTOR_ID,
+  action,
+  entityType = 'auth',
+  entityId = '',
+  metadata = {}
+} = {}) {
+  const safeAction = normalizeText(action);
+  const safeEntityType = normalizeText(entityType) || 'auth';
+
+  if (!safeAction) {
+    return null;
+  }
+
+  return recordAuditLog({
+    organizationId: normalizeText(organizationId) || PLATFORM_AUDIT_ORG_ID,
+    userId: normalizeText(userId) || SYSTEM_AUDIT_ACTOR_ID,
+    action: safeAction,
+    entityType: safeEntityType,
+    entityId: normalizeText(entityId) || normalizeText(userId) || SYSTEM_AUDIT_ACTOR_ID,
+    metadata: sanitizeAuditMetadata({
+      ...emailAuditHint(metadata.email),
+      ...metadata,
+      email: undefined
+    })
+  });
 }
 
 export async function listAuditLogs({

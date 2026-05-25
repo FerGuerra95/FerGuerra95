@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import { recordAuditLog } from '../audit/auditLog.service.js';
+import { recordAuditLog, recordAuthAuditLog } from '../audit/auditLog.service.js';
 import { sendPasswordResetEmail, isSmtpConfigured } from '../../integrations/email/mailTransport.js';
 import { validateNewPasswordStrength } from './passwordPolicy.js';
 import {
@@ -862,6 +862,14 @@ export async function loginUser({ email, password }) {
   const user = getUserByEmail(normalizedEmail);
 
   if (!user || user.status === 'inactive') {
+    await recordAuthAuditLog({
+      action: 'auth.login.failed',
+      metadata: {
+        email: normalizedEmail,
+        reason: 'user_not_found'
+      }
+    });
+
     throw createError(
       'Email o contraseña incorrectos.',
       401,
@@ -872,6 +880,18 @@ export async function loginUser({ email, password }) {
   const isValidPassword = verifyPassword(normalizedPassword, user);
 
   if (!isValidPassword) {
+    await recordAuthAuditLog({
+      organizationId: user.organizationId,
+      userId: user.id,
+      entityId: user.id,
+      action: 'auth.login.failed',
+      metadata: {
+        email: normalizedEmail,
+        reason: 'invalid_credentials',
+        role: user.role
+      }
+    });
+
     throw createError(
       'Email o contraseña incorrectos.',
       401,
@@ -883,7 +903,21 @@ export async function loginUser({ email, password }) {
     updateUserPasswordRecord(user.id, normalizedPassword);
   }
 
-  return issueAuthForSanitizedUser(sanitizeUser(user));
+  const auth = issueAuthForSanitizedUser(sanitizeUser(user));
+
+  await recordAuthAuditLog({
+    organizationId: user.organizationId,
+    userId: user.id,
+    entityId: user.id,
+    action: 'auth.login.succeeded',
+    metadata: {
+      email: normalizedEmail,
+      role: user.role,
+      method: 'password'
+    }
+  });
+
+  return auth;
 }
 
 function hashResetToken(token) {
@@ -1112,13 +1146,16 @@ export async function loginUserWithOidcProfile({ email, name }) {
 
   const auth = issueAuthForSanitizedUser(sanitizeUser(user));
 
-  await recordAuditLog({
+  await recordAuthAuditLog({
     organizationId: user.organizationId,
     userId: user.id,
-    action: 'auth.oidc.login',
-    entityType: 'user',
     entityId: user.id,
-    metadata: { email: normalizedEmail }
+    action: 'auth.login.succeeded',
+    metadata: {
+      email: normalizedEmail,
+      role: user.role,
+      method: 'oidc'
+    }
   });
 
   return auth;
@@ -1150,8 +1187,31 @@ export function listUsers() {
 
 export async function logoutUser(token) {
   const payload = verifyToken(token);
+  let auditUser = null;
+
+  if (payload?.sub) {
+    try {
+      ensureUsersSeeded();
+      auditUser = getUserById(payload.sub);
+    } catch {
+      auditUser = null;
+    }
+  }
 
   if (!payload?.jti) {
+    if (auditUser) {
+      await recordAuthAuditLog({
+        organizationId: auditUser.organizationId,
+        userId: auditUser.id,
+        entityId: auditUser.id,
+        action: 'auth.logout.succeeded',
+        metadata: {
+          sessionRevoked: false,
+          reason: 'no_session_jti'
+        }
+      });
+    }
+
     return {
       loggedOut: true,
       revoked: false
@@ -1174,6 +1234,19 @@ export async function logoutUser(token) {
       revokedAt
     }
   );
+
+  if (auditUser) {
+    await recordAuthAuditLog({
+      organizationId: auditUser.organizationId,
+      userId: auditUser.id,
+      entityId: auditUser.id,
+      action: 'auth.logout.succeeded',
+      metadata: {
+        sessionRevoked: Number(result?.changes) > 0,
+        sessionIdPrefix: String(payload.jti).slice(0, 8)
+      }
+    });
+  }
 
   return {
     loggedOut: true,

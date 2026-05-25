@@ -729,7 +729,21 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **RPO/RTO:** Provisional 24h / 4h manual — documented, not SLA.
 
-**Next:** C.14.3 audit logs · credential rotation ops.
+**Next:** C.14.4 security/privacy/RGPD pilot pack · credential rotation ops.
+
+## C.14.3 — Audit logs Compliance CRUD + Auth login/logout
+
+**C14-P1-AUDIT-COMPLIANCE-01:** **RESOLVED** — supplier/evidence/review/report CRUD writes `audit_logs` via `recordComplianceAudit`; metadata sanitized (`auditMetadata.js`).
+
+**C14-P1-AUDIT-AUTH-01:** **RESOLVED** — `loginUser` / `logoutUser` / OIDC login success emit `auth.login.*` / `auth.logout.succeeded`; failures use `org_platform` + `system_audit` when user unknown; no password/token in metadata.
+
+**C14-P1-CREDENTIAL-01:** **OPEN** (unchanged).
+
+**No schema change.** Audit write failure does not block auth (best-effort `recordAuditLog` try/catch).
+
+**Tests:** unit `tests/unit/audit/auditMetadata.test.js`; integration auth + compliance audit cases.
+
+**Next:** C.14.4 RGPD/privacy pack or C.14.5 pilot readiness.
 
 ## C.13.12B — PMI stale mergeWithDemo reference fix
 

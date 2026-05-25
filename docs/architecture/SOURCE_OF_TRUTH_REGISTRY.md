@@ -27,7 +27,9 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Domain | Data / Signal | Assumed Source of Truth | Status | Known Risk | Golden Dataset | Notes |
 |---|---|---|---|---|---|---|
 | Tenant scope | organizationId | Backend token/session/auth context | **Confirmed** (C.14.1 create hardening) | Cross-tenant write via client body **mitigated** on Risk/Strategy/Reporting/Executive create | `tenantPayload.js` + integration tests | Frontend never authoritative; client `organizationId` stripped on create |
+| Enterprise audit trail | `audit_logs` rows (auth + compliance CRUD) | `backend/services/audit/auditLog.service.js` + `recordComplianceAudit` / `recordAuthAuditLog` | **Confirmed** (C.14.3) | Other modules may still have gaps; metadata must stay sanitized | N/A | Auth: `auth.login.*`, `auth.logout.succeeded`; Compliance: `compliance.supplier|evidence|review|report.*`; no password/token in `metadata_json` |
 | Auth | roles/permissions | backend auth.middleware + AuthProvider mirror | Assumed / Pending C.13 validation | Viewer E2E gaps | N/A | Verify per endpoint |
+| Auth login/logout events | security audit events | `recordAuthAuditLog` in `auth.service.js` | **Confirmed** (C.14.3) | OIDC failures not fully enumerated | N/A | Login failure unknown user → `org_platform` |
 | Users | user records | Backend users storage / SQLite | Assumed / Pending C.13 validation | N/A | N/A | |
 | M&A valuation | enterprise value, equity metrics | FE `useValuationEngine` (live); Golden simple benchmarks separate | Partially resolved (C.13.4I) | snapshot drift; backend re-export policy | ma_valuation_* | Not fairness opinion |
 | M&A waterfall | seller proceeds | FE product waterfall (`netProceeds`); Golden WATERFALL_SIMPLE separate | Partially resolved (C.13.4I) | Product ≠ golden simple bridge; netProceeds fallback fixed C.13.4H | ma_waterfall_simple_distribution | DSS only |

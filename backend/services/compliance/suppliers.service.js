@@ -1,4 +1,8 @@
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
+import {
+  complianceChangedFields,
+  recordComplianceAudit
+} from './complianceAudit.service.js';
 
 const suppliersStore = createSqliteEntityStore('compliance_suppliers', 'supplier', {
   status: 'active',
@@ -257,7 +261,23 @@ export const createSupplier = async (payload = {}) => {
     }
   );
 
-  return suppliersStore.create(item);
+  const created = await suppliersStore.create(item);
+
+  await recordComplianceAudit({
+    organizationId: payload.organizationId,
+    userId: payload.userId,
+    action: 'compliance.supplier.created',
+    entityType: 'compliance_supplier',
+    entityId: created.id,
+    metadata: {
+      name: created.name,
+      status: created.status,
+      tier: created.tier,
+      criticality: created.criticality
+    }
+  });
+
+  return created;
 };
 
 export const updateSupplier = async (id, patch = {}, scope = {}) => {
@@ -294,11 +314,35 @@ export const updateSupplier = async (id, patch = {}, scope = {}) => {
     }
   );
 
-  return suppliersStore.updateForOrganization(
+  const updated = await suppliersStore.updateForOrganization(
     id,
     safePatch,
     scope.organizationId
   );
+
+  if (updated) {
+    await recordComplianceAudit({
+      organizationId: scope.organizationId,
+      userId: patch.userId || existing.userId,
+      action: 'compliance.supplier.updated',
+      entityType: 'compliance_supplier',
+      entityId: updated.id,
+      metadata: {
+        changedFields: complianceChangedFields(existing, normalizedPatch, [
+          'name',
+          'status',
+          'tier',
+          'criticality',
+          'riskScore',
+          'resilienceScore',
+          'spend'
+        ]),
+        status: updated.status
+      }
+    });
+  }
+
+  return updated;
 };
 
 export const deleteSupplier = async (id, scope = {}) => {
@@ -352,6 +396,20 @@ export const deleteSupplier = async (id, scope = {}) => {
     id,
     scope.organizationId
   );
+
+  if (supplierResult.deleted) {
+    await recordComplianceAudit({
+      organizationId: scope.organizationId,
+      userId: scope.userId || existing.userId,
+      action: 'compliance.supplier.deleted',
+      entityType: 'compliance_supplier',
+      entityId: id,
+      metadata: {
+        name: existing.name,
+        status: existing.status
+      }
+    });
+  }
 
   return {
     deleted: supplierResult.deleted,

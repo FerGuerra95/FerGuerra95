@@ -1,4 +1,5 @@
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
+import { recordComplianceAudit } from './complianceAudit.service.js';
 
 const suppliersStore = createSqliteEntityStore('compliance_suppliers', 'supplier', {
   status: 'active',
@@ -271,7 +272,23 @@ export const createComplianceReport = async (payload = {}) => {
     }
   );
 
-  return reportsStore.create(item);
+  const created = await reportsStore.create(item);
+
+  await recordComplianceAudit({
+    organizationId: payload.organizationId,
+    userId: payload.userId,
+    action: 'compliance.report.created',
+    entityType: 'compliance_report',
+    entityId: created.id,
+    metadata: {
+      supplierId: created.supplierId,
+      type: created.type,
+      scope: created.scope,
+      status: created.status
+    }
+  });
+
+  return created;
 };
 
 export const updateComplianceReport = async (id, patch = {}, scope = {}) => {

@@ -1,4 +1,8 @@
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
+import {
+  complianceChangedFields,
+  recordComplianceAudit
+} from './complianceAudit.service.js';
 
 const suppliersStore = createSqliteEntityStore('compliance_suppliers', 'supplier', {
   status: 'active',
@@ -322,7 +326,22 @@ export const createReviewDecision = async (payload = {}) => {
     }
   );
 
-  return reviewsStore.create(item);
+  const created = await reviewsStore.create(item);
+
+  await recordComplianceAudit({
+    organizationId: payload.organizationId,
+    userId: payload.userId,
+    action: 'compliance.review.created',
+    entityType: 'compliance_review',
+    entityId: created.id,
+    metadata: {
+      supplierId: created.supplierId,
+      alertId: created.alertId,
+      status: created.status
+    }
+  });
+
+  return created;
 };
 
 export const updateReviewDecision = async (id, patch = {}, scope = {}) => {
@@ -356,7 +375,38 @@ export const updateReviewDecision = async (id, patch = {}, scope = {}) => {
     }
   );
 
-  return reviewsStore.updateForOrganization(id, safePatch, scope.organizationId);
+  const updated = await reviewsStore.updateForOrganization(
+    id,
+    safePatch,
+    scope.organizationId
+  );
+
+  if (updated) {
+    const statusChanged =
+      Object.prototype.hasOwnProperty.call(normalizedPatch, 'status') &&
+      existing.status !== updated.status;
+
+    await recordComplianceAudit({
+      organizationId: scope.organizationId,
+      userId: patch.userId || existing.userId,
+      action: statusChanged
+        ? 'compliance.review.status_changed'
+        : 'compliance.review.updated',
+      entityType: 'compliance_review',
+      entityId: updated.id,
+      metadata: {
+        changedFields: complianceChangedFields(existing, normalizedPatch, [
+          'status',
+          'decision',
+          'reviewer'
+        ]),
+        previousStatus: statusChanged ? existing.status : undefined,
+        newStatus: statusChanged ? updated.status : undefined
+      }
+    });
+  }
+
+  return updated;
 };
 
 export const deleteReviewDecision = async (id, scope = {}) => {
@@ -382,6 +432,20 @@ export const deleteReviewDecision = async (id, scope = {}) => {
     id,
     scope.organizationId
   );
+
+  if (result.deleted) {
+    await recordComplianceAudit({
+      organizationId: scope.organizationId,
+      userId: scope.userId || existing.userId,
+      action: 'compliance.review.deleted',
+      entityType: 'compliance_review',
+      entityId: id,
+      metadata: {
+        supplierId: existing.supplierId,
+        status: existing.status
+      }
+    });
+  }
 
   return {
     deleted: result.deleted,
@@ -420,5 +484,26 @@ export async function decideReview(id, payload = {}, scope = {}) {
     }
   );
 
-  return reviewsStore.updateForOrganization(id, safePatch, scope.organizationId);
+  const updated = await reviewsStore.updateForOrganization(
+    id,
+    safePatch,
+    scope.organizationId
+  );
+
+  if (updated) {
+    await recordComplianceAudit({
+      organizationId: scope.organizationId,
+      userId: payload.userId || existing.userId,
+      action: 'compliance.review.status_changed',
+      entityType: 'compliance_review',
+      entityId: updated.id,
+      metadata: {
+        previousStatus: existing.status,
+        newStatus: updated.status,
+        decision: updated.decision
+      }
+    });
+  }
+
+  return updated;
 }
