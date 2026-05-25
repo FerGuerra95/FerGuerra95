@@ -771,6 +771,14 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **To close:** Operator attests rotation (no value) → re-run smoke → mark **RESOLVED OPS** in follow-up docs commit.
 
+## C.14.6b — OIDC invalid-signature unit test stabilization
+
+**C14-P1-OIDC-IDTOKEN-01:** **REMAINS RESOLVED** / INVALID SIGNATURE TEST STABILIZED — production verifier unchanged; test uses JWKS mismatch + corrupted signature segment (no auth relaxation).
+
+**C14-P1-CREDENTIAL-01:** **OPEN** (unchanged).
+
+**Validaciones:** unit **432** · integration **74** · build pass.
+
 ## C.14.6 — OIDC + Secure Share technical hardening
 
 **C14-P1-OIDC-IDTOKEN-01:** **RESOLVED** (when SSO on) — `verifyOidcIdToken` validates signature via JWKS (RS256) or HS256 + issuer/audience/exp/nonce; no unverified JWT decode fallback.

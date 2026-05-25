@@ -6137,7 +6137,25 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **To close P1:** Operator confirms: “rotated outside repo, no value stored” → optional smoke → follow-up commit marking **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO**
 
-**Validaciones:** unit **431** · integration **74** · build pass (docs-only)
+**Validaciones:** unit **430 passed / 1 failed** (`oidcIdTokenVerify` invalid-signature flake, pre-existing from C.14.6) · integration **74** · build pass (docs-only)
+
+### C.14.6b — OIDC invalid-signature unit test stabilization
+
+**Commit:** `test(auth): stabilize oidc invalid signature coverage`
+
+**Mode:** TEST FIX only — no production auth/OIDC behavior change.
+
+**C14-P1-OIDC-IDTOKEN-01:** **REMAINS RESOLVED** / INVALID SIGNATURE TEST STABILIZED
+
+**Root cause:** Flaky fixture flipped the JWT’s last character; that can leave an RS256 signature valid under base64url decoding.
+
+**Fix:** Deterministic coverage — JWKS key mismatch (sign with key A, verify with key B) plus corrupted signature segment; unique `jwks_uri` per case to avoid cache bleed.
+
+**Files:** `tests/unit/auth/oidcIdTokenVerify.test.js` only.
+
+**C14-P1-CREDENTIAL-01:** **OPEN** (unchanged)
+
+**Validaciones:** unit **432** · integration **74** · build pass
 
 ### C.14.6 — OIDC id_token verification + Secure Share technical hardening
 

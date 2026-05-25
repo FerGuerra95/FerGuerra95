@@ -64,6 +64,51 @@ describe('verifyOidcIdToken', () => {
       privateKey: keyPair.privateKey
     });
 
+    const wrongVerifierPair = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 2048
+    });
+    const wrongJwk = wrongVerifierPair.publicKey.export({ format: 'jwk' });
+    wrongJwk.kid = 'test-kid-1';
+    wrongJwk.use = 'sig';
+    wrongJwk.alg = 'RS256';
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({
+        ok: true,
+        json: async () => ({ keys: [wrongJwk] })
+      }))
+    );
+
+    await expect(
+      verifyOidcIdToken(token, {
+        issuer,
+        clientId,
+        discovery: {
+          issuer,
+          jwks_uri: 'https://issuer.example.com/jwks-invalid-sig'
+        }
+      })
+    ).rejects.toMatchObject({
+      code: 'OIDC_ID_TOKEN_SIGNATURE_INVALID'
+    });
+  });
+
+  it('rejects id_token with corrupted signature segment', async () => {
+    const token = signRs256Jwt({
+      header: { alg: 'RS256', typ: 'JWT', kid: 'test-kid-1' },
+      payload: {
+        iss: issuer,
+        aud: clientId,
+        exp: Math.floor(Date.now() / 1000) + 3600,
+        email: 'user@example.com'
+      },
+      privateKey: keyPair.privateKey
+    });
+
+    const [headerPart, payloadPart, signaturePart] = token.split('.');
+    const corrupted = `${headerPart}.${payloadPart}.${signaturePart.slice(0, -8)}INVALID00`;
+
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => ({
@@ -72,15 +117,13 @@ describe('verifyOidcIdToken', () => {
       }))
     );
 
-    const tampered = `${token.slice(0, -1)}${token.endsWith('a') ? 'b' : 'a'}`;
-
     await expect(
-      verifyOidcIdToken(tampered, {
+      verifyOidcIdToken(corrupted, {
         issuer,
         clientId,
         discovery: {
           issuer,
-          jwks_uri: 'https://issuer.example.com/jwks'
+          jwks_uri: 'https://issuer.example.com/jwks-corrupt-sig'
         }
       })
     ).rejects.toMatchObject({
