@@ -5964,6 +5964,43 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Commit:** docs-only — `docs: record production render smoke`
 
+### Post-redeploy Authenticated Production Smoke (2026-05-24)
+
+**Mode:** VALIDATION / DOCS — no product code changed.
+
+**Git baseline:** `HEAD` = `origin/main` = `6e701e8` · working tree `?? backend-server.err` only.
+
+**Redeploy status:** Render Dashboard commit hash **not verified by agent** (no dashboard access). **Bundle proxy confirms redeploy:** production no longer serves `index-Bf_8bVe8.js` (**404**); current main `index-C6AoPVVs.js` · lazy `ExecutiveOverviewer-RmxyISiT.js`.
+
+| Check | Result |
+|---|---|
+| Local unit / integration / build | **418 / 65 / pass** |
+| Health (app + Render) | **200 OK** |
+| API perimeter (no token) | **401** on `/api/ma/cases`, `/api/reporting/reports`, `/api/executive/overview` |
+| Bundle drift (P2 prior) | **RESOLVED** — new prod bundle; C.13.10B strings in `ExecutiveOverviewer-RmxyISiT.js`: `Board Review Draft`, `insufficient_data`, `human review`; `mergeWithDemo` **absent** |
+| `insufficient_data` in main index | **present** |
+| Production login (bootstrap local creds) | **401 INVALID_CREDENTIALS** — dev bootstrap not valid on prod |
+| `CEOS_E2E_USER` / `CEOS_E2E_PASSWORD` | **not set** in agent env or `.env` |
+| Authenticated CEO / Reporting / modules | **NOT EXECUTED** |
+| CRUD prod | **NOT EXECUTED** |
+| Playwright prod | **NOT EXECUTED** |
+
+**Final status:** **PRODUCTION AUTH SMOKE BLOCKED BY ENV/CREDENTIALS**
+
+**P0:** None.
+
+**P1:** None confirmed (authenticated CEO truthfulness still unverified).
+
+**P2 (resolved):** Deploy drift — bundle updated post-redeploy.
+
+**P2 (open):** Authenticated session smoke · CEO UI truthfulness post-login · Reporting/Board Review Draft UI · module navigation post-login · CRUD — all blocked until **production test credentials** (`CEOS_E2E_USER` / `CEOS_E2E_PASSWORD` for prod test org).
+
+**P3:** Render deploy commit ID not captured in docs (manual dashboard check recommended).
+
+**Recommendation:** Provision prod-only test user; set env vars locally (never commit); rerun CEO + Reporting + module smoke; then **C.14** if clean.
+
+**Commit:** `docs: record authenticated production smoke`
+
 ### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
 
 **Commit:** 1b39c9f — `docs: record cross-module source-of-truth closure`
