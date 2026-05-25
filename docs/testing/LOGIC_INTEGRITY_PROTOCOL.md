@@ -743,7 +743,23 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Tests:** unit `tests/unit/audit/auditMetadata.test.js`; integration auth + compliance audit cases.
 
-**Next:** C.14.4 RGPD/privacy pack or C.14.5 pilot readiness.
+**Next:** C.14.5 pilot readiness pack.
+
+## C.14.4 — Security / Privacy / RGPD Pilot Pack
+
+**Mode:** DOCS / OPS only — no product code changes.
+
+**C14-P1-DPA-RGPD-PRIVACY-01:** **PARTIALLY RESOLVED** — pilot drafts in `docs/privacy/` + `SECURITY_PRIVACY_PILOT_PACK.md`; **legal review required**; not GDPR-certified.
+
+**C14-P1-SECURE-SHARE-01:** **PARTIALLY RESOLVED** — `SECURE_SHARE_OPERATIONAL_GUIDELINES.md`; technical expiry/revoke/audit exist; operational enforcement remains.
+
+**C14-P1-CREDENTIAL-01:** **OPEN / ROTATION REQUIRED OUTSIDE REPO** — see `CREDENTIAL_HYGIENE.md`.
+
+**C14-P1-OIDC-IDTOKEN-01:** **OPEN** (if SSO) — document only; no OIDC implementation in this phase.
+
+**Do-not-claim (pilot):** GDPR fully compliant · SOC2/ISO ready · procurement-ready · legal reviewed · production certified.
+
+**Next:** C.14.5 pilot readiness pack · C.14.6 OIDC/secure-share technical hardening (if authorized).
 
 ## C.13.12B — PMI stale mergeWithDemo reference fix
 

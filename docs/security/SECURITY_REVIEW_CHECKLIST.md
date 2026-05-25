@@ -6,6 +6,43 @@ Security checklist for changes touching APIs, auth, persistence, reports, export
 
 Complete before merging security-sensitive work or recommending pilot exposure.
 
+**Pilot pack (C.14.4):** `SECURITY_PRIVACY_PILOT_PACK.md` · `CREDENTIAL_HYGIENE.md` · `SECURE_SHARE_OPERATIONAL_GUIDELINES.md` · `docs/privacy/*`
+
+---
+
+## Security control inventory (C.14.4)
+
+| Control | Current status | Evidence | Gap | Priority |
+|---|---|---|---|---|
+| Auth required for API | **Implemented** | `auth.middleware.js`, protected routes | Per-route public exceptions must stay documented | P2 |
+| API 401 without token | **Implemented** | Auth middleware + integration tests | — | — |
+| Role/permission model | **Partial** | `auth.middleware.js`, AuthProvider mirror | Full matrix Pending C.13 per module | P2 |
+| Tenant-safe create hardening | **Implemented** (C.14.1) | `tenantPayload.js`, Risk/Strategy/Reporting/Executive | Heritage/Bridge body-spread not in C.14.1 scope | P2 |
+| Audit logs (auth + compliance CRUD) | **Implemented** (C.14.3) | `auditLog.service.js`, integration tests | Other modules partial | P2 |
+| Backup/restore runbook | **Implemented** (C.14.2) | `BACKUP_RESTORE_RUNBOOK.md`, scripts | Prod schedule operator-dependent | P2 |
+| Health checks | **Implemented** | `/health`, `/api/health` | Split public vs internal minimal health — optional | P3 |
+| CORS allowlist | **Implemented** | `httpApp.js`, `CORS_ORIGIN(S)` | Misconfiguration risk if `*` in prod | P1 ops |
+| Security headers (CSP, HSTS, etc.) | **Implemented** | `security.middleware.js` | CSP may need tuning per deploy | P2 |
+| Password hashing | **Implemented** | `auth.service.js` | — | — |
+| Session/token revocation | **Implemented** | Logout + password reset revoke sessions | — | — |
+| Error stack suppression (prod client) | **Partial** | Error handler patterns | Verify each deploy | P2 |
+| Rate limiting | **Implemented** | `createRateLimiter`, secure-share public limiter | Global API limits may need tuning | P2 |
+| Secrets management | **Partial** | `.env.example`, Render secrets | No vault integration in repo | P2 |
+| Production smoke | **Partial** | Inventory: auth smoke passed post-redeploy | Funding e2e copy P2 | P2 |
+| Human review / DSS disclaimers | **Implemented** (docs) | `AGENTS.md`, logic protocol | UI copy variance possible | P2 |
+| Secure share (technical) | **Partial** | `secureShare.service.js` | Bearer secrecy operational | P1 partial |
+| Secure share (operational) | **Documented** (C.14.4) | `SECURE_SHARE_OPERATIONAL_GUIDELINES.md` | Training/enforcement | P1 partial |
+| Data retention policy | **Gap** | — | No automated purge | P1 |
+| DSR / export-delete workflow | **Gap** | — | Manual pilot only | P1 |
+| SSO/OIDC | **Partial** | `oidcAuth.service.js`, PKCE/state | **id_token not signature-verified** | P1 if SSO on |
+| DPA/RGPD legal pack | **Draft** (C.14.4) | `docs/privacy/*` | Legal review + final DPA | P1 |
+| SOC2/ISO certification | **Gap** | — | Not claimed | P3 |
+| Credential hygiene | **Documented** | `CREDENTIAL_HYGIENE.md` | C14-P1-CREDENTIAL-01 **OPEN** | P1 ops |
+
+Do not mark a row **Complete** unless evidence exists; use **Partial** or **Gap** honestly.
+
+---
+
 ## Authentication
 
 | Check | Pass |

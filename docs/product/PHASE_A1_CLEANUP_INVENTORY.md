@@ -6116,7 +6116,36 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Tests:** `tests/unit/audit/auditMetadata.test.js`; auth audit cases in `tests/integration/api/authApi.test.js`; compliance CRUD audit in `tests/integration/services/complianceApi.test.js`
 
-**Not closed:** DPA/RGPD · OIDC id_token verification · secure share operational secrecy · credential rotation
+**Not closed:** OIDC id_token verification · final DPA/legal · credential rotation (ops)
+
+**Siguiente:** C.14.5 pilot readiness pack
+
+### C.14.4 — Security / Privacy / RGPD Pilot Pack
+
+**Commit:** `docs: add security privacy pilot pack`
+
+**Mode:** DOCS / OPS / SECURITY-PACK — no product code, tests, Golden, or Formula Registry changes.
+
+**C14-P1-DPA-RGPD-PRIVACY-01:** **PARTIALLY RESOLVED** / PILOT PRIVACY PACK DRAFTED / LEGAL REVIEW REQUIRED
+
+**C14-P1-SECURE-SHARE-01:** **PARTIALLY RESOLVED** / OPERATIONAL SECRECY GUIDELINES DOCUMENTED
+
+**C14-P1-CREDENTIAL-01:** **OPEN / ROTATION REQUIRED OUTSIDE REPO** (operator must confirm rotation for RESOLVED OPS)
+
+**C14-P1-OIDC-IDTOKEN-01:** **OPEN** (if SSO enabled — `id_token` parsed without full signature verification)
+
+**Deliverables:**
+- `docs/security/SECURITY_PRIVACY_PILOT_PACK.md`
+- `docs/security/CREDENTIAL_HYGIENE.md`
+- `docs/security/SECURE_SHARE_OPERATIONAL_GUIDELINES.md`
+- `docs/security/SECURITY_REVIEW_CHECKLIST.md` (control inventory table)
+- `docs/privacy/RGPD_PILOT_READINESS.md`
+- `docs/privacy/DATA_PROCESSING_SUMMARY.md`
+- `docs/privacy/DPA_DRAFT_NOTES.md` (index only — not final DPA)
+- `docs/operations/PILOT_SECURITY_RUNBOOK.md`
+- `docs/operations/PRODUCTION_ACCESS_RUNBOOK.md`
+
+**Not closed:** Final DPA · final privacy policy · SOC2/ISO · procurement · SLA · retention automation · OIDC hardening · credential rotation confirmation
 
 ### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
 
