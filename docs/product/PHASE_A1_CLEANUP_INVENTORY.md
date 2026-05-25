@@ -6656,3 +6656,17 @@ No known P0 or P1 blocks controlled pilot today, provided:
 No implementation changes were made in this phase. No product code, backend code, frontend code, tests, migrations, Golden Dataset, Formula Registry, package/config, secrets, runtime security, or cleanup files were touched.
 
 The next recommended phase is **C.14.9 - Architecture / monolith / duplication audit READ ONLY**.
+
+---
+
+## C.14.9 - Architecture / monolith / duplication audit READ ONLY
+
+**Status:** COMPLETED / READ ONLY / NO CODE CHANGES.
+
+**Audit document:** `docs/architecture/ARCHITECTURE_CLEANUP_AUDIT.md`
+
+**Summary:** P0 none found. P1 none found for controlled pilot. P2 architecture debt documented across frontend/backend monoliths, route/API consistency, source-of-truth boundaries, CSS global override risk, and test/gate clarity. P3 cleanup/polish items documented for later batches.
+
+**Decision:** Architecture cleanup is not authorized by C.14.9. Cleanup may start only in C.14.10+ with explicit file allowlists, import/route/test checks, and no big-bang refactor.
+
+**Next recommended phase:** C.14.10 Cleanup Batch A - dead/unused/legacy only, or C.15.0 Honest Demo/Sales Pack if demo sequencing takes priority.

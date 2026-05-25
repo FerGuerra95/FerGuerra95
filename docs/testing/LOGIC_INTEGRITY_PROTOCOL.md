@@ -1154,3 +1154,22 @@ Refactor or cleanup must not begin before:
 ### Execution rule
 
 C.14.8 made no implementation changes. Future phases must use their own active prompt HEAD and must not rely on stale baseline references from older manuals or previous prompts. If HEAD, origin/main, or working tree expectations differ from the active prompt, stop before modifying files.
+
+## C.14.9 Architecture Cleanup Audit
+
+**Status:** completed as READ ONLY / AUDIT / DOCS.
+
+**Reference:** `docs/architecture/ARCHITECTURE_CLEANUP_AUDIT.md`
+
+No runtime changes were made. No product code, backend code, frontend code, tests, migrations, package/config, Golden Dataset, Formula Registry, secrets, auth, router, route registration, cleanup, deletion, refactor, or AI implementation changed in C.14.9.
+
+Architecture cleanup cannot start until this audit is reviewed and a future cleanup batch authorizes explicit file allowlists. Future cleanup must preserve the registered source-of-truth boundaries, especially:
+
+1. Funding draft workspace vs persisted backend data.
+2. Compliance operational/persisted/Golden score separation.
+3. Reporting variance as Golden oracle only until per-module ownership exists.
+4. CEO/Executive insufficient-data and null fallback gates.
+5. Bridge marketplace quarantine.
+6. Heritage preview/future audit status.
+
+AI implementation remains blocked until C.14.9 is reviewed and relevant cleanup/data-boundary gates are explicitly authorized.
