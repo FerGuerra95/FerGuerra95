@@ -723,6 +723,14 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Not in scope:** Heritage/Bridge body-spread audit (C.14.1B if needed).
 
+## C.14.2 — Backup/restore rehearsal + integrity_check
+
+**C14-P1-BACKUP-RESTORE-01:** **RESOLVED** — `scripts/backup-sqlite.js`, `verify-sqlite-integrity.js`, `restore-sqlite-drill.js`; `docs/operations/BACKUP_RESTORE_RUNBOOK.md`; local drill `integrity_check: ok`; prod restore blocked by script.
+
+**RPO/RTO:** Provisional 24h / 4h manual — documented, not SLA.
+
+**Next:** C.14.3 audit logs · credential rotation ops.
+
 ## C.13.12B — PMI stale mergeWithDemo reference fix
 
 **Fix:** `pmiStore.jsx` `savePmiCase` — `mergeWithDemo(saved)` → `normalizePersistedPmiCase(saved)`.

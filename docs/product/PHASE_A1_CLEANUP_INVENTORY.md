@@ -6067,6 +6067,35 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Siguiente:** C.14.2 backup/restore · C.14.3 audit logs · credential rotation ops
 
+### C.14.2 — Backup/restore rehearsal + integrity_check
+
+**Commit:** `chore(ops): add sqlite backup and restore rehearsal`
+
+**Mode:** OPS / DOCS / SCRIPTING — no product runtime changes.
+
+**C14-P1-BACKUP-RESTORE-01:** **RESOLVED** / BACKUP + INTEGRITY CHECK + LOCAL RESTORE DRILL DOCUMENTED AND TESTED
+
+**C14-P1-CREDENTIAL-01:** **OPEN** (unchanged)
+
+**Deliverables:**
+- `scripts/backup-sqlite.js` — `better-sqlite3` async `.backup()` (WAL-safe)
+- `scripts/verify-sqlite-integrity.js` — `PRAGMA integrity_check` / `--quick`
+- `scripts/restore-sqlite-drill.js` — copy backup → drill target; blocks `/var/data/ceos-os.sqlite`
+- `scripts/lib/sqlite-cli.mjs` — shared helpers
+- `docs/operations/BACKUP_RESTORE_RUNBOOK.md` — RPO 24h / RTO 4h provisional (not SLA)
+- `.gitignore` — `.local/`, `backups/`, `*.backup`
+
+**Local rehearsal (2026-05-25):**
+- Drill DB `.local/drill/ceos-drill-source.sqlite` → backup `integrity_check: ok` (~1.5MB)
+- Restore drill `.local/restore-drill/ceos-os-restore.sqlite` → `integrity_check: ok`
+- Production target restore → **blocked** (expected)
+
+**Production:** Run backup from Render shell with `DB_PATH` + `BACKUP_DIR=/var/data/backups` per runbook (not executed from agent — no prod disk access).
+
+**Validaciones:** unit **420** · integration **69** · build pass
+
+**Siguiente:** C.14.3 audit logs (Compliance CRUD + auth login/logout) · credential rotation ops
+
 ### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
 
 **Commit:** 1b39c9f — `docs: record cross-module source-of-truth closure`

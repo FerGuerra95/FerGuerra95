@@ -67,6 +67,11 @@ tmp/
 temp/
 .cache/
 
+# Local ops drills (C.14.2 — never commit backups or restore copies)
+.local/
+backups/
+*.backup
+
 # Local exports / generated reports
 exports/
 reports/
