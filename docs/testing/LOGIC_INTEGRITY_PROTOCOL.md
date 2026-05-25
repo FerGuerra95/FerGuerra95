@@ -759,7 +759,15 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Do-not-claim (pilot):** GDPR fully compliant · SOC2/ISO ready · procurement-ready · legal reviewed · production certified.
 
-**Next:** P2-FIX-02 Compliance radar · demo pack.
+**Next:** demo/sales pack honest DSS · C.14.8 residual register.
+
+## P2-FIX-02 — Compliance radar empty-state
+
+**P2-FIX-COMPLIANCE-RADAR-EMPTY:** **RESOLVED** — empty/no-audit compliance orgs return `score: null`, status `insufficient_data`, radar `displayLabel: N/A` (not `0/watch`). Real calculated zero preserved when audit baseline exists.
+
+**Scope:** executive/compliance hub adapters + CEO overview display; no Golden/Formula/scoring formula changes.
+
+**Tests:** `ceoOverviewTruthfulness.test.js`; `executiveCommandCenter.test.js` empty-org compliance assertions.
 
 ## P2-FIX-01 — Funding e2e copy mismatch
 

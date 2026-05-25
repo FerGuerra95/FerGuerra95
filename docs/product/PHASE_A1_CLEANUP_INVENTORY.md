@@ -6014,7 +6014,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 | Production login | **200** — admin test org (`admin.prod2@ceoos.local`) |
 | API with session | **200** on `/api/ma/cases`, `/api/executive/overview`, `/api/reporting/reports`, `/api/governance/decisions`, `/api/strategy/objectives`, `/api/funding/rounds`, `/api/pmi/programs` |
 | Logout API | **200** |
-| CEO API truthfulness | **PASS** — no synthetic cluster `64/60/58/55/62/65`; **M&A = 64** (module-specific); empty modules **null** on radar; PMI **28**; Compliance radar **0** (watch) — see P2 note |
+| CEO API truthfulness | **PASS** — no synthetic cluster `64/60/58/55/62/65`; **M&A = 64** (module-specific); empty modules **null** on radar; PMI **28**; Compliance radar empty-state fixed in P2-FIX-02 |
 | Playwright prod (`CEOS_BASE_URL`) | **ceo-command-center** PASS · **reporting-enterprise-flow** PASS · **governance-enterprise-flow** PASS · **strategy-enterprise-flow** PASS (includes create objective) · **authenticated-hubs** FAIL on Funding heading copy |
 | CRUD | **PARTIAL** — Strategy e2e create on prod org; dedicated `[SMOKE TEST]` CRUD not separately executed |
 | Reporting/Board draft UI | **PASS** via reporting e2e (no certified/final markers in suite) |
@@ -6027,7 +6027,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **P2:**
 - `authenticated-hubs` Funding heading — **RESOLVED** in P2-FIX-01 (flexible hero matcher + testids).
-- Compliance executive radar shows **0** not **null** — verify whether org has zero suppliers vs empty-state bug (human review).
+- Compliance executive radar empty-state — **RESOLVED** in P2-FIX-02 (`null` / `N/A` / `insufficient_data`; no `0/watch` without audit baseline).
 
 **P3:** Ad-hoc API paths `/api/compliance/suppliers` returned 404 (route naming differs; UI routes OK).
 
@@ -6137,6 +6137,20 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 **E2E:** Re-run `authenticated-hubs` with `CEOS_E2E_*` on prod after deploy (agent env login blocked).
 
 **Validaciones:** unit **435** · integration **74** · build pass
+
+### P2-FIX-02 — Compliance radar empty-state
+
+**Mode:** WRITE/FIX/TEST — display/adapter truthfulness only (no weightedRisk/resilience formula change).
+
+**P2-FIX-COMPLIANCE-RADAR-EMPTY:** **RESOLVED** / EMPTY COMPLIANCE RADAR USES NULL_NA_INSUFFICIENT_DATA
+
+**Root cause:** Executive overview mapped null compliance scores to `0/watch`; hub exposed `legalHealthScore` without audit; CEO page fell back to client compliance score; radar SVG coerced null to geometry ~12%.
+
+**Fix:** `executiveHub.service.js` (audit-gated `legalHealthScore`); `executiveOverview.service.js` (audit-only persisted compliance, `insufficient_data` cards/radar); CEO overview truthfulness helpers + radar/card display.
+
+**Tests:** `ceoOverviewTruthfulness.test.js`; `executiveCommandCenter.test.js` empty-org compliance assertions.
+
+**Not touched:** Golden Dataset · Formula Registry · weightedRiskScore · unrelated modules.
 
 ### Post-rotation auth smoke closure
 

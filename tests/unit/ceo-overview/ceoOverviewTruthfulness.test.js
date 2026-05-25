@@ -9,7 +9,9 @@ import {
   getEcosystemBranchOverview,
   getExecutiveSignal,
   getMAOverview,
-  getRiskOverview
+  getRiskOverview,
+  mapExecutiveCorporateRadarAxis,
+  resolveLegalHealthRadarScore
 } from '../../../src/modules/ceo-overview/utils/ceoOverviewTruthfulness.js';
 
 describe('CEO overview truthfulness helpers', () => {
@@ -94,5 +96,50 @@ describe('CEO overview truthfulness helpers', () => {
     expect(formatModuleSignalValue({ scoreDisplay: 'Insufficient data — human review required' })).toBe(
       'Insufficient data — human review required'
     );
+  });
+
+  it('does not resolve legal health radar without audit baseline', () => {
+    expect(resolveLegalHealthRadarScore({ legalHealthScore: 72 })).toBeNull();
+    expect(resolveLegalHealthRadarScore({ legalHealthScore: 0 })).toBeNull();
+  });
+
+  it('resolves legal health radar from hub when audit baseline exists', () => {
+    expect(
+      resolveLegalHealthRadarScore({ latestAuditRun: { id: 'audit-1' }, legalHealthScore: 68 })
+    ).toBe(68);
+    expect(
+      resolveLegalHealthRadarScore({ latestAuditRun: { id: 'audit-1' }, legalHealthScore: 0 })
+    ).toBe(0);
+    expect(
+      resolveLegalHealthRadarScore({ latestAuditRun: { id: 'audit-1' }, legalHealthScore: null })
+    ).toBeNull();
+  });
+
+  it('maps executive corporate radar axis to insufficient_data when score is null', () => {
+    const axis = mapExecutiveCorporateRadarAxis({
+      key: 'compliance',
+      label: 'Compliance',
+      value: null,
+      status: 'watch',
+      executiveSignalEligible: false
+    });
+    expect(axis.value).toBeNull();
+    expect(axis.displayLabel).toBe('N/A');
+    expect(axis.status).toBe('insufficient_data');
+    expect(axis.isCalculable).toBe(false);
+  });
+
+  it('preserves real zero compliance score when signal is eligible', () => {
+    const axis = mapExecutiveCorporateRadarAxis({
+      key: 'compliance',
+      label: 'Compliance',
+      value: 0,
+      status: 'watch',
+      executiveSignalEligible: true
+    });
+    expect(axis.value).toBe(0);
+    expect(axis.displayLabel).toBe('0%');
+    expect(axis.status).toBe('watch');
+    expect(axis.isCalculable).toBe(true);
   });
 });

@@ -19,6 +19,41 @@ export function getRadarGeometryValue(score) {
   return normalized === null ? 0 : normalized;
 }
 
+export function resolveLegalHealthRadarScore(hubBrief) {
+  const hasAuditBaseline = Boolean(hubBrief?.latestAuditRun?.id);
+  const hubScore = normalizeScoreOrNull(hubBrief?.legalHealthScore);
+
+  if (!hasAuditBaseline) {
+    return null;
+  }
+
+  return hubScore;
+}
+
+export function mapExecutiveCorporateRadarAxis(axis = {}) {
+  const score = normalizeScoreOrNull(axis.value ?? axis.score);
+  const insufficient =
+    score === null ||
+    axis.executiveSignalEligible === false ||
+    ['insufficient_data', 'not_available', 'empty'].includes(axis.status);
+
+  const status = insufficient
+    ? 'insufficient_data'
+    : axis.status || (score < 60 ? 'watch' : 'normal');
+
+  return {
+    key: axis.key,
+    label: axis.label,
+    route: axis.route,
+    score,
+    value: score,
+    displayLabel: formatScoreLabel(score),
+    status,
+    isCalculable: score !== null,
+    executiveSignalEligible: score !== null
+  };
+}
+
 export function buildRadarAxis({ key, label, score, route, tone }) {
   const normalized = normalizeScoreOrNull(score);
   return {

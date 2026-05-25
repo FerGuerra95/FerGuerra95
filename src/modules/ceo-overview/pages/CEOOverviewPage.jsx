@@ -46,12 +46,14 @@ import {
   estimateMaFinancialRadar,
   formatModuleSignalValue,
   formatScoreLabel,
+  mapExecutiveCorporateRadarAxis,
   getComplianceOverview,
   getEcosystemBranchOverview,
   getExecutiveSignal,
   getMAOverview,
   getRiskOverview,
-  normalizeScoreOrNull
+  normalizeScoreOrNull,
+  resolveLegalHealthRadarScore
 } from '../utils/ceoOverviewTruthfulness.js';
 import { boardPackApi } from '../services/boardPackApi.js';
 import { BoardPackModal } from '../components/BoardPackModal.jsx';
@@ -1829,13 +1831,7 @@ export function CEOOverviewPage() {
             maStore.savedDeals
         );
 
-  const legalHealthRadar =
-    hubBrief &&
-    hubBrief.legalHealthScore !== undefined &&
-    hubBrief.legalHealthScore !== null &&
-    Number.isFinite(Number(hubBrief.legalHealthScore))
-      ? clampScore(Number(hubBrief.legalHealthScore))
-      : complianceOverview.score;
+  const legalHealthRadar = resolveLegalHealthRadarScore(hubBrief);
 
   const maValuationSignal = maOverview.score;
   const dealReadinessCombined =
@@ -1929,15 +1925,10 @@ export function CEOOverviewPage() {
     humanReviewPosture: 'human_review_required'
   };
   const commandRadarAxes = Array.isArray(executiveCommand.corporateHealthRadar)
-    ? executiveCommand.corporateHealthRadar.map((axis) => ({
-        key: axis.key,
-        label: axis.label,
-        value: axis.value,
-        route: axis.route
-      }))
+    ? executiveCommand.corporateHealthRadar.map((axis) => mapExecutiveCorporateRadarAxis(axis))
     : radarAxes
         .filter((axis) => !['heritage'].includes(axis.key))
-        .map((axis) => ({ key: axis.key, label: axis.label, value: axis.value, route: axis.route }));
+        .map((axis) => mapExecutiveCorporateRadarAxis(axis));
   const commandSignals = Array.isArray(executiveCommand.signals) ? executiveCommand.signals : [];
   const commandDecisionQueue = Array.isArray(executiveCommand.decisionQueue) ? executiveCommand.decisionQueue : [];
   const commandBoardView = executiveCommand.boardView || {};

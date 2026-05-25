@@ -26,7 +26,8 @@ export function CorporateHealthRadar({ axes = [] }) {
           points={safeAxes
             .map((axis, index) => {
               const angle = -Math.PI / 2 + (index / safeAxes.length) * Math.PI * 2;
-              const radius = 84 * (clamp(axis.value) / 100);
+              const calculable = axis.isCalculable !== false && axis.value !== null && axis.value !== undefined;
+              const radius = calculable ? 84 * (clamp(axis.value) / 100) : 0;
               return `${110 + Math.cos(angle) * radius},${110 + Math.sin(angle) * radius}`;
             })
             .join(' ')}
@@ -36,7 +37,12 @@ export function CorporateHealthRadar({ axes = [] }) {
         {safeAxes.map((axis) => (
           <Link key={axis.key} to={axis.route || '/dashboard'}>
             <span>{axis.label}</span>
-            <strong>{axis.value === null || axis.value === undefined ? 'Signal not available' : `${clamp(axis.value)}%`}</strong>
+            <strong>
+              {axis.displayLabel ||
+                (axis.value === null || axis.value === undefined
+                  ? 'N/A'
+                  : `${clamp(axis.value)}%`)}
+            </strong>
           </Link>
         ))}
       </div>

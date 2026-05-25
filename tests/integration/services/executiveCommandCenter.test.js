@@ -104,5 +104,15 @@ describe('CEO command center enterprise foundation', () => {
     expect(overview.signals.length).toBeGreaterThan(0);
     expect(overview.moduleCards.find((item) => item.key === 'strategy')?.score).toBeNull();
     expect(overview.moduleCards.find((item) => item.key === 'risk')?.score).toBeNull();
+
+    const complianceCard = overview.moduleCards.find((item) => item.key === 'compliance');
+    expect(complianceCard?.score).toBeNull();
+    expect(complianceCard?.status).not.toBe('watch');
+    expect(complianceCard?.status).toBe('insufficient_data');
+
+    const complianceRadar = overview.corporateHealthRadar.find((item) => item.key === 'compliance');
+    expect(complianceRadar?.value).toBeNull();
+    expect(complianceRadar?.displayLabel).toBe('N/A');
+    expect(complianceRadar?.executiveSignalEligible).toBe(false);
   });
 });

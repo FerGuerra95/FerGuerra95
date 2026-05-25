@@ -50,13 +50,19 @@ export async function getExecutiveComplianceHubBrief(scope = {}) {
   const latestAudit = auditSorted[0] || null;
   const latestAuditSummary = summarizeAudit(latestAudit);
 
+  const hasAuditBaseline = Boolean(latestAuditSummary?.id);
+
   const riskScore =
-    typeof latestAudit?.score === 'number' && Number.isFinite(latestAudit.score)
+    hasAuditBaseline &&
+    typeof latestAudit?.score === 'number' &&
+    Number.isFinite(latestAudit.score)
       ? Math.max(0, Math.min(100, Math.round(latestAudit.score)))
       : null;
 
   const legalHealthScore =
-    riskScore === null ? null : Math.max(0, Math.min(100, 100 - riskScore));
+    hasAuditBaseline && riskScore !== null
+      ? Math.max(0, Math.min(100, 100 - riskScore))
+      : null;
 
   const reports = await listReports({
     organizationId: scope.organizationId
@@ -85,6 +91,7 @@ export async function getExecutiveComplianceHubBrief(scope = {}) {
     generatedAt: new Date().toISOString(),
     latestAuditRun: latestAuditSummary,
     legalHealthScore,
+    executiveSignalEligible: hasAuditBaseline,
     valuationDragSignals: {
       riskScore,
       criticalFindings: latestAuditSummary?.criticalFindings ?? null,

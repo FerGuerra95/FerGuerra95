@@ -49,10 +49,7 @@ function hasPersistedExecutiveModuleData(key, data) {
     case 'ma':
       return Number(data.counts?.deals ?? data.totalDeals ?? 0) > 0 || Boolean(data.latestDeal?.id);
     case 'compliance':
-      return (
-        (data.legalHealthScore !== null && data.legalHealthScore !== undefined) ||
-        Boolean(data.latestAuditRun?.id)
-      );
+      return Boolean(data.latestAuditRun?.id);
     case 'funding':
       return (
         Number(data.totalAmountRaised ?? data.totalRaised ?? 0) > 0 ||
@@ -216,19 +213,32 @@ export function buildModuleCards(moduleSummaries = {}, readiness = {}) {
     ['reporting', 'Reporting', '/reporting/dashboard', score('reporting')],
     ['strategy', 'Strategy', '/strategy/dashboard', score('strategy')]
   ].map(([key, title, route, rawScore]) => {
-    const available = moduleSummaries[key]?.status === 'available';
-    const value = rawScore === null || rawScore === undefined ? null : clampScore(rawScore);
+    const entry = moduleSummaries[key] || {};
+    const envelopeStatus = entry.status;
+    const eligible =
+      envelopeStatus === 'available' && entry.executiveSignalEligible !== false;
+    const value =
+      eligible && rawScore !== null && rawScore !== undefined ? clampScore(rawScore) : null;
+
+    let status = 'insufficient_data';
+    if (envelopeStatus === 'not_available') {
+      status = 'not_available';
+    } else if (value !== null) {
+      status = value < 60 ? 'watch' : 'normal';
+    }
+
     return {
       key,
       title,
       route,
-      status: available ? (value !== null && value < 60 ? 'watch' : 'normal') : 'not_available',
-      score: available && value !== null ? value : null,
-      trend: available ? readiness.trend : 'not_available',
-      keyMetric: available ? `${value ?? 'Insufficient data'}/100` : 'Signal not available',
-      attentionFlag: available ? value !== null && value < 65 : true,
-      cta: available ? 'Open module' : 'Signal not available',
-      humanReviewRequired: true
+      status,
+      score: value,
+      trend: value !== null ? readiness.trend : 'insufficient_data',
+      keyMetric: value !== null ? `${value}/100` : 'Insufficient data',
+      attentionFlag: value !== null ? value < 65 : false,
+      cta: value !== null ? 'Open module' : 'Signal not available',
+      humanReviewRequired: true,
+      executiveSignalEligible: value !== null
     };
   });
 }
@@ -251,8 +261,11 @@ export async function getExecutiveOverview(scope = {}) {
       key: card.key,
       label: card.title,
       value: card.score,
+      score: card.score,
       status: card.status,
-      route: card.route
+      route: card.route,
+      displayLabel: card.score === null ? 'N/A' : `${card.score}/100`,
+      executiveSignalEligible: card.executiveSignalEligible === true
     })),
     readiness,
     executiveReadinessIndex: readiness,
