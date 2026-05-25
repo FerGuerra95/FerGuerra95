@@ -572,3 +572,33 @@ Not a source-of-truth for production pilot narrative.
 **P2 residuals:** Governance/Strategy Golden · Render smoke · PDF renderer · per-module variance · ~~PMI `mergeWithDemo` stale reference~~ **resolved C.13.12B** · `executiveReports` readiness `\|\| 0` · Heritage audit · broader e2e.
 
 **Next:** Production Render smoke · C.14 Enterprise Hardening.
+
+## C.14.8 - Source-of-Truth Residual Register Note
+
+**Current SoT baseline:** closed for controlled DSS pilot use after C.13 global logic baseline and C.14 controlled-pilot hardening. This is not enterprise certification, procurement readiness, legal review, SOC2/ISO readiness, or autonomous decision approval.
+
+### C.14.8 SoT conclusions
+
+1. Remaining source-of-truth gaps are P2, architecture-cleanup, AI-readiness, or procurement-level unless a future phase confirms a new P0/P1.
+2. AI must not be implemented before C.14.8 and C.14.9 are both closed.
+3. Reporting remains **Board Review Draft** until PDF/HTML renderer, snapshot/versioning, and per-module ownership decisions are implemented and verified.
+4. Governance Golden helper/tests remain P2.
+5. Strategy Golden helper/tests remain P2.
+6. Heritage remains preview/future audit/freeze pending; it must not be sold as fully C.13 logic-audited.
+7. Bridge marketplace remains `INTERNAL_UNLISTED_DEMO / FUTURE_PRIVATE_NETWORK`, not a public marketplace and not an active transaction/success-fee product.
+8. Funding draft workspace vs persisted backend separation remains documented; broader e2e/runtime coverage is P2.
+9. M&A snapshot/re-export policy remains P2 before stronger demo/procurement claims.
+10. Procurement-level SoT confidence requires final legal/DPA/privacy review, retention/DSR process, audit export, SLA/support, incident response, DR/BCP, and security questionnaire readiness.
+
+### C.14.8 prohibited interpretations
+
+Do not interpret the current registry as saying:
+
+- all modules are enterprise complete;
+- Reporting has a finished PDF renderer;
+- Bridge is a public marketplace;
+- Heritage is fully audited;
+- Governance/Strategy have Golden helper closure;
+- AI features are authorized;
+- procurement enterprise readiness is achieved;
+- legal, financial, compliance, risk, governance, or valuation outputs are certified.

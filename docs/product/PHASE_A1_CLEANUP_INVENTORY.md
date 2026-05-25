@@ -6505,3 +6505,154 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 **Correcciones:** Executive empty org defensive signals; Board Pack PMI null preserved; Compliance null not 55; reportingReadinessScore null without metadata; createBoardPack generation_failed flag; scoringTruthfulness payload; tests.
 
 **Reporting global:** **AGGREGATOR RISK MITIGATED / PENDING REPORTING VARIANCE SOT**
+
+---
+
+## C.14.8 - Global P0/P1/P2/P3 Residual Register & Cleanup Plan
+
+**Fecha:** 26 mayo 2026  
+**Mode:** DOCS / AUDIT / PLANNING only. No product code, tests, migrations, Golden Dataset, Formula Registry, package/config, secrets, cleanup, refactor, or AI implementation.
+
+### 1. Estado general
+
+C.13 global logic baseline is closed for controlled DSS pilot use, with human review and truthfulness boundaries. C.14 pilot/security hardening has resolved the known controlled-pilot P1 blockers: tenant-safe creates, backup/restore rehearsal, auth + Compliance CRUD audit logs, OIDC id_token verification, Secure Share technical hardening, credential rotation closure, post-rotation auth smoke, Funding e2e copy mismatch, and Compliance radar empty-state.
+
+**Current global status:** controlled pilot can proceed as DSS/human-reviewed material if legal/pilot conditions are followed. Commercial demo, procurement enterprise readiness, AI, PDF/reporting renderer, and architecture cleanup remain gated by P2/P3 work below.
+
+### 2. Severity classification
+
+| Severity | Current count | Summary |
+|---|---:|---|
+| P0 | 0 | None known. |
+| P1 | 0 | None known for controlled pilot after C.14.7b, post-rotation smoke, P2-FIX-01, and P2-FIX-02. |
+| P2 | 15 | Blocks serious commercial demo, expanded pilot, procurement preparation, AI readiness, or architecture cleanup sequencing. |
+| P3 | 6 | Polish, broader coverage, naming/docs refinement, and later legacy cleanup after architecture audit. |
+
+### 3. P0 actuales
+
+**None known.**
+
+P0 remains reserved for production outage, auth bypass, confirmed cross-tenant leak, data loss/corruption, secret/token exposed in repo, or broken build/deploy.
+
+### 4. P1 actuales
+
+**None known for controlled pilot.**
+
+Notes:
+- Legal final / DPA remains not final, but it does not block an internal controlled pilot when documented as draft and legal review required.
+- Procurement enterprise remains blocked.
+- CORS allowlist, retention/DSR, and legal pack remain important, but based on the current docs they are not classified as controlled-pilot P1 unless a concrete deployment/customer condition makes them critical.
+- ES256 OIDC remains conditional: P2/P1 depending on the selected IdP. If the IdP requires ES256-only support before SSO go-live, reclassify as P1 for that SSO deployment.
+
+### 5. P2 actuales
+
+| Item | Severity | Blocker for | Recommended phase |
+|---|---|---|---|
+| Post-deploy CEO smoke after `ea98a0d` to verify Compliance `N/A` in prod empty org | P2 | Commercial demo confidence | C.14.8 follow-up / prod smoke |
+| Production authenticated-hubs rerun after `45b7e93` / `ea98a0d` deploy | P2 | Commercial demo confidence | C.14.8 follow-up / prod smoke |
+| Compliance API ad-hoc 404 route naming review | P2 | Expanded demo / API confidence | C.14.13 |
+| Retention / DSR automation | P2 | Procurement enterprise | C.17 |
+| PDF/HTML renderer | P2 | Commercial demo / reporting expectations | C.15 / dedicated renderer phase |
+| Governance Golden helper/tests | P2 | Logic hardening / future procurement | C.14.x / C.16 readiness |
+| Strategy Golden helper/tests | P2 | Logic hardening / future procurement | C.14.x / C.16 readiness |
+| Per-module variance ownership | P2 | Reporting product completeness | C.14.x / Reporting module phases |
+| M&A snapshot/re-export policy | P2 | M&A report truthfulness / demo | C.14.13 or M&A follow-up |
+| Funding dashboard e2e/runtime broader coverage | P2 | Expanded pilot confidence | C.14.13 or Funding follow-up |
+| Heritage audit/freeze decision | P2 | Demo scope / architecture cleanup | C.14.9 |
+| Bridge optional alignment and marketplace quarantine review | P2 | Demo/sales truthfulness | C.14.9 / C.15 |
+| Observability/APM/Sentry/LOG_HTTP | P2 | Expanded pilot operations | C.17 |
+| ES256 OIDC support if selected IdP requires it | P2 conditional | Enterprise SSO readiness | C.17 or SSO phase |
+| Final legal review for DPA/privacy/customer-facing documents | P2 | External/customer deployment and procurement | C.17 |
+
+### 6. P3 actuales
+
+| Item | Severity | Blocker for | Recommended phase |
+|---|---|---|---|
+| Docs polish | P3 | No direct pilot block | C.15 / ongoing |
+| Sales collateral refinement | P3 | Demo polish | C.15 |
+| Visual polish | P3 | Demo polish | C.15 / UI polish |
+| Wider e2e matrix | P3 | Broader confidence | C.14.13 / CI hardening |
+| Naming cleanup | P3 | Maintainability | C.14.10+ |
+| Legacy cleanup after architecture audit | P3 | Maintainability | C.14.10-C.14.12 |
+
+### 7. What blocks controlled pilot
+
+No known P0 or P1 blocks controlled pilot today, provided:
+
+1. DSS/human-review positioning is explicit.
+2. NDA/pilot agreement and legal review path are followed.
+3. Credential rotation remains outside repo and smoke credentials stay in secret/local environment only.
+4. Legal/DPA documents are treated as draft for pilot, not final customer/procurement pack.
+5. Procurement/SOC2/SLA/certification claims are not made.
+
+### 8. What blocks serious commercial demo
+
+1. Production CEO smoke refresh after `ea98a0d`.
+2. Production authenticated-hubs rerun after deploy.
+3. PDF/HTML renderer expectation management or renderer delivery.
+4. Demo script and sales wording review.
+5. No false claims: no certified enterprise, legal, investment, SOC2/ISO/SLA, autonomous decision, or public marketplace claims.
+6. Bridge marketplace remains internal/unlisted/quarantined.
+7. Heritage remains preview/future unless audited/frozen.
+
+### 9. What blocks enterprise procurement
+
+1. Final DPA/privacy/legal review.
+2. Retention/DSR process and automation.
+3. SLA/support model.
+4. SOC2/ISO roadmap and security questionnaire.
+5. Incident response and DR/BCP.
+6. Audit log export and broader audit coverage.
+7. SSO/SAML/SCIM roadmap and tenant admin model.
+8. Observability and operational monitoring.
+
+### 10. What must happen before AI
+
+1. C.14.8 residual register closed.
+2. C.14.9 architecture / monolith / duplication audit READ ONLY completed.
+3. Data boundaries documented for AI use.
+4. Tenant isolation for AI documented.
+5. Prompt injection guardrails documented.
+6. AI audit logging planned.
+7. First AI feature limited to draft-only, human-reviewed output.
+8. No AI feature may present legal, financial, governance, compliance, valuation, or board decisions as autonomous or certified.
+
+### 11. What must happen before refactor / cleanup
+
+1. C.14.8 residual register closed.
+2. C.14.9 architecture / monolith / duplication audit READ ONLY completed.
+3. Cleanup batches defined with file allowlists.
+4. No big-bang refactor.
+5. No deletion without import/route/service/test audit.
+6. No auth/router/migration/security runtime changes without explicit phase authorization.
+
+### 12. Gates
+
+| Gate | Status | Notes |
+|---|---|---|
+| Gate A - Controlled Pilot Ready | Ready with conditions | P0 none known; P1 none known for controlled pilot; C.13 logic baseline closed; C.14 security baseline closed; credential rotation smoke done; pilot pack documented; human review required; legal/DPA final not required for internal controlled pilot, but legal review required before formal external/customer deployment. |
+| Gate B - Commercial Demo Ready | Not yet | Requires Gate A, P2 visible issues fixed or documented, production smoke refreshed, demo script prepared, sales wording reviewed, no false claims, no enterprise certification claims. |
+| Gate C - Architecture Cleanup Ready | Not yet | Requires C.14.8 closed, C.14.9 architecture/monolith/duplication audit READ ONLY completed, cleanup batches defined, no big-bang refactor. |
+| Gate D - AI Readiness | Not yet | Requires C.14.8 and C.14.9 closed, AI data boundaries, tenant isolation, prompt-injection guardrails, AI audit logging plan, first AI feature draft-only and human-reviewed. |
+| Gate E - Procurement Enterprise Ready | Not yet | Requires final DPA/privacy/legal review, retention/DSR process, SLA/support, SOC2/ISO roadmap, security questionnaire, incident response, audit log export, SSO/SAML/SCIM roadmap, tenant admin model, DR/BCP. |
+
+### 13. Recommended cleanup roadmap
+
+1. Re-run prod CEO smoke after deploy `ea98a0d`.
+2. Re-run authenticated-hubs prod e2e after deploy.
+3. C.14.9 - Architecture / monolith / duplication audit READ ONLY.
+4. C.14.10 - Safe cleanup batch A: dead/unused/legacy only.
+5. C.14.11 - Safe cleanup batch B: duplicate helpers/shared utilities.
+6. C.14.12 - Safe cleanup batch C: monolith extraction low-risk.
+7. C.14.13 - Route/API consistency audit/fix if needed.
+8. C.15.0 - Honest demo/sales pack.
+9. C.16.0 - AI readiness audit.
+10. C.16.1 - AI provider abstraction.
+11. C.16.2 - AI Board Review Draft Assistant.
+12. C.17 - Procurement/legal/retention/SOC2/SLA roadmap.
+
+### 14. C.14.8 decision
+
+No implementation changes were made in this phase. No product code, backend code, frontend code, tests, migrations, Golden Dataset, Formula Registry, package/config, secrets, runtime security, or cleanup files were touched.
+
+The next recommended phase is **C.14.9 - Architecture / monolith / duplication audit READ ONLY**.

@@ -1111,3 +1111,46 @@ C.13 is the formal phase for:
 - Test Oracle Review
 - Cross-module Consistency Review
 C.13 must review both future branches and already audited branches.
+
+## C.14.8 Global Residual Register
+
+**Mode:** DOCS / AUDIT / PLANNING only.
+
+**Status:** C.13 global logic baseline is closed for controlled DSS pilot use. C.14 security/pilot hardening is closed for the known controlled-pilot P1 items recorded through C.14.7b, post-rotation auth smoke, P2-FIX-01, and P2-FIX-02.
+
+### Current severity posture
+
+| Severity | C.14.8 status |
+|---|---|
+| P0 | None known. |
+| P1 | None known for controlled pilot. |
+| P2 | Backlog remains: prod CEO smoke refresh, authenticated-hubs prod rerun, Compliance API 404 review, retention/DSR automation, PDF/HTML renderer, Governance/Strategy Golden helpers, per-module variance, M&A snapshot/re-export policy, Funding broader e2e/runtime coverage, Heritage audit/freeze, Bridge alignment, observability, conditional ES256 OIDC support, final legal review. |
+| P3 | Docs polish, sales collateral refinement, visual polish, wider e2e matrix, naming cleanup, legacy cleanup after architecture audit. |
+
+### AI gate
+
+AI implementation must not begin before:
+
+1. C.14.8 residual register is closed.
+2. C.14.9 architecture / monolith / duplication audit READ ONLY is closed.
+3. AI data boundaries are documented.
+4. Tenant isolation for AI is documented.
+5. Prompt injection guardrails are documented.
+6. AI audit logging is planned.
+7. First AI output is draft-only and human-reviewed.
+
+AI outputs must remain DSS material, not legal advice, financial advice, certified compliance, board approval, fairness opinion, autonomous decision, or procurement certification.
+
+### Cleanup gate
+
+Refactor or cleanup must not begin before:
+
+1. C.14.8 residual register is closed.
+2. C.14.9 architecture / monolith / duplication audit READ ONLY is closed.
+3. Cleanup batches and explicit file allowlists are defined.
+4. Big-bang refactor is rejected.
+5. Delete/move candidates have import, route, service, test, and migration safety checks.
+
+### Execution rule
+
+C.14.8 made no implementation changes. Future phases must use their own active prompt HEAD and must not rely on stale baseline references from older manuals or previous prompts. If HEAD, origin/main, or working tree expectations differ from the active prompt, stop before modifying files.
