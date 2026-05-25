@@ -6670,3 +6670,19 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Decision:** Architecture cleanup is not authorized by C.14.9. Cleanup may start only in C.14.10+ with explicit file allowlists, import/route/test checks, and no big-bang refactor.
 
 **Next recommended phase:** C.14.10 Cleanup Batch A - dead/unused/legacy only, or C.15.0 Honest Demo/Sales Pack if demo sequencing takes priority.
+
+---
+
+## C.14.10 - Safe Cleanup Batch A
+
+**Status:** COMPLETED / SAFE CLEANUP.
+
+**Reference:** `docs/architecture/ARCHITECTURE_CLEANUP_AUDIT.md`
+
+**Summary:** Removed five unreferenced Compliance placeholder components after import/route/test/name searches. Deferred ambiguous component-name cases, root test layout decisions, the `compilanceFlow` typo rename, empty CSS cleanup, and generated/dependency/artifact cleanup.
+
+**Runtime posture:** No auth, router, storage, formulas, Golden Dataset, Formula Registry, source-of-truth logic, migrations, package/config, secrets, production config, CSS global behavior, or business formulas changed.
+
+**Validation note:** `npx eslint . --no-fix` was attempted and failed before implementation because `npx` tried to fetch ESLint from npm and the environment returned `EACCES`; no autofix was applied.
+
+**Next recommended phase:** C.14.11 Duplicate Helpers Audit/Fix or C.15.0 Honest Demo/Sales Pack.

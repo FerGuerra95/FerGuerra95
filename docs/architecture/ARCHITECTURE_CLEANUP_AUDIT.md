@@ -234,3 +234,29 @@ Before AI:
 ## C.14.9 Decision
 
 No P0 or P1 findings were identified. This audit creates a cleanup map only. It does not authorize deletion, refactor, AI implementation, route/API changes, auth/security changes, formula changes, or visual cleanup.
+
+## C.14.10 - Cleanup Batch A Results
+
+**Status:** COMPLETED / SAFE CLEANUP.
+
+Batch A applied only deletions with direct import/name evidence and stayed below the five-file cap. No auth, router, storage, Formula Registry, Golden Dataset, source-of-truth, migration, package/config, secret, CSS global, or runtime business logic changes were made.
+
+`npx eslint . --no-fix` was attempted before implementation. The command did not run because `npx` tried to fetch ESLint from npm and the environment returned `EACCES`; no autofix or code modification was performed by ESLint.
+
+| Candidate | Decision | Evidence | Action | Risk | Follow-up |
+|---|---|---|---|---|---|
+| `src/modules/compliance/components/GeopoliticalContextCard.jsx` | SAFE_DELETE | Placeholder component; search found no imports/routes/tests outside the file itself. | Deleted. | Low; unreferenced UI placeholder only. | Recreate intentionally if a future Compliance UI phase needs it. |
+| `src/modules/compliance/components/ROIWidget.jsx` | SAFE_DELETE | Placeholder component; search found no imports/routes/tests outside the file itself. | Deleted. | Low; unreferenced UI placeholder only. | Recreate intentionally if a future Compliance UI phase needs it. |
+| `src/modules/compliance/components/EvidenceTimeline.jsx` | SAFE_DELETE | Placeholder component; exact component file was not imported. Remaining matches are engine helpers such as `assembleEvidenceTimeline`, not component imports. | Deleted. | Low; unreferenced UI placeholder only. | Preserve engine evidence timeline helpers as active logic. |
+| `src/modules/compliance/components/ReviewQueue.jsx` | SAFE_DELETE | Placeholder component; exact component file was not imported. Remaining matches are engine helpers such as `calculateReviewQueueStats`, not component imports. | Deleted. | Low; unreferenced UI placeholder only. | Preserve engine review queue helpers as active logic. |
+| `src/modules/compliance/components/SourceCitationList.jsx` | SAFE_DELETE | Placeholder component; exact component file was not imported. Remaining matches are engine helpers such as `buildSourceCitationList`, not component imports. | Deleted. | Low; unreferenced UI placeholder only. | Preserve engine source citation helpers as active logic. |
+| `src/modules/compliance/components/AlertCard.jsx` | DEFER | File appears unreferenced, but active local `AlertCard` components exist in Compliance pages. | No deletion. | Low to medium naming ambiguity. | Reassess in a later UI/component cleanup batch. |
+| `src/modules/compliance/components/SupplierRiskCard.jsx` | DEFER | File appears unreferenced, but active local `SupplierRiskCard` components exist in Compliance pages. | No deletion. | Low to medium naming ambiguity. | Reassess in a later UI/component cleanup batch. |
+| `src/index.css` | DEFER | Empty/unreferenced candidate, but harmless and outside the five-file deletion cap. | No deletion. | Low. | Reassess with artifact/empty-file policy. |
+| `tests/ceos-*.spec.js` root tests | DEFER | Root tests may still provide coverage value even if layout is nonstandard. | No deletion. | Medium if removed without gate review. | Decide in C.14.14 structure verification or a test-layout phase. |
+| `tests/e2e/compliance/compilanceFlow.spec.js` | DEFER | Typo is documented, but rename would change test path and may affect e2e invocation patterns. | No rename. | Low to medium. | Rename only in a test-layout phase with targeted e2e validation. |
+| `.local/backups`, `.tools`, `node_modules`, `dist`, generated artifacts | DO_NOT_TOUCH | Matches are generated, dependency, protected, or artifact paths. | No deletion. | High if touched casually. | Handle only with explicit artifact/dependency cleanup policy. |
+
+### C.14.10 Decision
+
+Batch A removed five unreferenced Compliance placeholder components. It intentionally did not rename tests, touch active wrappers, remove generated artifacts, clean CSS globals, or alter any source-of-truth/runtime logic. The next cleanup step remains C.14.11 for duplicate helpers/shared utilities, or C.15.0 if demo/sales readiness takes priority.

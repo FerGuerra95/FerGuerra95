@@ -1,1 +1,0 @@
-import React from 'react'; import { Card } from '../../../shared/components/ui/Card.jsx'; export function ReviewQueue() { return <Card><h3>ReviewQueue</h3><p className='muted'>Placeholder del módulo Compliance.</p></Card>; }

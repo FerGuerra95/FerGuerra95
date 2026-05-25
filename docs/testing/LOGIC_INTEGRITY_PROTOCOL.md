@@ -1173,3 +1173,27 @@ Architecture cleanup cannot start until this audit is reviewed and a future clea
 6. Heritage preview/future audit status.
 
 AI implementation remains blocked until C.14.9 is reviewed and relevant cleanup/data-boundary gates are explicitly authorized.
+
+## C.14.10 Safe Cleanup Batch A
+
+**Status:** completed as WRITE/FIX/TEST controlled cleanup.
+
+C.14.10 removed only five unreferenced Compliance placeholder components after import/route/test/name searches:
+
+1. `src/modules/compliance/components/GeopoliticalContextCard.jsx`
+2. `src/modules/compliance/components/ROIWidget.jsx`
+3. `src/modules/compliance/components/EvidenceTimeline.jsx`
+4. `src/modules/compliance/components/ReviewQueue.jsx`
+5. `src/modules/compliance/components/SourceCitationList.jsx`
+
+No formulas, Golden Dataset, Formula Registry, source-of-truth definitions, runtime business logic, auth, router, storage, migrations, package/config, secrets, CSS globals, or test logic changed.
+
+Deferred candidates remain documentation-only until a future prompt authorizes them:
+
+1. `AlertCard.jsx` and `SupplierRiskCard.jsx`, because active page-local components use the same names.
+2. `src/index.css`, because it is harmless and was outside the five-file cap.
+3. Root `tests/ceos-*.spec.js` layout decisions.
+4. `tests/e2e/compliance/compilanceFlow.spec.js` typo rename.
+5. Generated/dependency/artifact directories.
+
+`npx eslint . --no-fix` was attempted and did not run because `npx` tried to fetch ESLint from npm and the environment returned `EACCES`. No autofix was applied.
