@@ -1197,3 +1197,23 @@ Deferred candidates remain documentation-only until a future prompt authorizes t
 5. Generated/dependency/artifact directories.
 
 `npx eslint . --no-fix` was attempted and did not run because `npx` tried to fetch ESLint from npm and the environment returned `EACCES`. No autofix was applied.
+
+## C.14.11 Duplicate Helpers Audit/Fix
+
+**Status:** completed as WRITE/FIX/TEST controlled audit, with no safe consolidation applied.
+
+C.14.11 audited duplicate-looking helpers for:
+
+1. Currency formatting.
+2. Percent formatting.
+3. Number parsing and normalization.
+4. Clamp and score clamp helpers.
+5. `N/A`, null, and `insufficient_data` display/status mapping.
+6. Human-review and Board Review Draft truthfulness wording.
+7. Frontend/backend utility mirrors.
+
+No formulas, Golden Dataset, Formula Registry, source-of-truth definitions, scoring semantics, API contracts, runtime business logic, auth, router, storage, migrations, package/config, secrets, CSS globals, or test logic changed.
+
+The audit found no 1-3 helper candidates with exact semantic equivalence. Duplicate-looking helpers were deferred because they differ by module ownership, display/export context, ratio-vs-percent behavior, null-vs-zero behavior, DSS truthfulness labels, or backend readiness/scoring contracts.
+
+Future helper consolidation must add focused contract tests before changing imports. At minimum, tests should cover null, undefined, empty string, invalid text, comma decimals, thousands separators, zero denominators, ratio inputs, percent-point inputs, currency fallback, and DSS `insufficient_data` display semantics.

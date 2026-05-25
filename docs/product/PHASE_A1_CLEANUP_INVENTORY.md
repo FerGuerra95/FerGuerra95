@@ -6686,3 +6686,19 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Validation note:** `npx eslint . --no-fix` was attempted and failed before implementation because `npx` tried to fetch ESLint from npm and the environment returned `EACCES`; no autofix was applied.
 
 **Next recommended phase:** C.14.11 Duplicate Helpers Audit/Fix or C.15.0 Honest Demo/Sales Pack.
+
+---
+
+## C.14.11 - Duplicate Helpers Audit/Fix
+
+**Status:** COMPLETED / AUDIT ONLY / NO SAFE CONSOLIDATION.
+
+**Reference:** `docs/architecture/ARCHITECTURE_CLEANUP_AUDIT.md`
+
+**Summary:** Audited duplicate-looking helpers for currency, percent formatting, number parsing, score clamps, null/`N/A` mapping, `insufficient_data`, human-review labels, Board Review Draft wording, and frontend/backend utility mirrors. No code was changed because the candidates had module-specific semantics or touched scoring/source-of-truth boundaries.
+
+**Runtime posture:** No formulas, Golden Dataset, Formula Registry, scoring semantics, API contracts, auth, router, storage, package/config, secrets, UI visual behavior, or source-of-truth logic changed.
+
+**Decision:** Keep duplicate-looking helpers deferred until exact contract tests prove equivalence. The next cleanup phase may proceed to C.14.12 only with explicit low-risk monolith extraction boundaries, or sequencing may move to C.15.0 for demo/sales readiness.
+
+**Next recommended phase:** C.14.12 Monolith Extraction Low-Risk Audit or C.15.0 Honest Demo/Sales Pack.
