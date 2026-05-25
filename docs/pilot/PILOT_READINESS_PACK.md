@@ -25,7 +25,7 @@ This pack is for **internal operators**, pilot sponsors, and customer success �
 | **SLA-backed production** | **NO** |
 | **Autonomous decisions** | **NO** — human review required |
 
-**Prerequisites before go-live:** C.14 security/privacy drafts reviewed · backup executed · smoke passed · C14-P1-CREDENTIAL-01 addressed · NDA/pilot agreement (legal).
+**Prerequisites before go-live:** C.14 security/privacy drafts reviewed · backup executed · smoke passed · C14-P1-CREDENTIAL-01 rotation **RESOLVED OPS** (post-rotation smoke still **PENDING**) · NDA/pilot agreement (legal).
 
 ---
 
@@ -193,7 +193,7 @@ Follow `PILOT_OFFBOARDING_CHECKLIST.md`:
 
 | Limitation | Phase / owner |
 |---|---|
-| C14-P1-CREDENTIAL-01 password rotation | Ops — **OPEN** (C.14.7); blocks expanded pilot until operator confirms rotation outside repo |
+| C14-P1-CREDENTIAL-01 password rotation | Ops — **RESOLVED OPS** (C.14.7b); post-rotation smoke **PENDING** (`CEOS_E2E_*` in secret store only) |
 | Final DPA / privacy policy | Legal — pending |
 | OIDC id_token verification | C.14.6 if SSO required |
 | Secure share operational discipline | Customer + ops |

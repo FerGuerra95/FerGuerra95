@@ -9,22 +9,14 @@
 
 | Field | Value |
 |---|---|
-| **Status** | **OPEN / ROTATION REQUIRED OUTSIDE REPO** |
-| **Phase** | C.14.7 — Credential rotation closure (2026-05-24) |
-| **Operator confirmation** | **Not received** — cannot mark RESOLVED OPS without explicit operator attestation |
-| **Reason** | Production or shared test password was previously exposed outside secret stores (e.g. chat). Treat as **compromised** until rotated. |
-| **Resolution criteria** | Operator rotates password via secure admin/panel; attests rotation in writing (ticket/chat: “rotated, no value”); post-rotation auth smoke passes using `CEOS_E2E_*` only |
-| **New password in repo/docs/chat** | **Must remain no** |
+| **Status** | **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO** |
+| **Phase** | C.14.7b — Credential rotation closure (2026-05-25) |
+| **Operator confirmation** | **Received** — prod test password rotated outside repo; new value not stored in git/docs/chat |
+| **Reason** | Previous production test password was exposed outside secret stores (e.g. chat). Treated as **compromised**; rotation completed via ops path (`scripts/ops/reset-user-password.js` on Render shell). |
+| **New password in repo/docs/chat** | **No** — must remain no |
+| **Future smoke credentials** | `CEOS_E2E_USER` / `CEOS_E2E_PASSWORD` in local shell or secret manager only — never in repo/docs/chat |
 
 **Do not** document the new password value anywhere in git, docs, or tickets.
-
-### What blocks while OPEN
-
-- Claiming “credential hygiene closed” for enterprise pilot
-- Expanded production pilot without rotation attestation
-- Marking C14-P1-CREDENTIAL-01 **RESOLVED OPS** in inventory
-
-Does **not** block local development or docs-only phases.
 
 ### Operator attestation (no secrets)
 
@@ -52,15 +44,15 @@ Safe output only: `user found`, `password updated`, `timestamp` (no password val
 
 After run: verify login with new password and that the old password fails. Then attest (no secret):
 
-> Rotated outside repo on [date]. New value not in git/docs/chat. Post-rotation smoke [done/pending].
+> Rotated outside repo on 2026-05-25. New value not in git/docs/chat. Post-rotation smoke pending.
 
-**C14-P1-CREDENTIAL-01** stays **OPEN** until that attestation and smoke are recorded.
+**C14-P1-CREDENTIAL-01:** **RESOLVED OPS** (rotation). Post-rotation smoke tracked separately below.
 
 ### Post-rotation auth smoke
 
 | Item | Status |
 |---|---|
-| **POST-ROTATION AUTH SMOKE** | **PENDING** (requires rotation confirmation + local `CEOS_E2E_*`) |
+| **POST-ROTATION AUTH SMOKE** | **PENDING** — run with `CEOS_E2E_USER` / `CEOS_E2E_PASSWORD` from secret store only |
 
 Run only with variables in shell/secret manager — never in committed files:
 
@@ -73,11 +65,11 @@ $env:CEOS_BASE_URL = 'https://app.theceosos.com'
 
 Then: login smoke, one authenticated API read per critical hub, logout. Document pass/fail without printing credentials.
 
-### Closure state (operator selects one)
+### Closure state (historical)
 
 | Option | Inventory status |
 |---|---|
-| A — Rotated outside repo | **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO** |
+| A — Rotated outside repo | **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO** ← **current (C.14.7b)** |
 | B — Not yet rotated | **OPEN / ROTATION REQUIRED OUTSIDE REPO** |
 | C — Cannot confirm | **OPEN / ROTATION STATUS UNCONFIRMED** |
 
@@ -171,7 +163,7 @@ Reference: `.env.example` (placeholders only).
 - [ ] Password rotated outside repo
 - [ ] Sessions invalidated
 - [ ] Smoke re-run
-- [ ] C14-P1-CREDENTIAL-01 marked **RESOLVED OPS** in inventory (operator confirmation only)
+- [x] C14-P1-CREDENTIAL-01 marked **RESOLVED OPS** in inventory (C.14.7b — operator confirmation, no password value)
 
 ### After pilot ends
 

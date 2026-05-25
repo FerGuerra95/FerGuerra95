@@ -38,7 +38,7 @@ Complete before merging security-sensitive work or recommending pilot exposure.
 | SSO/OIDC | **Partial** | `oidcAuth.service.js`, PKCE/state | **id_token not signature-verified** | P1 if SSO on |
 | DPA/RGPD legal pack | **Draft** (C.14.4) | `docs/privacy/*` | Legal review + final DPA | P1 |
 | SOC2/ISO certification | **Gap** | — | Not claimed | P3 |
-| Credential hygiene | **OPEN** (C.14.7) | `CREDENTIAL_HYGIENE.md` | Prod test password compromised; rotation not operator-confirmed | **P1 ops** — blocks expanded pilot claim |
+| Credential hygiene | **RESOLVED OPS** (C.14.7b) | `CREDENTIAL_HYGIENE.md` | Prod test password rotated outside repo; post-rotation smoke **PENDING** | P2 ops — smoke with `CEOS_E2E_*` only |
 
 Do not mark a row **Complete** unless evidence exists; use **Partial** or **Gap** honestly.
 

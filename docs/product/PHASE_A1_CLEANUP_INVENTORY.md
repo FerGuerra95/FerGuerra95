@@ -6118,7 +6118,23 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Not closed:** OIDC id_token verification · final DPA/legal · credential rotation (ops)
 
-**Siguiente:** operator confirms prod password rotation → C.14.7b RESOLVED OPS · P2 Funding e2e · demo pack
+**Siguiente:** P2 Funding e2e · Compliance radar · demo/sales pack honest wording · post-rotation smoke (`CEOS_E2E_*`)
+
+### C.14.7b — Credential rotation closure / RESOLVED OPS
+
+**Commit:** `docs(security): close production credential rotation`
+
+**Mode:** DOCS ONLY — no code, tests, secrets, or credential values.
+
+**C14-P1-CREDENTIAL-01:** **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO**
+
+**Recorded (no secrets):**
+- Old prod test password considered compromised and rotated outside repo (Render shell + `scripts/ops/reset-user-password.js`).
+- New value not stored in git/docs/chat.
+- Future smoke credentials: `CEOS_E2E_USER` / `CEOS_E2E_PASSWORD` in local shell or secret manager only.
+- **POST-ROTATION AUTH SMOKE:** **PENDING**
+
+**Validaciones:** unit **435** · integration **74** · build pass (docs-only)
 
 ### C.14.7 — Credential rotation closure / prod test password hygiene
 
@@ -6153,7 +6169,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Files:** `tests/unit/auth/oidcIdTokenVerify.test.js` only.
 
-**C14-P1-CREDENTIAL-01:** **OPEN** (unchanged)
+**C14-P1-CREDENTIAL-01:** **OPEN** at C.14.6b (closed in C.14.7b)
 
 **Validaciones:** unit **432** · integration **74** · build pass
 

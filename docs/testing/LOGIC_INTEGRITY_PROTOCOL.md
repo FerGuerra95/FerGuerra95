@@ -759,7 +759,17 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Do-not-claim (pilot):** GDPR fully compliant · SOC2/ISO ready · procurement-ready · legal reviewed · production certified.
 
-**Next:** C.14.7 credential closure when operator confirms · P2 fixes · demo pack.
+**Next:** P2 fixes · demo pack · post-rotation smoke (`CEOS_E2E_*`).
+
+## C.14.7b — Credential rotation closure / RESOLVED OPS
+
+**C14-P1-CREDENTIAL-01:** **RESOLVED OPS / PROD TEST PASSWORD ROTATED OUTSIDE REPO** — operator attestation received; new password value not in git/docs/chat. Old prod test password treated as compromised and rotated.
+
+**Future smoke:** `CEOS_E2E_USER` / `CEOS_E2E_PASSWORD` in local shell or secret manager only.
+
+**POST-ROTATION AUTH SMOKE:** **PENDING**
+
+**Validaciones:** unit **435** · integration **74** · build pass (docs-only)
 
 ## C.14.7 — Credential rotation closure (OPS / DOCS)
 
@@ -775,7 +785,7 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **C14-P1-OIDC-IDTOKEN-01:** **REMAINS RESOLVED** / INVALID SIGNATURE TEST STABILIZED — production verifier unchanged; test uses JWKS mismatch + corrupted signature segment (no auth relaxation).
 
-**C14-P1-CREDENTIAL-01:** **OPEN** (unchanged).
+**C14-P1-CREDENTIAL-01:** **OPEN** (unchanged at C.14.6b).
 
 **Validaciones:** unit **432** · integration **74** · build pass.
 
