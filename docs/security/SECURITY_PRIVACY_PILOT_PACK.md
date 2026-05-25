@@ -191,6 +191,9 @@ CEO's OS pilot is **not**:
 | Pilot security runbook | `docs/operations/PILOT_SECURITY_RUNBOOK.md` |
 | Production access | `docs/operations/PRODUCTION_ACCESS_RUNBOOK.md` |
 | Backup/restore | `docs/operations/BACKUP_RESTORE_RUNBOOK.md` |
+| **Pilot readiness pack (C.14.5)** | `docs/pilot/PILOT_READINESS_PACK.md` |
+| Onboarding / weekly / offboarding | `docs/pilot/PILOT_ONBOARDING_CHECKLIST.md`, `PILOT_WEEKLY_REVIEW.md`, `PILOT_OFFBOARDING_CHECKLIST.md` |
+| Data intake / success / risks | `docs/pilot/PILOT_DATA_INTAKE_TEMPLATE.md`, `PILOT_SUCCESS_CRITERIA.md`, `PILOT_RISK_REGISTER.md` |
 
 ---
 

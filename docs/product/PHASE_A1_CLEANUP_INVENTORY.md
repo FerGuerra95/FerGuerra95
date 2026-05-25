@@ -6118,7 +6118,33 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Not closed:** OIDC id_token verification · final DPA/legal · credential rotation (ops)
 
-**Siguiente:** C.14.5 pilot readiness pack
+**Siguiente:** C.14.6 OIDC/secure-share hardening · credential rotation ops · optional P2 fixes
+
+### C.14.5 — Pilot Readiness Pack
+
+**Commit:** `docs: add pilot readiness pack`
+
+**Mode:** DOCS / OPS / PILOT READINESS — no product code, tests, Golden, or Formula Registry.
+
+**C14-PILOT-READINESS-01:** **RESOLVED** / CONTROLLED PILOT PACK DOCUMENTED
+
+**Pilot-ready (controlled internal use):** **YES**, with conditions (NDA, human review, security/privacy drafts, credential rotation, no procurement claims).
+
+**Enterprise certified / procurement-ready:** **NO**
+
+**Deliverables:**
+- `docs/pilot/PILOT_READINESS_PACK.md`
+- `docs/pilot/PILOT_ONBOARDING_CHECKLIST.md`
+- `docs/pilot/PILOT_DATA_INTAKE_TEMPLATE.md`
+- `docs/pilot/PILOT_SUCCESS_CRITERIA.md`
+- `docs/pilot/PILOT_WEEKLY_REVIEW.md`
+- `docs/pilot/PILOT_OFFBOARDING_CHECKLIST.md`
+- `docs/pilot/PILOT_RISK_REGISTER.md`
+- Cross-links in `PILOT_SECURITY_RUNBOOK.md`, `SECURITY_PRIVACY_PILOT_PACK.md`
+
+**P1 unchanged:** C14-P1-CREDENTIAL-01 OPEN · C14-P1-DPA-RGPD-PRIVACY-01 PARTIALLY RESOLVED · C14-P1-OIDC-IDTOKEN-01 OPEN if SSO · C14-P1-SECURE-SHARE-01 PARTIALLY RESOLVED
+
+**Validaciones (docs-only):** unit **423** · integration **73** · build pass (expected)
 
 ### C.14.4 — Security / Privacy / RGPD Pilot Pack
 

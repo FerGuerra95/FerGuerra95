@@ -3,6 +3,20 @@
 **Status:** Draft · Internal operations  
 **Scope:** Controlled pilot before enterprise procurement
 
+**Pilot operations pack (C.14.5):** `docs/pilot/PILOT_READINESS_PACK.md` — master index for onboarding, data intake, weekly review, offboarding, risks, and success criteria.
+
+| Document | Path |
+|---|---|
+| Pilot readiness pack | `docs/pilot/PILOT_READINESS_PACK.md` |
+| Onboarding | `docs/pilot/PILOT_ONBOARDING_CHECKLIST.md` |
+| Data intake | `docs/pilot/PILOT_DATA_INTAKE_TEMPLATE.md` |
+| Success criteria | `docs/pilot/PILOT_SUCCESS_CRITERIA.md` |
+| Weekly review | `docs/pilot/PILOT_WEEKLY_REVIEW.md` |
+| Offboarding | `docs/pilot/PILOT_OFFBOARDING_CHECKLIST.md` |
+| Risk register | `docs/pilot/PILOT_RISK_REGISTER.md` |
+| Credential hygiene | `docs/security/CREDENTIAL_HYGIENE.md` |
+| Backup/restore | `BACKUP_RESTORE_RUNBOOK.md` |
+
 ---
 
 ## 1. Pre-pilot checklist
@@ -15,6 +29,9 @@
 - [ ] C14-P1-CREDENTIAL-01: exposed test passwords **rotated**
 - [ ] Backup taken (`scripts/backup-sqlite.js`) — see `BACKUP_RESTORE_RUNBOOK.md`
 - [ ] Review `SECURITY_PRIVACY_PILOT_PACK.md` with sponsor
+- [ ] Complete `PILOT_ONBOARDING_CHECKLIST.md` pre-pilot section
+- [ ] Agree `PILOT_DATA_INTAKE_TEMPLATE.md` and `PILOT_SUCCESS_CRITERIA.md`
+- [ ] Review `PILOT_RISK_REGISTER.md` with sponsor
 
 ---
 
@@ -81,7 +98,7 @@ Store backup outside git. See `BACKUP_RESTORE_RUNBOOK.md`.
 
 ## 9. Audit log review cadence
 
-Weekly (pilot):
+Weekly (pilot) — use `docs/pilot/PILOT_WEEKLY_REVIEW.md`:
 
 - Sample `auth.login.failed` spikes
 - Compliance CRUD volume vs activity
@@ -114,11 +131,14 @@ Document timeline; no secrets in ticket body.
 
 ## 12. Offboarding
 
+Follow `docs/pilot/PILOT_OFFBOARDING_CHECKLIST.md`:
+
 - [ ] Disable pilot users
 - [ ] Revoke active secure shares
 - [ ] Export data if contract requires
 - [ ] Schedule deletion (manual until DSR automation)
 - [ ] Retain backups per agreed period only
+- [ ] Final pilot report and go/no-go per `PILOT_SUCCESS_CRITERIA.md`
 
 ---
 

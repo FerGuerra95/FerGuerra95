@@ -759,7 +759,23 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Do-not-claim (pilot):** GDPR fully compliant · SOC2/ISO ready · procurement-ready · legal reviewed · production certified.
 
-**Next:** C.14.5 pilot readiness pack · C.14.6 OIDC/secure-share technical hardening (if authorized).
+**Next:** C.14.6 OIDC/secure-share technical hardening (if authorized) · credential rotation ops.
+
+## C.14.5 — Pilot Readiness Pack
+
+**Mode:** DOCS / OPS only.
+
+**C14-PILOT-READINESS-01:** **RESOLVED** — `docs/pilot/*` operational pack (onboarding, data intake, success criteria, weekly review, offboarding, risk register).
+
+**Pilot-ready controlled internal use:** **YES** (conditions: human review, NDA, C.14.4 security/privacy drafts, no certification claims).
+
+**Enterprise certified / procurement-ready:** **NO**.
+
+**P1 unchanged:** C14-P1-CREDENTIAL-01 OPEN · DPA/RGPD partial · OIDC if SSO · secure share partial.
+
+**Commercial (pilot):** Can say Private Executive DSS pilot · human review · board **review draft** · Golden where documented. Cannot say certified · SOC2/ISO · SLA · autonomous · legal/investment advice.
+
+**Next:** C.14.6 technical hardening · P2 Funding e2e · demo pack after credential rotation.
 
 ## C.13.12B — PMI stale mergeWithDemo reference fix
 
