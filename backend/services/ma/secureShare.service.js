@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 
 import { recordAuditLog } from '../audit/auditLog.service.js';
+import { sanitizeAuditMetadata } from '../../utils/auditMetadata.js';
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
 import { getMaReportById } from './reports.service.js';
 
@@ -68,6 +69,16 @@ function safeTokenCompare(left, right) {
 
 function isExpired(item) {
   return item?.expiresAt && new Date(item.expiresAt).getTime() <= Date.now();
+}
+
+/** Public bearer route — uniform denial (no token/oracle leakage). */
+function denyPublicSecureShare() {
+  throw createError('Secure share no encontrado.', 404, 'SECURE_SHARE_NOT_FOUND');
+}
+
+function shareTokenPrefix(token) {
+  const safe = String(token || '');
+  return safe.length >= 8 ? safe.slice(0, 8) : '';
 }
 
 /**
@@ -256,19 +267,19 @@ export async function getMaSecureSharePublic({ id, token } = {}) {
   const item = await secureShareStore.getById(safeId);
 
   if (!item) {
-    throw createError('Secure share no encontrado.', 404, 'SECURE_SHARE_NOT_FOUND');
+    denyPublicSecureShare();
   }
 
   if (item.status !== 'active' || item.revokedAt) {
-    throw createError('Secure share revocado.', 403, 'SECURE_SHARE_REVOKED');
+    denyPublicSecureShare();
   }
 
   if (isExpired(item)) {
-    throw createError('Secure share caducado.', 403, 'SECURE_SHARE_EXPIRED');
+    denyPublicSecureShare();
   }
 
   if (!safeTokenCompare(hashToken(safeToken), item.tokenHash)) {
-    throw createError('Token de secure share no valido.', 403, 'SECURE_SHARE_TOKEN_INVALID');
+    denyPublicSecureShare();
   }
 
   const report = await getMaReportById(item.reportId, {
@@ -276,7 +287,7 @@ export async function getMaSecureSharePublic({ id, token } = {}) {
   });
 
   if (!report) {
-    throw createError('Informe M&A no encontrado.', 404, 'MA_REPORT_NOT_FOUND');
+    denyPublicSecureShare();
   }
 
   await recordAuditLog({
@@ -285,7 +296,12 @@ export async function getMaSecureSharePublic({ id, token } = {}) {
     action: 'ma.secure_share.public_accessed',
     entityType: 'ma',
     entityId: safeId,
-    metadata: { reportId: report.id, via: 'public_link' }
+    metadata: sanitizeAuditMetadata({
+      reportId: report.id,
+      via: 'public_link',
+      tokenPrefix: shareTokenPrefix(safeToken),
+      result: 'success'
+    })
   });
 
   return {

@@ -30,8 +30,9 @@ Complete before merging security-sensitive work or recommending pilot exposure.
 | Secrets management | **Partial** | `.env.example`, Render secrets | No vault integration in repo | P2 |
 | Production smoke | **Partial** | Inventory: auth smoke passed post-redeploy | Funding e2e copy P2 | P2 |
 | Human review / DSS disclaimers | **Implemented** (docs) | `AGENTS.md`, logic protocol | UI copy variance possible | P2 |
-| Secure share (technical) | **Partial** | `secureShare.service.js` | Bearer secrecy operational | P1 partial |
-| Secure share (operational) | **Documented** (C.14.4) | `SECURE_SHARE_OPERATIONAL_GUIDELINES.md` | Training/enforcement | P1 partial |
+| Secure share (technical) | **Implemented** (C.14.6) | `secureShare.service.js` | Public 404 oracle fix; auth route keeps 403 codes | P2 ops |
+| Secure share (operational) | **Documented** (C.14.4–C.14.6) | `SECURE_SHARE_OPERATIONAL_GUIDELINES.md` | Training/enforcement | P2 |
+| OIDC id_token verification | **Implemented** (C.14.6) | `oidcIdTokenVerify.js` | Requires `jwks_uri` for RS256; ES256 not supported | P1 if SSO + ES256 only |
 | Data retention policy | **Gap** | — | No automated purge | P1 |
 | DSR / export-delete workflow | **Gap** | — | Manual pilot only | P1 |
 | SSO/OIDC | **Partial** | `oidcAuth.service.js`, PKCE/state | **id_token not signature-verified** | P1 if SSO on |

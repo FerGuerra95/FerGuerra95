@@ -1,9 +1,9 @@
 # CEO's OS — Secure Share Operational Guidelines (M&A)
 
 **Status:** Draft · Internal / pilot  
-**C14-P1-SECURE-SHARE-01:** **PARTIALLY RESOLVED** / OPERATIONAL SECRECY GUIDELINES DOCUMENTED
+**C14-P1-SECURE-SHARE-01:** **RESOLVED** / TECHNICAL ACCESS CONTROLS + OPERATIONAL GUIDELINES (C.14.6)
 
-Technical controls exist (hashed token, expiry, revocation, rate limit, audit event on public access). **Full resolution** requires operational discipline plus future hardening (e.g. stricter logging review, mandatory expiry defaults) — not claimed closed by documentation alone.
+Technical controls (C.14.6): token **hashed** at rest; expiry + revocation; rate limit on public route; `ma.secure_share.public_accessed` audit with **tokenPrefix only** (no raw bearer); public API returns uniform **404** for invalid/expired/revoked token (no oracle). Operational discipline still required (see below).
 
 ---
 

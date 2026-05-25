@@ -87,12 +87,53 @@ describe('API MA public secure share', () => {
     expect(res.body?.data?.report?.payload?.html).toContain('Hi');
   });
 
-  it('rechaza token incorrecto sin JWT', async () => {
+  it('rechaza token incorrecto sin JWT con respuesta generica 404', async () => {
     const res = await request(app)
       .get(`/api/ma/public/secure-shares/${encodeURIComponent(shareId)}`)
       .set('X-MA-Share-Token', 'bad');
 
-    expect(res.status).toBe(403);
-    expect(res.body?.error?.code).toBe('SECURE_SHARE_TOKEN_INVALID');
+    expect(res.status).toBe(404);
+    expect(res.body?.error?.code).toBe('SECURE_SHARE_NOT_FOUND');
+  });
+
+  it('rechaza share revocado con respuesta generica 404', async () => {
+    const { revokeMaSecureShare } = await import(
+      '../../../backend/services/ma/secureShare.service.js'
+    );
+
+    const share2 = await createMaSecureShareLink({
+      organizationId: 'org_public_api',
+      userId: 'u_pub',
+      reportId: (
+        await createMaReport({
+          organizationId: 'org_public_api',
+          userId: 'u_pub',
+          caseId: (
+            await createMaCase({
+              name: 'Revoke case',
+              organizationId: 'org_public_api',
+              userId: 'u_pub',
+              financials: { name: 'R', sector: 'S', normalizedEbitda: 1 },
+              settings: { reportCurrency: 'EUR', evidenceDocuments: [] }
+            })
+          ).id,
+          title: 'R',
+          payload: { html: '<p>R</p>' }
+        })
+      ).id,
+      expiresInHours: 24
+    });
+
+    await revokeMaSecureShare({
+      organizationId: 'org_public_api',
+      id: share2.id
+    });
+
+    const res = await request(app)
+      .get(`/api/ma/public/secure-shares/${encodeURIComponent(share2.id)}`)
+      .set('X-MA-Share-Token', share2.token);
+
+    expect(res.status).toBe(404);
+    expect(res.body?.error?.code).toBe('SECURE_SHARE_NOT_FOUND');
   });
 });

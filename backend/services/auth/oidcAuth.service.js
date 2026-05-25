@@ -1,5 +1,7 @@
 import crypto from 'node:crypto';
 
+import { recordAuthAuditLog } from '../audit/auditLog.service.js';
+import { verifyOidcIdToken } from '../../utils/oidcIdTokenVerify.js';
 import { loginUserWithOidcProfile } from './auth.service.js';
 import { saveOidcState, takeOidcState } from './oidcStateStore.js';
 
@@ -73,26 +75,48 @@ async function fetchDiscovery(issuer) {
   return data;
 }
 
-function parseJwtPayload(jwt) {
-  const parts = String(jwt || '').split('.');
-  if (parts.length < 2) return null;
-  const payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-  const padded = payload.padEnd(payload.length + ((4 - (payload.length % 4)) % 4), '=');
-  try {
-    return JSON.parse(Buffer.from(padded, 'base64').toString('utf8'));
-  } catch {
-    return null;
+function profileFromIdTokenClaims(payload) {
+  const email =
+    payload?.email || payload?.preferred_username || payload?.upn;
+
+  if (!email) {
+    throw createError(
+      'No se pudo obtener el email del proveedor OIDC.',
+      502,
+      'OIDC_NO_EMAIL'
+    );
   }
+
+  const normalizedEmail = String(email).trim().toLowerCase();
+
+  return {
+    email: normalizedEmail,
+    name: payload?.name || normalizedEmail
+  };
 }
 
-async function fetchUserProfile(tokens, discovery) {
+/**
+ * Resolves OIDC user profile. Userinfo (Bearer access_token) is preferred.
+ * id_token is only accepted after cryptographic verification — never decoded without verify.
+ */
+export async function resolveOidcUserProfileFromTokens(
+  tokens,
+  discovery,
+  { nonce } = {}
+) {
+  const clientId = getEnv('OIDC_CLIENT_ID');
+  const issuer = getEnv('OIDC_ISSUER');
+  const clientSecret = getEnv('OIDC_CLIENT_SECRET');
+
   if (tokens.access_token && discovery.userinfo_endpoint) {
     const res = await fetch(discovery.userinfo_endpoint, {
       headers: { Authorization: `Bearer ${tokens.access_token}` }
     });
+
     if (res.ok) {
       const u = await res.json();
       const email = u.email || u.preferred_username || u.upn;
+
       if (email) {
         return {
           email: String(email).trim().toLowerCase(),
@@ -102,25 +126,33 @@ async function fetchUserProfile(tokens, discovery) {
     }
   }
 
-  if (tokens.id_token) {
-    const payload = parseJwtPayload(tokens.id_token);
-    if (payload) {
-      const email =
-        payload.email || payload.preferred_username || payload.upn;
-      if (email) {
-        return {
-          email: String(email).trim().toLowerCase(),
-          name: payload.name || email
-        };
-      }
-    }
+  if (!tokens.id_token) {
+    throw createError(
+      'No se pudo obtener el email del proveedor OIDC.',
+      502,
+      'OIDC_NO_EMAIL'
+    );
   }
 
-  throw createError(
-    'No se pudo obtener el email del proveedor OIDC.',
-    502,
-    'OIDC_NO_EMAIL'
-  );
+  try {
+    const verifiedPayload = await verifyOidcIdToken(tokens.id_token, {
+      issuer,
+      clientId,
+      nonce,
+      clientSecret,
+      discovery
+    });
+
+    return profileFromIdTokenClaims(verifiedPayload);
+  } catch (error) {
+    const code = error?.code || 'OIDC_ID_TOKEN_VERIFICATION_FAILED';
+
+    throw createError(
+      'No se pudo verificar el id_token del proveedor OIDC.',
+      401,
+      code
+    );
+  }
 }
 
 function assertAllowedEmailDomain(email) {
@@ -265,7 +297,9 @@ export async function completeOidcAuthorization(req, res) {
   }
 
   try {
-    const profile = await fetchUserProfile(tokens, discovery);
+    const profile = await resolveOidcUserProfileFromTokens(tokens, discovery, {
+      nonce: stored.nonce
+    });
     assertAllowedEmailDomain(profile.email);
     const result = await loginUserWithOidcProfile({
       email: profile.email,
@@ -275,6 +309,22 @@ export async function completeOidcAuthorization(req, res) {
     const jwt = encodeURIComponent(result.token);
     return res.redirect(302, `${frontend}/login#access_token=${jwt}`);
   } catch (err) {
+    const failureCode = String(err?.code || 'OIDC_ERROR');
+
+    if (
+      failureCode.startsWith('OIDC_ID_TOKEN') ||
+      failureCode === 'OIDC_JWKS_REQUIRED'
+    ) {
+      await recordAuthAuditLog({
+        action: 'auth.login.failed',
+        metadata: {
+          method: 'oidc',
+          reason: 'oidc_token_verification_failed',
+          failureCode
+        }
+      });
+    }
+
     const msg = encodeURIComponent(err?.message || 'Error SSO');
     return res.redirect(302, `${frontend}/login?sso_error=${msg}`);
   }

@@ -6118,7 +6118,27 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Not closed:** OIDC id_token verification · final DPA/legal · credential rotation (ops)
 
-**Siguiente:** C.14.6 OIDC/secure-share hardening · credential rotation ops · optional P2 fixes
+**Siguiente:** credential rotation ops · P2 Funding e2e · demo pack
+
+### C.14.6 — OIDC id_token verification + Secure Share technical hardening
+
+**Commit:** `fix(security): harden oidc and secure share controls`
+
+**Mode:** SECURITY WRITE/FIX/TEST — no migrations · no new npm dependencies.
+
+**C14-P1-OIDC-IDTOKEN-01:** **RESOLVED** / ID_TOKEN SIGNATURE ISSUER AUDIENCE VERIFIED (when SSO enabled with `jwks_uri`)
+
+**Implementation:** `backend/utils/oidcIdTokenVerify.js` (RS256/HS256 via Node `crypto` + JWKS fetch). `oidcAuth.service.js` — removed unverified `id_token` decode fallback; `resolveOidcUserProfileFromTokens` requires verified id_token if userinfo unavailable; `auth.login.failed` audit on verification failure (no raw token).
+
+**C14-P1-SECURE-SHARE-01:** **RESOLVED** / TECHNICAL ACCESS CONTROLS + AUDIT VERIFIED (no schema change)
+
+**Secure share:** token stored as hash; public route uniform `404 SECURE_SHARE_NOT_FOUND` for invalid/expired/revoked/wrong token; audit metadata sanitized (`tokenPrefix` only, no raw token). Authenticated route keeps specific error codes.
+
+**Tests:** `tests/unit/auth/oidcIdTokenVerify.test.js`, `oidcAuthProfile.test.js`; integration secure share updated.
+
+**C14-P1-CREDENTIAL-01:** **OPEN** (unchanged)
+
+**Validaciones:** unit **431** · integration **74** · build pass
 
 ### C.14.5 — Pilot Readiness Pack
 

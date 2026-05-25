@@ -759,7 +759,15 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Do-not-claim (pilot):** GDPR fully compliant · SOC2/ISO ready · procurement-ready · legal reviewed · production certified.
 
-**Next:** C.14.6 OIDC/secure-share technical hardening (if authorized) · credential rotation ops.
+**Next:** credential rotation ops · P2 fixes · demo pack.
+
+## C.14.6 — OIDC + Secure Share technical hardening
+
+**C14-P1-OIDC-IDTOKEN-01:** **RESOLVED** (when SSO on) — `verifyOidcIdToken` validates signature via JWKS (RS256) or HS256 + issuer/audience/exp/nonce; no unverified JWT decode fallback.
+
+**C14-P1-SECURE-SHARE-01:** **RESOLVED** (technical) — public bearer denial unified 404; audit metadata sanitized; existing hash/expiry/revoke unchanged.
+
+**No migration.** No new npm packages.
 
 ## C.14.5 — Pilot Readiness Pack
 

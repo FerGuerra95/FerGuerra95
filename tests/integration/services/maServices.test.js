@@ -253,7 +253,8 @@ describe('ma services multi-tenancy', () => {
         token: 'wrong-token'
       })
     ).rejects.toMatchObject({
-      code: 'SECURE_SHARE_TOKEN_INVALID'
+      code: 'SECURE_SHARE_NOT_FOUND',
+      status: 404
     });
 
     await expect(

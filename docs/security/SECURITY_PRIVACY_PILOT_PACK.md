@@ -57,7 +57,7 @@ Pilot data should use **dedicated test organizations**, synthetic or NDA-covered
 | Error handling | Production-oriented error responses (no raw stack in client contract goal) | Assumed — verify per deploy |
 | DSS disclaimers | Product positioning in AGENTS.md and logic protocol | `AGENTS.md`, `LOGIC_INTEGRITY_PROTOCOL.md` |
 
-**Partial / gap:** Full-module permission matrix (C.13 pending per endpoint), formal retention/DSR automation, OIDC `id_token` signature verification, SOC2/ISO program, enterprise incident response playbook.
+**Partial / gap:** Full-module permission matrix (C.13 pending per endpoint), formal retention/DSR automation, ES256-only OIDC providers (unsupported), SOC2/ISO program, enterprise incident response playbook.
 
 ---
 
@@ -129,7 +129,7 @@ All calculated scores, matches, readiness indicators, board-pack drafts, and com
 
 - No enterprise SOC2/ISO certification program in repo.
 - No finalized DPA, privacy policy, retention schedule, or DSR workflow.
-- OIDC: `id_token` payload parsed without full cryptographic verification when userinfo unavailable — **P1 if SSO enabled**.
+- OIDC: enable SSO only when discovery exposes `jwks_uri` (RS256) or HS256 with client secret — verified in C.14.6.
 - Secure share: bearer link secrecy depends on operational discipline; technical controls partial.
 - Not all modules may have complete audit coverage beyond Compliance CRUD + Auth (C.14.3).
 - Demo/bootstrap users exist in dev; production must use strong secrets and rotated test creds.
