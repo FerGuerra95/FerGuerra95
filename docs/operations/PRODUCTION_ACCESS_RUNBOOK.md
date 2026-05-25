@@ -119,8 +119,19 @@ After any prod change:
 
 If test password was exposed:
 
-1. Rotate in admin/bootstrap path (outside repo). **Never** commit or document the new value.  
-2. Update Render / CI secrets and local `CEOS_E2E_PASSWORD` **only** in secret store.  
+1. Rotate password for the **existing** user (bootstrap env alone does not update existing rows). From Render Shell:
+
+   ```bash
+   export DB_PATH=/var/data/ceos-os.sqlite
+   export CEOS_RESET_EMAIL="<email>"
+   export CEOS_RESET_PASSWORD="<new-secret>"
+   export CONFIRM_PASSWORD_RESET=yes
+   node scripts/ops/reset-user-password.js
+   ```
+
+   Script: `scripts/ops/reset-user-password.js` — uses the same scrypt hashing as `auth.service.js`; revokes sessions; prints only safe status lines.
+
+2. Update Render / CI secrets and local `CEOS_E2E_PASSWORD` **only** in secret store. **Never** commit or document the new value.  
 3. Re-run authenticated smoke (see `CREDENTIAL_HYGIENE.md` § post-rotation).  
 4. Operator attests rotation without revealing password.  
 5. Mark **RESOLVED OPS** in inventory only after steps 1–4.

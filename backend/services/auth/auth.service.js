@@ -1185,6 +1185,81 @@ export function listUsers() {
   return ensureUsersSeeded().map(sanitizeUser);
 }
 
+/**
+ * Operational password reset for an existing user (Render shell / ops).
+ * Uses the same scrypt record as login and completePasswordReset.
+ * Does not create users or sync bootstrap passwords.
+ *
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<{ userFound: boolean; passwordUpdated: boolean; code?: string }>}
+ */
+export async function resetUserPasswordByEmailForOps(email, password) {
+  const normalizedEmail = normalizeEmail(email);
+  const normalizedPassword = String(password || '').trim();
+
+  if (!normalizedEmail) {
+    return {
+      userFound: false,
+      passwordUpdated: false,
+      code: 'INVALID_EMAIL'
+    };
+  }
+
+  if (!normalizedPassword) {
+    return {
+      userFound: false,
+      passwordUpdated: false,
+      code: 'MISSING_PASSWORD'
+    };
+  }
+
+  const strength = validateNewPasswordStrength(normalizedPassword);
+  if (!strength.ok) {
+    return {
+      userFound: false,
+      passwordUpdated: false,
+      code: 'WEAK_PASSWORD'
+    };
+  }
+
+  const user = getUserByEmail(normalizedEmail);
+
+  if (!user) {
+    return {
+      userFound: false,
+      passwordUpdated: false,
+      code: 'USER_NOT_FOUND'
+    };
+  }
+
+  if (user.status === 'inactive') {
+    return {
+      userFound: true,
+      passwordUpdated: false,
+      code: 'USER_INACTIVE'
+    };
+  }
+
+  updateUserPasswordRecord(user.id, normalizedPassword);
+  revokeAllSessionsForUser(user.id);
+
+  await recordAuthAuditLog({
+    organizationId: user.organizationId,
+    userId: user.id,
+    entityId: user.id,
+    action: 'auth.password_reset.ops',
+    metadata: {
+      method: 'ops_shell_reset'
+    }
+  });
+
+  return {
+    userFound: true,
+    passwordUpdated: true
+  };
+}
+
 export async function logoutUser(token) {
   const payload = verifyToken(token);
   let auditUser = null;

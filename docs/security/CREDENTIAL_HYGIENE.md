@@ -34,6 +34,28 @@ When rotation is complete, operator confirms only:
 
 Do **not** include username+password together or any credential value.
 
+### Production password reset (existing user — Render shell)
+
+Changing `BOOTSTRAP_ADMIN_PASSWORD` on redeploy **does not** update passwords for users that already exist. Bootstrap only inserts missing users (and syncs passwords only when `CEOS_E2E=true` or `BOOTSTRAP_SYNC_USERS=true`).
+
+Use the ops script against the production SQLite file (values only in shell — never in git/docs/chat):
+
+```bash
+export DB_PATH=/var/data/ceos-os.sqlite
+export CEOS_RESET_EMAIL="the-test-user-email"
+export CEOS_RESET_PASSWORD="new-password-not-printed"
+export CONFIRM_PASSWORD_RESET=yes
+node scripts/ops/reset-user-password.js
+```
+
+Safe output only: `user found`, `password updated`, `timestamp` (no password values).
+
+After run: verify login with new password and that the old password fails. Then attest (no secret):
+
+> Rotated outside repo on [date]. New value not in git/docs/chat. Post-rotation smoke [done/pending].
+
+**C14-P1-CREDENTIAL-01** stays **OPEN** until that attestation and smoke are recorded.
+
 ### Post-rotation auth smoke
 
 | Item | Status |
