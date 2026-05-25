@@ -644,7 +644,8 @@ Reporting today remains:
 - Per-module variance product implementations (Reporting OPTION C deferred).
 - CEO e2e empty-org / button copy assertions.
 - ~~Production Render smoke~~ **executed 2026-05-24** — infra/health/SPA **PASS** (see inventory § Production Render Smoke).
-- ~~Post-redeploy bundle verification~~ **executed 2026-05-24** — prod bundle updated; C.13.10B strings in `ExecutiveOverviewer` chunk **confirmed**; authenticated smoke **BLOCKED** (no prod `CEOS_E2E_*` creds).
+- ~~Post-redeploy bundle verification~~ **executed 2026-05-24** — prod bundle updated; C.13.10B strings in `ExecutiveOverviewer` chunk **confirmed**.
+- ~~Authenticated production smoke~~ **executed 2026-05-24** — login/API/CEO truthfulness **PASS**; Playwright prod CEO/Reporting/Governance/Strategy **PASS**; hubs Funding heading **P2** (see inventory).
 - PDF/HTML report renderer.
 - Governance workflow state-machine guards.
 - Governance Controls/ESG UI gaps.
@@ -710,7 +711,7 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Cannot say:** Certified enterprise · autonomous engine · legal/investment advice · certified ratings · board-approved · public marketplace · SOC2/ISO/SLA · complete PDF reporting · all modules complete · production certified.
 
-**Next:** Prod test credentials + authenticated smoke rerun · C.14 Enterprise Hardening · Governance/Strategy Golden · demo/sales pack (authorized).
+**Next:** C.14 Enterprise Hardening · optional P2 Funding hub e2e copy alignment · Governance/Strategy Golden · demo/sales pack (authorized).
 
 ## C.13.12B — PMI stale mergeWithDemo reference fix
 

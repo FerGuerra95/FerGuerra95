@@ -6001,6 +6001,42 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Commit:** `docs: record authenticated production smoke`
 
+### Post-redeploy Authenticated Production Smoke — EXECUTED (2026-05-24)
+
+**Mode:** VALIDATION / DOCS — no product code changed. Credentials provided by operator in session only (not stored in repo).
+
+**Git baseline:** `HEAD` = `origin/main` = `6e701e8` at start · docs commit `a4c22b3` after prior blocked pass.
+
+| Check | Result |
+|---|---|
+| Bundle C.13.10B | **CONFIRMED** — `index-C6AoPVVs.js` + `ExecutiveOverviewer-RmxyISiT.js` (`Board Review Draft`, `insufficient_data`, `human review`) |
+| Health + API 401 perimeter | **PASS** |
+| Production login | **200** — admin test org (`admin.prod2@ceoos.local`) |
+| API with session | **200** on `/api/ma/cases`, `/api/executive/overview`, `/api/reporting/reports`, `/api/governance/decisions`, `/api/strategy/objectives`, `/api/funding/rounds`, `/api/pmi/programs` |
+| Logout API | **200** |
+| CEO API truthfulness | **PASS** — no synthetic cluster `64/60/58/55/62/65`; **M&A = 64** (module-specific); empty modules **null** on radar; PMI **28**; Compliance radar **0** (watch) — see P2 note |
+| Playwright prod (`CEOS_BASE_URL`) | **ceo-command-center** PASS · **reporting-enterprise-flow** PASS · **governance-enterprise-flow** PASS · **strategy-enterprise-flow** PASS (includes create objective) · **authenticated-hubs** FAIL on Funding heading copy |
+| CRUD | **PARTIAL** — Strategy e2e create on prod org; dedicated `[SMOKE TEST]` CRUD not separately executed |
+| Reporting/Board draft UI | **PASS** via reporting e2e (no certified/final markers in suite) |
+
+**Final status:** **PRODUCTION AUTH SMOKE PASSED WITH P2 RESIDUALS**
+
+**P0:** None.
+
+**P1:** None confirmed (no fake multi-module fallback cluster post-login).
+
+**P2:**
+- `authenticated-hubs` Playwright expects `Funding Command Center.` — not found on prod Funding dashboard (test copy drift vs prod UI).
+- Compliance executive radar shows **0** not **null** — verify whether org has zero suppliers vs empty-state bug (human review).
+
+**P3:** Ad-hoc API paths `/api/compliance/suppliers` returned 404 (route naming differs; UI routes OK).
+
+**Security note:** Operator shared prod test password in chat — **rotate** test password after smoke; never commit credentials.
+
+**Recommendation:** Proceed **C.14** with Funding hub heading alignment as optional P2 test fix; monitor Compliance `0` vs `null` on empty org in a future WRITE/FIX if confirmed bug.
+
+**Commit:** `docs: record prod authenticated smoke execution`
+
 ### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
 
 **Commit:** 1b39c9f — `docs: record cross-module source-of-truth closure`
