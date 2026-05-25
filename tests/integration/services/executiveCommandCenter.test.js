@@ -17,7 +17,11 @@ import {
   getExecutiveSignals,
   getExecutiveSummary
 } from '../../../backend/services/executive/executiveOverview.service.js';
-import { createExecutiveSignal, updateExecutiveSignal } from '../../../backend/services/executive/executiveSignals.service.js';
+import {
+  createExecutiveSignal,
+  listExecutiveSignals,
+  updateExecutiveSignal
+} from '../../../backend/services/executive/executiveSignals.service.js';
 import { createStrategicInitiative, createStrategicObjective } from '../../../backend/services/strategy/strategy.service.js';
 
 let tempDir = '';
@@ -76,6 +80,19 @@ describe('CEO command center enterprise foundation', () => {
     expect((await createSnapshotFromOverview({ organizationId, userId: actor.userId })).readinessScore).toBeGreaterThanOrEqual(0);
     expect((await createBoardViewFromOverview({ organizationId, userId: actor.userId })).title).toBe('Board Executive Snapshot');
     expect((await createExecutiveReportFromOverview({ organizationId, userId: actor.userId })).title).toBe('CEO Weekly Brief');
+  });
+
+  it('ignora organizationId malicioso del cliente en createExecutiveSignal', async () => {
+    const actor = { userId: 'u_exec_tenant_create' };
+    const created = await createExecutiveSignal(
+      'org_executive_a',
+      { title: 'Malicious org signal', organizationId: 'org_executive_b', tenant_id: 'org_executive_b' },
+      actor
+    );
+
+    expect(created.organizationId).toBe('org_executive_a');
+    expect((await listExecutiveSignals('org_executive_a')).some((item) => item.id === created.id)).toBe(true);
+    expect((await listExecutiveSignals('org_executive_b')).some((item) => item.id === created.id)).toBe(false);
   });
 
   it('mantiene comportamiento defensivo para organizaciones sin datos', async () => {

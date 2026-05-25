@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { omitClientTenantFields } from '../../utils/tenantPayload.js';
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
 import { listAuditLogs, recordAuditLog } from '../audit/auditLog.service.js';
 import { generateBoardPack } from './boardPack.service.js';
@@ -134,7 +135,10 @@ function checksum(payload = {}) {
 
 async function createWith(store, organizationId, payload = {}, actor = {}, action) {
   assertOrganizationId(organizationId);
-  const item = await store.create({ ...commonCreate(organizationId, actor), ...payload });
+  const item = await store.create({
+    ...omitClientTenantFields(payload),
+    ...commonCreate(organizationId, actor)
+  });
   await audit({ organizationId, userId: actorId(actor), action, entityId: item.id, metadata: { title: item.title || item.templateKey || item.reportId } });
   return item;
 }

@@ -76,6 +76,18 @@ describe('enterprise reporting foundation', () => {
     expect((await listEnterpriseReports('org_reporting_b')).some((item) => item.title === 'Tenant A report')).toBe(false);
   });
 
+  it('ignora organizationId malicioso del cliente en create', async () => {
+    const created = await createEnterpriseReport(
+      'org_reporting_a',
+      { title: 'Malicious org report', organizationId: 'org_reporting_b', organization_id: 'org_reporting_b' },
+      { userId: 'u_tenant_create' }
+    );
+
+    expect(created.organizationId).toBe('org_reporting_a');
+    expect((await listEnterpriseReports('org_reporting_a')).some((item) => item.id === created.id)).toBe(true);
+    expect((await listEnterpriseReports('org_reporting_b')).some((item) => item.id === created.id)).toBe(false);
+  });
+
   it('no infla reportingReadinessScore cuando no hay metadata persistida', async () => {
     const summary = await getReportingSummary({ organizationId: 'org_reporting_empty' });
 

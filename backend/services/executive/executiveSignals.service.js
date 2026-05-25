@@ -1,3 +1,4 @@
+import { omitClientTenantFields } from '../../utils/tenantPayload.js';
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
 import { recordAuditLog } from '../audit/auditLog.service.js';
 import { clampScore } from './readinessIndex.service.js';
@@ -175,10 +176,10 @@ export async function listExecutiveSignals(organizationId) {
 
 export async function createExecutiveSignal(organizationId, payload = {}, actor = {}) {
   const item = await executiveSignalsStore.create({
+    ...omitClientTenantFields(payload),
     organizationId,
     userId: actor.userId || '',
-    createdBy: actor.userId || '',
-    ...payload
+    createdBy: actor.userId || ''
   });
   await recordAuditLog({
     organizationId,
@@ -192,7 +193,11 @@ export async function createExecutiveSignal(organizationId, payload = {}, actor 
 }
 
 export async function updateExecutiveSignal(organizationId, id, payload = {}, actor = {}) {
-  const item = await executiveSignalsStore.updateForOrganization(id, payload, organizationId);
+  const item = await executiveSignalsStore.updateForOrganization(
+    id,
+    omitClientTenantFields(payload),
+    organizationId
+  );
   if (item) {
     await recordAuditLog({
       organizationId,

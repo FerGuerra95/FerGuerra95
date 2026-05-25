@@ -95,4 +95,17 @@ describe('enterprise risk foundation', () => {
     await createRisk('org_risk_a', { title: 'Tenant A risk' }, actor);
     expect((await listRisks('org_risk_b')).some((item) => item.title === 'Tenant A risk')).toBe(false);
   });
+
+  it('ignora organizationId malicioso del cliente en create', async () => {
+    const actor = { userId: 'u_tenant_create' };
+    const created = await createRisk(
+      'org_risk_a',
+      { title: 'Malicious org override', organizationId: 'org_risk_b', orgId: 'org_risk_b' },
+      actor
+    );
+
+    expect(created.organizationId).toBe('org_risk_a');
+    expect((await listRisks('org_risk_a')).some((item) => item.id === created.id)).toBe(true);
+    expect((await listRisks('org_risk_b')).some((item) => item.id === created.id)).toBe(false);
+  });
 });

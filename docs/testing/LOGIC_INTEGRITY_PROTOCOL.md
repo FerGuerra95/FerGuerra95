@@ -711,7 +711,17 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Cannot say:** Certified enterprise · autonomous engine · legal/investment advice · certified ratings · board-approved · public marketplace · SOC2/ISO/SLA · complete PDF reporting · all modules complete · production certified.
 
-**Next:** C.14 Enterprise Hardening · optional P2 Funding hub e2e copy alignment · Governance/Strategy Golden · demo/sales pack (authorized).
+**Next:** C.14.2 backup/restore · C.14.3 audit logs · credential rotation ops · optional P2 Funding hub e2e.
+
+## C.14.1 — Tenant-safe create hardening
+
+**C14-P1-TENANT-CREATE-01:** **RESOLVED** — `omitClientTenantFields` in `backend/utils/tenantPayload.js`; applied to Risk, Strategy, Reporting, Executive signal create/update paths. Session `organizationId` applied after sanitized payload.
+
+**Tests:** `tests/unit/security/tenantPayload.test.js` + integration cases in risk/strategy/reporting/executive enterprise tests.
+
+**C14-P1-CREDENTIAL-01:** **OPEN** — prod test password rotation (ops, outside repo).
+
+**Not in scope:** Heritage/Bridge body-spread audit (C.14.1B if needed).
 
 ## C.13.12B — PMI stale mergeWithDemo reference fix
 

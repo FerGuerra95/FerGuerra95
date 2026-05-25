@@ -6037,6 +6037,36 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 
 **Commit:** `docs: record prod authenticated smoke execution`
 
+### C.14.1 — Tenant-safe create hardening
+
+**Commit:** `fix(security): enforce tenant-safe create payloads`
+
+**Mode:** WRITE/FIX/TEST — scoped security hardening.
+
+**C14-P1-TENANT-CREATE-01:** **RESOLVED** / CLIENT TENANT FIELDS STRIPPED FROM CREATE PAYLOADS — backend session `organizationId` wins.
+
+**C14-P1-CREDENTIAL-01:** **OPEN** — prod test password rotation required outside repo (not in scope).
+
+**Helper:** `backend/utils/tenantPayload.js` — `omitClientTenantFields`, `buildTenantSafeCreateFields`.
+
+**Modules fixed:**
+- Risk — `createWith` / `updateWith`
+- Strategy — `createWith` / `updateWith`
+- Reporting — `createWith`
+- Executive signals — `createExecutiveSignal` / `updateExecutiveSignal`
+
+**Pattern:** `{ ...omitClientTenantFields(payload), ...commonCreate(organizationId, actor) }` (session org last).
+
+**Tests added:**
+- `tests/unit/security/tenantPayload.test.js`
+- Integration tenant-create cases in `riskEnterprise`, `strategyEnterprise`, `reportingEnterprise`, `executiveCommandCenter`
+
+**Validaciones:** unit **420** passed · integration **69** passed · build pass.
+
+**Residual C.14.1B (not fixed):** Other modules with body spread (Heritage, Bridge controllers) — audit separately if P1 confirmed.
+
+**Siguiente:** C.14.2 backup/restore · C.14.3 audit logs · credential rotation ops
+
 ### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
 
 **Commit:** 1b39c9f — `docs: record cross-module source-of-truth closure`

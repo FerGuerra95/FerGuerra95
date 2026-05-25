@@ -1,3 +1,4 @@
+import { omitClientTenantFields } from '../../utils/tenantPayload.js';
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
 import { listAuditLogs, recordAuditLog } from '../audit/auditLog.service.js';
 
@@ -391,14 +392,17 @@ async function listAll(organizationId) {
 
 async function createWith(store, organizationId, payload = {}, actor = {}, action) {
   assertOrganizationId(organizationId);
-  const item = await store.create({ ...commonCreate(organizationId, actor), ...payload });
+  const item = await store.create({
+    ...omitClientTenantFields(payload),
+    ...commonCreate(organizationId, actor)
+  });
   await recordRiskAudit({ organizationId, userId: actorId(actor), action, entityId: item.id, metadata: { title: item.title || item.action || item.metric } });
   return item;
 }
 
 async function updateWith(store, organizationId, id, payload = {}, actor = {}, action) {
   assertOrganizationId(organizationId);
-  const item = await store.updateForOrganization(id, payload, organizationId);
+  const item = await store.updateForOrganization(id, omitClientTenantFields(payload), organizationId);
   if (item) {
     await recordRiskAudit({ organizationId, userId: actorId(actor), action, entityId: item.id, metadata: { status: item.status } });
   }

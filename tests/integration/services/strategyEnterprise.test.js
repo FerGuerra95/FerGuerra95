@@ -74,6 +74,18 @@ describe('enterprise strategy foundation', () => {
     expect((await listStrategicObjectives('org_strategy_b')).some((item) => item.title === 'Tenant A objective')).toBe(false);
   });
 
+  it('ignora organizationId malicioso del cliente en create', async () => {
+    const created = await createStrategicObjective(
+      'org_strategy_a',
+      { title: 'Malicious org objective', organizationId: 'org_strategy_b', tenantId: 'org_strategy_b' },
+      { userId: 'u_tenant_create' }
+    );
+
+    expect(created.organizationId).toBe('org_strategy_a');
+    expect((await listStrategicObjectives('org_strategy_a')).some((item) => item.id === created.id)).toBe(true);
+    expect((await listStrategicObjectives('org_strategy_b')).some((item) => item.id === created.id)).toBe(false);
+  });
+
   it('returns insufficient_data summary for empty strategy org without 60 defaults', async () => {
     const summary = await getStrategySummary({ organizationId: 'org_strategy_empty' });
 

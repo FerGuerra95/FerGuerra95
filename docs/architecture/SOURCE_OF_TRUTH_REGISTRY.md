@@ -26,7 +26,7 @@ Do not mark Assumed entries as Confirmed before C.13.
 
 | Domain | Data / Signal | Assumed Source of Truth | Status | Known Risk | Golden Dataset | Notes |
 |---|---|---|---|---|---|---|
-| Tenant scope | organizationId | Backend token/session/auth context | Confirmed | Cross-tenant if bypassed | N/A | Frontend never authoritative |
+| Tenant scope | organizationId | Backend token/session/auth context | **Confirmed** (C.14.1 create hardening) | Cross-tenant write via client body **mitigated** on Risk/Strategy/Reporting/Executive create | `tenantPayload.js` + integration tests | Frontend never authoritative; client `organizationId` stripped on create |
 | Auth | roles/permissions | backend auth.middleware + AuthProvider mirror | Assumed / Pending C.13 validation | Viewer E2E gaps | N/A | Verify per endpoint |
 | Users | user records | Backend users storage / SQLite | Assumed / Pending C.13 validation | N/A | N/A | |
 | M&A valuation | enterprise value, equity metrics | FE `useValuationEngine` (live); Golden simple benchmarks separate | Partially resolved (C.13.4I) | snapshot drift; backend re-export policy | ma_valuation_* | Not fairness opinion |
