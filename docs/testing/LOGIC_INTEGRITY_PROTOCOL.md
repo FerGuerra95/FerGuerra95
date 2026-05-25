@@ -643,7 +643,7 @@ Reporting today remains:
 - Strategy Golden helper/tests for readiness scores.
 - Per-module variance product implementations (Reporting OPTION C deferred).
 - CEO e2e empty-org / button copy assertions.
-- Production Render smoke.
+- ~~Production Render smoke~~ **executed 2026-05-24** — infra/health/SPA **PASS**; authenticated CEO/module smoke **pending** redeploy + prod test creds (see `PHASE_A1_CLEANUP_INVENTORY.md` § Production Render Smoke).
 - PDF/HTML report renderer.
 - Governance workflow state-machine guards.
 - Governance Controls/ESG UI gaps.
@@ -709,7 +709,7 @@ Governance/Strategy Golden · Render smoke · PDF renderer · per-module varianc
 
 **Cannot say:** Certified enterprise · autonomous engine · legal/investment advice · certified ratings · board-approved · public marketplace · SOC2/ISO/SLA · complete PDF reporting · all modules complete · production certified.
 
-**Next:** Production Render smoke · C.14 · Governance/Strategy Golden · demo/sales pack (authorized).
+**Next:** C.14 Enterprise Hardening · post-redeploy authenticated production smoke · Governance/Strategy Golden · demo/sales pack (authorized).
 
 ## C.13.12B — PMI stale mergeWithDemo reference fix
 

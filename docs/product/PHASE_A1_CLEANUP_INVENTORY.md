@@ -5901,7 +5901,7 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 | CEO fallback scores | gated (C.13.10B) |
 | P1 logic blockers | **none known** |
 
-**P2 residuals:** Governance/Strategy Golden · Render smoke · PDF renderer · per-module variance · ~~PMI `mergeWithDemo` stale reference~~ **resolved C.13.12B** · `executiveReports` readiness `\|\| 0` · Heritage audit · broader e2e.
+**P2 residuals:** Governance/Strategy Golden · ~~Render smoke~~ **passed with residuals (2026-05-24)** · PDF renderer · per-module variance · ~~PMI `mergeWithDemo` stale reference~~ **resolved C.13.12B** · `executiveReports` readiness `\|\| 0` · Heritage audit · broader e2e.
 
 **Siguiente:** Production Render smoke · C.14 Enterprise Hardening
 
@@ -5916,6 +5916,53 @@ C13-P1-08: PARTIALLY RESOLVED / UI ALIGNMENT COMPLETED
 **Validaciones:** PMI unit + integration + full suite + build pass.
 
 **Siguiente:** Production Render smoke / C.14
+
+### Production Render Smoke — app.theceosos.com (2026-05-24)
+
+**Mode:** VALIDATION / DOCS — no product code changed.
+
+**Git baseline:** `HEAD` = `origin/main` = `51fe72b` · working tree `?? backend-server.err` only.
+
+**URLs:** Main `https://app.theceosos.com` · Render origin `https://ceos-os.onrender.com`
+
+| Check | Result |
+|---|---|
+| Local `npm run test:unit` | **418 passed** |
+| Local `npm run test:integration` | **65 passed** |
+| Local `npm run build` | **pass** (`dist/assets/index-cJpBWyAU.js`) |
+| `/health` + `/api/health` (app + Render) | **200 OK** — `status: ok`, CEO OS Backend |
+| API without token `GET /api/ma/cases` | **401** |
+| SPA direct refresh (32 routes) | **200** — SPA shell + `assets/index-*` on all module routes listed in smoke prompt |
+| Production login/logout/session | **NOT EXECUTED** — no authorized production test credentials in agent env; bootstrap dev creds return **401** on prod |
+| CEO Overview truthfulness (authenticated) | **NOT VERIFIED** — requires login + post-C.13.10B bundle |
+| Module dashboards (authenticated) | **NOT VERIFIED** — requires login |
+| CRUD smoke | **NOT EXECUTED** — no production test dataset authorized |
+| Reporting / Board Review Draft (authenticated) | **NOT VERIFIED** |
+| Playwright vs production | **NOT EXECUTED** — would require prod creds / env; config unchanged |
+| Browser console (unauthenticated `/login`) | No critical JS errors observed (CursorBrowser dialog warnings only) |
+
+**Deploy drift (P2):** Production serves `assets/index-Bf_8bVe8.js`; local build at `51fe72b` produces `index-cJpBWyAU.js`. Production main bundle **does not contain** C.13.10B/C.13.12B markers (`Board Review Draft`, `insufficient_data`, `normalizePersistedPmiCase`, `mergeWithDemo` absent in prod bundle grep). **Assumed:** Render deploy behind `main` until redeploy triggered.
+
+**Public copy smoke (unauthenticated landing/login HTML):** Permitted DSS language present (`Private Executive`). Prohibited terms from smoke list **not found** in static HTML shell (authenticated UI copy not scanned).
+
+**Unauthenticated routing:** `/ceo` returns SPA shell **200** (client-side auth gate); marketing landing at `/` with path to `/login`.
+
+**Final production status:** **PRODUCTION SMOKE PASSED WITH P2 RESIDUALS**
+
+**P0:** None.
+
+**P1:** None confirmed on infra/auth perimeter; authenticated CEO truthfulness **pending** post-redeploy + test account.
+
+**P2:**
+- Production frontend bundle drift vs `51fe72b` (redeploy required to ship C.13.10B/12B).
+- Authenticated login/session/module/CEO/Reporting smoke blocked (env).
+- CRUD not executed (no test dataset).
+
+**P3:** Cold-start not observed; minor browser automation warnings.
+
+**Recommendation:** Trigger Render deploy from `main` @ `51fe72b`; rerun authenticated smoke with `CEOS_E2E_USER` / `CEOS_E2E_PASSWORD` (prod test org only). Then advance to **C.14 Enterprise Hardening**.
+
+**Commit:** docs-only — `docs: record production render smoke`
 
 ### C.13.11A — Cross-module Source-of-Truth Closure (AUDIT / DOCS)
 
