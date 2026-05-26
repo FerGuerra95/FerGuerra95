@@ -187,6 +187,14 @@ No one-click “Approve for board” or “Certify compliance” from AI output.
 
 ---
 
+## C.16.2 Status Update
+
+**Status:** Board Review Draft Assistant foundation implemented as an internal backend service only.
+
+C.16.2 did **not** add an endpoint, UI, provider SDK, API key, external fetch, streaming, database mutation, or provider traffic. The service uses C.16.1 disabled/mock provider behavior and returns draft-only structured output from supplied DSS context. The original endpoint/UI scope remains future work for a later authorized runtime phase.
+
+---
+
 ## Conclusion
 
 **AI readiness:** **READY FOR DESIGN / NOT YET READY FOR RUNTIME IMPLEMENTATION**

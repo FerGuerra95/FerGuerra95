@@ -11,3 +11,4 @@ export { buildAiContext } from './aiContextBuilder.service.js';
 export { buildAiAuditRecord, redactAiPayload } from './aiAudit.service.js';
 export { BOARD_REVIEW_DRAFT_V1, getPromptDefinition, getPromptVersion } from './aiPromptRegistry.js';
 export { generateAiDraft } from './aiClient.service.js';
+export { createBoardReviewDraft } from './boardReviewDraft.service.js';

@@ -1402,3 +1402,25 @@ No secrets/tokens logged. No runtime changes.
 - `tests/unit/ai/aiClient.test.js`
 
 No runtime changes were made outside the approved backend AI foundation. No product code, routes, auth/storage, module services, package/config, secrets, Golden Dataset, or Formula Registry changed.
+
+## C.16.2 - AI Board Review Draft Assistant Foundation
+
+**Status:** COMPLETED / INTERNAL SERVICE ONLY / NO PROVIDER TRAFFIC.
+
+### Logic integrity guarantees
+
+| Rule | C.16.2 status |
+|---|---|
+| Official scores | Board Review Draft service does not calculate or recalculate scores |
+| Output mode | Draft only |
+| Human review | Required in labels and truthfulness metadata |
+| Provider mode | Disabled/mock only |
+| Source-of-truth | DSS-provided context only; AI draft is not SoT |
+| Provider traffic | None; no SDK, API key, external fetch, endpoint, UI, or streaming |
+| Audit | Safe metadata only; raw secret context and cross-tenant markers rejected |
+
+### Unit test added
+
+- `tests/unit/ai/boardReviewDraft.service.test.js`
+
+No product code, routes, auth/storage, module services, package/config, secrets, Golden Dataset, or Formula Registry changed.

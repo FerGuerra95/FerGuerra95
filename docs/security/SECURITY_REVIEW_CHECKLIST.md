@@ -187,6 +187,8 @@ Stop and escalate to human review if:
 
 **C.16.1 status:** Provider abstraction foundation implemented with runtime provider disabled. No customer data leaves the app; no provider SDK, API key, endpoint, UI, streaming path, external fetch, or database mutation was added. Mock provider is deterministic and test/local-only. DPA/subprocessor review remains required before production LLM traffic.
 
+**C.16.2 status:** Board Review Draft internal service implemented with no external fetch, no API keys, no provider SDK, no endpoint, no UI, no database mutation, and safe audit metadata only. Raw secret context and cross-tenant markers are rejected before draft creation.
+
 ---
 
 ## Related Rules

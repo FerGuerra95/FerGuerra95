@@ -57,6 +57,7 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Formulas | formula definitions | docs/testing/FORMULA_REGISTRY.md | Created IA-2 / Pending C.13 validation | | Mapped IDs | |
 | AI-generated narrative | draft text, memos, briefs | **Not source-of-truth** — future `aiAudit` + user-saved draft only | **Design (C.16.0)** | AI must not override scores, formulas, or persisted records | N/A | Official SoT remains module services, Formula Registry, Golden Datasets (engineering oracles), persisted DB fields |
 | AI provider abstraction | provider boundary, prompts, guardrails, context builder, audit metadata | `backend/services/ai/**` | **Foundation implemented (C.16.1) / not runtime SoT** | Disabled/mock only; no endpoint/UI/provider traffic; must not become source-of-truth | N/A | C.16.2 may consume only after authorized runtime endpoint + tenant tests |
+| AI Board Review Draft | draft narrative structure | `backend/services/ai/boardReviewDraft.service.js` from supplied DSS context | **Foundation implemented (C.16.2) / not SoT** | Mock/disabled only; no provider traffic; no official score calculation | N/A | Summarizes DSS-provided context only; human review required |
 
 ## AI and Source-of-Truth (C.16.0)
 
@@ -73,6 +74,13 @@ Do not mark Assumed entries as Confirmed before C.13.
 - No provider SDK, API key, endpoint, UI, external fetch, streaming, or database mutation exists in C.16.1.
 - AI cannot change formulas, Golden Datasets, official scores, persisted records, or module source-of-truth ownership.
 - Production provider traffic requires a later authorized phase, DPA/subprocessor review, secret-store setup, endpoint review, and tenant-scope tests.
+
+## AI Board Review Draft (C.16.2)
+
+- `boardReviewDraft.service.js` prepares draft-only Board Review structure from supplied sanitized DSS context.
+- The draft is not source-of-truth and must not be treated as board approved, certified, legal advice, investment advice, or official scoring.
+- The service does not fetch module data, read DB/files/env secrets, mutate records, call routes, or send data to a provider.
+- Runtime remains disabled/mock only until a later authorized provider phase.
 
 ## Rules
 

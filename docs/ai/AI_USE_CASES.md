@@ -36,6 +36,19 @@
 
 ---
 
+## C.16.2 Implementation Status
+
+**AI Board Review Draft Assistant foundation:** IMPLEMENTED AS INTERNAL SERVICE ONLY.
+
+- Internal backend service: `backend/services/ai/boardReviewDraft.service.js`.
+- Uses C.16.1 provider abstraction through disabled/mock modes only.
+- Produces draft-only structured output from supplied DSS context.
+- Requires human review and labels output as AI Draft / Requires Human Review / Based on DSS Signals / Not Legal Advice / Not Investment Advice / Not Board Approved.
+- No endpoint, UI, provider SDK, API key, external fetch, streaming, database mutation, or provider traffic.
+- Does not calculate official scores, certify posture, approve board material, or provide legal/investment advice.
+
+---
+
 ## Related
 
 - `AI_READINESS_AUDIT.md`  

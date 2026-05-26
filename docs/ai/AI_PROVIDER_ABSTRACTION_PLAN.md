@@ -146,6 +146,26 @@ Runtime provider traffic remains blocked until DPA/subprocessor review, provider
 
 ---
 
+## 10. C.16.2 Board Review Draft Service
+
+**Status:** IMPLEMENTED INTERNAL SERVICE ONLY / NO PROVIDER TRAFFIC.
+
+`boardReviewDraft.service.js` now consumes the C.16.1 abstraction to prepare a structured Board Review Draft from already supplied DSS context.
+
+| Area | C.16.2 result |
+|---|---|
+| Service | `backend/services/ai/boardReviewDraft.service.js` |
+| Provider mode | Disabled by default; mock only when explicitly allowed |
+| Endpoint/UI | None |
+| Provider traffic | None |
+| API keys / SDK | None |
+| Persistence | None; no DB mutation |
+| Source-of-truth | DSS signals only; AI draft is not SoT |
+
+Runtime provider remains disabled until a later authorized phase completes DPA/subprocessor review, provider selection, secret storage, endpoint security review, and tenant isolation tests.
+
+---
+
 ## Related
 
 - `AI_READINESS_AUDIT.md`  

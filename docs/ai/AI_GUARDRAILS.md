@@ -118,6 +118,25 @@ No provider SDK, API key, endpoint, UI, streaming path, external fetch, or produ
 
 ---
 
+## 9. C.16.2 Board Review Draft Service Guarantees
+
+**Status:** INTERNAL SERVICE ONLY / NO PROVIDER TRAFFIC.
+
+The Board Review Draft foundation guarantees:
+
+- Draft-only output.
+- Human review required.
+- DSS-grounded context only.
+- No official score recalculation.
+- No certification, board approval, legal advice, or investment advice.
+- No autonomous decisions, external sending, or database mutation.
+- Disabled provider returns controlled `AI_RUNTIME_DISABLED` status without fake draft content.
+- Mock provider is deterministic and allowed only for tests / explicit local allowance.
+
+No endpoint, UI, provider SDK, API key, external fetch, streaming path, or production LLM traffic was added in C.16.2.
+
+---
+
 ## Related
 
 - `AI_DATA_BOUNDARIES.md`  
