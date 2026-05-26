@@ -1339,3 +1339,16 @@ CEO truthfulness, Reporting Board Review Draft / human review, Funding hub, Comp
 No secrets, tokens, cookies, session IDs, auth headers, JWTs, `id_token`, `access_token` or `refresh_token` values were printed or written.
 
 No runtime changes were made. No product code, backend code, frontend code, tests, formulas, Golden Dataset, Formula Registry, package/config, secrets, AI behavior, marketplace behavior, auth, router, storage or source-of-truth definitions changed.
+
+### C.15.1b — Authenticated Production Smoke Final Rerun (2026-05-25)
+
+**Status:** **BLOCKED BY ENV/CREDENTIALS** · baseline `7cd0fa0` → docs `102623c`.
+
+| Area | Result | Notes |
+|---|---|---|
+| Local unit/integration | PARTIAL in agent env | Prior baseline at `7cd0fa0`: 439 / 74 passed |
+| Local build | PASS | |
+| Perimeter (shell, health, api health, unauth 401) | PASS | |
+| Login / authenticated APIs / CEO / Reporting / Funding / Compliance / logout | BLOCKED | `CEOS_E2E_*` not in agent shell |
+
+No secrets/tokens logged. No runtime changes.
