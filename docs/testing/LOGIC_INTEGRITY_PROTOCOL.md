@@ -1233,3 +1233,44 @@ Commercial claims are aligned with DSS truthfulness gates:
 5. Reporting must remain Board Review Draft until PDF renderer, snapshot/versioning and per-module ownership decisions are implemented and verified.
 
 The C.15.0 pack introduces no claims of enterprise certification, procurement readiness, SOC2/ISO certification, fully GDPR compliant status, SLA-backed service, autonomous AI, legal advice, investment advice, fairness opinion, certified compliance/risk/governance/valuation, board-approved output, complete PDF reporting, public marketplace, verified buyer network or operational success-fee platform.
+
+## C.15.1 Production Smoke Refresh
+
+**Status:** BLOCKED BY ENV/CREDENTIALS after successful local validation and unauthenticated production perimeter checks.
+
+### Local validation result
+
+| Command | Result |
+|---|---|
+| `npm run test:unit` | PASS - 439 passed |
+| `npm run test:integration` | PASS - 74 passed |
+| `npm run build` | PASS |
+
+### Production smoke result
+
+| Area | Result |
+|---|---|
+| App shell | `https://app.theceosos.com` returned 200 |
+| App health | `/health` and `/api/health` returned 200 on `app.theceosos.com` |
+| Render health | `/health` and `/api/health` returned 200 on `ceos-os.onrender.com` |
+| Protected API without token | `/api/executive/overview` returned 401 as expected |
+| Public route shell | Core module routes returned SPA shell 200 without server 404 |
+
+### Bundle status
+
+The production HTML served public assets including `index-Bon8YAz4.js` and related runtime/vendor chunks. The local build produced a different `index` hash, which is acceptable because C.15.0 was docs-only and the check was drift-oriented, not exact-hash release verification. Initial public chunks included `insufficient_data`. No prohibited public-bundle strings were found for enterprise certification, procurement-ready, SOC2 certified, board-approved, autonomous AI, public marketplace live or operational success-fee claims.
+
+### Auth status
+
+Authenticated production smoke was not executed because local environment variables `CEOS_E2E_USER` and `CEOS_E2E_PASSWORD` were not present. No secrets, tokens, cookies, session IDs, auth headers, JWTs, `id_token`, `access_token` or `refresh_token` values were printed or written.
+
+### CEO / Reporting / Funding / Compliance truthfulness status
+
+Authenticated truthfulness checks remain blocked by missing local secret-store credentials:
+
+1. CEO synthetic-score regression check not executed.
+2. Reporting Board Review Draft authenticated copy check not executed.
+3. Funding authenticated hub smoke not executed.
+4. Compliance empty/no-audit authenticated state check not executed.
+
+No runtime changes were made. No product code, backend code, frontend code, tests, formulas, Golden Dataset, Formula Registry, package/config, secrets, AI behavior, marketplace behavior, auth, router, storage or source-of-truth definitions changed.

@@ -6723,3 +6723,39 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Claims posture:** The sales pack explicitly prohibits enterprise certification, procurement-ready, SOC2/ISO certified, fully GDPR compliant, SLA-backed, autonomous AI, legal advice, investment advice, fairness opinion, board-approved output, complete PDF reporting, public marketplace, active verified buyer network and operational success-fee claims.
 
 **Next recommended phase:** C.15.1 Production Smoke Refresh or C.16.0 AI Readiness Audit.
+
+---
+
+## C.15.1 - Production Smoke Refresh
+
+**Status:** BLOCKED BY ENV/CREDENTIALS after local, perimeter and public shell checks.
+
+**Baseline:** `HEAD = origin/main = 284bd35`.
+
+**Local validation:** PASS.
+
+| Check | Result |
+|---|---|
+| `npm run test:unit` | PASS - 439 passed |
+| `npm run test:integration` | PASS - 74 passed |
+| `npm run build` | PASS |
+
+**Production perimeter:** PASS for unauthenticated checks.
+
+| Area | Result |
+|---|---|
+| `https://app.theceosos.com` | 200 |
+| `https://app.theceosos.com/health` | 200 |
+| `https://app.theceosos.com/api/health` | 200 |
+| `https://ceos-os.onrender.com/health` | 200 |
+| `https://ceos-os.onrender.com/api/health` | 200 |
+| Protected `/api/executive/overview` without token | 401 as expected |
+| Public SPA route shell checks | 23/23 returned 200 shell |
+
+**Bundle / claims check:** No critical public-bundle drift identified in the initial production shell. The public entry bundle exposes `insufficient_data`; C.15.0 commercial docs are docs-only and are not expected in the runtime bundle. No prohibited visible public-bundle strings were found for enterprise certification, procurement-ready, SOC2 certified, board-approved, autonomous AI, public marketplace live or operational success-fee claims.
+
+**Blocked checks:** Authenticated login, authenticated APIs, logout, authenticated UI module smoke, CEO truthfulness smoke, Reporting Board Review Draft smoke, Funding authenticated hub smoke and Compliance authenticated empty-state smoke were not executed because `CEOS_E2E_USER` and `CEOS_E2E_PASSWORD` were not present in the local environment. No credentials, tokens, cookies or secrets were printed.
+
+**Finding classification:** No P0/P1 was confirmed. Remaining production confidence gap is P2/env-blocked authenticated smoke until local secret-store credentials are available.
+
+**Next recommended phase:** C.15.1b Authenticated Production Smoke with `CEOS_BASE_URL`, `CEOS_E2E_USER` and `CEOS_E2E_PASSWORD` provided from local secret store, or C.16.0 AI Readiness Audit if production authenticated smoke is scheduled separately.
