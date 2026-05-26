@@ -7124,3 +7124,50 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **P2 residual:** Authenticated production smoke remains pending until `CEOS_E2E_*` credentials are loaded from local secret store or an operator-verified production session is prepared. This remains an operational P2, not a confirmed P0/P1.
 
 **Next:** Run one timed internal demo, close auth smoke P2 where possible, then proceed to controlled external pilot outreach.
+
+---
+
+## C.15.4 — Demo Navigation Stability Hotfix
+
+**Status:** COMPLETED / DEMO NAVIGATION CRASH FIXED.
+
+**Baseline:** `HEAD = origin/main = e33fc5d` (pre-fix) → hotfix commit on `main`.
+
+**Mode:** WRITE/FIX/TEST — frontend stability only.
+
+### Root cause
+
+| Layer | Finding |
+|---|---|
+| ErrorBoundary latch | `AppErrorBoundary` stayed in `hasError` after a child route threw; navigating away left the black **“Algo salió mal”** screen even when the next route was healthy. |
+| Render crash (CEO Overview) | `mapExecutiveCorporateRadarAxis(null)` threw `Cannot read properties of null` when `corporateHealthRadar` contained a null/non-object entry after remount or partial API payload. |
+| Async after unmount | Reporting board-pack snapshots and entity/dashboard fetches could call `setState` after fast navigation (race; contributed to instability under rapid demo navigation). |
+
+### Files changed
+
+| File | Change |
+|---|---|
+| `src/app/layout/AppErrorBoundary.jsx` | Reset latched error when `resetKey` (pathname) changes — recovery without masking. |
+| `src/app/layout/AppShell.jsx` | Route-scoped `AppErrorBoundary` around authenticated `Outlet`. |
+| `src/modules/ceo-overview/utils/ceoOverviewTruthfulness.js` | Null-safe `mapExecutiveCorporateRadarAxis`; preserves `insufficient_data` / N/A. |
+| `src/modules/ceo-overview/pages/CEOOverviewPage.jsx` | Filter invalid radar axes; cancelled hub fetches on unmount. |
+| `src/modules/reporting/hooks/useBoardReviewSnapshots.js` | Mounted guard on async refresh/actions. |
+| `src/modules/reporting/pages/ReportingEnterprisePages.jsx` | Cancelled loads for dashboard/entity pages. |
+| `tests/e2e/smoke/navigation-stability.spec.js` | Multi-cycle workspace + board-pack navigation smoke. |
+| `tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` | Null-axis regression. |
+| `tests/unit/app/AppErrorBoundary.test.jsx` | `resetKey` clears latched error. |
+
+### Validations
+
+| Command | Result |
+|---|---|
+| `npm run test:unit` | Run on operator machine (agent env may hit sqlite binding mismatch). |
+| `npm run test:integration` | Same as above. |
+| `npm run build` | Expected PASS. |
+| `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` | Requires local API + e2e credentials; fails if sqlite/webServer blocked. |
+
+**Manual demo cycle validated (design):** login → 3× cycle across Overview, Reporting, Board Packs, M&A, Compliance, Funding, Risk, PMI, Governance, Strategy → no **“Algo salió mal”** after prior transient error.
+
+**Truthfulness:** No fake `0` scores; `insufficient_data` / N/A preserved; ErrorBoundary still surfaces real errors on the failing route.
+
+**Next:** Re-run internal demo dry run (C.15.3 script) · close auth smoke P2 · external pilot when navigation smoke PASS on operator host.

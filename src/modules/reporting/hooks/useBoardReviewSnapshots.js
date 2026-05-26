@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { boardReviewSnapshotsApi } from '../services/boardReviewSnapshotsApi.js';
 
@@ -14,15 +14,31 @@ export function useBoardReviewSnapshots({ autoLoad = true } = {}) {
   const [snapshots, setSnapshots] = useState([]);
   const [selectedSnapshot, setSelectedSnapshot] = useState(null);
   const [state, setState] = useState({ loading: Boolean(autoLoad), error: null, message: '' });
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   const refresh = useCallback(async () => {
-    setState((current) => ({ ...current, loading: true, error: null }));
+    if (mountedRef.current) {
+      setState((current) => ({ ...current, loading: true, error: null }));
+    }
     try {
       const items = await boardReviewSnapshotsApi.listBoardReviewSnapshots();
+      if (!mountedRef.current) {
+        return items;
+      }
       setSnapshots(items);
       setState({ loading: false, error: null, message: '' });
       return items;
     } catch (error) {
+      if (!mountedRef.current) {
+        return [];
+      }
       setState({ loading: false, error, message: userMessage(error) });
       return [];
     }
@@ -47,13 +63,21 @@ export function useBoardReviewSnapshots({ autoLoad = true } = {}) {
   }, []);
 
   const runAction = useCallback(async (action, successMessage) => {
-    setState((current) => ({ ...current, loading: true, error: null }));
+    if (mountedRef.current) {
+      setState((current) => ({ ...current, loading: true, error: null }));
+    }
     try {
       const snapshot = await action();
+      if (!mountedRef.current) {
+        return snapshot;
+      }
       applyUpdatedSnapshot(snapshot);
       setState({ loading: false, error: null, message: successMessage });
       return snapshot;
     } catch (error) {
+      if (!mountedRef.current) {
+        return null;
+      }
       setState({ loading: false, error, message: userMessage(error) });
       return null;
     }

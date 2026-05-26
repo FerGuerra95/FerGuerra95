@@ -30,21 +30,22 @@ export function resolveLegalHealthRadarScore(hubBrief) {
   return hubScore;
 }
 
-export function mapExecutiveCorporateRadarAxis(axis = {}) {
-  const score = normalizeScoreOrNull(axis.value ?? axis.score);
+export function mapExecutiveCorporateRadarAxis(axis) {
+  const safeAxis = axis && typeof axis === 'object' ? axis : {};
+  const score = normalizeScoreOrNull(safeAxis.value ?? safeAxis.score);
   const insufficient =
     score === null ||
-    axis.executiveSignalEligible === false ||
-    ['insufficient_data', 'not_available', 'empty'].includes(axis.status);
+    safeAxis.executiveSignalEligible === false ||
+    ['insufficient_data', 'not_available', 'empty'].includes(safeAxis.status);
 
   const status = insufficient
     ? 'insufficient_data'
-    : axis.status || (score < 60 ? 'watch' : 'normal');
+    : safeAxis.status || (score < 60 ? 'watch' : 'normal');
 
   return {
-    key: axis.key,
-    label: axis.label,
-    route: axis.route,
+    key: safeAxis.key,
+    label: safeAxis.label,
+    route: safeAxis.route,
     score,
     value: score,
     displayLabel: formatScoreLabel(score),

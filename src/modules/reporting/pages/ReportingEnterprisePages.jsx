@@ -39,7 +39,27 @@ function EntityPage({ badge, title, copy, load, create, defaults = {}, fields = 
     }
   }
 
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const data = await load();
+        if (!cancelled) {
+          setItems(Array.isArray(data) ? data : []);
+          setState({ loading: false, error: null });
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setState({ loading: false, error });
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   async function submit(event) {
     event.preventDefault();
@@ -100,9 +120,25 @@ export function ReportingDashboardPage() {
   const [dashboard, setDashboard] = useState(null);
   const [state, setState] = useState({ loading: true, error: null });
   useEffect(() => {
-    reportingApi.getDashboard()
-      .then((data) => { setDashboard(data); setState({ loading: false, error: null }); })
-      .catch((error) => setState({ loading: false, error }));
+    let cancelled = false;
+
+    reportingApi
+      .getDashboard()
+      .then((data) => {
+        if (!cancelled) {
+          setDashboard(data);
+          setState({ loading: false, error: null });
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setState({ loading: false, error });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
   return (
     <div className="page">

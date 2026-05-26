@@ -16,6 +16,17 @@ export class AppErrorBoundary extends React.Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    const { resetKey } = this.props;
+    if (
+      resetKey != null &&
+      resetKey !== prevProps.resetKey &&
+      this.state.hasError
+    ) {
+      this.setState({ hasError: false, error: null });
+    }
+  }
+
   render() {
     if (this.state.hasError) {
       return (

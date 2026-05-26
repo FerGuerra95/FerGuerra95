@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { LogOut, UserCircle } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { AppErrorBoundary } from './AppErrorBoundary.jsx';
 import { Sidebar } from './Sidebar.jsx';
 import { Topbar } from './Topbar.jsx';
 import { ExecutivePremiumStyle } from './ExecutivePremiumStyle.jsx';
@@ -170,16 +171,18 @@ export function AppShell() {
         />
 
         <div className="ceos-content-shell ceos-page-shell-host">
-          <Suspense
-            fallback={
-              <div className="ceos-outlet-fallback ceos-ws-loading-panel">
-                <div className="ceos-ws-loading-branch">{theme.label}</div>
-                <div>Loading workspace...</div>
-              </div>
-            }
-          >
-            <Outlet />
-          </Suspense>
+          <AppErrorBoundary resetKey={location.pathname}>
+            <Suspense
+              fallback={
+                <div className="ceos-outlet-fallback ceos-ws-loading-panel">
+                  <div className="ceos-ws-loading-branch">{theme.label}</div>
+                  <div>Loading workspace...</div>
+                </div>
+              }
+            >
+              <Outlet />
+            </Suspense>
+          </AppErrorBoundary>
         </div>
 
         <ExecutivePremiumStyle />

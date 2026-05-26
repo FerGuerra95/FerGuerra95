@@ -1637,3 +1637,31 @@ P2 residual documented:
 - This is classified as P2/env, not a confirmed P0/P1.
 
 No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, secrets, AI runtime, PDF runtime, router, auth, storage, or source-of-truth logic changed.
+
+## C.15.4 — Demo Navigation Stability Hotfix
+
+**Status:** **COMPLETED** / navigation stability regression covered.
+
+### Runtime fixes (frontend only)
+
+| Area | Fix | Truthfulness |
+|---|---|---|
+| ErrorBoundary | Clear latched error on `resetKey` (pathname) change inside `AppShell` | Does **not** hide errors on the failing route; allows recovery on navigation |
+| CEO corporate health radar | `mapExecutiveCorporateRadarAxis` tolerates `null`/non-object axes | Missing scores remain `null` / `insufficient_data` / **N/A** — not coerced to `0` |
+| Reporting async | Mounted/cancel guards on snapshots and dashboard loads | Prevents stale state updates after unmount |
+
+### Tests added
+
+| Test | Purpose |
+|---|---|
+| `tests/e2e/smoke/navigation-stability.spec.js` | 3× workspace cycle + `/reporting/board-pack`; fails on **“Algo salió mal”**, `pageerror`, critical console errors |
+| `tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` | Null radar axis does not throw |
+| `tests/unit/app/AppErrorBoundary.test.jsx` | `resetKey` clears latched boundary state |
+
+### Regression posture
+
+- ErrorBoundary regression covered (latched black screen after navigation).
+- No Golden Dataset or Formula Registry changes.
+- No board-approved / certified PDF / autonomous AI claims introduced.
+
+**P2 residual:** Playwright navigation smoke still depends on local API boot + `CEOS_E2E_*` or `BOOTSTRAP_USERS_JSON` (same as C.15.1b).

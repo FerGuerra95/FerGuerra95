@@ -1613,57 +1613,95 @@ export function CEOOverviewPage() {
   });
 
   useEffect(() => {
+    let cancelled = false;
+
+    const applyIfMounted = (setter, value) => {
+      if (!cancelled) {
+        setter(value);
+      }
+    };
+
     maCasesApi
       .hydrateFromBackend()
-      .then((items) => setHydratedCases(Array.isArray(items) ? items : []))
-      .catch(() => setHydratedCases([]));
+      .then((items) => applyIfMounted(setHydratedCases, Array.isArray(items) ? items : []))
+      .catch(() => applyIfMounted(setHydratedCases, []));
 
     complianceAuditApi
       .getExecutiveHubBrief()
       .then((envelope) => {
         const data = envelope?.data ?? envelope;
-
-        setHubBrief(data && typeof data === 'object' ? data : null);
+        applyIfMounted(
+          setHubBrief,
+          data && typeof data === 'object' ? data : null
+        );
       })
-      .catch(() => setHubBrief(null));
+      .catch(() => applyIfMounted(setHubBrief, null));
 
     fundingEnterpriseApi
       .getExecutiveBridgeSnapshot()
       .then((snapshot) => {
         const data = snapshot?.summary ?? {};
-        setFundingSummary(data && typeof data === 'object' ? data : {});
+        applyIfMounted(
+          setFundingSummary,
+          data && typeof data === 'object' ? data : {}
+        );
       })
-      .catch(() => setFundingSummary({}));
+      .catch(() => applyIfMounted(setFundingSummary, {}));
 
     pmiApi
       .getExecutiveHubBrief()
-      .then((data) => setPmiBrief(data && typeof data === 'object' ? data : null))
-      .catch(() => setPmiBrief(null));
+      .then((data) =>
+        applyIfMounted(setPmiBrief, data && typeof data === 'object' ? data : null)
+      )
+      .catch(() => applyIfMounted(setPmiBrief, null));
 
     ecosystemApi
       .getExecutiveHubBrief()
-      .then((data) => setEcosystemBrief(data && typeof data === 'object' ? data : null))
-      .catch(() => setEcosystemBrief(null));
+      .then((data) =>
+        applyIfMounted(
+          setEcosystemBrief,
+          data && typeof data === 'object' ? data : null
+        )
+      )
+      .catch(() => applyIfMounted(setEcosystemBrief, null));
 
     bridgeApi
       .getSummary()
-      .then((data) => setBridgeSummary(data && typeof data === 'object' ? data : null))
-      .catch(() => setBridgeSummary(null));
+      .then((data) =>
+        applyIfMounted(setBridgeSummary, data && typeof data === 'object' ? data : null)
+      )
+      .catch(() => applyIfMounted(setBridgeSummary, null));
 
     riskApi
       .getSummary()
-      .then((data) => setRiskSummary(data && typeof data === 'object' ? data : null))
-      .catch(() => setRiskSummary(null));
+      .then((data) =>
+        applyIfMounted(setRiskSummary, data && typeof data === 'object' ? data : null)
+      )
+      .catch(() => applyIfMounted(setRiskSummary, null));
 
     strategyApi
       .getSummary()
-      .then((data) => setStrategySummary(data && typeof data === 'object' ? data : null))
-      .catch(() => setStrategySummary(null));
+      .then((data) =>
+        applyIfMounted(
+          setStrategySummary,
+          data && typeof data === 'object' ? data : null
+        )
+      )
+      .catch(() => applyIfMounted(setStrategySummary, null));
 
     executiveApi
       .getOverview()
-      .then((data) => setExecutiveOverview(data && typeof data === 'object' ? data : null))
-      .catch(() => setExecutiveOverview(null));
+      .then((data) =>
+        applyIfMounted(
+          setExecutiveOverview,
+          data && typeof data === 'object' ? data : null
+        )
+      )
+      .catch(() => applyIfMounted(setExecutiveOverview, null));
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const canGenerateBoardPack = role === 'admin' || role === 'board_member';
@@ -1925,9 +1963,11 @@ export function CEOOverviewPage() {
     humanReviewPosture: 'human_review_required'
   };
   const commandRadarAxes = Array.isArray(executiveCommand.corporateHealthRadar)
-    ? executiveCommand.corporateHealthRadar.map((axis) => mapExecutiveCorporateRadarAxis(axis))
+    ? executiveCommand.corporateHealthRadar
+        .filter((axis) => axis && typeof axis === 'object')
+        .map((axis) => mapExecutiveCorporateRadarAxis(axis))
     : radarAxes
-        .filter((axis) => !['heritage'].includes(axis.key))
+        .filter((axis) => axis && typeof axis === 'object' && !['heritage'].includes(axis.key))
         .map((axis) => mapExecutiveCorporateRadarAxis(axis));
   const commandSignals = Array.isArray(executiveCommand.signals) ? executiveCommand.signals : [];
   const commandDecisionQueue = Array.isArray(executiveCommand.decisionQueue) ? executiveCommand.decisionQueue : [];

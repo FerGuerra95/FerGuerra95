@@ -115,6 +115,18 @@ describe('CEO overview truthfulness helpers', () => {
     ).toBeNull();
   });
 
+  it('tolerates null or non-object executive corporate radar axis without throwing', () => {
+    expect(() => mapExecutiveCorporateRadarAxis(null)).not.toThrow();
+    const fromNull = mapExecutiveCorporateRadarAxis(null);
+    expect(fromNull.value).toBeNull();
+    expect(fromNull.status).toBe('insufficient_data');
+    expect(fromNull.displayLabel).toBe('N/A');
+
+    const fromString = mapExecutiveCorporateRadarAxis('invalid');
+    expect(fromString.value).toBeNull();
+    expect(fromString.isCalculable).toBe(false);
+  });
+
   it('maps executive corporate radar axis to insufficient_data when score is null', () => {
     const axis = mapExecutiveCorporateRadarAxis({
       key: 'compliance',
