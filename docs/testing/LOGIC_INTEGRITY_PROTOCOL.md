@@ -1352,3 +1352,7 @@ No runtime changes were made. No product code, backend code, frontend code, test
 | Login / authenticated APIs / CEO / Reporting / Funding / Compliance / logout | BLOCKED | `CEOS_E2E_*` not in agent shell |
 
 No secrets/tokens logged. No runtime changes.
+
+### AGENTS.md drift + C.15.1b retry (2026-05-25)
+
+**AGENTS.md:** accidental prompt paste reverted via `git restore` (no commit). **C.15.1b:** still **BLOCKED BY ENV/CREDENTIALS** in agent shell at `8b641eb`. Perimeter unauthenticated **PASS** (200/401). No secrets logged. No runtime changes.

@@ -6853,3 +6853,19 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Finding classification:** No P0/P1 confirmed. Active finding: **P2** — prod test credentials must be loaded in operator shell from local secret store before rerun (`CEOS_BASE_URL` + `CEOS_E2E_*`).
 
 **Next:** Operator rerun C.15.1b locally with secret-store env, or proceed **C.16.0** AI Readiness Audit if smoke is scheduled separately.
+
+### AGENTS.md drift resolution + C.15.1b retry (2026-05-25)
+
+**Baseline:** `HEAD = origin/main = 8b641eb`.
+
+**AGENTS.md decision:** **REVERTED (accidental)** — local file had been overwritten with a pasted setup prompt (~927 insertions), not a legitimate manual update. `git restore AGENTS.md` restored committed manual (`cd38e66`). No secrets or false certification claims in diff. **No AGENTS.md commit.**
+
+**Working tree after restore:** `?? backend-server.err` only.
+
+**C.15.1b authenticated smoke (agent shell retry):** **BLOCKED BY ENV/CREDENTIALS** — `CEOS_BASE_URL` · `CEOS_E2E_USER` · `CEOS_E2E_PASSWORD` not present in Cursor agent shell (presence checked without printing values).
+
+**Production perimeter (reconfirmed):** app shell **200** · `/health` **200** · `/api/health` **200** · unauth `/api/executive/overview` **401**.
+
+**Local (agent shell):** unit **PARTIAL** (434 passed, 2 sqlite binding suites) · build **PASS**. Integration not re-run (credentials blocked authenticated path).
+
+**Operator action to close C.15.1b:** load `CEOS_E2E_*` from local secret store in operator PowerShell, then run `.local/post-rotation-auth-smoke.mjs` and Playwright `authenticated-hubs` — never paste credentials in chat.
