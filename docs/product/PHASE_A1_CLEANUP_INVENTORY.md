@@ -6901,3 +6901,23 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **P2 unchanged:** C.15.1b authenticated smoke still **BLOCKED BY ENV/CREDENTIALS** in agent shell — does not block AI design.
 
 **Next recommended:** **C.16.1** AI Provider Abstraction · **C.16.2** Board Review Draft Assistant · parallel **C.17.0** Reporting PDF renderer planning.
+
+---
+
+## C.16.1 — AI Provider Abstraction Foundation
+
+**Status:** COMPLETED / FOUNDATION ONLY / NO PROVIDER TRAFFIC.
+
+**Baseline:** `HEAD = origin/main = 59b2425`.
+
+**Mode:** WRITE/FIX/TEST controlled — backend AI foundation only.
+
+**Implemented:** `backend/services/ai/**` with use-case policy, controlled errors, guardrails, sanitized context builder, audit redaction/metadata builder, versioned prompt registry, disabled/mock AI client, and service exports.
+
+**Tests:** `tests/unit/ai/**` added for use-case policy, guardrails, context rejection/minimization, audit redaction, prompt labels/instructions, and disabled/mock client behavior.
+
+**Runtime posture:** No product UI, no public AI endpoint, no provider SDK, no API keys, no external fetch, no streaming, no database mutation, no customer data sent to a provider.
+
+**Truthfulness posture:** AI remains draft-only, human-reviewed, not legal advice, not investment advice, not board approved, and not source-of-truth for formulas, Golden Datasets, scores, or persisted records.
+
+**Next recommended:** C.16.2 AI Board Review Draft Assistant or C.17.0 Reporting PDF Renderer planning.

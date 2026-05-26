@@ -124,6 +124,28 @@ Client → auth.middleware → permission check → ai.routes
 
 ---
 
+## 9. C.16.1 Implementation Status
+
+**Status:** IMPLEMENTED FOUNDATION ONLY / NO PROVIDER TRAFFIC.
+
+| Area | C.16.1 result |
+|---|---|
+| Backend AI service boundary | Implemented under `backend/services/ai/**` |
+| Provider runtime | Disabled by default; mock provider only for tests / explicit local allowance |
+| Provider SDK / dependency | None added |
+| API keys / env secrets | None read, added, printed, or committed |
+| External calls | None; no `fetch` / SDK / streaming path |
+| Public AI endpoint | None |
+| UI | None |
+| Database mutation | None |
+| Audit | Sanitized in-memory audit record builder only; no DB write in C.16.1 |
+| Prompt registry | Versioned `BOARD_REVIEW_DRAFT_V1` with human-review labels |
+| C.16.2 readiness | Board Review Draft Assistant can build on this service boundary after endpoint/UI authorization |
+
+Runtime provider traffic remains blocked until DPA/subprocessor review, provider selection, secret-store configuration, endpoint authorization, tenant-scope integration tests, and product UI review are complete.
+
+---
+
 ## Related
 
 - `AI_READINESS_AUDIT.md`  

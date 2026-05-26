@@ -97,6 +97,27 @@ Must remain consistent with:
 
 ---
 
+## 8. C.16.1 Implemented Guardrails
+
+**Status:** IMPLEMENTED FOUNDATION ONLY / NO RUNTIME PROVIDER TRAFFIC.
+
+The backend AI foundation now enforces:
+
+- Allowed use case limited to `BOARD_REVIEW_DRAFT` in draft-only mode.
+- Future use cases remain not allowed; autonomous agent, legal advice, investment advice, and marketplace matching are forbidden.
+- `organizationId` tenant scope is required.
+- Human review is required.
+- External sending, database mutation, score recalculation, and certification claims are rejected.
+- Context builder rejects raw DB dumps, tokens, cookies, auth headers, password material, secure-share tokens, secrets, and cross-tenant data markers.
+- Context builder only accepts minimized sanitized summaries, module signals, and report metadata.
+- Audit helper redacts password/token/cookie/auth/API-key/private-key style fields recursively.
+- Prompt registry labels Board Review Draft output as AI Draft, Requires Human Review, Based on DSS Signals, Not Legal Advice, Not Investment Advice, and Not Board Approved.
+- AI client is disabled by default; mock provider is deterministic and test/local-only.
+
+No provider SDK, API key, endpoint, UI, streaming path, external fetch, or production LLM traffic was added in C.16.1.
+
+---
+
 ## Related
 
 - `AI_DATA_BOUNDARIES.md`  

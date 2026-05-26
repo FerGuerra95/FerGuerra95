@@ -185,6 +185,8 @@ Stop and escalate to human review if:
 
 **C.16.0 status:** Design complete — **no runtime AI endpoints** until C.16.1 implementation pass.
 
+**C.16.1 status:** Provider abstraction foundation implemented with runtime provider disabled. No customer data leaves the app; no provider SDK, API key, endpoint, UI, streaming path, external fetch, or database mutation was added. Mock provider is deterministic and test/local-only. DPA/subprocessor review remains required before production LLM traffic.
+
 ---
 
 ## Related Rules

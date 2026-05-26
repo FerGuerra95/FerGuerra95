@@ -1374,3 +1374,31 @@ No secrets/tokens logged. No runtime changes.
 | C.16.0 implementation | **No runtime AI** in this phase — design docs only |
 
 **Related:** `docs/ai/AI_READINESS_AUDIT.md` · `AI_GUARDRAILS.md` · `AI_DATA_BOUNDARIES.md`
+
+## C.16.1 — AI Provider Abstraction Foundation
+
+**Status:** COMPLETED / FOUNDATION ONLY / NO PROVIDER TRAFFIC.
+
+### Logic integrity guarantees
+
+| Rule | C.16.1 status |
+|---|---|
+| AI cannot change formulas | Enforced by scope; no Formula Registry or Golden Dataset changes |
+| AI cannot calculate official scores | Guardrails reject score recalculation; prompt forbids official score calculation |
+| AI output mode | Draft only |
+| Human review | Required by guardrails and prompt labels |
+| Source-of-truth | AI is not SoT; module services / formulas / persisted fields remain authoritative |
+| Provider runtime | Disabled by default; mock only for tests / explicit local allowance |
+| Provider traffic | None; no SDK, API key, external fetch, endpoint, UI, or streaming |
+| Audit | Sanitized audit record builder only; no DB mutation in C.16.1 |
+
+### Unit tests added
+
+- `tests/unit/ai/aiUseCases.test.js`
+- `tests/unit/ai/aiGuardrails.test.js`
+- `tests/unit/ai/aiContextBuilder.test.js`
+- `tests/unit/ai/aiAudit.test.js`
+- `tests/unit/ai/aiPromptRegistry.test.js`
+- `tests/unit/ai/aiClient.test.js`
+
+No runtime changes were made outside the approved backend AI foundation. No product code, routes, auth/storage, module services, package/config, secrets, Golden Dataset, or Formula Registry changed.

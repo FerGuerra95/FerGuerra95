@@ -56,6 +56,7 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Golden Datasets | calculation oracles | docs/testing/golden_inputs.json | Confirmed baseline seed | Implementation may mismatch | All IDs in file | Oracle not product data |
 | Formulas | formula definitions | docs/testing/FORMULA_REGISTRY.md | Created IA-2 / Pending C.13 validation | | Mapped IDs | |
 | AI-generated narrative | draft text, memos, briefs | **Not source-of-truth** — future `aiAudit` + user-saved draft only | **Design (C.16.0)** | AI must not override scores, formulas, or persisted records | N/A | Official SoT remains module services, Formula Registry, Golden Datasets (engineering oracles), persisted DB fields |
+| AI provider abstraction | provider boundary, prompts, guardrails, context builder, audit metadata | `backend/services/ai/**` | **Foundation implemented (C.16.1) / not runtime SoT** | Disabled/mock only; no endpoint/UI/provider traffic; must not become source-of-truth | N/A | C.16.2 may consume only after authorized runtime endpoint + tenant tests |
 
 ## AI and Source-of-Truth (C.16.0)
 
@@ -64,6 +65,14 @@ Do not mark Assumed entries as Confirmed before C.13.
 - **AI may** describe values already present in tenant-scoped DSS context built from approved services.
 - **Golden Datasets** remain engineering oracles — not customer-facing AI facts.
 - See `docs/ai/AI_READINESS_AUDIT.md` and `docs/ai/AI_DATA_BOUNDARIES.md`.
+
+## AI Provider Abstraction (C.16.1)
+
+- `backend/services/ai/**` exists as a foundation boundary only.
+- The AI client is disabled by default and supports deterministic mock output only for tests / explicit local allowance.
+- No provider SDK, API key, endpoint, UI, external fetch, streaming, or database mutation exists in C.16.1.
+- AI cannot change formulas, Golden Datasets, official scores, persisted records, or module source-of-truth ownership.
+- Production provider traffic requires a later authorized phase, DPA/subprocessor review, secret-store setup, endpoint review, and tenant-scope tests.
 
 ## Rules
 
