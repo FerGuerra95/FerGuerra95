@@ -76,5 +76,26 @@ describe('toBoardReviewDraftInput', () => {
 
     expect(input.missingData).toContain('board_pack_or_report_snapshot:insufficient_data');
     expect(input.auditMetadata.sourceType).toBe('snapshot_required');
+    expect(input.requiresSnapshot).toBe(true);
+  });
+
+  it('returns snapshot and audit metadata when requested', () => {
+    const input = toBoardReviewDraftInput({
+      boardPack: {
+        id: 'bp_snapshot',
+        title: 'Snapshot Pack',
+        moduleSignals: [{ module: 'Reporting', label: 'Completeness', score: null }],
+        missingData: ['strategy:insufficient_data']
+      },
+      includeSnapshot: true,
+      generatedAt: '2026-05-26T10:00:00.000Z'
+    });
+
+    expect(input.snapshot.snapshotId).toContain('preview-bp-snapshot');
+    expect(input.auditMetadata.snapshotVersion).toBe('preview-v1');
+    expect(input.auditMetadata.exportType).toBe('html_preview');
+    expect(input.snapshot.truthfulness.snapshotIsSourceOfTruth).toBe(false);
+    expect(input.moduleSignals[0].score).toBe('N/A');
+    expect(input.moduleSignals[0].score).not.toBe(0);
   });
 });

@@ -143,7 +143,9 @@ function BoardPackPreviewIntegration({ items = [] }) {
     const input = toBoardReviewDraftInput({
       boardPack,
       generatedAt: new Date(),
-      fallbackScope: 'Reporting / Board Packs'
+      fallbackScope: 'Reporting / Board Packs',
+      includeSnapshot: true,
+      statusInput: { status: boardPack.status || 'human_review_required' }
     });
     const html = buildBoardReviewDraftHtml(input);
     const result = openBoardReviewDraftWindow(html);

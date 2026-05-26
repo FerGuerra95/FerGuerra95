@@ -1472,3 +1472,21 @@ Renderer integration tests ensure:
 - Board Review Draft, Human Review Required, Based on DSS Signals, Not Legal Advice, Not Investment Advice, Not Board Approved, and Confidential labels remain visible.
 
 No backend, router, unrelated module, package/config, Golden Dataset, Formula Registry, AI runtime, endpoint, or binary PDF generation changed.
+
+## C.17.3 - Snapshot / Versioning / Audit Metadata
+
+**Status:** COMPLETED / FRONTEND SNAPSHOT FOUNDATION / NO BACKEND PERSISTENCE.
+
+Snapshot/versioning tests ensure:
+
+- Snapshot metadata is not source-of-truth.
+- Renderer metadata is not source-of-truth.
+- Board Review Draft preview does not recalculate official scores.
+- Missing scores are not converted to `0`.
+- `insufficient_data` is preserved.
+- `reviewed` requires explicit human review metadata.
+- `internal_final` requires explicit internal-final approval metadata.
+- AI-only metadata cannot set reviewed/internal-final.
+- Audit metadata redacts token/password/cookie/auth header and other sensitive keys.
+
+No backend, API, DB persistence, router, unrelated module, package/config, Golden Dataset, Formula Registry, AI runtime, endpoint, or binary PDF generation changed.

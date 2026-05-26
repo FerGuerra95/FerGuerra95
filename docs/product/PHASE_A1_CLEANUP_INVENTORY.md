@@ -6981,3 +6981,17 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Runtime posture:** No backend, API, database, router, unrelated module, package/config, PDF dependency, binary PDF generation, external service, AI runtime, Golden Dataset, or Formula Registry change.
 
 **Truthfulness posture:** Preview preserves CEO's OS logo/header, Board Review Draft, Confidential, Human Review Required, Based on DSS Signals, Not Legal Advice, Not Investment Advice, and Not Board Approved labels. Missing scores remain `N/A` / `insufficient_data`, not fake `0`.
+
+---
+
+## C.17.3 - Snapshot / Versioning / Audit Metadata
+
+**Status:** COMPLETED / FRONTEND SNAPSHOT FOUNDATION / NO BACKEND PERSISTENCE.
+
+**Baseline:** `HEAD = origin/main = d865c0f`.
+
+**Implemented:** Frontend-only Reporting helpers for Board Review Draft status resolution, version metadata, audit metadata sanitization, local preview snapshot construction, snapshot validation, and renderer sanitization.
+
+**Runtime posture:** No backend, API, database, migration, router, unrelated module, package/config, PDF dependency, binary PDF generation, AI runtime, provider traffic, Golden Dataset, or Formula Registry change.
+
+**Truthfulness posture:** Snapshot and renderer are not source-of-truth. `reviewed` requires explicit human review metadata; `internal_final` requires explicit internal-final approval metadata; AI-only output cannot set reviewed or internal-final. Missing scores remain `N/A` / `insufficient_data`, not fake `0`.

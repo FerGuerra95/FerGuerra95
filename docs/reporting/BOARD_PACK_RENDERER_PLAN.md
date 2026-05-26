@@ -173,3 +173,17 @@ Truthfulness posture:
 - Board Review Draft, Confidential, Human Review Required, Based on DSS Signals, Not Legal Advice, Not Investment Advice, and Not Board Approved labels remain visible.
 - Missing scores remain `N/A` or `insufficient_data`, not fake `0`.
 - The preview does not create reviewed, internal-final, board-approved, certified, legal, investment, or compliance-certification output.
+
+## C.17.3 Snapshot / Versioning Status
+
+**Status:** FRONTEND SNAPSHOT METADATA FOUNDATION IMPLEMENTED / NO BACKEND PERSISTENCE.
+
+C.17.3 extends the preview flow so Board Review Draft HTML previews can carry local snapshot, version, status, and audit metadata. This prepares future export/PDF work without adding persistence or final-report semantics.
+
+Current scope:
+
+- Frontend-only snapshot object.
+- Safe audit metadata for preview display.
+- Version metadata for `draft`, `ai_draft`, `human_review_required`, `reviewed`, `internal_final`, `archived`, and `revoked`.
+- Review/final states gated by explicit human metadata.
+- Snapshot and renderer remain display/export metadata only, not source-of-truth.

@@ -77,3 +77,43 @@ Preview metadata remains safe display metadata:
 - limitations and insufficient-data markers.
 
 No raw secrets, tokens, cookies, session ids, auth headers, API keys, passwords, or private keys belong in preview metadata.
+
+## C.17.3 Status
+
+**Status:** FRONTEND SNAPSHOT / VERSIONING / AUDIT METADATA FOUNDATION IMPLEMENTED / NO BACKEND PERSISTENCE.
+
+C.17.3 adds pure frontend helpers for Board Review Draft snapshot metadata:
+
+- `resolveBoardReviewStatus`
+- `createBoardReviewVersionMetadata`
+- `buildBoardReviewAuditMetadata`
+- `sanitizeBoardReviewAuditMetadata`
+- `buildBoardReviewSnapshot`
+- `validateBoardReviewSnapshot`
+- `sanitizeSnapshotForRenderer`
+
+Runtime posture:
+
+- No backend persistence.
+- No API endpoint.
+- No database migration.
+- No export ledger mutation.
+- No binary PDF generation.
+- No AI runtime/provider change.
+
+Status rules:
+
+- Default preview status is `human_review_required`.
+- `reviewed` requires explicit human review metadata.
+- `internal_final` requires explicit internal-final approval metadata.
+- AI-only output cannot set `reviewed` or `internal_final`.
+- `revoked` and `archived` can be represented as metadata states when provided.
+- No `board_approved` status exists.
+
+Snapshot rules:
+
+- Snapshot metadata is preview/export metadata only.
+- Snapshot metadata is not source-of-truth.
+- Renderer metadata is not source-of-truth.
+- Missing scores remain `N/A` / `insufficient_data`.
+- Audit metadata is sanitized and redacts sensitive keys before display.

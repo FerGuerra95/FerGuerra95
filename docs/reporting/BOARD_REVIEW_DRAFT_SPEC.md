@@ -102,3 +102,20 @@ The preview integration preserves:
 - Not Board Approved.
 
 The preview requires a selected board pack or report snapshot. It must not invent data, recalculate scores, convert missing scores to `0`, hide `insufficient_data`, or present the preview as reviewed, internal-final, certified, or board-approved.
+
+## C.17.3 Status
+
+C.17.3 adds snapshot, version, status, and audit metadata to the Board Review Draft preview foundation.
+
+Preview metadata must remain visible enough for review workflows:
+
+- snapshot id and snapshot version;
+- status;
+- generated timestamp;
+- source type/modules where available;
+- data freshness when supplied;
+- AI used yes/no and prompt version when supplied;
+- insufficient-data flags;
+- limitations.
+
+The metadata does not make the preview source-of-truth. `reviewed` and `internal_final` can appear only when explicit human review/final metadata is supplied. AI-only content cannot set those states.

@@ -88,3 +88,15 @@ The preview flow:
 - Does not call an external PDF service.
 - Does not add a PDF package or binary export path.
 - Does not create a certified PDF, board-approved report, legal report, investment recommendation, or compliance certification.
+
+## C.17.3 Status
+
+C.17.3 adds frontend snapshot/version/audit metadata for HTML previews. Future PDF/export implementation must use a persisted/export snapshot produced by an authorized backend phase, not live recalculation at render time.
+
+Future PDF requirements now include:
+
+- Use export snapshot metadata rather than recalculating official scores.
+- Preserve status and human-review metadata.
+- Preserve insufficient-data flags.
+- Preserve audit metadata and limitations.
+- Never convert preview metadata into board approval, certification, legal advice, investment advice, or compliance certification.

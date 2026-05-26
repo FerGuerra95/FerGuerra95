@@ -659,3 +659,20 @@ Source-of-truth rules:
 - AI draft text, when present in a future phase, is not source-of-truth.
 - The preview does not mutate persisted records, create export ledger events, or set reviewed/internal-final status.
 - Board Review Draft does not mean board approved, certified, legal advice, investment advice, compliance certification, or fairness opinion.
+
+## C.17.3 - Board Review Snapshot Metadata Boundary
+
+Board Review snapshot metadata status: **DISPLAY / EXPORT METADATA ONLY / NOT OFFICIAL SOURCE-OF-TRUTH**.
+
+C.17.3 adds frontend-only snapshot, version, and audit metadata for Board Review Draft previews. Until a later backend persistence phase is explicitly authorized, this metadata is not an authoritative record, export ledger event, audit ledger entry, or module source-of-truth.
+
+Boundary rules:
+
+- Snapshot metadata is not SoT.
+- Renderer metadata is not SoT.
+- Module services and persisted module records remain authoritative.
+- Snapshot metadata must not recalculate official scores.
+- Missing values remain `N/A` / `insufficient_data`.
+- `reviewed` and `internal_final` require explicit human metadata.
+- AI-only metadata cannot mark a report reviewed or internal-final.
+- No Board Review Draft snapshot means board approval, certification, legal advice, investment advice, compliance certification, or fairness opinion.

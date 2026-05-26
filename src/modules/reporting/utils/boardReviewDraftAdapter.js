@@ -1,4 +1,5 @@
 import { BOARD_REVIEW_DRAFT_LABELS } from './reportLabels.js';
+import { buildBoardReviewSnapshot, sanitizeSnapshotForRenderer } from './boardReviewSnapshot.js';
 import {
   ensureNoInvalidNumber,
   normalizeMissingData,
@@ -66,7 +67,12 @@ export function toBoardReviewDraftInput({
   report,
   organizationName,
   generatedAt = new Date(),
-  fallbackScope = 'Reporting / Board Packs'
+  fallbackScope = 'Reporting / Board Packs',
+  includeSnapshot = false,
+  statusInput,
+  aiMetadata,
+  sourceModules,
+  dataFreshness
 } = {}) {
   const source = boardPack || report || {};
   const sourceType = boardPack ? 'board_pack' : report ? 'report' : 'snapshot_required';
@@ -95,7 +101,7 @@ export function toBoardReviewDraftInput({
         sourceLabel: 'Reporting preview'
       }];
 
-  return {
+  const rendererInput = {
     title: safeText(firstDefined(source.title, source.name), BOARD_REVIEW_DRAFT_LABELS.status),
     organizationName: safeText(firstDefined(organizationName, source.organizationName), ''),
     scopeLabel: safeText(firstDefined(source.scopeLabel, source.module, source.reportType, fallbackScope), fallbackScope),
@@ -112,7 +118,31 @@ export function toBoardReviewDraftInput({
     reviewQuestions: safeList(firstDefined(source.reviewQuestions, source.decisionQuestions, source.sections?.reviewQuestions, DEFAULT_REVIEW_QUESTIONS)),
     humanReviewChecklist: safeList(firstDefined(source.humanReviewChecklist, source.sections?.humanReviewChecklist, DEFAULT_HUMAN_REVIEW_CHECKLIST)),
     auditMetadata: normalizeAuditMetadata(source, generatedAt, sourceType),
-    logoSrc: source.logoSrc
+    logoSrc: source.logoSrc,
+    requiresSnapshot: !sourceHasSnapshot
+  };
+
+  if (!includeSnapshot) {
+    return rendererInput;
+  }
+
+  const snapshot = buildBoardReviewSnapshot({
+    boardPack,
+    report,
+    rendererInput,
+    organizationName,
+    scopeLabel: rendererInput.scopeLabel,
+    generatedAt,
+    sourceModules,
+    dataFreshness,
+    aiMetadata,
+    statusInput
+  });
+
+  return {
+    ...sanitizeSnapshotForRenderer(snapshot),
+    snapshot,
+    requiresSnapshot: !sourceHasSnapshot
   };
 }
 

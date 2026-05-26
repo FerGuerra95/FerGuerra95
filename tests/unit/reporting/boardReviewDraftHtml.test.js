@@ -103,6 +103,7 @@ describe('buildBoardReviewDraftHtml', () => {
         missingData: ['risk:insufficient_data']
       },
       logoSrc: '/brand/ceos-logo.svg',
+      includeSnapshot: true,
       generatedAt: '2026-05-26T10:00:00.000Z'
     });
     const html = buildBoardReviewDraftHtml(input);
@@ -113,5 +114,10 @@ describe('buildBoardReviewDraftHtml', () => {
     expect(html).toContain('Not Board Approved');
     expect(html).toContain('<td>N/A</td>');
     expect(html).toContain('risk:insufficient_data');
+    expect(html).toContain('snapshotId');
+    expect(html).toContain('previewOnly');
+    expect(html).toContain('html_preview');
+    expect(html).not.toMatch(/board-approved/i);
+    expect(html).not.toMatch(/certified PDF/i);
   });
 });
