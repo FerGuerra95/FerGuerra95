@@ -164,6 +164,29 @@ Stop and escalate to human review if:
 - output implies certification, legal advice, or investment advice
 - auth/router/middleware change required without explicit authorization
 
+## AI Runtime Checklist (C.16.0+ — required before any `POST /api/ai/*`)
+
+| Check | Pass |
+|---|---|
+| Provider DPA / subprocessor documented | |
+| API keys only in secret store (not repo) | |
+| Request/response logging with redaction | |
+| Tenant isolation in context builder (tests) | |
+| Prompt injection refusal patterns tested | |
+| Output labeled: AI Draft / Requires Human Review | |
+| No autonomous action (send, approve, delete, mutate) | |
+| No secrets in prompts or logs | |
+| No cross-tenant scope in prompts | |
+| Viewer cannot invoke AI write paths | |
+| Rate limits and timeout configured | |
+| No silent fake-AI fallback on provider error | |
+| AI does not recalculate official scores | |
+| Commercial copy matches `WHAT_WE_CAN_AND_CANNOT_SAY.md` | |
+
+**C.16.0 status:** Design complete — **no runtime AI endpoints** until C.16.1 implementation pass.
+
+---
+
 ## Related Rules
 
 - `.cursor/rules/ceos-os-security-review.mdc`

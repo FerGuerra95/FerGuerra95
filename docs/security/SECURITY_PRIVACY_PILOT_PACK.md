@@ -178,6 +178,21 @@ CEO's OS pilot is **not**:
 
 ---
 
+## AI Readiness / No Runtime AI Yet (C.16.0)
+
+| Statement | Status |
+|---|---|
+| Runtime AI in product | **Not implemented** — no customer prompts sent to external LLM by product code in C.16.0 |
+| AI guardrails | **Documented** — `docs/ai/AI_GUARDRAILS.md`, `AI_DATA_BOUNDARIES.md`, `AI_READINESS_AUDIT.md` |
+| Customer data to AI provider | **None by product runtime** until C.16.1+ and legal/DPA sign-off |
+| Future provider | Requires **DPA / subprocessor** review, key storage in secret manager, audit logging with redaction |
+| Training on customer data | **Disabled by default** unless explicit contract and legal approval |
+| Before runtime AI | Prompt injection controls, tenant isolation in context builder, human-review UI labels, no autonomous actions |
+
+Pilot operators must not enable third-party AI tools on production exports containing client PII without legal approval.
+
+---
+
 ## Related documents
 
 | Document | Path |

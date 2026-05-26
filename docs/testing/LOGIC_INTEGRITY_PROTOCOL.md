@@ -1356,3 +1356,21 @@ No secrets/tokens logged. No runtime changes.
 ### AGENTS.md drift + C.15.1b retry (2026-05-25)
 
 **AGENTS.md:** accidental prompt paste reverted via `git restore` (no commit). **C.15.1b:** still **BLOCKED BY ENV/CREDENTIALS** in agent shell at `8b641eb`. Perimeter unauthenticated **PASS** (200/401). No secrets logged. No runtime changes.
+
+## C.16.0 — AI Readiness Audit
+
+**Status:** **COMPLETED** · **READY FOR DESIGN** · **NOT RUNTIME AI YET**
+
+### Logic integrity rules for future AI (product runtime)
+
+| Rule | Requirement |
+|---|---|
+| Formulas | AI **must not** change `FORMULA_REGISTRY.md` or Golden expected outputs |
+| Official scores | AI **must not** calculate or replace module scores, KPIs, or readiness indices |
+| Narrative | AI **may** draft narrative **only** from existing tenant-scoped DSS outputs in context |
+| Human review | All AI output **requires human review** before business use |
+| Labels | AI Draft · Requires Human Review · Based on DSS Signals · Not Legal/Investment Advice |
+| Source-of-truth | AI is **not** SoT — see `SOURCE_OF_TRUTH_REGISTRY.md` |
+| C.16.0 implementation | **No runtime AI** in this phase — design docs only |
+
+**Related:** `docs/ai/AI_READINESS_AUDIT.md` · `AI_GUARDRAILS.md` · `AI_DATA_BOUNDARIES.md`

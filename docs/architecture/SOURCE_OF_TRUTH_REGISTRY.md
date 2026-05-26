@@ -55,6 +55,15 @@ Do not mark Assumed entries as Confirmed before C.13.
 | Executive Overview | module health / radar / executive signal | Backend `executiveOverview.service.js` + CEO `ceoOverviewTruthfulness.js` | **TRUTHFULNESS GATED** (C.13.10B) | Fallback risk gated C.13.10B | executive_module_health_average_basic (future) | Aggregator only; not master store |
 | Golden Datasets | calculation oracles | docs/testing/golden_inputs.json | Confirmed baseline seed | Implementation may mismatch | All IDs in file | Oracle not product data |
 | Formulas | formula definitions | docs/testing/FORMULA_REGISTRY.md | Created IA-2 / Pending C.13 validation | | Mapped IDs | |
+| AI-generated narrative | draft text, memos, briefs | **Not source-of-truth** — future `aiAudit` + user-saved draft only | **Design (C.16.0)** | AI must not override scores, formulas, or persisted records | N/A | Official SoT remains module services, Formula Registry, Golden Datasets (engineering oracles), persisted DB fields |
+
+## AI and Source-of-Truth (C.16.0)
+
+- **AI is not source-of-truth.** LLM outputs are **draft narrative only** until a human explicitly adopts them in product workflows.
+- **AI must not** calculate or replace official scores (compliance weighted risk, risk heatmap, funding runway, M&A valuation, executive readiness, etc.).
+- **AI may** describe values already present in tenant-scoped DSS context built from approved services.
+- **Golden Datasets** remain engineering oracles — not customer-facing AI facts.
+- See `docs/ai/AI_READINESS_AUDIT.md` and `docs/ai/AI_DATA_BOUNDARIES.md`.
 
 ## Rules
 

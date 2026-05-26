@@ -6869,3 +6869,35 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Local (agent shell):** unit **PARTIAL** (434 passed, 2 sqlite binding suites) · build **PASS**. Integration not re-run (credentials blocked authenticated path).
 
 **Operator action to close C.15.1b:** load `CEOS_E2E_*` from local secret store in operator PowerShell, then run `.local/post-rotation-auth-smoke.mjs` and Playwright `authenticated-hubs` — never paste credentials in chat.
+
+---
+
+## C.16.0 — AI Readiness Audit
+
+**Status:** **COMPLETED** · **READY FOR DESIGN** · **NOT RUNTIME AI YET**
+
+**Baseline:** `HEAD = origin/main = 2e0a3cc` (pre-commit); docs commit records C.16.0 closure.
+
+**Mode:** DOCS / SECURITY / ARCHITECTURE only — no `src/`, `backend/`, `tests/`, package, secrets, Golden, or Formula Registry changes.
+
+**Deliverables:**
+
+| Document | Purpose |
+|---|---|
+| `docs/ai/AI_READINESS_AUDIT.md` | Executive decision, risks, phases, first use case |
+| `docs/ai/AI_DATA_BOUNDARIES.md` | Allowed / forbidden data for AI context |
+| `docs/ai/AI_GUARDRAILS.md` | Draft-only, human review, refusals, injection defense |
+| `docs/ai/AI_USE_CASES.md` | Use case catalog and implementation order |
+| `docs/ai/AI_PROVIDER_ABSTRACTION_PLAN.md` | C.16.1 backend design (not implemented) |
+
+**Updates:** `SECURITY_PRIVACY_PILOT_PACK.md` · `SECURITY_REVIEW_CHECKLIST.md` · `SOURCE_OF_TRUTH_REGISTRY.md` · `LOGIC_INTEGRITY_PROTOCOL.md`
+
+**AI readiness decision:** **READY FOR DESIGN / NOT YET READY FOR RUNTIME IMPLEMENTATION**
+
+**First approved candidate:** **AI Board Review Draft Assistant** — draft-only, human review, DSS-grounded, no mutation, no certification language.
+
+**Blocked until C.16.1+:** Runtime provider, API keys, autonomous agents, score recalculation, cross-tenant context, customer data to LLM without DPA.
+
+**P2 unchanged:** C.15.1b authenticated smoke still **BLOCKED BY ENV/CREDENTIALS** in agent shell — does not block AI design.
+
+**Next recommended:** **C.16.1** AI Provider Abstraction · **C.16.2** Board Review Draft Assistant · parallel **C.17.0** Reporting PDF renderer planning.
