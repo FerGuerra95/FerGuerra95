@@ -1274,3 +1274,42 @@ Authenticated truthfulness checks remain blocked by missing local secret-store c
 4. Compliance empty/no-audit authenticated state check not executed.
 
 No runtime changes were made. No product code, backend code, frontend code, tests, formulas, Golden Dataset, Formula Registry, package/config, secrets, AI behavior, marketplace behavior, auth, router, storage or source-of-truth definitions changed.
+
+## C.15.1b Authenticated Production Smoke
+
+**Status:** BLOCKED BY ENV/CREDENTIALS.
+
+### Local validation result
+
+| Command | Result |
+|---|---|
+| `npm run test:unit` | PASS - 439 passed |
+| `npm run test:integration` | PASS - 74 passed |
+| `npm run build` | PASS |
+
+### Production perimeter result
+
+| Area | Result |
+|---|---|
+| App shell | `https://app.theceosos.com` returned 200 |
+| App health | `/health` returned 200 |
+| API health | `/api/health` returned 200 |
+| Protected API without token | `/api/executive/overview` returned 401 as expected |
+
+### Auth smoke result
+
+Authenticated login was not attempted because `CEOS_BASE_URL`, `CEOS_E2E_USER` and `CEOS_E2E_PASSWORD` were not present in the local environment. This is classified as P2/env credential availability, not a confirmed product P0/P1.
+
+### Truthfulness result
+
+The authenticated truthfulness checks remain blocked by missing local secret-store credentials:
+
+1. CEO synthetic fallback score check.
+2. Reporting Board Review Draft / human review check.
+3. Funding hub copy and claim check.
+4. Compliance empty/no-audit state check.
+5. Logout/session invalidation check.
+
+No secrets, tokens, cookies, session IDs, auth headers, JWTs, `id_token`, `access_token` or `refresh_token` values were printed or written.
+
+No runtime changes were made. No product code, backend code, frontend code, tests, formulas, Golden Dataset, Formula Registry, package/config, secrets, AI behavior, marketplace behavior, auth, router, storage or source-of-truth definitions changed.

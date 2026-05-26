@@ -6759,3 +6759,36 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Finding classification:** No P0/P1 was confirmed. Remaining production confidence gap is P2/env-blocked authenticated smoke until local secret-store credentials are available.
 
 **Next recommended phase:** C.15.1b Authenticated Production Smoke with `CEOS_BASE_URL`, `CEOS_E2E_USER` and `CEOS_E2E_PASSWORD` provided from local secret store, or C.16.0 AI Readiness Audit if production authenticated smoke is scheduled separately.
+
+---
+
+## C.15.1b - Authenticated Production Smoke
+
+**Status:** BLOCKED BY ENV/CREDENTIALS.
+
+**Baseline:** `HEAD = origin/main = 4023905`.
+
+**Local validation:** PASS.
+
+| Check | Result |
+|---|---|
+| `npm run test:unit` | PASS - 439 passed |
+| `npm run test:integration` | PASS - 74 passed |
+| `npm run build` | PASS |
+
+**Production perimeter confirmation:** PASS.
+
+| Area | Result |
+|---|---|
+| `https://app.theceosos.com` | 200 |
+| `https://app.theceosos.com/health` | 200 |
+| `https://app.theceosos.com/api/health` | 200 |
+| Protected `/api/executive/overview` without token | 401 as expected |
+
+**Authenticated smoke:** Not executed because `CEOS_BASE_URL`, `CEOS_E2E_USER` and `CEOS_E2E_PASSWORD` were not present in the local environment. No credentials, tokens, cookies, session IDs, auth headers, JWTs, `id_token`, `access_token` or `refresh_token` values were printed or written.
+
+**Blocked checks:** Login, authenticated APIs, authenticated UI routes, CEO synthetic-score regression check, Reporting Board Review Draft check, Funding hub check, Compliance empty-state check and logout/session invalidation remain blocked until local secret-store credentials are available.
+
+**Finding classification:** No P0/P1 was confirmed. The only active finding remains P2/env credential availability for authenticated production smoke.
+
+**Next recommended phase:** Re-run C.15.1b after loading `CEOS_BASE_URL`, `CEOS_E2E_USER` and `CEOS_E2E_PASSWORD` from local secret store, or proceed to C.16.0 AI Readiness Audit if authenticated smoke is scheduled separately.
