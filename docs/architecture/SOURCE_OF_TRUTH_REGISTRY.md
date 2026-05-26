@@ -709,3 +709,30 @@ Future state after an authorized backend phase:
 - Persisted snapshots still must not become source-of-truth for module facts, formulas, official scores, legal conclusions, investment advice, compliance certification, or board approval.
 - Module services and persisted module records remain authoritative for module facts.
 - Backend tenant scope, permissions, audit events, and tests are required before persisted workflow state can be treated as authoritative.
+
+## C.17.6 - Persisted Board Review Snapshot Boundary
+
+Persisted Board Review snapshot status is now backend source-of-truth for Reporting workflow state.
+
+Scope of source-of-truth:
+
+- Snapshot status: `draft`, `ai_draft`, `human_review_required`, `reviewed`, `internal_final`, `archived`, `revoked`.
+- Snapshot version metadata.
+- Review/internal-final workflow metadata.
+- Sanitized Board Review audit events.
+
+Out of scope:
+
+- Module facts and official scores.
+- Legal, investment, compliance, fairness-opinion, or board-approval conclusions.
+- PDF certification or board-approved output.
+- AI-generated approval state.
+
+Boundary rules:
+
+- Renderer remains display layer only.
+- Module services and persisted module records remain authoritative for module values.
+- Tenant scope is backend/session-derived.
+- Client-provided tenant fields are not source-of-truth.
+- AI/service actors cannot mark reviewed/internal-final.
+- `internal_final` is internal workflow status only and does not mean board-approved.

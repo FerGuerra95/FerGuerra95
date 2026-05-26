@@ -209,3 +209,19 @@ Current scope:
 C.17.5 defines the future backend persistence architecture for Board Review Draft snapshots and workflow states. It does not implement backend services, routes, migrations, DB persistence, PDF export, secure share, or AI runtime.
 
 Next backend phase: **C.17.6 - Backend persistence implementation for Board Review Draft snapshots**.
+
+## C.17.6 Backend Persistence Status
+
+**Status:** BACKEND PERSISTENCE FOUNDATION IMPLEMENTED / NO FRONTEND PERSISTED-SNAPSHOT INTEGRATION YET.
+
+C.17.6 adds tenant-scoped backend persistence for Board Review Draft snapshots and workflow audit events. Reporting now has protected backend endpoints for snapshot create/list/read and reviewed/internal-final/archive/revoke transitions.
+
+Current boundaries:
+
+- No binary PDF generation.
+- No public secure share.
+- No AI runtime/provider traffic.
+- No board-approved or certified output.
+- Frontend preview integration with the persisted endpoints remains a future phase.
+
+Next recommended phase: **C.17.7 - Frontend integration with persisted Board Review snapshots**.

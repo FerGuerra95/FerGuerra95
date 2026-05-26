@@ -31,6 +31,14 @@ router.post('/exports', exportReporting, validate(reportingValidator.body), cont
 router.get('/board-pack', readReporting, controller.listBoardPack);
 router.post('/board-pack', exportReporting, validate(reportingValidator.body), controller.createBoardPackReport);
 
+router.get('/board-review-snapshots', readReporting, controller.listBoardReviewSnapshotRecords);
+router.get('/board-review-snapshots/:id', readReporting, validate(reportingValidator.params), controller.getBoardReviewSnapshotRecord);
+router.post('/board-review-snapshots', createReporting, validate(reportingValidator.boardReviewCreate), controller.createBoardReviewSnapshotRecord);
+router.post('/board-review-snapshots/:id/mark-reviewed', updateReporting, validate(reportingValidator.boardReviewTransition), controller.markBoardReviewSnapshotReviewed);
+router.post('/board-review-snapshots/:id/mark-internal-final', exportReporting, validate(reportingValidator.boardReviewInternalFinal), controller.markBoardReviewSnapshotInternalFinal);
+router.post('/board-review-snapshots/:id/archive', updateReporting, validate(reportingValidator.boardReviewTransition), controller.archiveBoardReviewSnapshotRecord);
+router.post('/board-review-snapshots/:id/revoke', updateReporting, validate(reportingValidator.boardReviewTransition), controller.revokeBoardReviewSnapshotRecord);
+
 router.get('/schedules', readReporting, controller.listSchedules);
 router.post('/schedules', updateReporting, validate(reportingValidator.body), controller.createSchedule);
 

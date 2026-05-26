@@ -7025,3 +7025,17 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Runtime posture:** No product code, backend code, frontend runtime, tests, scripts, package/config, migrations, DB persistence, endpoints, PDF binary, AI runtime, Golden Dataset, or Formula Registry changed.
 
 **Truthfulness posture:** Backend persistence is not implemented yet. Future persisted snapshots may become Reporting state source-of-truth only after authorized backend implementation, tenant scoping, permissions, audit events, and tests. No board-approved or certified PDF claims.
+
+---
+
+## C.17.6 - Board Review Backend Persistence Implementation
+
+**Status:** COMPLETED / BACKEND PERSISTENCE FOUNDATION.
+
+**Baseline:** `HEAD = origin/main = bb8975b`.
+
+**Implemented:** SQLite migration `021_board_review_persistence.sql`, tenant-scoped Board Review snapshot repository/service, protected Reporting API endpoints, validators, sanitized workflow audit events, unit tests, integration API tests, and documentation updates.
+
+**Runtime posture:** Backend Reporting persistence only. No frontend, PDF binary, secure-share public access, AI runtime/provider traffic, package/config, Golden Dataset, or Formula Registry changed.
+
+**Truthfulness posture:** Persisted Board Review snapshot status is backend source-of-truth for Reporting workflow state. Renderer remains display layer. `reviewed` and `internal_final` are gated by human actor/approval metadata; AI cannot mark them. No board-approved status or certified PDF claim exists.

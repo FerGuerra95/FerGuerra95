@@ -117,3 +117,16 @@ Future PDF requirements now include:
 C.17.5 plans the backend persistence layer required before stronger export workflows. Future PDF generation must render from a persisted, tenant-scoped Board Review snapshot rather than live recalculation or frontend-only preview metadata.
 
 Binary PDF remains future only. No PDF dependency, external PDF service, endpoint, DB persistence, or export ledger mutation exists in C.17.5.
+
+## C.17.6 Status
+
+C.17.6 implements persisted Board Review Draft snapshot state and workflow audit metadata, but does not implement binary PDF generation.
+
+Future PDF requirements now include:
+
+- Render from `board_review_snapshots` persisted state.
+- Preserve persisted status, limitations, insufficient-data flags, and audit metadata.
+- Preserve CEO's OS logo/header and human-review labels.
+- Never render revoked snapshots as exportable.
+- Never convert `internal_final` into board-approved or certified PDF semantics.
+- Keep PDF/export endpoints separate from the C.17.6 snapshot API until explicitly authorized.

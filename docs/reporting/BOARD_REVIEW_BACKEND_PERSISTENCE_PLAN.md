@@ -439,3 +439,41 @@ PDF export, secure share integration, and AI runtime should remain separate phas
 Status: **PLANNED / NO BACKEND IMPLEMENTED IN C.17.5**
 
 Recommended next implementation: **C.17.6 - Backend persistence implementation for Board Review Draft snapshots**.
+
+## C.17.6 Implementation Status
+
+Status: **IMPLEMENTED / BACKEND PERSISTENCE FOUNDATION / NO PDF OR SECURE SHARE**.
+
+C.17.6 implements the first tenant-scoped backend persistence layer for Board Review Draft snapshots and workflow audit metadata.
+
+Implemented runtime scope:
+
+- New SQLite migration: `021_board_review_persistence.sql`.
+- New backend tables:
+  - `board_review_snapshots`;
+  - `board_review_audit_events`.
+- Backend Reporting repository/service for tenant-scoped snapshot create/list/read and workflow transitions.
+- Protected Reporting API endpoints under `/api/reporting/board-review-snapshots`.
+- Minimal validators for snapshot creation and workflow transitions.
+- Sanitized audit events for creation, reviewed, internal-final, archive, revoke, and blocked transitions.
+- Unit and integration coverage for tenant isolation, permissions, workflow gates, status truthfulness, and secret redaction.
+
+Implemented endpoints:
+
+- `GET /api/reporting/board-review-snapshots`
+- `GET /api/reporting/board-review-snapshots/:id`
+- `POST /api/reporting/board-review-snapshots`
+- `POST /api/reporting/board-review-snapshots/:id/mark-reviewed`
+- `POST /api/reporting/board-review-snapshots/:id/mark-internal-final`
+- `POST /api/reporting/board-review-snapshots/:id/archive`
+- `POST /api/reporting/board-review-snapshots/:id/revoke`
+
+Still not implemented:
+
+- Binary PDF export.
+- Public secure-share access.
+- AI runtime/provider traffic.
+- Frontend integration with persisted snapshots.
+- Certified PDF or board-approved output.
+
+Recommended next implementation: **C.17.7 - Frontend integration with persisted Board Review snapshots**.

@@ -1,4 +1,6 @@
 import {
+  archiveBoardReviewSnapshot,
+  createBoardReviewSnapshot,
   createBoardPack,
   createEnterpriseReport,
   createReportEvidence,
@@ -6,8 +8,10 @@ import {
   createReportSchedule,
   createReportTemplate,
   createReportVersion,
+  getBoardReviewSnapshot,
   getReportingDashboard,
   getReportingSummary,
+  listBoardReviewSnapshots,
   listBoardPacks,
   listEnterpriseReports,
   listReportEvidence,
@@ -15,7 +19,10 @@ import {
   listReportSchedules,
   listReportTemplates,
   listReportVersions,
-  listReportingAuditLogs
+  listReportingAuditLogs,
+  markBoardReviewInternalFinal,
+  markBoardReviewReviewed,
+  revokeBoardReviewSnapshot
 } from '../../services/reporting/reporting.service.js';
 
 function meta(extra = {}) { return { timestamp: new Date().toISOString(), ...extra }; }
@@ -72,6 +79,104 @@ export const listEvidence = (req, res, next) => listResponse(req, res, next, lis
 export const createEvidence = (req, res, next) => createResponse(req, res, next, createReportEvidence);
 export const listBoardPack = (req, res, next) => listResponse(req, res, next, listBoardPacks);
 export const createBoardPackReport = (req, res, next) => createResponse(req, res, next, createBoardPack);
+
+export async function listBoardReviewSnapshotRecords(req, res, next) {
+  try {
+    const current = scope(req);
+    const items = await listBoardReviewSnapshots({
+      organizationId: current.organizationId,
+      filters: { status: req.query?.status }
+    });
+    return ok(res, { items, total: items.length });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function getBoardReviewSnapshotRecord(req, res, next) {
+  try {
+    const current = scope(req);
+    const item = await getBoardReviewSnapshot({
+      organizationId: current.organizationId,
+      snapshotId: req.params.id
+    });
+    return ok(res, item);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function createBoardReviewSnapshotRecord(req, res, next) {
+  try {
+    const current = scope(req);
+    const item = await createBoardReviewSnapshot({
+      organizationId: current.organizationId,
+      actor: actor(req),
+      payload: req.body
+    });
+    return created(res, item);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function markBoardReviewSnapshotReviewed(req, res, next) {
+  try {
+    const current = scope(req);
+    const item = await markBoardReviewReviewed({
+      organizationId: current.organizationId,
+      snapshotId: req.params.id,
+      actor: actor(req),
+      reviewMetadata: req.body?.reviewMetadata || req.body || {}
+    });
+    return ok(res, item);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function markBoardReviewSnapshotInternalFinal(req, res, next) {
+  try {
+    const current = scope(req);
+    const item = await markBoardReviewInternalFinal({
+      organizationId: current.organizationId,
+      snapshotId: req.params.id,
+      actor: actor(req),
+      approvalMetadata: req.body?.approvalMetadata || req.body || {}
+    });
+    return ok(res, item);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function archiveBoardReviewSnapshotRecord(req, res, next) {
+  try {
+    const current = scope(req);
+    const item = await archiveBoardReviewSnapshot({
+      organizationId: current.organizationId,
+      snapshotId: req.params.id,
+      actor: actor(req)
+    });
+    return ok(res, item);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function revokeBoardReviewSnapshotRecord(req, res, next) {
+  try {
+    const current = scope(req);
+    const item = await revokeBoardReviewSnapshot({
+      organizationId: current.organizationId,
+      snapshotId: req.params.id,
+      actor: actor(req)
+    });
+    return ok(res, item);
+  } catch (error) {
+    return next(error);
+  }
+}
 
 export async function listAuditTrail(req, res, next) {
   try {

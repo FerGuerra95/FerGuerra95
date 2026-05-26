@@ -3,6 +3,17 @@ import { omitClientTenantFields } from '../../utils/tenantPayload.js';
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
 import { listAuditLogs, recordAuditLog } from '../audit/auditLog.service.js';
 import { generateBoardPack } from './boardPack.service.js';
+export {
+  archiveBoardReviewSnapshot,
+  createBoardReviewSnapshot,
+  getBoardReviewSnapshot,
+  listBoardReviewAuditEvents,
+  listBoardReviewSnapshots,
+  markBoardReviewInternalFinal,
+  markBoardReviewReviewed,
+  redactBoardReviewPayload,
+  revokeBoardReviewSnapshot
+} from './boardReview.service.js';
 
 const reportsStore = createSqliteEntityStore('enterprise_reports', 'enterprise_report', {
   title: 'Enterprise report',

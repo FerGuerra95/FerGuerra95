@@ -170,3 +170,43 @@ Future backend implementation must preserve:
 - AI cannot mark reviewed/internal-final;
 - no board-approved status;
 - no certified PDF claim.
+
+## C.17.6 Status
+
+**Status:** BACKEND PERSISTENCE FOUNDATION IMPLEMENTED.
+
+C.17.6 adds persisted Board Review Draft snapshots and sanitized workflow audit events.
+
+Implemented persistence:
+
+- `board_review_snapshots`
+- `board_review_audit_events`
+
+Implemented API boundary:
+
+- Protected endpoints under `/api/reporting/board-review-snapshots`.
+- Tenant scope comes from backend auth/session only.
+- Client-supplied `organizationId`, `orgId`, or `tenantId` is stripped/ignored.
+- Same-organization reads and transitions are enforced.
+
+Implemented workflow rules:
+
+- Default status remains `human_review_required`.
+- `reviewed` requires a human actor.
+- `internal_final` requires reviewed state plus explicit approval.
+- AI/service actors cannot mark reviewed/internal-final.
+- Revoked snapshots cannot be finalized.
+- Archived snapshots are read-only.
+- No `board_approved` status exists.
+
+Audit posture:
+
+- Snapshot creation and workflow transitions create audit events.
+- Blocked internal-final/review transitions create sanitized blocked audit metadata when a snapshot exists.
+- Token, cookie, password, auth-header, API-key, secret, and raw share-token fields are rejected or redacted.
+
+PDF/export posture:
+
+- Binary PDF remains future only.
+- Future PDF must render from persisted snapshot state, not live recalculation.
+- `internal_final` still does not mean board-approved or certified.

@@ -212,6 +212,31 @@ Before implementing Board Review backend persistence, verify:
 
 **C.17.5 status:** Planning only. No backend persistence, endpoint, migration, DB table, PDF binary, secure-share integration, or AI runtime change exists yet.
 
+**C.17.6 status:** Backend persistence foundation implemented for Board Review snapshots and workflow audit events.
+
+Security checks implemented:
+
+| Check | Result |
+|---|---|
+| Auth | Board Review snapshot endpoints are under authenticated `/api/reporting` routes |
+| Tenant scope | `organizationId` comes from backend auth/session |
+| Client tenant fields | `organizationId`, `orgId`, and tenant aliases are stripped/ignored |
+| Cross-tenant access | GET/list/transitions filter by same organization |
+| Viewer mutation | Viewer can read own org snapshots but cannot mark reviewed/internal-final |
+| Reviewed state | Requires human actor |
+| Internal final | Requires reviewed state plus explicit approval |
+| AI actor | Service blocks AI/service actors from reviewed/internal-final |
+| Audit events | Create/review/final/archive/revoke/blocked transitions record sanitized audit metadata |
+| Secrets | Sensitive payload keys are rejected by API validators or redacted in service metadata |
+| Public access | No public endpoint or secure-share exposure added |
+| PDF/export | No binary PDF or export endpoint added |
+
+Remaining future security work:
+
+- Frontend persisted-snapshot integration.
+- Backend export/PDF authorization if a future PDF phase is approved.
+- Secure-share read-only boundary if a future share phase is approved.
+
 ## Related Rules
 
 - `.cursor/rules/ceos-os-security-review.mdc`

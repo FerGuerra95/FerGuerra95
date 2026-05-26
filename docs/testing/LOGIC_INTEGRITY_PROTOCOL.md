@@ -1523,3 +1523,27 @@ Workflow tests ensure:
 - No board-approved or certified claims are rendered.
 
 No backend, API, DB persistence, router, unrelated module, package/config, Golden Dataset, Formula Registry, AI runtime, endpoint, or binary PDF generation changed.
+
+## C.17.6 - Board Review Backend Persistence Implementation
+
+**Status:** COMPLETED / BACKEND PERSISTENCE FOUNDATION.
+
+Logic-integrity checks now cover:
+
+- Tenant-scoped Board Review snapshot persistence.
+- Client-supplied tenant fields stripped/ignored.
+- Cross-tenant read blocked.
+- Missing scores remain null / `insufficient_data`, not fake `0`.
+- `reviewed` requires human actor metadata.
+- `internal_final` requires reviewed state plus explicit approval.
+- AI/service actor cannot mark reviewed/internal-final.
+- Revoked snapshots cannot be finalized.
+- No `board_approved` status exists.
+- Snapshot/audit metadata rejects or redacts token/password/cookie/auth header/secret fields.
+
+Renderer and AI boundaries remain:
+
+- Renderer remains display layer.
+- Persisted snapshot status is backend source-of-truth for Reporting workflow state only.
+- Module facts, formulas, and official scores remain owned by module source-of-truth records.
+- No binary PDF, secure share public access, AI runtime, Golden Dataset, or Formula Registry changed.

@@ -141,3 +141,23 @@ C.17.5 plans future backend persistence for Board Review Draft snapshots and wor
 Reviewed/internal-final states become official Reporting workflow state only after a backend persistence phase implements tenant-scoped storage, permissions, audit events, and tests. Until then, frontend workflow metadata remains preview/display metadata only.
 
 Backend persistence must not introduce board-approved, certified PDF, legal approval, investment approval, compliance certification, or AI-approved report semantics.
+
+## C.17.6 Status
+
+C.17.6 implements the backend persistence foundation for Board Review Draft snapshots and workflow state.
+
+Persisted Board Review Draft state now exists for:
+
+- tenant-scoped snapshot records;
+- sanitized audit events;
+- reviewed transitions with human actor metadata;
+- internal-final transitions gated by reviewed state and explicit approval;
+- archive/revoke workflow posture.
+
+Spec boundaries remain unchanged:
+
+- Board Review Draft is not board-approved.
+- Internal final is internal workflow state only, not board approval or certification.
+- AI/service actors cannot mark reviewed/internal-final.
+- Missing scores must remain `N/A` / `insufficient_data`, not fake `0`.
+- Binary PDF and secure-share exposure remain future phases.
