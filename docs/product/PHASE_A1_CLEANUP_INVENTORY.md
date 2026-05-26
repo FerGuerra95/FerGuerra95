@@ -7207,3 +7207,23 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Validations:** targeted formatter unit PASS; global unit PASS (552); integration PASS (81); navigation stability Playwright PASS after binding Vite to `127.0.0.1`. Local `/funding/dashboard` served 200 from the built app.
 
 **Truthfulness:** Missing dilution remains **N/A**, not fake `0`; no scoring or dilution formula changed.
+
+---
+
+## C.15.4d - Demo Navigation Stability Validation Closure
+
+**Status:** COMPLETED / DEMO NAVIGATION STABILITY VALIDATED.
+
+**Baseline:** `HEAD = origin/main = b4898e7`.
+
+**Build:** `npm run build` PASS.
+
+**Dist verification:** `Select-String` over `dist/assets/*.js` found no `formatDilutionValue` symbol and no `formatDilutionValue is not defined|ReferenceError` match.
+
+**Local route smoke:** `http://127.0.0.1:5173/funding/dashboard` returned 200 and `http://localhost:4000/funding/dashboard` returned 200.
+
+**Navigation validation:** `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS after launching Vite with `--host 127.0.0.1 --port 5173`. This automated smoke covers repeated workspace navigation without ErrorBoundary latch.
+
+**Manual validation note:** Browser-operator 20-30 hop validation should still be repeated before an external live demo, but the automated navigation smoke passed in this environment. No code/runtime changes were made in C.15.4d.
+
+**Result:** No P1 navigation crash reproduced. Prior `127.0.0.1:5173` connection refusal is classified as P2/env from Vite not being bound to that host.

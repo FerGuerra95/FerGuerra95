@@ -1708,3 +1708,27 @@ Validation:
 - `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS after launching Vite with `--host 127.0.0.1`.
 
 No backend, package/config, Golden Dataset, Formula Registry, ErrorBoundary, AI runtime, or scoring logic changed.
+
+## C.15.4d - Demo Navigation Stability Validation Closure
+
+**Status:** COMPLETED / demo navigation stability validated.
+
+Validation closure:
+
+- `npm run build` PASS.
+- `dist/assets/*.js` contains no `formatDilutionValue` symbol.
+- `dist/assets/*.js` contains no `formatDilutionValue is not defined|ReferenceError` match.
+- `http://127.0.0.1:5173/funding/dashboard` returned 200.
+- `http://localhost:4000/funding/dashboard` returned 200.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS after launching Vite with `--host 127.0.0.1 --port 5173`.
+
+Logic-integrity result:
+
+- No Funding Dashboard ReferenceError reproduced.
+- No ErrorBoundary latch reproduced in the automated navigation smoke.
+- Missing dilution remains **N/A**, not fake `0`.
+- No formulas, Golden Dataset, Formula Registry, backend, package/config, AI runtime, or source-of-truth logic changed.
+
+Remaining operator note:
+
+- Manual 20-30 browser hop dry run is recommended immediately before external demo, but the automated navigation stability smoke passed in this environment.
