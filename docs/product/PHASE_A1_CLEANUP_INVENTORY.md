@@ -6792,3 +6792,29 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Finding classification:** No P0/P1 was confirmed. The only active finding remains P2/env credential availability for authenticated production smoke.
 
 **Next recommended phase:** Re-run C.15.1b after loading `CEOS_BASE_URL`, `CEOS_E2E_USER` and `CEOS_E2E_PASSWORD` from local secret store, or proceed to C.16.0 AI Readiness Audit if authenticated smoke is scheduled separately.
+
+### C.15.1b - Authenticated Production Smoke Rerun (baseline correction)
+
+**Status:** BLOCKED BY ENV/CREDENTIALS.
+
+**Corrected approved baseline:** `HEAD = origin/main = f03cf5b`.
+
+**Working tree at start:** `?? backend-server.err` only.
+
+**Local validation:** PASS.
+
+| Check | Result |
+|---|---|
+| `npm run test:unit` | PASS - 439 passed |
+| `npm run test:integration` | PASS - 74 passed |
+| `npm run build` | PASS |
+
+**Credential availability:** `CEOS_BASE_URL` was set for `https://app.theceosos.com`; `CEOS_E2E_USER` and `CEOS_E2E_PASSWORD` were not present in the local environment. No password, token, cookie, session ID, auth header, JWT, `id_token`, `access_token` or `refresh_token` value was printed or written.
+
+**Authenticated smoke:** Not executed because prod test credentials were unavailable from the local secret-store environment.
+
+**Blocked checks:** Login, authenticated APIs, authenticated UI routes, CEO synthetic-score regression check, Reporting Board Review Draft check, Funding hub check, Compliance empty-state check and logout/session invalidation remain blocked until local secret-store credentials are available.
+
+**Finding classification:** No P0/P1 was confirmed. The active finding remains P2/env credential availability for authenticated production smoke.
+
+**Runtime posture:** No product code, backend code, frontend code, tests, formulas, Golden Dataset, Formula Registry, package/config, secrets, AI behavior, marketplace behavior, auth, router, storage or source-of-truth definitions changed.

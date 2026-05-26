@@ -1313,3 +1313,29 @@ The authenticated truthfulness checks remain blocked by missing local secret-sto
 No secrets, tokens, cookies, session IDs, auth headers, JWTs, `id_token`, `access_token` or `refresh_token` values were printed or written.
 
 No runtime changes were made. No product code, backend code, frontend code, tests, formulas, Golden Dataset, Formula Registry, package/config, secrets, AI behavior, marketplace behavior, auth, router, storage or source-of-truth definitions changed.
+
+### C.15.1b rerun with corrected baseline
+
+**Status:** BLOCKED BY ENV/CREDENTIALS.
+
+**Corrected approved baseline:** `HEAD = origin/main = f03cf5b`.
+
+#### Local validation result
+
+| Command | Result |
+|---|---|
+| `npm run test:unit` | PASS - 439 passed |
+| `npm run test:integration` | PASS - 74 passed |
+| `npm run build` | PASS |
+
+#### Auth smoke result
+
+Authenticated login was not attempted because `CEOS_E2E_USER` and `CEOS_E2E_PASSWORD` were not present in the local environment. `CEOS_BASE_URL` was set for `https://app.theceosos.com`. This remains classified as P2/env credential availability, not a confirmed product P0/P1.
+
+#### Truthfulness result
+
+CEO truthfulness, Reporting Board Review Draft / human review, Funding hub, Compliance empty/no-audit state and logout/session invalidation checks remain blocked by missing local secret-store credentials. No synthetic-score regression, false certification claim, autonomous AI claim or marketplace-live claim was confirmed in this rerun.
+
+No secrets, tokens, cookies, session IDs, auth headers, JWTs, `id_token`, `access_token` or `refresh_token` values were printed or written.
+
+No runtime changes were made. No product code, backend code, frontend code, tests, formulas, Golden Dataset, Formula Registry, package/config, secrets, AI behavior, marketplace behavior, auth, router, storage or source-of-truth definitions changed.
