@@ -227,4 +227,36 @@ Conditions: legal review for external use · credential rotation · no procureme
 
 ---
 
+## C.15.0 Commercial entry point
+
+**Status:** COMMERCIAL PILOT PACK DRAFTED.
+
+Use the C.15.0 commercial pack as the customer-facing starting point for controlled pilot discussions:
+
+| Asset | Path | Use |
+|---|---|---|
+| One-pager | `../commercial/CEO_OS_ONE_PAGER.md` | First commercial narrative and CTA. |
+| Demo script | `../commercial/DEMO_SCRIPT.md` | 30-45 minute demo sequence and truthfulness fallback language. |
+| Pilot proposal | `../commercial/PILOT_PROPOSAL.md` | Scope, duration, options, exclusions and offboarding. |
+| Pricing hypothesis | `../commercial/PRICING_HYPOTHESIS.md` | Internal pilot price framing, not final policy. |
+| Sales messaging | `../commercial/SALES_MESSAGING.md` | Pitches, objections and buyer personas. |
+| Claims control | `../commercial/WHAT_WE_CAN_AND_CANNOT_SAY.md` | Can/cannot-say guardrails for demo and pilot sales. |
+
+### Recommended demo sequence
+
+1. Opening: private DSS, controlled pilot, human review required.
+2. Executive Overview: aggregate command center, not certified enterprise health.
+3. M&A: DSS preparation, not fairness opinion or certified valuation.
+4. Compliance / Risk: operational support, not legal advice or certified audit.
+5. Funding: scenarios and readiness drafts, not investment advice or guaranteed outcomes.
+6. Reporting / Board Review Draft: review material, not board-approved output or complete PDF renderer.
+7. Governance / Strategy: decision traceability and priorities, not certified governance.
+8. Pilot proposal: 4-6 week limited-data controlled pilot.
+
+### Final wording caution
+
+Customer-facing wording must keep CEO's OS positioned as Private Executive DSS / Controlled Pilot / Human Review Required / Board Review Draft. Do not claim enterprise certification, procurement readiness, SOC2/ISO, formal SLA, fully GDPR compliant status, autonomous AI, legal advice, investment advice, fairness opinion, public marketplace, active verified buyer network or operational success-fee platform.
+
+---
+
 **This document is an internal pilot readiness draft. It is not a contract, SLA, or legal advice.**

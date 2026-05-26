@@ -1217,3 +1217,19 @@ No formulas, Golden Dataset, Formula Registry, source-of-truth definitions, scor
 The audit found no 1-3 helper candidates with exact semantic equivalence. Duplicate-looking helpers were deferred because they differ by module ownership, display/export context, ratio-vs-percent behavior, null-vs-zero behavior, DSS truthfulness labels, or backend readiness/scoring contracts.
 
 Future helper consolidation must add focused contract tests before changing imports. At minimum, tests should cover null, undefined, empty string, invalid text, comma decimals, thousands separators, zero denominators, ratio inputs, percent-point inputs, currency fallback, and DSS `insufficient_data` display semantics.
+
+## C.15.0 Demo / Sales Pack Honest DSS
+
+**Status:** completed as DOCS / COMMERCIAL / PILOT PACK.
+
+C.15.0 did not change runtime logic, product code, backend code, frontend code, tests, formulas, Golden Dataset, Formula Registry, package/config, secrets, AI behavior, marketplace behavior, route behavior, auth, storage or source-of-truth definitions.
+
+Commercial claims are aligned with DSS truthfulness gates:
+
+1. CEO's OS may be described as a Private Executive DSS, controlled pilot, operational decision-support workspace, human-reviewed system and Board Review Draft producer.
+2. Golden-tested oracles may be referenced only where documented.
+3. AI may be described as planned/readiness work, not autonomous AI implemented in the commercial pilot.
+4. Bridge marketplace must remain internal, unlisted and future/private-network language only.
+5. Reporting must remain Board Review Draft until PDF renderer, snapshot/versioning and per-module ownership decisions are implemented and verified.
+
+The C.15.0 pack introduces no claims of enterprise certification, procurement readiness, SOC2/ISO certification, fully GDPR compliant status, SLA-backed service, autonomous AI, legal advice, investment advice, fairness opinion, certified compliance/risk/governance/valuation, board-approved output, complete PDF reporting, public marketplace, verified buyer network or operational success-fee platform.

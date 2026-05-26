@@ -6702,3 +6702,24 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Decision:** Keep duplicate-looking helpers deferred until exact contract tests prove equivalence. The next cleanup phase may proceed to C.14.12 only with explicit low-risk monolith extraction boundaries, or sequencing may move to C.15.0 for demo/sales readiness.
 
 **Next recommended phase:** C.14.12 Monolith Extraction Low-Risk Audit or C.15.0 Honest Demo/Sales Pack.
+
+---
+
+## C.15.0 - Demo / Sales Pack honest DSS
+
+**Status:** COMPLETED / COMMERCIAL PILOT PACK DRAFTED.
+
+**Commercial assets:**
+
+1. `docs/commercial/CEO_OS_ONE_PAGER.md`
+2. `docs/commercial/DEMO_SCRIPT.md`
+3. `docs/commercial/PILOT_PROPOSAL.md`
+4. `docs/commercial/PRICING_HYPOTHESIS.md`
+5. `docs/commercial/SALES_MESSAGING.md`
+6. `docs/commercial/WHAT_WE_CAN_AND_CANNOT_SAY.md`
+
+**Summary:** C.15.0 prepares CEO's OS for controlled commercial conversations as a Private Executive DSS / Controlled Pilot / Human Review Required / Board Review Draft product. It does not change product runtime, tests, formulas, Golden Dataset, Formula Registry, package/config, secrets, AI, marketplace, procurement status, legal status or certification status.
+
+**Claims posture:** The sales pack explicitly prohibits enterprise certification, procurement-ready, SOC2/ISO certified, fully GDPR compliant, SLA-backed, autonomous AI, legal advice, investment advice, fairness opinion, board-approved output, complete PDF reporting, public marketplace, active verified buyer network and operational success-fee claims.
+
+**Next recommended phase:** C.15.1 Production Smoke Refresh or C.16.0 AI Readiness Audit.
