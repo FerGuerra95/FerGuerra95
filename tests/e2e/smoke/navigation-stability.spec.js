@@ -4,7 +4,7 @@ import { loginAsDemoAdmin } from '../helpers/auth.js';
 
 const ERROR_BOUNDARY_PATTERN = /Algo salió mal|Something went wrong/i;
 const CRITICAL_CONSOLE_PATTERN =
-  /(Cannot read properties of null|Cannot read properties of undefined|Uncaught Error|Maximum update depth exceeded)/i;
+  /(Cannot read properties of null|Cannot read properties of undefined|Uncaught Error|Maximum update depth exceeded|ReferenceError|is not defined)/i;
 
 const NAV_CYCLE = [
   {
@@ -103,6 +103,25 @@ test.describe('Navigation stability smoke', () => {
       await selectWorkspace(page, 'overview');
       await expect(page).toHaveURL(/\/dashboard/);
       await assertHealthyShell(page, `overview-return cycle ${cycle + 1}`);
+    }
+
+    for (let hop = 0; hop < 6; hop += 1) {
+      await selectWorkspace(page, 'funding');
+      await expect(page).toHaveURL(/\/funding\/dashboard/);
+      await expect(page.getByRole('heading', { name: /Funding/i }).first()).toBeVisible();
+      await assertHealthyShell(page, `funding-stress-${hop + 1}-enter`);
+
+      await selectWorkspace(page, 'overview');
+      await expect(page).toHaveURL(/\/dashboard/);
+      await assertHealthyShell(page, `funding-stress-${hop + 1}-overview`);
+
+      await selectWorkspace(page, 'reporting');
+      await expect(page).toHaveURL(/\/reporting\/dashboard/);
+      await assertHealthyShell(page, `funding-stress-${hop + 1}-reporting`);
+
+      await selectWorkspace(page, 'funding');
+      await expect(page).toHaveURL(/\/funding\/dashboard/);
+      await assertHealthyShell(page, `funding-stress-${hop + 1}-return`);
     }
   });
 });

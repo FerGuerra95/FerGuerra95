@@ -50,6 +50,7 @@ import {
   getRunwayStatusLabel,
   toSafeNumber
 } from '../utils/fundingExecutiveMetrics.js';
+import { formatDilutionValue } from '../utils/fundingDisplayFormat.js';
 
 const EMPTY_FUNDING_INPUTS = {
   companyName: '',

@@ -1665,3 +1665,16 @@ No runtime changes were made. No product code, backend code, frontend code, test
 - No board-approved / certified PDF / autonomous AI claims introduced.
 
 **P2 residual:** Playwright navigation smoke still depends on local API boot + `CEOS_E2E_*` or `BOOTSTRAP_USERS_JSON` (same as C.15.1b).
+
+## C.15.4b — Funding Navigation Crash Hotfix
+
+**Status:** **COMPLETED** / Funding dashboard render regression covered.
+
+| Area | Fix | Truthfulness |
+|---|---|---|
+| `formatDilutionValue` | New display helper in `fundingDisplayFormat.js`; imported in `FundingDashboardPage` | `null` / non-finite → **N/A**; numeric dilution shown as `X.X%`; no formula change |
+| E2E | Funding stress loop in `navigation-stability.spec.js`; console pattern includes `ReferenceError` | Catches undefined-formatter class regressions |
+
+**Tests:** `tests/unit/funding/fundingDisplayFormat.test.js` (null, ratio, percent scale, no throw).
+
+No Golden Dataset / Formula Registry / backend changes.

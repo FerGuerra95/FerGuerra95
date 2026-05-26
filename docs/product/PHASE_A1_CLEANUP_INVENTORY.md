@@ -7171,3 +7171,21 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Truthfulness:** No fake `0` scores; `insufficient_data` / N/A preserved; ErrorBoundary still surfaces real errors on the failing route.
 
 **Next:** Re-run internal demo dry run (C.15.3 script) · close auth smoke P2 · external pilot when navigation smoke PASS on operator host.
+
+---
+
+## C.15.4b — Funding Navigation Crash Hotfix
+
+**Status:** COMPLETED / FUNDING DASHBOARD CRASH FIXED.
+
+**Baseline:** `HEAD = origin/main = db21986` (pre-fix).
+
+**Root cause:** `FundingDashboardPage` called `formatDilutionValue(impliedDilution)` in export table and narrative copy without defining or importing the helper → `ReferenceError: formatDilutionValue is not defined` (P1 demo blocker on Funding workspace entry).
+
+**Fix:** Added display-only helper `src/modules/funding/utils/fundingDisplayFormat.js` (`formatDilutionValue`) and imported it in `FundingDashboardPage.jsx`. Values remain on existing `dilutionPct` 0–100 scale; missing dilution → **N/A** (not `0`).
+
+**Tests:** `tests/unit/funding/fundingDisplayFormat.test.js`; extended `tests/e2e/smoke/navigation-stability.spec.js` with Funding stress hops (overview ↔ reporting ↔ funding ×6).
+
+**Validations:** `npm run build` PASS; targeted unit PASS; full unit/integration subject to operator sqlite env.
+
+**Next:** Manual 20–30 hop demo including repeated Funding entry; Playwright navigation smoke on operator host.
