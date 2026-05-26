@@ -736,3 +736,24 @@ Boundary rules:
 - Client-provided tenant fields are not source-of-truth.
 - AI/service actors cannot mark reviewed/internal-final.
 - `internal_final` is internal workflow status only and does not mean board-approved.
+
+## C.17.7 - Frontend Persisted Snapshot Boundary
+
+C.17.7 connects the Reporting frontend to the persisted Board Review snapshot backend.
+
+Source-of-truth boundary:
+
+- Backend persisted snapshot status remains source-of-truth for Reporting workflow state.
+- Frontend payload builders are not tenant source-of-truth.
+- Frontend renderer remains display layer only.
+- Persisted preview uses backend `rendererInput`; it must not recalculate scores.
+- Frontend workflow UI must not show updated persisted state until the backend confirms success.
+
+Out of scope remains unchanged:
+
+- Module facts and official scores.
+- Board approval.
+- Certified PDF.
+- Legal, investment, compliance, or fairness-opinion conclusions.
+- Public secure-share access.
+- AI runtime/provider output.

@@ -161,3 +161,19 @@ Spec boundaries remain unchanged:
 - AI/service actors cannot mark reviewed/internal-final.
 - Missing scores must remain `N/A` / `insufficient_data`, not fake `0`.
 - Binary PDF and secure-share exposure remain future phases.
+
+## C.17.7 Status
+
+C.17.7 connects the frontend Board Review Draft experience to persisted backend snapshots.
+
+Persisted preview rules:
+
+- Use persisted `rendererInput` from the backend snapshot.
+- Use persisted status and audit metadata.
+- Do not recalculate scores in the preview path.
+- Preserve missing scores as `N/A` / `insufficient_data`.
+- Preserve Board Review Draft, Human Review Required, Not Legal Advice, Not Investment Advice, Not Board Approved, Based on DSS Signals, and Confidential labels.
+- Do not open revoked snapshots as active Board Review Draft previews.
+- Treat archived snapshots as read-only.
+
+Reviewed and internal-final labels remain workflow state only. They do not mean board-approved, certified PDF, legal approval, investment approval, compliance certification, or AI-approved report.

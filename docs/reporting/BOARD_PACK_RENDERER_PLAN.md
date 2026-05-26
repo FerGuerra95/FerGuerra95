@@ -225,3 +225,17 @@ Current boundaries:
 - Frontend preview integration with the persisted endpoints remains a future phase.
 
 Next recommended phase: **C.17.7 - Frontend integration with persisted Board Review snapshots**.
+
+## C.17.7 Persisted Snapshot Integration Status
+
+**Status:** FRONTEND-TO-BACKEND SNAPSHOT LOOP IMPLEMENTED / NO BINARY PDF.
+
+C.17.7 completes the first Reporting / Board Packs loop for persisted Board Review Draft snapshots:
+
+- create persisted snapshot;
+- list persisted snapshots;
+- open persisted snapshot preview;
+- show persisted workflow status;
+- call backend workflow actions for reviewed/internal-final/archive/revoke.
+
+The renderer still displays Board Review Draft material only. It does not generate PDF, certify output, create public share access, or claim board approval.

@@ -83,6 +83,9 @@ export function buildBoardReviewDraftHtml({
   const generatedLabel = safeDate(generatedAt || new Date());
   const scope = [organizationName, scopeLabel].map((item) => safeText(item, '')).filter(Boolean).join(' - ');
   const normalizedMissingData = normalizeMissingData(missingData);
+  const persistenceLabel = auditMetadata?.persistedSnapshot === true
+    ? 'Persisted backend snapshot. Workflow state changes only after API confirmation.'
+    : 'Preview only. Requires backend persistence before review actions can be recorded.';
 
   return `<!doctype html>
 <html lang="en">
@@ -177,7 +180,7 @@ export function buildBoardReviewDraftHtml({
       <h2>Workflow Status</h2>
       <p><strong>Status:</strong> ${escapeHtml(auditMetadata?.status || BOARD_REVIEW_DRAFT_LABELS.humanReview)}</p>
       <p><strong>Review posture:</strong> ${escapeHtml(BOARD_REVIEW_DRAFT_LABELS.humanReview)} - ${escapeHtml(BOARD_REVIEW_DRAFT_LABELS.notBoardApproved)}</p>
-      <p><strong>Persistence:</strong> Preview only. Requires backend persistence before review actions can be recorded.</p>
+      <p><strong>Persistence:</strong> ${escapeHtml(persistenceLabel)}</p>
     </section>
 
     <section class="section">

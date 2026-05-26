@@ -28,8 +28,13 @@ export const reportingEnterpriseCss = `
   .reporting-table th,.reporting-table td { padding: 12px; border-bottom: 1px solid rgba(148,163,184,.12); text-align: left; color: rgba(226,232,240,.84); vertical-align: top; }
   .reporting-table th { color: rgba(248,250,252,.92); font-size: .72rem; text-transform: uppercase; letter-spacing: 0; }
   .reporting-table-action { min-height: 34px; border: 1px solid rgba(148,163,184,.28); border-radius: 8px; padding: 0 12px; background: rgba(226,232,240,.94); color: #020617; font-weight: 800; cursor: pointer; white-space: nowrap; }
+  .reporting-table-action:disabled { opacity: .5; cursor: not-allowed; }
+  .reporting-table-link { border: 0; padding: 0; background: transparent; color: #f8fafc; font: inherit; font-weight: 800; text-align: left; cursor: pointer; }
   .reporting-preview-note { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; color: rgba(226,232,240,.74); font-size: .82rem; }
   .reporting-preview-message { margin: 0 0 14px; border: 1px solid rgba(148,163,184,.18); border-radius: 8px; padding: 12px; color: rgba(226,232,240,.78); background: rgba(2,6,23,.28); }
+  .reporting-snapshot-area { display: grid; gap: 14px; }
+  .reporting-snapshot-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border: 1px solid rgba(148,163,184,.14); border-radius: 8px; padding: 14px; background: rgba(2,6,23,.24); }
+  .reporting-snapshot-actions .reporting-muted { flex: 1 1 260px; }
   @media (max-width: 760px) { .reporting-hero { padding: 20px; } .reporting-table { min-width: 720px; } .reporting-scroll { overflow-x: auto; } }
 `;
 

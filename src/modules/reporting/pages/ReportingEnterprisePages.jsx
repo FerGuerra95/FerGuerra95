@@ -3,6 +3,8 @@ import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { PERMISSIONS, useAuth } from '../../../app/providers/AuthProvider.jsx';
 import { reportingApi } from '../services/reportingApi.js';
 import { buildBoardReviewDraftHtml } from '../renderers/boardReviewDraftHtml.js';
+import { BoardReviewSnapshotActions } from '../components/BoardReviewSnapshotActions.jsx';
+import { BoardReviewSnapshotList } from '../components/BoardReviewSnapshotList.jsx';
 import {
   BoardPackTable,
   ReportLibraryTable,
@@ -12,7 +14,9 @@ import {
   reportingEnterpriseCss
 } from '../components/ReportingEnterpriseComponents.jsx';
 import { BoardReviewWorkflowPanel } from '../components/BoardReviewWorkflowPanel.jsx';
+import { useBoardReviewSnapshots } from '../hooks/useBoardReviewSnapshots.js';
 import { toBoardReviewDraftInput } from '../utils/boardReviewDraftAdapter.js';
+import { buildCreateBoardReviewSnapshotPayload } from '../utils/boardReviewSnapshotPayload.js';
 import { openBoardReviewDraftWindow } from '../utils/openBoardReviewDraftWindow.js';
 
 const EMPTY_REPORTING_FILTERS = { module: '', status: '', owner: '' };
@@ -124,12 +128,29 @@ export function ReportingDashboardPage() {
 export const ReportingLibraryPage = () => <EntityPage badge="Library" title="Report library." copy="Module, type, owner, version, export freshness and evidence completeness." load={reportingApi.listReports} create={reportingApi.createReport} defaults={{ title: '', module: 'M&A', reportType: 'M&A Executive Report', status: 'draft', owner: 'Executive Office', evidenceCompleteness: 75 }} fields={['title', 'module', 'reportType', 'status', 'owner', 'evidenceCompleteness']} render={(items) => <ReportLibraryTable items={items} />} />;
 export const ReportingTemplatesPage = () => <EntityPage badge="Templates" title="Template manager." copy="Template structure, required sections, required evidence and status by module." load={reportingApi.listTemplates} create={reportingApi.createTemplate} defaults={{ templateKey: '', module: 'enterprise', status: 'active' }} fields={['templateKey', 'module', 'status']} permission={PERMISSIONS.UPDATE_REPORTING} render={(items) => <ReportingTable title="Templates" items={items} columns={[{ key: 'templateKey', label: 'Template' }, { key: 'module', label: 'Module' }, { key: 'status', label: 'Status', render: (item) => <ReportingStatusBadge status={item.status} /> }]} />} />;
 function BoardPackPreviewIntegration({ items = [] }) {
+  const { can } = useAuth();
   const [previewMessage, setPreviewMessage] = useState(items.length === 0 ? BOARD_REVIEW_PREVIEW_REQUIRED : '');
   const [activeSnapshot, setActiveSnapshot] = useState(null);
+  const {
+    loading: snapshotsLoading,
+    message: snapshotMessage,
+    snapshots,
+    selectedSnapshot,
+    setSelectedSnapshot,
+    createSnapshot,
+    markReviewed,
+    markInternalFinal,
+    archive,
+    revoke
+  } = useBoardReviewSnapshots();
+  const canCreateSnapshot = can(PERMISSIONS.CREATE_REPORTING);
+  const canReviewSnapshot = can(PERMISSIONS.UPDATE_REPORTING);
+  const canFinalizeSnapshot = can(PERMISSIONS.EXPORT_REPORTING);
+  const currentSnapshot = selectedSnapshot || snapshots[0] || null;
 
   const workflowPreviewInput = useMemo(() => {
-    if (activeSnapshot) {
-      return { snapshot: activeSnapshot };
+    if (activeSnapshot || currentSnapshot) {
+      return { snapshot: activeSnapshot || currentSnapshot };
     }
     if (items.length === 0) {
       return toBoardReviewDraftInput({ includeSnapshot: true });
@@ -141,7 +162,7 @@ function BoardPackPreviewIntegration({ items = [] }) {
       includeSnapshot: true,
       statusInput: { status: items[0]?.status || 'human_review_required' }
     });
-  }, [activeSnapshot, items]);
+  }, [activeSnapshot, currentSnapshot, items]);
 
   useEffect(() => {
     if (items.length > 0 && previewMessage === BOARD_REVIEW_PREVIEW_REQUIRED) {
@@ -177,9 +198,85 @@ function BoardPackPreviewIntegration({ items = [] }) {
     setPreviewMessage('Board Review Draft preview opened. Human review required before circulation.');
   }
 
+  async function handleCreatePersistedSnapshot() {
+    const boardPack = items[0];
+    if (!boardPack?.id && !boardPack?.title) {
+      setPreviewMessage(BOARD_REVIEW_PREVIEW_REQUIRED);
+      return;
+    }
+
+    const payload = buildCreateBoardReviewSnapshotPayload({
+      boardPack,
+      generatedAt: new Date(),
+      fallbackScope: 'Reporting / Board Packs',
+      statusInput: { status: boardPack.status || 'human_review_required' }
+    });
+    const created = await createSnapshot(payload);
+    if (created) {
+      setSelectedSnapshot(created);
+      setActiveSnapshot(created);
+      setPreviewMessage('Persisted Board Review snapshot created. Human review required before circulation.');
+    }
+  }
+
+  function buildPersistedPreviewInput(snapshot) {
+    return {
+      ...(snapshot.rendererInput || {}),
+      title: snapshot.rendererInput?.title || snapshot.title,
+      generatedAt: snapshot.rendererInput?.generatedAt || snapshot.createdAt,
+      missingData: snapshot.rendererInput?.missingData || snapshot.missingData,
+      auditMetadata: {
+        ...(snapshot.rendererInput?.auditMetadata || {}),
+        ...(snapshot.auditMetadata || {}),
+        status: snapshot.status,
+        snapshotId: snapshot.id,
+        snapshotVersion: snapshot.snapshotVersion,
+        persistedSnapshot: true,
+        humanReviewRequired: true,
+        notBoardApproved: true
+      }
+    };
+  }
+
+  function handlePreviewPersistedSnapshot(snapshot) {
+    if (!snapshot?.id) return;
+    if (snapshot.status === 'revoked' || snapshot.revokedAt) {
+      setPreviewMessage('This snapshot has been revoked and cannot be previewed as an active Board Review Draft.');
+      return;
+    }
+
+    setSelectedSnapshot(snapshot);
+    setActiveSnapshot(snapshot);
+    const result = openBoardReviewDraftWindow(
+      buildBoardReviewDraftHtml(buildPersistedPreviewInput(snapshot))
+    );
+
+    if (!result.ok) {
+      setPreviewMessage('Board Review Draft preview window was blocked. Enable popups for this app to preview the draft.');
+      return;
+    }
+
+    setPreviewMessage('Persisted Board Review snapshot preview opened. Human review labels preserved.');
+  }
+
+  async function handleMarkReviewed(snapshot) {
+    const updated = await markReviewed(snapshot.id, { reviewedAt: new Date().toISOString() });
+    if (updated) {
+      setPreviewMessage('Backend confirmed reviewed status. Not Board Approved.');
+    }
+  }
+
+  async function handleMarkInternalFinal(snapshot) {
+    const updated = await markInternalFinal(snapshot.id, { explicitApproval: true, internalFinalAt: new Date().toISOString() });
+    if (updated) {
+      setPreviewMessage('Backend confirmed Internal Final status. Internal Final is not Board Approved.');
+    }
+  }
+
   return (
     <>
       {previewMessage ? <div className="reporting-preview-message">{previewMessage}</div> : null}
+      {snapshotMessage ? <div className="reporting-preview-message">{snapshotMessage}</div> : null}
       <div className="reporting-preview-note" aria-label="Board Review Draft preview truthfulness labels">
         <span>Board Review Draft</span>
         <span>Confidential</span>
@@ -190,6 +287,37 @@ function BoardPackPreviewIntegration({ items = [] }) {
         <span>Not Board Approved</span>
       </div>
       <BoardReviewWorkflowPanel snapshot={workflowPreviewInput.snapshot} />
+      <section className="reporting-snapshot-area" aria-label="Persisted Board Review snapshot workspace">
+        <h3>Persisted Board Review Snapshots</h3>
+        <BoardReviewSnapshotActions
+          snapshot={currentSnapshot}
+          canCreate={canCreateSnapshot}
+          canReview={canReviewSnapshot}
+          canFinalize={canFinalizeSnapshot}
+          canArchive={canReviewSnapshot}
+          loading={snapshotsLoading}
+          onCreate={handleCreatePersistedSnapshot}
+          onMarkReviewed={handleMarkReviewed}
+          onMarkInternalFinal={handleMarkInternalFinal}
+          onArchive={async (snapshot) => {
+            const updated = await archive(snapshot.id);
+            if (updated) setPreviewMessage('Backend confirmed archived status. Archived snapshots are read-only.');
+          }}
+          onRevoke={async (snapshot) => {
+            const updated = await revoke(snapshot.id);
+            if (updated) setPreviewMessage('Backend confirmed revoked status. Revoked snapshots cannot be previewed as active drafts.');
+          }}
+        />
+        <BoardReviewSnapshotList
+          snapshots={snapshots}
+          selectedSnapshotId={currentSnapshot?.id}
+          onSelect={(snapshot) => {
+            setSelectedSnapshot(snapshot);
+            setActiveSnapshot(snapshot);
+          }}
+          onPreview={handlePreviewPersistedSnapshot}
+        />
+      </section>
       <BoardPackTable items={items} onPreviewBoardReviewDraft={handlePreviewBoardReviewDraft} />
     </>
   );

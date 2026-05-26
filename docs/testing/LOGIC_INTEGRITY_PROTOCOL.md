@@ -1547,3 +1547,22 @@ Renderer and AI boundaries remain:
 - Persisted snapshot status is backend source-of-truth for Reporting workflow state only.
 - Module facts, formulas, and official scores remain owned by module source-of-truth records.
 - No binary PDF, secure share public access, AI runtime, Golden Dataset, or Formula Registry changed.
+
+## C.17.7 - Frontend Integration with Persisted Snapshots
+
+**Status:** COMPLETED / FRONTEND CONNECTED TO BACKEND SNAPSHOTS.
+
+Logic-integrity checks now cover:
+
+- Frontend API client calls protected Board Review snapshot endpoints.
+- Frontend payload builder strips `organizationId`, `orgId`, and `tenantId`.
+- Frontend payload builder strips token/password/cookie/auth-header/secret fields.
+- Persisted preview uses backend `rendererInput` rather than recalculating scores.
+- Missing score is not converted to `0`.
+- `insufficient_data` is preserved.
+- Workflow state changes only after backend API success.
+- `403` keeps UI read-only.
+- `409` keeps previous state and reports invalid transition.
+- Revoked snapshots cannot be previewed as active drafts.
+
+No backend, router, unrelated module, package/config, Golden Dataset, Formula Registry, AI runtime, secure share, or binary PDF changed.

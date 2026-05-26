@@ -477,3 +477,25 @@ Still not implemented:
 - Certified PDF or board-approved output.
 
 Recommended next implementation: **C.17.7 - Frontend integration with persisted Board Review snapshots**.
+
+## C.17.7 Frontend Integration Status
+
+Status: **IMPLEMENTED / FRONTEND CONNECTED TO BACKEND SNAPSHOTS / NO PDF OR PUBLIC SHARE**.
+
+C.17.7 connects Reporting / Board Packs to the persisted Board Review snapshot API from C.17.6.
+
+Implemented frontend scope:
+
+- Frontend API client for `/api/reporting/board-review-snapshots`.
+- Safe payload builder that strips client tenant fields and sensitive keys.
+- Reporting hook for list/create/read-state workflow actions.
+- Board Review snapshot list and workflow actions in Reporting / Board Packs.
+- Persisted snapshot preview using persisted `rendererInput`, status, and audit metadata.
+
+Safety posture:
+
+- Frontend does not send `organizationId`, `orgId`, or `tenantId` as source-of-truth.
+- Workflow UI updates state only after backend API success.
+- Revoked snapshots cannot be opened as active Board Review Draft previews.
+- Archived snapshots remain read-only.
+- No backend, migration, PDF binary, public secure share, or AI runtime change was added.

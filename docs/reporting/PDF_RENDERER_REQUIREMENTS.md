@@ -130,3 +130,15 @@ Future PDF requirements now include:
 - Never render revoked snapshots as exportable.
 - Never convert `internal_final` into board-approved or certified PDF semantics.
 - Keep PDF/export endpoints separate from the C.17.6 snapshot API until explicitly authorized.
+
+## C.17.7 Status
+
+C.17.7 adds frontend persisted-snapshot preview integration only. It does not add binary PDF generation, PDF dependencies, external PDF services, export endpoints, or secure-share output.
+
+Future PDF implementation must continue to:
+
+- render from persisted backend snapshots;
+- preserve backend status and audit metadata;
+- refuse revoked snapshots;
+- avoid live score recalculation;
+- avoid board-approved and certified PDF claims.

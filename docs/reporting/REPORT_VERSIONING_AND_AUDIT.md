@@ -210,3 +210,28 @@ PDF/export posture:
 - Binary PDF remains future only.
 - Future PDF must render from persisted snapshot state, not live recalculation.
 - `internal_final` still does not mean board-approved or certified.
+
+## C.17.7 Status
+
+**Status:** FRONTEND CONNECTED TO PERSISTED SNAPSHOTS.
+
+Reporting / Board Packs can now use the backend snapshot API to:
+
+- list persisted Board Review snapshots;
+- create a persisted snapshot from the current Board Review Draft context;
+- open a premium HTML preview from persisted `rendererInput`;
+- request backend workflow transitions for reviewed, internal-final, archive, and revoke.
+
+UI workflow rules:
+
+- Local UI state changes only after backend success.
+- `403` responses keep the UI read-only with a permission message.
+- `409` responses keep the prior state and show an invalid-transition message.
+- Revoked snapshots are not previewed as active drafts.
+- Archived snapshots remain read-only.
+
+Audit/versioning boundary:
+
+- Persisted snapshot status remains backend source-of-truth for Reporting workflow state.
+- Frontend renderer remains display layer only.
+- PDF export and secure-share history remain future phases.

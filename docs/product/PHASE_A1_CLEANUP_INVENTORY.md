@@ -7039,3 +7039,17 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Runtime posture:** Backend Reporting persistence only. No frontend, PDF binary, secure-share public access, AI runtime/provider traffic, package/config, Golden Dataset, or Formula Registry changed.
 
 **Truthfulness posture:** Persisted Board Review snapshot status is backend source-of-truth for Reporting workflow state. Renderer remains display layer. `reviewed` and `internal_final` are gated by human actor/approval metadata; AI cannot mark them. No board-approved status or certified PDF claim exists.
+
+---
+
+## C.17.7 - Frontend Integration with Persisted Snapshots
+
+**Status:** COMPLETED / FRONTEND CONNECTED TO BACKEND SNAPSHOTS.
+
+**Baseline:** `HEAD = origin/main = c2f369e`.
+
+**Implemented:** Reporting / Board Packs frontend now lists persisted Board Review snapshots, creates backend snapshots from the current Board Review Draft context, opens previews from persisted `rendererInput`, and calls backend workflow actions for reviewed/internal-final/archive/revoke.
+
+**Runtime posture:** Frontend Reporting integration only. No backend, migration, router, unrelated module, package/config, PDF binary, secure-share public access, AI runtime, Golden Dataset, or Formula Registry changed.
+
+**Truthfulness posture:** Persisted preview does not recalculate scores, does not convert missing score to `0`, and preserves human-review/not-board-approved labels. Workflow state changes are shown only after backend API success.
