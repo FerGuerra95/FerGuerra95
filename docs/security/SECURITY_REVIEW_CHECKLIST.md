@@ -191,6 +191,27 @@ Stop and escalate to human review if:
 
 ---
 
+## Board Review Backend Persistence Checklist (C.17.5 Planning)
+
+Before implementing Board Review backend persistence, verify:
+
+| Check | Required posture |
+|---|---|
+| Auth | All Board Review snapshot endpoints protected |
+| Tenant scope | `organizationId` from backend session/auth only |
+| Cross-tenant access | Same-organization read/write enforced and tested |
+| Permissions | Viewer cannot review/finalize/archive/revoke/export |
+| Reviewed state | Requires human reviewer actor and timestamp |
+| Internal final | Requires reviewed state plus explicit approval |
+| AI actor | Cannot mark reviewed or internal_final |
+| Audit events | Every transition records sanitized audit metadata |
+| Secrets | No tokens, cookies, passwords, auth headers, API keys, raw share tokens, or raw DB dumps |
+| Secure share | Future read-only only; revoked/expired unavailable |
+| Export/PDF | Future export must preserve status/limitations and avoid board-approved/certified claims |
+| Migration | New, non-destructive migration only |
+
+**C.17.5 status:** Planning only. No backend persistence, endpoint, migration, DB table, PDF binary, secure-share integration, or AI runtime change exists yet.
+
 ## Related Rules
 
 - `.cursor/rules/ceos-os-security-review.mdc`

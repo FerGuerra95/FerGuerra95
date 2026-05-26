@@ -201,3 +201,11 @@ Current scope:
 - Disabled actions with backend-persistence requirement labels.
 - Internal-final eligibility helper for future persistence phase.
 - No saved/persisted claim and no formal approval claim.
+
+## C.17.5 Backend Persistence Planning Status
+
+**Status:** BACKEND PLAN ONLY / NO RUNTIME IMPLEMENTATION.
+
+C.17.5 defines the future backend persistence architecture for Board Review Draft snapshots and workflow states. It does not implement backend services, routes, migrations, DB persistence, PDF export, secure share, or AI runtime.
+
+Next backend phase: **C.17.6 - Backend persistence implementation for Board Review Draft snapshots**.

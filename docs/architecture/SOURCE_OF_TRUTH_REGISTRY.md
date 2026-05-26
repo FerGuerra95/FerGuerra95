@@ -691,3 +691,21 @@ Boundary rules:
 - `internal_final` requires reviewed state and explicit human approval metadata.
 - AI-only metadata cannot mark reviewed or internal-final.
 - Board Review Draft workflow states do not mean board approval, certification, legal advice, investment advice, compliance certification, or fairness opinion.
+
+## C.17.5 - Future Backend Persistence Source-of-Truth Boundary
+
+C.17.5 plans future backend persistence for Board Review snapshots, versions, workflow events, audit events, and exports. It does not implement persistence.
+
+Current state:
+
+- Frontend snapshot metadata remains display metadata only.
+- Frontend workflow metadata remains display metadata only.
+- Renderer remains display layer only.
+- No backend Board Review source-of-truth exists yet.
+
+Future state after an authorized backend phase:
+
+- Persisted Board Review snapshots may become source-of-truth for Reporting workflow state only.
+- Persisted snapshots still must not become source-of-truth for module facts, formulas, official scores, legal conclusions, investment advice, compliance certification, or board approval.
+- Module services and persisted module records remain authoritative for module facts.
+- Backend tenant scope, permissions, audit events, and tests are required before persisted workflow state can be treated as authoritative.

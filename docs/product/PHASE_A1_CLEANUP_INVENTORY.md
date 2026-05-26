@@ -7009,3 +7009,19 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Runtime posture:** No backend, API, database, migration, router, unrelated module, package/config, PDF dependency, binary PDF generation, AI runtime, provider traffic, Golden Dataset, or Formula Registry change.
 
 **Truthfulness posture:** Workflow metadata is not source-of-truth. AI-only output cannot mark reviewed/internal-final. Internal-final requires reviewed state and explicit human approval metadata. UI actions are preview-only and require future backend persistence.
+
+---
+
+## C.17.5 - Backend Persistence Planning
+
+**Status:** COMPLETED / BACKEND PLAN ONLY / NO RUNTIME IMPLEMENTATION.
+
+**Baseline:** `HEAD = origin/main = fbc6ca5`.
+
+**Deliverable:** `docs/reporting/BOARD_REVIEW_BACKEND_PERSISTENCE_PLAN.md`.
+
+**Summary:** Planned future backend entities, tables, endpoints, permissions, tenant-scope rules, workflow rules, audit events, secure-share boundaries, AI interaction rules, PDF/export boundaries, testing requirements, migration strategy, and C.17.6 scope.
+
+**Runtime posture:** No product code, backend code, frontend runtime, tests, scripts, package/config, migrations, DB persistence, endpoints, PDF binary, AI runtime, Golden Dataset, or Formula Registry changed.
+
+**Truthfulness posture:** Backend persistence is not implemented yet. Future persisted snapshots may become Reporting state source-of-truth only after authorized backend implementation, tenant scoping, permissions, audit events, and tests. No board-approved or certified PDF claims.

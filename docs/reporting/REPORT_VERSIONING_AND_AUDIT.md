@@ -150,3 +150,23 @@ Workflow rules:
 - Revoked and archived states preserve warning posture.
 - Workflow actions are preview-only until backend persistence exists.
 - The UI must not claim the workflow has been saved or persisted.
+
+## C.17.5 Status
+
+**Status:** BACKEND PERSISTENCE PLANNING COMPLETED / NO RUNTIME IMPLEMENTATION.
+
+C.17.5 defines the future backend persistence plan for Board Review Draft snapshots, versions, workflow events, audit events, exports, and later secure-share boundaries.
+
+Reference: `docs/reporting/BOARD_REVIEW_BACKEND_PERSISTENCE_PLAN.md`
+
+No backend persistence, API endpoint, database migration, export ledger mutation, secure-share integration, binary PDF generation, AI runtime change, or reviewed/internal-final persisted state exists yet.
+
+Future backend implementation must preserve:
+
+- organization-scoped snapshots;
+- audit event for every state transition;
+- `reviewed` only with human reviewer metadata;
+- `internal_final` only after reviewed plus explicit approval;
+- AI cannot mark reviewed/internal-final;
+- no board-approved status;
+- no certified PDF claim.

@@ -133,3 +133,11 @@ State rules:
 - Preview-only UI actions must not claim the report has been saved, persisted, certified, or board approved.
 
 Mandatory labels remain visible: Board Review Draft, Human Review Required, Based on DSS Signals, Not Legal Advice, Not Investment Advice, Not Board Approved, and Confidential.
+
+## C.17.5 Status
+
+C.17.5 plans future backend persistence for Board Review Draft snapshots and workflow state.
+
+Reviewed/internal-final states become official Reporting workflow state only after a backend persistence phase implements tenant-scoped storage, permissions, audit events, and tests. Until then, frontend workflow metadata remains preview/display metadata only.
+
+Backend persistence must not introduce board-approved, certified PDF, legal approval, investment approval, compliance certification, or AI-approved report semantics.

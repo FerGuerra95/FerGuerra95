@@ -111,3 +111,9 @@ Future PDF requirements now include:
 - Confirm internal-final approval metadata from an authorized backend workflow.
 - Preserve preview-only warnings until persistence exists.
 - Never infer reviewed/internal-final from AI output alone.
+
+## C.17.5 Status
+
+C.17.5 plans the backend persistence layer required before stronger export workflows. Future PDF generation must render from a persisted, tenant-scoped Board Review snapshot rather than live recalculation or frontend-only preview metadata.
+
+Binary PDF remains future only. No PDF dependency, external PDF service, endpoint, DB persistence, or export ledger mutation exists in C.17.5.

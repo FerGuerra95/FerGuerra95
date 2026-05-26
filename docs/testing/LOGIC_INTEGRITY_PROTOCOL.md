@@ -1491,6 +1491,23 @@ Snapshot/versioning tests ensure:
 
 No backend, API, DB persistence, router, unrelated module, package/config, Golden Dataset, Formula Registry, AI runtime, endpoint, or binary PDF generation changed.
 
+## C.17.5 - Backend Persistence Planning
+
+**Status:** COMPLETED / BACKEND PLAN ONLY / NO RUNTIME IMPLEMENTATION.
+
+Future backend persistence must preserve logic-integrity boundaries:
+
+- Persisted Board Review snapshots must not recalculate official scores.
+- Missing scores must remain `N/A` / `insufficient_data`, not fake `0`.
+- Module services and persisted module records remain authoritative for module facts.
+- No `reviewed` or `internal_final` state without audit event and human actor metadata.
+- AI cannot mark reviewed/internal_final.
+- Viewer/public access cannot mutate workflow state.
+- Secure share cannot upgrade draft status.
+- Export/PDF must render from persisted snapshot once backend persistence exists.
+
+C.17.5 adds planning only. No code, tests, migrations, DB persistence, endpoints, AI runtime, Golden Dataset, Formula Registry, or PDF binary changed.
+
 ## C.17.4 - Reviewed / Internal-Final Workflow
 
 **Status:** COMPLETED / FRONTEND WORKFLOW FOUNDATION / NO BACKEND PERSISTENCE.
