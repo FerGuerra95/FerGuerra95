@@ -53,3 +53,9 @@ Audit metadata must not include raw secrets, tokens, cookies, session ids, auth 
 ## Snapshot Policy
 
 Snapshots preserve the rendered facts, labels, status, limitations, and insufficient-data flags shown at export time. A snapshot is historical evidence of what was rendered; it is not a source-of-truth for live module values.
+
+## C.17.1 Status
+
+C.17.1 includes an Audit Metadata section in the HTML renderer foundation.
+
+Persistent report versioning, export audit events, snapshot storage, secure-share state preservation, and reviewed/internal-final workflows remain future phases. The current renderer displays provided metadata only and does not mutate or persist records.

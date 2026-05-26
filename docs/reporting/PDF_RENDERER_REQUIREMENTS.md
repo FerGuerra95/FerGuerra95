@@ -69,3 +69,9 @@ Future implementation should include:
 ## C.17.0 Decision
 
 C.17.0 does not implement PDF generation. The recommended next step is an HTML Board Review Draft Renderer that is print-ready and dependency-light before any binary PDF path is authorized.
+
+## C.17.1 Status
+
+C.17.1 implements the shared HTML renderer foundation and report logo/header requirement. Binary PDF generation remains deferred.
+
+The renderer uses an existing CEO's OS brand asset in a reusable header component and HTML builder. No `jsPDF`, PDF dependency, external PDF service, binary export, or route integration was added.

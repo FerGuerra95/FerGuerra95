@@ -136,3 +136,20 @@ Why HTML first:
 - Easier to test.
 - Compatible with existing report/export patterns.
 - No new package/dependency required initially.
+
+## C.17.1 Implementation Status
+
+**Status:** HTML BOARD REVIEW DRAFT RENDERER FOUNDATION IMPLEMENTED / NO PDF BINARY / NO ROUTE INTEGRATION.
+
+C.17.1 adds a shared report header, footer, section component, sanitizers, labels, a printable HTML builder, and a React renderer foundation under `src/modules/reporting/**`.
+
+Runtime posture:
+
+- No binary PDF generation.
+- No new dependency.
+- No route or page integration.
+- No backend change.
+- No AI runtime change.
+- Renderer remains a display layer, not source-of-truth.
+
+The first foundation includes a shared CEO's OS logo/header so future reports do not paste logo markup individually.

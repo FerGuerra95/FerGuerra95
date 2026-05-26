@@ -69,3 +69,19 @@ Displays or records safe metadata: report id, organization id, actor id, generat
 - Reviewed requires human action.
 - Internal final requires explicit confirmation.
 - No AI output can mark itself reviewed or internal-final.
+
+## C.17.1 Status
+
+C.17.1 implements the mandatory report logo/header foundation for HTML Board Review Draft rendering.
+
+The renderer preserves:
+
+- Board Review Draft.
+- Human Review Required.
+- Based on DSS Signals.
+- Not Legal Advice.
+- Not Investment Advice.
+- Not Board Approved.
+- Confidential.
+
+No route/page integration or binary PDF generation exists in C.17.1.

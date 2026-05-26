@@ -6953,3 +6953,17 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Truthfulness posture:** Renderer is not source-of-truth, must preserve human review and AI labels, must not hide `insufficient_data`, and must not claim board approval, certification, legal advice, investment advice, or complete PDF readiness.
 
 **Runtime posture:** No code, tests, package/config, renderer, PDF generation, AI runtime, module behavior, Golden Dataset, or Formula Registry changed.
+
+---
+
+## C.17.1 - HTML Board Review Draft Renderer
+
+**Status:** COMPLETED / HTML RENDERER FOUNDATION / NO PDF BINARY / NO ROUTE INTEGRATION.
+
+**Baseline:** `HEAD = origin/main = a4169a3`.
+
+**Implemented:** Shared Reporting renderer foundation under `src/modules/reporting/**`: reusable report header with CEO's OS logo, footer, section component, labels, sanitizers, printable HTML builder, React renderer, and focused unit tests.
+
+**Runtime posture:** No backend, route/page integration, package dependency, PDF library, binary PDF generation, external service, AI runtime change, Golden Dataset, or Formula Registry change.
+
+**Truthfulness posture:** Board Review Draft only; Human Review Required; Confidential; Based on DSS Signals; Not Legal Advice; Not Investment Advice; Not Board Approved. Missing scores remain `N/A` / `insufficient_data`, not fake `0`.

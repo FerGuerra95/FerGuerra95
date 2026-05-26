@@ -1441,3 +1441,19 @@ No product code, routes, auth/storage, module services, package/config, secrets,
 | Source-of-truth | Renderer displays snapshots from module SoT; it is not SoT |
 
 No runtime code changed in C.17.0.
+
+## C.17.1 - HTML Board Review Draft Renderer
+
+**Status:** COMPLETED / HTML RENDERER FOUNDATION / NO PDF BINARY / NO ROUTE INTEGRATION.
+
+Renderer tests ensure:
+
+- No `undefined`, `null`, `NaN`, or `Infinity` in rendered HTML.
+- Missing scores render as `N/A`, not fake `0`.
+- `insufficient_data` is preserved.
+- Board Review Draft, Human Review Required, Based on DSS Signals, Not Legal Advice, Not Investment Advice, Not Board Approved, and Confidential labels are preserved.
+- Audit metadata section is present.
+- HTML includes print CSS / A4 marker.
+- Shared header renders CEO's OS logo or textual fallback.
+
+No backend, routes, unrelated modules, package/config, Golden Dataset, Formula Registry, AI runtime, or binary PDF generation changed.

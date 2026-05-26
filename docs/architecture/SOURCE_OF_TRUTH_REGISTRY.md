@@ -91,6 +91,13 @@ Do not mark Assumed entries as Confirmed before C.13.
 - Export status must distinguish `draft`, `ai_draft`, `human_review_required`, `reviewed`, `internal_final`, `archived`, and `revoked`.
 - Renderer must preserve insufficient-data and human-review labels.
 
+## HTML Board Review Draft Renderer (C.17.1)
+
+- HTML renderer is a display layer only.
+- It does not calculate official scores, mutate data, persist snapshots, or set reviewed/internal-final status.
+- It preserves `N/A` and `insufficient_data` for missing values.
+- It includes shared CEO's OS logo/header and mandatory truthfulness labels.
+
 ## Rules
 
 1. One business value must have one official source-of-truth.
