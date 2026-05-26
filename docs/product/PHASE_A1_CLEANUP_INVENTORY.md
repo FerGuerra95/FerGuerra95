@@ -7071,3 +7071,36 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Residual:** P2 environment/credential alignment. The persisted Reporting snapshot create/list/read/workflow UI path could not be validated against production in this phase.
 
 **Runtime posture:** No code, backend, frontend, tests, package/config, Golden Dataset, Formula Registry, PDF binary, AI runtime, public endpoint, or secure-share behavior changed.
+
+---
+
+## C.15.2 — Demo Commercial Final (Board Intelligence)
+
+**Status:** **COMPLETED** / **COMMERCIAL DEMO PACK READY**
+
+**Baseline:** `HEAD = origin/main = e5882f7` (pre-commit).
+
+**Mode:** DOCS / COMMERCIAL only — no runtime changes.
+
+**Positioning:** Private Executive DSS · **Board Intelligence Workspace** · *De datos dispersos a Board Review Drafts trazables.*
+
+**Deliverables:**
+
+| Asset | Path |
+|---|---|
+| Board Intelligence pilot offer | `docs/commercial/BOARD_INTELLIGENCE_PILOT_OFFER.md` |
+| 30-min demo script | `docs/commercial/DEMO_SCRIPT.md` |
+| One-pager | `docs/commercial/CEO_OS_ONE_PAGER.md` |
+| Claims + C.15.2 wording | `docs/commercial/WHAT_WE_CAN_AND_CANNOT_SAY.md` |
+| Objection handling | `docs/commercial/DEMO_OBJECTION_HANDLING.md` |
+| Demo checklist | `docs/commercial/DEMO_CHECKLIST.md` |
+
+**Updates:** `PILOT_READINESS_PACK.md` · `LOGIC_INTEGRITY_PROTOCOL.md`
+
+**Demo spine:** Executive Overview → Reporting persisted snapshot → HTML preview (Human Review / Not Board Approved) → workflow → optional M&A/Compliance/Funding → pilot offer.
+
+**Truthfulness:** No enterprise certified, procurement-ready, SOC2/ISO, board-approved, certified PDF, autonomous AI, legal/investment advice, or marketplace-live claims.
+
+**P2 documented:** C.15.1b authenticated production smoke may remain env-blocked — mention before external demo; perimeter unauth PASS per C.17.8.
+
+**Next:** Execute external demo with `DEMO_CHECKLIST.md` · close auth smoke P2 · **C.16.3** AI provider runtime planning (optional parallel).

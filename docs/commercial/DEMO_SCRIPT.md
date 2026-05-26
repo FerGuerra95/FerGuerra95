@@ -1,80 +1,117 @@
-# CEO's OS Demo Script
+# CEO's OS — Board Intelligence Demo Script (C.15.2)
 
-## Positioning
+**Duration:** 25–35 minutes · **Audience:** CEO, CFO, board secretary, head of M&A/compliance  
+**Positioning:** Private Executive DSS · Board Intelligence Workspace · Human Review Required
 
-Demo CEO's OS as a private executive DSS for traceable, human-reviewed company intelligence. Do not position it as enterprise certified software, procurement-ready SaaS, autonomous AI, legal advice, investment advice, a fairness opinion, a certified compliance platform, a public marketplace, or a success-fee transaction platform.
+**Do not position as:** enterprise certified, procurement-ready, SOC2/ISO certified, autonomous AI, legal/investment advice, board-approved output, certified PDF, public marketplace.
 
-## 30-45 minute flow
+---
 
-| Segment | Time | What to show | What to say | Do not show / do not say |
-|---|---:|---|---|---|
-| Opening | 3 min | Product frame, pilot scope, DSS/human-review disclaimer. | "This is a controlled executive intelligence pilot: private DSS, human-reviewed, Board Review Draft outputs." | Do not claim procurement readiness, SOC2/ISO, SLA, autonomous AI or legal review completion. |
-| Executive Overview | 6 min | CEO command center, module health, insufficient-data states, human review labels. | "The overview aggregates signals; it does not invent decisions or replace module owners." | Do not present the score as certified enterprise health. |
-| M&A workspace | 6 min | Valuation, waterfall, pipeline, CIM/data room, secure share posture. | "M&A outputs are indicative DSS and preparation material, not a fairness opinion." | Do not claim certified valuation, buyer verification or transaction execution. |
-| Compliance / Risk | 6 min | Supplier/evidence/review flow, risk register, controls, audit posture. | "These are operational compliance and risk support views, not certified audits." | Do not claim legal advice, regulatory certification or fully GDPR compliant status. |
-| Funding | 5 min | Runway, scenarios, dilution, readiness draft. | "Funding is a decision-support workspace for scenario clarity." | Do not claim fundraising success, investment advice or investor commitment. |
-| Reporting / Board Review Draft | 5 min | Reporting library, board pack draft, human review cues. | "Board packs are review drafts that support preparation before formal approval." | Do not claim board-approved output or complete PDF renderer. |
-| Governance / Strategy | 5 min | Decisions, committees, strategy objectives, initiatives. | "Governance and strategy help trace decisions and priorities for review." | Do not claim certified governance or Strategy Golden closure. |
-| Pilot proposal | 5 min | Pilot scope, data boundaries, success criteria, next step. | "The right next step is a 4-6 week controlled pilot with limited data and named human reviewers." | Do not commit to SLA, SOC2, final DPA, marketplace, autonomous AI or procurement pack. |
+## 0–3 min — Executive problem
 
-## Discovery questions
+**Show:** Title slide or Executive Overview login (no deep module tour yet).
 
-- Where does executive reporting currently break down?
-- Which decisions are hardest to trace after the fact?
-- Which module creates the most manual work today: M&A, compliance, funding, reporting, governance or risk?
-- What would a useful Board Review Draft need to contain?
-- Who would be the named human review owner during a pilot?
-- What data can be safely used under NDA and pilot agreement?
-- Which outcomes would make a 4-6 week pilot worth expanding?
+**Say:**
 
-## Recommended phrases
+- “Leadership teams lose weeks stitching M&A, compliance, funding and reporting into board materials.”  
+- “CEO's OS is a **private executive DSS**: one workspace for **traceable Board Review Drafts**, not autonomous decisions.”  
+- “Everything material is **human-reviewed**; we show **Board Review Draft**, never board-approved packs.”
 
-- "Private Executive DSS."
-- "Human review required."
-- "Board Review Draft, not board-approved output."
-- "Operational decision-support, not legal or investment advice."
-- "Controlled pilot-ready with documented limits."
-- "Golden-tested oracles where documented; not a blanket certification."
-- "AI-ready architecture is planned, but AI is not being sold as implemented autonomous decision-making."
-- "Bridge marketplace is internal/unlisted/future only."
+**Do not say:** “AI runs your board” · “certified enterprise platform” · “procurement-ready today”.
+
+---
+
+## 3–8 min — CEO / Executive Overview
+
+**Show:** `/ceo` — module cards, corporate health radar, `insufficient_data` / N/A where applicable.
+
+**Say:**
+
+- “This **aggregates** module signals; it does not replace module owners or invent certified health scores.”  
+- “When data is missing, you see **N/A / insufficient_data** — we do not fake zero or watch states.”  
+- “This is preparation for discussion, not a compliance or investment verdict.”
+
+**Do not say:** “Enterprise health score certified” · synthetic 64/60/58 cluster as facts.
+
+---
+
+## 8–18 min — Reporting / Board Packs (spine)
+
+**Show:** `/reporting` → Board Packs → **create persisted Board Review Snapshot** → open **premium HTML preview**.
+
+**Highlight on screen:**
+
+- Logo / header branding  
+- Labels: **Board Review Draft · Human Review Required · Not Board Approved**  
+- Persisted snapshot list (version / audit metadata if visible)  
+- Workflow: **draft → reviewed → internal_final** (explicit human action; no auto-approve)
+
+**Say:**
+
+- “This is our **Board Intelligence** layer: from DSS signals to a **persisted, auditable snapshot** you can reopen.”  
+- “Preview is **HTML Board Review Draft** for executive review — **not** a certified PDF or filed report.”  
+- “Workflow states advance only when a **human** confirms — the system does not approve for the board.”  
+- “**AI-ready:** we have foundation for a **Board Review Draft Assistant** that would suggest **draft** narrative only — it does not certify, approve, or recalculate KPIs.”
+
+**Do not say:** “Board-approved pack” · “certified PDF ready” · “AI approved this report”.
+
+---
+
+## 18–25 min — Deep dive (pick ONE)
+
+| Track | Route | Message |
+|---|---|---|
+| **M&A** | `/ma/dashboard`, valuation or pipeline | Indicative DSS; not fairness opinion |
+| **Compliance** | `/compliance/dashboard`, suppliers/reports | Operational support; not certified audit |
+| **Funding** | `/funding/dashboard` | Scenario clarity; not investment advice |
+
+**Say:** “These modules feed the board narrative; they do not replace counsel or investors.”
+
+**Do not show:** all modules · marketplace as live · success-fee story.
+
+---
+
+## 25–30 min — Pilot offer and next steps
+
+**Show:** `BOARD_INTELLIGENCE_PILOT_OFFER.md` summary slide (packages 7.5–12k EUR Board Intelligence tier).
+
+**Say:**
+
+- “Next step: **4–6 week controlled pilot** with named human reviewer and limited data under NDA.”  
+- “We deliver persisted snapshots, workflow discipline, and retrospective against success criteria.”  
+- “Before a large external rollout we recommend completing **authenticated production smoke** with your operator credentials — documented P2 if env not loaded.”
+
+**Discovery (if time):** Who owns board pack prep? What would make a draft “good enough” for your board process?
+
+---
+
+## Talking points (memorize)
+
+| Phrase | Use when |
+|---|---|
+| “This is **decision support**, not autonomous decision-making.” | Opening / AI questions |
+| “The board draft is **review-ready**, not **board-approved**.” | Reporting segment |
+| “**AI assists draft preparation**; it does not approve, certify, or calculate official scores.” | AI questions |
+| “The value is **private context, workflow, audit, and human review**.” | Differentiation |
+| “**Persisted snapshots** give you traceability — what was shown when.” | Technical buyers |
+| “**Controlled pilot ready** — no known P0/P1 for pilot scope; limits documented.” | Procurement hints |
+
+---
 
 ## Prohibited phrases
 
-- "Enterprise certified."
-- "Procurement-ready."
-- "SOC2/ISO certified."
-- "Fully GDPR compliant."
-- "SLA-backed enterprise SaaS."
-- "Autonomous AI agents make decisions."
-- "Legal advice" or "investment advice."
-- "Fairness opinion."
-- "Certified compliance/risk/governance/valuation."
-- "Board-approved output."
-- "Complete PDF reporting."
-- "Public marketplace is live."
-- "Verified buyer network is active."
-- "Success-fee transaction platform is operational."
+See `WHAT_WE_CAN_AND_CANNOT_SAY.md` — including: enterprise certified, procurement-ready, SOC2/ISO certified, board-approved, certified PDF, autonomous AI, legal/investment advice, public marketplace live.
 
-## If asked about AI
+---
 
-Say: "AI readiness is planned, but the current commercial offer is a private DSS pilot with human-reviewed outputs. We will not sell autonomous AI decisions in this phase."
+## Appendix — If asked
 
-Do not say: "The system autonomously advises the board" or "AI agents make the decisions."
+| Question | Short answer |
+|---|---|
+| AI? | Draft assistant foundation; human review; not autonomous |
+| PDF? | HTML Board Review Draft preview; not certified PDF |
+| SOC2? | Pilot security documented; certification not claimed |
+| GDPR? | Pilot drafts; legal review for DPA |
+| vs ChatGPT? | Tenant workflow + snapshots + DSS SoT — see objection doc |
 
-## If asked about PDF/export
-
-Say: "The Reporting / Board Pack renderer is planned in C.17. The current position is Board Review Draft, not board-approved final output, and export quality is being designed under truthfulness and security gates."
-
-Do not say: "Complete PDF reporting is ready," "certified PDF reports are available," or "AI generates final board packs autonomously."
-
-## If asked about SOC2/ISO or procurement
-
-Say: "Security and privacy pilot procedures are documented, including audit, backup and credential hygiene. Formal SOC2/ISO, SLA, procurement pack, final DPA and retention automation remain future procurement work."
-
-Do not say: "SOC2 ready," "ISO certified," "procurement-ready," or "fully GDPR compliant."
-
-## If asked about marketplace or success fees
-
-Say: "Bridge marketplace concepts are internal, unlisted and future-oriented. The controlled pilot is not a public marketplace and not an operational transaction or success-fee platform."
-
-Do not say: "The buyer network is live," "verified buyers are active," or "success fees are operational."
+**Related:** `DEMO_CHECKLIST.md` · `DEMO_OBJECTION_HANDLING.md` · `CEO_OS_ONE_PAGER.md`

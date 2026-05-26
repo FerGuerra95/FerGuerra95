@@ -1598,3 +1598,21 @@ Logic-integrity posture:
 - Truthfulness checks for production UI/preview remain pending until authenticated smoke credentials are available.
 
 No runtime changes were made.
+
+## C.15.2 — Demo Commercial Final (Board Intelligence)
+
+**Status:** **COMPLETED** / commercial docs only.
+
+### Demo wording (logic integrity)
+
+| Rule | Requirement |
+|---|---|
+| DSS limits | Demo must preserve decision-support, not autonomous decision-making |
+| Board Review Draft | **Not** board-approved; **Human Review Required** on board-facing previews |
+| Snapshots | Tenant-scoped persisted snapshots; preview from `rendererInput` — no score recalculation |
+| Missing data | `insufficient_data` / N/A preserved — not fake `0` / `watch` |
+| AI | AI is **not** source-of-truth; Assistant foundation only — no autonomous AI sold in demo |
+| PDF | HTML Board Review Draft preview ≠ **certified PDF** binary |
+| Production smoke | C.15.1b authenticated flow **P2** until `CEOS_E2E_*` in operator env |
+
+No runtime changes. No Golden/Formula changes.

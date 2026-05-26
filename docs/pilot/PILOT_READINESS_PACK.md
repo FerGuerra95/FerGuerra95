@@ -51,7 +51,7 @@ This pack is for **internal operators**, pilot sponsors, and customer success �
 - Certified compliance / governance / risk rating  
 - Investment advice · Fairness opinion · Legal opinion  
 - Board pack or report **approved** without human sign-off  
-- Public deal marketplace · Complete PDF reporting (renderer pending)  
+- Public deal marketplace · **Certified PDF** (HTML Board Review Draft preview in scope — not certified PDF binary)  
 - GDPR fully compliant (pilot drafts only — legal review required)  
 
 ---
@@ -65,7 +65,7 @@ This pack is for **internal operators**, pilot sponsors, and customer success �
 | **Risk** | Register, heatmap, controls, mitigations | Golden basic score exists |
 | **PMI** | Synergies, milestones, Day 1/100 | Demo merge removed C.13.12B; label forecasts |
 | **Compliance** | Suppliers, evidence, reviews, reports, audit runs | CRUD audited C.14.3; weighted risk Golden where documented |
-| **Reporting** | KPIs, board pack **draft** | Board pack = review draft, not approved pack |
+| **Reporting** | KPIs, Board Review Draft, **persisted snapshots**, HTML preview, workflow | Board pack = review draft, not approved pack; not certified PDF |
 | **Governance** | Decisions, committees, audit trail | Backend-strong; not certified governance system |
 | **Strategy** | Objectives, initiatives, scenarios | DSS prioritization |
 | **Funding** | Rounds, runway, scenarios | **Use with caution** — draft vs persisted SoT; label draft vs backend |
@@ -80,7 +80,7 @@ This pack is for **internal operators**, pilot sponsors, and customer success �
 | **Heritage** | **Preview / partial** — not C.13 logic-audited; do not promise completeness |
 | **Certified legal/compliance/risk** | **Excluded** — DSS only |
 | **Certified valuation / fairness opinion** | **Excluded** |
-| **Complete PDF reporting** | **Excluded** until renderer phase authorized |
+| **Certified PDF binary** | **Excluded** — HTML Board Review Draft preview in scope (C.17.1–C.17.7) |
 | **Autonomous decision-making** | **Excluded** |
 | **Enterprise SSO** | **Excluded** unless OIDC configured and C14-P1-OIDC-IDTOKEN-01 accepted |
 | **Procurement / SOC2 pack** | **Excluded** from this pilot |
@@ -249,13 +249,28 @@ Use the C.15.0 commercial pack as the customer-facing starting point for control
 3. M&A: DSS preparation, not fairness opinion or certified valuation.
 4. Compliance / Risk: operational support, not legal advice or certified audit.
 5. Funding: scenarios and readiness drafts, not investment advice or guaranteed outcomes.
-6. Reporting / Board Review Draft: review material, not board-approved output or complete PDF renderer.
+6. Reporting / Board Intelligence: persisted snapshot, HTML preview, workflow — not board-approved or certified PDF.
 7. Governance / Strategy: decision traceability and priorities, not certified governance.
 8. Pilot proposal: 4-6 week limited-data controlled pilot.
 
 ### Final wording caution
 
 Customer-facing wording must keep CEO's OS positioned as Private Executive DSS / Controlled Pilot / Human Review Required / Board Review Draft. Do not claim enterprise certification, procurement readiness, SOC2/ISO, formal SLA, fully GDPR compliant status, autonomous AI, legal advice, investment advice, fairness opinion, public marketplace, active verified buyer network or operational success-fee platform.
+
+---
+
+---
+
+## C.15.2 — Demo Commercial Pack (Board Intelligence)
+
+| Item | Status |
+|---|---|
+| Commercial demo pack | **READY** — `DEMO_SCRIPT.md`, `BOARD_INTELLIGENCE_PILOT_OFFER.md`, `DEMO_CHECKLIST.md`, `DEMO_OBJECTION_HANDLING.md`, updated one-pager and claims |
+| Reporting persisted workflow | **In demo narrative** — snapshots + HTML preview + draft/reviewed/internal_final (C.17.7) |
+| Authenticated prod smoke | **P2 residual** — load `CEOS_E2E_*` from secret store and run C.15.1b before high-stakes external demo when possible |
+| Controlled demo without prod auth smoke | **Allowed** with operator-verified session or staging; document limits honestly |
+
+**Before external demo:** `DEMO_CHECKLIST.md` · `WHAT_WE_CAN_AND_CANNOT_SAY.md` (C.15.2 section).
 
 ---
 
