@@ -6818,3 +6818,38 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Finding classification:** No P0/P1 was confirmed. The active finding remains P2/env credential availability for authenticated production smoke.
 
 **Runtime posture:** No product code, backend code, frontend code, tests, formulas, Golden Dataset, Formula Registry, package/config, secrets, AI behavior, marketplace behavior, auth, router, storage or source-of-truth definitions changed.
+
+### C.15.1b — Authenticated Production Smoke Final Rerun (2026-05-25)
+
+**Status:** **BLOCKED BY ENV/CREDENTIALS** (authenticated checks not executed).
+
+**Baseline:** `HEAD = origin/main = 7cd0fa0` (`docs: record authenticated production smoke status`).
+
+**Working tree at start:** `M AGENTS.md` (out of scope — not modified or committed in this phase) · `?? backend-server.err` only otherwise.
+
+**Local validation (agent shell):**
+
+| Check | Result | Notes |
+|---|---|---|
+| `npm run test:unit` | **PARTIAL** | 434 passed · 5 skipped · 2 suites failed (`better-sqlite3` native binding in agent Windows env — not treated as product regression at `7cd0fa0`) |
+| `npm run test:integration` | **PARTIAL** | 3 passed · 71 skipped · 17 suites failed (same native binding) |
+| `npm run build` | **PASS** | |
+
+**Prior baseline at `7cd0fa0`:** unit **439** · integration **74** · build **PASS** (documented on commit).
+
+**Credential availability:** `CEOS_BASE_URL` · `CEOS_E2E_USER` · `CEOS_E2E_PASSWORD` — **not present** in agent shell. No password, token, cookie, session ID, auth header, JWT, `id_token`, `access_token` or `refresh_token` printed or written.
+
+**Production perimeter (unauthenticated):** **PASS**
+
+| Area | Result |
+|---|---|
+| `https://app.theceosos.com` | 200 |
+| `/health` | 200 |
+| `/api/health` | 200 |
+| `/api/executive/overview` without token | **401** |
+
+**Authenticated smoke:** Not executed — login, authenticated APIs, UI routes (`/ceo`, M&A, Compliance, Funding, Reporting, Governance, Strategy, PMI, Risk), CEO truthfulness, Reporting Board Review Draft, Funding hub, Compliance empty-state (`N/A` / `insufficient_data` vs `0/watch`), Playwright `authenticated-hubs`, logout.
+
+**Finding classification:** No P0/P1 confirmed. Active finding: **P2** — prod test credentials must be loaded in operator shell from local secret store before rerun (`CEOS_BASE_URL` + `CEOS_E2E_*`).
+
+**Next:** Operator rerun C.15.1b locally with secret-store env, or proceed **C.16.0** AI Readiness Audit if smoke is scheduled separately.
