@@ -100,3 +100,14 @@ Future PDF requirements now include:
 - Preserve insufficient-data flags.
 - Preserve audit metadata and limitations.
 - Never convert preview metadata into board approval, certification, legal advice, investment advice, or compliance certification.
+
+## C.17.4 Status
+
+C.17.4 adds frontend reviewed/internal-final workflow controls for HTML previews. Future PDF or internal-final export requires backend-persisted review metadata before any export can represent reviewed or internal-final status.
+
+Future PDF requirements now include:
+
+- Confirm review metadata from persisted backend records.
+- Confirm internal-final approval metadata from an authorized backend workflow.
+- Preserve preview-only warnings until persistence exists.
+- Never infer reviewed/internal-final from AI output alone.

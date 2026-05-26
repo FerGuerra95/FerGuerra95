@@ -74,6 +74,25 @@ describe('boardReviewSnapshot', () => {
     expect(snapshot.aiMetadata.status).toBe('human_review_required');
   });
 
+  it('gates reviewed and internal-final metadata', () => {
+    const reviewed = buildBoardReviewSnapshot({
+      rendererInput: baseRendererInput(),
+      statusInput: {
+        status: 'reviewed',
+        humanReviewed: true,
+        reviewedBy: 'Reviewer',
+        reviewedAt: '2026-05-26T10:00:00.000Z'
+      }
+    });
+    const blockedFinal = buildBoardReviewSnapshot({
+      rendererInput: baseRendererInput(),
+      statusInput: { status: 'internal_final' }
+    });
+
+    expect(reviewed.status).toBe('reviewed');
+    expect(blockedFinal.status).toBe('human_review_required');
+  });
+
   it('does not mutate input', () => {
     const input = baseRendererInput();
     const original = JSON.stringify(input);

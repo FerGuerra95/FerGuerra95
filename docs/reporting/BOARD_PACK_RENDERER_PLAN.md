@@ -187,3 +187,17 @@ Current scope:
 - Version metadata for `draft`, `ai_draft`, `human_review_required`, `reviewed`, `internal_final`, `archived`, and `revoked`.
 - Review/final states gated by explicit human metadata.
 - Snapshot and renderer remain display/export metadata only, not source-of-truth.
+
+## C.17.4 Reviewed / Internal-Final Workflow Status
+
+**Status:** FRONTEND WORKFLOW FOUNDATION IMPLEMENTED / NO BACKEND PERSISTENCE.
+
+Reporting / Board Packs preview now displays review workflow state, human-review checklist posture, missing-data flags, limitations, and audit metadata in a preview-only panel.
+
+Current scope:
+
+- Visual status badge for Board Review Draft workflow states.
+- Preview-only workflow panel.
+- Disabled actions with backend-persistence requirement labels.
+- Internal-final eligibility helper for future persistence phase.
+- No saved/persisted claim and no formal approval claim.

@@ -174,6 +174,13 @@ export function buildBoardReviewDraftHtml({
     </section>
 
     <section class="section">
+      <h2>Workflow Status</h2>
+      <p><strong>Status:</strong> ${escapeHtml(auditMetadata?.status || BOARD_REVIEW_DRAFT_LABELS.humanReview)}</p>
+      <p><strong>Review posture:</strong> ${escapeHtml(BOARD_REVIEW_DRAFT_LABELS.humanReview)} - ${escapeHtml(BOARD_REVIEW_DRAFT_LABELS.notBoardApproved)}</p>
+      <p><strong>Persistence:</strong> Preview only. Requires backend persistence before review actions can be recorded.</p>
+    </section>
+
+    <section class="section">
       <h2>Limitations</h2>
       ${renderList(BOARD_REVIEW_DRAFT_LIMITATIONS)}
     </section>

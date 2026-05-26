@@ -117,6 +117,8 @@ describe('buildBoardReviewDraftHtml', () => {
     expect(html).toContain('snapshotId');
     expect(html).toContain('previewOnly');
     expect(html).toContain('html_preview');
+    expect(html).toContain('Workflow Status');
+    expect(html).toContain('Requires backend persistence');
     expect(html).not.toMatch(/board-approved/i);
     expect(html).not.toMatch(/certified PDF/i);
   });

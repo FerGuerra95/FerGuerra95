@@ -119,3 +119,17 @@ Preview metadata must remain visible enough for review workflows:
 - limitations.
 
 The metadata does not make the preview source-of-truth. `reviewed` and `internal_final` can appear only when explicit human review/final metadata is supplied. AI-only content cannot set those states.
+
+## C.17.4 Status
+
+C.17.4 adds frontend review workflow state controls for Board Review Draft previews.
+
+State rules:
+
+- `reviewed` requires explicit human review metadata, including reviewer and timestamp where available.
+- `internal_final` requires reviewed state plus explicit internal-final approval metadata.
+- AI-only content cannot set `reviewed` or `internal_final`.
+- Revoked and archived states remain metadata/display states until backend persistence exists.
+- Preview-only UI actions must not claim the report has been saved, persisted, certified, or board approved.
+
+Mandatory labels remain visible: Board Review Draft, Human Review Required, Based on DSS Signals, Not Legal Advice, Not Investment Advice, Not Board Approved, and Confidential.

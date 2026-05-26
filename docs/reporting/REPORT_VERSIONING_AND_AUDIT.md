@@ -117,3 +117,36 @@ Snapshot rules:
 - Renderer metadata is not source-of-truth.
 - Missing scores remain `N/A` / `insufficient_data`.
 - Audit metadata is sanitized and redacts sensitive keys before display.
+
+## C.17.4 Status
+
+**Status:** FRONTEND REVIEWED / INTERNAL-FINAL WORKFLOW FOUNDATION IMPLEMENTED / NO BACKEND PERSISTENCE.
+
+C.17.4 adds pure frontend workflow helpers and visual controls for Board Review Draft review states:
+
+- `resolveBoardReviewWorkflowState`
+- `canTransitionBoardReviewStatus`
+- `buildHumanReviewChecklistState`
+- `validateInternalFinalEligibility`
+- `markReviewIntent`
+- `BoardReviewStatusBadge`
+- `BoardReviewWorkflowPanel`
+
+Runtime posture:
+
+- No backend persistence.
+- No API endpoint.
+- No database migration.
+- No export ledger mutation.
+- No binary PDF generation.
+- No AI runtime/provider change.
+
+Workflow rules:
+
+- Default preview state remains `human_review_required`.
+- `reviewed` requires explicit human review metadata.
+- `internal_final` requires reviewed state plus explicit internal-final approval metadata.
+- AI-only output cannot transition to `reviewed` or `internal_final`.
+- Revoked and archived states preserve warning posture.
+- Workflow actions are preview-only until backend persistence exists.
+- The UI must not claim the workflow has been saved or persisted.

@@ -676,3 +676,18 @@ Boundary rules:
 - `reviewed` and `internal_final` require explicit human metadata.
 - AI-only metadata cannot mark a report reviewed or internal-final.
 - No Board Review Draft snapshot means board approval, certification, legal advice, investment advice, compliance certification, or fairness opinion.
+
+## C.17.4 - Review Workflow Metadata Boundary
+
+Review workflow metadata status: **DISPLAY-LAYER FOUNDATION / FUTURE PERSISTENCE BOUNDARY / NOT SOURCE-OF-TRUTH**.
+
+C.17.4 adds frontend-only status controls for reviewed/internal-final workflow posture. Until a later backend persistence phase is explicitly authorized, workflow metadata is not an authoritative review record, export ledger event, audit ledger entry, board approval, certification, or final legal/investment/compliance output.
+
+Boundary rules:
+
+- Workflow metadata is not SoT.
+- Preview-only actions must not claim saved or persisted state.
+- `reviewed` requires explicit human review metadata.
+- `internal_final` requires reviewed state and explicit human approval metadata.
+- AI-only metadata cannot mark reviewed or internal-final.
+- Board Review Draft workflow states do not mean board approval, certification, legal advice, investment advice, compliance certification, or fairness opinion.

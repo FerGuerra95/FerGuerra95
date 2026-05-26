@@ -6995,3 +6995,17 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Runtime posture:** No backend, API, database, migration, router, unrelated module, package/config, PDF dependency, binary PDF generation, AI runtime, provider traffic, Golden Dataset, or Formula Registry change.
 
 **Truthfulness posture:** Snapshot and renderer are not source-of-truth. `reviewed` requires explicit human review metadata; `internal_final` requires explicit internal-final approval metadata; AI-only output cannot set reviewed or internal-final. Missing scores remain `N/A` / `insufficient_data`, not fake `0`.
+
+---
+
+## C.17.4 - Reviewed / Internal-Final Workflow
+
+**Status:** COMPLETED / FRONTEND WORKFLOW FOUNDATION / NO BACKEND PERSISTENCE.
+
+**Baseline:** `HEAD = origin/main = 2f2da6a`.
+
+**Implemented:** Frontend-only Reporting workflow helpers plus Board Review status badge and workflow panel for preview-only reviewed/internal-final state controls.
+
+**Runtime posture:** No backend, API, database, migration, router, unrelated module, package/config, PDF dependency, binary PDF generation, AI runtime, provider traffic, Golden Dataset, or Formula Registry change.
+
+**Truthfulness posture:** Workflow metadata is not source-of-truth. AI-only output cannot mark reviewed/internal-final. Internal-final requires reviewed state and explicit human approval metadata. UI actions are preview-only and require future backend persistence.

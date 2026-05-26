@@ -1490,3 +1490,19 @@ Snapshot/versioning tests ensure:
 - Audit metadata redacts token/password/cookie/auth header and other sensitive keys.
 
 No backend, API, DB persistence, router, unrelated module, package/config, Golden Dataset, Formula Registry, AI runtime, endpoint, or binary PDF generation changed.
+
+## C.17.4 - Reviewed / Internal-Final Workflow
+
+**Status:** COMPLETED / FRONTEND WORKFLOW FOUNDATION / NO BACKEND PERSISTENCE.
+
+Workflow tests ensure:
+
+- AI-only output cannot mark `reviewed`.
+- AI-only output cannot mark `internal_final`.
+- `internal_final` requires reviewed state and explicit human approval metadata.
+- Critical unresolved limitations block internal-final eligibility.
+- Revoked/archived states preserve warning posture.
+- Preview-only controls do not claim saved or persisted workflow state.
+- No board-approved or certified claims are rendered.
+
+No backend, API, DB persistence, router, unrelated module, package/config, Golden Dataset, Formula Registry, AI runtime, endpoint, or binary PDF generation changed.

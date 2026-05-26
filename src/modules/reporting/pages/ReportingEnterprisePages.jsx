@@ -11,6 +11,7 @@ import {
   ReportingTable,
   reportingEnterpriseCss
 } from '../components/ReportingEnterpriseComponents.jsx';
+import { BoardReviewWorkflowPanel } from '../components/BoardReviewWorkflowPanel.jsx';
 import { toBoardReviewDraftInput } from '../utils/boardReviewDraftAdapter.js';
 import { openBoardReviewDraftWindow } from '../utils/openBoardReviewDraftWindow.js';
 
@@ -124,6 +125,23 @@ export const ReportingLibraryPage = () => <EntityPage badge="Library" title="Rep
 export const ReportingTemplatesPage = () => <EntityPage badge="Templates" title="Template manager." copy="Template structure, required sections, required evidence and status by module." load={reportingApi.listTemplates} create={reportingApi.createTemplate} defaults={{ templateKey: '', module: 'enterprise', status: 'active' }} fields={['templateKey', 'module', 'status']} permission={PERMISSIONS.UPDATE_REPORTING} render={(items) => <ReportingTable title="Templates" items={items} columns={[{ key: 'templateKey', label: 'Template' }, { key: 'module', label: 'Module' }, { key: 'status', label: 'Status', render: (item) => <ReportingStatusBadge status={item.status} /> }]} />} />;
 function BoardPackPreviewIntegration({ items = [] }) {
   const [previewMessage, setPreviewMessage] = useState(items.length === 0 ? BOARD_REVIEW_PREVIEW_REQUIRED : '');
+  const [activeSnapshot, setActiveSnapshot] = useState(null);
+
+  const workflowPreviewInput = useMemo(() => {
+    if (activeSnapshot) {
+      return { snapshot: activeSnapshot };
+    }
+    if (items.length === 0) {
+      return toBoardReviewDraftInput({ includeSnapshot: true });
+    }
+    return toBoardReviewDraftInput({
+      boardPack: items[0],
+      generatedAt: new Date(),
+      fallbackScope: 'Reporting / Board Packs',
+      includeSnapshot: true,
+      statusInput: { status: items[0]?.status || 'human_review_required' }
+    });
+  }, [activeSnapshot, items]);
 
   useEffect(() => {
     if (items.length > 0 && previewMessage === BOARD_REVIEW_PREVIEW_REQUIRED) {
@@ -147,6 +165,7 @@ function BoardPackPreviewIntegration({ items = [] }) {
       includeSnapshot: true,
       statusInput: { status: boardPack.status || 'human_review_required' }
     });
+    setActiveSnapshot(input.snapshot);
     const html = buildBoardReviewDraftHtml(input);
     const result = openBoardReviewDraftWindow(html);
 
@@ -170,6 +189,7 @@ function BoardPackPreviewIntegration({ items = [] }) {
         <span>Not Investment Advice</span>
         <span>Not Board Approved</span>
       </div>
+      <BoardReviewWorkflowPanel snapshot={workflowPreviewInput.snapshot} />
       <BoardPackTable items={items} onPreviewBoardReviewDraft={handlePreviewBoardReviewDraft} />
     </>
   );
