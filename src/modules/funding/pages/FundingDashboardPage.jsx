@@ -50,7 +50,6 @@ import {
   getRunwayStatusLabel,
   toSafeNumber
 } from '../utils/fundingExecutiveMetrics.js';
-import { formatDilutionValue } from '../utils/fundingDisplayFormat.js';
 
 const EMPTY_FUNDING_INPUTS = {
   companyName: '',
@@ -78,6 +77,23 @@ const EMPTY_FUNDING_SETTINGS = {
   reportCurrency: 'EUR',
   scenarioMode: 'balanced'
 };
+
+function formatDilutionValue(value) {
+  if (value === null || value === undefined || value === '') {
+    return 'N/A';
+  }
+
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed)) {
+    return 'N/A';
+  }
+
+  const normalized =
+    Math.abs(parsed) > 0 && Math.abs(parsed) <= 1 ? parsed * 100 : parsed;
+
+  return `${normalized.toFixed(1)}%`;
+}
 
 const FUNDING_SOURCE_COPY = {
   draftBadge: 'Scenario draft workspace',

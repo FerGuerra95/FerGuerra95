@@ -1678,3 +1678,33 @@ No runtime changes were made. No product code, backend code, frontend code, test
 **Tests:** `tests/unit/funding/fundingDisplayFormat.test.js` (null, ratio, percent scale, no throw).
 
 No Golden Dataset / Formula Registry / backend changes.
+
+## C.15.4c - FundingDashboardPage formatDilutionValue final fix
+
+**Status:** COMPLETED / dangling formatter reference removed.
+
+Root cause:
+
+- C.15.4b added/imported `formatDilutionValue`, but production still showed `ReferenceError: formatDilutionValue is not defined` in the Funding dashboard chunk.
+- C.15.4c removes the import dependency for the page call sites by defining `formatDilutionValue` directly inside `FundingDashboardPage.jsx` module scope.
+
+Logic-integrity guardrails:
+
+- Missing dilution renders **N/A**.
+- `NaN`, `Infinity`, `null`, `undefined`, and empty string render **N/A**.
+- Finite numeric dilution renders as display percentage only.
+- Ratio-style values in `(0, 1]` may normalize for display only.
+- No funding formulas changed.
+- `derived.dilutionPct` is not modified.
+- Missing dilution is not converted to `0`.
+
+Validation:
+
+- `npx vitest run tests/unit/funding/fundingDisplayFormat.test.js` PASS.
+- `npm run build` PASS.
+- `Select-String` over `dist/assets/*.js` found no `formatDilutionValue` symbol and no `ReferenceError|formatDilutionValue is not defined`.
+- `npm run test:unit` PASS: 552 tests.
+- `npm run test:integration` PASS: 81 tests.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS after launching Vite with `--host 127.0.0.1`.
+
+No backend, package/config, Golden Dataset, Formula Registry, ErrorBoundary, AI runtime, or scoring logic changed.

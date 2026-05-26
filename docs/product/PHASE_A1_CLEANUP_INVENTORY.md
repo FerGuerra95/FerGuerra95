@@ -7189,3 +7189,21 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Validations:** `npm run build` PASS; targeted unit PASS; full unit/integration subject to operator sqlite env.
 
 **Next:** Manual 20–30 hop demo including repeated Funding entry; Playwright navigation smoke on operator host.
+
+---
+
+## C.15.4c - FundingDashboardPage formatDilutionValue final fix
+
+**Status:** COMPLETED / DANGLING FORMATTER REFERENCE REMOVED.
+
+**Baseline:** `HEAD = origin/main = 994884e`.
+
+**Root cause:** C.15.4b added `formatDilutionValue` as an imported display helper, but the production Funding dashboard chunk still contained a failing runtime reference path for `formatDilutionValue`. The final fix removes the import dependency from `FundingDashboardPage.jsx` and defines the display-only formatter directly in the page module scope used by the component.
+
+**Fix:** `FundingDashboardPage.jsx` now has an in-scope local `formatDilutionValue` helper. Missing, empty, and non-finite dilution values render as **N/A**. Finite numeric values render as one-decimal percentages; ratio-style display inputs in `(0, 1]` normalize for display only. No funding formulas, `derived.dilutionPct`, Golden Dataset, Formula Registry, backend, ErrorBoundary, or missing-data semantics changed.
+
+**Build verification:** `npm run build` PASS. `dist/assets/*.js` search for `formatDilutionValue` returned no matches; search for `ReferenceError|formatDilutionValue is not defined` returned no matches. Funding dashboard chunk inlines the formatter as a local function, not a free runtime name.
+
+**Validations:** targeted formatter unit PASS; global unit PASS (552); integration PASS (81); navigation stability Playwright PASS after binding Vite to `127.0.0.1`. Local `/funding/dashboard` served 200 from the built app.
+
+**Truthfulness:** Missing dilution remains **N/A**, not fake `0`; no scoring or dilution formula changed.
