@@ -153,3 +153,23 @@ Runtime posture:
 - Renderer remains a display layer, not source-of-truth.
 
 The first foundation includes a shared CEO's OS logo/header so future reports do not paste logo markup individually.
+
+## C.17.2 Integration Status
+
+**Status:** REPORTING PREVIEW INTEGRATION IMPLEMENTED / NO BINARY PDF / NO BACKEND.
+
+C.17.2 integrates the Board Review Draft HTML renderer into the Reporting / Board Packs preview flow. The integration uses a frontend-only adapter and window helper to open a printable HTML preview from an existing board pack or report snapshot.
+
+Runtime posture:
+
+- No backend, API, database, router, or AI runtime change.
+- No PDF dependency, `jsPDF`, binary PDF generation, or external rendering service.
+- No provider traffic and no customer data leaves the browser for rendering.
+- Preview remains a display layer only and does not mutate persisted records.
+- If no board pack or report snapshot exists, the UI shows a safe snapshot-required state.
+
+Truthfulness posture:
+
+- Board Review Draft, Confidential, Human Review Required, Based on DSS Signals, Not Legal Advice, Not Investment Advice, and Not Board Approved labels remain visible.
+- Missing scores remain `N/A` or `insufficient_data`, not fake `0`.
+- The preview does not create reviewed, internal-final, board-approved, certified, legal, investment, or compliance-certification output.

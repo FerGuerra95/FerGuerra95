@@ -1457,3 +1457,18 @@ Renderer tests ensure:
 - Shared header renders CEO's OS logo or textual fallback.
 
 No backend, routes, unrelated modules, package/config, Golden Dataset, Formula Registry, AI runtime, or binary PDF generation changed.
+
+## C.17.2 - Renderer Integration
+
+**Status:** COMPLETED / REPORTING PREVIEW INTEGRATION / NO BINARY PDF / NO BACKEND.
+
+Renderer integration tests ensure:
+
+- Board pack/report snapshots map into renderer input without recalculating scores.
+- Missing scores remain `N/A` / `insufficient_data`, not fake `0`.
+- `insufficient_data` is preserved.
+- Audit metadata is displayed as safe preview metadata only.
+- The preview helper opens local HTML without auto-printing by default, external fetch, or external URL.
+- Board Review Draft, Human Review Required, Based on DSS Signals, Not Legal Advice, Not Investment Advice, Not Board Approved, and Confidential labels remain visible.
+
+No backend, router, unrelated module, package/config, Golden Dataset, Formula Registry, AI runtime, endpoint, or binary PDF generation changed.

@@ -85,3 +85,20 @@ The renderer preserves:
 - Confidential.
 
 No route/page integration or binary PDF generation exists in C.17.1.
+
+## C.17.2 Status
+
+C.17.2 integrates Board Review Draft preview into Reporting / Board Packs.
+
+The preview integration preserves:
+
+- CEO's OS logo/header.
+- Board Review Draft status.
+- Confidential classification.
+- Human Review Required warning.
+- Based on DSS Signals label.
+- Not Legal Advice.
+- Not Investment Advice.
+- Not Board Approved.
+
+The preview requires a selected board pack or report snapshot. It must not invent data, recalculate scores, convert missing scores to `0`, hide `insufficient_data`, or present the preview as reviewed, internal-final, certified, or board-approved.

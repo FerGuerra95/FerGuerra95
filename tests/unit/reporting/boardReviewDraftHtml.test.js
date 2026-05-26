@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { buildBoardReviewDraftHtml } from '../../../src/modules/reporting/renderers/boardReviewDraftHtml.js';
+import { toBoardReviewDraftInput } from '../../../src/modules/reporting/utils/boardReviewDraftAdapter.js';
 
 function buildHtml(overrides = {}) {
   return buildBoardReviewDraftHtml({
@@ -90,5 +91,27 @@ describe('buildBoardReviewDraftHtml', () => {
     expect(html).toContain('@page { size: A4;');
     expect(html).toContain('@media print');
     expect(html).toContain('page-break-inside: avoid');
+  });
+
+  it('renders integrated adapter output with logo/header labels', () => {
+    const input = toBoardReviewDraftInput({
+      boardPack: {
+        id: 'bp_integrated',
+        title: 'Integrated Board Pack',
+        executiveSummary: 'Prepared from Reporting snapshot.',
+        moduleSignals: [{ module: 'Reporting', label: 'Snapshot readiness', score: null }],
+        missingData: ['risk:insufficient_data']
+      },
+      logoSrc: '/brand/ceos-logo.svg',
+      generatedAt: '2026-05-26T10:00:00.000Z'
+    });
+    const html = buildBoardReviewDraftHtml(input);
+
+    expect(html).toContain('Integrated Board Pack');
+    expect(html).toContain('Board Review Draft');
+    expect(html).toContain('Human Review Required');
+    expect(html).toContain('Not Board Approved');
+    expect(html).toContain('<td>N/A</td>');
+    expect(html).toContain('risk:insufficient_data');
   });
 });

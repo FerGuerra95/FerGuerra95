@@ -644,3 +644,18 @@ Do not interpret the current registry as saying:
 - AI features are authorized;
 - procurement enterprise readiness is achieved;
 - legal, financial, compliance, risk, governance, or valuation outputs are certified.
+
+## C.17.0-C.17.2 - Reporting Renderer Source-of-Truth Boundary
+
+Reporting renderer status: **DISPLAY LAYER ONLY / NOT SOURCE-OF-TRUTH**.
+
+The HTML Board Review Draft renderer and C.17.2 preview integration display provided Reporting / Board Pack snapshot metadata. They do not own module facts, formulas, scores, tenant scope, review status, or final approval state.
+
+Source-of-truth rules:
+
+- Module services and persisted module records remain authoritative for module values.
+- Reporting preview must not recalculate official scores.
+- Missing scores remain `N/A` / `insufficient_data`, not fake `0`.
+- AI draft text, when present in a future phase, is not source-of-truth.
+- The preview does not mutate persisted records, create export ledger events, or set reviewed/internal-final status.
+- Board Review Draft does not mean board approved, certified, legal advice, investment advice, compliance certification, or fairness opinion.

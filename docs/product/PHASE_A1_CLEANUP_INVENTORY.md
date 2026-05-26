@@ -6967,3 +6967,17 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Runtime posture:** No backend, route/page integration, package dependency, PDF library, binary PDF generation, external service, AI runtime change, Golden Dataset, or Formula Registry change.
 
 **Truthfulness posture:** Board Review Draft only; Human Review Required; Confidential; Based on DSS Signals; Not Legal Advice; Not Investment Advice; Not Board Approved. Missing scores remain `N/A` / `insufficient_data`, not fake `0`.
+
+---
+
+## C.17.2 - Renderer Integration
+
+**Status:** COMPLETED / REPORTING PREVIEW INTEGRATION / NO BINARY PDF / NO BACKEND.
+
+**Baseline:** `HEAD = origin/main = 86cecb1`.
+
+**Implemented:** Reporting / Board Packs can open a Board Review Draft HTML preview using the C.17.1 renderer foundation, a safe frontend adapter, and a local preview-window helper.
+
+**Runtime posture:** No backend, API, database, router, unrelated module, package/config, PDF dependency, binary PDF generation, external service, AI runtime, Golden Dataset, or Formula Registry change.
+
+**Truthfulness posture:** Preview preserves CEO's OS logo/header, Board Review Draft, Confidential, Human Review Required, Based on DSS Signals, Not Legal Advice, Not Investment Advice, and Not Board Approved labels. Missing scores remain `N/A` / `insufficient_data`, not fake `0`.

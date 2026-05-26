@@ -1,6 +1,7 @@
 import React from 'react';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { Card } from '../../../shared/components/ui/Card.jsx';
+import { ensureNoInvalidNumber } from '../utils/reportSanitizers.js';
 
 export const reportingEnterpriseCss = `
   .reporting-page { width: min(1440px,100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
@@ -24,8 +25,11 @@ export const reportingEnterpriseCss = `
   .ceos-enterprise-filter-clear:disabled { opacity: .42; cursor: not-allowed; }
   .reporting-empty { border: 1px dashed rgba(148,163,184,.24); border-radius: 8px; padding: 18px; color: rgba(226,232,240,.68); background: rgba(15,23,42,.42); }
   .reporting-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
-  .reporting-table th,.reporting-table td { padding: 12px; border-bottom: 1px solid rgba(148,163,184,.12); text-align: left; color: rgba(226,232,240,.84); }
+  .reporting-table th,.reporting-table td { padding: 12px; border-bottom: 1px solid rgba(148,163,184,.12); text-align: left; color: rgba(226,232,240,.84); vertical-align: top; }
   .reporting-table th { color: rgba(248,250,252,.92); font-size: .72rem; text-transform: uppercase; letter-spacing: 0; }
+  .reporting-table-action { min-height: 34px; border: 1px solid rgba(148,163,184,.28); border-radius: 8px; padding: 0 12px; background: rgba(226,232,240,.94); color: #020617; font-weight: 800; cursor: pointer; white-space: nowrap; }
+  .reporting-preview-note { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; color: rgba(226,232,240,.74); font-size: .82rem; }
+  .reporting-preview-message { margin: 0 0 14px; border: 1px solid rgba(148,163,184,.18); border-radius: 8px; padding: 12px; color: rgba(226,232,240,.78); background: rgba(2,6,23,.28); }
   @media (max-width: 760px) { .reporting-hero { padding: 20px; } .reporting-table { min-width: 720px; } .reporting-scroll { overflow-x: auto; } }
 `;
 
@@ -82,11 +86,29 @@ export function ReportLibraryTable({ items = [] }) {
   ]} />;
 }
 
-export function BoardPackTable({ items = [] }) {
+function renderCompleteness(item) {
+  const value = ensureNoInvalidNumber(item?.completenessScore);
+  return value === 'N/A' ? 'N/A' : `${value}%`;
+}
+
+export function BoardPackTable({ items = [], onPreviewBoardReviewDraft }) {
   return <ReportingTable title="Board packs" items={items} columns={[
     { key: 'title', label: 'Board pack' },
     { key: 'status', label: 'Status', render: (item) => <ReportingStatusBadge status={item.status} /> },
-    { key: 'completenessScore', label: 'Completeness', render: (item) => `${item.completenessScore || 0}%` },
-    { key: 'executiveSummary', label: 'Summary' }
+    { key: 'completenessScore', label: 'Completeness', render: renderCompleteness },
+    { key: 'executiveSummary', label: 'Summary' },
+    ...(onPreviewBoardReviewDraft ? [{
+      key: 'preview',
+      label: 'Preview',
+      render: (item) => (
+        <button
+          type="button"
+          className="reporting-table-action"
+          onClick={() => onPreviewBoardReviewDraft(item)}
+        >
+          Preview Board Review Draft
+        </button>
+      )
+    }] : [])
   ]} />;
 }

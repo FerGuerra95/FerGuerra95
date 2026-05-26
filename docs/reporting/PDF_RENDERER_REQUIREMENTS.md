@@ -75,3 +75,16 @@ C.17.0 does not implement PDF generation. The recommended next step is an HTML B
 C.17.1 implements the shared HTML renderer foundation and report logo/header requirement. Binary PDF generation remains deferred.
 
 The renderer uses an existing CEO's OS brand asset in a reusable header component and HTML builder. No `jsPDF`, PDF dependency, external PDF service, binary export, or route integration was added.
+
+## C.17.2 Status
+
+C.17.2 completes HTML preview integration inside Reporting / Board Packs. Binary PDF remains deferred.
+
+The preview flow:
+
+- Uses the existing HTML builder.
+- Opens a local printable HTML preview window.
+- Preserves the shared CEO's OS logo/header.
+- Does not call an external PDF service.
+- Does not add a PDF package or binary export path.
+- Does not create a certified PDF, board-approved report, legal report, investment recommendation, or compliance certification.

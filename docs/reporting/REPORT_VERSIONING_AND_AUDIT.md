@@ -59,3 +59,21 @@ Snapshots preserve the rendered facts, labels, status, limitations, and insuffic
 C.17.1 includes an Audit Metadata section in the HTML renderer foundation.
 
 Persistent report versioning, export audit events, snapshot storage, secure-share state preservation, and reviewed/internal-final workflows remain future phases. The current renderer displays provided metadata only and does not mutate or persist records.
+
+## C.17.2 Status
+
+C.17.2 adds Reporting / Board Packs preview integration for the HTML Board Review Draft renderer.
+
+Persistent report versioning remains a future phase. The preview uses displayed audit metadata only and does not persist snapshots, create export ledger events, set reviewed/internal-final status, or mutate records.
+
+Preview metadata remains safe display metadata:
+
+- report or board pack id when available;
+- draft status;
+- generated timestamp;
+- source type;
+- AI used yes/no;
+- prompt version if supplied;
+- limitations and insufficient-data markers.
+
+No raw secrets, tokens, cookies, session ids, auth headers, API keys, passwords, or private keys belong in preview metadata.
