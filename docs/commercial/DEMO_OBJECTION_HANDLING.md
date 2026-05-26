@@ -85,3 +85,19 @@
 - **IA futura:** prompt injection / subprocessor → diseñado en C.16.0, no runtime abierto sin DPA.
 
 **Cierre:** “El valor es **contexto privado, workflow, auditoría y revisión humana** — no certificación ni autonomía.”
+
+---
+
+## 13. "Where is the real AI?"
+
+**Respuesta:** The AI layer is intentionally staged. The current product has an **AI-ready Board Review Draft Assistant foundation** with provider abstraction, prompt registry, guardrails, and mock/disabled runtime. It is not yet sold as production LLM traffic. Before customer data goes to an external provider, we need DPA/subprocessor review and an authorized runtime phase.
+
+**No decir:** "OpenAI is already drafting your board packs in production" or "AI approves the report."
+
+---
+
+## 14. "Why pay for a pilot instead of waiting?"
+
+**Respuesta:** The pilot is not just access to software. It tests whether the customer's real board-prep workflow benefits from private DSS context, persisted snapshots, human review gates, and audit metadata. The deliverable is a scoped operating loop: selected data, Board Review Drafts, reviewer workflow, success criteria, and an expand/hold decision.
+
+**No decir:** "The pilot buys a certified enterprise deployment" or "the pilot guarantees board approval."

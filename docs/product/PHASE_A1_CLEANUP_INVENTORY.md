@@ -7104,3 +7104,23 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **P2 documented:** C.15.1b authenticated production smoke may remain env-blocked — mention before external demo; perimeter unauth PASS per C.17.8.
 
 **Next:** Execute external demo with `DEMO_CHECKLIST.md` · close auth smoke P2 · **C.16.3** AI provider runtime planning (optional parallel).
+
+---
+
+## C.15.3 - Internal Demo Dry Run / Commercial QA
+
+**Status:** COMPLETED / INTERNAL DEMO QA READY.
+
+**Baseline:** `HEAD = origin/main = b6c1c74`.
+
+**Mode:** DOCS / DEMO QA only - no runtime changes.
+
+**Deliverable:** `docs/commercial/INTERNAL_DEMO_DRY_RUN.md`.
+
+**Demo readiness:** Overall external demo readiness assessed at **7.5/10** for controlled pilot use, with strongest proof points in Reporting / Board Packs, persisted snapshots, premium HTML Board Review Draft preview, and reviewed/internal_final workflow.
+
+**Commercial posture:** Clear and sellable as **Private Executive DSS** / **Board Intelligence Workspace** / controlled pilot. Not positioned as enterprise certified, procurement-ready, SOC2/ISO certified, board-approved, certified PDF, autonomous AI, legal advice, investment advice, or public marketplace.
+
+**P2 residual:** Authenticated production smoke remains pending until `CEOS_E2E_*` credentials are loaded from local secret store or an operator-verified production session is prepared. This remains an operational P2, not a confirmed P0/P1.
+
+**Next:** Run one timed internal demo, close auth smoke P2 where possible, then proceed to controlled external pilot outreach.

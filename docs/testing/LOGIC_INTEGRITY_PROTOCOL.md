@@ -1616,3 +1616,24 @@ No runtime changes were made.
 | Production smoke | C.15.1b authenticated flow **P2** until `CEOS_E2E_*` in operator env |
 
 No runtime changes. No Golden/Formula changes.
+
+## C.15.3 - Internal Demo Dry Run / Commercial QA
+
+**Status:** COMPLETED / internal demo QA docs only.
+
+Demo claims checked:
+
+- CEO's OS remains positioned as Private Executive DSS and Board Intelligence Workspace.
+- Board Review Draft wording is preserved.
+- Human Review Required and Not Board Approved labels remain mandatory.
+- Persisted snapshots are described as reporting workflow traceability, not board approval.
+- AI is described as draft-assistant foundation only, not autonomous runtime or source-of-truth.
+- Premium HTML preview is not described as certified PDF.
+- No legal advice, investment advice, fairness opinion, certified compliance, SOC2/ISO certification, procurement-ready, public marketplace, or enterprise-certified claim is introduced.
+
+P2 residual documented:
+
+- Authenticated production smoke remains blocked until `CEOS_E2E_*` credentials are available from local secret store or an operator-verified session is prepared.
+- This is classified as P2/env, not a confirmed P0/P1.
+
+No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, secrets, AI runtime, PDF runtime, router, auth, storage, or source-of-truth logic changed.
