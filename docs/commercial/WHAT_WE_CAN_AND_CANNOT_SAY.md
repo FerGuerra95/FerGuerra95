@@ -10,6 +10,7 @@ Use this document to keep demo, pilot and sales language aligned with DSS truthf
 | M&A | M&A DSS for valuation prep, waterfall, pipeline, CIM and data-room support. | Fairness opinion; certified valuation; guaranteed buyer matching. | Outputs are indicative preparation material. |
 | Funding | Funding DSS for runway, dilution, scenarios and readiness drafts. | Investment advice; funding guaranteed; investor commitments verified. | Funding dashboard is decision-support only. |
 | Reporting | Reporting workspace and Board Review Draft support. | Complete PDF reporting; certified reports; filed or approved board materials. | PDF renderer remains pending. |
+| Reporting / PDF Renderer | Board Review Draft planned; draft reporting with human review required; export-ready reporting architecture planned; premium reporting renderer planned. | Certified PDF reports; board-approved report; final legal/investment/compliance report; autonomous AI-generated board pack. | C.17.0 is planning only; renderer not implemented yet. |
 | Board Pack | Board Review Draft for human review. | Board-approved output. | Directors and governance process remain authoritative. |
 | Marketplace | Bridge marketplace is internal, unlisted, future/private-network concept. | Public marketplace is live; verified buyer network is active. | Do not use marketplace as production pilot narrative. |
 | Success fee | Not part of the controlled pilot. | Success-fee transaction platform is operational. | No transaction layer is sold. |

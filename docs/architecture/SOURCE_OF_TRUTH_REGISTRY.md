@@ -58,6 +58,7 @@ Do not mark Assumed entries as Confirmed before C.13.
 | AI-generated narrative | draft text, memos, briefs | **Not source-of-truth** — future `aiAudit` + user-saved draft only | **Design (C.16.0)** | AI must not override scores, formulas, or persisted records | N/A | Official SoT remains module services, Formula Registry, Golden Datasets (engineering oracles), persisted DB fields |
 | AI provider abstraction | provider boundary, prompts, guardrails, context builder, audit metadata | `backend/services/ai/**` | **Foundation implemented (C.16.1) / not runtime SoT** | Disabled/mock only; no endpoint/UI/provider traffic; must not become source-of-truth | N/A | C.16.2 may consume only after authorized runtime endpoint + tenant tests |
 | AI Board Review Draft | draft narrative structure | `backend/services/ai/boardReviewDraft.service.js` from supplied DSS context | **Foundation implemented (C.16.2) / not SoT** | Mock/disabled only; no provider traffic; no official score calculation | N/A | Summarizes DSS-provided context only; human review required |
+| Reporting renderer | rendered Board Review Draft / export presentation | Future renderer over module snapshots | **Planned (C.17.0) / not SoT** | Must not recalculate scores, hide insufficient data, or convert draft to reviewed/internal-final | N/A | Displays snapshots from module SoT; status must distinguish draft/reviewed/internal-final |
 
 ## AI and Source-of-Truth (C.16.0)
 
@@ -81,6 +82,14 @@ Do not mark Assumed entries as Confirmed before C.13.
 - The draft is not source-of-truth and must not be treated as board approved, certified, legal advice, investment advice, or official scoring.
 - The service does not fetch module data, read DB/files/env secrets, mutate records, call routes, or send data to a provider.
 - Runtime remains disabled/mock only until a later authorized provider phase.
+
+## Reporting Renderer (C.17.0)
+
+- Reporting renderer is not source-of-truth.
+- Renderer displays snapshots from module-owned source-of-truth and preserves what was shown at export time.
+- AI draft text is not source-of-truth.
+- Export status must distinguish `draft`, `ai_draft`, `human_review_required`, `reviewed`, `internal_final`, `archived`, and `revoked`.
+- Renderer must preserve insufficient-data and human-review labels.
 
 ## Rules
 

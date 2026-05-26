@@ -166,6 +166,18 @@ Runtime provider remains disabled until a later authorized phase completes DPA/s
 
 ---
 
+## 11. C.17.0 Renderer Planning Relationship
+
+The future Reporting / Board Pack renderer may consume Board Review Draft content, but it must preserve provider-abstraction boundaries:
+
+- Provider runtime remains disabled unless a later authorized phase changes it.
+- Renderer must not call AI providers directly.
+- Renderer must not read API keys, use SDKs, stream, or send customer data externally.
+- Renderer must preserve AI Draft and Human Review Required labels.
+- Renderer must not transform AI draft output into reviewed or internal-final status.
+
+---
+
 ## Related
 
 - `AI_READINESS_AUDIT.md`  

@@ -1424,3 +1424,20 @@ No runtime changes were made outside the approved backend AI foundation. No prod
 - `tests/unit/ai/boardReviewDraft.service.test.js`
 
 No product code, routes, auth/storage, module services, package/config, secrets, Golden Dataset, or Formula Registry changed.
+
+## C.17.0 - Reporting / PDF / Board Pack Renderer Planning
+
+**Status:** COMPLETED / PLANNED / NO RUNTIME IMPLEMENTATION.
+
+### Renderer logic integrity requirements
+
+| Rule | Requirement |
+|---|---|
+| Official scores | Renderer must not create or recalculate official scores |
+| Missing data | Renderer must preserve `null`, `N/A`, and `insufficient_data` |
+| Certification | Renderer must not certify output |
+| AI labels | Renderer must preserve AI Draft and human-review labels |
+| Review status | AI cannot set reviewed/internal-final |
+| Source-of-truth | Renderer displays snapshots from module SoT; it is not SoT |
+
+No runtime code changed in C.17.0.

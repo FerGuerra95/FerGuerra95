@@ -1,0 +1,138 @@
+# C.17.0 - Board Pack Renderer Plan
+
+**Status:** PLANNED / NOT IMPLEMENTED IN C.17.0
+
+## 1. Executive Summary
+
+CEO's OS needs a premium Reporting / Board Pack renderer that preserves DSS truthfulness while making executive material easier to review, export, and circulate internally. C.17.0 is planning only: no renderer, PDF generation, runtime code, UI, tests, package changes, AI runtime changes, or module behavior changes.
+
+## 2. Product Goal
+
+Create an executive-grade rendering path for Board Review Draft materials that can later support printable HTML and PDF-quality exports without presenting drafts as certified, legal, investment, compliance, or formally approved board material.
+
+## 3. What This Renderer Is
+
+- A presentation layer for tenant-scoped Reporting, Executive Overview, and module summary signals.
+- A Board Review Draft renderer for internal executive preparation.
+- A future export surface with explicit status, version, source, limitation, and review metadata.
+- A truthfulness-preserving bridge between DSS data and human-reviewed board preparation.
+
+## 4. What This Renderer Is Not
+
+- Not a source-of-truth for scores, formulas, module state, or compliance posture.
+- Not a certified PDF generator.
+- Not legal advice, investment advice, a fairness opinion, or compliance certification.
+- Not an autonomous AI report writer.
+- Not a formal approval mechanism.
+- Not a public marketplace or external filing workflow.
+
+## 5. Target Users
+
+- CEO / executive sponsor preparing board review material.
+- CFO / strategy owner reviewing financial and funding narrative.
+- Compliance / risk owner validating limitations and missing evidence.
+- Governance owner confirming review status and circulation readiness.
+- Operating team members preparing supporting DSS evidence.
+
+## 6. Report Types
+
+Initial renderer scope should focus on:
+
+1. Board Review Draft pack.
+2. Executive summary appendix.
+3. Module signal appendix.
+4. Missing-data / insufficient-data appendix.
+5. Human review checklist.
+
+Out of scope for first implementation: certified PDF reports, filed board minutes, external investor memoranda, legal reports, compliance certificates, public marketplace reports, and autonomous AI-generated packs.
+
+## 7. Data Sources
+
+Renderer inputs must come from already tenant-scoped DSS data:
+
+- Reporting board pack metadata and sections.
+- Executive Overview module signals.
+- Module-owned summaries from M&A, Compliance, Funding, Governance, PMI, Risk, Strategy, Bridge, and Heritage only when explicitly included by approved services.
+- AI Board Review Draft text only as draft narrative and never as source-of-truth.
+- Human review metadata when a reviewer explicitly records it.
+
+## 8. Source-of-Truth Boundaries
+
+- Module services and persisted module records remain authoritative for module data.
+- Formula Registry and Golden Datasets remain engineering oracles, not customer-facing facts.
+- Renderer snapshots preserve what was shown at export time; they do not recalculate business values.
+- Rendered labels must distinguish real values, missing values, insufficient data, draft text, and reviewed metadata.
+
+## 9. AI Boundaries
+
+- AI may feed draft narrative only when clearly labeled.
+- AI cannot set `reviewed`, `internal_final`, or any approval status.
+- AI cannot calculate scores, fill missing data, certify posture, approve reports, or make recommendations as legal/investment advice.
+- Renderer must preserve AI labels and human-review warnings.
+
+## 10. Export Lifecycle
+
+Recommended lifecycle:
+
+1. `draft` - editable working material.
+2. `ai_draft` - draft narrative includes AI-generated text.
+3. `human_review_required` - requires named reviewer action before circulation.
+4. `reviewed` - human reviewer has confirmed review metadata.
+5. `internal_final` - explicitly confirmed internal final for the tenant workflow.
+6. `archived` - retained for record.
+7. `revoked` - no longer available for circulation or secure share.
+
+## 11. Draft / Review / Internal-Final States
+
+`Board Review Draft` means internal preparation material requiring human review. `Reviewed` requires a human action and audit metadata. `Internal final` means a tenant-internal confirmation, not board approval, certification, legal advice, investment advice, or external filing readiness.
+
+## 12. Audit Requirements
+
+Every future export should record safe metadata:
+
+- report id, organization id, actor id;
+- export timestamp and version;
+- status at export time;
+- source modules and data freshness;
+- human reviewer when present;
+- AI used yes/no and prompt version when present;
+- limitations and insufficient-data flags.
+
+No raw secrets, tokens, cookies, auth headers, session ids, API keys, or full sensitive prompt payloads.
+
+## 13. Security Requirements
+
+- Tenant scope must come from backend session/auth, not client-provided ownership.
+- Secure share must preserve status labels and never expose draft as approved material.
+- Revoked shares must remain unavailable.
+- Export metadata must avoid secrets and excessive PII.
+- External PDF services are out of scope; no data leaves the app for rendering.
+
+## 14. UX Requirements
+
+- A4-ready printable layout.
+- Premium executive hierarchy with clear cover, classification, status, and review metadata.
+- Page-break safe sections.
+- No cut-off cards, undefined values, `NaN`, `Infinity`, fake scores, or hidden missing-data states.
+- Required labels visible on every export: Board Review Draft, Human Review Required, Based on DSS Signals, Not Legal Advice, Not Investment Advice, Not Board Approved, Confidential.
+
+## 15. Future Implementation Phases
+
+1. C.17.1 - HTML Board Review Draft Renderer.
+2. C.17.2 - Export audit and snapshot persistence.
+3. C.17.3 - Print/PDF quality hardening.
+4. C.17.4 - Secure share integration with status preservation.
+
+## Conclusion
+
+Renderer status: **PLANNED / NOT IMPLEMENTED IN C.17.0**
+
+Recommended first implementation: **C.17.1 - HTML Board Review Draft Renderer**
+
+Why HTML first:
+
+- A4-ready browser export.
+- Safer than binary PDF generation at first.
+- Easier to test.
+- Compatible with existing report/export patterns.
+- No new package/dependency required initially.

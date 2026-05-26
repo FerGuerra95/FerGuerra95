@@ -137,6 +137,16 @@ No endpoint, UI, provider SDK, API key, external fetch, streaming path, or produ
 
 ---
 
+## 10. C.17.0 Renderer Guardrails
+
+- Renderer must preserve AI labels.
+- Renderer must not remove human-review warnings.
+- Renderer must not transform AI draft narrative into reviewed or internal-final status.
+- Renderer must not convert `insufficient_data` to synthetic scores.
+- Renderer must not present AI output as certification, legal advice, investment advice, or board approval.
+
+---
+
 ## Related
 
 - `AI_DATA_BOUNDARIES.md`  

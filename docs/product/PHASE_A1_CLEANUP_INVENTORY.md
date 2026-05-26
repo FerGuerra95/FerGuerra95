@@ -6937,3 +6937,19 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Truthfulness posture:** Draft-only; human review required; DSS signals only; no official score recalculation; no certification; no autonomous decision; not legal advice; not investment advice; not board approved.
 
 **Next recommended:** C.17.0 PDF Renderer or C.16.3 Provider Runtime Planning after DPA/subprocessor review.
+
+---
+
+## C.17.0 - Reporting / PDF / Board Pack Renderer Planning
+
+**Status:** COMPLETED / PLANNED / NO RUNTIME IMPLEMENTATION.
+
+**Baseline:** `HEAD = origin/main = a23fb99`.
+
+**Deliverables:** `docs/reporting/BOARD_PACK_RENDERER_PLAN.md`, `PDF_RENDERER_REQUIREMENTS.md`, `BOARD_REVIEW_DRAFT_SPEC.md`, and `REPORT_VERSIONING_AND_AUDIT.md`.
+
+**Decision:** C.17.1 should start with an HTML Board Review Draft Renderer because it is A4-ready, easier to test, compatible with existing export patterns, and does not require a new package/dependency initially.
+
+**Truthfulness posture:** Renderer is not source-of-truth, must preserve human review and AI labels, must not hide `insufficient_data`, and must not claim board approval, certification, legal advice, investment advice, or complete PDF readiness.
+
+**Runtime posture:** No code, tests, package/config, renderer, PDF generation, AI runtime, module behavior, Golden Dataset, or Formula Registry changed.

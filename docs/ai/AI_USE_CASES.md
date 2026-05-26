@@ -49,6 +49,16 @@
 
 ---
 
+## C.17.0 Board Pack Renderer Relationship
+
+- AI Board Review Draft Assistant may feed draft narrative into a future Board Pack renderer.
+- Renderer must preserve AI Draft, Requires Human Review, Based on DSS Signals, Not Legal Advice, Not Investment Advice, and Not Board Approved labels.
+- AI cannot set `reviewed` or `internal_final`.
+- AI cannot approve a report, certify a report, or replace module-owned source-of-truth.
+- See `docs/reporting/BOARD_REVIEW_DRAFT_SPEC.md`.
+
+---
+
 ## Related
 
 - `AI_READINESS_AUDIT.md`  

@@ -61,6 +61,12 @@ Say: "AI readiness is planned, but the current commercial offer is a private DSS
 
 Do not say: "The system autonomously advises the board" or "AI agents make the decisions."
 
+## If asked about PDF/export
+
+Say: "The Reporting / Board Pack renderer is planned in C.17. The current position is Board Review Draft, not board-approved final output, and export quality is being designed under truthfulness and security gates."
+
+Do not say: "Complete PDF reporting is ready," "certified PDF reports are available," or "AI generates final board packs autonomously."
+
 ## If asked about SOC2/ISO or procurement
 
 Say: "Security and privacy pilot procedures are documented, including audit, backup and credential hygiene. Formal SOC2/ISO, SLA, procurement pack, final DPA and retention automation remain future procurement work."
