@@ -1566,3 +1566,35 @@ Logic-integrity checks now cover:
 - Revoked snapshots cannot be previewed as active drafts.
 
 No backend, router, unrelated module, package/config, Golden Dataset, Formula Registry, AI runtime, secure share, or binary PDF changed.
+
+## C.17.8 - Reporting Production Smoke / Export Audit
+
+**Status:** PASSED WITH P2 RESIDUALS / AUTHENTICATED FLOW BLOCKED BY ENV/CREDENTIALS.
+
+Local validation result:
+
+- `npm run test:unit` PASS: 546 tests.
+- `npm run test:integration` PASS: 81 tests.
+- `npm run build` PASS.
+
+Production perimeter result:
+
+- App shell returned 200.
+- `/health` returned 200.
+- `/api/health` returned 200.
+- Unauthenticated `/api/reporting/board-review-snapshots` returned 401.
+- Unauthenticated `/api/executive/overview` returned 401.
+
+Authenticated Reporting result:
+
+- Blocked because local production smoke credentials were unavailable in the operator environment.
+- No login, snapshot create/list/read, persisted preview, workflow action, archive/revoke, or logout validation was executed against production.
+- No credentials, tokens, cookies, sessions, auth headers, JWTs, API keys, or private keys were printed.
+
+Logic-integrity posture:
+
+- Local tests still cover persisted snapshot tenant stripping, sensitive-field stripping, missing-score handling, `insufficient_data` preservation, 403/409 handling, and workflow state only after backend success.
+- Production unauthenticated perimeter confirms protected Reporting snapshot API is not publicly accessible.
+- Truthfulness checks for production UI/preview remain pending until authenticated smoke credentials are available.
+
+No runtime changes were made.

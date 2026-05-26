@@ -7053,3 +7053,21 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Runtime posture:** Frontend Reporting integration only. No backend, migration, router, unrelated module, package/config, PDF binary, secure-share public access, AI runtime, Golden Dataset, or Formula Registry changed.
 
 **Truthfulness posture:** Persisted preview does not recalculate scores, does not convert missing score to `0`, and preserves human-review/not-board-approved labels. Workflow state changes are shown only after backend API success.
+
+---
+
+## C.17.8 - Reporting Production Smoke / Export Audit
+
+**Status:** PASSED WITH P2 RESIDUALS / AUTHENTICATED FLOW BLOCKED BY ENV/CREDENTIALS.
+
+**Baseline:** `HEAD = origin/main = 7d5295d`.
+
+**Local validation:** `npm run test:unit` PASS with 546 tests, `npm run test:integration` PASS with 81 tests, and `npm run build` PASS.
+
+**Production perimeter:** `https://app.theceosos.com`, `/health`, and `/api/health` returned 200. Protected unauthenticated APIs `/api/reporting/board-review-snapshots` and `/api/executive/overview` returned 401.
+
+**Authenticated Reporting smoke:** Blocked in this operator shell because `CEOS_BASE_URL`, `CEOS_E2E_USER`, and `CEOS_E2E_PASSWORD` were not available. No credentials, tokens, cookies, sessions, auth headers, or secrets were printed.
+
+**Residual:** P2 environment/credential alignment. The persisted Reporting snapshot create/list/read/workflow UI path could not be validated against production in this phase.
+
+**Runtime posture:** No code, backend, frontend, tests, package/config, Golden Dataset, Formula Registry, PDF binary, AI runtime, public endpoint, or secure-share behavior changed.
