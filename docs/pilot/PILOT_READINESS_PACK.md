@@ -274,4 +274,16 @@ Customer-facing wording must keep CEO's OS positioned as Private Executive DSS /
 
 ---
 
+## C.22.5 / C.22.6 - Intake and Premium Demo Dataset
+
+| Asset | Status | Use |
+|---|---|---|
+| `CLIENT_DATA_INTAKE_SYSTEM.md` | **READY** | Minimum data system for a 48h Board Intelligence pilot start |
+| `PILOT_ONBOARDING_48H_CHECKLIST.md` | **READY** | Day 0 / Day 1 / Day 2 operating checklist |
+| `PREMIUM_DEMO_COMPANY_DATASET.md` | **READY** | Fictional IberNova Industrial Group S.L. demo storyline |
+
+Operating rule: real client data must be minimized, reviewed, and labelled. Demo data is fictional and must not be presented as a real customer, certification, investment recommendation, legal conclusion, or board-approved output.
+
+---
+
 **This document is an internal pilot readiness draft. It is not a contract, SLA, or legal advice.**

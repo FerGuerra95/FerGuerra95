@@ -69,6 +69,17 @@
 
 **Do not show:** all modules · marketplace as live · success-fee story.
 
+### Optional demo company storyline - IberNova Industrial Group S.L.
+
+Use `docs/pilot/PREMIUM_DEMO_COMPANY_DATASET.md` if a buyer needs a richer narrative:
+
+- IberNova is a fictional Spanish family-owned industrial group with EUR 22.0M revenue and EUR 3.2M EBITDA.
+- The board is reviewing whether to continue diligence on a supplier acquisition while preparing funding and compliance remediation.
+- The demo intentionally includes missing data: cash movement, target customer concentration, export-control screening, integration owner.
+- The correct message is: CEO's OS turns incomplete but realistic DSS signals into a traceable **Board Review Draft**, not a final recommendation.
+
+**Do not say:** IberNova is a real customer, real case study, certified result, or board-approved acquisition decision.
+
 ---
 
 ## 25–30 min — Pilot offer and next steps

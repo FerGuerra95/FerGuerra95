@@ -1732,3 +1732,18 @@ Logic-integrity result:
 Remaining operator note:
 
 - Manual 20-30 browser hop dry run is recommended immediately before external demo, but the automated navigation stability smoke passed in this environment.
+
+## C.22.5 / C.22.6 - Client Intake and Premium Demo Dataset
+
+**Status:** COMPLETED / docs and demo-data design only.
+
+Logic-integrity rules:
+
+- Premium demo data is fictional and must not be presented as real client data.
+- No real customer data, secrets, tokens, raw database exports, privileged legal advice, or unnecessary sensitive personal data should be used in demo materials.
+- Missing data in intake or demo company context must remain visible as **N/A**, **insufficient_data**, "not provided", or a board-review question.
+- Missing financial, compliance, funding, M&A, risk, or PMI inputs must not be converted into `0`, watch states, certified scores, or confident conclusions.
+- IberNova Industrial Group S.L. is a synthetic demo company only.
+- Board Review Draft remains draft-only, human-reviewed, not legal advice, not investment advice, and not board approved.
+
+No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, AI runtime, PDF runtime, auth, storage, or source-of-truth logic changed.

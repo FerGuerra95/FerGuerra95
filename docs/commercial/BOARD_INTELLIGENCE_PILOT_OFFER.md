@@ -135,8 +135,11 @@ See `DEMO_SCRIPT.md` — Board Intelligence spine: Executive Overview → Report
 - Pilot organization and user accounts (no shared prod passwords in tickets)  
 - NDA / pilot agreement (legal)  
 - Data intake per `PILOT_DATA_INTAKE_TEMPLATE.md` — minimize PII  
+- Minimum 48h intake package per `docs/pilot/CLIENT_DATA_INTAKE_SYSTEM.md` and `docs/pilot/PILOT_ONBOARDING_48H_CHECKLIST.md`  
 - Decision on optional module (M&A / Compliance / Funding)  
 - Acceptance that outputs are **DSS drafts**, not certified filings  
+
+If minimum data is not available, the first pilot deliverable becomes a missing-data map and board-review question set rather than a polished Board Review Draft.
 
 ---
 

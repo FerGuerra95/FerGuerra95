@@ -7227,3 +7227,27 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Manual validation note:** Browser-operator 20-30 hop validation should still be repeated before an external live demo, but the automated navigation smoke passed in this environment. No code/runtime changes were made in C.15.4d.
 
 **Result:** No P1 navigation crash reproduced. Prior `127.0.0.1:5173` connection refusal is classified as P2/env from Vite not being bound to that host.
+
+---
+
+## C.22.5 - Client Data Intake System
+
+**Status:** COMPLETED / PRODUCT OPS DOC READY.
+
+**Deliverable:** `docs/pilot/CLIENT_DATA_INTAKE_SYSTEM.md`.
+
+**Summary:** Defines the minimum Board Intelligence pilot data package, recommended module-level intake, prohibited data, sensitive-data rules, missing-data handling, 48h intake flow, and criteria for marking `insufficient_data`.
+
+**Truthfulness:** Missing data remains visible as N/A / `insufficient_data`; no fake certainty, no automatic decisions, no certification claims.
+
+---
+
+## C.22.6 - Premium Demo Dataset / Demo Company
+
+**Status:** COMPLETED / FICTIONAL DEMO COMPANY READY.
+
+**Deliverables:** `docs/pilot/PREMIUM_DEMO_COMPANY_DATASET.md` and `docs/pilot/PILOT_ONBOARDING_48H_CHECKLIST.md`.
+
+**Demo company:** IberNova Industrial Group S.L. - fictional Spanish family-owned industrial group with EUR 22.0M revenue, EUR 3.2M EBITDA, 140 employees, acquisition/funding/compliance pressures, and intentionally incomplete data.
+
+**Truthfulness:** Demo data is synthetic and must not be presented as a real customer, legal/investment advice, certified compliance, board-approved output, or procurement certification.
