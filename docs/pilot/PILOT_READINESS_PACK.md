@@ -377,6 +377,21 @@ C.24.3 adds the visual capture and QA plan required before recording:
 
 Recording should proceed only after visual QA passes and the shot list confirms synthetic data, labels, and screen safety.
 
+### AI video production setup
+
+C.24.4 prepares external production execution:
+
+| Asset | Status | Use |
+|---|---|---|
+| `../academy/AI_VIDEO_PRODUCTION_SETUP.md` | **READY** | External recording, editing, avatar, hosting, and approval workflow |
+| `../academy/RECORDING_REHEARSAL_CHECKLIST.md` | **READY** | Rehearsal checklist before recording |
+| `../academy/AI_VIDEO_TOOLING_DECISION.md` | **READY** | Recommended tooling decision and data cautions |
+| `../academy/FOUNDER_AVATAR_PRODUCTION_PLAN.md` | **READY** | Consent and approval path for founder avatar/voice |
+| `../academy/VIDEO_APPROVAL_AND_RELEASE_CHECKLIST.md` | **READY** | Release checklist before sharing externally |
+| `../academy/VIDEO_ASSET_VERSIONING_POLICY.md` | **READY** | Versioning, revocation, and external storage rules |
+
+Operating rule: video production may proceed outside the repository only after rehearsal, visual QA, truthfulness review, and founder/avatar approval where applicable.
+
 ---
 
 **This document is an internal pilot readiness draft. It is not a contract, SLA, or legal advice.**

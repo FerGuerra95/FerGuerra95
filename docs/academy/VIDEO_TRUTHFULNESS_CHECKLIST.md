@@ -50,6 +50,14 @@ The asset must not claim:
 - [ ] Browser print/save-as-PDF is not described as certified PDF.
 - [ ] Visual framing does not crop away risk/truthfulness labels.
 
+## Avatar / Voice / Founder Approval Checks
+
+- [ ] Founder avatar or likeness has Fernando's approval before external use.
+- [ ] Founder voice or AI voice has Fernando's approval before external use.
+- [ ] Avatar does not present fake testimonials, legal authority, investment authority, audit authority, or board approval.
+- [ ] Avatar/voice script uses approved DSS and human-review wording.
+- [ ] No real client data is included in avatar, voice, or video tool prompts.
+
 ## Product Accuracy
 
 - [ ] CEO Overview is explained as aggregator only.

@@ -20,6 +20,9 @@ Use this checklist before capturing screenshots or recording any CEO's OS Visual
 - [ ] Confirm no legal advice, investment advice, fairness opinion, certified compliance, SOC2/ISO, procurement-ready, or public marketplace claim appears.
 - [ ] Confirm Bridge and Heritage are labelled demo/future/internal when shown.
 - [ ] Confirm browser export/PDF is explained as print/save-as-PDF from the browser, not a CEO's OS certified PDF export.
+- [ ] Confirm recording/editing/avatar tools are approved for synthetic data.
+- [ ] Confirm no real data will be uploaded to external video or AI tools.
+- [ ] Confirm external tool workspace does not expose private links, tokens, or account data.
 
 ## Capture Environment
 
@@ -44,4 +47,3 @@ Use this checklist before capturing screenshots or recording any CEO's OS Visual
 - The route is wrong or stale.
 - The screen implies Bridge marketplace is live.
 - The screen implies PDF certification or board approval.
-

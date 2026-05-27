@@ -7519,3 +7519,26 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Capture posture:** The plan defines what screens to capture, what to avoid, required labels, narration cues, visual QA, and demo-safe classifications. It does not generate screenshots, videos, audio, thumbnails, or any other media.
 
 **Demo-safe rule:** External visuals must use IberNova/synthetic data, preserve N/A/insufficient_data, keep Board Review Draft/Human Review Required labels visible, and avoid board-approved, certified PDF, autonomous AI, legal/investment advice, SOC2/ISO, production AI provider traffic, or public marketplace claims.
+
+---
+
+## C.24.4 - Recording Rehearsal & AI Video Production Setup
+
+**Status:** COMPLETED / AI VIDEO PRODUCTION SETUP READY / NO MEDIA GENERATED YET.
+
+**Baseline:** `HEAD = origin/main = 585b65d`.
+
+**Deliverables:**
+
+- `docs/academy/AI_VIDEO_PRODUCTION_SETUP.md`
+- `docs/academy/RECORDING_REHEARSAL_CHECKLIST.md`
+- `docs/academy/AI_VIDEO_TOOLING_DECISION.md`
+- `docs/academy/FOUNDER_AVATAR_PRODUCTION_PLAN.md`
+- `docs/academy/VIDEO_APPROVAL_AND_RELEASE_CHECKLIST.md`
+- `docs/academy/VIDEO_ASSET_VERSIONING_POLICY.md`
+
+**Production posture:** External tools may be used for walkthrough capture, editing, captions, hosting, and optional avatar/founder-style presentation, but all media must remain outside the repository and must use synthetic data only.
+
+**Founder/avatar rule:** Any AI-generated founder image, avatar, voice, or presenter must be approved by Fernando before external use.
+
+**Release rule:** No external video can bypass rehearsal, visual QA, product truthfulness review, security/privacy review, versioning, and controlled link access.

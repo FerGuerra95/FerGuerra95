@@ -1977,3 +1977,22 @@ Screenshot and video artifacts are product outputs for truthfulness purposes. Th
 - Pass visual QA before recording or publication.
 
 No screenshots, videos, images, audio, media files, product code, backend, frontend, tests, package/config, Golden Dataset, Formula Registry, or source-of-truth logic were changed.
+
+---
+
+## C.24.4 - Recording Rehearsal & AI Video Production Setup
+
+**Status:** COMPLETED / docs-only video production setup.
+
+AI-generated videos, avatars, voices, captions, cover frames, and edited walkthroughs are product truthfulness artifacts. They cannot bypass review.
+
+Required controls:
+
+- Use synthetic/IberNova data only.
+- Do not upload real client data, prospect data, secrets, tokens, cookies, auth headers, session IDs, logs, or confidential screenshots to external video/AI tools.
+- Founder avatar, likeness, or voice requires Fernando approval before external use.
+- Every release must pass truthfulness, visual QA, security/privacy, caption, and versioning checks.
+- External links must be access controlled and revocable.
+- Old or inaccurate versions must be archived or revoked.
+
+No video, image, audio, avatar, voice, raw recording, media file, product code, backend, frontend, tests, package/config, Golden Dataset, Formula Registry, AI runtime, provider traffic, or source-of-truth logic was changed.

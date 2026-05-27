@@ -42,6 +42,12 @@ Examples:
 - `C24.1-ceos-overview-v0.1-draft-2026-05-27`
 - `C24.1-reporting-board-packs-v1.0-approved-2026-06-03`
 
+For C.24.4 production assets, also use `VIDEO_ASSET_VERSIONING_POLICY.md`.
+
+Recommended production filename:
+
+`CEOS_VisualAcademy_{AssetName}_{Audience}_{DataType}_v{Version}_YYYY-MM-DD`
+
 ## Version Log Template
 
 | Version | Date | Asset | Data used | Claim review | Security review | Status | Link owner |
@@ -67,4 +73,3 @@ Immediately remove access if:
 - Secrets or tokens appear.
 - A founder/avatar likeness was used without approval.
 - The video implies certification, board approval, legal/investment advice, autonomous AI, or production provider AI traffic.
-

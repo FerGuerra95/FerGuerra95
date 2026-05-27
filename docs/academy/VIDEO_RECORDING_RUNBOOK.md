@@ -5,10 +5,12 @@
 - Confirm the video scope and chapter list.
 - Use IberNova or other synthetic data only.
 - Confirm the environment is stable.
+- Run `RECORDING_REHEARSAL_CHECKLIST.md`.
 - Run `VISUAL_CAPTURE_CHECKLIST.md`.
 - Run `VISUAL_QA_BEFORE_RECORDING.md`.
 - Select shots from `SCREENSHOT_SHOT_LIST.md`.
 - Confirm screen classification in `DEMO_SAFE_SCREEN_GUIDE.md`.
+- Confirm tooling choice in `AI_VIDEO_TOOLING_DECISION.md`.
 - Confirm no real client/prospect data is loaded.
 - Close unrelated browser tabs and apps.
 - Disable notifications.
@@ -91,6 +93,17 @@ Review for:
 
 Run `VIDEO_TRUTHFULNESS_CHECKLIST.md` before publishing. Block the video if any forbidden claim appears.
 
+## 8A. External AI Video Production Workflow
+
+Use `AI_VIDEO_PRODUCTION_SETUP.md` when producing with external tools:
+
+1. Capture with Guidde, Supademo, Loom, or OBS.
+2. Add approved avatar/voice only if `FOUNDER_AVATAR_PRODUCTION_PLAN.md` requirements are met.
+3. Edit in Canva, CapCut, Descript, or equivalent outside the repo.
+4. Run `VIDEO_APPROVAL_AND_RELEASE_CHECKLIST.md`.
+5. Version using `VIDEO_ASSET_VERSIONING_POLICY.md`.
+6. Host externally with controlled access.
+
 ## 9. Exporting the Video
 
 Export video outside the repository.
@@ -134,3 +147,13 @@ Update the video when:
 - AI runtime status changes.
 - Legal/security claims change.
 - A forbidden claim is discovered.
+
+## 13. Approval Before Publishing
+
+No video can be sent to prospects until:
+
+- rehearsal has passed;
+- visual QA has passed;
+- product truthfulness review has passed;
+- avatar/founder approval is complete if used;
+- version and hosting access are assigned.
