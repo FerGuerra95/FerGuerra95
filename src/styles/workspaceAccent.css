@@ -950,14 +950,13 @@
   box-sizing: border-box;
   overflow-x: auto;
   overflow-y: visible;
-  border-radius: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.11);
-  border-top: 2px solid var(--ws-accent-border);
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.38), rgba(2, 6, 23, 0.78));
+    linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(2, 6, 23, 0.38)),
+    rgba(2, 6, 23, 0.28);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.032),
-    0 0 18px var(--ws-accent-glow);
+    inset 0 1px 0 rgba(255, 255, 255, 0.034);
   -webkit-overflow-scrolling: touch;
 }
 
@@ -1040,9 +1039,6 @@
   table.reporting-table.ceos-enterprise-table thead th,
   table.strategy-table.ceos-enterprise-table thead th,
   table.risk-enterprise-table.ceos-enterprise-table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
   padding: 13px 12px;
   font-size: 11px;
   font-weight: 820;
@@ -1051,10 +1047,10 @@
   color: rgba(248, 250, 252, 0.94);
   background: linear-gradient(
     180deg,
-    var(--ws-surface-strong),
-    var(--ws-surface)
+    rgba(15, 23, 42, 0.66),
+    rgba(15, 23, 42, 0.44)
   ) !important;
-  border-bottom: 1px solid var(--ws-accent-border) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 

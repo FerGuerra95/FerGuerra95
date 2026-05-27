@@ -22,8 +22,11 @@ export function BoardReviewSnapshotList({
   }
 
   return (
-    <div className="reporting-scroll" aria-label="Persisted Board Review snapshots">
-      <table className="reporting-table">
+    <div
+      className="reporting-scroll ceos-enterprise-table-wrap"
+      aria-label="Persisted Board Review snapshots"
+    >
+      <table className="reporting-table ceos-enterprise-table">
         <thead>
           <tr>
             <th>Snapshot</th>

@@ -46,3 +46,19 @@ Validation notes:
 
 - Build and unit tests passed after C.24.3b polish.
 - Playwright navigation smoke was not completed because the local Vite server was not running; run it again during recording rehearsal.
+
+---
+
+## C.24.3c Demo UI Layout Integration Notes
+
+| Screen | Classification | Reason | Required wording | Notes |
+|---|---|---|---|---|
+| Enterprise tables across demo-safe modules | SAFE_TO_SHOW_EXTERNAL | Table shells softened and integrated into panels | "DSS table evidence; human review required." | No floating/sticker table treatment |
+| Reporting snapshot list | SAFE_TO_SHOW_EXTERNAL | Persisted snapshots now use shared enterprise table shell | "Persisted review snapshot." | Revoked snapshots remain blocked from active preview |
+| Reporting table actions | SAFE_TO_SHOW_EXTERNAL | Buttons toned into panel/table surface | "Workflow changes appear only after backend confirmation." | Disabled states must remain visible |
+| Reporting table headers | SAFE_TO_SHOW_EXTERNAL | Sticky/z-index visual stacking removed from enterprise table headers | "Board Review Draft workspace." | No board-approved claim |
+
+Validation notes:
+
+- Build and unit tests passed after C.24.3c layout integration polish.
+- Playwright navigation smoke was not completed because the local Vite server was not running; run it again during recording rehearsal.

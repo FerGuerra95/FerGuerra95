@@ -2026,3 +2026,34 @@ Validation:
 - `npm run build` PASS.
 - `npm run test:unit` PASS: 552 tests.
 - Playwright navigation smoke blocked by environment because `http://127.0.0.1:5173` was not serving Vite; classify as P2/env, not product evidence.
+
+---
+
+## C.24.3c - Demo UI Layout Integration Polish
+
+**Status:** COMPLETED / scoped visual layout integration polish.
+
+Logic-integrity constraints preserved:
+
+- No formulas changed.
+- No Golden Dataset or Formula Registry changes.
+- No backend, auth, router, migrations, package/config, secrets, or runtime provider changes.
+- No base palette or global visual identity change.
+- No aggressive new global CSS, high z-index masking, absolute-position layout masking, or overflow hiding that cuts content.
+- N/A and insufficient_data remain visible.
+- Missing data was not converted to `0`.
+- DSS, Human Review Required, Board Review Draft, and Not Board Approved boundaries remain intact.
+
+Demo layout result:
+
+- Enterprise table shells were softened so tables sit inside panels instead of reading as floating stickers.
+- Enterprise table headers no longer use sticky/z-index layering that could visually sit above cards.
+- Reporting snapshot tables now use the same enterprise table shell as other persisted data tables.
+- Reporting table buttons were toned into the panel surface instead of reading as unrelated bright overlay actions.
+- Reporting panel/table spacing was normalized without changing values, columns, status logic, or workflow behavior.
+
+Validation:
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 552 tests.
+- Playwright navigation smoke blocked by environment because `http://127.0.0.1:5173` was not serving Vite; classify as P2/env, not product evidence.

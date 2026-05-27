@@ -10,8 +10,10 @@ export const reportingEnterpriseCss = `
   .reporting-copy,.reporting-muted { color: rgba(226,232,240,.72); margin: 0; }
   .reporting-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 16px; }
   .reporting-grid-two { display: grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap: 16px; }
-  .reporting-panel { background: rgba(15,23,42,.78); border: 1px solid rgba(148,163,184,.16); border-radius: 8px; color: #e2e8f0; }
+  .reporting-panel { background: rgba(15,23,42,.72); border: 1px solid rgba(148,163,184,.16); border-radius: 8px; color: #e2e8f0; }
   .reporting-panel h3 { margin: 0 0 10px; color: #f8fafc; letter-spacing: 0; }
+  .reporting-panel > .reporting-scroll,
+  .reporting-panel > .ceos-enterprise-table-wrap { margin-top: 14px; }
   .reporting-value { font-size: 1.7rem; color: #f8fafc; font-weight: 800; line-height: 1; }
   .reporting-toolbar { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 12px; align-items: end; padding: 16px; border: 1px solid rgba(148,163,184,.14); border-radius: 8px; background: rgba(2,6,23,.32); }
   .reporting-field { display: grid; gap: 6px; color: rgba(226,232,240,.78); font-size: .78rem; font-weight: 700; }
@@ -27,9 +29,10 @@ export const reportingEnterpriseCss = `
   .reporting-scroll { overflow-x: auto; border-radius: 8px; }
   .reporting-table { width: 100%; border-collapse: collapse; font-size: .86rem; table-layout: fixed; min-width: 760px; }
   .reporting-table th,.reporting-table td { padding: 13px 14px; border-bottom: 1px solid rgba(148,163,184,.12); text-align: left; color: rgba(226,232,240,.84); vertical-align: top; overflow-wrap: anywhere; }
-  .reporting-table th { color: rgba(248,250,252,.92); font-size: .72rem; text-transform: uppercase; letter-spacing: 0; background: rgba(15,23,42,.64); }
+  .reporting-table th { color: rgba(248,250,252,.92); font-size: .72rem; text-transform: uppercase; letter-spacing: 0; background: rgba(15,23,42,.48); }
   .reporting-table tbody tr:hover td { background: rgba(148,163,184,.045); }
-  .reporting-table-action { min-height: 34px; border: 1px solid rgba(148,163,184,.28); border-radius: 8px; padding: 0 12px; background: rgba(226,232,240,.94); color: #020617; font-weight: 800; cursor: pointer; white-space: nowrap; }
+  .reporting-table-action { min-height: 34px; border: 1px solid rgba(148,163,184,.26); border-radius: 8px; padding: 0 12px; background: rgba(15,23,42,.62); color: #f8fafc; font-weight: 800; cursor: pointer; white-space: nowrap; }
+  .reporting-table-action:hover:not(:disabled) { border-color: rgba(226,232,240,.38); background: rgba(30,41,59,.76); }
   .reporting-table-action:disabled { opacity: .5; cursor: not-allowed; }
   .reporting-table-link { border: 0; padding: 0; background: transparent; color: #f8fafc; font: inherit; font-weight: 800; text-align: left; cursor: pointer; }
   .reporting-preview-note { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; color: rgba(226,232,240,.74); font-size: .82rem; }

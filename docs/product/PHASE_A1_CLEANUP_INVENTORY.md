@@ -7580,3 +7580,42 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 - `npm run build` PASS.
 - `npm run test:unit` PASS: 552 tests.
 - `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` P2/env: Vite was not running at `http://127.0.0.1:5173`, so navigation smoke could not start.
+
+---
+
+## C.24.3c - Demo UI Layout Integration Polish
+
+**Status:** COMPLETED / DEMO TABLES AND PANELS VISUALLY INTEGRATED.
+
+**Baseline:** `HEAD = origin/main = 72d69ec`.
+
+**Routes reviewed for layout integration scope:**
+
+- `/dashboard` / `/ceo`
+- `/reporting`
+- `/reporting/library`
+- `/funding/dashboard`
+- `/ma/dashboard`
+- `/compliance/dashboard`
+- `/compliance/suppliers`
+- `/compliance/evidence`
+- `/risk/register`
+- `/pmi/dashboard`
+- `/governance/dashboard`
+- `/strategy/dashboard`
+
+**Layout polish applied:**
+
+- Reduced the opt-in enterprise table shell glow/shadow so tables read as part of their parent panels rather than floating layers.
+- Removed sticky/z-index table header behavior from enterprise table headers to avoid visual stacking above surrounding cards.
+- Softened enterprise table shell borders/backgrounds while preserving the dark executive workspace theme.
+- Integrated Reporting snapshot tables into the shared enterprise table shell.
+- Added consistent Reporting panel-to-table spacing and toned table action buttons into the panel surface.
+
+**Safety:** No formulas, Golden Dataset, Formula Registry, backend, auth/router, package/config, base color palette, product calculations, source-of-truth logic, or data rendering semantics changed. N/A and insufficient_data remain visible.
+
+**Validation:**
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 552 tests.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` P2/env: Vite was not running at `http://127.0.0.1:5173`, so navigation smoke could not start.

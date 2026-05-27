@@ -100,3 +100,39 @@ Validation notes:
 
 - Build and unit tests passed after polish.
 - Automated navigation smoke still requires launching Vite at `127.0.0.1:5173` before recording rehearsal.
+
+---
+
+## C.24.3c Demo UI Layout Integration Polish
+
+**Status:** COMPLETED / layout integration ready for recording QA pass.
+
+Routes reviewed for layout integration:
+
+- `/dashboard` / `/ceo`
+- `/reporting`
+- `/reporting/library`
+- `/funding/dashboard`
+- `/ma/dashboard`
+- `/compliance/dashboard`
+- `/compliance/suppliers`
+- `/compliance/evidence`
+- `/risk/register`
+- `/pmi/dashboard`
+- `/governance/dashboard`
+- `/strategy/dashboard`
+
+Visual layout updates to verify during recording:
+
+- Enterprise tables should read as integrated panel content, not floating overlay cards.
+- Reporting snapshot list should use the same table shell treatment as other persisted lists.
+- Reporting table headers should not visually stack above the surrounding panel.
+- Reporting table action buttons should sit calmly inside the table, with disabled states still clear.
+- No table should hide N/A or insufficient_data to achieve a cleaner screenshot.
+
+No calculation, formula, source-of-truth, base theme, palette, or Golden Dataset changes were made.
+
+Validation notes:
+
+- Build and unit tests passed after layout polish.
+- Automated navigation smoke still requires launching Vite at `127.0.0.1:5173` before recording rehearsal.
