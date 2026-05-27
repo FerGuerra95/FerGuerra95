@@ -1933,3 +1933,29 @@ Publishing gate:
 - Use `docs/academy/VIDEO_TRUTHFULNESS_CHECKLIST.md` before any video/manual publication.
 - Use `docs/academy/VIDEO_HOSTING_AND_VERSIONING.md` to keep rendered media outside the repository and versioned externally.
 - Block publication if any forbidden claim, real data, secret, or unapproved likeness appears.
+
+---
+
+## C.24.2 - Practical User Manual Walkthrough & Export Tutorial
+
+**Status:** COMPLETED / docs-only user-manual scripting.
+
+Generated documents shown in videos must preserve:
+
+- DSS framing.
+- Human Review Required.
+- Board Review Draft wording.
+- Not Board Approved wording.
+- Not Legal Advice / Not Investment Advice.
+- Synthetic/IberNova data labels.
+- Missing data visibility.
+- No certification or autonomous-AI claims.
+
+Export/PDF integrity rules:
+
+- Browser print/save-as-PDF may be demonstrated as a manual browser convenience only.
+- Do not call browser-saved files certified PDFs.
+- Do not imply a product-native binary PDF export exists unless implemented in a later approved phase.
+- A saved document must still be reviewed before sharing.
+
+No videos, images, audio, media files, product code, backend, frontend, tests, package/config, Golden Dataset, Formula Registry, runtime AI, or PDF runtime were changed.

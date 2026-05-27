@@ -49,6 +49,15 @@ The asset must not claim:
 - [ ] Bridge is internal/unlisted/demo only.
 - [ ] Heritage is future/premium unless supported by explicit data.
 
+## Export / PDF Wording Rules
+
+- [ ] If the video shows `Ctrl+P` or browser print, call it "browser-native print/save-as-PDF."
+- [ ] If a PDF file is saved, call it a "convenience copy of the HTML Board Review Draft."
+- [ ] Do not call it a certified PDF.
+- [ ] Do not imply CEO's OS has implemented binary PDF generation if the workflow is browser-native.
+- [ ] Do not imply the saved PDF is legally approved, board-approved, digitally signed, filed, or certified.
+- [ ] State that the saved copy must be reviewed before sharing.
+
 ## Publication Decision
 
 | Result | Action |
@@ -57,4 +66,3 @@ The asset must not claim:
 | Minor wording issue | Edit script/caption and re-review |
 | Any forbidden claim | Block publication |
 | Any secret/real data exposure | Block publication and delete draft from unsafe location |
-

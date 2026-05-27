@@ -160,3 +160,23 @@ Never imply the module makes final decisions, certifies results, gives legal/inv
 
 **Script:** "Heritage is a premium/future narrative layer for continuity, succession, and institutional memory. It should be framed as roadmap or limited demo context unless implemented with real source data."
 
+## Video 11 - Practical User Manual / End-to-End Walkthrough
+
+**Duration:** 35-60 minutes.
+
+**Script:** "This practical walkthrough shows how a pilot user enters CEO's OS, navigates branches, creates a persisted Board Review snapshot, opens the HTML Board Review Draft, reviews workflow states, and uses browser-native print/save-as-PDF for a convenience copy."
+
+**Demo beats:**
+
+- Login and navigation.
+- CEO Overview cards/radar.
+- Reporting / Board Packs.
+- Create persisted snapshot.
+- Open HTML Board Review Draft.
+- Explain draft/reviewed/internal_final.
+- Use browser print/save as PDF.
+- Walk through M&A, Funding, Compliance/Risk, and limited operating modules.
+
+**Must say:** "Browser save-as-PDF is a convenience copy of the HTML Board Review Draft, not a certified PDF export."
+
+**Must not say:** "CEO's OS generated a certified PDF", "board-approved", "autonomous AI", "legal advice", or "investment advice."

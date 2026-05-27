@@ -38,6 +38,7 @@ Do not position CEO's OS as:
 | Visual manual | Pilot operators, internal team | Provide screen-by-screen explanation | Controlled PDF/HTML |
 | Founder/avatar intro | Prospects | Add trust and founder context | Optional/unlisted |
 | Claim checklist | Internal reviewers | Prevent unsafe publishing | Internal |
+| Practical user manual video | Pilot users, demo operators | Teach end-to-end app use, snapshot creation, preview, and browser save-as-PDF | Controlled/unlisted |
 
 ## Recommended Video Set
 
@@ -55,6 +56,24 @@ Do not position CEO's OS as:
 | Strategy | 2-3 min | Synthetic initiative map | Initiative alignment and strategic questions |
 | Bridge | 2 min | Synthetic/internal signals | Internal/unlisted cross-module signals only |
 | Heritage | 2 min | Synthetic/future narrative | Premium/future continuity narrative |
+| Practical user manual | 35-60 min | IberNova synthetic | End-to-end walkthrough from login to Board Review Draft preview and browser save-as-PDF |
+
+## Flagship Onboarding Asset
+
+The practical user manual video is the flagship onboarding asset for qualified pilots. It should be sent after discovery or used during guided onboarding, not as a cold first-touch asset.
+
+The video should show:
+
+- Login and app navigation.
+- CEO Overview as aggregator.
+- Reporting / Board Packs.
+- Persisted snapshot creation.
+- HTML Board Review Draft preview.
+- Workflow states.
+- Browser-native print/save as PDF.
+- Limited branch walkthroughs.
+
+It must not imply that CEO's OS produces a certified PDF, approves board materials, gives legal/investment advice, or uses production AI provider traffic.
 
 ## Production Workflow
 
@@ -99,4 +118,3 @@ Every visual asset must pass:
 ## C.24.1 Status
 
 PLANNED / VISUAL ACADEMY DOCUMENTED / NO MEDIA GENERATED.
-

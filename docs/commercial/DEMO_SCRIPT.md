@@ -160,4 +160,14 @@ Recommended external pre-demo sequence:
 
 Do not use visual academy material to imply board approval, certification, autonomous AI, legal/investment advice, SOC2/ISO status, production provider AI traffic, or a real client case study.
 
+### Practical user manual timing
+
+The practical user manual video should be sent after discovery or after a prospect has agreed to a guided demo/pilot scoping step. Do not send the full 35-60 minute walkthrough as the first outreach asset; it can overwhelm early prospects.
+
+Use it when:
+
+- a pilot user needs onboarding;
+- a sponsor asks how the workflow actually operates;
+- the prospect wants to understand snapshot creation, preview, and browser save-as-PDF before inviting more users.
+
 **Related:** `DEMO_CHECKLIST.md` · `DEMO_OBJECTION_HANDLING.md` · `CEO_OS_ONE_PAGER.md`

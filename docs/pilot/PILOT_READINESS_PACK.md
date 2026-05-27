@@ -349,6 +349,20 @@ Operating rule: first demos should use IberNova/synthetic data. Real data requir
 
 Operating rule: visual academy assets may support synthetic-first pilot education, but they do not replace live demo validation, legal path approval, or human review. No real videos, generated avatars, screenshot assets, or heavy media files are stored in the repository.
 
+### Practical user manual video
+
+C.24.2 adds the planned practical user manual script and storyboard for onboarding:
+
+| Asset | Status | Use |
+|---|---|---|
+| `../academy/PRACTICAL_USER_MANUAL_VIDEO_SCRIPT.md` | **READY** | 35-60 minute script from login to Board Review Draft preview and browser save-as-PDF |
+| `../academy/USER_MANUAL_WALKTHROUGH_STORYBOARD.md` | **READY** | Step-by-step screen/action/narration map |
+| `../academy/EXPORT_AND_BOARD_REVIEW_DRAFT_TUTORIAL.md` | **READY** | Board Review Draft and browser PDF wording tutorial |
+| `../academy/BRANCH_BUTTONS_AND_ACTIONS_CHECKLIST.md` | **READY** | Branch-level button/action checklist |
+| `../academy/VIDEO_RECORDING_RUNBOOK.md` | **READY** | Recording, review, export, hosting, and update runbook |
+
+The practical video remains planned only; no media is generated or stored in the repository.
+
 ---
 
 **This document is an internal pilot readiness draft. It is not a contract, SLA, or legal advice.**

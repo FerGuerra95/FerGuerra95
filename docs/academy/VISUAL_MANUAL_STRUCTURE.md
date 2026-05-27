@@ -35,6 +35,23 @@ Do not commit heavy video files, raw recordings, or unreviewed screenshot export
 17. Pilot path: 48h onboarding and legal/data boundary.
 18. Appendix: claim checklist and version log.
 
+## Practical Walkthrough Section
+
+Add a practical walkthrough chapter for pilot onboarding:
+
+1. Login and navigation.
+2. CEO Overview.
+3. Reporting / Board Packs.
+4. Persisted snapshot creation.
+5. HTML Board Review Draft preview.
+6. Workflow states.
+7. Browser-native print/save-as-PDF.
+8. M&A / Funding / Compliance / Risk walkthrough.
+9. Limited PMI / Governance / Strategy context.
+10. Bridge / Heritage as internal/demo/future context.
+
+This section should be operational and button-oriented. It should not read like a sales deck.
+
 ## Page Template
 
 | Section | Content |
@@ -63,4 +80,3 @@ Example:
 - Use captions, not dense prose.
 - Keep Board Review Draft / Human Review Required labels visible.
 - Do not include future modules unless labelled roadmap/demo.
-

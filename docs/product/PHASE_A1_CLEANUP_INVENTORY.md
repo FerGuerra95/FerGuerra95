@@ -7479,3 +7479,23 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Academy posture:** The visual academy is a documentation and planning layer for external synthetic demos, branch videos, a visual manual, screenshots, and optional founder/avatar use. No video files, screenshot assets, generated images, AI avatar files, provider traffic, runtime AI, code, tests, backend, frontend, Golden Dataset, Formula Registry, package/config, or secrets were changed.
 
 **Truthfulness:** All visual academy materials must preserve DSS, Human Review Required, synthetic/IberNova labels, no board-approved output, no certified PDF, no autonomous AI, no legal/investment advice, no SOC2/ISO claim, and no production AI provider traffic.
+
+---
+
+## C.24.2 - Practical User Manual Walkthrough & Export Tutorial
+
+**Status:** COMPLETED / PRACTICAL USER MANUAL VIDEO SCRIPT READY / NO MEDIA GENERATED YET.
+
+**Baseline:** `HEAD = origin/main = b7b5082`.
+
+**Deliverables:**
+
+- `docs/academy/PRACTICAL_USER_MANUAL_VIDEO_SCRIPT.md`
+- `docs/academy/USER_MANUAL_WALKTHROUGH_STORYBOARD.md`
+- `docs/academy/EXPORT_AND_BOARD_REVIEW_DRAFT_TUTORIAL.md`
+- `docs/academy/BRANCH_BUTTONS_AND_ACTIONS_CHECKLIST.md`
+- `docs/academy/VIDEO_RECORDING_RUNBOOK.md`
+
+**Manual posture:** The practical user manual teaches the end-to-end synthetic workflow: login, navigation, CEO Overview, Reporting / Board Packs, persisted snapshot creation, HTML Board Review Draft preview, workflow states, browser-native save/print as PDF, and branch walkthroughs. It does not create video/media assets or product runtime behavior.
+
+**Export wording:** Browser print/save-as-PDF may be shown only as a convenience copy of the HTML Board Review Draft. It must not be described as a CEO's OS certified PDF, binary PDF export, legal approval, investment recommendation, or board-approved artifact.
