@@ -2540,8 +2540,8 @@ function getNextActions(score) {
         status: 'Required'
       },
       {
-        title: 'Preparar report',
-        description: 'Exportar informe ejecutivo y narrativa CIM preliminar.',
+        title: 'Preparar Board Review draft',
+        description: 'Descargar HTML draft y narrativa CIM preliminar para revision humana.',
         status: 'Ready'
       }
     ];

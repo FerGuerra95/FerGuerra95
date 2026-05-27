@@ -1996,3 +1996,33 @@ Required controls:
 - Old or inaccurate versions must be archived or revoked.
 
 No video, image, audio, avatar, voice, raw recording, media file, product code, backend, frontend, tests, package/config, Golden Dataset, Formula Registry, AI runtime, provider traffic, or source-of-truth logic was changed.
+
+---
+
+## C.24.3b - Demo UI Copy & Visual Readiness Polish
+
+**Status:** COMPLETED / scoped frontend copy and visual polish.
+
+Logic-integrity constraints preserved:
+
+- No formulas changed.
+- No Golden Dataset or Formula Registry changes.
+- No backend, auth, router, migrations, package/config, secrets, or runtime provider changes.
+- No base color/style system change and no aggressive global CSS.
+- N/A and insufficient_data remain visible.
+- Missing data was not converted to `0`.
+- Board Review Draft, Human Review Required, Not Board Approved, DSS, and browser print/save-as-PDF convenience-copy language were preserved.
+- No certified PDF, board-approved output, autonomous AI, legal/investment advice, or public marketplace claim was introduced.
+
+Demo polish result:
+
+- Compliance placeholder component copy was replaced with review-safe synthetic DSS copy.
+- M&A report actions now describe HTML draft download and browser print/save-as-PDF rather than implying certified PDF/export finality.
+- Reporting snapshot tables/actions gained clearer visual wrapping and disabled-state explanations without changing workflow logic.
+- Bridge copy in CEO Overview now says internal/unlisted demo layer, not live marketplace.
+
+Validation:
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 552 tests.
+- Playwright navigation smoke blocked by environment because `http://127.0.0.1:5173` was not serving Vite; classify as P2/env, not product evidence.

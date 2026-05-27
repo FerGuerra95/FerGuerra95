@@ -1782,7 +1782,7 @@ export function CEOOverviewPage() {
     title: 'Bridge opportunity pipeline',
     posture: 'insufficient_data',
     description:
-      'Bridge connects cross-module signals and counterparties. Preview pipeline — not a public marketplace certification.',
+      'Bridge connects cross-module signals and counterparties. Internal/unlisted demo layer — not a live marketplace.',
     route: '/bridge/dashboard',
     latestTitle: 'Insufficient persisted bridge data'
   });

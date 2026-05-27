@@ -7542,3 +7542,41 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Founder/avatar rule:** Any AI-generated founder image, avatar, voice, or presenter must be approved by Fernando before external use.
 
 **Release rule:** No external video can bypass rehearsal, visual QA, product truthfulness review, security/privacy review, versioning, and controlled link access.
+
+---
+
+## C.24.3b - Demo UI Copy & Visual Readiness Polish
+
+**Status:** COMPLETED / DEMO UI COPY AND VISUAL READINESS POLISHED.
+
+**Baseline:** `HEAD = origin/main = 56d90d8`.
+
+**Routes reviewed for demo-safe capture:**
+
+- `/dashboard` / `/ceo`
+- `/reporting`
+- `/reporting/library`
+- `/funding/dashboard`
+- `/ma/dashboard`
+- `/compliance/dashboard`
+- `/risk/register`
+- `/pmi/dashboard`
+- `/governance/dashboard`
+- `/strategy/dashboard`
+
+**Polish applied:**
+
+- Replaced Compliance placeholder component copy with synthetic/human-review DSS language.
+- Relabelled Bridge CEO Overview copy as internal/unlisted demo layer, not a live marketplace.
+- Relabelled M&A export/print UI as HTML draft and browser print/save-as-PDF convenience copy.
+- Added clearer disabled workflow hints for Reporting reviewed/internal_final actions.
+- Improved Reporting table wrapping, row separation, header readability, and horizontal overflow handling.
+- Preserved N/A rendering and stopped generic table cells from treating valid `0` values as missing.
+
+**Safety:** No formulas, Golden Dataset, Formula Registry, backend, auth/router, package/config, base color palette, global CSS, or product calculations changed.
+
+**Validation:**
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 552 tests.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` P2/env: Vite was not running at `http://127.0.0.1:5173`, so navigation smoke could not start.

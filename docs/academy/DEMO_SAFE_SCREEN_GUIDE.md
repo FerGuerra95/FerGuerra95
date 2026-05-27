@@ -31,3 +31,18 @@ Use this guide to decide what can be shown in external visuals.
 | API/network panel | DO_NOT_SHOW | Token/data risk | N/A | Never show in external visuals |
 | Account/profile with real email | DO_NOT_SHOW | Personal data risk | N/A | Use synthetic/blur outside repo if needed |
 
+---
+
+## C.24.3b Demo UI Polish Notes
+
+| Screen | Classification | Reason | Required wording | Notes |
+|---|---|---|---|---|
+| Compliance alert/supplier review cards | SAFE_TO_SHOW_EXTERNAL | Placeholder copy removed | "Synthetic alert/supplier review; human review required." | Not a certified audit |
+| Reporting snapshot table/actions | SAFE_TO_SHOW_EXTERNAL | Table wrapping and action hints improved | "Workflow changes appear only after backend confirmation." | Internal Final is not board approval |
+| M&A report controls | SHOW_WITH_LABELS | Export wording can be misread | "HTML draft and browser print/save-as-PDF convenience copy." | Not certified PDF |
+| CEO Overview Bridge card | SHOW_WITH_LABELS | Marketplace wording risk | "Internal/unlisted demo layer, not a live marketplace." | Keep future/demo boundary |
+
+Validation notes:
+
+- Build and unit tests passed after C.24.3b polish.
+- Playwright navigation smoke was not completed because the local Vite server was not running; run it again during recording rehearsal.

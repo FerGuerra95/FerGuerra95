@@ -65,6 +65,7 @@ export function BoardReviewSnapshotList({
                     type="button"
                     className="reporting-table-action"
                     disabled={revoked}
+                    title={revoked ? 'Revoked snapshots cannot be opened as active Board Review Drafts' : 'Open persisted HTML Board Review Draft preview'}
                     onClick={() => onPreview?.(snapshot)}
                   >
                     {revoked ? 'Revoked' : 'Open persisted preview'}

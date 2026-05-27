@@ -24,9 +24,11 @@ export const reportingEnterpriseCss = `
   .ceos-enterprise-filter-clear:hover:not(:disabled) { border-color: rgba(226,232,240,.42); background: rgba(30,41,59,.92); }
   .ceos-enterprise-filter-clear:disabled { opacity: .42; cursor: not-allowed; }
   .reporting-empty { border: 1px dashed rgba(148,163,184,.24); border-radius: 8px; padding: 18px; color: rgba(226,232,240,.68); background: rgba(15,23,42,.42); }
-  .reporting-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
-  .reporting-table th,.reporting-table td { padding: 12px; border-bottom: 1px solid rgba(148,163,184,.12); text-align: left; color: rgba(226,232,240,.84); vertical-align: top; }
-  .reporting-table th { color: rgba(248,250,252,.92); font-size: .72rem; text-transform: uppercase; letter-spacing: 0; }
+  .reporting-scroll { overflow-x: auto; border-radius: 8px; }
+  .reporting-table { width: 100%; border-collapse: collapse; font-size: .86rem; table-layout: fixed; min-width: 760px; }
+  .reporting-table th,.reporting-table td { padding: 13px 14px; border-bottom: 1px solid rgba(148,163,184,.12); text-align: left; color: rgba(226,232,240,.84); vertical-align: top; overflow-wrap: anywhere; }
+  .reporting-table th { color: rgba(248,250,252,.92); font-size: .72rem; text-transform: uppercase; letter-spacing: 0; background: rgba(15,23,42,.64); }
+  .reporting-table tbody tr:hover td { background: rgba(148,163,184,.045); }
   .reporting-table-action { min-height: 34px; border: 1px solid rgba(148,163,184,.28); border-radius: 8px; padding: 0 12px; background: rgba(226,232,240,.94); color: #020617; font-weight: 800; cursor: pointer; white-space: nowrap; }
   .reporting-table-action:disabled { opacity: .5; cursor: not-allowed; }
   .reporting-table-link { border: 0; padding: 0; background: transparent; color: #f8fafc; font: inherit; font-weight: 800; text-align: left; cursor: pointer; }
@@ -35,7 +37,7 @@ export const reportingEnterpriseCss = `
   .reporting-snapshot-area { display: grid; gap: 14px; }
   .reporting-snapshot-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border: 1px solid rgba(148,163,184,.14); border-radius: 8px; padding: 14px; background: rgba(2,6,23,.24); }
   .reporting-snapshot-actions .reporting-muted { flex: 1 1 260px; }
-  @media (max-width: 760px) { .reporting-hero { padding: 20px; } .reporting-table { min-width: 720px; } .reporting-scroll { overflow-x: auto; } }
+  @media (max-width: 760px) { .reporting-hero { padding: 20px; } .reporting-table { min-width: 720px; } }
 `;
 
 export function ReportingKpi({ label, value, description }) {
@@ -60,6 +62,12 @@ export function ReportingStatusBadge({ status }) {
 }
 
 export function ReportingTable({ title, items = [], columns = [] }) {
+  function renderCell(item, column) {
+    if (column.render) return column.render(item);
+    const value = item[column.key];
+    return value === null || value === undefined || value === '' ? 'N/A' : value;
+  }
+
   return (
     <Card className="reporting-panel">
       <h3>{title}</h3>
@@ -72,7 +80,7 @@ export function ReportingTable({ title, items = [], columns = [] }) {
         <div className="reporting-scroll ceos-enterprise-table-wrap">
           <table className="reporting-table ceos-enterprise-table">
             <thead><tr>{columns.map((column) => <th key={column.key}>{column.label}</th>)}</tr></thead>
-            <tbody>{items.map((item) => <tr key={item.id}>{columns.map((column) => <td key={column.key}>{column.render ? column.render(item) : item[column.key] || 'N/A'}</td>)}</tr>)}</tbody>
+            <tbody>{items.map((item) => <tr key={item.id}>{columns.map((column) => <td key={column.key}>{renderCell(item, column)}</td>)}</tr>)}</tbody>
           </table>
         </div>
       ) : null}

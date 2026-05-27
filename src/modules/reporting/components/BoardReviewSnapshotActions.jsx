@@ -42,6 +42,7 @@ export function BoardReviewSnapshotActions({
         type="button"
         className="reporting-button"
         disabled={!canReview || !canMarkReviewed(snapshot) || loading}
+        title={!canMarkReviewed(snapshot) ? 'Requires an active draft snapshot and review permission' : 'Confirm human review'}
         onClick={() => onMarkReviewed?.(snapshot)}
       >
         Mark reviewed
@@ -50,6 +51,7 @@ export function BoardReviewSnapshotActions({
         type="button"
         className="reporting-button"
         disabled={!canFinalize || !canMarkInternalFinal(snapshot) || loading}
+        title={!canMarkInternalFinal(snapshot) ? 'Requires reviewed status and explicit human approval' : 'Confirm internal final state'}
         onClick={() => onMarkInternalFinal?.(snapshot)}
       >
         Mark internal final
@@ -71,7 +73,7 @@ export function BoardReviewSnapshotActions({
         Revoke
       </button>
       <p className="reporting-muted">
-        Workflow changes are shown only after backend confirmation. Internal Final is not board approval.
+        Workflow changes appear only after backend confirmation. Internal Final is an internal review state, not board approval.
       </p>
     </div>
   );

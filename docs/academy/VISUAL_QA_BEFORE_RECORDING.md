@@ -67,3 +67,36 @@ Run this QA pass before recording or screenshot capture.
 | Claim/data/security issue | Block capture |
 | Runtime product issue | Stop and classify separately |
 
+---
+
+## C.24.3b Demo UI Copy & Visual Readiness Polish
+
+**Status:** COMPLETED / ready for recording QA pass.
+
+Routes reviewed:
+
+- `/dashboard` / `/ceo`
+- `/reporting`
+- `/reporting/library`
+- `/funding/dashboard`
+- `/ma/dashboard`
+- `/compliance/dashboard`
+- `/risk/register`
+- `/pmi/dashboard`
+- `/governance/dashboard`
+- `/strategy/dashboard`
+
+Visual/copy updates to verify during recording:
+
+- Compliance cards should not show placeholder/build copy.
+- Reporting snapshot tables should wrap long titles and keep horizontal overflow controlled.
+- Reporting workflow buttons should explain disabled prerequisites and backend-confirmed state changes.
+- M&A report controls should say HTML draft and browser print/save-as-PDF convenience copy, not certified PDF.
+- Bridge should read as internal/unlisted demo layer, not live marketplace.
+
+No calculation, formula, base theme, palette, or Golden Dataset changes were made.
+
+Validation notes:
+
+- Build and unit tests passed after polish.
+- Automated navigation smoke still requires launching Vite at `127.0.0.1:5173` before recording rehearsal.

@@ -224,7 +224,7 @@ export function MAReportExportButton({
 
       notifyExport(
         onExportComplete,
-        'Informe M&A profesional descargado correctamente en HTML'
+        'Board Review draft descargado correctamente en HTML'
       );
     } catch (error) {
       notifyExport(
@@ -256,7 +256,7 @@ export function MAReportExportButton({
       if (!printWindow) {
         notifyExport(
           onExportComplete,
-          'El navegador ha bloqueado la ventana de impresion. Permite ventanas emergentes para guardar el informe como PDF'
+          'El navegador ha bloqueado la ventana de impresion. Permite ventanas emergentes para usar print/save-as-PDF del navegador'
         );
 
         return;
@@ -284,7 +284,7 @@ export function MAReportExportButton({
 
       notifyExport(
         onExportComplete,
-        'Vista imprimible abierta. Para conservar el diseno premium, activa "Graficos de fondo" en la ventana de impresion'
+        'Vista imprimible abierta. Usa print/save-as-PDF del navegador como copia de conveniencia, no como PDF certificado'
       );
     } catch (error) {
       notifyExport(
@@ -374,11 +374,11 @@ export function MAReportExportButton({
         title={
           disabled
             ? 'Completa los inputs obligatorios antes de exportar'
-            : 'Descargar informe ejecutivo en HTML'
+            : 'Descargar Board Review draft en HTML'
         }
       >
         <Download size={16} />
-        {isExporting ? 'Generando...' : 'Exportar informe'}
+        {isExporting ? 'Preparing...' : 'Download HTML draft'}
       </Button>
 
       {showPrintButton ? (
@@ -390,11 +390,11 @@ export function MAReportExportButton({
           title={
             disabled
               ? 'Completa los inputs obligatorios antes de imprimir'
-              : 'Abrir informe imprimible'
+              : 'Abrir vista imprimible del navegador'
           }
         >
           <Printer size={16} />
-          Imprimir PDF
+          Browser save PDF
         </Button>
       ) : null}
 
@@ -416,7 +416,7 @@ export function MAReportExportButton({
       ) : null}
 
       <div className="ma-report-export-hint">
-        Informe HTML, vista PDF y secure sharing autenticado.
+        HTML draft, browser print/save-as-PDF convenience copy, and authenticated secure share where enabled.
       </div>
     </div>
   );
