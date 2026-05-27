@@ -241,3 +241,37 @@ No calculation, formula, source-of-truth, workflow, base theme, palette, or Gold
 Validation notes:
 
 - Build, unit tests, and navigation smoke passed after C.24.3f.
+
+---
+
+## C.24.3g M&A + Compliance Reports Visual Fix Before Recording
+
+**Status:** COMPLETED / focused recording-readiness pass for M&A and Compliance Reports.
+
+Routes to verify in the recording rehearsal:
+
+- `/ma/dashboard`
+- `/ma/pipeline`
+- `/ma/deals`
+- `/compliance/reports`
+
+Visual updates to verify:
+
+- M&A dashboard action rows should no longer show a rectangular sticker surface behind buttons.
+- M&A Current Deal Snapshot, Recommended Next Step, Saved Valuation Snapshot, and Clean Dashboard Mode should keep real actions but without fake wrapper layers.
+- M&A pipeline columns and empty states should not create excessive black vertical whitespace.
+- Deals Repository should flow naturally from the hero to "Deal archive at a glance".
+- Compliance Reports should read as a premium draft-review workspace, not a builder or internal scaffolding page.
+- Compliance Reports empty states should not use dashed placeholder styling.
+- Compliance Reports draft controls, evidence base, and report library should feel integrated with the dark-premium system.
+
+Copy notes:
+
+- Localized Compliance copy was corrected from builder/generated-report language to draft controls, evidence base, and board review draft library language.
+- Remaining cross-branch copy candidates are deferred to C.24.3h Product Copy Cleanup.
+
+Validation notes:
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 88 files / 552 tests.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS.

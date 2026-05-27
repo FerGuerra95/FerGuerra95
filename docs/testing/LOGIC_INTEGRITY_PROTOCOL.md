@@ -2099,6 +2099,41 @@ Validation:
 
 ---
 
+## C.24.3g - M&A + Compliance Reports Visual Fix Before Recording
+
+**Status:** COMPLETED / focused visual QA fix with logic integrity preserved.
+
+Logic-integrity constraints preserved:
+
+- No formulas changed.
+- No Golden Dataset or Formula Registry changes.
+- No backend, auth, router, migrations, package/config, secrets, runtime provider, report-generation contract, source-of-truth, or data changes.
+- No base palette, branch color, or global product identity change.
+- No new visual system, aggressive global CSS, high z-index masking, or overflow hiding that cuts content.
+- N/A and insufficient_data remain visible.
+- Missing data was not converted to `0`.
+- DSS, Human Review Required, Board Review Draft, Not Board Approved, no certified PDF, no legal advice, and no investment advice boundaries remain intact.
+
+Focused fixes:
+
+- M&A dashboard action surfaces were softened by removing visible wrapper styling from action rows and keeping real route buttons intact.
+- M&A pipeline/deal archive spacing was compacted by reducing board/column/empty-state height and repository hero overflow that could create large dark gaps.
+- Compliance Reports draft controls, evidence base, and report library were changed from generic card wrappers to scoped report sections to reduce nested-card visual layering without changing report logic.
+- Compliance empty-state and report-library wording now uses draft/library language instead of builder/generated-report staging language.
+
+Copy audit for next phase:
+
+- Corrected within scope: Compliance "Generated reports", "Report Builder", and "Report Content" wording.
+- Deferred outside scope for C.24.3h: CEO Overview "Enterprise executive layer", CEO Overview "Liquidity & Runway Widget", Executive Alerts "Attention classification", and Heritage "Generated reports".
+
+Validation:
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 88 files / 552 tests.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS.
+
+---
+
 ## C.24.3c - Demo UI Layout Integration Polish
 
 **Status:** COMPLETED / scoped visual layout integration polish.

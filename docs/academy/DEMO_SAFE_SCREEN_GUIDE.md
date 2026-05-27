@@ -114,3 +114,20 @@ Validation notes:
 Validation notes:
 
 - Build, unit tests, and Playwright navigation smoke passed after C.24.3f visual parity.
+
+---
+
+## C.24.3g Focused M&A + Compliance Reports Notes
+
+| Screen | Classification | Reason | Required wording | Notes |
+|---|---|---|---|---|
+| M&A dashboard action rows | SAFE_TO_SHOW_EXTERNAL | Action wrappers softened; real actions preserved | "Indicative M&A DSS preparation; human review required." | No fairness opinion or autonomous approval |
+| M&A Deal Pipeline | SAFE_TO_SHOW_EXTERNAL | Pipeline board/empty-state spacing compacted | "Pipeline view for internal deal tracking." | No fake deal matching or guaranteed outcome |
+| M&A Deals Repository | SAFE_TO_SHOW_EXTERNAL | Hero/archive spacing reduced before "Deal archive at a glance" | "Private deal archive; saved snapshots may differ from live engine." | Saved snapshot is not live valuation |
+| Compliance Reports draft controls | SAFE_TO_SHOW_EXTERNAL | Builder framing replaced with review controls | "Draft controls; Human Review Required." | Not legal advice or certified audit |
+| Compliance Reports evidence base | SAFE_TO_SHOW_EXTERNAL | Report content reframed as evidence/review base | "Evidence and review base for DSS draft." | Missing evidence remains visible |
+| Compliance Reports library | SAFE_TO_SHOW_EXTERNAL | Generated-report staging language replaced with draft-library language | "Board review draft library." | Not board-approved; not certified PDF |
+
+Validation notes:
+
+- Build, unit tests, and Playwright navigation smoke passed after C.24.3g focused visual QA.

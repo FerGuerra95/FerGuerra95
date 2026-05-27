@@ -79,7 +79,7 @@ const pipelineCss = `
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 34px;
+    gap: 26px;
   }
 
   .ma-pipeline-hero {
@@ -165,6 +165,24 @@ const pipelineCss = `
     flex-wrap: wrap;
     gap: 14px;
     margin-top: 34px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .ma-pipeline-actions a {
+    display: inline-flex;
+    text-decoration: none;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .ma-pipeline-actions .button {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.045),
+      0 8px 18px rgba(0,0,0,0.18);
   }
 
   .ma-pipeline-command-bar {
@@ -377,7 +395,7 @@ const pipelineCss = `
     position: relative;
     overflow: hidden;
     border-radius: 34px;
-    padding: 30px;
+    padding: 26px;
     border: 1px solid rgba(148, 163, 184, 0.17);
     background:
       radial-gradient(circle at 4% 0%, rgba(37, 99, 235, 0.18), transparent 30%),
@@ -411,7 +429,7 @@ const pipelineCss = `
     justify-content: space-between;
     gap: 24px;
     align-items: flex-end;
-    margin-bottom: 26px;
+    margin-bottom: 20px;
   }
 
   .ma-pipeline-kicker {
@@ -447,7 +465,7 @@ const pipelineCss = `
 
   .ma-pipeline-column {
     min-width: 240px;
-    min-height: 420px;
+    min-height: 270px;
     border-radius: 26px;
     padding: 16px;
     background:
@@ -647,7 +665,7 @@ const pipelineCss = `
   }
 
   .ma-pipeline-empty {
-    min-height: 190px;
+    min-height: 118px;
     border-radius: 21px;
     padding: 18px;
     display: grid;
@@ -835,7 +853,7 @@ const pipelineCss = `
 
   .ma-pipeline-column {
     padding: 18px;
-    min-height: 440px;
+    min-height: 280px;
   }
 
   .ma-pipeline-column-header {

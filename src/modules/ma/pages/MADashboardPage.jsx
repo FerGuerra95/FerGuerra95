@@ -641,6 +641,33 @@ const maDashboardCss = `
     gap: 14px;
     align-items: center;
     margin-top: 22px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .ma-action-row a {
+    display: inline-flex;
+    text-decoration: none;
+    border-radius: 16px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .ma-action-row .button,
+  .ma-hero-actions .button,
+  .ma-pipeline-preview-actions .button {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.045),
+      0 8px 18px rgba(0,0,0,0.18);
+  }
+
+  .ma-glass-block > .ma-action-row {
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(148, 163, 184, 0.10);
   }
 
   .ma-summary-card {

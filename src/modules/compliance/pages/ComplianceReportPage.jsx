@@ -16,7 +16,6 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Card } from '../../../shared/components/ui/Card.jsx';
 import { EmptyState } from '../../../shared/components/ui/EmptyState.jsx';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import { Select } from '../../../shared/components/ui/Select.jsx';
@@ -336,7 +335,7 @@ const complianceReportCss = `
   }
 
   .report-grid-two {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
   }
 
   .report-kpi-card,
@@ -446,10 +445,10 @@ const complianceReportCss = `
   }
 
   .report-panel {
-    padding: 31px;
+    padding: 28px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
   }
 
   .report-panel-header {
@@ -473,14 +472,16 @@ const complianceReportCss = `
   .report-list {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 14px;
   }
 
   .report-glass-block {
-    padding: 20px;
-    border-radius: 24px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.075);
+    padding: 18px;
+    border-radius: 22px;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.040), rgba(255,255,255,0.012)),
+      rgba(2, 6, 23, 0.18);
+    border: 1px solid rgba(255,255,255,0.055);
   }
 
   .report-glass-block p {
@@ -491,6 +492,18 @@ const complianceReportCss = `
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
+    align-items: center;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .report-action-row .button,
+  .report-card-actions .button {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.045),
+      0 8px 18px rgba(0,0,0,0.18);
   }
 
   .report-mini-grid {
@@ -517,10 +530,10 @@ const complianceReportCss = `
   }
 
   .report-list-panel {
-    padding: 31px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 18px;
   }
 
   .report-list-card {
@@ -561,13 +574,18 @@ const complianceReportCss = `
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 18px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
   }
 
   .report-empty-wrap {
-    border-radius: 26px;
-    padding: 34px;
-    border: 1px dashed rgba(148, 163, 184, 0.24);
-    background: rgba(255,255,255,0.025);
+    border-radius: 24px;
+    padding: 26px;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.038), rgba(255,255,255,0.012)),
+      rgba(2, 6, 23, 0.20);
   }
 
   .report-muted-tight {
@@ -1298,7 +1316,7 @@ function buildMultinationalCompliancePack({
       ['Operational risk score', activeSupplier ? `${activeRiskScore}/100` : 'N/A'],
       ['Operational resilience score', activeSupplier ? `${activeResilienceScore}/100` : 'N/A'],
       ['Report posture', reportSignal?.posture || 'N/A'],
-      ['Generated reports', safeReports.length],
+      ['Report library', safeReports.length],
       ['Supplier reports', safeSupplierReports.length],
       ['Report items', safeReportItems.length]
     ],
@@ -1707,7 +1725,7 @@ export function ComplianceReportPage() {
                 />
 
                 <CommandItem
-                  label="Generated reports"
+                  label="Report library"
                   value={supplierReports.length}
                 />
 
@@ -1878,12 +1896,12 @@ export function ComplianceReportPage() {
           </ReportPremiumPanel>
         </section>
         <section className="report-grid report-grid-two">
-          <Card className="report-panel">
+          <section className="report-panel">
             <PanelHeader
-              kicker="Report builder"
+              kicker="Draft controls"
               icon={Plus}
-              title="Report Builder"
-              description="Selecciona proveedor, revisa el resumen ejecutivo y genera o exporta el informe actual."
+              title="Review controls"
+              description="Selecciona proveedor, revisa la base ejecutiva y prepara un draft interno sujeto a revisión humana."
             />
 
             <div className="report-builder-stack">
@@ -1962,13 +1980,13 @@ export function ComplianceReportPage() {
                 </>
               )}
             </div>
-          </Card>
+          </section>
 
-          <Card className="report-panel">
+          <section className="report-panel">
             <PanelHeader
-              kicker="Report content"
+              kicker="Draft evidence base"
               icon={Archive}
-              title="Report Content"
+              title="Evidence and review base"
               description="Elementos que alimentan el informe ejecutivo del proveedor seleccionado."
             />
 
@@ -2002,27 +2020,27 @@ export function ComplianceReportPage() {
                 criterio legal o de compliance.
               </p>
             </div>
-          </Card>
+          </section>
         </section>
 
         <section className="report-section">
           <SectionHeader
-            kicker="Generated reports"
+            kicker="Report library"
             icon={FileSearch}
-            title="Generated Reports"
-            description="Historial de reportes creados para el proveedor seleccionado."
+            title="Board review draft library"
+            description="Historial interno de drafts de compliance creados para el proveedor seleccionado."
             right={<Badge>{supplierReports.length} resultados</Badge>}
           />
 
-          <Card className="report-list-panel">
+          <section className="report-list-panel">
             {supplierReports.length === 0 ? (
               <div className="report-empty-wrap">
                 <EmptyState
-                  title="No hay informes generados"
+                  title="Draft library empty"
                   description={
                     canCreateReport
-                      ? 'Genera el primer informe de compliance para este proveedor.'
-                      : 'No hay informes disponibles para este proveedor.'
+                      ? 'Draft preview will appear once the report configuration is ready.'
+                      : 'No hay drafts disponibles para este proveedor.'
                   }
                 />
               </div>
@@ -2039,7 +2057,7 @@ export function ComplianceReportPage() {
                 ))}
               </div>
             )}
-          </Card>
+          </section>
         </section>
 
         <section className="report-section">

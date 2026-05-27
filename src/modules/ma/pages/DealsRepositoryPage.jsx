@@ -34,16 +34,16 @@ const dealsRepositoryCss = `
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 38px;
+    gap: 28px;
     max-width: 100%;
     overflow-x: clip;
   }
 
   .deals-hero {
     position: relative;
-    overflow: visible;
-    border-radius: 38px;
-    padding: 42px 46px 52px;
+    overflow: hidden;
+    border-radius: 36px;
+    padding: 38px 42px 42px;
     border: 1px solid rgba(148, 163, 184, 0.18);
     background:
       radial-gradient(circle at 8% 2%, rgba(37, 99, 235, 0.38), transparent 30%),
@@ -72,9 +72,9 @@ const dealsRepositoryCss = `
   .deals-hero::after {
     content: "";
     position: absolute;
-    inset: auto 0 -120px auto;
-    width: 360px;
-    height: 360px;
+    inset: auto -80px -150px auto;
+    width: 320px;
+    height: 320px;
     border-radius: 999px;
     background: radial-gradient(circle, rgba(16, 185, 129, 0.13), transparent 70%);
     pointer-events: none;
@@ -129,6 +129,10 @@ const dealsRepositoryCss = `
     flex-wrap: wrap;
     gap: 14px;
     margin-top: 34px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
   }
 
   .deals-command-bar {
@@ -527,6 +531,9 @@ const dealsRepositoryCss = `
     justify-content: flex-end;
     align-items: center;
     min-width: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
   }
 
   .deals-case-metrics {
