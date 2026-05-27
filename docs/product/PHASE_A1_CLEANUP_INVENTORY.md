@@ -7583,6 +7583,41 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 
 ---
 
+## C.14.0B - Update AI Agent Prompt Output Discipline
+
+**Status:** COMPLETED / COPY-PASTE PROMPT OUTPUT DISCIPLINE ADDED.
+
+**Baseline:** `HEAD = origin/main = bf39a05`.
+
+**Scope:** AI operating model and Cursor prompt-discipline rules only.
+
+**Rule added:** When Fernando asks for a prompt, Cursor prompt, master prompt, handoff, PowerShell block, script, final code, execution block, "copy and paste" format, "un único bloque", or "ponmelo todo en un solo texto", the AI must return the main deliverable in one clean code fence.
+
+**Required behavior:**
+
+- Use one complete code fence for the main deliverable.
+- Use `text` for prompts, Cursor instructions, handoffs, and generic execution blocks.
+- Use `powershell` only for PowerShell command blocks.
+- Use the relevant language tag for final code/scripts.
+- Do not use fence attributes such as `id="..."`.
+- Do not split the prompt across multiple blocks.
+- Do not interleave external explanation inside the block.
+
+**Files updated:**
+
+- `.cursorrules`
+- `.cursor/rules/ceos-os-prompt-discipline.mdc`
+- `docs/ai/AI_OPERATING_MODEL.md`
+- `docs/ai/PROMPT_LIBRARY.md`
+
+**Safety:** Docs/rules only. No runtime code, backend, frontend product behavior, tests, Golden Dataset, Formula Registry, package/config, secrets, or data changed.
+
+**Validation:**
+
+- `npm run build` PASS.
+
+---
+
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix
 
 **Status:** COMPLETED / DEMO ACTION SURFACES VISUALLY UNIFIED.

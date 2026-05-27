@@ -25,6 +25,26 @@ Copy a template verbatim into Cursor. Replace bracketed placeholders.
 
 ---
 
+## Copy/Paste Deliverable Format
+
+When Fernando asks for a prompt, Cursor prompt, PowerShell block, handoff, script, final code, or "copy and paste" format, return the complete deliverable in one clean code fence with no fence attributes and no interleaved explanation.
+
+For prompts, Cursor instructions, handoffs, and generic execution blocks, use exactly one clean `text` fence:
+
+```text
+FULL PASTE-READY CONTENT HERE
+```
+
+For PowerShell command blocks, use exactly one clean `powershell` fence:
+
+```powershell
+FULL PASTE-READY POWERSHELL HERE
+```
+
+Do not use fence attributes such as `id="..."`. Do not split the deliverable into multiple blocks. If a short explanation is needed, place it before the block and keep the block itself paste-ready.
+
+---
+
 ## Prompt Template — No Fix Mode / Read-Only Audit
 
 ```text

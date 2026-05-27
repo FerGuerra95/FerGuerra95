@@ -242,6 +242,42 @@ Never replace existing logic with placeholders.
 
 Never delete unknown logic because it was omitted from the response.
 
+COPY/PASTE OUTPUT DISCIPLINE:
+
+When Fernando asks for any of the following:
+
+- "pásame el prompt"
+- "ponlo en formato copiar y pegar"
+- "formato powershell"
+- "prompt para Cursor"
+- "prompt maestro"
+- "bloque para abrir nuevo chat"
+- "handoff"
+- "código final"
+- "script"
+- "ponmelo todo en un solo texto"
+- "un único bloque"
+- "para copiar y pegar"
+
+The response must put the main deliverable in one clean code fence.
+
+Rules:
+
+- Use a single fenced block for the complete deliverable.
+- Use ```text for prompts, Cursor instructions, handoffs, runbooks, and generic execution blocks.
+- Use ```powershell only for PowerShell commands.
+- Use the relevant language tag for final code/scripts.
+- Do not add fence attributes such as id="...".
+- Do not split the prompt across multiple blocks.
+- Do not mix external explanation inside the code block.
+- If context is useful, add one short sentence before the block, then provide the block cleanly.
+
+Required prompt shape:
+
+```text
+FULL PASTE-READY CONTENT HERE
+```
+
 STRUCTURED VERIFICATION RULE:
 
 Before outputting any report, table, audit result, or code modification, provide a concise visible verification block called:

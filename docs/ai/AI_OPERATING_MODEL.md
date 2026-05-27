@@ -53,6 +53,26 @@ CEO's OS is not:
 - Commit `backend-server.err`
 - Refactor broadly outside scope
 
+## Copy/Paste Output Discipline
+
+When Fernando asks for a prompt, Cursor prompt, master prompt, handoff, PowerShell block, script, final code, execution block, "copy and paste" format, "un único bloque", or "ponmelo todo en un solo texto", the AI must return the main deliverable in one clean code fence.
+
+Rules:
+
+- Use one complete block, not fragmented sections.
+- Use `text` for prompts, handoffs, Cursor instructions, and generic execution blocks.
+- Use `powershell` only for PowerShell command blocks.
+- Use the relevant language tag for final code/scripts.
+- Do not add fence attributes such as `id="..."`.
+- Do not interleave explanation inside the block.
+- If context is helpful, put one short sentence before the block; the block itself must remain paste-ready.
+
+Required prompt shape:
+
+```text
+FULL PASTE-READY CONTENT HERE
+```
+
 ## Human Review Required
 
 Human review is mandatory before treating output as client-ready or pilot-ready for:

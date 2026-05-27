@@ -90,6 +90,27 @@ When writing `.mdc`, `.md`, `.cursorignore`, or `AGENTS.md` to disk:
 - Do not wrap entire file in triple-backtick fences
 - Inline code examples inside docs are allowed when teaching format
 
+## Copy/Paste Output Discipline
+
+When the user asks for a prompt, Cursor prompt, master prompt, handoff, PowerShell block, script, final code, execution block, or anything explicitly described as "copy and paste", "copiar y pegar", "un único bloque", or "ponmelo todo en un solo texto", the main deliverable must be returned in **one clean code fence**.
+
+Required behavior:
+
+- Use a single fenced block for the deliverable.
+- Use `text` for prompts, handoffs, Cursor instructions, generic execution blocks, and plain-language runbooks.
+- Use `powershell` only when the user specifically asks for PowerShell commands.
+- Use the relevant language tag for final code or scripts.
+- Do not add fence attributes such as `id="..."`.
+- Do not split the deliverable across multiple code blocks.
+- Do not interleave explanation inside the block.
+- If context is needed, place a short sentence before the block and keep the block itself paste-ready.
+
+Required prompt format:
+
+```text
+FULL PASTE-READY CONTENT HERE
+```
+
 ## Required Final Summary
 
 End every execution phase with:
