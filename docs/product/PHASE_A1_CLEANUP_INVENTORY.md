@@ -7294,3 +7294,22 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Legal posture:** Templates are internal drafts only and must be reviewed by qualified legal counsel before client use. They do not make CEO's OS legally approved, SOC2/ISO certified, procurement-ready, board-approved, or a legal/investment advisory service.
 
 **Pilot rule:** Use synthetic data for early demos. Do not process real client data until the required NDA/DPA/SOW path is approved for the pilot scope.
+
+---
+
+## C.15.6 - Pilot Outreach Execution Control
+
+**Status:** COMPLETED / PILOT OUTREACH EXECUTION READY.
+
+**Baseline:** `HEAD = origin/main = 55a6caf`.
+
+**Deliverables:**
+
+- `docs/commercial/PILOT_TARGET_TRACKER_TEMPLATE.md`
+- `docs/commercial/PILOT_OUTREACH_EXECUTION_PLAYBOOK.md`
+- `docs/commercial/PILOT_CALL_NOTES_TEMPLATE.md`
+- `docs/commercial/PILOT_GO_NO_GO_SCORECARD.md`
+
+**Execution posture:** The first 3-5 conversations should be tracked as controlled learning loops, not broad outbound. Use IberNova/synthetic data first, score prospects before proposing pilots, and keep real target data out of repository docs.
+
+**Truthfulness:** Outreach controls preserve DSS, Human Review Required, legal path before sensitive data, and no procurement/SOC2/ISO/board-approved/autonomous-AI claims.

@@ -1748,6 +1748,21 @@ Logic-integrity rules:
 
 No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, AI runtime, PDF runtime, auth, storage, or source-of-truth logic changed.
 
+## C.15.6 - Pilot Outreach Execution Control
+
+**Status:** COMPLETED / sales-ops docs only.
+
+Outreach execution integrity rules:
+
+- Outreach execution must not introduce false claims or imply product/legal readiness beyond the controlled pilot scope.
+- No real target data, personal data, secrets, or confidential prospect notes belong in repo docs.
+- Synthetic-first demo path remains mandatory for early conversations; IberNova is fictional.
+- Legal path is required before requesting or processing sensitive client data.
+- DSS and Human Review Required language must remain visible in pitches, discovery, call notes, scoring, and follow-up.
+- No procurement readiness, SOC2/ISO certification, board-approved output, autonomous AI, legal advice, investment advice, fairness opinion, certified compliance, or certified PDF claims may be introduced.
+
+No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, AI runtime, PDF runtime, auth, storage, or source-of-truth logic changed.
+
 ## C.19.0 - Pilot Legal Pack / NDA / DPA Basico
 
 **Status:** COMPLETED / docs and legal-ops drafts only.

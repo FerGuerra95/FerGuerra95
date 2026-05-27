@@ -322,3 +322,18 @@ Before requesting or receiving non-public client data:
 5. define offboarding and deletion expectations before intake.
 
 Use `docs/legal/PILOT_LEGAL_PACK.md` and `docs/legal/LEGAL_REVIEW_CHECKLIST.md` as internal preparation only. They are drafts for professional review, not legally approved client documents.
+
+---
+
+## 22. Execution Controls
+
+Use these C.15.6 templates to run the first 3-5 conversations without drifting into broad sales activity:
+
+| Asset | Use |
+|---|---|
+| `PILOT_TARGET_TRACKER_TEMPLATE.md` | Track target segments, fit, legal path, outreach status, and next action |
+| `PILOT_OUTREACH_EXECUTION_PLAYBOOK.md` | Run the outreach round synthetic-first and within DSS/legal boundaries |
+| `PILOT_CALL_NOTES_TEMPLATE.md` | Capture call learning without storing real target data in repo |
+| `PILOT_GO_NO_GO_SCORECARD.md` | Decide whether to propose pilot, continue discovery, park, or no-go |
+
+Operating rule: no real target data belongs in repo docs. Use placeholders here and move any real notes to an approved controlled workspace.

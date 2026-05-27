@@ -319,4 +319,19 @@ Operating rule: real client data should not be processed until the legal path is
 
 ---
 
+## C.15.6 Pilot Outreach Execution Controls
+
+**Status:** READY / first 3-5 outreach conversations can be controlled.
+
+| Asset | Status | Use |
+|---|---|---|
+| `../commercial/PILOT_TARGET_TRACKER_TEMPLATE.md` | **READY** | Track target fit without real target data in repo |
+| `../commercial/PILOT_OUTREACH_EXECUTION_PLAYBOOK.md` | **READY** | Run outreach synthetic-first and legally bounded |
+| `../commercial/PILOT_CALL_NOTES_TEMPLATE.md` | **READY** | Capture structured discovery notes in a controlled workspace |
+| `../commercial/PILOT_GO_NO_GO_SCORECARD.md` | **READY** | Score pilot fit before proposing SOW/legal path |
+
+Operating rule: first demos should use IberNova/synthetic data. Real data requires the approved legal path, and outreach must preserve DSS, Human Review Required, and no-certification/no-autonomous-AI limits.
+
+---
+
 **This document is an internal pilot readiness draft. It is not a contract, SLA, or legal advice.**
