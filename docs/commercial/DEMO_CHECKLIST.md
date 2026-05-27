@@ -25,6 +25,21 @@
 
 ---
 
+## Before contacting external prospects
+
+| # | Check | Done |
+|---|---|---|
+| 1 | Navigation stability validated after C.15.4d | TODO |
+| 2 | IberNova fictional demo dataset ready and clearly labelled synthetic | TODO |
+| 3 | Data intake system and 48h onboarding checklist ready | TODO |
+| 4 | External outreach pack reviewed for DSS / human-review limits | TODO |
+| 5 | No secrets, real client data, tokens, `.env`, DB tools, or auth headers on screen | TODO |
+| 6 | P2 authenticated smoke closed or explicitly disclosed if production demo depends on it | TODO |
+| 7 | Pilot offer confirms minimum intake, human reviewer, and no certified/board-approved output | TODO |
+| 8 | First 3-5 prospects selected from ICP list, not broad outbound | TODO |
+
+---
+
 ## During demo — DO
 
 - Open with **Private Executive DSS** + **human review** frame  

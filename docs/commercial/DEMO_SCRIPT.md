@@ -96,6 +96,21 @@ Use `docs/pilot/PREMIUM_DEMO_COMPANY_DATASET.md` if a buyer needs a richer narra
 
 ---
 
+## External demo variant with IberNova
+
+Use this version when the prospect is not ready to share data yet:
+
+1. Frame IberNova Industrial Group S.L. as a fictional Spanish family-owned industrial group.
+2. Show the same spine: CEO Overview -> Reporting / Board Packs -> persisted snapshots -> HTML Board Review Draft -> workflow.
+3. Emphasize the intentionally incomplete data and how it becomes missing-data questions for review.
+4. Close with a controlled pilot: minimum intake, named reviewer, 48h onboarding checklist, and success criteria.
+
+If production fails during the demo, say: "I am going to switch to the prepared dry-run path rather than imply the live environment is behaving differently. The product limit and pilot scope remain the same." Then use local/staging screenshots clearly labelled as illustrative.
+
+Closing phrase: "The next step is not a broad rollout. It is a controlled pilot with limited data, explicit human review, and one Board Review Draft workflow we can judge together."
+
+---
+
 ## Talking points (memorize)
 
 | Phrase | Use when |

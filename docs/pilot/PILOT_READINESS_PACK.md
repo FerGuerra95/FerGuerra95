@@ -286,4 +286,20 @@ Operating rule: real client data must be minimized, reviewed, and labelled. Demo
 
 ---
 
+## C.15.5 External Pilot Outreach
+
+**Status:** READY / external pilot outreach pack prepared.
+
+| Asset | Status | Use |
+|---|---|---|
+| `../commercial/EXTERNAL_PILOT_OUTREACH_PACK.md` | **READY** | ICP, pitches, sequences, call/demo scripts, and acceptance criteria |
+| `../commercial/PILOT_DISCOVERY_QUESTIONS.md` | **READY** | Structured first-call and discovery questions |
+| `../commercial/PILOT_FOLLOW_UP_EMAILS.md` | **READY** | Follow-up templates that preserve DSS and human-review limits |
+
+Recommended first outreach: 3-5 carefully selected prospects in family-owned private groups, family offices, M&A / corporate finance boutiques, or industrial SMEs with board reporting, acquisition, funding, compliance, or supplier-risk pressure.
+
+Before paid pilot execution, complete legal pack / SOW review and keep DPA/subprocessor requirements separate from product claims.
+
+---
+
 **This document is an internal pilot readiness draft. It is not a contract, SLA, or legal advice.**

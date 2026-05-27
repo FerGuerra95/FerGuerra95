@@ -183,3 +183,17 @@ See `PILOT_SUCCESS_CRITERIA.md` for full list.
 5. Load pilot data; optional: operator auth smoke before external audience.  
 
 **Objections:** `DEMO_OBJECTION_HANDLING.md`
+
+---
+
+## 16. External pilot outreach readiness
+
+Use this offer after the prospect has passed basic discovery and understands the pilot boundaries:
+
+- A minimum data intake is required before a useful Board Review Draft can be produced.
+- IberNova Industrial Group S.L. may be used as a fictional demo company before client data is available.
+- The pilot requires a named sponsor and named human reviewer.
+- Outputs remain DSS materials for review, not legal advice, investment advice, certified compliance, certified PDF, or board-approved output.
+- AI language, if used, must remain limited to draft-assistant foundation and human-reviewed narrative support.
+
+Recommended next commercial step after a positive demo: send `PILOT_DISCOVERY_QUESTIONS.md`, agree the 48h intake checklist, then prepare a narrow SOW for a controlled pilot.

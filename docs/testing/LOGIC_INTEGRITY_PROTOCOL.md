@@ -1747,3 +1747,19 @@ Logic-integrity rules:
 - Board Review Draft remains draft-only, human-reviewed, not legal advice, not investment advice, and not board approved.
 
 No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, AI runtime, PDF runtime, auth, storage, or source-of-truth logic changed.
+
+## C.15.5 - External Pilot Outreach Pack
+
+**Status:** COMPLETED / commercial docs only.
+
+Outreach logic-integrity rules:
+
+- External outreach must preserve the DSS frame: decision support, not autonomous decision-making.
+- Board Review Draft wording must remain draft/review oriented, not board-approved.
+- Human review must remain explicit in demo, pilot offer, discovery, and follow-up copy.
+- No certification, SOC2/ISO, procurement, certified PDF, legal advice, investment advice, fairness opinion, or certified compliance claims may be introduced.
+- No autonomous AI claim: AI may be described as draft-assistant foundation only where appropriate.
+- IberNova Industrial Group S.L. remains fictional demo data and must not be presented as a real client or real case study.
+- Missing data in outreach/demo narratives must stay visible and become board-review questions, not fake certainty.
+
+No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, AI runtime, PDF runtime, auth, storage, or source-of-truth logic changed.

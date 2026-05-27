@@ -7251,3 +7251,25 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Demo company:** IberNova Industrial Group S.L. - fictional Spanish family-owned industrial group with EUR 22.0M revenue, EUR 3.2M EBITDA, 140 employees, acquisition/funding/compliance pressures, and intentionally incomplete data.
 
 **Truthfulness:** Demo data is synthetic and must not be presented as a real customer, legal/investment advice, certified compliance, board-approved output, or procurement certification.
+
+---
+
+## C.15.5 - External Pilot Outreach Pack
+
+**Status:** COMPLETED / EXTERNAL PILOT OUTREACH READY.
+
+**Baseline:** `HEAD = origin/main = 3949d76`.
+
+**Deliverables:**
+
+- `docs/commercial/EXTERNAL_PILOT_OUTREACH_PACK.md`
+- `docs/commercial/PILOT_DISCOVERY_QUESTIONS.md`
+- `docs/commercial/PILOT_FOLLOW_UP_EMAILS.md`
+
+**Updated commercial assets:** `BOARD_INTELLIGENCE_PILOT_OFFER.md`, `DEMO_SCRIPT.md`, `DEMO_CHECKLIST.md`, and `PILOT_READINESS_PACK.md` now reference external pilot outreach, IberNova demo usage, minimum data intake, and controlled pilot limits.
+
+**ICP decision:** Prioritize family-owned private groups, private company groups, family offices, M&A / corporate finance boutiques, and industrial SMEs with reporting, M&A, funding, compliance, or supplier-risk pressure.
+
+**Commercial posture:** Outreach is designed for 3-5 controlled pilot conversations only. Position CEO's OS as a Private Executive DSS / Board Intelligence Workspace. Do not claim procurement readiness, SOC2/ISO certification, enterprise certification, autonomous AI, legal advice, investment advice, certified PDF, or board-approved output.
+
+**Next:** Run an IberNova dry run, select the first 3-5 outreach targets, and prepare C.19.0 Pilot Legal Pack before any paid pilot.
