@@ -213,3 +213,12 @@ Pilot operators must not enable third-party AI tools on production exports conta
 ---
 
 **This document is an internal/pilot readiness draft and requires legal review before use as a customer-facing legal document.**
+---
+
+## C.16.3 AI Provider Runtime Gate
+
+AI provider runtime is not enabled for pilot client data.
+
+Before any provider traffic with real client data, DPA/subprocessor path must be approved, provider no-training and retention terms must be reviewed, international transfer basis must be reviewed where applicable, client approval must be recorded, redaction/minimization must be tested, prompt injection tests must pass, and kill switch must be tested.
+
+Synthetic demos may use IberNova/synthetic data only. Production provider AI traffic remains blocked until a later authorized runtime phase.

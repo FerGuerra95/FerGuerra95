@@ -64,3 +64,28 @@
 - `AI_READINESS_AUDIT.md`  
 - `AI_GUARDRAILS.md`  
 - `AI_PROVIDER_ABSTRACTION_PLAN.md`
+---
+
+## C.16.3 Near-Term Runtime Use-Case Boundary
+
+Approved near-term runtime candidates after legal/security gates:
+
+| Use case | Boundary |
+|---|---|
+| Board Review Draft narrative | Draft-only, based on persisted snapshot/DSS context |
+| Outreach draft assistant | Draft copy only; human sends/edits |
+| Call note summarization | Summarize human-provided notes; no CRM automation |
+| Missing data questions | Generate review questions; do not invent answers |
+
+Blocked use cases:
+
+- autonomous email sending;
+- autonomous approval/review/internal-final marking;
+- legal advice;
+- investment advice;
+- fairness opinions;
+- certified compliance conclusions;
+- formula or score recalculation;
+- source-of-truth changes;
+- full database chat;
+- real client data before DPA/subprocessor approval.

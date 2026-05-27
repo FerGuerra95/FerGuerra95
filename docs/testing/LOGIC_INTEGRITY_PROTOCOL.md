@@ -1794,3 +1794,20 @@ Outreach logic-integrity rules:
 - Missing data in outreach/demo narratives must stay visible and become board-review questions, not fake certainty.
 
 No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, AI runtime, PDF runtime, auth, storage, or source-of-truth logic changed.
+---
+
+## C.16.3 - AI Provider Runtime Planning
+
+**Status:** COMPLETED / docs and AI-runtime planning only.
+
+AI runtime integrity rules:
+
+- AI output cannot recalculate formulas, official scores, or Golden Dataset values.
+- AI output cannot hide `insufficient_data`, missing data, N/A, limitations, or uncertainty.
+- AI output cannot mark reviewed/internal_final, approve reports, send messages, mutate DB records, or become source-of-truth.
+- AI output cannot provide legal advice, investment advice, fairness opinions, certified compliance, certified PDF, or board-approved output.
+- Prompt injection tests are required before runtime provider traffic.
+- Redaction/minimization tests are required before runtime provider traffic.
+- DPA/subprocessor approval is required before real client data/provider traffic.
+
+No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, provider SDK, API key, external fetch, provider traffic, AI runtime, auth, storage, or source-of-truth logic changed.

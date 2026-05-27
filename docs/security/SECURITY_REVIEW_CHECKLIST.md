@@ -248,3 +248,23 @@ Remaining future security work:
 Record findings in audit inventory or HANDOFF_STATE.
 
 Do not mark security as Confirmed for whole product until C.13 security pass completes.
+---
+
+## AI Runtime Security Gates (C.16.3)
+
+Before provider AI runtime is enabled, verify:
+
+| Gate | Required posture |
+|---|---|
+| Provider traffic | Disabled by default; feature-flagged |
+| DPA/subprocessor | Approved before real client data |
+| API keys | Secret store only; never repo/frontend/logs |
+| Kill switch | Tested and server-side |
+| Data minimization | Snapshot summaries only; no raw DB/data room |
+| Redaction | Secrets/tokens/cookies/auth headers stripped |
+| Prompt injection | Threat-model tests pass |
+| Tenant scope | Context builder enforces organization boundary |
+| Output labels | AI Draft / Requires Human Review visible |
+| Source-of-truth | AI cannot mutate SoT or workflow status |
+| Advice/certification | Legal/investment/certified outputs blocked |
+| Error handling | No silent fake-AI fallback |

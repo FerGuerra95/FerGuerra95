@@ -757,3 +757,19 @@ Out of scope remains unchanged:
 - Legal, investment, compliance, or fairness-opinion conclusions.
 - Public secure-share access.
 - AI runtime/provider output.
+---
+
+## C.16.3 AI Runtime Source-of-Truth Boundary
+
+AI is not source-of-truth.
+
+AI output may be used only as draft narrative or review assistance after the approved runtime/legal/security path. It cannot override module service values, persisted module records, Golden Dataset formulas, Reporting snapshot status, workflow review/finalization state, audit records, or tenant ownership.
+
+Boundary rules:
+
+- AI cannot recalculate official formulas or scores.
+- AI cannot hide `insufficient_data`.
+- AI cannot mark `reviewed`, `internal_final`, approved, certified, archived, or revoked.
+- AI cannot provide legal advice, investment advice, fairness opinions, or certified compliance.
+- AI cannot approve board material.
+- Human review remains required.

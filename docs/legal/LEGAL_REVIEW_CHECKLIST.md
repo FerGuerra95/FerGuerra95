@@ -158,3 +158,19 @@ Do not offer success fees, brokerage, placement, deal matching, or regulated tra
 ## 18. KYC / AML Caution
 
 If any future transaction layer activates, KYC/AML obligations must be assessed before use.
+---
+
+## 19. AI Provider Runtime Review
+
+- provider terms reviewed;
+- DPA/subprocessor status approved;
+- no-training/default retention reviewed;
+- prompt/output retention reviewed;
+- international transfer mechanism reviewed if applicable;
+- client approval path defined;
+- data classes approved/excluded;
+- redaction/minimization controls reviewed;
+- prompt-injection risk reviewed;
+- kill switch and incident process reviewed.
+
+No real client data should be sent to an AI provider until this review is complete.

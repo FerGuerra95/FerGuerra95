@@ -7313,3 +7313,23 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Execution posture:** The first 3-5 conversations should be tracked as controlled learning loops, not broad outbound. Use IberNova/synthetic data first, score prospects before proposing pilots, and keep real target data out of repository docs.
 
 **Truthfulness:** Outreach controls preserve DSS, Human Review Required, legal path before sensitive data, and no procurement/SOC2/ISO/board-approved/autonomous-AI claims.
+---
+
+## C.16.3 - AI Provider Runtime Planning
+
+**Status:** COMPLETED / RUNTIME PLANNED / PROVIDER TRAFFIC STILL BLOCKED.
+
+**Baseline:** `HEAD = origin/main = 3213d22`.
+
+**Deliverables:**
+
+- `docs/ai/AI_PROVIDER_RUNTIME_PLAN.md`
+- `docs/ai/AI_RUNTIME_DATA_BOUNDARIES.md`
+- `docs/ai/AI_SUBPROCESSOR_AND_DPA_GATE.md`
+- `docs/ai/AI_PROMPT_INJECTION_THREAT_MODEL.md`
+- `docs/ai/AI_OUTPUT_EVALUATION_FRAMEWORK.md`
+- `docs/ai/AI_RUNTIME_ROLLOUT_PLAN.md`
+
+**AI runtime posture:** Future provider runtime is planned but remains disabled. No provider SDK, API keys, external fetch, provider traffic, runtime AI, or real client data processing was introduced.
+
+**Gate:** DPA/subprocessor approval, security review, no-training/retention review, prompt injection tests, redaction tests, output evaluation, feature flags, and kill switch are required before C.16.4 runtime work.

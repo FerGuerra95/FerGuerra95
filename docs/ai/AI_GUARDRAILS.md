@@ -153,3 +153,21 @@ No endpoint, UI, provider SDK, API key, external fetch, streaming path, or produ
 - `AI_USE_CASES.md`  
 - `AI_PROVIDER_ABSTRACTION_PLAN.md`  
 - `docs/security/SECURITY_REVIEW_CHECKLIST.md` (AI section)
+---
+
+## C.16.3 Runtime Provider Guardrails
+
+Runtime provider guardrails:
+
+- provider traffic disabled by default;
+- feature flags must be server-side and tenant/use-case scoped;
+- kill switch required before provider traffic;
+- no real client data before DPA/subprocessor approval;
+- no autonomous approval, sending, mutation, review, or finalization;
+- AI output remains draft narrative only;
+- AI cannot become source-of-truth or scoring authority;
+- AI cannot recalculate formulas or hide `insufficient_data`;
+- secrets, tokens, cookies, auth headers, API keys, private keys, raw DB dumps, and raw secure-share URLs are forbidden in prompts and logs;
+- output must preserve AI Draft / Requires Human Review / Not Legal Advice / Not Investment Advice / Not Board Approved labels.
+
+See: `AI_PROVIDER_RUNTIME_PLAN.md`, `AI_RUNTIME_DATA_BOUNDARIES.md`, `AI_SUBPROCESSOR_AND_DPA_GATE.md`, `AI_PROMPT_INJECTION_THREAT_MODEL.md`, and `AI_OUTPUT_EVALUATION_FRAMEWORK.md`.

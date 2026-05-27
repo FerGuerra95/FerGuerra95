@@ -204,3 +204,14 @@ C.16.2 did **not** add an endpoint, UI, provider SDK, API key, external fetch, s
 **Reason:** Draft-only, human-reviewed, grounded in existing DSS outputs, no autonomous decisions, no data mutation, aligned with C.15 commercial truthfulness and C.13/C.14 security posture.
 
 **Related docs:** `AI_DATA_BOUNDARIES.md` · `AI_GUARDRAILS.md` · `AI_USE_CASES.md` · `AI_PROVIDER_ABSTRACTION_PLAN.md` · `AI_OPERATING_MODEL.md` (engineering agents, not product runtime AI)
+---
+
+## C.16.3 Runtime Planning Status
+
+**Status:** COMPLETED / RUNTIME PLANNED / PROVIDER TRAFFIC STILL BLOCKED.
+
+C.16.3 adds planning for provider runtime activation, data boundaries, subprocessor/DPA gate, prompt-injection threat model, output evaluation, and rollout phases.
+
+Runtime AI remains blocked until C.16.4 is explicitly authorized, DPA/subprocessor approval is complete, security review is complete, no-training/retention review is complete, prompt-injection and redaction tests pass, and human-review labels are preserved.
+
+No provider SDK, API key, external fetch, runtime provider traffic, endpoint, UI, or real client data processing is authorized by C.16.3.

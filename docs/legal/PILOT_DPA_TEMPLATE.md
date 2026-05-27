@@ -220,3 +220,12 @@ AI provider runtime must remain disabled for real client data unless separately 
 | Uploaded files deleted | `[name]` | `[date]` | `[link/ref]` |
 | Snapshots retained/deleted per SOW | `[name]` | `[date]` | `[link/ref]` |
 | Client confirmation received | `[name]` | `[date]` | `[link/ref]` |
+---
+
+## C.16.3 AI Provider / Subprocessor Placeholder
+
+| Provider | Purpose | Data categories | No-training / retention | Transfer basis | Approval status |
+|---|---|---|---|---|---|
+| `[TBD AI provider]` | Draft-assistant narrative support only | `[approved categories only]` | `[placeholder]` | `[placeholder]` | Not approved until legal/security review |
+
+No provider AI processing of real client data is permitted unless this subprocessor path is completed and approved for the specific pilot scope.

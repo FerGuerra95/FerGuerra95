@@ -184,3 +184,12 @@ The future Reporting / Board Pack renderer may consume Board Review Draft conten
 - `AI_DATA_BOUNDARIES.md`  
 - `AI_GUARDRAILS.md`  
 - `AI_USE_CASES.md`
+---
+
+## C.16.3 Runtime Planning Transition
+
+C.16.1 and C.16.2 established the disabled/mock provider foundation. C.16.3 plans the future transition to runtime without enabling it.
+
+Future runtime must include disabled-by-default feature flags, a server-side provider adapter only, kill switch, no provider SDK until an authorized implementation phase, no API keys in repo/docs/frontend/tests, no external fetch outside the approved adapter, synthetic-only sandbox first, DPA/subprocessor approval before real client data, and audit logging with redaction.
+
+Provider runtime implementation remains out of scope until C.16.4 is explicitly authorized.
