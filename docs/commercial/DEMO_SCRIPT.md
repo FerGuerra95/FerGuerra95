@@ -140,4 +140,24 @@ See `WHAT_WE_CAN_AND_CANNOT_SAY.md` — including: enterprise certified, procure
 | GDPR? | Pilot drafts; legal review for DPA |
 | vs ChatGPT? | Tenant workflow + snapshots + DSS SoT — see objection doc |
 
+---
+
+## Visual academy support
+
+Use the C.24.1 visual academy assets when a prospect needs a lower-friction explanation before live access:
+
+- `../academy/VISUAL_ACADEMY_PLAN.md` defines the academy strategy.
+- `../academy/BRANCH_VIDEO_SCRIPT_INDEX.md` provides the script spine for the general CEO's OS video and branch videos.
+- `../academy/VISUAL_MANUAL_STRUCTURE.md` defines the visual manual.
+- `../academy/VIDEO_TRUTHFULNESS_CHECKLIST.md` must be used before publishing any video, screenshot deck, avatar intro, or visual manual.
+
+Recommended external pre-demo sequence:
+
+1. Send or show the short CEO's OS overview video once produced.
+2. Use IberNova/synthetic screenshots only.
+3. Offer the Reporting / Board Packs branch video as the primary Board Intelligence explainer.
+4. Share branch videos only when the prospect has a matching use case.
+
+Do not use visual academy material to imply board approval, certification, autonomous AI, legal/investment advice, SOC2/ISO status, production provider AI traffic, or a real client case study.
+
 **Related:** `DEMO_CHECKLIST.md` · `DEMO_OBJECTION_HANDLING.md` · `CEO_OS_ONE_PAGER.md`

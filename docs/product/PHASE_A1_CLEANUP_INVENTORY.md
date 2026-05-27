@@ -7458,3 +7458,24 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 2. C.30.2 chart truthfulness label pass for CEO radar, Funding, Compliance, PMI, and Reporting.
 3. C.30.3 demo-script lock for IberNova path only.
 4. C.30.4 authenticated production smoke closure when credentials are available.
+
+---
+
+## C.24.1 - Visual Manual & Branch Video Academy
+
+**Status:** COMPLETED / VISUAL ACADEMY PLAN READY / NO MEDIA GENERATED.
+
+**Baseline:** `HEAD = origin/main = 6cb3733`.
+
+**Deliverables:**
+
+- `docs/academy/VISUAL_ACADEMY_PLAN.md`
+- `docs/academy/BRANCH_VIDEO_SCRIPT_INDEX.md`
+- `docs/academy/AI_AVATAR_AND_FOUNDER_IMAGE_GUIDELINES.md`
+- `docs/academy/VIDEO_TRUTHFULNESS_CHECKLIST.md`
+- `docs/academy/VISUAL_MANUAL_STRUCTURE.md`
+- `docs/academy/VIDEO_HOSTING_AND_VERSIONING.md`
+
+**Academy posture:** The visual academy is a documentation and planning layer for external synthetic demos, branch videos, a visual manual, screenshots, and optional founder/avatar use. No video files, screenshot assets, generated images, AI avatar files, provider traffic, runtime AI, code, tests, backend, frontend, Golden Dataset, Formula Registry, package/config, or secrets were changed.
+
+**Truthfulness:** All visual academy materials must preserve DSS, Human Review Required, synthetic/IberNova labels, no board-approved output, no certified PDF, no autonomous AI, no legal/investment advice, no SOC2/ISO claim, and no production AI provider traffic.

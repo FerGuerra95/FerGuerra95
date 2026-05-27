@@ -334,4 +334,21 @@ Operating rule: first demos should use IberNova/synthetic data. Real data requir
 
 ---
 
+## C.24.1 Visual Manual & Branch Video Academy
+
+**Status:** READY / visual education plan documented, no media generated.
+
+| Asset | Status | Use |
+|---|---|---|
+| `../academy/VISUAL_ACADEMY_PLAN.md` | **READY** | Strategy for general video, branch videos, visual manual, screenshots, founder/avatar guidance, hosting, and review gates |
+| `../academy/BRANCH_VIDEO_SCRIPT_INDEX.md` | **READY** | Script index for CEO's OS overview and branch-level videos |
+| `../academy/AI_AVATAR_AND_FOUNDER_IMAGE_GUIDELINES.md` | **READY** | Consent and likeness rules before any founder/avatar image use |
+| `../academy/VIDEO_TRUTHFULNESS_CHECKLIST.md` | **READY** | Publication checklist for claims, data, screenshots, and forbidden language |
+| `../academy/VISUAL_MANUAL_STRUCTURE.md` | **READY** | Manual outline and screenshot/caption structure |
+| `../academy/VIDEO_HOSTING_AND_VERSIONING.md` | **READY** | Hosting, access level, versioning, and takedown rules |
+
+Operating rule: visual academy assets may support synthetic-first pilot education, but they do not replace live demo validation, legal path approval, or human review. No real videos, generated avatars, screenshot assets, or heavy media files are stored in the repository.
+
+---
+
 **This document is an internal pilot readiness draft. It is not a contract, SLA, or legal advice.**

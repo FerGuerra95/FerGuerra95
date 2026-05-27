@@ -1911,3 +1911,25 @@ Recommended C.30.1+:
 - Add chart truthfulness evidence where coverage is thin.
 - Lock demo script to the IberNova-safe path.
 - Keep remediation targeted; do not reopen closed branches without evidence.
+
+---
+
+## C.24.1 - Visual Manual & Branch Video Academy
+
+**Status:** COMPLETED / docs-only visual academy planning.
+
+Logic-integrity rules:
+
+- Visual academy assets must use IberNova or other clearly synthetic data unless a separate legal/data path approves real client data.
+- Videos and visual manuals must preserve DSS, Human Review Required, Board Review Draft, Not Board Approved, Not Legal Advice, and Not Investment Advice language.
+- Branch videos must not imply certified outputs, autonomous AI, production provider AI traffic, SOC2/ISO certification, public marketplace, or procurement readiness.
+- Screenshots must not contain secrets, tokens, cookies, auth headers, session IDs, real client data, real target data, personal data, or debug output.
+- Founder/avatar imagery requires explicit consent and must not imply fake endorsement, live autonomous AI, legal approval, or investment authority.
+- Missing data must remain visible as N/A, insufficient_data, not provided, or review questions.
+- No media files, generated avatars, real videos, screenshots, runtime AI, product code, tests, package/config, Golden Dataset, Formula Registry, backend, frontend, or source-of-truth logic were changed.
+
+Publishing gate:
+
+- Use `docs/academy/VIDEO_TRUTHFULNESS_CHECKLIST.md` before any video/manual publication.
+- Use `docs/academy/VIDEO_HOSTING_AND_VERSIONING.md` to keep rendered media outside the repository and versioned externally.
+- Block publication if any forbidden claim, real data, secret, or unapproved likeness appears.

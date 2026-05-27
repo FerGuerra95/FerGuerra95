@@ -337,3 +337,26 @@ Use these C.15.6 templates to run the first 3-5 conversations without drifting i
 | `PILOT_GO_NO_GO_SCORECARD.md` | Decide whether to propose pilot, continue discovery, park, or no-go |
 
 Operating rule: no real target data belongs in repo docs. Use placeholders here and move any real notes to an approved controlled workspace.
+
+---
+
+## 23. Visual Academy Support
+
+C.24.1 adds a planned visual academy for prospect education before broad product access.
+
+Use cases:
+
+- Send a short CEO's OS overview video once reviewed.
+- Use the Reporting / Board Packs branch video to explain persisted Board Review Draft snapshots.
+- Use branch videos selectively after discovery confirms a relevant pain.
+- Use the visual manual as a controlled pilot explanation artifact.
+
+Controls:
+
+- Use IberNova or synthetic data first.
+- Keep rendered videos and screenshots outside the repository.
+- Apply `../academy/VIDEO_TRUTHFULNESS_CHECKLIST.md` before sharing.
+- Do not request real client data based on a video; move to NDA/DPA/SOW path first.
+- Do not use founder/avatar imagery unless consent and tool review are complete.
+
+Unsafe claims remain blocked: board-approved output, certified PDF, autonomous AI, legal/investment advice, SOC2/ISO certification, production provider AI traffic, public marketplace, or real case study without separate approval.
