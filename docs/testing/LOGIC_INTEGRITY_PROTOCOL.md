@@ -2057,3 +2057,36 @@ Validation:
 - `npm run build` PASS.
 - `npm run test:unit` PASS: 552 tests.
 - Playwright navigation smoke blocked by environment because `http://127.0.0.1:5173` was not serving Vite; classify as P2/env, not product evidence.
+
+---
+
+## C.24.3d - Final Cross-Branch Visual Integration & Style Cleanup
+
+**Status:** COMPLETED / cross-branch visual style consolidation.
+
+Logic-integrity constraints preserved:
+
+- No formulas changed.
+- No Golden Dataset or Formula Registry changes.
+- No backend, auth, router, migrations, package/config, secrets, runtime provider, report logic, workflow logic, or source-of-truth changes.
+- No base palette, branch color, or global product identity change.
+- No new parallel visual system.
+- No aggressive new global CSS.
+- No high z-index masking, sticky table header masking, absolute-position table layout, or overflow hiding that cuts content.
+- N/A and insufficient_data remain visible.
+- Missing data was not converted to `0`.
+- DSS, Human Review Required, Board Review Draft, and Not Board Approved boundaries remain intact.
+
+Visual integration result:
+
+- Remaining shared/legacy table wrappers were aligned with the softer enterprise table shell.
+- Cross-branch table headers were toned down so they sit inside panels instead of reading as separate layers.
+- Module KPI cards, enterprise panels, lower-page surfaces, workspace sections, and table panels had repeated glow/shadow layers reduced.
+- Duplicate Compliance report table-header style was removed.
+- Existing `workspaceAccent.css` primitives were reused rather than adding new wrappers or another visual system.
+
+Validation:
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 552 tests.
+- Playwright navigation smoke blocked by environment because `http://127.0.0.1:5173` was not serving Vite; classify as P2/env, not product evidence.

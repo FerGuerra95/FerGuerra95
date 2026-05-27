@@ -7619,3 +7619,43 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 - `npm run build` PASS.
 - `npm run test:unit` PASS: 552 tests.
 - `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` P2/env: Vite was not running at `http://127.0.0.1:5173`, so navigation smoke could not start.
+
+---
+
+## C.24.3d - Final Cross-Branch Visual Integration & Style Cleanup
+
+**Status:** COMPLETED / CROSS-BRANCH VISUAL INTEGRATION CONSOLIDATED.
+
+**Baseline:** `HEAD = origin/main = bb23788`.
+
+**Branches reviewed for recording-safe layout:**
+
+- CEO Overview
+- Reporting / Board Packs / snapshots
+- Funding
+- M&A
+- Compliance
+- Risk
+- PMI
+- Governance
+- Strategy
+- Bridge labels/surfaces
+- Heritage labels/surfaces
+
+**Styles reused/consolidated:**
+
+- Reused existing `workspaceAccent.css` workspace surface and table primitives.
+- Consolidated the remaining legacy `.table-wrap` treatment with the softer enterprise table shell from C.24.3c.
+- Removed duplicate Compliance report table-header styling.
+- Reduced repeated workspace glow/shadow treatment on module KPI cards, enterprise panels, workspace sections, lower-page surfaces, and table panels.
+- Softened table header backgrounds across M&A, Funding, Compliance, Risk, PMI, Reporting, and Strategy so headers integrate with parent panels instead of appearing as separate overlay layers.
+
+**Style cleanup posture:** No new visual system, no new broad selector family, no high z-index masking, no absolute-position layout masking, and no palette/brand redesign were introduced.
+
+**Safety:** No formulas, data, Golden Dataset, Formula Registry, backend, auth/router, package/config, source-of-truth logic, report logic, workflow logic, or product claims changed. N/A and insufficient_data remain visible.
+
+**Validation:**
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 552 tests.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` P2/env: Vite was not running at `http://127.0.0.1:5173`, so navigation smoke could not start.

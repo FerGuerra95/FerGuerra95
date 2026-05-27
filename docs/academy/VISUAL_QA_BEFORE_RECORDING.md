@@ -136,3 +136,38 @@ Validation notes:
 
 - Build and unit tests passed after layout polish.
 - Automated navigation smoke still requires launching Vite at `127.0.0.1:5173` before recording rehearsal.
+
+---
+
+## C.24.3d Final Cross-Branch Visual Integration & Style Cleanup
+
+**Status:** COMPLETED / final recording-safe layout consolidation ready for QA pass.
+
+Branches reviewed:
+
+- CEO Overview
+- Reporting / Board Packs / snapshots
+- Funding
+- M&A
+- Compliance
+- Risk
+- PMI
+- Governance
+- Strategy
+- Bridge/Heritage surfaces where shown
+
+Visual updates to verify during recording:
+
+- Tables across branches should feel integrated with the parent panel rather than glowing as separate stickers.
+- Legacy table wrappers should match the softer enterprise table shell treatment.
+- Table headers should not stick above or visually float over cards.
+- Module cards and panels should keep the dark premium style with reduced duplicate glow/shadow layers.
+- Reporting, Strategy, Risk, Funding, M&A, Compliance and PMI table headers should read as panel content.
+- N/A and insufficient_data must remain visible even where the surface is visually calmer.
+
+No calculation, formula, source-of-truth, workflow, base theme, palette, or Golden Dataset changes were made.
+
+Validation notes:
+
+- Build and unit tests passed after C.24.3d.
+- Automated navigation smoke still requires launching Vite at `127.0.0.1:5173` before recording rehearsal.

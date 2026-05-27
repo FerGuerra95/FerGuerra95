@@ -62,3 +62,20 @@ Validation notes:
 
 - Build and unit tests passed after C.24.3c layout integration polish.
 - Playwright navigation smoke was not completed because the local Vite server was not running; run it again during recording rehearsal.
+
+---
+
+## C.24.3d Final Cross-Branch Visual Integration Notes
+
+| Screen | Classification | Reason | Required wording | Notes |
+|---|---|---|---|---|
+| Cross-branch enterprise panels | SAFE_TO_SHOW_EXTERNAL | Repeated glow/shadow layers reduced | "DSS workspace; human review required." | Panels should feel native to page surface |
+| Legacy table wrappers | SAFE_TO_SHOW_EXTERNAL | Aligned with enterprise table shell | "Evidence table; missing data remains visible." | No sticky/z-index header layer |
+| M&A/Funding/Compliance/Risk/PMI tables | SHOW_WITH_LABELS | Table headers softened across branch surfaces | "Indicative DSS data; not certification or advice." | Preserve N/A and insufficient_data |
+| Reporting/Strategy tables | SAFE_TO_SHOW_EXTERNAL | Existing table integration preserved and consolidated | "Board Review Draft / strategic DSS context." | No board-approved or certified claim |
+| Bridge/Heritage surfaces | SHOW_WITH_LABELS | Styling remains surface-only | "Internal/demo/future layer." | Do not present as live marketplace or core pilot maturity |
+
+Validation notes:
+
+- Build and unit tests passed after C.24.3d cross-branch visual integration.
+- Playwright navigation smoke was not completed because the local Vite server was not running; run it again during recording rehearsal.
