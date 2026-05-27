@@ -1811,3 +1811,103 @@ AI runtime integrity rules:
 - DPA/subprocessor approval is required before real client data/provider traffic.
 
 No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, provider SDK, API key, external fetch, provider traffic, AI runtime, auth, storage, or source-of-truth logic changed.
+
+---
+
+## C.30.0 - Consolidated Product Truth Gate
+
+**Status:** COMPLETED / consolidated product truth gate only.
+
+Scope:
+
+- Consolidated existing C.13-C.17 and C.16.3 evidence across M&A, Funding, Compliance, Risk, PMI, Reporting, Governance, Strategy, Bridge, Heritage, and CEO Overview.
+- Reused existing Source-of-Truth Registry, Formula Registry, Golden Dataset documentation, reporting workflow evidence, AI runtime planning, pilot/legal/commercial guardrails, and current test inventory.
+- Did not change product code, tests, formulas, Golden Dataset, Formula Registry, reports, charts, backend, frontend, package/config, migrations, or runtime behavior.
+
+Branch truth gate summary:
+
+| Branch | Gate status | Logic-integrity result |
+|---|---|---|
+| M&A | RESOLVED_FOR_CURRENT_SCOPE | Demo-safe as indicative DSS valuation/workflow with human review and existing Golden/report evidence. |
+| Funding | RESOLVED_FOR_CURRENT_SCOPE | Demo-safe; dilution/runway/readiness formatting protects missing values as N/A and does not change formulas. |
+| Compliance | PARTIAL_WITH_TRACKED_RISKS | Demo-safe with labels; weighted/resilience evidence exists, but operational-vs-Golden scope must stay explicit. |
+| Risk | RESOLVED_FOR_CURRENT_SCOPE | Demo-safe with likelihood/impact/severity evidence and heatmap truthfulness checks. |
+| PMI | PARTIAL_WITH_TRACKED_RISKS | Demo-safe only when forecast/template/demo synergy language stays visible. |
+| Reporting | RESOLVED_FOR_CURRENT_SCOPE | Core demo spine; persisted snapshots, Board Review Draft, workflow gates, audit metadata, and no certified/board-approved claims. |
+| Governance | RESOLVED_FOR_CURRENT_SCOPE | Demo-safe as board/workflow readiness DSS, subject to human review. |
+| Strategy | RESOLVED_FOR_CURRENT_SCOPE | Demo-safe with initiative/empty-state guardrails. |
+| Bridge | DEMO_ONLY | Internal/unlisted signal layer only; no public marketplace or success-fee-live claim. |
+| Heritage | DEMO_ONLY | Premium/future narrative layer only; no fake enterprise maturity claim. |
+| CEO Overview | PARTIAL_WITH_TRACKED_RISKS | Demo-safe if aggregator-only, N/A handling, module eligibility, and fallback-label discipline remain visible. |
+
+Critical metric map result:
+
+- M&A, Funding, Risk, Reporting workflow state, and Board Review Draft status have the strongest current evidence for the IberNova demo path.
+- Compliance and PMI have usable current-scope evidence but require explicit scope labels where demo or forecast assumptions are used.
+- Bridge and Heritage remain demo/future layers, not production truth sources.
+- CEO Overview may aggregate module signals only when source eligibility and N/A/fallback rules are preserved.
+
+IberNova coherence result:
+
+- IberNova Industrial Group S.L. is coherent for synthetic Board Intelligence demo use.
+- Strongest path: CEO Overview -> Reporting / Board Packs -> persisted snapshot -> HTML Board Review Draft -> Funding/M&A/Compliance/Risk optional deep dive.
+- PMI, Governance, and Strategy may be shown as partial/demo context if missing operating detail remains visible.
+- Bridge and Heritage should be shown only as internal/unlisted/future-premium context.
+- IberNova must not be described as a real client, real case study, legally reviewed output, investment recommendation, or board-approved report.
+
+CEO Overview coherence result:
+
+- CEO Overview remains an aggregator, not source-of-truth.
+- It must not invent aggregate score certainty, convert N/A to `0`, sell fallback/demo data as truth, or mix persisted and live/demo data without labels.
+- Reporting snapshot status and Human Review Required language must remain visible when Board Review Drafts are referenced.
+
+Board Review Draft and reporting result:
+
+- Board Review Draft remains not board-approved, not certified PDF, not legal advice, not investment advice, and not an AI-approved output.
+- Persisted snapshot preview must use persisted renderer input/status metadata and must not recalculate scores.
+- Missing data, insufficient_data, N/A, and audit metadata remain visible.
+- Reviewed/internal_final remains human-gated and does not mean board-approved.
+
+Chart truthfulness result:
+
+- CEO radar, Risk heatmap, Funding charts, M&A waterfall, PMI charts, Compliance risk maps, and Reporting KPI charts are demo-safe only when null/N/A handling, ratio-vs-percent labeling, source-of-truth labels, and scale semantics remain explicit.
+- No chart changes were made in this gate.
+- Follow-up C.30.1 should target any chart/metric without enough Golden or unit coverage instead of changing visuals opportunistically.
+
+Cross-module boundaries:
+
+| Connection | Boundary |
+|---|---|
+| M&A -> Funding | Valuation may be context/input only, not unaudited truth. |
+| Compliance -> Risk | Risk signal ownership must remain explicit to avoid double-counting. |
+| PMI -> Reporting | Forecast/template/demo synergy data must not be displayed as actual operating performance. |
+| Reporting -> CEO Overview | Draft/reviewed/internal_final status must be preserved by the aggregator. |
+| AI -> Reporting | AI can draft narrative only; it cannot alter metrics, formulas, states, approvals, or source-of-truth. |
+| Bridge -> Marketplace | Bridge remains internal/unlisted/demo; no public marketplace live claim. |
+| Heritage -> Enterprise | Heritage remains premium/future narrative unless explicit data and SoT are implemented. |
+
+Findings:
+
+| Severity | Count | Summary |
+|---|---:|---|
+| P0 | 0 | No confirmed false critical calculation, cross-module contradiction, real-data-as-demo issue, or critical report NaN/undefined/Infinity found from existing evidence. |
+| P1 | 0 | No P1 blocks identified for the IberNova synthetic demo spine. |
+| P2 | 6 | CEO aggregate discipline, Compliance scope labels, PMI forecast labels, Bridge internal-only label, Heritage future/premium label, and auth/legal/provider gates require continued operator discipline. |
+| P3 | 3 | Copy/chart polish and additional evidence tables can improve confidence later. |
+
+Demo decision:
+
+**DEMO EXTERNA SINTETICA AUTORIZADA** for the IberNova path only, with these conditions:
+
+- Use synthetic/demo data first.
+- Preserve DSS and Human Review Required language.
+- Do not claim board approval, certified PDF, legal advice, investment advice, certified compliance, public marketplace, autonomous AI, or enterprise certification.
+- Keep Bridge/Heritage clearly marked as demo/future/premium context.
+- Close authenticated production smoke and legal/DPA/subprocessor gates before real client data or provider AI traffic.
+
+Recommended C.30.1+:
+
+- Plan targeted Golden/test gaps for any metric still PARTIAL.
+- Add chart truthfulness evidence where coverage is thin.
+- Lock demo script to the IberNova-safe path.
+- Keep remediation targeted; do not reopen closed branches without evidence.

@@ -7333,3 +7333,128 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **AI runtime posture:** Future provider runtime is planned but remains disabled. No provider SDK, API keys, external fetch, provider traffic, runtime AI, or real client data processing was introduced.
 
 **Gate:** DPA/subprocessor approval, security review, no-training/retention review, prompt injection tests, redaction tests, output evaluation, feature flags, and kill switch are required before C.16.4 runtime work.
+---
+
+## C.30.0 - Consolidated Product Truth Gate
+
+**Status:** COMPLETED / PRODUCT TRUTH GATE CONSOLIDATED.
+
+**Baseline:** `HEAD = origin/main = 4ed4efc`.
+
+**Scope:** Read-only consolidation of existing C.13-C.17 and C.16.3 evidence across M&A, Funding, Compliance, Risk, PMI, Reporting, Governance, Strategy, Bridge, Heritage, and CEO Overview. No product code, tests, Golden Dataset, Formula Registry, formulas, reports, charts, backend, frontend, package/config, or secrets changed.
+
+### Branch status
+
+| Branch | Current status | Existing evidence | Main remaining risk | Demo readiness |
+|---|---|---|---|---|
+| M&A | RESOLVED_FOR_CURRENT_SCOPE | Formula Registry EV/net debt/equity/waterfall benchmark rows; `maGoldenFormulas`, product report alignment, valuation/report tests | Product waterfall and buyer fit remain DSS/product-specific, not full Golden-certified opinions | Demo-safe for indicative DSS with labels |
+| Funding | RESOLVED_FOR_CURRENT_SCOPE | Formula Registry runway/post-money/ownership; funding formulas/display tests; C.15.4c/d Funding crash closure | Investor readiness/funding risk are DSS signals, not investment advice | Demo-safe |
+| Compliance | PARTIAL_WITH_TRACKED_RISKS | Weighted risk and resilience Golden helpers/tests; compliance scoring/report tests; empty-state evidence | Operational risk/resilience engines remain separate from Golden benchmark and not certified compliance | Demo-safe with operational-DSS labels |
+| Risk | RESOLVED_FOR_CURRENT_SCOPE | Risk Golden/formula tests, heatmap/unit/report truthfulness tests | Severity bands are DSS indicators, not certified risk ratings | Demo-safe |
+| PMI | PARTIAL_WITH_TRACKED_RISKS | PMI Golden/operational/demo/report truthfulness tests | Capture/forecast/demo layers require labels; synergy estimates are not guarantees | Demo-safe if labelled forecast/demo |
+| Reporting | RESOLVED_FOR_CURRENT_SCOPE | C.17.1-C.17.7 renderer, persisted snapshots, workflow/audit tests, API integration tests | PDF/certified export remains future; Board Review Draft only | Core demo spine |
+| Governance | RESOLVED_FOR_CURRENT_SCOPE | Governance metrics/truthfulness tests and integration flow | Governance readiness is DSS maturity, not certification | Demo-safe |
+| Strategy | RESOLVED_FOR_CURRENT_SCOPE | Strategy metrics/truthfulness tests and integration flow | Empty-org/initiative consistency should stay labelled when incomplete | Demo-safe selective |
+| Bridge | DEMO_ONLY | Bridge engine/golden/operational priority tests; marketplace public-live claim blocked in commercial docs | Marketplace remains internal/unlisted/demo; no success-fee-live claim | Mention only as internal signals/demo |
+| Heritage | DEMO_ONLY | Heritage metrics and integration tests; pilot/commercial docs label future/premium posture | Maturity/legacy narrative is not core pilot proof | Optional, clearly labelled |
+| CEO Overview | PARTIAL_WITH_TRACKED_RISKS | CEO overview truthfulness, executive metrics, command-center e2e, SoT registry aggregator boundary | Aggregator must preserve eligibility/N/A and avoid fallback-as-truth | Demo-safe with N/A/fallback discipline |
+
+### Critical metric map
+
+| Metric group | Owner | SoT documented? | Golden? | Unit test? | Report usage? | CEO usage? | Status |
+|---|---|---|---|---|---|---|---|
+| M&A EV / equity / net debt / valuation range | M&A | Yes | Yes for benchmark/core | Yes | Yes with DSS labels | Context only | RESOLVED_FOR_CURRENT_SCOPE |
+| M&A waterfall / buyer fit | M&A | Partial | Waterfall simple benchmark only; buyer fit future | Yes for report alignment/operational paths | Yes | Context only | PARTIAL_WITH_TRACKED_RISKS |
+| Funding post-money / ownership / dilution / runway / burn | Funding | Yes | Yes for core formulas | Yes | Yes | Yes, as DSS | RESOLVED_FOR_CURRENT_SCOPE |
+| Funding investor readiness / funding risk | Funding | Partial | No Golden as decision score | Yes for metrics/display | Yes with limits | Yes, labelled | PARTIAL_WITH_TRACKED_RISKS |
+| Compliance weighted risk / resilience | Compliance | Yes for benchmark | Yes | Yes | Yes | Yes, as DSS | RESOLVED_FOR_CURRENT_SCOPE |
+| Compliance operational risk / evidence risk | Compliance | Partial | No operational Golden | Yes | Yes | Yes, labelled | PARTIAL_WITH_TRACKED_RISKS |
+| Risk likelihood / impact / severity / residual / heatmap | Risk | Yes | Yes | Yes | Yes | Yes | RESOLVED_FOR_CURRENT_SCOPE |
+| PMI synergy / capture / cost / net synergy / payback | PMI | Partial | Capture Golden + operational tests | Yes | Yes with forecast/demo labels | Context only | PARTIAL_WITH_TRACKED_RISKS |
+| Reporting KPI variance / snapshot / workflow / audit | Reporting | Yes | KPI variance Golden/test evidence | Yes | Core | Yes by status | RESOLVED_FOR_CURRENT_SCOPE |
+| Governance readiness / decision workflow / control maturity | Governance | Yes for DSS module | N/A for certification | Yes | Optional | Yes | RESOLVED_FOR_CURRENT_SCOPE |
+| Strategy readiness / strategic risk / initiatives | Strategy | Yes for DSS module | N/A for certification | Yes | Optional | Yes | RESOLVED_FOR_CURRENT_SCOPE |
+| Bridge priority / marketplace status | Bridge | Partial | Priority benchmark evidence | Yes | Optional | Context only | DEMO_ONLY |
+| Heritage maturity / legacy narrative | Heritage | Partial | N/A | Yes | Optional | Context only | DEMO_ONLY |
+| CEO aggregate / radar / cards / N/A handling | CEO Overview | Aggregator boundary documented | Average health mapped/pending historical registry row | Yes | N/A | Core display | PARTIAL_WITH_TRACKED_RISKS |
+
+### IberNova coherence
+
+| Module | IberNova readiness | Can show? | Must label as | Missing data |
+|---|---|---|---|---|
+| CEO Overview | Strong enough for narrative | Yes | Synthetic DSS overview | Cash movement, current board-approved budget, complete module evidence |
+| Reporting / Board Packs | Strong | Yes | Board Review Draft / Human Review Required | Snapshot should preserve missing-data questions |
+| Board Review Draft | Strong | Yes | Draft-only, not board-approved | Target EBITDA support, customer concentration, export-control screening |
+| Funding | Medium/strong | Yes | Scenario / not investment advice | Latest cash, monthly cash movement, lender terms |
+| M&A | Medium/strong | Yes | Indicative DSS / not fairness opinion | Target customer concentration, diligence evidence, EBITDA support |
+| Compliance | Medium | Yes | Operational DSS / not certified compliance | Export-control screening, supplier evidence |
+| Risk | Medium | Yes | DSS risk indicators | Detailed likelihood/impact evidence |
+| PMI | Partial | Limited | Demo/forecast only | Integration owner, synergy validation, cost plan |
+| Governance / Strategy | Partial | Selective | Board prep / strategic context | Formal governance process and OKR detail |
+| Bridge / Heritage | Low/roadmap | Mention only | Demo/future/internal signal | Insufficient operating evidence |
+
+### CEO Overview coherence
+
+| CEO area | Source | Eligibility | Display | Risk | Status |
+|---|---|---|---|---|---|
+| Executive cards | Module summaries / tests | Eligible when module signal exists | DSS signal + N/A where missing | Overstating module maturity | PASS_WITH_P2 |
+| Radar values | Aggregated module signals | Must exclude/label missing | N/A/insufficient_data preserved | Historical registry row still warns aggregator only | PASS_WITH_P2 |
+| Funding card | Funding engine/display evidence | Eligible for core metrics | No fake dilution/runway values | Investor readiness is not advice | PASS |
+| Compliance card | Compliance operational/golden split | Eligible with operational label | Not certified compliance | Mixed operational vs benchmark scores | PASS_WITH_P2 |
+| Reporting card | Persisted snapshot workflow | Eligible when snapshot/status exists | Draft/reviewed/internal_final labels | Internal_final could be misunderstood as board approval if copy drifts | PASS |
+| AI-related narrative | C.16.3 docs | Runtime disabled | Draft-only / no provider traffic | DPA/subprocessor gate must remain visible | PASS |
+
+### Board Review / reporting correctness
+
+| Report | Current protection | Remaining risk | Demo-safe? |
+|---|---|---|---|
+| HTML Board Review Draft | Header/logo, Confidential, Human Review Required, Not Board Approved, Not Legal/Investment Advice | Must avoid PDF/certified language | Yes |
+| Persisted snapshot preview | Uses backend rendererInput/status; no recalculation; audit metadata | Revoked/archived state must remain clear | Yes |
+| Workflow reviewed/internal_final | Backend gated; AI/service actor blocked; audit events | Internal_final is not board-approved | Yes with wording |
+| AI draft narrative | C.16.3 blocks runtime/provider traffic; AI not SoT | Future C.16.4 must pass DPA/prompt-injection gates | Not live; roadmap only |
+
+### Chart truthfulness
+
+| Chart | Risk | Current evidence | Required follow-up |
+|---|---|---|---|
+| CEO radar | Aggregator could imply certified health | CEO truthfulness tests; SoT aggregator boundary | Keep N/A/eligibility labels |
+| Risk heatmap | Severity color may look definitive | Risk heatmap/unit/report tests | Keep DSS/likelihood-impact labels |
+| Funding charts | Ratio vs percent/dilution display | Funding display/formula tests and C.15.4c fix | Continue no NaN/Infinity/fake 0 checks |
+| M&A waterfall | Product waterfall differs from simple Golden | MA report alignment tests; Formula Registry distinction | Keep product DSS vs benchmark distinction |
+| PMI charts | Forecast/demo vs actual capture | PMI demo/operational/report tests | Keep forecast/demo labels |
+| Compliance risk maps | Operational vs Golden benchmark confusion | Compliance scoring/golden/report tests | Keep not-certified label |
+| Reporting KPI charts | Budget=0/null variance risk | Reporting golden/aggregator tests | Preserve null/N/A for zero denominator |
+
+### Cross-module synergy
+
+| Connection | Status | Risk | Required next step |
+|---|---|---|---|
+| M&A -> Funding | Contextual only | Valuation could be treated as financing truth | Keep indicative DSS label |
+| Compliance -> Risk | Partial boundary | Duplicate risk score semantics | Keep owner/SoT labels |
+| PMI -> Reporting | Usable with labels | Forecast/demo mistaken as actual | Preserve forecast/demo metadata |
+| Reporting -> CEO | Strong | Workflow status copy drift | Preserve draft/reviewed/internal_final wording |
+| AI -> Reporting | Planned/blocked | Runtime could alter metrics if future guardrails skipped | C.16.4 must remain synthetic-first |
+| Bridge -> Marketplace | Demo/internal only | Marketplace-live or success-fee implication | Keep out of external demo except caveat |
+| Heritage -> Enterprise | Future/premium | Fake maturity claim | Mention only as roadmap/premium |
+
+### Findings
+
+| Severity | Count | Summary |
+|---|---:|---|
+| P0 | 0 | No confirmed false critical calculation, report conclusion, cross-module contradiction, real-data demo misuse, or NaN/undefined/Infinity in critical report path from reused evidence |
+| P1 | 0 for IberNova demo spine | No P1 blocking CEO Overview + Reporting + Funding/M&A/Compliance synthetic demo path |
+| P2 | 6 | CEO aggregate remains aggregator-only; Compliance operational-vs-Golden distinction; PMI forecast/demo labels; Bridge marketplace internal-only; Heritage future/premium status; authenticated production smoke/legal review/provider DPA gates remain operational/documentary |
+| P3 | 3 | Copy/visual polish, chart label polish, broader test coverage can improve |
+
+### Demo decision
+
+| Decision | Conditions |
+|---|---|
+| **Option A - DEMO EXTERNA SINTETICA AUTORIZADA** | Authorized only with IberNova/synthetic data, Board Intelligence spine, DSS/Human Review framing, no board-approved/certified/AI-runtime claims, no real client data before legal path, and Bridge/Heritage kept as internal/future/optional |
+
+### Recommended C.30.1+ follow-up
+
+1. C.30.1 targeted Golden/Formula gap planning for CEO aggregate, Reporting variance, Bridge priority, PMI capture and selected operational metrics.
+2. C.30.2 chart truthfulness label pass for CEO radar, Funding, Compliance, PMI, and Reporting.
+3. C.30.3 demo-script lock for IberNova path only.
+4. C.30.4 authenticated production smoke closure when credentials are available.
