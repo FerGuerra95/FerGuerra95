@@ -1959,3 +1959,21 @@ Export/PDF integrity rules:
 - A saved document must still be reviewed before sharing.
 
 No videos, images, audio, media files, product code, backend, frontend, tests, package/config, Golden Dataset, Formula Registry, runtime AI, or PDF runtime were changed.
+
+---
+
+## C.24.3 - Visual Capture Checklist / Screenshot Capture Plan
+
+**Status:** COMPLETED / docs-only visual capture planning.
+
+Screenshot and video artifacts are product outputs for truthfulness purposes. They must:
+
+- Preserve DSS and Human Review Required language.
+- Keep N/A and insufficient_data visible.
+- Avoid cropped labels that hide limitations.
+- Avoid any board-approved, certified PDF, autonomous AI, legal/investment advice, certified compliance, SOC2/ISO, production provider AI traffic, or public marketplace claim.
+- Classify Bridge/Heritage as internal/demo/future when shown.
+- Use browser-native print/save-as-PDF wording only for PDF convenience copies.
+- Pass visual QA before recording or publication.
+
+No screenshots, videos, images, audio, media files, product code, backend, frontend, tests, package/config, Golden Dataset, Formula Registry, or source-of-truth logic were changed.

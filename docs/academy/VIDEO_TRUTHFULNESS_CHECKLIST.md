@@ -37,6 +37,18 @@ The asset must not claim:
 - [ ] No real target names, prospect notes, emails, phone numbers, or personal data.
 - [ ] No hidden error boundary, NaN, undefined, Infinity, or fake 0 replacing N/A.
 - [ ] Browser tabs/bookmarks do not reveal private data.
+- [ ] Screen classification has been checked against `DEMO_SAFE_SCREEN_GUIDE.md`.
+- [ ] Shot has passed `VISUAL_QA_BEFORE_RECORDING.md`.
+- [ ] Screenshot or clip belongs to the approved `SCREENSHOT_SHOT_LIST.md` or chapter capture plan.
+
+## Visual Capture Truthfulness Checks
+
+- [ ] N/A and insufficient_data are visible when relevant.
+- [ ] Board Review Draft labels are readable.
+- [ ] Human Review Required is visible or narrated.
+- [ ] Bridge/Heritage future/internal labels are visible when those screens appear.
+- [ ] Browser print/save-as-PDF is not described as certified PDF.
+- [ ] Visual framing does not crop away risk/truthfulness labels.
 
 ## Product Accuracy
 

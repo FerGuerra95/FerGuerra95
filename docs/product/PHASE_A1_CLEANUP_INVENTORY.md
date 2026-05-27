@@ -7499,3 +7499,23 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Manual posture:** The practical user manual teaches the end-to-end synthetic workflow: login, navigation, CEO Overview, Reporting / Board Packs, persisted snapshot creation, HTML Board Review Draft preview, workflow states, browser-native save/print as PDF, and branch walkthroughs. It does not create video/media assets or product runtime behavior.
 
 **Export wording:** Browser print/save-as-PDF may be shown only as a convenience copy of the HTML Board Review Draft. It must not be described as a CEO's OS certified PDF, binary PDF export, legal approval, investment recommendation, or board-approved artifact.
+
+---
+
+## C.24.3 - Visual Capture Checklist / Screenshot Capture Plan
+
+**Status:** COMPLETED / VISUAL CAPTURE PLAN READY / NO MEDIA GENERATED YET.
+
+**Baseline:** `HEAD = origin/main = ba78e30`.
+
+**Deliverables:**
+
+- `docs/academy/VISUAL_CAPTURE_CHECKLIST.md`
+- `docs/academy/SCREENSHOT_SHOT_LIST.md`
+- `docs/academy/VIDEO_CHAPTER_CAPTURE_PLAN.md`
+- `docs/academy/DEMO_SAFE_SCREEN_GUIDE.md`
+- `docs/academy/VISUAL_QA_BEFORE_RECORDING.md`
+
+**Capture posture:** The plan defines what screens to capture, what to avoid, required labels, narration cues, visual QA, and demo-safe classifications. It does not generate screenshots, videos, audio, thumbnails, or any other media.
+
+**Demo-safe rule:** External visuals must use IberNova/synthetic data, preserve N/A/insufficient_data, keep Board Review Draft/Human Review Required labels visible, and avoid board-approved, certified PDF, autonomous AI, legal/investment advice, SOC2/ISO, production AI provider traffic, or public marketplace claims.

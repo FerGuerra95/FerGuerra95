@@ -2,6 +2,8 @@
 
 This storyboard supports the practical end-to-end user manual video. It is designed for synthetic data only.
 
+Use `SCREENSHOT_SHOT_LIST.md` for shot IDs and `VIDEO_CHAPTER_CAPTURE_PLAN.md` for chapter-level capture order.
+
 | Step | Screen | Action | Button/Menu | Expected result | Narration | Risk label |
 |---:|---|---|---|---|---|---|
 | 1 | Login | Enter app | Login | Authenticated workspace opens | "We start with a controlled demo account using synthetic data." | No credentials on screen |
@@ -30,3 +32,12 @@ This storyboard supports the practical end-to-end user manual video. It is desig
 | 24 | Heritage | Optional view | Heritage nav | Future/premium narrative visible | "Future/premium continuity layer." | Not core proof |
 | 25 | Closing | Return to Reporting | Reporting nav | Board Draft context visible | "Use snapshots, human review, and legal/data gates." | No autonomous AI |
 
+## Shot ID References
+
+- CEO Overview steps should use `CEO-01` through `CEO-04`.
+- Reporting and Board Review Draft steps should use `REP-01` through `REP-08`.
+- Funding steps should use `FUN-01` through `FUN-04`.
+- M&A steps should use `MA-01` through `MA-04`.
+- Compliance/Risk steps should use `COMP-01` through `COMP-03` and `RISK-01` through `RISK-02`.
+- PMI/Governance/Strategy steps should use `PMI-01`, `PMI-02`, `GOV-01`, and `STR-01`.
+- Bridge/Heritage steps should use `BRG-01`, `BRG-02`, and `HER-01` only with future/internal labels.

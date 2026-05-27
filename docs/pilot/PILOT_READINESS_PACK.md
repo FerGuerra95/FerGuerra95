@@ -363,6 +363,20 @@ C.24.2 adds the planned practical user manual script and storyboard for onboardi
 
 The practical video remains planned only; no media is generated or stored in the repository.
 
+### Visual capture plan
+
+C.24.3 adds the visual capture and QA plan required before recording:
+
+| Asset | Status | Use |
+|---|---|---|
+| `../academy/VISUAL_CAPTURE_CHECKLIST.md` | **READY** | Global pre-capture checklist |
+| `../academy/SCREENSHOT_SHOT_LIST.md` | **READY** | Module-by-module shot list |
+| `../academy/VIDEO_CHAPTER_CAPTURE_PLAN.md` | **READY** | Chapter capture order and narration cues |
+| `../academy/DEMO_SAFE_SCREEN_GUIDE.md` | **READY** | SAFE / LABEL / INTERNAL / FUTURE / DO_NOT_SHOW classification |
+| `../academy/VISUAL_QA_BEFORE_RECORDING.md` | **READY** | Visual QA before recording |
+
+Recording should proceed only after visual QA passes and the shot list confirms synthetic data, labels, and screen safety.
+
 ---
 
 **This document is an internal pilot readiness draft. It is not a contract, SLA, or legal advice.**

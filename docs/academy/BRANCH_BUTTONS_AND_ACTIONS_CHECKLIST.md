@@ -2,6 +2,8 @@
 
 Use this checklist while recording the practical user manual video. Button names may vary slightly by UI state; use the visible product label on screen.
 
+Use `DEMO_SAFE_SCREEN_GUIDE.md` before deciding whether to show, label, limit, or skip a screen.
+
 | Branch | Main buttons/actions | Demonstrate | Do not demonstrate | Data needed | Expected result | Risk/truthfulness note |
 |---|---|---|---|---|---|---|
 | CEO Overview | Sidebar nav, cards, detail links, radar/attention queue | Executive aggregation and N/A behavior | Certified enterprise health | Synthetic module signals | Cards/radar load | Aggregator only, not SoT |
@@ -23,3 +25,12 @@ Use this checklist while recording the practical user manual video. Button names
 - If showing archive/revoke, use a clearly disposable synthetic snapshot.
 - Do not show real credentials, real user profiles, real customer names, or debug consoles.
 
+## Show / Do-Not-Show Classification
+
+| Classification | Meaning |
+|---|---|
+| SAFE_TO_SHOW_EXTERNAL | Can appear in synthetic external academy material after normal QA |
+| SHOW_WITH_LABELS | Can appear only with explicit narration/onscreen caveat |
+| INTERNAL_ONLY | Keep for operator training unless separately approved |
+| FUTURE_ONLY | Mention as roadmap/future/internal context only |
+| DO_NOT_SHOW | Do not capture or publish |

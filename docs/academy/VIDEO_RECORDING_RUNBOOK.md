@@ -5,6 +5,10 @@
 - Confirm the video scope and chapter list.
 - Use IberNova or other synthetic data only.
 - Confirm the environment is stable.
+- Run `VISUAL_CAPTURE_CHECKLIST.md`.
+- Run `VISUAL_QA_BEFORE_RECORDING.md`.
+- Select shots from `SCREENSHOT_SHOT_LIST.md`.
+- Confirm screen classification in `DEMO_SAFE_SCREEN_GUIDE.md`.
 - Confirm no real client/prospect data is loaded.
 - Close unrelated browser tabs and apps.
 - Disable notifications.
@@ -64,6 +68,7 @@ Record chapters separately when possible. This makes it easier to remove a chapt
 For each chapter:
 
 - Read objective.
+- Check `VIDEO_CHAPTER_CAPTURE_PLAN.md`.
 - Verify data is synthetic.
 - Record action.
 - Check labels.
@@ -129,4 +134,3 @@ Update the video when:
 - AI runtime status changes.
 - Legal/security claims change.
 - A forbidden claim is discovered.
-
