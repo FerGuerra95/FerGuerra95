@@ -2029,6 +2029,40 @@ Validation:
 
 ---
 
+## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix
+
+**Status:** COMPLETED / action surfaces unified without logic changes.
+
+Logic-integrity constraints preserved:
+
+- No formulas changed.
+- No Golden Dataset or Formula Registry changes.
+- No backend, auth, router, migrations, package/config, secrets, runtime provider, report logic, workflow logic, source-of-truth, or data changes.
+- No base palette, branch color, or global product identity change.
+- No new parallel visual system.
+- No duplicated action-surface style family.
+- No aggressive new global CSS.
+- No high z-index masking, sticky header masking, absolute-position layout masking, or overflow hiding that cuts content.
+- N/A and insufficient_data remain visible.
+- Missing data was not converted to `0`.
+- DSS, Human Review Required, Board Review Draft, and Not Board Approved boundaries remain intact.
+
+Visual coherence result:
+
+- Shared workspace action rows were softened from accent-edge callouts into integrated panel actions.
+- Shared enterprise table toolbar/footer surfaces were toned down so controls read as part of the table shell.
+- Reporting snapshot actions, Reporting filters, Risk filters, and Strategy filters now use the same calmer action-surface treatment.
+- Bridge enterprise toolbar borders were softened while preserving internal/unlisted/demo/future truthfulness.
+- The review covered demo-safe branches cross-branch and was not limited to M&A.
+
+Validation:
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 552 tests.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS.
+
+---
+
 ## C.24.3c - Demo UI Layout Integration Polish
 
 **Status:** COMPLETED / scoped visual layout integration polish.

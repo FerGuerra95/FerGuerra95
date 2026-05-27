@@ -171,3 +171,38 @@ Validation notes:
 
 - Build and unit tests passed after C.24.3d.
 - Automated navigation smoke still requires launching Vite at `127.0.0.1:5173` before recording rehearsal.
+
+---
+
+## C.24.3e Cross-Branch Visual Coherence & Action Surface Integration Fix
+
+**Status:** COMPLETED / action surfaces ready for recording QA pass.
+
+Branches reviewed:
+
+- CEO Overview
+- Reporting / Board Packs / snapshots / workflow actions
+- Funding
+- M&A
+- Compliance
+- Risk
+- PMI
+- Governance
+- Strategy
+- Bridge/Heritage surfaces where shown
+
+Visual updates to verify during recording:
+
+- Buttons and pills should not have visible rectangular sticker wrappers behind them.
+- Action rows should feel integrated with the card or table surface rather than added on top.
+- Reporting snapshot actions, Reporting filters, Risk filters, and Strategy filters should share a calmer integrated toolbar treatment.
+- Shared enterprise table toolbars and footers should read as table controls, not separate accent cards.
+- Bridge and Heritage surfaces must still be labelled internal/demo/future as applicable.
+- N/A and insufficient_data must remain visible even where the surface is visually calmer.
+
+No calculation, formula, source-of-truth, workflow, base theme, palette, or Golden Dataset changes were made.
+
+Validation notes:
+
+- Build and unit tests passed after C.24.3e.
+- Automated navigation smoke passed for C.24.3e.

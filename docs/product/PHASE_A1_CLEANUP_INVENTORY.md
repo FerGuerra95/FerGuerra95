@@ -7583,6 +7583,47 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 
 ---
 
+## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix
+
+**Status:** COMPLETED / DEMO ACTION SURFACES VISUALLY UNIFIED.
+
+**Baseline:** `HEAD = origin/main = 485565c`.
+
+**Branches reviewed for action-surface coherence:**
+
+- CEO Overview
+- Reporting / Board Packs / snapshots / workflow actions
+- Funding
+- M&A
+- Compliance
+- Risk
+- PMI
+- Governance
+- Strategy
+- Bridge labels/surfaces
+- Heritage labels/surfaces
+
+**Action wrapper and surface work completed:**
+
+- Reused existing `workspaceAccent.css` workspace primitives instead of adding another visual layer.
+- Softened `.ceos-ws-action-row` so action rows use neutral integrated panel treatment rather than a left-accent sticker edge.
+- Softened the shared enterprise table toolbar/footer treatment so table controls sit inside the parent table surface.
+- Reduced Reporting snapshot/filter/action wrapper contrast so buttons read as native actions, not separate rectangular overlays.
+- Applied the same toolbar integration pattern to Risk and Strategy to keep cross-branch demo surfaces visually consistent.
+- Toned Bridge enterprise toolbar borders away from strong accent framing while preserving future/internal/demo boundaries.
+
+**Style cleanup posture:** No new visual system, no new duplicated action style family, no broad selector expansion, no high z-index masking, and no palette/brand redesign were introduced.
+
+**Safety:** No formulas, data, Golden Dataset, Formula Registry, backend, auth/router, package/config, source-of-truth logic, report logic, workflow logic, or product claims changed. N/A and insufficient_data remain visible.
+
+**Validation:**
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 552 tests.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS.
+
+---
+
 ## C.24.3c - Demo UI Layout Integration Polish
 
 **Status:** COMPLETED / DEMO TABLES AND PANELS VISUALLY INTEGRATED.

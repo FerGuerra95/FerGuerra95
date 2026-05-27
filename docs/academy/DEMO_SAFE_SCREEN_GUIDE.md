@@ -79,3 +79,21 @@ Validation notes:
 
 - Build and unit tests passed after C.24.3d cross-branch visual integration.
 - Playwright navigation smoke was not completed because the local Vite server was not running; run it again during recording rehearsal.
+
+---
+
+## C.24.3e Cross-Branch Action Surface Integration Notes
+
+| Screen | Classification | Reason | Required wording | Notes |
+|---|---|---|---|---|
+| Shared workspace action rows | SAFE_TO_SHOW_EXTERNAL | Accent-edge wrapper softened into integrated action surface | "DSS action surface; human review required." | Buttons should not appear on sticker rectangles |
+| Reporting snapshot/filter actions | SAFE_TO_SHOW_EXTERNAL | Action wrappers toned down and aligned with table shell | "Workflow changes appear only after backend confirmation." | Internal Final is not board approval |
+| Risk register/filter actions | SAFE_TO_SHOW_EXTERNAL | Toolbar treatment aligned with Reporting | "Risk DSS visualization, not certified rating." | Preserve N/A and insufficient_data |
+| Strategy filter/actions | SAFE_TO_SHOW_EXTERNAL | Toolbar treatment aligned with Reporting/Risk | "Strategic planning support." | Empty-state honesty remains required |
+| Enterprise table toolbars/footers | SAFE_TO_SHOW_EXTERNAL | Controls now sit inside the table surface | "Evidence table; missing data remains visible." | No floating/sticker toolbar treatment |
+| Bridge/Heritage surfaces | SHOW_WITH_LABELS | Borders softened only; truthfulness labels preserved | "Internal/demo/future layer." | Do not present as live marketplace or core pilot maturity |
+
+Validation notes:
+
+- Build and unit tests passed after C.24.3e action-surface integration.
+- Playwright navigation smoke passed after C.24.3e action-surface integration.

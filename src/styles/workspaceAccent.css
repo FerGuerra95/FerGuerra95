@@ -549,13 +549,14 @@
 }
 
 .main-area[data-workspace] .ceos-ws-action-row {
-  border-left: 3px solid var(--ws-accent-border);
-  padding-left: 14px;
-  border-radius: 0 12px 12px 0;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(2, 6, 23, 0.16);
 }
 
 .main-area[data-workspace] .ceos-ws-action-row:hover {
-  background: var(--ws-surface);
+  background: rgba(148, 163, 184, 0.055);
 }
 
 .main-area[data-workspace] .ceos-ws-footer-strip {
@@ -833,7 +834,7 @@
     .bridge-enterprise-toolbar,
     .bridge-enterprise-field
   ) {
-  border-color: var(--ws-accent-border) !important;
+  border-color: rgba(148, 163, 184, 0.12) !important;
 }
 
 .main-area[data-workspace='reporting'] .reporting-page :is(
@@ -846,7 +847,7 @@
     .strategy-scroll,
     .strategy-panel
   ) {
-  border-color: var(--ws-accent-border) !important;
+  border-color: rgba(148, 163, 184, 0.12) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
 }
@@ -946,9 +947,9 @@
   padding: 12px 14px;
   margin-bottom: 8px;
   border-radius: 12px;
-  border: 1px solid var(--ws-accent-border);
-  background:
-    linear-gradient(135deg, var(--ws-surface), rgba(0, 0, 0, 0.42));
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(2, 6, 23, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.024);
 }
 
 .main-area[data-workspace] .ceos-enterprise-table-filter {
@@ -968,7 +969,7 @@
   margin-top: 8px;
   border-radius: 0 0 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 1px 0 var(--ws-accent-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.024);
   color: rgba(226, 232, 240, 0.62);
   font-size: 12px;
   font-weight: 650;

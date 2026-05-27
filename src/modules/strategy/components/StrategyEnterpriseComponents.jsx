@@ -12,7 +12,7 @@ export const strategyEnterpriseCss = `
   .strategy-panel { background: rgba(15,23,42,.78); border: 1px solid rgba(148,163,184,.16); border-radius: 8px; color: #e2e8f0; }
   .strategy-panel h3 { margin: 0 0 10px; color: #f8fafc; letter-spacing: 0; }
   .strategy-value { font-size: 1.7rem; color: #f8fafc; font-weight: 800; line-height: 1; }
-  .strategy-toolbar { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 12px; align-items: end; padding: 16px; border: 1px solid rgba(148,163,184,.14); border-radius: 8px; background: rgba(2,6,23,.32); }
+  .strategy-toolbar { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 12px; align-items: end; padding: 16px; border: 1px solid rgba(148,163,184,.1); border-radius: 8px; background: rgba(2,6,23,.16); }
   .strategy-field { display: grid; gap: 6px; color: rgba(226,232,240,.78); font-size: .78rem; font-weight: 700; }
   .strategy-input { width: 100%; min-height: 38px; border-radius: 8px; border: 1px solid rgba(148,163,184,.22); background: rgba(15,23,42,.86); color: #f8fafc; padding: 0 10px; }
   .strategy-button { min-height: 38px; border: 0; border-radius: 8px; padding: 0 14px; background: #e2e8f0; color: #020617; font-weight: 800; cursor: pointer; }
