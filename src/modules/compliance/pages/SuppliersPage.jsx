@@ -376,16 +376,63 @@ const suppliersPageCss = `
   .suppliers-panel,
   .suppliers-kpi-card,
   .suppliers-list-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     width: 100%;
     height: 100%;
     border-radius: 31px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.034);
     background:
-      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
-      rgba(15, 23, 42, 0.64);
+      radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.112), transparent 36%),
+      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.086), transparent 42%),
+      linear-gradient(115deg, rgba(59, 130, 246, 0.064), rgba(255,255,255,0.016) 46%, rgba(16, 185, 129, 0.052)),
+      rgba(15, 23, 42, 0.58);
     box-shadow:
-      0 24px 70px rgba(0, 0, 0, 0.21),
-      inset 0 1px 0 rgba(255,255,255,0.035);
+      0 28px 82px rgba(0, 0, 0, 0.28),
+      0 0 42px rgba(59, 130, 246, 0.086),
+      inset 0 1px 0 rgba(255,255,255,0.058),
+      inset 1px 0 0 rgba(59, 130, 246, 0.064),
+      inset -1px 0 0 rgba(16, 185, 129, 0.056);
+    backdrop-filter: blur(20px) saturate(134%);
+    -webkit-backdrop-filter: blur(20px) saturate(134%);
+  }
+
+  .suppliers-panel::before,
+  .suppliers-kpi-card::before,
+  .suppliers-list-card::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 0% 10%, rgba(59, 130, 246, 0.100), transparent 34%),
+      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.084), transparent 38%),
+      radial-gradient(circle at 54% 120%, rgba(255,255,255,0.032), transparent 42%);
+    filter: blur(28px);
+    opacity: 0.60;
+    mix-blend-mode: screen;
+  }
+
+  .suppliers-panel::after,
+  .suppliers-kpi-card::after,
+  .suppliers-list-card::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.066), rgba(255,255,255,0.012) 32%, transparent 58%, rgba(255,255,255,0.020));
+    opacity: 0.32;
+  }
+
+  .suppliers-panel > *,
+  .suppliers-kpi-card > *,
+  .suppliers-list-card > * {
+    position: relative;
+    z-index: 1;
   }
 
   .suppliers-panel {
@@ -482,10 +529,11 @@ const suppliersPageCss = `
 
   .suppliers-list-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(96, 165, 250, 0.24);
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.078), rgba(255,255,255,0.03)),
-      rgba(15, 23, 42, 0.78);
+    border-color: rgba(96, 165, 250, 0.18);
+    box-shadow:
+      0 30px 86px rgba(0, 0, 0, 0.31),
+      0 0 46px rgba(59, 130, 246, 0.112),
+      inset 0 1px 0 rgba(255,255,255,0.070);
   }
 
   .suppliers-list-card.is-active {

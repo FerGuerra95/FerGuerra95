@@ -9,7 +9,10 @@ export const strategyEnterpriseCss = `
   .strategy-copy,.strategy-muted { color: rgba(226,232,240,.72); margin: 0; }
   .strategy-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 16px; }
   .strategy-grid-two { display: grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap: 16px; }
-  .strategy-panel { background: rgba(15,23,42,.78); border: 1px solid rgba(148,163,184,.16); border-radius: 8px; color: #e2e8f0; }
+  .strategy-panel { position: relative; isolation: isolate; overflow: hidden; background: radial-gradient(circle at 0% 0%, rgba(59,130,246,.105), transparent 36%), radial-gradient(circle at 100% 8%, rgba(16,185,129,.072), transparent 42%), linear-gradient(115deg, rgba(59,130,246,.052), rgba(255,255,255,.012) 46%, rgba(16,185,129,.040)), rgba(15,23,42,.58); border: 1px solid rgba(255,255,255,.034); border-radius: 18px; color: #e2e8f0; box-shadow: 0 24px 72px rgba(0,0,0,.24), 0 0 36px rgba(59,130,246,.078), inset 0 1px 0 rgba(255,255,255,.052); backdrop-filter: blur(18px) saturate(130%); -webkit-backdrop-filter: blur(18px) saturate(130%); }
+  .strategy-panel::before { content: ""; position: absolute; inset: -30%; z-index: 0; pointer-events: none; background: radial-gradient(circle at 0% 10%, rgba(59,130,246,.092), transparent 34%), radial-gradient(circle at 100% 8%, rgba(16,185,129,.072), transparent 38%), radial-gradient(circle at 54% 120%, rgba(255,255,255,.030), transparent 42%); filter: blur(26px); opacity: .58; mix-blend-mode: screen; }
+  .strategy-panel::after { content: ""; position: absolute; inset: 1px; z-index: 0; pointer-events: none; border-radius: inherit; background: linear-gradient(135deg, rgba(255,255,255,.060), rgba(255,255,255,.012) 32%, transparent 58%, rgba(255,255,255,.020)); opacity: .30; }
+  .strategy-panel > * { position: relative; z-index: 1; }
   .strategy-panel h3 { margin: 0 0 10px; color: #f8fafc; letter-spacing: 0; }
   .strategy-value { font-size: 1.7rem; color: #f8fafc; font-weight: 800; line-height: 1; }
   .strategy-toolbar { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 12px; align-items: end; padding: 16px; border: 1px solid rgba(148,163,184,.1); border-radius: 8px; background: rgba(2,6,23,.16); }

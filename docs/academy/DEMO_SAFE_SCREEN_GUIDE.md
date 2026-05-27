@@ -97,3 +97,20 @@ Validation notes:
 
 - Build and unit tests passed after C.24.3e action-surface integration.
 - Playwright navigation smoke passed after C.24.3e action-surface integration.
+
+---
+
+## C.24.3f Cross-Branch Visual Parity Notes
+
+| Screen | Classification | Reason | Required wording | Notes |
+|---|---|---|---|---|
+| M&A reference surfaces | SAFE_TO_SHOW_EXTERNAL | Approved visual reference for integrated cards/actions | "Indicative DSS deal preparation." | Not fairness opinion |
+| Funding dashboard cards | SAFE_TO_SHOW_EXTERNAL | Surface treatment aligned with approved M&A pattern | "Scenario support, not investment advice." | Preserve N/A and no fake 0 |
+| Compliance dashboard/suppliers/evidence/reports | SAFE_TO_SHOW_EXTERNAL | Cards aligned with approved M&A pattern | "Operational compliance DSS; human review required." | Not certified audit |
+| Reporting panels | SAFE_TO_SHOW_EXTERNAL | Panels aligned with approved M&A surface hierarchy | "Board Review Draft workspace." | No board-approved claim |
+| Risk register/panels | SAFE_TO_SHOW_EXTERNAL | Panels aligned with approved M&A surface hierarchy | "Risk DSS visualization, not certified rating." | Keep insufficient_data visible |
+| PMI/Governance/Strategy panels | SAFE_TO_SHOW_EXTERNAL | Panels aligned with approved M&A surface hierarchy | "Planning and governance DSS support." | Not certification or autonomous approval |
+
+Validation notes:
+
+- Build, unit tests, and Playwright navigation smoke passed after C.24.3f visual parity.

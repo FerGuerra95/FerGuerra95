@@ -10,7 +10,10 @@ export const pmiEnterpriseCss = `
   .pmi-enterprise-copy { max-width: 920px; color: rgba(203,213,225,0.86); line-height: 1.65; margin: 0; }
   .pmi-enterprise-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
   .pmi-enterprise-grid-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-  .pmi-enterprise-panel { border: 1px solid rgba(148,163,184,0.16); border-radius: 18px; padding: 18px; background: rgba(15,23,42,0.68); }
+  .pmi-enterprise-panel { position: relative; isolation: isolate; overflow: hidden; border: 1px solid rgba(255,255,255,0.034); border-radius: 18px; padding: 18px; background: radial-gradient(circle at 0% 0%, rgba(20,184,166,0.112), transparent 36%), radial-gradient(circle at 100% 8%, rgba(59,130,246,0.076), transparent 42%), linear-gradient(115deg, rgba(20,184,166,0.060), rgba(255,255,255,0.012) 46%, rgba(59,130,246,0.042)), rgba(15,23,42,0.58); box-shadow: 0 24px 72px rgba(0,0,0,0.24), 0 0 36px rgba(20,184,166,0.080), inset 0 1px 0 rgba(255,255,255,0.052); backdrop-filter: blur(18px) saturate(130%); -webkit-backdrop-filter: blur(18px) saturate(130%); }
+  .pmi-enterprise-panel::before { content: ""; position: absolute; inset: -30%; z-index: 0; pointer-events: none; background: radial-gradient(circle at 0% 10%, rgba(20,184,166,0.092), transparent 34%), radial-gradient(circle at 100% 8%, rgba(59,130,246,0.070), transparent 38%), radial-gradient(circle at 54% 120%, rgba(255,255,255,0.030), transparent 42%); filter: blur(26px); opacity: 0.58; mix-blend-mode: screen; }
+  .pmi-enterprise-panel::after { content: ""; position: absolute; inset: 1px; z-index: 0; pointer-events: none; border-radius: inherit; background: linear-gradient(135deg, rgba(255,255,255,0.060), rgba(255,255,255,0.012) 32%, transparent 58%, rgba(255,255,255,0.020)); opacity: 0.30; }
+  .pmi-enterprise-panel > * { position: relative; z-index: 1; }
   .pmi-enterprise-kpi strong { display: block; font-size: 30px; line-height: 1; letter-spacing: 0; margin-top: 10px; }
   .pmi-enterprise-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
   .pmi-enterprise-field { display: grid; gap: 6px; min-width: 180px; color: rgba(203,213,225,0.78); font-size: 0.78rem; font-weight: 800; text-transform: uppercase; }

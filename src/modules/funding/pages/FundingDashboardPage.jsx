@@ -431,16 +431,63 @@ const fundingDashboardCss = `
   .funding-kpi-card,
   .funding-panel,
   .funding-flow-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     width: 100%;
     height: 100%;
     border-radius: 31px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.034);
     background:
-      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
-      rgba(15, 23, 42, 0.64);
+      radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.135), transparent 36%),
+      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.086), transparent 42%),
+      linear-gradient(115deg, rgba(59, 130, 246, 0.074), rgba(255,255,255,0.016) 46%, rgba(16, 185, 129, 0.052)),
+      rgba(15, 23, 42, 0.58);
     box-shadow:
-      0 24px 70px rgba(0, 0, 0, 0.21),
-      inset 0 1px 0 rgba(255,255,255,0.035);
+      0 28px 82px rgba(0, 0, 0, 0.28),
+      0 0 42px rgba(59, 130, 246, 0.096),
+      inset 0 1px 0 rgba(255,255,255,0.058),
+      inset 1px 0 0 rgba(59, 130, 246, 0.070),
+      inset -1px 0 0 rgba(16, 185, 129, 0.058);
+    backdrop-filter: blur(20px) saturate(134%);
+    -webkit-backdrop-filter: blur(20px) saturate(134%);
+  }
+
+  .funding-kpi-card::before,
+  .funding-panel::before,
+  .funding-flow-card::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 0% 10%, rgba(59, 130, 246, 0.115), transparent 34%),
+      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.094), transparent 38%),
+      radial-gradient(circle at 54% 120%, rgba(255,255,255,0.034), transparent 42%);
+    filter: blur(28px);
+    opacity: 0.62;
+    mix-blend-mode: screen;
+  }
+
+  .funding-kpi-card::after,
+  .funding-panel::after,
+  .funding-flow-card::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.070), rgba(255,255,255,0.012) 32%, transparent 58%, rgba(255,255,255,0.022));
+    opacity: 0.34;
+  }
+
+  .funding-kpi-card > *,
+  .funding-panel > *,
+  .funding-flow-card > * {
+    position: relative;
+    z-index: 1;
   }
 
   .funding-kpi-card {
@@ -459,10 +506,13 @@ const fundingDashboardCss = `
   .funding-kpi-card:hover,
   .funding-flow-card:hover {
     transform: translateY(-3px);
-    border-color: rgba(96, 165, 250, 0.25);
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.078), rgba(255,255,255,0.03)),
-      rgba(15, 23, 42, 0.78);
+    border-color: rgba(96, 165, 250, 0.18);
+    box-shadow:
+      0 34px 96px rgba(0, 0, 0, 0.34),
+      0 0 54px rgba(59, 130, 246, 0.135),
+      inset 0 1px 0 rgba(255,255,255,0.074),
+      inset 1px 0 0 rgba(59, 130, 246, 0.092),
+      inset -1px 0 0 rgba(16, 185, 129, 0.074);
   }
 
   .funding-kpi-top {

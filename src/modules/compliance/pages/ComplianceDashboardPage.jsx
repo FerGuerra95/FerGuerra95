@@ -377,17 +377,67 @@ const complianceDashboardCss = `
   .compliance-panel,
   .compliance-list-card,
   .compliance-bridge-panel {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     width: 100%;
     min-width: 0;
     height: 100%;
     border-radius: 29px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.034);
     background:
-      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
-      rgba(15, 23, 42, 0.64);
+      radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.120), transparent 36%),
+      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.092), transparent 42%),
+      linear-gradient(115deg, rgba(59, 130, 246, 0.068), rgba(255,255,255,0.016) 46%, rgba(16, 185, 129, 0.058)),
+      rgba(15, 23, 42, 0.58);
     box-shadow:
-      0 22px 62px rgba(0, 0, 0, 0.19),
-      inset 0 1px 0 rgba(255,255,255,0.035);
+      0 28px 82px rgba(0, 0, 0, 0.28),
+      0 0 42px rgba(59, 130, 246, 0.092),
+      inset 0 1px 0 rgba(255,255,255,0.058),
+      inset 1px 0 0 rgba(59, 130, 246, 0.066),
+      inset -1px 0 0 rgba(16, 185, 129, 0.060);
+    backdrop-filter: blur(20px) saturate(134%);
+    -webkit-backdrop-filter: blur(20px) saturate(134%);
+  }
+
+  .compliance-kpi-card::before,
+  .compliance-panel::before,
+  .compliance-list-card::before,
+  .compliance-bridge-panel::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 0% 10%, rgba(59, 130, 246, 0.105), transparent 34%),
+      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.092), transparent 38%),
+      radial-gradient(circle at 54% 120%, rgba(255,255,255,0.034), transparent 42%);
+    filter: blur(28px);
+    opacity: 0.62;
+    mix-blend-mode: screen;
+  }
+
+  .compliance-kpi-card::after,
+  .compliance-panel::after,
+  .compliance-list-card::after,
+  .compliance-bridge-panel::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.070), rgba(255,255,255,0.012) 32%, transparent 58%, rgba(255,255,255,0.022));
+    opacity: 0.34;
+  }
+
+  .compliance-kpi-card > *,
+  .compliance-panel > *,
+  .compliance-list-card > *,
+  .compliance-bridge-panel > * {
+    position: relative;
+    z-index: 1;
   }
 
   .compliance-kpi-card {
@@ -405,10 +455,13 @@ const complianceDashboardCss = `
 
   .compliance-kpi-card:hover {
     transform: translateY(-3px);
-    border-color: rgba(96, 165, 250, 0.25);
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.078), rgba(255,255,255,0.03)),
-      rgba(15, 23, 42, 0.78);
+    border-color: rgba(96, 165, 250, 0.18);
+    box-shadow:
+      0 34px 96px rgba(0, 0, 0, 0.34),
+      0 0 54px rgba(59, 130, 246, 0.132),
+      inset 0 1px 0 rgba(255,255,255,0.074),
+      inset 1px 0 0 rgba(59, 130, 246, 0.086),
+      inset -1px 0 0 rgba(16, 185, 129, 0.074);
   }
 
   .compliance-kpi-top {
@@ -504,10 +557,11 @@ const complianceDashboardCss = `
 
   .compliance-list-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(96, 165, 250, 0.24);
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.078), rgba(255,255,255,0.03)),
-      rgba(15, 23, 42, 0.78);
+    border-color: rgba(96, 165, 250, 0.18);
+    box-shadow:
+      0 30px 86px rgba(0, 0, 0, 0.31),
+      0 0 46px rgba(59, 130, 246, 0.115),
+      inset 0 1px 0 rgba(255,255,255,0.070);
   }
 
   .compliance-list-card-head {

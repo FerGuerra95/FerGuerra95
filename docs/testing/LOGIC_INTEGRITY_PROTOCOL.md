@@ -2063,6 +2063,42 @@ Validation:
 
 ---
 
+## C.24.3f - Cross-Branch Visual Parity Using Approved M&A Surface Pattern
+
+**Status:** COMPLETED / visual parity applied without logic changes.
+
+Logic-integrity constraints preserved:
+
+- No formulas changed.
+- No Golden Dataset or Formula Registry changes.
+- No backend, auth, router, migrations, package/config, secrets, runtime provider, report logic, workflow logic, source-of-truth, or data changes.
+- No base palette, branch color, or global product identity change.
+- No new parallel visual system and no duplicated visual style family.
+- No aggressive new global CSS, broad `[class*=...]` selector, high z-index masking, absolute-position table layout, or overflow hiding that cuts content.
+- N/A and insufficient_data remain visible.
+- Missing data was not converted to `0`.
+- DSS, Human Review Required, Board Review Draft, and Not Board Approved boundaries remain intact.
+
+M&A reference pattern:
+
+- Approved M&A surfaces use broad radius, low-alpha borders, radial/linear dark glass backgrounds, feathered pseudo-element glow, and action rows with no visible wrapper rectangle.
+- C.24.3f reused that pattern on existing branch classes instead of adding a new visual system.
+
+Visual parity result:
+
+- Funding KPI/panel/flow cards aligned with the M&A surface hierarchy.
+- Compliance dashboard, suppliers, evidence, and report cards aligned with the M&A surface hierarchy.
+- Reporting, Risk, PMI, Governance, and Strategy enterprise panels aligned with the same integrated dark-glass treatment.
+- M&A remained the reference branch; it was not the only branch reviewed.
+
+Validation:
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 552 tests.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS.
+
+---
+
 ## C.24.3c - Demo UI Layout Integration Polish
 
 **Status:** COMPLETED / scoped visual layout integration polish.

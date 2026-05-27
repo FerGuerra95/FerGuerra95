@@ -7624,6 +7624,40 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 
 ---
 
+## C.24.3f - Cross-Branch Visual Parity Using Approved M&A Surface Pattern
+
+**Status:** COMPLETED / CROSS-BRANCH SURFACES ALIGNED WITH APPROVED M&A PATTERN.
+
+**Baseline:** `HEAD = origin/main = 35d18a7`.
+
+**Approved M&A reference pattern used:**
+
+- Reference surfaces: M&A Current Deal Snapshot, Recommended Next Step, Saved Valuation Snapshot, mini metrics, command items, and action rows.
+- Pattern: broad radius, very-low-alpha border, radial + linear dark glass background, softened internal glow, feathered `::before`/`::after` surface overlays, action rows without visible rectangular wrappers, and content isolated above the surface glow.
+- Implementation posture: replicated through existing branch classes only; no new visual system, no new `v2`/`sticker-fix` classes.
+
+**Branches corrected:**
+
+- Funding dashboard KPI/panel/flow cards now use the approved integrated surface pattern.
+- Compliance dashboard KPI/panel/list/bridge cards now use the approved integrated surface pattern.
+- Compliance suppliers, evidence, and reports list/panel/KPI cards now use the same softer surface hierarchy.
+- Reporting panels now use the same feathered surface integration while preserving existing table/action logic.
+- Risk, PMI, Governance, and Strategy enterprise panels now use the same integrated dark-glass panel treatment.
+
+**Branches reviewed:** Funding, Compliance, Reporting, Risk, PMI, Governance, Strategy, M&A reference surfaces, CEO Overview entry surfaces, Bridge/Heritage future/internal labels.
+
+**Styles reused/consolidated:** Existing module classes were upgraded in place. The M&A-approved surface properties were mirrored into existing branch surfaces; no shared broad selector or parallel visual family was introduced.
+
+**Safety:** No formulas, data, Golden Dataset, Formula Registry, backend, auth/router, package/config, source-of-truth logic, report logic, workflow logic, or product claims changed. N/A and insufficient_data remain visible.
+
+**Validation:**
+
+- `npm run build` PASS.
+- `npm run test:unit` PASS: 552 tests.
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS.
+
+---
+
 ## C.24.3c - Demo UI Layout Integration Polish
 
 **Status:** COMPLETED / DEMO TABLES AND PANELS VISUALLY INTEGRATED.

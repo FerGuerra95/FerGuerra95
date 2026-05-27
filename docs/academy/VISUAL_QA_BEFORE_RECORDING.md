@@ -206,3 +206,38 @@ Validation notes:
 
 - Build and unit tests passed after C.24.3e.
 - Automated navigation smoke passed for C.24.3e.
+
+---
+
+## C.24.3f Cross-Branch Visual Parity Using Approved M&A Surface Pattern
+
+**Status:** COMPLETED / visual parity ready for recording QA pass.
+
+M&A reference pattern:
+
+- Use the approved M&A Current Deal Snapshot / Recommended Next Step / Saved Valuation Snapshot surface treatment as the visual reference.
+- Expected qualities: broad radius, feathered border/glow, low-alpha border, dark glass background, action rows without visible sticker wrapper, and content breathing inside the panel.
+
+Branches corrected:
+
+- Funding dashboard cards and flow panels.
+- Compliance dashboard cards, supplier cards, evidence cards, and report cards.
+- Reporting panels.
+- Risk panels.
+- PMI panels.
+- Governance panels.
+- Strategy panels.
+
+Visual updates to verify during recording:
+
+- Funding and Compliance should no longer look less polished than M&A.
+- Card borders should feel feathered/integrated, not hard linear boxes.
+- Buttons should sit inside the surface without a strong rectangle behind them.
+- Tables and panels should inherit the same dark premium hierarchy.
+- N/A and insufficient_data must remain visible.
+
+No calculation, formula, source-of-truth, workflow, base theme, palette, or Golden Dataset changes were made.
+
+Validation notes:
+
+- Build, unit tests, and navigation smoke passed after C.24.3f.
