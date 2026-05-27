@@ -1748,6 +1748,22 @@ Logic-integrity rules:
 
 No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, AI runtime, PDF runtime, auth, storage, or source-of-truth logic changed.
 
+## C.19.0 - Pilot Legal Pack / NDA / DPA Basico
+
+**Status:** COMPLETED / docs and legal-ops drafts only.
+
+Legal logic-integrity rules:
+
+- The legal pack is documentation only; it is not legal advice and is not a professional legal approval.
+- NDA, DPA, and SOW templates must remain marked as drafts for legal review.
+- CEO's OS remains DSS material with Human Review Required.
+- Board Review Drafts are not board-approved outputs, certified PDFs, legal advice, investment advice, fairness opinions, or certified compliance.
+- No real client data should be processed before the applicable NDA/DPA/SOW path is approved.
+- Synthetic data, including IberNova Industrial Group S.L., remains preferred for early demos.
+- Production provider AI traffic with real client data remains blocked until DPA/subprocessor approval.
+
+No runtime changes were made. No product code, backend code, frontend code, tests, package/config, Golden Dataset, Formula Registry, AI runtime, PDF runtime, auth, storage, or source-of-truth logic changed.
+
 ## C.15.5 - External Pilot Outreach Pack
 
 **Status:** COMPLETED / commercial docs only.

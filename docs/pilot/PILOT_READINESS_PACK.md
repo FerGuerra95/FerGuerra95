@@ -302,4 +302,21 @@ Before paid pilot execution, complete legal pack / SOW review and keep DPA/subpr
 
 ---
 
+## C.19.0 Pilot Legal Pack
+
+**Status:** READY / internal legal-ops drafts prepared for professional review.
+
+| Asset | Status | Use |
+|---|---|---|
+| `../legal/PILOT_LEGAL_PACK.md` | **READY** | Legal workflow, roles, go/no-go, DSS and AI limits |
+| `../legal/PILOT_NDA_TEMPLATE.md` | **DRAFT** | Confidentiality starting point for counsel |
+| `../legal/PILOT_DPA_TEMPLATE.md` | **DRAFT** | Processing/data-protection starting point for counsel |
+| `../legal/PILOT_SOW_TEMPLATE.md` | **DRAFT** | Controlled pilot scope and exclusions |
+| `../legal/PILOT_DATA_HANDLING_AND_OFFBOARDING.md` | **READY** | Data minimization, prohibited data, deletion/offboarding |
+| `../legal/LEGAL_REVIEW_CHECKLIST.md` | **READY** | Professional review checklist before client use |
+
+Operating rule: real client data should not be processed until the legal path is approved for the prospect and scope. The templates are internal drafts only and do not mean the pilot is legally approved, certified, or procurement-ready.
+
+---
+
 **This document is an internal pilot readiness draft. It is not a contract, SLA, or legal advice.**

@@ -197,3 +197,17 @@ Use this offer after the prospect has passed basic discovery and understands the
 - AI language, if used, must remain limited to draft-assistant foundation and human-reviewed narrative support.
 
 Recommended next commercial step after a positive demo: send `PILOT_DISCOVERY_QUESTIONS.md`, agree the 48h intake checklist, then prepare a narrow SOW for a controlled pilot.
+
+---
+
+## 17. Legal path before real client data
+
+Before requesting or processing sensitive client data:
+
+- use synthetic/IberNova demo data for early evaluation;
+- execute or review NDA before confidential information is exchanged;
+- define scope in a Pilot SOW before paid pilot work;
+- assess whether a DPA is required before personal data or client-controlled data is processed;
+- confirm data handling and offboarding expectations.
+
+Internal drafts exist in `docs/legal/`, but they require professional legal review before customer use. Nothing in this offer is legal advice, investment advice, certified compliance, certified PDF, board approval, or procurement approval.

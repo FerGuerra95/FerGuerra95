@@ -7273,3 +7273,24 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 **Commercial posture:** Outreach is designed for 3-5 controlled pilot conversations only. Position CEO's OS as a Private Executive DSS / Board Intelligence Workspace. Do not claim procurement readiness, SOC2/ISO certification, enterprise certification, autonomous AI, legal advice, investment advice, certified PDF, or board-approved output.
 
 **Next:** Run an IberNova dry run, select the first 3-5 outreach targets, and prepare C.19.0 Pilot Legal Pack before any paid pilot.
+
+---
+
+## C.19.0 - Pilot Legal Pack / NDA / DPA Basico
+
+**Status:** COMPLETED / INTERNAL LEGAL OPS DRAFTS READY FOR PROFESSIONAL REVIEW.
+
+**Baseline:** `HEAD = origin/main = 7ecbdf2`.
+
+**Deliverables:**
+
+- `docs/legal/PILOT_LEGAL_PACK.md`
+- `docs/legal/PILOT_NDA_TEMPLATE.md`
+- `docs/legal/PILOT_DPA_TEMPLATE.md`
+- `docs/legal/PILOT_SOW_TEMPLATE.md`
+- `docs/legal/PILOT_DATA_HANDLING_AND_OFFBOARDING.md`
+- `docs/legal/LEGAL_REVIEW_CHECKLIST.md`
+
+**Legal posture:** Templates are internal drafts only and must be reviewed by qualified legal counsel before client use. They do not make CEO's OS legally approved, SOC2/ISO certified, procurement-ready, board-approved, or a legal/investment advisory service.
+
+**Pilot rule:** Use synthetic data for early demos. Do not process real client data until the required NDA/DPA/SOW path is approved for the pilot scope.

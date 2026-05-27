@@ -306,3 +306,19 @@ Do not say:
 - [ ] P2 authenticated production smoke understood.
 - [ ] Claims reviewed against "What We Can And Cannot Say".
 - [ ] Pilot offer ready.
+
+---
+
+## 21. Legal Path Before Sensitive Data
+
+Early outreach and first demos should use IberNova or other synthetic data. Do not ask prospects to send sensitive files in email or chat.
+
+Before requesting or receiving non-public client data:
+
+1. confirm whether the discussion is still exploratory or moving into pilot scope;
+2. use the NDA path before sensitive confidential information is shared;
+3. use the SOW path before paid pilot work starts;
+4. assess whether a DPA is required before personal data or client-controlled data is processed;
+5. define offboarding and deletion expectations before intake.
+
+Use `docs/legal/PILOT_LEGAL_PACK.md` and `docs/legal/LEGAL_REVIEW_CHECKLIST.md` as internal preparation only. They are drafts for professional review, not legally approved client documents.
