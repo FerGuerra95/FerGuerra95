@@ -466,6 +466,98 @@
   border-radius: 16px !important;
 }
 
+/* C.24.3j-d — hero-embedded side signal panels (M&A anchoring, not floating stickers) */
+.main-area[data-workspace]
+  :is(
+    .ma-hero,
+    .funding-hero,
+    .investor-hero,
+    .compliance-hero,
+    .pmi-hero,
+    .governance-enterprise-hero,
+    .risk-enterprise-hero,
+    .reporting-hero,
+    .strategy-hero,
+    .bridge-enterprise-hero
+  ).ceos-ws-hero
+  :is(
+    .ma-signal-card,
+    .funding-signal-card,
+    .investor-signal-card,
+    .compliance-signal-card,
+    .pmi-signal-card,
+    .governance-enterprise-signal-card,
+    .risk-enterprise-signal-card,
+    .reporting-signal-card,
+    .strategy-signal-card,
+    .bridge-enterprise-signal-card
+  ) {
+  align-self: stretch !important;
+  justify-self: stretch !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+  border-radius: 32px !important;
+  border: 1px solid rgba(148, 163, 184, 0.22) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.086), rgba(255, 255, 255, 0.026)),
+    rgba(15, 23, 42, 0.68) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 32px rgba(0, 0, 0, 0.16) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+
+/* C.24.3j-d — executive surfaces on page panels: single premium layer (no module glass stack) */
+.main-area[data-workspace]
+  .ceos-executive-inner-surface:is(
+    .funding-kpi-card,
+    .funding-panel,
+    .funding-flow-card,
+    .investor-kpi-card,
+    .investor-panel,
+    .compliance-kpi-card,
+    .compliance-panel,
+    .pmi-kpi-card,
+    .pmi-panel,
+    .report-panel,
+    .reporting-panel,
+    .risk-enterprise-panel,
+    .governance-enterprise-panel,
+    .strategy-panel
+  ) {
+  isolation: isolate !important;
+  overflow: hidden !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.086), rgba(255, 255, 255, 0.026)),
+    rgba(15, 23, 42, 0.76) !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  box-shadow:
+    0 20px 56px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(22px) !important;
+  -webkit-backdrop-filter: blur(22px) !important;
+  filter: none !important;
+}
+
+.main-area[data-workspace]
+  .ceos-executive-inner-surface:is(
+    .funding-kpi-card,
+    .funding-panel,
+    .funding-flow-card,
+    .investor-kpi-card,
+    .investor-panel
+  ):hover {
+  transform: none !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  box-shadow:
+    0 20px 56px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
 /* C.24.3j-b — neutralize branch-local duplicate layers when primitive is present */
 .main-area[data-workspace]
   :is(

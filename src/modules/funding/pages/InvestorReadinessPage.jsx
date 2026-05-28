@@ -58,9 +58,9 @@ const investorReadinessCss = `
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1.28fr) minmax(320px, 0.72fr);
-    gap: 34px;
-    align-items: start;
+    grid-template-columns: minmax(0, 1.45fr) minmax(380px, 0.55fr);
+    gap: 32px;
+    align-items: stretch;
     min-width: 0;
   }
 

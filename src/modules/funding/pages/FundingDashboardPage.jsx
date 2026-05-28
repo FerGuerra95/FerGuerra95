@@ -121,7 +121,7 @@ const fundingDashboardCss = `
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 38px;
+    gap: 26px;
   }
 
   .funding-hero {
@@ -167,8 +167,8 @@ const fundingDashboardCss = `
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1.42fr) minmax(380px, 0.58fr);
-    gap: 36px;
+    grid-template-columns: minmax(0, 1.45fr) minmax(380px, 0.55fr);
+    gap: 32px;
     align-items: stretch;
   }
 
@@ -380,7 +380,7 @@ const fundingDashboardCss = `
   .funding-section {
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 20px;
   }
 
   .funding-section-header {
@@ -416,7 +416,7 @@ const fundingDashboardCss = `
 
   .funding-grid {
     display: grid;
-    gap: 26px;
+    gap: 20px;
     align-items: stretch;
   }
 
@@ -426,6 +426,7 @@ const fundingDashboardCss = `
 
   .funding-grid-two {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
   }
 
   .funding-kpi-card,
@@ -656,7 +657,8 @@ const fundingDashboardCss = `
   .funding-external-section {
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 18px;
+    min-width: 0;
   }
 
   .funding-muted-tight {

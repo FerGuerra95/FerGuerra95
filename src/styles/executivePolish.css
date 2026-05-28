@@ -311,9 +311,24 @@ textarea,
 }
 
 .funding-dashboard-page .funding-hero-layout,
-.funding-dashboard-page .funding-multinational-grid,
+.funding-dashboard-page .funding-multinational-grid {
+  grid-template-columns: minmax(0, 1.45fr) minmax(380px, 0.55fr) !important;
+  gap: 32px !important;
+  align-items: stretch !important;
+}
+
 .funding-dashboard-page .funding-grid-two {
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.82fr) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  align-items: stretch !important;
+}
+
+.page:has(.funding-dashboard-page) .page-grid > .funding-input-rail.ceos-ws-panel {
+  border-radius: 28px !important;
+  border: 1px solid rgba(148, 163, 184, 0.14) !important;
+  padding: 26px !important;
+  background: var(--ceos-polish-surface) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
 }
 
 .funding-command-bar {

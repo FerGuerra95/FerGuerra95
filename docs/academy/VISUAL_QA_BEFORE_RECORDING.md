@@ -405,3 +405,25 @@ Expected visual outcome:
 - Parent panel keeps premium curved surface.
 - Internal child cards/rows look flatter (no sticker overlays, no heavy child glow/shadow).
 - M&A reference panel remains unchanged.
+
+### C.24.3j-d hero integration + Funding composition checklist
+
+Focus routes:
+
+- `/ma/dashboard` (reference — no regression)
+- `/ceo/overview` (no regression)
+- `/funding/dashboard`
+- `/funding/readiness`
+- `/compliance/dashboard`
+- `/compliance/reports`
+- `/reporting/library`
+- `/risk/register`
+- `/pmi/dashboard`
+- `/governance/dashboard`
+- `/strategy/dashboard`
+
+Expected visual outcome:
+
+- Hero side signal panel stretches with hero row; clear border; not a floating sticker.
+- Funding: Capital allocation / Raise Overview / Memo / Readiness columns align with equal width; reduced black vertical voids.
+- Funding form rail (`Base de financiación`) reads as same workspace family as panels above.

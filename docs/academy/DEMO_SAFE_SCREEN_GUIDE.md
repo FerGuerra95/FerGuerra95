@@ -200,3 +200,11 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - The change flattens nested sticker-like child surfaces inside executive panels.
 - Parent executive cards remain the primary visual anchor.
 - No data logic, formulas, or compliance truthfulness semantics changed.
+
+### C.24.3j-d demo safety note (hero integration + Funding composition)
+
+- Funding dashboard and investor readiness are the primary demo routes to re-check after this pass.
+- Hero side panels should read embedded in the hero shell (M&A reference), not as floating overlays.
+- Funding memo/readiness/allocation rows should feel like one continuous workspace, not disconnected black gaps.
+- Form rail at bottom should match panel surface language; scenario draft vs persisted badges unchanged.
+- No data logic, formulas, or compliance truthfulness semantics changed.

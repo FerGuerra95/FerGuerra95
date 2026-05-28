@@ -7671,6 +7671,31 @@ Validation highlights:
 - Funding computed evidence confirms parent shadow retained and child shadow removed.
 - Unit focal PASS; global unit remains blocked by known local `better-sqlite3` ABI mismatch.
 
+### C.24.3j-d - Branch Hero Inner Panel Integration + Funding Composition Fix
+
+**Status:** IMPLEMENTED AND TESTED.
+
+**Baseline:** `90a4d28`.
+
+Problem addressed:
+
+- Hero side signal panels (Funding and other branches) still read as floating stickers vs M&A integration.
+- Funding page composition: asymmetric two-column override, large vertical gaps, disconnected sections, form rail visually separate.
+
+Resolution:
+
+- `workspaceAccent.css`: hero-embedded side signal anchoring (stretch, no max-width/margin float, softer inset shadow, M&A border grammar); executive-inner-surface panel de-stack for Funding/branch page panels.
+- `executivePolish.css`: hero layout matches M&A `1.45fr / 0.55fr`; `funding-grid-two` equal columns; funding input rail surface integration.
+- `FundingDashboardPage.jsx`: tighter page/section/grid gaps; hero grid aligned to M&A.
+- `InvestorReadinessPage.jsx`: hero inner grid stretch + M&A proportions.
+- `FundingInputPanel.jsx`: `ceos-executive-inner-surface` on workspace form rail.
+
+Branches touched: Funding (dashboard + readiness + input rail); shared styles apply hero side panels across Compliance, PMI, Governance, Risk, Reporting, Strategy when `ceos-ws-hero` present.
+
+**No-regression:** M&A reference (`ma-signal-card` without float hacks); CEO Overview preserved.
+
+Validation: `npm run build` PASS; visual QA on `/ma/dashboard`, `/ceo/overview`, `/funding/dashboard`, `/funding/readiness`, branch dashboards.
+
 ---
 
 ## C.14.0B - Update AI Agent Prompt Output Discipline

@@ -2070,6 +2070,13 @@ Validation:
 - No new primitive or wrapper introduced.
 - No formula/backend/truthfulness changes; `N/A` and `insufficient_data` preserved.
 
+### C.24.3j-d - Hero side panel integration + Funding composition guard
+
+- M&A hero side panel remains layout source of truth (`1.45fr / 0.55fr`, stretch anchoring).
+- Hero-embedded side signals must not use float offsets (`justify-self: end`, `max-width`, side margins).
+- Funding two-column content sections use equal columns; hero-only asymmetry retained.
+- No formula/backend/truthfulness changes; `N/A` and `insufficient_data` preserved.
+
 ---
 
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix
