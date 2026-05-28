@@ -2084,6 +2084,13 @@ Validation:
 - Funding readiness scores use `formatScoreOutOf100` (display-only round); missing => `N/A`, not `0`.
 - No formula/backend/Golden changes.
 
+### C.24.4A - Visual CSS architecture audit guard
+
+- READ ONLY: no `src/**`, tests, backend, or runtime CSS changes.
+- Document cascade order: `styles.css` → `maExecutiveTheme.css` → `executivePolish.css` → `workspaceAccent.css` → `ExecutivePremiumStyle.jsx` → inline JSX.
+- Flag P0 attribute selectors in `executivePolish.css` before any C.24.4B consolidation.
+- Dead CSS removal only after C.24.4C quarantine with grep evidence.
+
 ---
 
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix

@@ -7718,6 +7718,25 @@ Resolution:
 
 Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
+### C.24.4A - Visual CSS Architecture Audit (READ ONLY)
+
+**Status:** COMPLETED / DOCS ONLY.
+
+**Baseline:** `9c361f0`.
+
+**Deliverable:** `docs/architecture/VISUAL_SYSTEM_CSS_AUDIT.md`
+
+**Scope:** Inventory of static CSS, runtime `ExecutivePremiumStyle.jsx`, ~55 embedded JSX style blocks; duplicate groups; aggressive selectors; dead CSS candidates; target architecture using existing files; consolidation plan C.24.4B–D.
+
+**Key findings (summary):**
+
+- P0: `executivePolish.css` attribute selectors `[class*="card"|"panel"|"hero"]` flatten globally.
+- P1: Hero/signal/panel glass duplicated across modules; fifth layer `ExecutivePremiumStyle.jsx` overlaps M&A theme.
+- P1: C.24.3j primitive stack fights module-local inline glass.
+- No runtime/src changes in this phase.
+
+**Validation:** `npm run build` PASS (no src diff).
+
 ---
 
 ## C.14.0B - Update AI Agent Prompt Output Discipline
