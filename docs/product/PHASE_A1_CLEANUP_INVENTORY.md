@@ -7606,6 +7606,25 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 - `npx vitest run tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` PASS.
 - `npm run test:unit` FAIL only due known local `better-sqlite3` Node ABI mismatch (external to this visual phase).
 
+### C.24.3j-b - Copy Approved M&A Inner Surface to CEO First
+
+**Status:** IMPLEMENTED AND TESTED (CEO-first only).
+
+**Baseline:** `b792055`.
+
+**M&A approved inner reference extracted from runtime (`/ma/dashboard`):**
+
+- Element/class: `.ma-signal-card`
+- Computed surface: radius `18px`, dark premium background, thin low-opacity border, subtle shadow, `padding: 28px`
+
+**CEO target updated:**
+
+- Selector: `.main-area[data-workspace='overview'] .ceo-hero .ceo-deal-readiness-card.ceos-ws-card-accent`
+- Added class in JSX: `ceos-executive-inner-surface`
+- Primitive tuned to M&A-style finish and applied only to CEO target scope in this phase.
+
+**Scope lock:** No rollout to Funding/Compliance/Reporting/Risk/PMI/Governance/Strategy/Bridge/Heritage in this step.
+
 ---
 
 ## C.14.0B - Update AI Agent Prompt Output Discipline

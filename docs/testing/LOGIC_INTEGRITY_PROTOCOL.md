@@ -2052,6 +2052,12 @@ Validation:
 - `npx vitest run tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` PASS.
 - `npm run test:unit` FAIL due known local `better-sqlite3` Node ABI mismatch (external environment issue).
 
+### C.24.3j-b - CEO-first surface copy guard
+
+- Phase constrained to CEO-first visual surface application.
+- No branch-wide panel rollout in this subphase.
+- Truthfulness unchanged: Legal Compliance keeps `N/A` / `insufficient_data`; no fallback `0`.
+
 ---
 
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix

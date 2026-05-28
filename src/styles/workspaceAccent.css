@@ -339,17 +339,17 @@
   width: 100%;
   min-width: 0;
   color: inherit;
-  border-radius: 30px !important;
-  padding: 26px !important;
+  border-radius: 32px !important;
+  padding: 28px !important;
   border: 1px solid rgba(148, 163, 184, 0.2) !important;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.086), rgba(255, 255, 255, 0.026)),
     rgba(15, 23, 42, 0.76) !important;
   box-shadow:
-    0 22px 56px rgba(0, 0, 0, 0.22),
+    0 26px 70px rgba(0, 0, 0, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: blur(22px) !important;
+  -webkit-backdrop-filter: blur(22px) !important;
 }
 
 .main-area[data-workspace] .ceos-executive-inner-surface::before {
@@ -357,7 +357,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(circle at 18% 0%, rgba(96, 165, 250, 0.11), transparent 36%);
+  background: radial-gradient(circle at 18% 0%, rgba(96, 165, 250, 0.13), transparent 35%);
   pointer-events: none;
 }
 
@@ -369,33 +369,6 @@
 .main-area[data-workspace] .ceos-executive-inner-surface > * {
   position: relative;
   z-index: 1;
-}
-
-.main-area[data-workspace]
-  :is(
-    .funding-signal-card,
-    .funding-kpi-card,
-    .compliance-signal-card,
-    .compliance-kpi-card,
-    .reporting-panel,
-    .risk-enterprise-panel,
-    .pmi-signal-card,
-    .pmi-kpi-card,
-    .governance-enterprise-panel,
-    .strategy-panel,
-    .bridge-enterprise-panel,
-    .heritage-enterprise-panel
-  ) {
-  border-radius: 30px !important;
-  border-color: rgba(148, 163, 184, 0.2) !important;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.086), rgba(255, 255, 255, 0.026)),
-    rgba(15, 23, 42, 0.76) !important;
-  box-shadow:
-    0 22px 56px rgba(0, 0, 0, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
 }
 
 /* Module KPI / signal stacks — interior tint (scoped per shell workspace) */
@@ -447,10 +420,10 @@
     linear-gradient(135deg, rgba(255, 255, 255, 0.086), rgba(255, 255, 255, 0.026)),
     rgba(15, 23, 42, 0.76) !important;
   box-shadow:
-    0 22px 56px rgba(0, 0, 0, 0.22),
+    0 26px 70px rgba(0, 0, 0, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: blur(22px) !important;
+  -webkit-backdrop-filter: blur(22px) !important;
 }
 
 .main-area[data-workspace='overview'] .ceo-hero.ceos-ws-hero {

@@ -351,3 +351,17 @@ Visual pass criteria:
 - No double glass layering from old accent rules.
 - No content clipping or horizontal overflow introduced by surface styling.
 - CEO Deal Readiness card contains `.ceos-executive-inner-surface` and preserves `N/A` where data is missing.
+
+### C.24.3j-b CEO-first checkpoint
+
+Routes for this checkpoint:
+
+- `/ma/dashboard` (reference only)
+- `/dashboard`
+- `/overview`
+- `/ceo/overview`
+
+Pass criteria:
+
+- CEO top readiness inner card visibly matches M&A-like embedded surface finish.
+- No cross-branch rollout expected in this checkpoint.

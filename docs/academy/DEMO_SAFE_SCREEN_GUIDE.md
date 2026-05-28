@@ -175,3 +175,8 @@ Validation notes:
 - `npm run build` PASS.
 - `npx vitest run tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` PASS.
 - `npm run test:unit` has known local `better-sqlite3` ABI mismatch (environment-only; outside visual scope).
+
+### C.24.3j-b demo safety note (CEO-first)
+
+This checkpoint applies the approved M&A inner-surface copy to CEO Overview first.  
+No other branch surface rollout is included in this subphase.
