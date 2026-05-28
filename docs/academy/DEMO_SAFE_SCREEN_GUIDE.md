@@ -208,3 +208,10 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - Funding memo/readiness/allocation rows should feel like one continuous workspace, not disconnected black gaps.
 - Form rail at bottom should match panel surface language; scenario draft vs persisted badges unchanged.
 - No data logic, formulas, or compliance truthfulness semantics changed.
+
+### C.24.3j-e demo safety note (accent restoration + funding polish)
+
+- Risk and Governance regained branch-colored borders/headers without nested sticker cards.
+- Funding readiness score is rounded for display only; underlying engine unchanged.
+- Re-check `/risk/register` and `/governance/dashboard` before recording ? tables should not look washed out.
+- M&A and CEO remain reference / preserved surfaces.

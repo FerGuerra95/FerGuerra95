@@ -525,8 +525,6 @@
     .pmi-panel,
     .report-panel,
     .reporting-panel,
-    .risk-enterprise-panel,
-    .governance-enterprise-panel,
     .strategy-panel
   ) {
   isolation: isolate !important;
@@ -556,6 +554,136 @@
   box-shadow:
     0 20px 56px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+/* C.24.3j-e — branch accent on parent surfaces (Risk / Governance / Funding) */
+.main-area[data-workspace='risk']
+  .ceos-executive-inner-surface.risk-enterprise-panel,
+.main-area[data-workspace='governance']
+  .ceos-executive-inner-surface.governance-enterprise-panel,
+.main-area[data-workspace='funding']
+  .ceos-executive-inner-surface:is(
+    .funding-kpi-card,
+    .funding-panel,
+    .funding-flow-card,
+    .investor-kpi-card,
+    .investor-panel,
+    .funding-input-rail
+  ) {
+  border-color: var(--ws-accent-border) !important;
+  background: var(--ws-card-gradient) !important;
+  box-shadow:
+    0 20px 56px rgba(0, 0, 0, 0.22),
+    0 0 22px var(--ws-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+.main-area[data-workspace='risk']
+  .ceos-executive-inner-surface.risk-enterprise-panel::before,
+.main-area[data-workspace='governance']
+  .ceos-executive-inner-surface.governance-enterprise-panel::before,
+.main-area[data-workspace='funding']
+  .ceos-executive-inner-surface:is(
+    .funding-kpi-card,
+    .funding-panel,
+    .funding-flow-card,
+    .investor-kpi-card,
+    .investor-panel,
+    .funding-input-rail
+  )::before {
+  background: radial-gradient(
+    circle at 18% 0%,
+    rgba(var(--ws-accent-rgb), 0.16),
+    transparent 38%
+  ) !important;
+}
+
+.main-area[data-workspace='funding']
+  .funding-hero.ceos-ws-hero
+  .funding-signal-card.ceos-executive-inner-surface {
+  border-color: var(--ws-accent-border) !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.086), rgba(255, 255, 255, 0.026)),
+    rgba(15, 23, 42, 0.68) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 32px rgba(0, 0, 0, 0.16),
+    0 0 18px var(--ws-accent-glow) !important;
+}
+
+.main-area[data-workspace='funding']
+  .ceos-executive-inner-surface
+  :is(
+    .funding-glass-block,
+    .funding-thesis-item,
+    .funding-mini-card,
+    .investor-score-box,
+    .investor-mini-card,
+    .investor-target-card,
+    .funding-field-shell
+  ) {
+  border-color: rgba(var(--ws-accent-rgb), 0.12) !important;
+  background: rgba(var(--ws-accent-rgb), 0.045) !important;
+}
+
+.main-area[data-workspace='risk']
+  .ceos-executive-inner-surface
+  :is(.risk-row-card, .risk-enterprise-toolbar, .risk-enterprise-empty) {
+  border-color: rgba(var(--ws-accent-rgb), 0.12) !important;
+  background: rgba(var(--ws-accent-rgb), 0.045) !important;
+}
+
+.main-area[data-workspace='risk']
+  .ceos-executive-inner-surface
+  .risk-enterprise-icon {
+  background: var(--ws-icon-surface) !important;
+  border: 1px solid var(--ws-accent-border) !important;
+  color: var(--ws-accent-text) !important;
+}
+
+.main-area[data-workspace='governance']
+  .ceos-executive-inner-surface
+  :is(.governance-mini-card, .governance-enterprise-toolbar) {
+  border-color: rgba(var(--ws-accent-rgb), 0.12) !important;
+  background: rgba(var(--ws-accent-rgb), 0.045) !important;
+}
+
+.main-area[data-workspace='governance']
+  .ceos-executive-inner-surface
+  .governance-enterprise-row {
+  border-top-color: rgba(var(--ws-accent-rgb), 0.14) !important;
+}
+
+.main-area[data-workspace='governance']
+  .ceos-executive-inner-surface
+  .governance-enterprise-table-head {
+  color: var(--ws-accent-text) !important;
+  border-bottom-color: var(--ws-accent-border) !important;
+}
+
+.main-area[data-workspace='governance']
+  .ceos-executive-inner-surface
+  .governance-enterprise-button {
+  border-color: var(--ws-accent-border) !important;
+  background: var(--ws-surface-strong) !important;
+  color: rgba(248, 250, 252, 0.94) !important;
+}
+
+.main-area[data-workspace='risk']
+  table.risk-enterprise-table.ceos-enterprise-table thead th {
+  border-bottom-color: var(--ws-accent-border) !important;
+  color: var(--ws-accent-text) !important;
+  box-shadow: inset 0 1px 0 rgba(var(--ws-accent-rgb), 0.12) !important;
+}
+
+.main-area[data-workspace='risk']
+  .risk-enterprise-page
+  table.risk-enterprise-table.ceos-enterprise-table thead th {
+  background: linear-gradient(
+    180deg,
+    rgba(var(--ws-accent-rgb), 0.14),
+    rgba(15, 23, 42, 0.5)
+  ) !important;
 }
 
 /* C.24.3j-b — neutralize branch-local duplicate layers when primitive is present */
@@ -1175,10 +1303,11 @@
 .main-area[data-workspace='risk'] .risk-enterprise-page table thead th {
   background: linear-gradient(
     180deg,
-    rgba(15, 23, 42, 0.66),
-    rgba(15, 23, 42, 0.44)
+    rgba(var(--ws-accent-rgb), 0.14),
+    rgba(15, 23, 42, 0.5)
   ) !important;
-  border-bottom-color: rgba(148, 163, 184, 0.14) !important;
+  border-bottom-color: var(--ws-accent-border) !important;
+  color: var(--ws-accent-text) !important;
 }
 
 .main-area[data-workspace='risk'] .risk-enterprise-page table tbody tr:hover td {

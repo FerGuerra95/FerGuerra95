@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatDilutionValue } from '../../../src/modules/funding/utils/fundingDisplayFormat.js';
+import {
+  formatDilutionValue,
+  formatScoreOutOf100
+} from '../../../src/modules/funding/utils/fundingDisplayFormat.js';
 
 describe('formatDilutionValue', () => {
   it('returns N/A for missing or non-finite dilution', () => {
@@ -25,5 +28,25 @@ describe('formatDilutionValue', () => {
   it('does not throw for any input', () => {
     expect(() => formatDilutionValue(null)).not.toThrow();
     expect(() => formatDilutionValue({})).not.toThrow();
+  });
+});
+
+describe('formatScoreOutOf100', () => {
+  it('returns N/A for missing or non-finite scores', () => {
+    expect(formatScoreOutOf100(null)).toBe('N/A');
+    expect(formatScoreOutOf100(undefined)).toBe('N/A');
+    expect(formatScoreOutOf100('')).toBe('N/A');
+    expect(formatScoreOutOf100(Number.NaN)).toBe('N/A');
+    expect(formatScoreOutOf100(Number.POSITIVE_INFINITY)).toBe('N/A');
+  });
+
+  it('rounds fractional scores for display', () => {
+    expect(formatScoreOutOf100(36.9733333333333336)).toBe('37/100');
+    expect(formatScoreOutOf100(74.4)).toBe('74/100');
+    expect(formatScoreOutOf100(0)).toBe('0/100');
+  });
+
+  it('does not coerce invalid objects to zero', () => {
+    expect(formatScoreOutOf100({})).toBe('N/A');
   });
 });

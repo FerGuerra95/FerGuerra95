@@ -19,3 +19,20 @@ export function formatDilutionValue(value) {
 
   return `${normalized.toFixed(1)}%`;
 }
+
+/**
+ * Display-only score out of 100 (rounded integer). Does not alter calculation source.
+ */
+export function formatScoreOutOf100(value) {
+  if (value === null || value === undefined || value === '') {
+    return 'N/A';
+  }
+
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed)) {
+    return 'N/A';
+  }
+
+  return `${Math.round(parsed)}/100`;
+}

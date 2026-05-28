@@ -50,6 +50,7 @@ import {
   getRunwayStatusLabel,
   toSafeNumber
 } from '../utils/fundingExecutiveMetrics.js';
+import { formatScoreOutOf100 } from '../utils/fundingDisplayFormat.js';
 
 const EMPTY_FUNDING_INPUTS = {
   companyName: '',
@@ -659,6 +660,15 @@ const fundingDashboardCss = `
     flex-direction: column;
     gap: 18px;
     min-width: 0;
+  }
+
+  .funding-composition-band {
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .funding-composition-band .funding-external-section {
+    gap: 14px;
   }
 
   .funding-muted-tight {
@@ -1411,10 +1421,10 @@ function buildMultinationalFundingPack({
       ['Current cash', formatCurrency(currentCash, reportCurrency)]
     ],
     readinessRows: [
-      ['Investor readiness', `${readinessScore}/100`],
+      ['Investor readiness', formatScoreOutOf100(readinessScore)],
       ['Data room', formatPercentValue(dataRoomCompletion)],
-      ['Founder-market fit', `${founderMarketFit}/100`],
-      ['Investor interest', `${investorInterest}/100`],
+      ['Founder-market fit', formatScoreOutOf100(founderMarketFit)],
+      ['Investor interest', formatScoreOutOf100(investorInterest)],
       ['Current revenue', formatCurrency(currentRevenue, reportCurrency)],
       ['Annual growth', formatPercentValue(annualGrowthRate)],
       ['Gross margin', formatPercentValue(grossMargin)],
@@ -2122,7 +2132,7 @@ export function FundingDashboardPage() {
             <FundingHeroCard derived={derived} settings={fundingSettings} />
           </section>
 
-          <section className="funding-grid funding-grid-two">
+          <section className="funding-grid funding-grid-two funding-composition-band">
             <div className="funding-external-section">
               <SectionHeader
                 kicker="Use of funds"
@@ -2156,7 +2166,7 @@ export function FundingDashboardPage() {
             </Card>
           </section>
 
-          <section className="funding-grid funding-grid-two">
+          <section className="funding-grid funding-grid-two funding-composition-band">
             <Card className="funding-panel ceos-executive-inner-surface">
               <PanelHeader
                 kicker="Funding memo"

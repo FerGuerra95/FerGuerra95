@@ -7696,6 +7696,28 @@ Branches touched: Funding (dashboard + readiness + input rail); shared styles ap
 
 Validation: `npm run build` PASS; visual QA on `/ma/dashboard`, `/ceo/overview`, `/funding/dashboard`, `/funding/readiness`, branch dashboards.
 
+### C.24.3j-e - Branch Accent Restoration + Funding Composition Final Fix
+
+**Status:** IMPLEMENTED AND TESTED.
+
+**Baseline:** `d72a5f6`.
+
+Problem addressed:
+
+- C.24.3j-d generic panel override removed branch tint from Risk/Governance (and muted Funding).
+- Investor Readiness showed long decimal score (`36.973…/100`).
+- Funding form rail and two-column bands still felt fragmented.
+
+Resolution:
+
+- `workspaceAccent.css`: removed Risk/Governance from generic gray panel flatten; added workspace-scoped accent on parent panels, tables, toolbars, and flat children (Funding/Risk/Governance).
+- Funding: composition bands, form rail without inner Card box, `formatScoreOutOf100` display helper.
+- Risk/Governance: table headers, icons, rows, buttons restore `--ws-*` accent without heavy nested glass.
+
+**No-regression:** M&A and CEO untouched; score formatting is display-only (`N/A` preserved for missing).
+
+Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
+
 ---
 
 ## C.14.0B - Update AI Agent Prompt Output Discipline

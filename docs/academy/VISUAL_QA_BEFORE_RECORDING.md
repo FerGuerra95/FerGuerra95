@@ -427,3 +427,17 @@ Expected visual outcome:
 - Hero side signal panel stretches with hero row; clear border; not a floating sticker.
 - Funding: Capital allocation / Raise Overview / Memo / Readiness columns align with equal width; reduced black vertical voids.
 - Funding form rail (`Base de financiación`) reads as same workspace family as panels above.
+
+### C.24.3j-e accent + funding final checklist
+
+Focus routes:
+
+- `/funding/dashboard`, `/funding/readiness`, `/risk/register`, `/governance/dashboard`
+- `/ma/dashboard`, `/ceo/overview` (no regression)
+
+Expected:
+
+- Risk/Governance panels and tables show workspace accent (border/header/icon), not flat gray generic shell.
+- Funding panels show Funding accent; inner children stay flat (no sticker stacks).
+- Readiness score displays as integer `/100` (e.g. `37/100`), not long decimals; missing => `N/A`.
+- Funding form rail integrated (no hard inner admin Card box).

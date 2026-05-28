@@ -11,6 +11,7 @@ import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { useFundingStore } from '../store/fundingStore.jsx';
 import { useFundingEngine } from '../engine/useFundingEngine.js';
 import { ReadinessChecklistCard } from '../components/ReadinessChecklistCard.jsx';
+import { formatScoreOutOf100 } from '../utils/fundingDisplayFormat.js';
 
 const investorReadinessCss = `
   .investor-page {
@@ -18,7 +19,7 @@ const investorReadinessCss = `
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 24px;
     min-width: 0;
   }
 
@@ -574,7 +575,7 @@ export function InvestorReadinessPage() {
 
           <KpiCard
             label="Readiness Score"
-            value={`${readinessScore}/100`}
+            value={formatScoreOutOf100(readinessScore)}
             description={`Preparación ${readinessLevel.label}`}
             color={readinessLevel.color}
             icon={CheckCircle2}

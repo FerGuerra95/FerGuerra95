@@ -2077,6 +2077,13 @@ Validation:
 - Funding two-column content sections use equal columns; hero-only asymmetry retained.
 - No formula/backend/truthfulness changes; `N/A` and `insufficient_data` preserved.
 
+### C.24.3j-e - Branch accent restoration guard
+
+- Do not re-flatten Risk/Governance parent panels with generic gray executive override.
+- Child surfaces stay flat; accent via border, table header, icon, and subtle tint only.
+- Funding readiness scores use `formatScoreOutOf100` (display-only round); missing => `N/A`, not `0`.
+- No formula/backend/Golden changes.
+
 ---
 
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix

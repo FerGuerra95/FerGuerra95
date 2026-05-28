@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card } from '../../../shared/components/ui/Card.jsx';
 import { Input } from '../../../shared/components/ui/Input.jsx';
 import { Select } from '../../../shared/components/ui/Select.jsx';
 import { STAGE_OPTIONS } from '../engine/fundingFormulas.js';
@@ -45,9 +44,59 @@ export function FundingInputPanel({
   onSettingsChange
 }) {
   return (
-    <div className="stack funding-input-rail ceos-ws-panel ceos-executive-inner-surface">
+    <div className="stack funding-input-rail ceos-ws-panel ceos-executive-inner-surface funding-input-panel">
       <style>
         {`
+          .funding-input-panel {
+            gap: 22px;
+            padding: 4px 2px 8px;
+          }
+
+          .funding-input-panel-head {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03);
+          }
+
+          .funding-input-panel-head h3 {
+            margin: 0;
+            font-size: clamp(22px, 2.2vw, 28px);
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+          }
+
+          .funding-input-panel-copy {
+            margin: 0;
+            max-width: 72ch;
+            line-height: 1.62;
+            color: rgba(203, 213, 225, 0.78);
+            font-size: 14px;
+          }
+
+          .funding-input-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+          }
+
+          .funding-input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(148, 163, 184, 0.12);
+          }
+
+          .funding-input-section h3 {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+          }
+
           .funding-form-grid-2,
           .funding-capital-grid {
             display: grid;
@@ -66,6 +115,10 @@ export function FundingInputPanel({
           .funding-field-shell {
             width: 100%;
             min-width: 0;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            background: rgba(255, 255, 255, 0.02);
           }
 
           .funding-field-shell > * {
@@ -213,10 +266,16 @@ export function FundingInputPanel({
         `}
       </style>
 
-      <Card>
+      <header className="funding-input-panel-head">
+        <div className="kpi-label">Scenario workspace</div>
         <h3>Base de financiación</h3>
+        <p className="funding-input-panel-copy muted">
+          Inputs del escenario draft — ajustan runway, dilución y readiness sin
+          sustituir datos persistidos de rondas.
+        </p>
+      </header>
 
-        <div className="stack">
+      <div className="funding-input-stack">
           <FieldShell>
             <Input
               label="Compañía"
@@ -319,13 +378,12 @@ export function FundingInputPanel({
               />
             </FieldShell>
           </div>
-        </div>
-      </Card>
+      </div>
 
-      <Card>
+      <section className="funding-input-section">
         <h3>Preparación para inversores</h3>
 
-        <div className="stack">
+        <div className="funding-input-stack">
           <SliderField
             label="Data room completado"
             value={fundingInputs.dataRoomCompletion}
@@ -373,12 +431,12 @@ export function FundingInputPanel({
             />
           </FieldShell>
         </div>
-      </Card>
+      </section>
 
-      <Card>
+      <section className="funding-input-section">
         <h3>Estructura de capital</h3>
 
-        <div className="stack">
+        <div className="funding-input-stack">
           <div className="funding-capital-grid">
             <FieldShell className="funding-capital-field-shell">
               <Input
@@ -432,7 +490,7 @@ export function FundingInputPanel({
             />
           </FieldShell>
         </div>
-      </Card>
+      </section>
     </div>
   );
 }
