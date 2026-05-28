@@ -2091,6 +2091,14 @@ Validation:
 - Flag P0 attribute selectors in `executivePolish.css` before any C.24.4B consolidation.
 - Dead CSS removal only after C.24.4C quarantine with grep evidence.
 
+### C.24.4B - Cascade control guard
+
+- Do not reintroduce global `[class*="card"|"panel"|"hero"]` flatten without `.page` scope and `:not(.ceos-executive-inner-surface)` (and branch/M&A exclusions).
+- Do not add universal `*` resets in `ExecutivePremiumStyle.jsx` or shared CSS.
+- `workspaceAccent.css` loads after `executivePolish.css` — premium primitives win via explicit exclusions, not new global overrides.
+- No dead CSS deletion in C.24.4B; no formula/backend/Golden changes.
+- M&A, CEO, Funding score display, Risk/Governance accent are no-regression gates.
+
 ---
 
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix

@@ -7737,6 +7737,26 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 **Validation:** `npm run build` PASS (no src diff).
 
+### C.24.4B - Shared Visual Primitives / Cascade Control (WRITE)
+
+**Status:** COMPLETED.
+
+**Baseline:** `5f4e93f`.
+
+**Scope:** Narrow P0 selectors in `executivePolish.css`; limit `ExecutivePremiumStyle.jsx` universal reset; add cascade contract in `workspaceAccent.css`. No dead CSS removal; no inline mass migration.
+
+**Files:** `executivePolish.css`, `workspaceAccent.css`, `ExecutivePremiumStyle.jsx`, `docs/architecture/VISUAL_SYSTEM_CSS_AUDIT.md` §11.
+
+**Key changes:**
+
+- P0 flatten scoped to `.page` with `:not()` guards for `ceos-executive-inner-surface`, `ceos-ws-hero`, branch panels, M&A signal family.
+- Removed `ExecutivePremiumStyle.jsx` universal `*` / pseudo reset on M&A pages.
+- Primitives preserved; no new CSS files.
+
+**Validation:** `npm run build` PASS; `fundingDisplayFormat.test.js` PASS; `ceoOverviewTruthfulness.test.js` PASS.
+
+**Next:** C.24.4C — dead/duplicated CSS quarantine and removal.
+
 ---
 
 ## C.14.0B - Update AI Agent Prompt Output Discipline

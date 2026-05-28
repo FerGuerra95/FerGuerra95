@@ -60,22 +60,30 @@ h4 {
   gap: 36px !important;
 }
 
+/*
+  C.24.4B — cascade control (P0).
+  Flatten generic shells only. Never target:
+  .ceos-executive-inner-surface, .ceos-ws-hero, .ceos-ws-panel, .ceos-ws-card-accent
+  or approved M&A signal surfaces (ma-signal-card family).
+*/
+.page :is(
+  .card,
+  [class*="hero"],
+  [class*="panel"],
+  [class*="card"],
+  [class*="box"],
+  [class*="block"],
+  [class*="metric"],
+  [class*="kpi"],
+  [class*="command-item"],
+  [class*="signal-card"],
+  [class*="state-card"]
+):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card),
 .ceos-main-build-strip,
 .topbar,
 .sidebar.ceos-sidebar,
 .ceos-workspace-card,
-.ceos-build-card,
-.card,
-[class*="hero"],
-[class*="panel"],
-[class*="card"],
-[class*="box"],
-[class*="block"],
-[class*="metric"],
-[class*="kpi"],
-[class*="command-item"],
-[class*="signal-card"],
-[class*="state-card"] {
+.ceos-build-card {
   box-shadow: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -86,46 +94,45 @@ h4 {
 .ceos-nav-link-shine,
 .ceos-sidebar-edge-glow,
 .hero::after,
-[class*="hero"]::before,
-[class*="hero"]::after,
-[class*="card"]::before,
-[class*="card"]::after,
-[class*="panel"]::before,
-[class*="panel"]::after,
-[class*="box"]::before,
-[class*="box"]::after,
-[class*="block"]::before,
-[class*="block"]::after,
-[class*="metric"]::before,
-[class*="metric"]::after {
+.page :is(
+  [class*="hero"],
+  [class*="card"],
+  [class*="panel"],
+  [class*="box"],
+  [class*="block"],
+  [class*="metric"]
+):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card)::before,
+.page :is(
+  [class*="hero"],
+  [class*="card"],
+  [class*="panel"],
+  [class*="box"],
+  [class*="block"],
+  [class*="metric"]
+):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card)::after {
   display: none !important;
   content: none !important;
 }
 
-.card,
-[class*="panel"],
-[class*="card"],
-[class*="box"],
-[class*="block"],
-[class*="metric"],
-[class*="kpi"],
-[class*="command-item"],
-[class*="signal-card"],
-[class*="state-card"] {
+.page :is(
+  .card,
+  [class*="panel"],
+  [class*="card"],
+  [class*="box"],
+  [class*="block"],
+  [class*="metric"],
+  [class*="kpi"],
+  [class*="command-item"],
+  [class*="signal-card"],
+  [class*="state-card"]
+):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card) {
   border: 1px solid var(--ceos-polish-line) !important;
   background: var(--ceos-polish-surface-soft) !important;
   border-radius: var(--ceos-polish-radius) !important;
 }
 
-.card .card,
-[class*="panel"] [class*="card"],
-[class*="card"] [class*="card"],
-[class*="card"] [class*="box"],
-[class*="panel"] [class*="box"],
-[class*="card"] [class*="block"],
-[class*="panel"] [class*="block"],
-[class*="card"] [class*="metric"],
-[class*="panel"] [class*="metric"] {
+.page :is([class*="panel"], [class*="card"]):not(.ceos-executive-inner-surface)
+  :is([class*="card"], [class*="box"], [class*="block"], [class*="metric"]):not(.ceos-executive-inner-surface) {
   background: rgba(2, 6, 23, 0.26) !important;
   border-color: var(--ceos-polish-line-soft) !important;
 }
@@ -163,9 +170,7 @@ textarea,
 
 .button:hover,
 .ceos-nav-link:hover,
-[class*="card"]:hover,
-[class*="flow-card"]:hover,
-[class*="list-card"]:hover {
+.page :is([class*="flow-card"], [class*="list-card"]):not(.ceos-executive-inner-surface):hover {
   transform: none !important;
 }
 
@@ -408,32 +413,35 @@ textarea,
 ),
 .page .ma-executive-page :is(
   .ma-command-item,
-  .ma-signal-card,
   .ma-mini-metric,
   .ma-glass-block,
   .ma-bridge-step,
   .ma-pipeline-preview-metric
-),
+):not(.ceos-executive-inner-surface),
 .page .funding-dashboard-page :is(
   .funding-command-item,
-  .funding-signal-card,
-  .funding-kpi-card,
   .funding-premium-row,
   .funding-premium-memo,
   .funding-premium-item,
-  .funding-flow-card,
-  .funding-panel,
   .funding-state-card
-),
+):not(.ceos-executive-inner-surface),
+.page .funding-dashboard-page :is(
+  .funding-signal-card,
+  .funding-kpi-card,
+  .funding-flow-card,
+  .funding-panel
+):not(.ceos-executive-inner-surface),
 .page .ceo-overview-page :is(
   .ceo-command-item,
-  .ceo-signal-card,
   .ceo-kpi-card,
   .ceo-module-card,
   .ceo-action-card,
   .ceo-panel,
   .ceo-mini-row
-) {
+):not(.ceos-executive-inner-surface),
+.page .ceo-overview-page :is(
+  .ceo-signal-card
+):not(.ceos-executive-inner-surface):not(.ceos-ws-card-accent) {
   background: var(--ceos-polish-surface-soft) !important;
   background-image: none !important;
   border-color: var(--ceos-polish-line) !important;
@@ -514,11 +522,11 @@ textarea,
   box-shadow: none !important;
 }
 
-.ceo-signal-card,
-.ceo-kpi-card,
-.ceo-module-card,
-.ceo-panel,
-.ceo-action-card {
+.ceo-signal-card:not(.ceos-executive-inner-surface):not(.ceos-ws-card-accent),
+.ceo-kpi-card:not(.ceos-executive-inner-surface),
+.ceo-module-card:not(.ceos-executive-inner-surface),
+.ceo-panel:not(.ceos-executive-inner-surface),
+.ceo-action-card:not(.ceos-executive-inner-surface) {
   background: var(--ceos-polish-surface-soft) !important;
   border-color: var(--ceos-polish-line) !important;
 }

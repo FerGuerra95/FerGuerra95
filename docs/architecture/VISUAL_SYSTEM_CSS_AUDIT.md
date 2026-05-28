@@ -1,8 +1,9 @@
-# Visual System CSS Architecture Audit — C.24.4A
+# Visual System CSS Architecture Audit — C.24.4A / C.24.4B
 
-**Status:** READ-ONLY AUDIT COMPLETE  
-**Baseline:** `HEAD = origin/main = 9c361f0`  
-**Mode:** READ ONLY — no `src/**`, tests, backend, or runtime changes  
+**Status:** C.24.4A READ-ONLY COMPLETE · C.24.4B CASCADE CONTROL COMPLETE  
+**Baseline (C.24.4B):** `HEAD = origin/main = 5f4e93f` → commit after C.24.4B  
+**Mode (C.24.4A):** READ ONLY — no `src/**`, tests, backend, or runtime changes  
+**Mode (C.24.4B):** WRITE/FIX — cascade control only; no dead CSS removal  
 **Date:** 2026-05-28  
 
 ---
@@ -289,3 +290,72 @@ Line counts: workspaceAccent.css, executivePolish.css, maExecutiveTheme.css, sty
 ```
 
 **Validation:** `npm run build` — PASS (docs-only phase; no src changes).
+
+---
+
+## 11. C.24.4B — Shared Visual Primitives / Cascade Control
+
+**Status:** IMPLEMENTED AND TESTED (build + focused unit tests). Visual route matrix: Assumed / Pending human hard-refresh QA.
+
+**Files touched:**
+
+| File | Change |
+|---|---|
+| `src/styles/executivePolish.css` | P0 flatten scoped to `.page`; `:not()` guards for executive primitives + M&A signal family |
+| `src/styles/workspaceAccent.css` | C.24.4B cascade contract comment + `isolation: isolate` on premium primitives |
+| `src/app/layout/ExecutivePremiumStyle.jsx` | Removed universal `*`, `*::before`, `*::after` reset; ownership comment |
+
+**Aggressive selectors narrowed:**
+
+| Selector before | Selector after | File | Why safe |
+|---|---|---|---|
+| Global `[class*="card"\|"panel"\|"hero"]` flatten (no page scope) | `.page :is(...)` with `:not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(...)` | `executivePolish.css` | Flatten applies only inside `.page`; premium surfaces and M&A signal cards excluded |
+| Global `::before`/`::after { display: none }` on substring matches | Same selectors scoped to `.page :is(...)` with identical `:not()` guards | `executivePolish.css` | Hero pseudo-layers and branch accents no longer killed app-wide |
+| Nested flatten without executive guard | `.page :is([class*="panel"], [class*="card"]):not(.ceos-executive-inner-surface) :is(...):not(.ceos-executive-inner-surface)` | `executivePolish.css` | Inner surfaces inside executive panels preserved |
+| Hover flatten on broad card substring | `.page :is([class*="flow-card"], [class*="list-card"]):not(.ceos-executive-inner-surface):hover` | `executivePolish.css` | List/flow cards only; executive inner surface hover preserved |
+| `.main-area :is(.ma-…) *, *::before, *::after { box-shadow/backdrop: none }` | **Removed** — M&A rules remain on explicit class lists only | `ExecutivePremiumStyle.jsx` | Universal descendant reset no longer strips non-M&A module polish |
+
+**ExecutivePremiumStyle.jsx:** Touched **yes**. Universal `*` reset removed. M&A page-wrapper rules retained. Full merge into `maExecutiveTheme.css` **deferred to post-C.24.4C**.
+
+**Primitives preserved (no new files):**
+
+| Primitive | File | Purpose | Status |
+|---|---|---|---|
+| `ceos-executive-inner-surface` | `workspaceAccent.css` | Parent premium inner panel (M&A-approved pattern) | Preserved + cascade guard |
+| `ceos-ws-hero` | `workspaceAccent.css` | Branch hero shell + accent anchoring | Excluded from polish flatten |
+| `ceos-ws-panel` / `ceos-ws-card-accent` | `workspaceAccent.css` | Branch panel/card accent surfaces | Excluded from polish flatten |
+| `--ws-*` tokens | `workspaceAccent.css` | Per-workspace accent colors | Unchanged |
+| `ceos-enterprise-table` | `workspaceAccent.css` | Shared table shell | Unchanged |
+| M&A signal family (`ma-signal-card`, etc.) | inline + `ExecutivePremiumStyle` | M&A reference signal cards | Explicitly excluded from flatten |
+| Polish rhythm / form rails | `executivePolish.css` | Spacing, tables, action rows | Scoped; no branch color |
+
+**Branch no-regression (route matrix for QA):**
+
+| Branch | Route | Status | Notes |
+|---|---|---|---|
+| M&A | `/ma/dashboard` | Pending visual QA | Signal cards + hero pseudos must survive; no sticker buttons |
+| CEO | `/ceo/overview` | Pending visual QA | N/A / insufficient_data; no fake 0 |
+| Funding | `/funding/dashboard`, `/funding/readiness` | Pending visual QA | Composition + `37/100` display; no stickers |
+| Risk | `/risk/register` | Pending visual QA | Workspace accent preserved |
+| Governance | `/governance/dashboard` | Pending visual QA | Workspace accent preserved |
+| Compliance | `/compliance/dashboard`, `/compliance/reports` | Pending visual QA | Inner surface + hero |
+| Reporting | `/reporting/library` | Pending visual QA | Enterprise table shell |
+| PMI / Strategy | `/pmi/dashboard`, `/strategy/dashboard` | Pending visual QA | No overflow / cut cards |
+
+**Deferred to C.24.4C:**
+
+| Class / rule / file | Reason |
+|---|---|
+| `ceos-glass-layer`, legacy `-glass-block` | Dead-code quarantine requires grep proof |
+| Full `ExecutivePremiumStyle.jsx` → `maExecutiveTheme.css` merge | Needs parity diff after cascade stable |
+| ~55 inline `<style>` blocks | Mass migration blocked until cascade contract proven |
+| `ceo-branch-surface` vs `ceos-executive-inner-surface` | Consolidation after dead CSS pass |
+
+**Validations (C.24.4B):**
+
+- `npm run build` — PASS
+- `npx vitest run tests/unit/funding/fundingDisplayFormat.test.js` — PASS (7)
+- `npx vitest run tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` — PASS (17)
+- `npm run test:unit` — not run (optional; better-sqlite3 ABI may block locally)
+
+**Confirmations:** No backend, Golden Dataset, Formula Registry, package/config, or secrets touched. No dead CSS deleted. No new CSS files created.

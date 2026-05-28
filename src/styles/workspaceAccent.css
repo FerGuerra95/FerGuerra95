@@ -332,6 +332,18 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.045) !important;
 }
 
+/*
+  C.24.4B — cascade contract (loads after executivePolish.css).
+  These primitives intentionally restore premium surfaces flattened by polish.
+  Do not reintroduce global [class*="card"|"panel"] flatten without :not() guards.
+*/
+.main-area[data-workspace] .ceos-ws-hero,
+.main-area[data-workspace] .ceos-executive-inner-surface,
+.main-area[data-workspace] .ceos-ws-panel,
+.main-area[data-workspace] .ceos-ws-card-accent {
+  isolation: isolate;
+}
+
 /* C.24.3j — shared executive inner surface primitive (M&A approved pattern) */
 .main-area[data-workspace] .ceos-executive-inner-surface {
   position: relative;

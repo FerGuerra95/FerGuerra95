@@ -1,6 +1,11 @@
 import React from 'react';
 
 const executivePremiumCss = `
+  /*
+    C.24.4B — M&A runtime theme (AppShell).
+    Scope: M&A page wrappers only. Do not use universal * selectors.
+    Full merge into maExecutiveTheme.css deferred to post-C.24.4C.
+  */
   :root {
     --premium-surface: rgba(10, 15, 26, 0.94);
     --premium-surface-soft: rgba(2, 6, 23, 0.30);
@@ -23,43 +28,6 @@ const executivePremiumCss = `
     margin: 0 auto !important;
     gap: 26px !important;
     color: #f8fafc !important;
-  }
-
-  .main-area :is(
-    .ma-executive-page,
-    .ma-valuation-page,
-    .ma-pipeline-page,
-    .waterfall-page,
-    .cim-page,
-    .buyer-page,
-    .deals-page,
-    .ma-deal-detail-page
-  ) *,
-  .main-area :is(
-    .ma-executive-page,
-    .ma-valuation-page,
-    .ma-pipeline-page,
-    .waterfall-page,
-    .cim-page,
-    .buyer-page,
-    .deals-page,
-    .ma-deal-detail-page
-  ) *::before,
-  .main-area :is(
-    .ma-executive-page,
-    .ma-valuation-page,
-    .ma-pipeline-page,
-    .waterfall-page,
-    .cim-page,
-    .buyer-page,
-    .deals-page,
-    .ma-deal-detail-page
-  ) *::after {
-    box-shadow: none !important;
-    text-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    letter-spacing: 0 !important;
   }
 
   .main-area :is(

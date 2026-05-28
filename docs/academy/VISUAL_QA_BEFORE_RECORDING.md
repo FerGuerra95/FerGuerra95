@@ -441,3 +441,21 @@ Expected:
 - Funding panels show Funding accent; inner children stay flat (no sticker stacks).
 - Readiness score displays as integer `/100` (e.g. `37/100`), not long decimals; missing => `N/A`.
 - Funding form rail integrated (no hard inner admin Card box).
+
+### C.24.4B cascade control checklist
+
+Focus routes (hard refresh after CSS cascade changes):
+
+- `/ma/dashboard`, `/ceo/overview` (reference — no regression)
+- `/funding/dashboard`, `/funding/readiness`
+- `/risk/register`, `/governance/dashboard`
+- `/compliance/dashboard`, `/compliance/reports`
+- `/reporting/library`, `/pmi/dashboard`, `/strategy/dashboard`
+
+Expected:
+
+- No new sticker stacks or heavy nested glass on inner children inside `ceos-executive-inner-surface`.
+- M&A signal cards and hero pseudo-layers intact (not globally flattened).
+- Risk/Governance workspace accent visible (border/header/icon tint).
+- Funding readiness score integer `/100`; missing => `N/A`.
+- No horizontal overflow; no clipped buttons; N/A and insufficient_data visible.
