@@ -371,6 +371,101 @@
   z-index: 1;
 }
 
+/* C.24.3j-c — de-layer nested sticker cards inside executive surfaces */
+.main-area[data-workspace] .ceos-executive-inner-surface
+  :is(
+    .funding-glass-block,
+    .funding-thesis-item,
+    .funding-mini-card,
+    .funding-score-box,
+    .investor-score-box,
+    .investor-mini-card,
+    .investor-target-card,
+    .investor-panel .card,
+    .investor-panel .funding-readiness-card,
+    .investor-panel li,
+    .ceo-deal-pill,
+    .ceo-radar-legend a,
+    .report-panel-note,
+    .report-mini-metric,
+    .report-list-card,
+    .reporting-scroll .card,
+    .risk-row-card,
+    .pmi-mini-card,
+    .governance-mini-card,
+    .strategy-mini-card
+  ) {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(148, 163, 184, 0.08) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.main-area[data-workspace] .ceos-executive-inner-surface
+  :is(
+    .funding-thesis-item,
+    .funding-mini-card,
+    .investor-mini-card,
+    .investor-target-card,
+    .ceo-deal-pill,
+    .report-mini-metric
+  ):hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: rgba(148, 163, 184, 0.12) !important;
+  background: rgba(255, 255, 255, 0.028) !important;
+}
+
+.main-area[data-workspace] .ceos-executive-inner-surface
+  :is(
+    .funding-glass-block,
+    .funding-thesis-item,
+    .funding-mini-card,
+    .investor-score-box,
+    .investor-mini-card,
+    .investor-target-card,
+    .ceo-deal-pill,
+    .report-panel-note,
+    .report-mini-metric
+  )::before,
+.main-area[data-workspace] .ceos-executive-inner-surface
+  :is(
+    .funding-glass-block,
+    .funding-thesis-item,
+    .funding-mini-card,
+    .investor-score-box,
+    .investor-mini-card,
+    .investor-target-card,
+    .ceo-deal-pill,
+    .report-panel-note,
+    .report-mini-metric
+  )::after {
+  content: none !important;
+  display: none !important;
+}
+
+.main-area[data-workspace] .ceos-executive-inner-surface
+  :is(
+    .funding-thesis-list,
+    .investor-stack,
+    .ceo-radar-legend
+  ) {
+  gap: 10px !important;
+}
+
+.main-area[data-workspace] .ceos-executive-inner-surface
+  :is(
+    .funding-thesis-item,
+    .funding-mini-card,
+    .investor-mini-card,
+    .investor-target-card,
+    .ceo-deal-pill,
+    .report-list-card
+  ) {
+  border-radius: 16px !important;
+}
+
 /* C.24.3j-b — neutralize branch-local duplicate layers when primitive is present */
 .main-area[data-workspace]
   :is(

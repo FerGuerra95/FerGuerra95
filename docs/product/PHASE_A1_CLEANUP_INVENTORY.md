@@ -7648,6 +7648,29 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 
 **No-regression checks:** M&A reference unchanged; CEO preserved with previous approved surface.
 
+### C.24.3j-c - Inner Surface De-layering / Sticker Removal
+
+**Status:** IMPLEMENTED AND TESTED.
+
+**Baseline:** `79ff211`.
+
+Problem addressed:
+
+- Nested sticker layers inside already-approved executive surfaces (card-inside-card effect).
+- Internal mini-cards, score boxes, and list cards competing visually with parent premium surfaces.
+
+Resolution:
+
+- Preserved main `.ceos-executive-inner-surface` parent cards.
+- Flattened inner sticker children via shared de-layering rules in `workspaceAccent.css` (subtle background, minimal border, no child shadows, no duplicate pseudo-layers).
+- Funding and Investor Readiness prioritized; CEO preserved; M&A preserved.
+
+Validation highlights:
+
+- Build PASS.
+- Funding computed evidence confirms parent shadow retained and child shadow removed.
+- Unit focal PASS; global unit remains blocked by known local `better-sqlite3` ABI mismatch.
+
 ---
 
 ## C.14.0B - Update AI Agent Prompt Output Discipline

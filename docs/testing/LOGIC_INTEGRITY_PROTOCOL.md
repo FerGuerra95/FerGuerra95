@@ -2064,6 +2064,12 @@ Validation:
 - Scope limited to equivalent visible inner panels in Funding/Compliance/Reporting/Risk/PMI/Governance/Strategy.
 - No formula or truthfulness logic changes performed.
 
+### C.24.3j-c - De-layering guard
+
+- Main executive surfaces preserved; only nested child layers flattened.
+- No new primitive or wrapper introduced.
+- No formula/backend/truthfulness changes; `N/A` and `insufficient_data` preserved.
+
 ---
 
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix

@@ -194,3 +194,9 @@ Expanded to visible branch inner surfaces using the same approved primitive:
 - Strategy
 
 Safety posture unchanged: DSS-only, human review required, and no formula/backend changes.
+
+### C.24.3j-c demo safety note (inner de-layering)
+
+- The change flattens nested sticker-like child surfaces inside executive panels.
+- Parent executive cards remain the primary visual anchor.
+- No data logic, formulas, or compliance truthfulness semantics changed.

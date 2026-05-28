@@ -385,3 +385,23 @@ Expected result:
 
 - Inner panels in these routes use the same curved embedded executive family as M&A/CEO.
 - No regressions on `/ma/dashboard`, `/dashboard`, `/ceo/overview`.
+
+### C.24.3j-c de-layering checklist
+
+Focus routes:
+
+- `/funding/dashboard`
+- `/funding/readiness`
+- `/ceo/overview`
+- `/compliance/reports`
+- `/reporting/library`
+- `/risk/register`
+- `/pmi/dashboard`
+- `/governance/dashboard`
+- `/strategy/dashboard`
+
+Expected visual outcome:
+
+- Parent panel keeps premium curved surface.
+- Internal child cards/rows look flatter (no sticker overlays, no heavy child glow/shadow).
+- M&A reference panel remains unchanged.
