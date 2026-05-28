@@ -128,10 +128,9 @@ const ceoOverviewCss = `
     z-index: 1;
     min-height: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
-    align-items: start;
-    gap: 38px;
-    align-items: center;
+    grid-template-columns: minmax(0, 1.45fr) minmax(380px, 0.55fr);
+    gap: 36px;
+    align-items: stretch;
   }
 
   .ceo-badge-row {
@@ -735,17 +734,25 @@ const ceoOverviewCss = `
 
   .ceo-deal-readiness-radar-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+    grid-template-columns: minmax(320px, 1.24fr) minmax(260px, 0.76fr);
+    gap: 20px;
     margin-top: 28px;
+    align-items: stretch;
+  }
+
+  @media (max-width: 1500px) {
+    .ceo-deal-readiness-radar-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
   }
 
   .ceo-deal-readiness-card {
     width: 100%;
     min-width: 0;
     height: auto;
-    border-radius: 24px;
-    padding: 22px;
+    border-radius: 30px;
+    padding: 26px;
     border: 1px solid rgba(148, 163, 184, 0.12);
     background: rgba(255, 255, 255, 0.03);
     box-shadow: none;
@@ -1056,6 +1063,11 @@ const ceoOverviewCss = `
     .ceo-grid-two,
     .executive-command-layer {
       grid-template-columns: 1fr;
+    }
+
+    .ceo-deal-readiness-radar-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
     }
 
     .ceo-signal-card {
