@@ -523,7 +523,7 @@ const pipelineCss = `
     position: relative;
     overflow: hidden;
     border-radius: 23px;
-    padding: 18px;
+    padding: 18px 18px 18px 22px;
     background:
       radial-gradient(circle at 100% 0%, rgba(37,99,235,0.11), transparent 34%),
       linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.027)),
@@ -547,16 +547,26 @@ const pipelineCss = `
       rgba(15, 23, 42, 0.78);
   }
 
+  .ma-deal-card::before {
+    display: none !important;
+    content: none !important;
+  }
+
   .ma-deal-card::after {
     content: "";
     position: absolute;
+    z-index: 0;
+    inset: auto;
     right: -52px;
     bottom: -60px;
+    left: auto;
+    top: auto;
     width: 140px;
     height: 140px;
     border-radius: 999px;
     background: rgba(37, 99, 235, 0.08);
     pointer-events: none;
+    opacity: 1;
   }
 
   .ma-deal-card-top {
@@ -569,10 +579,14 @@ const pipelineCss = `
   }
 
   .ma-deal-card h3 {
+    position: relative;
+    z-index: 2;
     margin: 0;
+    padding-left: 1px;
     font-size: 16px;
-    line-height: 1.18;
-    letter-spacing: -0.035em;
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
   }
 
   .ma-deal-priority {
@@ -760,7 +774,6 @@ const pipelineCss = `
   .ma-pipeline-search::before,
   .ma-pipeline-board-shell::before,
   .ma-pipeline-column::before,
-  .ma-deal-card::before,
   .ma-pipeline-empty::before,
   .ma-pipeline-count::before,
   .ma-deal-open::before {
@@ -787,7 +800,6 @@ const pipelineCss = `
   .ma-pipeline-search::after,
   .ma-pipeline-board-shell::after,
   .ma-pipeline-column::after,
-  .ma-deal-card::after,
   .ma-pipeline-empty::after,
   .ma-pipeline-count::after,
   .ma-deal-open::after {

@@ -14,6 +14,16 @@ export function formatScoreLabel(score, fallbackLabel = 'N/A') {
   return normalizeScoreOrNull(score) === null ? fallbackLabel : `${normalizeScoreOrNull(score)}%`;
 }
 
+export function formatModuleScoreDisplay(score, fallbackLabel = 'N/A') {
+  const normalized = normalizeScoreOrNull(score);
+  return normalized === null ? fallbackLabel : `${normalized}/100`;
+}
+
+export function formatExecutiveScoreNumber(score, fallbackLabel = 'N/A') {
+  const normalized = normalizeScoreOrNull(score);
+  return normalized === null ? fallbackLabel : String(normalized);
+}
+
 export function getRadarGeometryValue(score) {
   const normalized = normalizeScoreOrNull(score);
   return normalized === null ? 0 : normalized;
@@ -172,11 +182,25 @@ export function getComplianceOverview({ suppliers = [], alerts = [], evidenceIte
     });
   }
 
+  const supplierRiskScores = safeSuppliers
+    .map((supplier) => normalizeScoreOrNull(supplier?.riskScore))
+    .filter((value) => value !== null);
+
+  if (supplierRiskScores.length === 0) {
+    return insufficientOverview({
+      title: 'Compliance score pending',
+      posture: 'insufficient_data',
+      supplierCount: safeSuppliers.length,
+      openAlerts,
+      evidenceCount: safeEvidence.length,
+      reviewCount: safeReviews.length,
+      description:
+        'Supplier, evidence or alert records exist, but no persisted supplier risk score is available for an executive compliance signal. Human review required — not a certified audit score.'
+    });
+  }
+
   const averageRisk =
-    safeSuppliers.length > 0
-      ? safeSuppliers.reduce((total, supplier) => total + Number(supplier?.riskScore || 0), 0) /
-        safeSuppliers.length
-      : 0;
+    supplierRiskScores.reduce((total, value) => total + value, 0) / supplierRiskScores.length;
 
   const score = clampScore(
     100 -

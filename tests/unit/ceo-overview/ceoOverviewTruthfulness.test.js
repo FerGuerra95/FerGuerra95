@@ -4,6 +4,7 @@ import {
   buildInsufficientFallbackModuleCards,
   buildRadarAxis,
   estimateMaFinancialRadar,
+  formatModuleScoreDisplay,
   formatModuleSignalValue,
   getComplianceOverview,
   getEcosystemBranchOverview,
@@ -29,6 +30,25 @@ describe('CEO overview truthfulness helpers', () => {
     expect(overview.posture).toBe('insufficient_data');
     expect(overview.score).not.toBe(60);
     expect(overview.title).not.toMatch(/controlled/i);
+  });
+
+  it('does not coerce missing supplier risk scores into compliance score 0', () => {
+    const overview = getComplianceOverview({
+      suppliers: [{ id: 's1', name: 'Acme', riskScore: null }],
+      alerts: [],
+      evidenceItems: [],
+      reviews: []
+    });
+    expect(overview.score).toBeNull();
+    expect(overview.posture).toBe('insufficient_data');
+    expect(overview.score).not.toBe(0);
+  });
+
+  it('formats module score display as N/A when score is null', () => {
+    expect(formatModuleScoreDisplay(null)).toBe('N/A');
+    expect(formatModuleScoreDisplay(undefined)).toBe('N/A');
+    expect(formatModuleScoreDisplay(0)).toBe('0/100');
+    expect(formatModuleScoreDisplay(72)).toBe('72/100');
   });
 
   it('does not return fallback scores for empty Governance/ESG branch', () => {

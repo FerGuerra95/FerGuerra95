@@ -44,6 +44,8 @@ import {
   buildInsufficientFallbackModuleCards,
   buildRadarAxis,
   estimateMaFinancialRadar,
+  formatExecutiveScoreNumber,
+  formatModuleScoreDisplay,
   formatModuleSignalValue,
   formatScoreLabel,
   mapExecutiveCorporateRadarAxis,
@@ -84,18 +86,17 @@ const ceoOverviewCss = `
   .ceo-hero {
     position: relative;
     overflow: hidden;
-    min-height: 560px;
-    border-radius: 38px;
-    padding: 44px;
-    border: 1px solid rgba(148, 163, 184, 0.18);
+    min-height: 0;
+    border-radius: 32px;
+    padding: 36px 38px 40px;
+    border: 1px solid rgba(148, 163, 184, 0.14);
     background:
-      radial-gradient(circle at 8% 2%, rgba(212, 175, 55, 0.14), transparent 32%),
-      radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.12), transparent 28%),
-      radial-gradient(circle at 60% 110%, rgba(245, 158, 11, 0.08), transparent 30%),
+      radial-gradient(circle at 8% 2%, rgba(212, 175, 55, 0.1), transparent 32%),
+      radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.08), transparent 28%),
       linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97));
     box-shadow:
-      0 38px 120px rgba(0, 0, 0, 0.42),
-      inset 0 1px 0 rgba(255, 255, 255, 0.055);
+      0 24px 72px rgba(0, 0, 0, 0.34),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
   .ceo-hero::before {
@@ -113,12 +114,13 @@ const ceoOverviewCss = `
   .ceo-hero::after {
     content: "";
     position: absolute;
-    inset: auto -190px -210px auto;
-    width: 520px;
-    height: 520px;
+    inset: auto -120px -140px auto;
+    width: 360px;
+    height: 360px;
     border-radius: 999px;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.13), transparent 70%);
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.08), transparent 70%);
     pointer-events: none;
+    opacity: 0.65;
   }
 
   .ceo-hero-layout {
@@ -212,26 +214,18 @@ const ceoOverviewCss = `
     width: 100%;
     max-width: 460px;
     justify-self: end;
-    border-radius: 32px;
-    padding: 26px;
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.086), rgba(255,255,255,0.026)),
-      rgba(15, 23, 42, 0.76);
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    backdrop-filter: blur(22px);
-    box-shadow:
-      0 26px 70px rgba(0, 0, 0, 0.24),
-      inset 0 1px 0 rgba(255,255,255,0.05);
+    border-radius: 24px;
+    padding: 22px;
+    background: rgba(15, 23, 42, 0.52);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    backdrop-filter: none;
+    box-shadow: none;
     overflow: hidden;
   }
 
   .ceo-signal-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 32px;
-    background: radial-gradient(circle at 18% 0%, rgba(96, 165, 250, 0.13), transparent 35%);
-    pointer-events: none;
+    display: none;
+    content: none;
   }
 
   .ceo-signal-inner {
@@ -329,6 +323,10 @@ const ceoOverviewCss = `
 
   .ceo-signal-table {
     display: grid;
+    border-radius: 18px;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+    padding: 4px 14px;
   }
 
   .ceo-signal-row {
@@ -414,11 +412,11 @@ const ceoOverviewCss = `
 
   .executive-command-card,
   .executive-module-card {
-    border-radius: 22px;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    background: rgba(15, 23, 42, 0.72);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.045);
-    padding: 22px;
+    border-radius: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background: rgba(15, 23, 42, 0.48);
+    box-shadow: none;
+    padding: 20px 22px;
     min-width: 0;
   }
 
@@ -1530,7 +1528,7 @@ function ModuleCard({
 
   return (
     <div className={interactive ? 'ceo-module-hit' : ''} {...shellProps}>
-      <Card className={`ceo-module-card ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}>
+      <Card className={`ceo-module-card ceo-branch-surface ceo-branch-${branch}`}>
         <div className="ceo-module-head">
           <div>
             <div className="ceo-kicker">
@@ -1549,7 +1547,7 @@ function ModuleCard({
         </div>
 
         <div className="ceo-module-metrics">
-          <MiniRow label="Signal score" value={`${score}/100`} />
+          <MiniRow label="Signal score" value={formatModuleScoreDisplay(score)} />
           <MiniRow label="Current posture" value={posture} />
 
           {rows.map((row) => (
@@ -1576,7 +1574,7 @@ function ModuleCard({
 
 function ActionCard({ icon: Icon, branch = 'overview', title, description, to, label }) {
   return (
-    <article className={`ceo-action-card ceo-branch-surface ceo-glass-branch ceo-branch-${branch}`}>
+    <article className={`ceo-action-card ceo-branch-surface ceo-branch-${branch}`}>
       <div className="ceo-action-head">
         <div>
           <h3 className="ceo-action-title">{title}</h3>
@@ -2139,7 +2137,7 @@ export function CEOOverviewPage() {
                   <div className="ceo-deal-score-row">
                     <div className="ceo-deal-pill">
                       <div className="kpi-label">Valuation signal</div>
-                      <strong style={{ fontSize: 26 }}>{formatScoreLabel(maValuationSignal).replace('%', '')}</strong>
+                      <strong style={{ fontSize: 26 }}>{formatExecutiveScoreNumber(maValuationSignal)}</strong>
                       <button
                         type="button"
                         className="ceo-link secondary"
@@ -2162,7 +2160,7 @@ export function CEOOverviewPage() {
 
                     <div className="ceo-deal-pill">
                       <div className="kpi-label">Legal / Compliance health</div>
-                      <strong style={{ fontSize: 26 }}>{formatScoreLabel(legalHealthRadar).replace('%', '')}</strong>
+                      <strong style={{ fontSize: 26 }}>{formatExecutiveScoreNumber(legalHealthRadar)}</strong>
                       <button
                         type="button"
                         className="ceo-link secondary"
@@ -2185,7 +2183,7 @@ export function CEOOverviewPage() {
 
                     <div className="ceo-deal-pill">
                       <div className="kpi-label">Unified readiness</div>
-                      <strong style={{ fontSize: 26 }}>{formatScoreLabel(dealReadinessCombined).replace('%', '')}</strong>
+                      <strong style={{ fontSize: 26 }}>{formatExecutiveScoreNumber(dealReadinessCombined)}</strong>
                       <div className="kpi-label" style={{ marginTop: 10 }}>
                         Compliance drag Δ {complianceDragPenalty != null ? `${complianceDragPenalty} pts` : 'N/A'}
                       </div>
