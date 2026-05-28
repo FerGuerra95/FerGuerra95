@@ -387,7 +387,7 @@ export function FundingHeroCard({ derived, settings }) {
             </p>
           </div>
 
-          <aside className="funding-signal-card">
+          <aside className="funding-signal-card ceos-executive-inner-surface">
             <div className="funding-signal-head">
               <div>
                 <div className="kpi-label">Funding Signal</div>

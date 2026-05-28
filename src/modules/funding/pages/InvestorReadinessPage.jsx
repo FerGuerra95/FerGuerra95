@@ -414,7 +414,7 @@ function getReadinessSignal(score) {
 
 function KpiCard({ label, value, description, color = '', icon: Icon = Target }) {
   return (
-    <article className="investor-kpi-card">
+    <article className="investor-kpi-card ceos-executive-inner-surface">
       <div className="investor-kpi-top">
         <div>
           <div className="kpi-label">{label}</div>
@@ -436,7 +436,7 @@ function KpiCard({ label, value, description, color = '', icon: Icon = Target })
 
 function InfoBlock({ title, text }) {
   return (
-    <div className="investor-mini-card">
+    <div className="investor-mini-card ceos-executive-inner-surface">
       <strong>{title}</strong>
       <p className="muted">{text}</p>
     </div>
@@ -463,7 +463,7 @@ function ThesisList({ items }) {
 
 function InvestorTargetCard({ target }) {
   return (
-    <div className="investor-target-card">
+    <div className="investor-target-card ceos-executive-inner-surface">
       <div className="investor-target-head">
         <strong>{target.type}</strong>
         <span className="badge">{target.fit}% fit</span>
@@ -535,7 +535,7 @@ export function InvestorReadinessPage() {
               </p>
             </div>
 
-            <aside className="investor-signal-card">
+            <aside className="investor-signal-card ceos-executive-inner-surface">
               <div className="investor-signal-head">
                 <div>
                   <div className="kpi-label">Readiness Signal</div>
@@ -619,7 +619,7 @@ export function InvestorReadinessPage() {
         </div>
 
         <section className="investor-grid investor-grid-two">
-          <div className="investor-panel">
+          <div className="investor-panel ceos-executive-inner-surface">
             <div className="investor-panel-head">
               <div>
                 <h3>Readiness Assessment</h3>
@@ -654,7 +654,7 @@ export function InvestorReadinessPage() {
             </div>
           </div>
 
-          <div className="investor-panel">
+          <div className="investor-panel ceos-executive-inner-surface">
             <div className="investor-panel-head">
               <div>
                 <h3>Market Narrative</h3>
@@ -675,7 +675,7 @@ export function InvestorReadinessPage() {
         </section>
 
         <section className="investor-grid investor-grid-two">
-          <div className="investor-panel">
+          <div className="investor-panel ceos-executive-inner-surface">
             <div className="investor-panel-head">
               <div>
                 <h3>Execution Checklist</h3>
@@ -692,7 +692,7 @@ export function InvestorReadinessPage() {
             <ReadinessChecklistCard readinessChecklist={readinessChecklist} />
           </div>
 
-          <div className="investor-panel">
+          <div className="investor-panel ceos-executive-inner-surface">
             <div className="investor-panel-head">
               <div>
                 <h3>Target Investor Fit</h3>
@@ -722,7 +722,7 @@ export function InvestorReadinessPage() {
           </div>
         </section>
 
-        <section className="investor-panel">
+        <section className="investor-panel ceos-executive-inner-surface">
           <div className="investor-panel-head">
             <div>
               <h3>Investor Preparation Notes</h3>

@@ -7625,6 +7625,29 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 
 **Scope lock:** No rollout to Funding/Compliance/Reporting/Risk/PMI/Governance/Strategy/Bridge/Heritage in this step.
 
+### C.24.3j-b - Extend approved executive inner surface to visible branches
+
+**Status:** IMPLEMENTED AND TESTED (cross-branch visible inner panels).
+
+**Baseline:** `0c037bd`.
+
+**Primitive reused (no new visual system):**
+
+- `src/styles/workspaceAccent.css` -> `.ceos-executive-inner-surface`
+- Kept the same M&A-derived surface recipe (curved radius, dark premium gradient, soft border/shadow, subtle highlight).
+
+**Branches updated (equivalent inner surfaces only):**
+
+- Funding dashboard/readiness: signal cards, memo/readiness panels, KPI and mini cards.
+- Compliance dashboard/reports: signal/KPI and review list/panels.
+- Reporting enterprise panels.
+- Risk enterprise panels.
+- PMI dashboard signal panel.
+- Governance enterprise panels.
+- Strategy enterprise panels.
+
+**No-regression checks:** M&A reference unchanged; CEO preserved with previous approved surface.
+
 ---
 
 ## C.14.0B - Update AI Agent Prompt Output Discipline

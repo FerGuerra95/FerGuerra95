@@ -87,7 +87,7 @@ function SimpleCards({ items }) {
   return (
     <section className="governance-enterprise-grid-two">
       {items.map((item) => (
-        <Card className="governance-enterprise-panel" key={item.id}>
+        <Card className="governance-enterprise-panel ceos-executive-inner-surface" key={item.id}>
           <h3>{item.title || item.committeeName || item.meetingTitle || item.action || item.id}</h3>
           <p className="muted">{item.status || item.reportType || 'active'}</p>
         </Card>

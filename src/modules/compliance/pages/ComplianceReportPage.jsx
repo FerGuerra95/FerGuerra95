@@ -1159,7 +1159,7 @@ function MiniMetric({ label, value, tone = '' }) {
 
 function ReportCard({ report, canCreateReport, onExport, onOpenSupplier }) {
   return (
-    <article className="report-list-card">
+    <article className="report-list-card ceos-executive-inner-surface">
       <div className="report-list-card-head">
         <div>
           <h3 className="report-list-card-title">{report.title}</h3>
@@ -1950,7 +1950,7 @@ export function ComplianceReportPage() {
           </ReportPremiumPanel>
         </section>
         <section className="report-grid report-grid-two">
-          <section className="report-panel">
+          <section className="report-panel ceos-executive-inner-surface">
             <PanelHeader
               kicker="Draft controls"
               icon={Plus}
@@ -2036,7 +2036,7 @@ export function ComplianceReportPage() {
             </div>
           </section>
 
-          <section className="report-panel">
+          <section className="report-panel ceos-executive-inner-surface">
             <PanelHeader
               kicker="Draft evidence base"
               icon={Archive}

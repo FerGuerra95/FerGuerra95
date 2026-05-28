@@ -57,7 +57,7 @@ export function RiskStatusBadge({ status }) {
 
 export function RiskKpiCard({ icon: Icon = Gauge, label, value, description }) {
   return (
-    <Card className="risk-enterprise-panel">
+    <Card className="risk-enterprise-panel ceos-executive-inner-surface">
       <div className="risk-enterprise-kpi">
         <div className="risk-enterprise-icon"><Icon size={18} /></div>
         <div>
@@ -104,7 +104,7 @@ export function RiskRegisterTable({ items = [] }) {
 
 export function EnterpriseRiskTable({ title, items = [], columns = [] }) {
   return (
-    <Card className="risk-enterprise-panel">
+    <Card className="risk-enterprise-panel ceos-executive-inner-surface">
       <h3>{title}</h3>
       {items.length === 0 ? (
         <div className="risk-enterprise-empty ceos-enterprise-table-empty">
@@ -140,7 +140,7 @@ export function RiskHeatmap({ heatmap = [], risks = [], items = [] }) {
   }));
 
   return (
-    <Card className="risk-enterprise-panel">
+    <Card className="risk-enterprise-panel ceos-executive-inner-surface">
       <h3>Likelihood × impact matrix</h3>
       <p className="risk-heatmap-note">
         Portfolio distribution by likelihood and impact. Operational residual scores are DSS decision-support signals — not certified risk ratings. Golden benchmark uses L×I for validation only.
@@ -233,7 +233,7 @@ export function RiskReportsPanel({ items = [] }) {
   const payloadTruthfulness = summarizeRiskReportPayloadTruthfulness(latestPayload || {});
 
   return (
-    <Card className="risk-enterprise-panel">
+    <Card className="risk-enterprise-panel ceos-executive-inner-surface">
       <h3>Risk reports</h3>
       <p className="risk-report-disclaimer">{payloadTruthfulness.disclaimer || RISK_REPORT_PANEL_DISCLAIMER}</p>
       {items.length === 0 ? (
@@ -303,7 +303,7 @@ export function RiskNotificationPanel({ items = [] }) {
 
 export function BoardRiskReadinessPanel({ metrics = {} }) {
   return (
-    <Card className="risk-enterprise-panel">
+    <Card className="risk-enterprise-panel ceos-executive-inner-surface">
       <h3>Board risk readiness</h3>
       <p className="risk-muted">Enterprise Risk is a decision-support system. CRO, audit committee and legal review remain required.</p>
       <div className="risk-enterprise-grid">

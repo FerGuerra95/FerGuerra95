@@ -2058,6 +2058,12 @@ Validation:
 - No branch-wide panel rollout in this subphase.
 - Truthfulness unchanged: Legal Compliance keeps `N/A` / `insufficient_data`; no fallback `0`.
 
+### C.24.3j-b - Cross-branch inner surface rollout guard
+
+- Reused existing primitive `.ceos-executive-inner-surface`; no parallel visual system introduced.
+- Scope limited to equivalent visible inner panels in Funding/Compliance/Reporting/Risk/PMI/Governance/Strategy.
+- No formula or truthfulness logic changes performed.
+
 ---
 
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix

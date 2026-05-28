@@ -54,7 +54,7 @@ function formatStrategicRiskLevel(value) {
 }
 
 export function StrategyKpi({ label, value, description }) {
-  return <Card className="strategy-panel"><p className="strategy-muted">{label}</p><div className="strategy-value">{value ?? 0}</div><p className="strategy-muted">{description}</p></Card>;
+  return <Card className="strategy-panel ceos-executive-inner-surface"><p className="strategy-muted">{label}</p><div className="strategy-value">{value ?? 0}</div><p className="strategy-muted">{description}</p></Card>;
 }
 
 export function StrategyExecutiveWidget({ summary = {} }) {
@@ -74,7 +74,7 @@ export function StrategyExecutiveWidget({ summary = {} }) {
 
 export function StrategyTable({ title, items = [], columns = [] }) {
   return (
-    <Card className="strategy-panel">
+    <Card className="strategy-panel ceos-executive-inner-surface">
       <h3>{title}</h3>
       {items.length === 0 ? (
         <div className="strategy-empty ceos-enterprise-table-empty">

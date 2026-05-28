@@ -1098,7 +1098,7 @@ function PanelHeader({ kicker, icon: Icon, title, description }) {
 
 function KpiCard({ label, value, description, icon: Icon, tone = '' }) {
   return (
-    <article className="funding-kpi-card">
+    <article className="funding-kpi-card ceos-executive-inner-surface">
       <div className="funding-kpi-top">
         <div>
           <div className="kpi-label">{label}</div>
@@ -1746,7 +1746,7 @@ export function FundingDashboardPage() {
                 </div>
               </div>
 
-              <aside className="funding-signal-card">
+              <aside className="funding-signal-card ceos-executive-inner-surface">
                 <div className="funding-signal-inner">
                   <div className="funding-signal-top">
                     <div>
@@ -1840,7 +1840,7 @@ export function FundingDashboardPage() {
           </section>
 
           {normalizedSummary.executiveSignals.length > 0 ? (
-            <Card className="funding-panel">
+            <Card className="funding-panel ceos-executive-inner-surface">
               <PanelHeader
                 kicker="Executive signals"
                 icon={ShieldCheck}
@@ -1924,7 +1924,7 @@ export function FundingDashboardPage() {
               description="Persisted funding rounds from enterprise backend — official round records per organization."
               sourceBadge="Persisted rounds"
             />
-            <Card className="funding-panel">
+            <Card className="funding-panel ceos-executive-inner-surface">
               {isLoadingFundingData ? (
                 <p className="muted">Loading funding rounds...</p>
               ) : fundingDataError ? (
@@ -2114,7 +2114,7 @@ export function FundingDashboardPage() {
                 totalAmountRaised: normalizedSummary.totalAmountRaised
               }}
               currency={reportCurrency}
-              className="funding-panel ceos-ws-panel"
+              className="funding-panel ceos-ws-panel ceos-executive-inner-surface"
             />
 
             <FundingHeroCard derived={derived} settings={fundingSettings} />
@@ -2136,7 +2136,7 @@ export function FundingDashboardPage() {
               />
             </div>
 
-            <Card className="funding-panel">
+            <Card className="funding-panel ceos-executive-inner-surface">
               <PanelHeader
                 kicker="Raise narrative"
                 icon={TrendingUp}
@@ -2155,7 +2155,7 @@ export function FundingDashboardPage() {
           </section>
 
           <section className="funding-grid funding-grid-two">
-            <Card className="funding-panel">
+            <Card className="funding-panel ceos-executive-inner-surface">
               <PanelHeader
                 kicker="Funding memo"
                 icon={FileText}
@@ -2193,7 +2193,7 @@ export function FundingDashboardPage() {
               </div>
             </Card>
 
-            <Card className="funding-panel">
+            <Card className="funding-panel ceos-executive-inner-surface">
               <PanelHeader
                 kicker="Investor readiness"
                 icon={ShieldCheck}

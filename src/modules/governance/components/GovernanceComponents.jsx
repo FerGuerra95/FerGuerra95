@@ -37,7 +37,7 @@ function formatGovernanceScore(value) {
 
 export function GovernanceReadinessScore({ value = null, label = 'Governance readiness (DSS)' }) {
   return (
-    <Card className="governance-enterprise-panel governance-enterprise-kpi">
+    <Card className="governance-enterprise-panel governance-enterprise-kpi ceos-executive-inner-surface">
       <div className="kpi-label">{label}</div>
       <strong>{formatGovernanceScore(value)}</strong>
       <p className="muted">Operational DSS heuristic. Not a certified governance rating. Human review required.</p>
@@ -59,7 +59,7 @@ export function GovernanceExecutiveWidget({ summary }) {
 
 export function MetricCard({ icon: Icon = Scale, label, value, description = '' }) {
   return (
-    <Card className="governance-enterprise-panel governance-enterprise-kpi">
+    <Card className="governance-enterprise-panel governance-enterprise-kpi ceos-executive-inner-surface">
       <div className="governance-enterprise-toolbar">
         <Icon size={18} />
         <span className="kpi-label">{label}</span>
@@ -79,7 +79,7 @@ export function DecisionRegisterTable({ items = [], onSelect, onSubmit, onApprov
     );
   }
   return (
-    <Card className="governance-enterprise-panel">
+    <Card className="governance-enterprise-panel ceos-executive-inner-surface">
       <div className="ceos-enterprise-table-wrap ceos-enterprise-div-table">
         <div className="governance-enterprise-row governance-enterprise-table-head">
           <span>Decision</span><span>Status</span><span>Owner</span><span>Actions</span>
@@ -103,7 +103,7 @@ export function DecisionRegisterTable({ items = [], onSelect, onSubmit, onApprov
 
 export function ApprovalFlowPanel({ decision }) {
   return (
-    <Card className="governance-enterprise-panel">
+    <Card className="governance-enterprise-panel ceos-executive-inner-surface">
       <div className="governance-enterprise-toolbar"><Scale size={18} /><h3>Approval flow</h3></div>
       <p className="muted">Current status: {decision?.status || 'draft'}. Approved decisions are locked for direct editing.</p>
     </Card>
@@ -120,7 +120,7 @@ export function GovernanceAuditTimeline({ items = [] }) { return <SimpleList tit
 
 function SimpleList({ title, items, labelKey, valueKey }) {
   return (
-    <Card className="governance-enterprise-panel">
+    <Card className="governance-enterprise-panel ceos-executive-inner-surface">
       <h3>{title}</h3>
       {items.length === 0 ? (
         <div className="governance-enterprise-empty ceos-enterprise-table-empty">

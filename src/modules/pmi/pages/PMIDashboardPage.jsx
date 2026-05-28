@@ -1464,7 +1464,7 @@ export function PMIDashboardPage() {
               </div>
             </div>
 
-            <aside className="pmi-signal-card">
+            <aside className="pmi-signal-card ceos-executive-inner-surface">
               <div className="pmi-signal-inner">
                 <div className="pmi-signal-top">
                   <div>

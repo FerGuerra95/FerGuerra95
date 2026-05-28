@@ -180,3 +180,17 @@ Validation notes:
 
 This checkpoint applies the approved M&A inner-surface copy to CEO Overview first.  
 No other branch surface rollout is included in this subphase.
+
+### C.24.3j-b demo safety note (visible branch rollout)
+
+Expanded to visible branch inner surfaces using the same approved primitive:
+
+- Funding (dashboard/readiness)
+- Compliance (dashboard/reports)
+- Reporting
+- Risk
+- PMI
+- Governance
+- Strategy
+
+Safety posture unchanged: DSS-only, human review required, and no formula/backend changes.

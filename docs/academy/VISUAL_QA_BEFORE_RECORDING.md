@@ -365,3 +365,23 @@ Pass criteria:
 
 - CEO top readiness inner card visibly matches M&A-like embedded surface finish.
 - No cross-branch rollout expected in this checkpoint.
+
+### C.24.3j-b rollout visual checklist
+
+Routes validated for visible inner-surface rollout:
+
+- `/funding/dashboard`
+- `/funding/readiness`
+- `/compliance/dashboard`
+- `/compliance/reports`
+- `/reporting/dashboard`
+- `/reporting/library`
+- `/risk/register`
+- `/pmi/dashboard`
+- `/governance/dashboard`
+- `/strategy/dashboard`
+
+Expected result:
+
+- Inner panels in these routes use the same curved embedded executive family as M&A/CEO.
+- No regressions on `/ma/dashboard`, `/dashboard`, `/ceo/overview`.

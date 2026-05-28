@@ -47,7 +47,7 @@ export const reportingEnterpriseCss = `
 `;
 
 export function ReportingKpi({ label, value, description }) {
-  return <Card className="reporting-panel"><p className="reporting-muted">{label}</p><div className="reporting-value">{value ?? 0}</div><p className="reporting-muted">{description}</p></Card>;
+  return <Card className="reporting-panel ceos-executive-inner-surface"><p className="reporting-muted">{label}</p><div className="reporting-value">{value ?? 0}</div><p className="reporting-muted">{description}</p></Card>;
 }
 
 export function ReportingExecutiveWidget({ summary = {} }) {
@@ -75,7 +75,7 @@ export function ReportingTable({ title, items = [], columns = [] }) {
   }
 
   return (
-    <Card className="reporting-panel">
+    <Card className="reporting-panel ceos-executive-inner-surface">
       <h3>{title}</h3>
       {items.length === 0 ? (
         <div className="reporting-empty ceos-enterprise-table-empty">

@@ -977,7 +977,7 @@ function SectionHeader({ kicker, icon: Icon, title, description }) {
 
 function DashboardMetric({ icon: Icon, label, value, helper }) {
   return (
-    <article className="compliance-kpi-card">
+    <article className="compliance-kpi-card ceos-executive-inner-surface">
       <div className="compliance-kpi-top">
         <div>
           <div className="kpi-label">{label}</div>
@@ -1357,7 +1357,7 @@ export function ComplianceDashboardPage() {
               </div>
             </div>
 
-            <aside className="compliance-signal-card">
+            <aside className="compliance-signal-card ceos-executive-inner-surface">
               <div className="compliance-signal-inner">
                 <div className="compliance-signal-top">
                   <div>

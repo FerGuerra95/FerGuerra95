@@ -371,6 +371,57 @@
   z-index: 1;
 }
 
+/* C.24.3j-b — neutralize branch-local duplicate layers when primitive is present */
+.main-area[data-workspace]
+  :is(
+    .funding-signal-card,
+    .funding-kpi-card,
+    .funding-panel,
+    .investor-signal-card,
+    .investor-kpi-card,
+    .investor-panel,
+    .investor-mini-card,
+    .investor-target-card,
+    .compliance-signal-card,
+    .compliance-kpi-card,
+    .report-panel,
+    .report-list-card,
+    .pmi-signal-card,
+    .reporting-panel,
+    .risk-enterprise-panel,
+    .governance-enterprise-panel,
+    .strategy-panel
+  ).ceos-executive-inner-surface::before {
+  background: radial-gradient(circle at 18% 0%, rgba(96, 165, 250, 0.13), transparent 35%) !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+}
+
+.main-area[data-workspace]
+  :is(
+    .funding-signal-card,
+    .funding-kpi-card,
+    .funding-panel,
+    .investor-signal-card,
+    .investor-kpi-card,
+    .investor-panel,
+    .investor-mini-card,
+    .investor-target-card,
+    .compliance-signal-card,
+    .compliance-kpi-card,
+    .report-panel,
+    .report-list-card,
+    .pmi-signal-card,
+    .reporting-panel,
+    .risk-enterprise-panel,
+    .governance-enterprise-panel,
+    .strategy-panel
+  ).ceos-executive-inner-surface::after {
+  content: none !important;
+  display: none !important;
+}
+
 /* Module KPI / signal stacks — interior tint (scoped per shell workspace) */
 .main-area[data-workspace]
   :is(
