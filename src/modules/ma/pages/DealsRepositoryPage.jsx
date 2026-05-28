@@ -34,7 +34,7 @@ const dealsRepositoryCss = `
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 24px;
     max-width: 100%;
     overflow-x: clip;
   }
@@ -316,7 +316,7 @@ const dealsRepositoryCss = `
   .deals-section {
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 20px;
   }
 
   .deals-section-header {

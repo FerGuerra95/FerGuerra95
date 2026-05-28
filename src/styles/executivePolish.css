@@ -925,11 +925,14 @@ textarea,
 .ma-pipeline-page :is(.ma-pipeline-board) {
   grid-template-columns: repeat(6, minmax(220px, 1fr)) !important;
   overflow-x: auto !important;
+  align-items: flex-start !important;
 }
 
 .ma-pipeline-page :is(.ma-pipeline-column) {
   min-width: 220px !important;
-  min-height: 380px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  align-self: flex-start !important;
   padding: 14px !important;
 }
 

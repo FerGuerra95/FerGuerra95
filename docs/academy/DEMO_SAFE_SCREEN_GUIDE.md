@@ -144,3 +144,17 @@ Validation notes:
 | Compliance Reports panels (re-check) | SAFE_TO_SHOW_EXTERNAL | `.report-panel-note` replaces nested glass blocks | Draft controls / evidence base / library | Re-verify no builder look |
 
 Validation: `npm run build` PASS after C.24.3g-b. Operator visual pass required before recording.
+
+---
+
+## C.24.3g-c — Runtime Override Visual Fix
+
+| Screen | Classification | Reason | Required wording | Notes |
+|---|---|---|---|---|
+| M&A dashboard action rows | SAFE_TO_SHOW_EXTERNAL | `maExecutiveTheme.css` no longer paints `.ma-action-row a` with permanent gradient box | Decision-support; not investment advice | Hard-refresh `/ma/dashboard` |
+| M&A pipeline | SAFE_TO_SHOW_EXTERNAL | Removed `align-items: stretch` + `min-height: 380px` column override | Same as pipeline | Hard-refresh `/ma/pipeline` |
+| M&A deals archive | SAFE_TO_SHOW_EXTERNAL | Tighter section rhythm; archive follows hero without artificial void | Private deal archive | Hard-refresh `/ma/deals` |
+| CEO Overview hero | SAFE_TO_SHOW_EXTERNAL | Hero without `ceo-glass-branch`; readiness card not double-accented | Executive Command Center; DSS only | Hard-refresh `/dashboard` |
+| Compliance Reports | SAFE_TO_SHOW_EXTERNAL | Flat list cards; Review controls / Board review draft library | Not certified audit | Hard-refresh `/compliance/reports` |
+
+**Baseline:** `29bfc93`. **Validations:** build PASS; Playwright navigation smoke PASS; unit 537/552 (4 sqlite ABI skips local env).

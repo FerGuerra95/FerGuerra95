@@ -294,3 +294,32 @@ Verify:
 - CEO Overview: upper internal readiness/radar cards integrate into hero (no screen-in-screen double frame).
 - Compliance Reports: draft controls and library read as one dark-premium surface; no dashed empty placeholders.
 - No new global polish layers added on top of old ones.
+
+---
+
+## C.24.3g-c — Runtime Override Visual Fix
+
+**Baseline:** `29bfc93` (`fix(ui): remove visual layering issues before recording`)
+
+**Overrides removed (root cause):**
+
+| Area | File | Selector / class | Issue | Fix |
+|---|---|---|---|---|
+| M&A action rows | `src/modules/ma/styles/maExecutiveTheme.css` | `.ma-executive-page :is(.ma-arrow-link, .ma-action-row a)` | `!important` gradient box on all action links | Split: keep gradient on `.ma-arrow-link`; `.ma-action-row a` transparent + subtle hover |
+| M&A pipeline | `maExecutiveTheme.css` + `executivePolish.css` | `.ma-pipeline-board` stretch; `.ma-pipeline-column` `min-height: 380px` | Empty columns stretched to viewport | `align-items: flex-start`; column `min-height: 0` |
+| CEO hero | `CEOOverviewPage.jsx` | `ceo-glass-branch` on hero | Double glass / screen-in-screen | Removed class from hero; scoped `workspaceAccent` readiness card flatten |
+| Compliance Reports | `ComplianceReportPage.jsx` + `workspaceAccent.css` | `.report-panel` / `.report-list-card` shared pseudo-glass | Builder / card-in-card | Panels keep single surface; list cards + empty states flat; list panel wrapper aplanado |
+
+**Routes to hard-refresh before recording:**
+
+- `/ma/dashboard`, `/ma/pipeline`, `/ma/deals`, `/ma/valuation`
+- `/compliance/reports`
+- `/dashboard` or `/ceo/overview` (CEO Overview hero)
+
+**Validations (2026-05-28):**
+
+- `npm run build` PASS
+- `npm run test:unit` — 537 passed; 4 suites skipped (local `better-sqlite3` Node ABI mismatch; not UI-related)
+- `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS
+
+**Operator:** Confirm no permanent sticker backgrounds on M&A action rows, no giant empty pipeline columns, no CEO hero double frame, Compliance library reads as executive product (not internal builder).

@@ -374,6 +374,14 @@
   border-color: var(--ws-accent-border) !important;
 }
 
+.main-area[data-workspace='overview']
+  .ceo-hero .ceo-deal-readiness-card.ceos-ws-card-accent {
+  background: rgba(255, 255, 255, 0.03) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 .main-area[data-workspace='overview'] .ceo-panel-icon,
 .main-area[data-workspace='overview'] .ceo-card-icon,
 .main-area[data-workspace='overview'] .ceo-icon-box {
@@ -717,12 +725,10 @@
     .report-signal-card,
     .report-score-module,
     .report-section,
-    .report-list-card,
     .report-kpi-card,
     .report-panel,
     .report-premium-panel,
-    .report-premium-item,
-    .report-empty-wrap
+    .report-premium-item
   ) {
   border-color: var(--ws-accent-border) !important;
   background:
@@ -731,6 +737,14 @@
   box-shadow:
     0 12px 32px rgba(0, 0, 0, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.main-area[data-workspace='compliance']
+  .compliance-report-page
+  :is(.report-list-card, .report-list-panel, .report-empty-wrap) {
+  border-color: rgba(148, 163, 184, 0.12) !important;
+  background: rgba(15, 23, 42, 0.34) !important;
+  box-shadow: none !important;
 }
 
 .main-area[data-workspace='compliance'] .compliance-report-page .report-signal-table thead th,

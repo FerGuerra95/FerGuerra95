@@ -133,7 +133,7 @@
   box-shadow: none !important;
 }
 
-.ma-executive-page :is(.ma-arrow-link, .ma-action-row a),
+.ma-executive-page :is(.ma-arrow-link),
 .ma-pipeline-page :is(.ma-deal-open),
 .deals-page :is(.deals-case-actions a),
 .ma-deal-detail-page :is(.ma-deal-detail-actions a) {
@@ -142,11 +142,27 @@
     linear-gradient(90deg, rgba(var(--ma-exec-green), 0.145), rgba(var(--ma-exec-blue), 0.080)) !important;
 }
 
+.ma-executive-page :is(.ma-action-row a) {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.ma-executive-page :is(.ma-action-row a):hover,
+.ma-executive-page :is(.ma-action-row a):focus-visible {
+  border-color: rgba(var(--ma-exec-green), 0.2) !important;
+  background: rgba(var(--ma-exec-green), 0.07) !important;
+}
+
 .ma-valuation-page :is(.ma-valuation-workspace),
-.ma-pipeline-page :is(.ma-pipeline-board),
 .buyer-page :is(.buyer-grid),
 .deals-page :is(.deals-archive-list) {
   align-items: stretch;
+}
+
+.ma-pipeline-page :is(.ma-pipeline-board) {
+  align-items: flex-start;
 }
 
 .ma-executive-page *,

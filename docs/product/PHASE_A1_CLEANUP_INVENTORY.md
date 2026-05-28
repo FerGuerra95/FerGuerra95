@@ -7763,6 +7763,29 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 
 ---
 
+## C.24.3g-c — Runtime Override Visual Fix
+
+**Status:** COMPLETED / RUNTIME OVERRIDE REMOVAL — OPERATOR VISUAL RE-CHECK BEFORE RECORDING.
+
+**Baseline:** `HEAD = origin/main = 29bfc93` (`fix(ui): remove visual layering issues before recording`).
+
+**Overrides that were still winning after C.24.3g-b:**
+
+| Area | File | Selector / class | Previous issue | Fix applied |
+|---|---|---|---|---|
+| M&A action rows | `src/modules/ma/styles/maExecutiveTheme.css` | `.ma-executive-page :is(.ma-arrow-link, .ma-action-row a)` | Permanent gradient sticker on dashboard botoneras | Action-row links transparent; arrow links keep accent |
+| M&A pipeline | `maExecutiveTheme.css`, `executivePolish.css` | `.ma-pipeline-board` stretch; column `min-height: 380px` | Giant empty columns | `align-items: flex-start`; `min-height: 0` |
+| CEO hero | `CEOOverviewPage.jsx` | `ceo-glass-branch` on hero | Screen-in-screen double glass | Removed from hero; readiness card accent scoped in `workspaceAccent.css` |
+| Compliance Reports | `ComplianceReportPage.jsx`, `workspaceAccent.css` | `.report-panel` + `.report-list-card` shared pseudo layers | Builder / scaffolding look | Flat list cards; lighter panels; list shell unwrapped |
+
+**Routes reviewed (automated smoke + build):** `/ma/dashboard`, `/ma/pipeline`, `/ma/deals`, `/ma/valuation`, `/compliance/reports`, CEO overview route via navigation smoke.
+
+**Validations:** `npm run build` PASS; Playwright `navigation-stability.spec.js` PASS; unit 537/552 (4 sqlite ABI skips on this host).
+
+**No regression:** backend, formulas, Golden Dataset, Formula Registry, package/config, secrets untouched.
+
+---
+
 ## C.24.3c - Demo UI Layout Integration Polish
 
 **Status:** COMPLETED / DEMO TABLES AND PANELS VISUALLY INTEGRATED.

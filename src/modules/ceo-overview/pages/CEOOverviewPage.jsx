@@ -2028,7 +2028,7 @@ export function CEOOverviewPage() {
       <style>{ceoOverviewCss}</style>
 
       <div className="ceo-overview-page">
-        <section className="ceo-hero ceos-ws-hero ceo-branch-surface ceo-glass-branch ceo-branch-overview">
+        <section className="ceo-hero ceos-ws-hero ceo-branch-surface ceo-branch-overview">
           <div className="ceo-hero-layout">
             <div>
               <div className="ceo-badge-row">

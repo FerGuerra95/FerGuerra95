@@ -2149,6 +2149,27 @@ No formulas, Golden Dataset, Formula Registry, backend, or data semantics change
 
 ---
 
+## C.24.3g-c — Runtime Override Visual Fix
+
+**Status:** COMPLETED / CSS specificity overrides removed (operator hard-refresh required).
+
+**Baseline:** `HEAD = origin/main = 29bfc93`.
+
+| Area | Override source | Fix |
+|---|---|---|
+| M&A action rows | `maExecutiveTheme.css` `.ma-executive-page :is(.ma-arrow-link, .ma-action-row a)` with `!important` background | Split selectors; action-row links transparent by default |
+| M&A pipeline | `maExecutiveTheme.css` `align-items: stretch` on `.ma-pipeline-board`; `executivePolish.css` `min-height: 380px` on columns | `flex-start` + `min-height: 0` |
+| CEO Overview hero | `ceo-glass-branch` on hero + `workspaceAccent` readiness accent | Removed hero glass class; flattened readiness card accent |
+| Compliance Reports | Shared pseudo-glass on `.report-list-card`; workspace accent on list/empty | List cards flat; panels single surface; list panel wrapper transparent |
+
+**Files:** `maExecutiveTheme.css`, `executivePolish.css`, `CEOOverviewPage.jsx`, `ComplianceReportPage.jsx`, `DealsRepositoryPage.jsx` (spacing), `workspaceAccent.css`.
+
+**Validations:** `npm run build` PASS; Playwright navigation smoke PASS; unit 537 passed (4 local sqlite ABI skips, not UI).
+
+No formulas, Golden Dataset, Formula Registry, backend, or data semantics changed.
+
+---
+
 ## C.24.3c - Demo UI Layout Integration Polish
 
 **Status:** COMPLETED / scoped visual layout integration polish.

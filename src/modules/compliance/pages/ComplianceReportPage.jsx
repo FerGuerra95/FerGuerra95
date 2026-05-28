@@ -340,62 +340,74 @@ const complianceReportCss = `
   }
 
   .report-kpi-card,
-  .report-panel,
-  .report-list-card {
+  .report-panel {
     position: relative;
     isolation: isolate;
     overflow: hidden;
     width: 100%;
     height: 100%;
-    border-radius: 31px;
-    border: 1px solid rgba(255, 255, 255, 0.034);
+    border-radius: 28px;
+    border: 1px solid rgba(148, 163, 184, 0.14);
     background:
-      radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.112), transparent 36%),
-      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.086), transparent 42%),
-      linear-gradient(115deg, rgba(59, 130, 246, 0.064), rgba(255,255,255,0.016) 46%, rgba(16, 185, 129, 0.052)),
-      rgba(15, 23, 42, 0.58);
+      linear-gradient(135deg, rgba(255,255,255,0.042), rgba(255,255,255,0.012)),
+      rgba(15, 23, 42, 0.62);
     box-shadow:
-      0 28px 82px rgba(0, 0, 0, 0.28),
-      0 0 42px rgba(59, 130, 246, 0.086),
-      inset 0 1px 0 rgba(255,255,255,0.058),
-      inset 1px 0 0 rgba(59, 130, 246, 0.064),
-      inset -1px 0 0 rgba(16, 185, 129, 0.056);
-    backdrop-filter: blur(20px) saturate(134%);
-    -webkit-backdrop-filter: blur(20px) saturate(134%);
+      0 18px 48px rgba(0, 0, 0, 0.22),
+      inset 0 1px 0 rgba(255,255,255,0.04);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
   }
 
   .report-kpi-card::before,
-  .report-panel::before,
-  .report-list-card::before {
+  .report-panel::before {
     content: "";
     position: absolute;
-    inset: -30%;
+    inset: -20%;
     z-index: 0;
     pointer-events: none;
     background:
-      radial-gradient(circle at 0% 10%, rgba(59, 130, 246, 0.100), transparent 34%),
-      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.084), transparent 38%),
-      radial-gradient(circle at 54% 120%, rgba(255,255,255,0.032), transparent 42%);
-    filter: blur(28px);
-    opacity: 0.60;
+      radial-gradient(circle at 0% 10%, rgba(59, 130, 246, 0.08), transparent 34%),
+      radial-gradient(circle at 100% 8%, rgba(16, 185, 129, 0.06), transparent 38%);
+    filter: blur(20px);
+    opacity: 0.45;
     mix-blend-mode: screen;
   }
 
   .report-kpi-card::after,
-  .report-panel::after,
-  .report-list-card::after {
+  .report-panel::after {
     content: "";
     position: absolute;
     inset: 1px;
     z-index: 0;
     pointer-events: none;
     border-radius: inherit;
-    background: linear-gradient(135deg, rgba(255,255,255,0.066), rgba(255,255,255,0.012) 32%, transparent 58%, rgba(255,255,255,0.020));
-    opacity: 0.32;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent 48%);
+    opacity: 0.24;
   }
 
   .report-kpi-card > *,
-  .report-panel > *,
+  .report-panel > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .report-list-card {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background: rgba(15, 23, 42, 0.36);
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .report-list-card::before,
+  .report-list-card::after {
+    display: none;
+    content: none;
+  }
+
   .report-list-card > * {
     position: relative;
     z-index: 1;
@@ -414,14 +426,19 @@ const complianceReportCss = `
       background .18s ease;
   }
 
-  .report-kpi-card:hover,
-  .report-list-card:hover {
-    transform: translateY(-3px);
+  .report-kpi-card:hover {
+    transform: translateY(-2px);
     border-color: rgba(96, 165, 250, 0.18);
     box-shadow:
-      0 34px 96px rgba(0, 0, 0, 0.34),
-      0 0 54px rgba(59, 130, 246, 0.132),
-      inset 0 1px 0 rgba(255,255,255,0.074);
+      0 22px 56px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .report-list-card:hover {
+    transform: none;
+    border-color: rgba(96, 165, 250, 0.16);
+    background: rgba(15, 23, 42, 0.46);
+    box-shadow: none;
   }
 
   .report-kpi-top {
@@ -568,17 +585,16 @@ const complianceReportCss = `
   }
 
   .report-section .report-list-panel {
-    border-radius: 24px;
-    border: 1px solid rgba(148, 163, 184, 0.12);
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.034), rgba(255,255,255,0.010)),
-      rgba(15, 23, 42, 0.42);
+    border-radius: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
   }
 
   .report-list-card {
-    padding: 26px;
+    padding: 20px 22px;
     transition:
-      transform .18s ease,
       border-color .18s ease,
       background .18s ease;
   }
@@ -619,12 +635,11 @@ const complianceReportCss = `
   }
 
   .report-empty-wrap {
-    border-radius: 24px;
-    padding: 26px;
-    border: 1px solid rgba(148, 163, 184, 0.14);
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.038), rgba(255,255,255,0.012)),
-      rgba(2, 6, 23, 0.20);
+    border-radius: 18px;
+    padding: 18px 20px;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    background: rgba(15, 23, 42, 0.28);
+    box-shadow: none;
   }
 
   .report-muted-tight {
@@ -2078,7 +2093,7 @@ export function ComplianceReportPage() {
                   title="Draft library empty"
                   description={
                     canCreateReport
-                      ? 'Draft preview will appear once the report configuration is ready.'
+                      ? 'Genera un draft desde Review controls para poblar esta librería.'
                       : 'No hay drafts disponibles para este proveedor.'
                   }
                 />
