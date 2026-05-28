@@ -336,6 +336,7 @@ const complianceReportCss = `
 
   .report-grid-two {
     grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
+    align-items: start;
   }
 
   .report-kpi-card,
@@ -475,17 +476,44 @@ const complianceReportCss = `
     gap: 14px;
   }
 
-  .report-glass-block {
-    padding: 18px;
-    border-radius: 22px;
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.040), rgba(255,255,255,0.012)),
-      rgba(2, 6, 23, 0.18);
-    border: 1px solid rgba(255,255,255,0.055);
+  .report-panel-note {
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
   }
 
-  .report-glass-block p {
+  .report-panel-note p {
     line-height: 1.62;
+    margin: 0;
+  }
+
+  .report-panel .report-panel-note {
+    padding-top: 4px;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .report-panel .report-mini-metric {
+    min-height: 96px;
+    padding: 16px;
+    background: rgba(255,255,255,0.03) !important;
+    border: 1px solid rgba(255,255,255,0.06) !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .report-panel .report-mini-metric::before,
+  .report-panel .report-mini-metric::after,
+  .report-panel .report-panel-note::before,
+  .report-panel .report-panel-note::after {
+    display: none !important;
+    content: none !important;
   }
 
   .report-action-row {
@@ -530,10 +558,21 @@ const complianceReportCss = `
   }
 
   .report-list-panel {
-    padding: 24px;
+    padding: 20px 22px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .report-section .report-list-panel {
+    border-radius: 24px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.034), rgba(255,255,255,0.010)),
+      rgba(15, 23, 42, 0.42);
   }
 
   .report-list-card {
@@ -1916,7 +1955,7 @@ export function ComplianceReportPage() {
                 }
               />
 
-              <div className="report-glass-block">
+              <div className="report-panel-note">
                 <div className="row">
                   <ShieldCheck size={18} />
 
@@ -2013,7 +2052,7 @@ export function ComplianceReportPage() {
               />
             </div>
 
-            <div className="report-glass-block">
+            <div className="report-panel-note">
               <p className="muted report-muted-tight">
                 El reporte funciona como soporte a la decisión: organiza
                 evidencia, alertas y revisión humana, pero no sustituye el

@@ -136,6 +136,18 @@ const maValuationCss = `
     flex-wrap: wrap;
     gap: 14px;
     margin-top: 32px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .ma-valuation-actions a {
+    display: inline-flex;
+    padding: 0;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
   }
 
   .ma-valuation-command-bar {

@@ -2134,6 +2134,21 @@ Validation:
 
 ---
 
+## C.24.3g-b — Targeted DOM/Class Visual Fix (M&A, CEO Overview, Compliance)
+
+**Status:** COMPLETED / DOM-class root-cause layer removal (visual re-check required on operator host).
+
+| Area | Root cause | Fix |
+|---|---|---|
+| M&A action rows | Nested `.ma-glass-block` inside `.ma-panel` received full glass pseudo-layers | `.ma-panel-body` transparent; action link wrappers flattened |
+| M&A pipeline | `.ma-pipeline-column` forced `min-height: 270–280px` | Content-height columns; `align-items: start`; compact empty state |
+| CEO Overview hero | `.ceo-hero` + inner cards stacked `.ceo-glass-branch` | Single hero surface; inset readiness cards without glass-branch |
+| Compliance Reports | `.report-glass-block` nested in `.report-panel` + workspace accent bulk styling | `.report-panel-note`; nested metrics excluded from double-surface rule |
+
+No formulas, Golden Dataset, Formula Registry, backend, or data semantics changed.
+
+---
+
 ## C.24.3c - Demo UI Layout Integration Polish
 
 **Status:** COMPLETED / scoped visual layout integration polish.

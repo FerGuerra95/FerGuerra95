@@ -669,8 +669,7 @@
     .ma-bridge-panel,
     .ma-pipeline-preview,
     .ma-summary-card,
-    .ma-panel,
-    .ma-glass-block
+    .ma-panel
   ) {
   border-color: var(--ws-accent-border) !important;
   background:
@@ -721,12 +720,9 @@
     .report-list-card,
     .report-kpi-card,
     .report-panel,
-    .report-glass-block,
     .report-premium-panel,
     .report-premium-item,
-    .report-empty-wrap,
-    .report-list-panel,
-    .report-mini-metric
+    .report-empty-wrap
   ) {
   border-color: var(--ws-accent-border) !important;
   background:

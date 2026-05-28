@@ -459,13 +459,16 @@ const pipelineCss = `
     display: grid;
     grid-template-columns: repeat(6, minmax(240px, 1fr));
     gap: 15px;
+    align-items: start;
     overflow-x: auto;
     padding-bottom: 4px;
   }
 
   .ma-pipeline-column {
     min-width: 240px;
-    min-height: 270px;
+    min-height: 0;
+    height: auto;
+    align-self: start;
     border-radius: 26px;
     padding: 16px;
     background:
@@ -665,15 +668,15 @@ const pipelineCss = `
   }
 
   .ma-pipeline-empty {
-    min-height: 118px;
-    border-radius: 21px;
-    padding: 18px;
+    min-height: 0;
+    border-radius: 18px;
+    padding: 14px 16px;
     display: grid;
     place-items: center;
     text-align: center;
     color: rgba(203, 213, 225, 0.7);
     background: rgba(255,255,255,0.03);
-    border: 1px dashed rgba(148, 163, 184, 0.18);
+    border: 1px solid rgba(148, 163, 184, 0.12);
   }
 
   .ma-pipeline-empty strong {
@@ -852,8 +855,9 @@ const pipelineCss = `
   }
 
   .ma-pipeline-column {
-    padding: 18px;
-    min-height: 280px;
+    padding: 16px;
+    min-height: 0;
+    height: auto;
   }
 
   .ma-pipeline-column-header {

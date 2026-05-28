@@ -7738,6 +7738,31 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 
 ---
 
+## C.24.3g-b — Targeted DOM/Class Visual Fix (M&A, CEO Overview, Compliance)
+
+**Status:** COMPLETED / TARGETED LAYER REMOVAL — REQUIRES OPERATOR VISUAL RE-CHECK BEFORE RECORDING.
+
+**Baseline:** `HEAD = origin/main = c787371` (pre-fix).
+
+**Root causes fixed:**
+
+| Area | Class/wrapper | Fix |
+|---|---|---|
+| M&A action rows | `.ma-glass-block` inside `.ma-panel` + glass pseudo-layers on nested block | Replaced with `.ma-panel-body` (transparent); removed nested block from premium glass system; flattened `.ma-action-row` / `.ma-hero-actions` link wrappers |
+| M&A pipeline | `.ma-pipeline-column { min-height: 270px/280px }` + default stretch | `min-height: 0`, `align-items: start`, compact `.ma-pipeline-empty` (solid border, not dashed) |
+| CEO Overview upper frame | `.ceo-hero` + `.ceo-deal-readiness-card` both using `.ceo-glass-branch` | Removed `ceo-glass-branch` from hero and inner readiness cards; inset cards use single soft border, no double glass |
+| Compliance Reports builder look | `.report-glass-block` inside `.report-panel` + workspace accent double-surface | Renamed to `.report-panel-note` (transparent); excluded nested metrics from workspace accent bulk rule; softened list shell |
+
+**Files:** `MADashboardPage.jsx`, `DealPipelinePage.jsx`, `ValuationPage.jsx` (action links only), `CEOOverviewPage.jsx`, `ComplianceReportPage.jsx`, scoped `workspaceAccent.css`.
+
+**New classes:** `.ma-panel-body`, `.report-panel-note` only — semantic, module-scoped, replace duplicated inner surfaces.
+
+**Copy:** No mass rewrite. C.24.3h deferred phrases unchanged.
+
+**Validation:** `npm run build` PASS. Full unit/e2e on operator host recommended before external recording.
+
+---
+
 ## C.24.3c - Demo UI Layout Integration Polish
 
 **Status:** COMPLETED / DEMO TABLES AND PANELS VISUALLY INTEGRATED.

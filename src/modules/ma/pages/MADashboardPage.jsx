@@ -606,12 +606,27 @@ const maDashboardCss = `
     border: 1px solid rgba(255, 255, 255, 0.085);
   }
 
-  .ma-glass-block {
-    border-radius: 25px;
-    padding: 25px;
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.066), rgba(255,255,255,0.026));
-    border: 1px solid rgba(255,255,255,0.092);
+  .ma-panel-body {
+    display: grid;
+    gap: 16px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .ma-panel .ma-panel-body {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .ma-panel .ma-panel-body::before,
+  .ma-panel .ma-panel-body::after {
+    display: none !important;
+    content: none !important;
   }
 
   .ma-latest-grid,
@@ -635,25 +650,40 @@ const maDashboardCss = `
     overflow-wrap: anywhere;
   }
 
-  .ma-action-row {
+  .ma-action-row,
+  .ma-hero-actions,
+  .ma-pipeline-preview-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 14px;
     align-items: center;
     margin-top: 22px;
     padding: 0;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
   }
 
-  .ma-action-row a {
+  .ma-hero-actions {
+    margin-top: 34px;
+  }
+
+  .ma-action-row a,
+  .ma-hero-actions a,
+  .ma-pipeline-preview-actions a {
     display: inline-flex;
     text-decoration: none;
-    border-radius: 16px;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .ma-panel > .ma-action-row {
+    margin-top: 18px;
+    padding-top: 0;
+    border-top: 0;
   }
 
   .ma-action-row .button,
@@ -662,12 +692,6 @@ const maDashboardCss = `
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.045),
       0 8px 18px rgba(0,0,0,0.18);
-  }
-
-  .ma-glass-block > .ma-action-row {
-    margin-top: 18px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(148, 163, 184, 0.10);
   }
 
   .ma-summary-card {
@@ -706,7 +730,6 @@ const maDashboardCss = `
   .ma-workflow-card,
   .ma-panel,
   .ma-summary-card,
-  .ma-glass-block,
   .ma-mini-metric,
   .ma-command-item,
   .ma-bridge-step {
@@ -743,7 +766,6 @@ const maDashboardCss = `
   .ma-workflow-card::before,
   .ma-panel::before,
   .ma-summary-card::before,
-  .ma-glass-block::before,
   .ma-mini-metric::before,
   .ma-command-item::before,
   .ma-bridge-step::before {
@@ -770,7 +792,6 @@ const maDashboardCss = `
   .ma-workflow-card::after,
   .ma-panel::after,
   .ma-summary-card::after,
-  .ma-glass-block::after,
   .ma-mini-metric::after,
   .ma-command-item::after,
   .ma-bridge-step::after {
@@ -800,7 +821,6 @@ const maDashboardCss = `
   .ma-workflow-card > *,
   .ma-panel > *,
   .ma-summary-card > *,
-  .ma-glass-block > *,
   .ma-mini-metric > *,
   .ma-command-item > *,
   .ma-bridge-step > * {
@@ -889,7 +909,6 @@ const maDashboardCss = `
 
   .ma-signal-row,
   .ma-mini-metric,
-  .ma-glass-block,
   .ma-bridge-step {
     border-color: rgba(255,255,255,0.070) !important;
   }
@@ -921,7 +940,6 @@ const maDashboardCss = `
     .ma-kpi-card,
     .ma-module-card,
     .ma-mini-metric,
-    .ma-glass-block,
     .ma-bridge-step,
     .ma-pipeline-preview,
     .ma-pipeline-preview-metric,
@@ -947,7 +965,6 @@ const maDashboardCss = `
     .ma-kpi-card,
     .ma-module-card,
     .ma-mini-metric,
-    .ma-glass-block,
     .ma-bridge-step,
     .ma-pipeline-preview,
     .ma-pipeline-preview-metric,
@@ -960,7 +977,6 @@ const maDashboardCss = `
     .ma-kpi-card,
     .ma-module-card,
     .ma-mini-metric,
-    .ma-glass-block,
     .ma-bridge-step,
     .ma-pipeline-preview,
     .ma-pipeline-preview-metric,
@@ -1524,7 +1540,7 @@ export function MADashboardPage() {
               description="Siguiente acción sugerida según el estado actual del caso y del repositorio."
             />
 
-            <div className="ma-glass-block">
+            <div className="ma-panel-body">
               <strong>{getRecommendedAction(qualityScore, latestCase)}</strong>
 
               <p className="muted" style={{ marginTop: 10 }}>
@@ -1569,7 +1585,7 @@ export function MADashboardPage() {
 
             {latestCase ? (
               <div>
-                <div className="ma-glass-block">
+                <div className="ma-panel-body">
                   <div className="ma-panel-header">
                     <div>
                       <strong>{latestCase.name}</strong>
@@ -1608,7 +1624,7 @@ export function MADashboardPage() {
                 </div>
               </div>
             ) : (
-              <div className="ma-glass-block">
+              <div className="ma-panel-body">
                 <strong>Repositorio sin casos guardados</strong>
 
                 <p className="muted" style={{ marginTop: 10 }}>

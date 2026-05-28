@@ -275,3 +275,22 @@ Validation notes:
 - `npm run build` PASS.
 - `npm run test:unit` PASS: 88 files / 552 tests.
 - `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS.
+
+---
+
+## C.24.3g-b Targeted DOM/Class Visual Fix
+
+**Status:** COMPLETED — operator must re-verify screenshots before recording.
+
+Additional routes:
+
+- `/dashboard` (CEO Overview / Executive Command Center)
+- `/ma/valuation` (action-row parity check only)
+
+Verify:
+
+- M&A: no rectangular sticker behind hero/dashboard action rows.
+- M&A pipeline: columns height follows content; empty columns stay compact.
+- CEO Overview: upper internal readiness/radar cards integrate into hero (no screen-in-screen double frame).
+- Compliance Reports: draft controls and library read as one dark-premium surface; no dashed empty placeholders.
+- No new global polish layers added on top of old ones.

@@ -124,9 +124,10 @@ const ceoOverviewCss = `
   .ceo-hero-layout {
     position: relative;
     z-index: 1;
-    min-height: 470px;
+    min-height: 0;
     display: grid;
     grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+    align-items: start;
     gap: 38px;
     align-items: center;
   }
@@ -742,12 +743,42 @@ const ceoOverviewCss = `
   }
 
   .ceo-deal-readiness-card {
-    border-radius: 28px;
-    padding: 24px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    background: rgba(15, 23, 42, 0.44);
+    border-radius: 24px;
+    padding: 22px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     display: grid;
     gap: 14px;
+  }
+
+  .ceo-hero .ceo-deal-readiness-card::before,
+  .ceo-hero .ceo-deal-readiness-card::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .ceo-hero.ceo-glass-branch {
+    background:
+      radial-gradient(circle at 8% 2%, rgba(212, 175, 55, 0.14), transparent 32%),
+      radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.12), transparent 28%),
+      radial-gradient(circle at 60% 110%, rgba(245, 158, 11, 0.08), transparent 30%),
+      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97)) !important;
+    box-shadow:
+      0 38px 120px rgba(0, 0, 0, 0.42),
+      inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .ceo-hero.ceo-glass-branch::before {
+    opacity: 0.42;
+  }
+
+  .ceo-hero.ceo-glass-branch::after {
+    opacity: 0.22;
   }
 
   .ceo-deal-score-row {
@@ -2088,7 +2119,7 @@ export function CEOOverviewPage() {
               </div>
 
               <div className="ceo-deal-readiness-radar-grid">
-                <article className="ceo-deal-readiness-card ceos-ws-card-accent ceo-branch-surface ceo-glass-branch ceo-branch-overview">
+                <article className="ceo-deal-readiness-card ceos-ws-card-accent ceo-branch-surface ceo-branch-overview">
                   <div className="ceo-kicker">
                     <Target size={14} />
                     Deal readiness index
@@ -2193,7 +2224,7 @@ export function CEOOverviewPage() {
                   </p>
                 </article>
 
-                <article className="ceo-deal-readiness-card ceos-ws-card-accent ceo-branch-surface ceo-glass-branch ceo-branch-overview ceo-radar-card-inner">
+                <article className="ceo-deal-readiness-card ceos-ws-card-accent ceo-branch-surface ceo-branch-overview ceo-radar-card-inner">
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                     <div>
                       <div className="ceo-kicker">
@@ -2227,7 +2258,7 @@ export function CEOOverviewPage() {
               </div>
             </div>
 
-            <aside className="ceo-signal-card ceos-ws-card-accent ceo-branch-surface ceo-glass-branch ceo-branch-overview">
+            <aside className="ceo-signal-card ceos-ws-card-accent ceo-branch-surface ceo-branch-overview">
               <div className="ceo-signal-inner">
                 <div className="ceo-signal-top">
                   <div>

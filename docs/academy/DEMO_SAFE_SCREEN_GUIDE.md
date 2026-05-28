@@ -131,3 +131,16 @@ Validation notes:
 Validation notes:
 
 - Build, unit tests, and Playwright navigation smoke passed after C.24.3g focused visual QA.
+
+---
+
+## C.24.3g-b Targeted Layer-Removal Notes
+
+| Screen | Classification | Reason | Required wording | Notes |
+|---|---|---|---|---|
+| CEO Overview hero / readiness cards | SAFE_TO_SHOW_EXTERNAL | Removed double `ceo-glass-branch` frame on hero + inner cards | "Executive Command Center; decision-support only." | Deferred copy cleanup in C.24.3h |
+| M&A dashboard action rows (re-check) | SAFE_TO_SHOW_EXTERNAL | Removed nested `.ma-glass-block` sticker layer | Same as M&A dashboard above | Re-verify after C.24.3g-b |
+| M&A pipeline columns (re-check) | SAFE_TO_SHOW_EXTERNAL | Column height now content-driven | Same as pipeline above | Re-verify empty columns |
+| Compliance Reports panels (re-check) | SAFE_TO_SHOW_EXTERNAL | `.report-panel-note` replaces nested glass blocks | Draft controls / evidence base / library | Re-verify no builder look |
+
+Validation: `npm run build` PASS after C.24.3g-b. Operator visual pass required before recording.
