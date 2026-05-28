@@ -735,12 +735,15 @@ const ceoOverviewCss = `
 
   .ceo-deal-readiness-radar-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(290px, 0.82fr);
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
     margin-top: 28px;
   }
 
   .ceo-deal-readiness-card {
+    width: 100%;
+    min-width: 0;
+    height: auto;
     border-radius: 24px;
     padding: 22px;
     border: 1px solid rgba(148, 163, 184, 0.12);
