@@ -7583,6 +7583,31 @@ The next recommended phase is **C.14.9 - Architecture / monolith / duplication a
 
 ---
 
+## C.24.3j - Executive Inner Surface System
+
+**Status:** IMPLEMENTED AND TESTED (visual surface primitive rollout).
+
+**M&A approved pattern source:** `src/modules/ma/pages/MADashboardPage.jsx` (`.ma-signal-card`).
+
+**Shared primitive created:** `src/styles/workspaceAccent.css` -> `.ceos-executive-inner-surface`.
+
+**Surface outcome:**
+
+- Curved executive inner-card primitive with dark premium gradient, low-opacity border, and subtle shadow.
+- CEO hero inner readiness/radar/signal surfaces now include `.ceos-executive-inner-surface`.
+- Equivalent branch inner panels (Funding, Compliance, Reporting, Risk, PMI, Governance, Strategy, Bridge, Heritage) were aligned through shared selectors in `workspaceAccent.css`.
+- Legacy double-layer effects were reduced by neutralizing conflicting after-layers on primitive-applied cards.
+
+**Truthfulness safety:** Legal Compliance `N/A` / `insufficient_data` preserved. No fallback `0` reintroduced.
+
+**Validation:**
+
+- `npm run build` PASS.
+- `npx vitest run tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` PASS.
+- `npm run test:unit` FAIL only due known local `better-sqlite3` Node ABI mismatch (external to this visual phase).
+
+---
+
 ## C.14.0B - Update AI Agent Prompt Output Discipline
 
 **Status:** COMPLETED / COPY-PASTE PROMPT OUTPUT DISCIPLINE ADDED.

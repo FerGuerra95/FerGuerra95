@@ -323,3 +323,31 @@ Verify:
 - `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` PASS
 
 **Operator:** Confirm no permanent sticker backgrounds on M&A action rows, no giant empty pipeline columns, no CEO hero double frame, Compliance library reads as executive product (not internal builder).
+
+---
+
+## C.24.3j - Executive Inner Surface System QA
+
+Routes to check before recording:
+
+- `/ma/dashboard`
+- `/dashboard`
+- `/overview`
+- `/ceo/overview`
+- `/funding/dashboard`
+- `/compliance/dashboard`
+- `/compliance/reports`
+- `/reporting`
+- `/reporting/library`
+- `/risk/register`
+- `/pmi/dashboard`
+- `/governance/dashboard`
+- `/strategy/dashboard`
+
+Visual pass criteria:
+
+- Inner executive cards show curved surface finish (not hard rectangular boxes).
+- Surface reads as embedded premium card (no screen-within-screen or table-sticker look).
+- No double glass layering from old accent rules.
+- No content clipping or horizontal overflow introduced by surface styling.
+- CEO Deal Readiness card contains `.ceos-executive-inner-surface` and preserves `N/A` where data is missing.

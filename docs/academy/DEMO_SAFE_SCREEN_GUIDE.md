@@ -147,7 +147,7 @@ Validation: `npm run build` PASS after C.24.3g-b. Operator visual pass required 
 
 ---
 
-## C.24.3g-c â€” Runtime Override Visual Fix
+## C.24.3g-c â?? Runtime Override Visual Fix
 
 | Screen | Classification | Reason | Required wording | Notes |
 |---|---|---|---|---|
@@ -158,3 +158,20 @@ Validation: `npm run build` PASS after C.24.3g-b. Operator visual pass required 
 | Compliance Reports | SAFE_TO_SHOW_EXTERNAL | Flat list cards; Review controls / Board review draft library | Not certified audit | Hard-refresh `/compliance/reports` |
 
 **Baseline:** `29bfc93`. **Validations:** build PASS; Playwright navigation smoke PASS; unit 537/552 (4 sqlite ABI skips local env).
+
+---
+
+## C.24.3j - Executive Inner Surface System (Demo Safety)
+
+| Screen | Classification | Reason | Required wording | Notes |
+|---|---|---|---|---|
+| CEO Overview inner readiness/radar cards | SAFE_TO_SHOW_EXTERNAL | Uses shared curved executive inner surface primitive aligned to approved M&A card finish | "Executive Command Center; decision-support only." | Keep `N/A` / `insufficient_data` visible |
+| Funding / Compliance / Reporting inner panels | SAFE_TO_SHOW_EXTERNAL | Equivalent inner surfaces aligned to shared executive primitive, reduced layered builder look | "Indicative DSS workspace; human review required." | No certification claims |
+| Risk / PMI / Governance / Strategy inner panels | SAFE_TO_SHOW_EXTERNAL | Inner cards aligned to the same premium curved system | "Planning and monitoring DSS support." | Not autonomous approval |
+| Bridge / Heritage visible inner panels | SAFE_TO_SHOW_EXTERNAL | Surface alignment only; no feature activation | "Internal DSS surface; human review required." | Maintain internal/future framing |
+
+Validation notes:
+
+- `npm run build` PASS.
+- `npx vitest run tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` PASS.
+- `npm run test:unit` has known local `better-sqlite3` ABI mismatch (environment-only; outside visual scope).

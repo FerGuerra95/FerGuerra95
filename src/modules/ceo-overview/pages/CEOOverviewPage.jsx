@@ -2132,7 +2132,7 @@ export function CEOOverviewPage() {
               </div>
 
               <div className="ceo-deal-readiness-radar-grid">
-                <article className="ceo-deal-readiness-card ceos-ws-card-accent ceo-branch-surface ceo-branch-overview">
+                <article className="ceo-deal-readiness-card ceos-ws-card-accent ceos-executive-inner-surface ceo-branch-surface ceo-branch-overview">
                   <div className="ceo-kicker">
                     <Target size={14} />
                     Deal readiness index
@@ -2237,7 +2237,7 @@ export function CEOOverviewPage() {
                   </p>
                 </article>
 
-                <article className="ceo-deal-readiness-card ceos-ws-card-accent ceo-branch-surface ceo-branch-overview ceo-radar-card-inner">
+                <article className="ceo-deal-readiness-card ceos-ws-card-accent ceos-executive-inner-surface ceo-branch-surface ceo-branch-overview ceo-radar-card-inner">
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                     <div>
                       <div className="ceo-kicker">
@@ -2271,7 +2271,7 @@ export function CEOOverviewPage() {
               </div>
             </div>
 
-            <aside className="ceo-signal-card ceos-ws-card-accent ceo-branch-surface ceo-branch-overview">
+            <aside className="ceo-signal-card ceos-ws-card-accent ceos-executive-inner-surface ceo-branch-surface ceo-branch-overview">
               <div className="ceo-signal-inner">
                 <div className="ceo-signal-top">
                   <div>

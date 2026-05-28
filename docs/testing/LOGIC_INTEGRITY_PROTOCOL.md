@@ -2029,6 +2029,31 @@ Validation:
 
 ---
 
+## C.24.3j - Executive Inner Surface System
+
+**Status:** IMPLEMENTED AND TESTED.
+
+Logic-integrity constraints preserved:
+
+- No formulas changed.
+- No Golden Dataset or Formula Registry changes.
+- No backend/auth/router/migrations/package-config/secrets changes.
+- No `N/A` suppression and no fallback `0` reintroduced for missing Legal Compliance data.
+
+UI-system result:
+
+- Added shared primitive `.ceos-executive-inner-surface` in `src/styles/workspaceAccent.css`.
+- Applied primitive directly to CEO inner hero cards and aligned equivalent branch inner panels via shared selectors.
+- Reduced conflicting layered card effects (duplicate after-layers) where the primitive is active.
+
+Validation:
+
+- `npm run build` PASS.
+- `npx vitest run tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` PASS.
+- `npm run test:unit` FAIL due known local `better-sqlite3` Node ABI mismatch (external environment issue).
+
+---
+
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix
 
 **Status:** COMPLETED / action surfaces unified without logic changes.
