@@ -8186,12 +8186,12 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 ---
 
-## C.24.5A-radar-polish — Corporate Health Radar Premium Visual Recovery
+## C.24.5A-final-polish — Executive Overview Final Premium Polish
 
 **Status:** COMPLETED.
 
-**Baseline:** `2a760a8`.
+**Baseline:** `773dc94`.
 
-**Fix:** Premium radar 42/58 layout, larger SVG, gold glow, branch legend; N/A excluded from polygon.
+**Fix:** Radar 46/54 + 360px SVG; lighter legend rows; hero black/gold + sovereign seal ring; lion soft-light; warmer charcoal cards.
 
 **Validation:** build + truthfulness tests PASS.

@@ -2445,3 +2445,15 @@ Validation: build + CEO/funding truthfulness tests PASS.
 **Truthfulness:** N/A branches excluded from polygon; dashed spokes + legend; polygon only when ≥3 calculable axes.
 
 Validation: build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-final-polish — Executive Overview Final Premium Polish
+
+**Status:** COMPLETED (visual only, CEO scope).
+
+**Baseline:** `773dc94`.
+
+**Fix:** Final radar/legend/hero/lion/card polish; no data or metric changes.
+
+Validation: build + truthfulness tests PASS.

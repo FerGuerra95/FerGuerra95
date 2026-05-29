@@ -199,6 +199,16 @@
 
 ---
 
+## 15. C.24.5A-final-polish — Executive Overview Final Premium Polish
+
+**Baseline:** `773dc94`.
+
+**Fix:** Radar 46/54 + larger SVG (max 360px); lighter legend rows; hero black/gold; premium lion watermark; tighter vertical spacing.
+
+**Validation:** build + truthfulness tests PASS.
+
+---
+
 ## 12. C.24.5A-polish — Golden Command Center Visual Polish
 
 **Baseline:** `fa06cf5`.
@@ -226,5 +236,15 @@
 **Baseline:** `2a760a8`.
 
 **Fix:** Premium radar layout, larger SVG, branch legend swatches, N/A-safe polygon.
+
+**Validation:** build + truthfulness tests PASS.
+
+---
+
+## 15. C.24.5A-final-polish — Executive Overview Final Premium Polish
+
+**Baseline:** `773dc94`.
+
+**Fix:** Radar 46/54 + larger SVG (max 360px); lighter legend rows; hero black/gold; premium lion watermark; tighter vertical spacing.
 
 **Validation:** build + truthfulness tests PASS.

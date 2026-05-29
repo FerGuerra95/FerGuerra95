@@ -543,3 +543,10 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Radar left ~42%, legend right ~58% on desktop.
 - Missing branches show N/A in legend; polygon excludes N/A (no silent 0).
 - Hero Executive Readiness Index unchanged.
+
+### C.24.5A-final-polish checklist
+
+- Radar ~46% width, SVG up to 360px; polygon glow visible.
+- Legend rows thin/transparent (not table boxes).
+- Hero reads black/gold; lion watermark with seal ring aura.
+- Gold CTA unchanged; ERI hero metric unchanged.

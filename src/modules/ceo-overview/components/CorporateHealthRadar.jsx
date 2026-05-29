@@ -76,7 +76,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
   const count = safeAxes.length || 1;
   const cx = 120;
   const cy = 120;
-  const rMax = 92;
+  const rMax = 96;
   const tau = Math.PI * 2;
 
   const geometry = useMemo(
@@ -132,8 +132,8 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
               <stop offset="52%" stopColor="rgba(212, 175, 55, 0.34)" />
               <stop offset="100%" stopColor="rgba(154, 117, 24, 0.28)" />
             </linearGradient>
-            <filter id="ceoRadarGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="2.5" result="blur" />
+            <filter id="ceoRadarGlow" x="-24%" y="-24%" width="148%" height="148%">
+              <feGaussianBlur stdDeviation="3.2" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
@@ -187,7 +187,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
                 key={`${entry.axis.key}-node`}
                 cx={entry.pointX}
                 cy={entry.pointY}
-                r="4.5"
+                r="5"
                 className="executive-radar-node"
                 fill={entry.tone}
                 stroke="rgba(248, 250, 252, 0.85)"

@@ -251,3 +251,8 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 - Radar polygon draws only calculable branches; N/A shown in legend with dashed spoke markers.
 - No scores hardcoded; hero Executive Readiness Index unchanged.
+
+### C.24.5A-final-polish demo safety note
+
+- Visual-only CSS/SVG sizing polish; no metric, formula, or API changes.
+- Executive Readiness Index remains hero; Corporate Health Radar remains in §04.

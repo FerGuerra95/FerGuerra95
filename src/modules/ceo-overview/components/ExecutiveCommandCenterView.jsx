@@ -22,8 +22,8 @@ const commandCenterCss = `
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    color: #e8edf5;
+    gap: 18px;
+    color: rgba(236, 230, 216, 0.94);
   }
 
   .ceo-command-section {
@@ -41,10 +41,10 @@ const commandCenterCss = `
     box-shadow:
       0 18px 48px rgba(0, 0, 0, 0.42),
       inset 0 1px 0 rgba(243, 218, 138, 0.06);
-    padding: 18px 18px 16px;
+    padding: 16px 16px 14px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
   }
 
   .ceo-command-section-header {
@@ -82,9 +82,9 @@ const commandCenterCss = `
 
   .ceo-command-section-copy {
     margin: 4px 0 0;
-    color: rgba(203, 213, 225, 0.72);
-    line-height: 1.5;
-    font-size: 13px;
+    color: rgba(210, 198, 170, 0.72);
+    line-height: 1.48;
+    font-size: 12px;
   }
 
   .ceo-command-section-body {
@@ -95,47 +95,65 @@ const commandCenterCss = `
     position: relative;
     overflow: hidden;
     border-radius: 18px;
-    border: 1px solid rgba(212, 175, 55, 0.32);
+    border: 1px solid rgba(212, 175, 55, 0.38);
     background:
-      radial-gradient(circle at 78% 18%, rgba(212, 175, 55, 0.22), transparent 46%),
-      radial-gradient(circle at 12% 0%, rgba(212, 175, 55, 0.14), transparent 38%),
-      linear-gradient(135deg, rgba(4, 4, 6, 0.99), rgba(10, 10, 14, 0.98));
+      radial-gradient(circle at 82% 22%, rgba(212, 175, 55, 0.24), transparent 48%),
+      radial-gradient(circle at 10% 0%, rgba(212, 175, 55, 0.12), transparent 40%),
+      linear-gradient(145deg, rgba(2, 2, 3, 0.99), rgba(8, 7, 5, 0.98));
     box-shadow:
-      inset 0 1px 0 rgba(243, 218, 138, 0.12),
-      0 12px 36px rgba(0, 0, 0, 0.35);
-    padding: 20px;
+      inset 0 1px 0 rgba(243, 218, 138, 0.14),
+      inset 0 0 0 1px rgba(212, 175, 55, 0.06),
+      0 14px 40px rgba(0, 0, 0, 0.42);
+    padding: 18px;
   }
 
   .ceo-command-hero::before {
     content: '';
     position: absolute;
-    right: 6%;
+    right: 5%;
     top: 50%;
-    width: min(38vw, 320px);
-    height: min(38vw, 320px);
+    width: min(40vw, 340px);
+    height: min(40vw, 340px);
     transform: translateY(-50%);
     border-radius: 999px;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.04) 52%, transparent 72%);
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.05) 48%, transparent 74%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ceo-command-hero::after {
+    content: '';
+    position: absolute;
+    right: 14%;
+    top: 50%;
+    width: min(28vw, 220px);
+    height: min(28vw, 220px);
+    transform: translateY(-50%);
+    border-radius: 999px;
+    border: 1px solid rgba(212, 175, 55, 0.14);
+    box-shadow: inset 0 0 28px rgba(212, 175, 55, 0.08);
     pointer-events: none;
     z-index: 0;
   }
 
   .ceo-sovereign-watermark {
     position: absolute;
-    right: 1%;
+    right: 0.5%;
     top: 50%;
-    width: min(36vw, 340px);
-    opacity: 0.44;
+    width: min(38vw, 360px);
+    opacity: 0.52;
     pointer-events: none;
     transform: translateY(-52%);
-    filter: drop-shadow(0 0 42px rgba(212, 175, 55, 0.48));
+    filter: drop-shadow(0 0 48px rgba(212, 175, 55, 0.55));
     z-index: 0;
+    mix-blend-mode: soft-light;
   }
 
   .ceo-sovereign-watermark img {
     width: 100%;
     height: auto;
     display: block;
+    filter: sepia(0.28) saturate(1.12) brightness(1.06);
   }
 
   .ceo-command-status-grid {
@@ -187,7 +205,7 @@ const commandCenterCss = `
     display: block;
     margin-top: 8px;
     font-size: clamp(14px, 1.5vw, 17px);
-    color: rgba(226, 232, 240, 0.72);
+    color: rgba(220, 210, 188, 0.74);
     letter-spacing: -0.02em;
     line-height: 1.45;
     font-weight: 500;
@@ -230,16 +248,16 @@ const commandCenterCss = `
   }
 
   .ceo-command-card {
-    border-radius: 16px;
-    border: 1px solid rgba(212, 175, 55, 0.18);
+    border-radius: 15px;
+    border: 1px solid rgba(212, 175, 55, 0.22);
     background:
-      linear-gradient(180deg, rgba(12, 12, 16, 0.96), rgba(6, 6, 8, 0.98));
-    padding: 14px;
+      linear-gradient(180deg, rgba(7, 7, 9, 0.98), rgba(3, 3, 4, 0.99));
+    padding: 12px;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.04);
+    gap: 7px;
+    box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.05);
     transition: border-color 160ms ease, box-shadow 160ms ease;
   }
 
@@ -267,8 +285,8 @@ const commandCenterCss = `
 
   .ceo-command-card p {
     margin: 0;
-    color: rgba(203, 213, 225, 0.74);
-    line-height: 1.45;
+    color: rgba(210, 200, 180, 0.72);
+    line-height: 1.42;
     font-size: 12px;
   }
 
@@ -338,8 +356,8 @@ const commandCenterCss = `
   .ceo-readiness-meta {
     width: 100%;
     font-size: 11px;
-    color: rgba(203, 213, 225, 0.72);
-    line-height: 1.45;
+    color: rgba(210, 200, 180, 0.72);
+    line-height: 1.42;
   }
 
   .ceo-priorities-card p {
@@ -386,8 +404,8 @@ const commandCenterCss = `
 
   .ceo-executive-command-page .executive-radar-panel.ceo-radar-premium {
     display: grid;
-    grid-template-columns: minmax(260px, 42%) minmax(0, 58%);
-    gap: 18px;
+    grid-template-columns: minmax(280px, 46%) minmax(0, 54%);
+    gap: 16px;
     align-items: center;
   }
 
@@ -395,52 +413,53 @@ const commandCenterCss = `
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 280px;
-    padding: 8px;
-    border-radius: 16px;
-    border: 1px solid rgba(212, 175, 55, 0.14);
+    min-height: 300px;
+    padding: 10px;
+    border-radius: 18px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
     background:
-      radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08), transparent 62%),
-      rgba(6, 6, 8, 0.55);
+      radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.12), transparent 64%),
+      linear-gradient(180deg, rgba(5, 5, 6, 0.72), rgba(2, 2, 3, 0.88));
+    box-shadow: inset 0 0 36px rgba(212, 175, 55, 0.06);
   }
 
   .ceo-executive-command-page .ceo-radar-svg {
     width: 100%;
-    max-width: 320px;
-    min-height: 260px;
+    max-width: 360px;
+    min-height: 290px;
     height: auto;
     display: block;
   }
 
   .ceo-executive-command-page .executive-radar-outer-ring {
-    fill: rgba(212, 175, 55, 0.04);
-    stroke: rgba(212, 175, 55, 0.18);
-    stroke-width: 1;
+    fill: rgba(212, 175, 55, 0.05);
+    stroke: rgba(212, 175, 55, 0.24);
+    stroke-width: 1.1;
   }
 
   .ceo-executive-command-page .executive-radar-grid,
   .ceo-executive-command-page .executive-radar-axis {
     fill: none;
-    stroke: rgba(212, 175, 55, 0.2);
-    stroke-width: 1;
+    stroke: rgba(212, 175, 55, 0.28);
+    stroke-width: 1.1;
   }
 
   .ceo-executive-command-page .executive-radar-axis.is-missing {
-    stroke: rgba(148, 163, 184, 0.28);
+    stroke: rgba(180, 170, 150, 0.24);
     stroke-dasharray: 4 4;
   }
 
   .ceo-executive-command-page .executive-radar-reference {
-    fill: rgba(212, 175, 55, 0.05);
-    stroke: rgba(212, 175, 55, 0.16);
-    stroke-width: 1;
+    fill: rgba(212, 175, 55, 0.06);
+    stroke: rgba(212, 175, 55, 0.22);
+    stroke-width: 1.1;
   }
 
   .ceo-executive-command-page .executive-radar-fill {
-    stroke: rgba(243, 218, 138, 0.88);
-    stroke-width: 2.2;
+    stroke: rgba(252, 236, 180, 0.92);
+    stroke-width: 2.6;
     stroke-linejoin: round;
-    fill-opacity: 0.72;
+    fill-opacity: 0.78;
   }
 
   .ceo-radar-legend-wrap {
@@ -463,68 +482,69 @@ const commandCenterCss = `
 
   .ceo-executive-command-page .ceo-radar-legend {
     display: grid;
-    gap: 8px;
+    gap: 4px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .ceo-executive-command-page .ceo-radar-legend-item {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-    align-items: flex-start;
-    padding: 9px 11px;
-    border-radius: 12px;
-    border: 1px solid rgba(212, 175, 55, 0.14);
-    background: rgba(6, 6, 8, 0.78);
+    gap: 8px;
+    align-items: center;
+    padding: 5px 4px;
+    border-radius: 8px;
+    border: none;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+    background: transparent;
     color: inherit;
     text-decoration: none;
-    transition: border-color 160ms ease, background 160ms ease;
+    transition: background 160ms ease, border-color 160ms ease;
   }
 
   .ceo-executive-command-page .ceo-radar-legend-item:hover {
-    border-color: rgba(212, 175, 55, 0.28);
-    background: rgba(10, 10, 14, 0.92);
+    background: rgba(212, 175, 55, 0.05);
+    border-bottom-color: rgba(212, 175, 55, 0.16);
   }
 
   .ceo-executive-command-page .ceo-radar-legend-item.is-missing {
-    border-style: dashed;
-    border-color: rgba(148, 163, 184, 0.22);
+    border-bottom-style: dashed;
+    border-bottom-color: rgba(180, 170, 150, 0.18);
   }
 
   .ceo-radar-legend-label {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     font-size: 11px;
-    color: rgba(226, 232, 240, 0.86);
+    color: rgba(230, 222, 204, 0.88);
     min-width: 0;
   }
 
   .ceo-radar-swatch {
     flex: 0 0 auto;
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 999px;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.18);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.22);
   }
 
   .ceo-radar-legend-values {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2px;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
     text-align: right;
+    flex-shrink: 0;
   }
 
   .ceo-radar-legend-values strong {
     color: rgba(243, 218, 138, 0.94);
-    font-size: 12px;
-    letter-spacing: -0.02em;
+    font-size: 11px;
+    letter-spacing: -0.01em;
   }
 
   .ceo-radar-legend-values small {
-    color: rgba(148, 163, 184, 0.82);
-    font-size: 10px;
+    color: rgba(190, 180, 160, 0.68);
+    font-size: 9px;
     text-transform: capitalize;
   }
 
@@ -657,7 +677,7 @@ const commandCenterCss = `
     }
 
     .ceo-radar-visual-wrap {
-      min-height: 240px;
+      min-height: 250px;
     }
 
     .ceo-executive-command-page .ceo-radar-legend {
