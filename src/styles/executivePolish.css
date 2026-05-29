@@ -93,7 +93,6 @@ h4 {
 .ceos-glass-shine,
 .ceos-nav-link-shine,
 .ceos-sidebar-edge-glow,
-.hero::after,
 .page :is(
   [class*="hero"],
   [class*="card"],
@@ -414,7 +413,6 @@ textarea,
 .page .ma-executive-page :is(
   .ma-command-item,
   .ma-mini-metric,
-  .ma-glass-block,
   .ma-bridge-step,
   .ma-pipeline-preview-metric
 ):not(.ceos-executive-inner-surface),
@@ -706,7 +704,6 @@ textarea,
   .ma-bridge-step,
   .ma-pipeline-preview,
   .ma-pipeline-preview-metric,
-  .ma-glass-block,
   .ma-mini-metric
 ),
 .ma-valuation-page :is(

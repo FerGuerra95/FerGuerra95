@@ -459,3 +459,23 @@ Expected:
 - Risk/Governance workspace accent visible (border/header/icon tint).
 - Funding readiness score integer `/100`; missing => `N/A`.
 - No horizontal overflow; no clipped buttons; N/A and insufficient_data visible.
+
+### C.24.4C dead CSS cleanup checklist
+
+**Status:** COMPLETED (closure).
+
+Routes (hard refresh after dead-selector removal):
+
+- `/ma/dashboard`, `/dashboard`, `/ceo/overview`
+- `/funding/dashboard`, `/funding/readiness`
+- `/risk/register`, `/governance/dashboard`
+- `/compliance/dashboard`, `/compliance/reports`
+- `/reporting/library`, `/pmi/dashboard`, `/strategy/dashboard`
+
+Expected (unchanged from C.24.4B):
+
+- M&A signal cards and hero intact; no sticker buttons.
+- CEO N/A / insufficient_data; no fake `0`.
+- Funding composition + integer readiness score (`37/100` style).
+- Risk/Governance workspace accent on panels/tables.
+- No black screen; no horizontal overflow; no NaN/undefined/Infinity in view.

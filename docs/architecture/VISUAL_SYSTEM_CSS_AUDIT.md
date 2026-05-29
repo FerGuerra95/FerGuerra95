@@ -359,3 +359,44 @@ Line counts: workspaceAccent.css, executivePolish.css, maExecutiveTheme.css, sty
 - `npm run test:unit` — not run (optional; better-sqlite3 ABI may block locally)
 
 **Confirmations:** No backend, Golden Dataset, Formula Registry, package/config, or secrets touched. No dead CSS deleted. No new CSS files created.
+
+---
+
+## 12. C.24.4C — Dead / Duplicated CSS Quarantine + Removal
+
+**Status:** IMPLEMENTED AND TESTED (build + focused unit tests). Visual QA: manual pass on route matrix (post–hard refresh).
+
+**Baseline:** `HEAD = origin/main = eca41cb` (C.24.4B).
+
+**Scope:** Grep-proven dead selectors only. No JSX changes. No additional CSS removal beyond the −29 line closure set. No `ExecutivePremiumStyle.jsx` merge.
+
+**Removed CSS (grep evidence):**
+
+| Class / rule | File | Evidence | Replacement | Risk |
+|---|---|---|---|---|
+| `.ma-glass-block` (selector entries) | `executivePolish.css`, `maExecutiveTheme.css` | `rg "ma-glass-block" src` → 0 JSX; docs: replaced by `.ma-panel-body` | `.ma-panel-body` in `MADashboardPage.jsx` | Low |
+| `.hero`, `.hero::after` rules | `styles.css` | No `className="hero"` in React app; export HTML embeds own `.hero` | Per-export inline CSS in services | Low |
+| `.hero::after` in pseudo-kill list | `executivePolish.css` | Dead target in authenticated shell | N/A | Low |
+| `.funding-score-box` in de-layer `:is()` | `workspaceAccent.css` | `rg` → CSS-only, never in JSX | N/A | Low |
+| `.risk-row-card`, `.pmi-mini-card`, `.governance-mini-card`, `.strategy-mini-card`, `.reporting-scroll .card` in de-layer `:is()` | `workspaceAccent.css` | `rg` → no JSX className matches | Active rules use remaining selectors (e.g. `.risk-enterprise-toolbar`) | Low |
+
+**Deferred (not removed):**
+
+| Class / rule / file | Reason | Future phase |
+|---|---|---|
+| `ceos-glass-layer`, `ceos-glass-shine`, `ceos-sidebar-edge-glow` | **Active** in `Sidebar.jsx`; polish intentionally hides decorative layers | C.24.4D QA only; Sidebar out of scope |
+| `ceo-branch-surface` | 22+ refs in `CEOOverviewPage.jsx` | Consolidate with primitives after parity proof |
+| `funding-glass-block`, `buyer-glass-block`, `waterfall-glass-block`, etc. | Active in JSX + inline CSS | Inline migration deferred |
+| `ExecutivePremiumStyle.jsx` full merge | Requires M&A parity diff | Post–C.24.4D |
+| ~55 inline `<style>` blocks | Not grep-dead | C.24.4D+ controlled migration |
+
+**Validations:**
+
+- `npm run build` — PASS
+- `fundingDisplayFormat.test.js` — PASS (7)
+- `ceoOverviewTruthfulness.test.js` — PASS (17)
+- `npm run test:unit` — not run (known better-sqlite3 Node ABI may block locally)
+
+**Visual QA (manual, hard refresh):** `/ma/dashboard`, `/dashboard`, `/ceo/overview`, `/funding/dashboard`, `/funding/readiness`, `/risk/register`, `/governance/dashboard`, `/compliance/dashboard`, `/compliance/reports`, `/reporting/library`, `/pmi/dashboard`, `/strategy/dashboard` — no black screen, no horizontal overflow, M&A/CEO/Funding/Risk/Governance accents preserved, N/A / insufficient_data visible, no fake `0`, no NaN/undefined/Infinity observed.
+
+**Confirmations:** No backend, Golden, Formula Registry, formulas, package/config, secrets, JSX, or dist touched. `backend-server.err` not staged. No `git add .`.

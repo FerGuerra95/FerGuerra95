@@ -2099,6 +2099,13 @@ Validation:
 - No dead CSS deletion in C.24.4B; no formula/backend/Golden changes.
 - M&A, CEO, Funding score display, Risk/Governance accent are no-regression gates.
 
+### C.24.4C - Dead CSS removal guard
+
+- Remove only classes/rules with `rg` proof of zero JSX/runtime use or documented replacement (e.g. `.ma-glass-block` → `.ma-panel-body`).
+- Do not remove `ceos-glass-layer` / Sidebar decorative classes without Sidebar scope authorization.
+- Do not remove `ceo-branch-surface` or active `-glass-block` module classes without JSX migration plan.
+- No JSX changes in C.24.4C closure; no formula/backend/Golden changes.
+
 ---
 
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix

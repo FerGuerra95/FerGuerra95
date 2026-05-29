@@ -85,7 +85,7 @@
   -webkit-backdrop-filter: blur(22px) saturate(138%);
 }
 
-.ma-executive-page :is(.ma-command-item, .ma-kpi-card, .ma-panel, .ma-summary-card, .ma-workflow-card, .ma-bridge-panel, .ma-pipeline-preview, .ma-glass-block),
+.ma-executive-page :is(.ma-command-item, .ma-kpi-card, .ma-panel, .ma-summary-card, .ma-workflow-card, .ma-bridge-panel, .ma-pipeline-preview),
 .ma-valuation-page :is(.ma-valuation-command-item, .ma-valuation-status-box, .ma-state-card, .ma-intelligence-panel, .ma-premium-deal-card, .ma-closing-structure-box, .ma-closing-footer-card, .ma-premium-metric),
 .ma-pipeline-page :is(.ma-pipeline-command-item, .ma-pipeline-summary-card, .ma-pipeline-toolbar, .ma-pipeline-board-shell, .ma-pipeline-column, .ma-deal-card),
 .waterfall-page :is(.waterfall-command-item, .waterfall-kpi-card, .waterfall-panel, .waterfall-bridge-panel, .waterfall-glass-block),
@@ -201,7 +201,7 @@
   border-radius: 12px !important;
 }
 
-.ma-executive-page :is(.ma-command-item, .ma-kpi-card, .ma-panel, .ma-summary-card, .ma-workflow-card, .ma-bridge-panel, .ma-pipeline-preview, .ma-glass-block),
+.ma-executive-page :is(.ma-command-item, .ma-kpi-card, .ma-panel, .ma-summary-card, .ma-workflow-card, .ma-bridge-panel, .ma-pipeline-preview),
 .ma-valuation-page :is(.ma-valuation-command-item, .ma-valuation-status-box, .ma-state-card, .ma-intelligence-panel, .ma-premium-deal-card, .ma-closing-structure-box, .ma-closing-footer-card, .ma-premium-metric),
 .ma-pipeline-page :is(.ma-pipeline-command-item, .ma-pipeline-summary-card, .ma-pipeline-toolbar, .ma-pipeline-board-shell, .ma-pipeline-column, .ma-deal-card),
 .waterfall-page :is(.waterfall-command-item, .waterfall-kpi-card, .waterfall-panel, .waterfall-bridge-panel, .waterfall-glass-block),

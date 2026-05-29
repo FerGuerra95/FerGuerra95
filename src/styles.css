@@ -644,22 +644,6 @@ select option {
   letter-spacing: -0.045em;
 }
 
-.hero {
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  inset: auto -60px -60px auto;
-  width: 220px;
-  height: 220px;
-  background: radial-gradient(circle, rgba(16,185,129,0.12), transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
 .muted {
   color: var(--muted);
 }

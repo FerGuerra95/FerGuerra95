@@ -7757,6 +7757,24 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 **Next:** C.24.4C — dead/duplicated CSS quarantine and removal.
 
+### C.24.4C - Dead / Duplicated CSS Quarantine + Removal (WRITE)
+
+**Status:** COMPLETED.
+
+**Baseline:** `eca41cb`.
+
+**Scope:** Remove grep-proven dead selectors only (−29 lines). No JSX, no additional CSS deletion at closure, no backend/formulas/Golden.
+
+**Files:** `styles.css`, `executivePolish.css`, `workspaceAccent.css`, `maExecutiveTheme.css`, four docs.
+
+**Removed:** `.ma-glass-block` selector refs; unused `.hero` in `styles.css`; dead entries in `workspaceAccent.css` de-layer `:is()` lists.
+
+**Deferred:** `ceo-branch-surface`, active `-glass-block` variants, `ceos-glass-layer` (Sidebar), `ExecutivePremiumStyle` merge, inline CSS mass migration.
+
+**Validation:** `npm run build` PASS; `fundingDisplayFormat.test.js` PASS; `ceoOverviewTruthfulness.test.js` PASS; manual visual QA route matrix PASS.
+
+**Next:** C.24.4D — Visual Regression QA after CSS consolidation.
+
 ---
 
 ## C.14.0B - Update AI Agent Prompt Output Discipline

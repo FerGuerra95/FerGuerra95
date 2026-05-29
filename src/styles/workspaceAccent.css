@@ -389,7 +389,6 @@
     .funding-glass-block,
     .funding-thesis-item,
     .funding-mini-card,
-    .funding-score-box,
     .investor-score-box,
     .investor-mini-card,
     .investor-target-card,
@@ -400,12 +399,7 @@
     .ceo-radar-legend a,
     .report-panel-note,
     .report-mini-metric,
-    .report-list-card,
-    .reporting-scroll .card,
-    .risk-row-card,
-    .pmi-mini-card,
-    .governance-mini-card,
-    .strategy-mini-card
+    .report-list-card
   ) {
   background: rgba(255, 255, 255, 0.02) !important;
   border: 1px solid rgba(148, 163, 184, 0.08) !important;
@@ -655,7 +649,7 @@
 
 .main-area[data-workspace='governance']
   .ceos-executive-inner-surface
-  :is(.governance-mini-card, .governance-enterprise-toolbar) {
+  :is(.governance-enterprise-toolbar) {
   border-color: rgba(var(--ws-accent-rgb), 0.12) !important;
   background: rgba(var(--ws-accent-rgb), 0.045) !important;
 }
