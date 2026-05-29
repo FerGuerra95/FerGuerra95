@@ -196,17 +196,17 @@ const commandCenterCss = `
     border: none;
     border-radius: 0;
     background: transparent;
-    color: rgba(243, 218, 138, 0.72);
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    color: rgba(243, 218, 138, 0.58);
+    font-size: 9px;
+    font-weight: 550;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
   .ceo-command-badge + .ceo-command-badge::before {
     content: '·';
-    margin: 0 9px;
-    color: rgba(212, 175, 55, 0.32);
+    margin: 0 10px;
+    color: rgba(212, 175, 55, 0.24);
     font-weight: 400;
     letter-spacing: 0;
   }
@@ -267,8 +267,8 @@ const commandCenterCss = `
 
   .ceo-command-card {
     border-radius: 15px;
-    border: 1px solid rgba(212, 175, 55, 0.14);
-    background: linear-gradient(180deg, rgba(7, 7, 9, 0.96), rgba(3, 3, 4, 0.98));
+    border: 1px solid rgba(212, 175, 55, 0.12);
+    background: linear-gradient(180deg, rgba(5, 5, 6, 0.98), rgba(2, 2, 3, 0.99));
     padding: 14px 14px 12px;
     min-width: 0;
     display: flex;
@@ -474,7 +474,7 @@ const commandCenterCss = `
   .ceo-corporate-radar-copy {
     margin: 0;
     font-size: 12px;
-    color: rgba(203, 213, 225, 0.72);
+    color: rgba(210, 198, 170, 0.68);
     line-height: 1.45;
   }
 
@@ -564,28 +564,29 @@ const commandCenterCss = `
   }
 
   .ceo-executive-command-page .ceo-radar-legend-item {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 12px;
-    align-items: center;
-    padding: 7px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 6px 0;
     border-radius: 0;
     border: none;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.06);
+    border-bottom: none;
     background: transparent;
     color: inherit;
     text-decoration: none;
-    transition: border-color 160ms ease;
+  }
+
+  .ceo-executive-command-page .ceo-radar-legend-item + .ceo-radar-legend-item {
+    border-top: 1px solid rgba(212, 175, 55, 0.05);
   }
 
   .ceo-executive-command-page .ceo-radar-legend-item:hover {
     background: transparent;
-    border-bottom-color: rgba(212, 175, 55, 0.14);
   }
 
-  .ceo-executive-command-page .ceo-radar-legend-item.is-missing {
-    border-bottom-style: dashed;
-    border-bottom-color: rgba(180, 170, 150, 0.14);
+  .ceo-executive-command-page .ceo-radar-legend-item.is-missing .ceo-radar-legend-values strong {
+    color: rgba(190, 180, 160, 0.72);
   }
 
   .ceo-radar-legend-label {
@@ -679,55 +680,61 @@ const commandCenterCss = `
   .ceo-workflow-step p {
     margin: 6px 0 0;
     font-size: 11px;
-    color: rgba(203, 213, 225, 0.68);
+    color: rgba(210, 198, 170, 0.64);
     line-height: 1.42;
   }
 
   .ceo-decision-card-priority {
     font-size: 9px;
-    font-weight: 650;
-    letter-spacing: 0.12em;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    color: rgba(243, 218, 138, 0.52);
+  }
+
+  .ceo-decision-card-priority.is-high {
+    color: rgba(252, 211, 77, 0.72);
+  }
+
+  .ceo-decision-card-priority.is-medium {
     color: rgba(243, 218, 138, 0.58);
+  }
+
+  .ceo-decision-card-priority.is-watch {
+    color: rgba(210, 200, 180, 0.52);
   }
 
   .ceo-decision-card-status {
     margin-top: auto;
-    padding-top: 6px;
+    padding-top: 8px;
     display: block;
     width: auto;
     border: none;
     border-radius: 0;
     background: transparent;
-    color: rgba(210, 200, 180, 0.72);
+    color: rgba(210, 200, 180, 0.62);
     font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-weight: 550;
+    letter-spacing: 0.03em;
+    text-transform: none;
   }
 
   .ceo-decision-card-status::before {
-    content: '';
-    display: inline-block;
-    width: 4px;
-    height: 4px;
-    border-radius: 999px;
-    background: rgba(212, 175, 55, 0.5);
-    margin-right: 6px;
-    vertical-align: middle;
-    transform: translateY(-1px);
-  }
-
-  .ceo-module-score-row .ceo-decision-card-status {
-    display: inline;
-    padding-top: 0;
-    font-size: 9px;
-    letter-spacing: 0.08em;
-    color: rgba(243, 218, 138, 0.62);
-  }
-
-  .ceo-module-score-row .ceo-decision-card-status::before {
     display: none;
+  }
+
+  .ceo-module-posture {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: none;
+    color: rgba(210, 200, 180, 0.58);
+    font-weight: 550;
+  }
+
+  .ceo-module-score-row .ceo-module-posture {
+    text-align: right;
+    max-width: 48%;
+    line-height: 1.35;
   }
 
   .ceo-module-score-row {
@@ -837,6 +844,44 @@ function progressWidth(score) {
   }
 
   return Math.max(0, Math.min(100, Math.round(Number(score))));
+}
+
+function formatPostureLabel(posture) {
+  const safe = String(posture || '').trim().toLowerCase();
+
+  if (!safe || safe === 'insufficient_data' || safe === 'not_available') {
+    return 'Pending inputs';
+  }
+
+  return safe.replace(/_/g, ' ');
+}
+
+function buildUnifiedReadinessNote({
+  unifiedReadinessScore,
+  maValuationSignal,
+  maOverview,
+  legalHealthRadar,
+  complianceDragPenalty
+}) {
+  const maScore = normalizeScoreOrNull(maValuationSignal ?? maOverview?.score);
+  const legalScore = normalizeScoreOrNull(legalHealthRadar);
+  const hasIncompleteInputs =
+    unifiedReadinessScore === null || maScore === null || legalScore === null;
+
+  let note =
+    'Unified readiness is shown separately from the Executive Readiness Index.';
+
+  if (hasIncompleteInputs) {
+    return `${note} Some branch inputs remain incomplete.`;
+  }
+
+  note += ` Current unified blend: ${formatModuleScoreDisplay(unifiedReadinessScore)}.`;
+
+  if (complianceDragPenalty != null && Number.isFinite(Number(complianceDragPenalty))) {
+    note += ` Compliance drag signal: ${complianceDragPenalty} pts.`;
+  }
+
+  return note;
 }
 
 function mapQueueStatus(posture, { actionRequired = false, opportunity = false } = {}) {
@@ -1162,7 +1207,6 @@ export function ExecutiveCommandCenterView({
   onViewExecutiveBriefing
 }) {
   const unifiedReadinessScore = normalizeScoreOrNull(dealReadinessCombined);
-  const unifiedReadinessLabel = formatModuleScoreDisplay(unifiedReadinessScore);
 
   const decisionQueueCards = buildDecisionQueueCards({
     complianceOverview,
@@ -1192,6 +1236,13 @@ export function ExecutiveCommandCenterView({
   });
 
   const topPriorities = executivePriorityRows.slice(0, 3);
+  const unifiedReadinessNote = buildUnifiedReadinessNote({
+    unifiedReadinessScore,
+    maValuationSignal,
+    maOverview,
+    legalHealthRadar,
+    complianceDragPenalty
+  });
 
   return (
     <>
@@ -1282,7 +1333,11 @@ export function ExecutiveCommandCenterView({
           <div className="ceo-decision-queue-grid">
             {decisionQueueCards.map((card) => (
               <article key={card.title} className="ceo-command-card">
-                <div className="ceo-decision-card-priority">{card.priority}</div>
+                <div
+                  className={`ceo-decision-card-priority is-${String(card.priority || 'medium').toLowerCase()}`}
+                >
+                  {card.priority}
+                </div>
                 <strong>{card.title}</strong>
                 <p>{card.summary}</p>
                 <span className="ceo-decision-card-status">{card.status}</span>
@@ -1323,8 +1378,8 @@ export function ExecutiveCommandCenterView({
                 <div className="ceo-command-card-kicker">{module.label}</div>
                 <div className="ceo-module-score-row">
                   <strong>{formatModuleScoreDisplay(module.overview.score)}</strong>
-                  <span className="ceo-decision-card-status">
-                    {module.overview.posture || 'insufficient_data'}
+                  <span className="ceo-module-posture">
+                    {formatPostureLabel(module.overview.posture)}
                   </span>
                 </div>
                 <div className="ceo-module-progress">
@@ -1348,12 +1403,7 @@ export function ExecutiveCommandCenterView({
                 Cross-branch posture across deal, funding, compliance, risk and governance signals.
               </p>
               <CorporateHealthRadar axes={commandRadarAxes} />
-              <p className="ceo-unified-context">
-                Unified readiness (M&A + legal blend): {unifiedReadinessLabel} · Distinct from Executive
-                Readiness Index · M&A {formatScoreLabel(maValuationSignal ?? maOverview.score)} · Legal{' '}
-                {formatScoreLabel(legalHealthRadar)}
-                {complianceDragPenalty != null ? ` · Compliance drag ${complianceDragPenalty} pts` : ''}.
-              </p>
+              <p className="ceo-unified-context">{unifiedReadinessNote}</p>
             </article>
           </div>
         </SectionBlock>

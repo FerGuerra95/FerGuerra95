@@ -563,3 +563,10 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Top priorities render as executive list with dot markers.
 - Status labels (HIGH/MEDIUM/WATCH) are text, not bordered pills.
 - Radar legend uses fine separators, not spreadsheet cells.
+
+### C.24.5A-texture-polish checklist
+
+- Cards read charcoal/black/gold (not blue panels).
+- Module postures show Pending inputs, not raw insufficient_data pills.
+- Unified readiness note is executive copy, still truthfulness-safe.
+- Decision queue HIGH/MEDIUM/WATCH are text accents, not form bars.

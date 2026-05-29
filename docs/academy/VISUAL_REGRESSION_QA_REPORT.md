@@ -268,3 +268,13 @@
 **Fix:** Lighter badges, executive priority list, text status labels, premium radar legend rows.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## 18. C.24.5A-texture-polish — Executive Overview Technical Bars Cleanup
+
+**Baseline:** `13374d8`.
+
+**Fix:** Black/gold card texture; executive unified-readiness note; flat module postures; softer legend.
+
+**Validation:** build + truthfulness tests PASS.

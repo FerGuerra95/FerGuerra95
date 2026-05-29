@@ -2479,3 +2479,15 @@ Validation: build + truthfulness tests PASS.
 **Fix:** Reduced pill/bar encapsulation on hero badges, priorities, status labels, radar legend; information preserved.
 
 Validation: build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-texture-polish — Executive Overview Technical Bars Cleanup
+
+**Status:** COMPLETED (visual only, CEO scope).
+
+**Baseline:** `13374d8`.
+
+**Fix:** Black/gold texture pass; executive unified-readiness copy; flat posture labels; legend de-table.
+
+Validation: build + truthfulness tests PASS.

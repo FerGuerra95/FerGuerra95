@@ -8219,3 +8219,15 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Fix:** Lighter hero badges; executive priority list; status as text+dot not pills; softer radar legend; discrete section kickers.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-texture-polish — Executive Overview Technical Bars Cleanup
+
+**Status:** COMPLETED.
+
+**Baseline:** `13374d8`.
+
+**Fix:** Warmer black/gold cards; flat module postures; executive unified-readiness note; softer radar legend rows; priority accent colors.
+
+**Validation:** build + truthfulness tests PASS.
