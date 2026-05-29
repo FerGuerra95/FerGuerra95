@@ -9,7 +9,7 @@ import {
   normalizeScoreOrNull
 } from '../utils/ceoOverviewTruthfulness.js';
 
-const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png';
+const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png?v=20260529-lion';
 
 const commandCenterCss = `
   .ceo-executive-command-page {
@@ -127,7 +127,7 @@ const commandCenterCss = `
     z-index: 1;
   }
 
-  .ceo-sovereign-mark {
+  .ceo-lion-mark-wrap {
     position: relative;
     display: flex;
     align-items: center;
@@ -137,18 +137,19 @@ const commandCenterCss = `
     margin-left: auto;
     pointer-events: none;
     z-index: 0;
+    flex-shrink: 0;
   }
 
-  .ceo-sovereign-mark::before {
+  .ceo-lion-mark-wrap::before {
     content: '';
     position: absolute;
     inset: -4%;
     border-radius: 999px;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.16) 0%, transparent 72%);
     pointer-events: none;
   }
 
-  .ceo-sovereign-mark img {
+  .ceo-executive-command-page .ceo-lion-mark {
     position: relative;
     z-index: 1;
     width: 100%;
@@ -156,8 +157,8 @@ const commandCenterCss = `
     height: auto;
     display: block;
     object-fit: contain;
-    opacity: 0.98;
-    filter: drop-shadow(0 0 24px rgba(212, 175, 55, 0.36));
+    opacity: 1;
+    filter: drop-shadow(0 0 24px rgba(212, 175, 55, 0.34));
   }
 
   .ceo-command-status-grid {
@@ -772,7 +773,7 @@ const commandCenterCss = `
       grid-template-columns: minmax(0, 1fr) minmax(110px, 180px);
     }
 
-    .ceo-sovereign-mark img {
+    .ceo-lion-mark-wrap .ceo-lion-mark {
       max-width: 160px;
     }
 
@@ -806,13 +807,13 @@ const commandCenterCss = `
       grid-template-columns: 1fr;
     }
 
-    .ceo-sovereign-mark {
+    .ceo-lion-mark-wrap {
       max-width: 180px;
       margin: 0 auto;
       order: -1;
     }
 
-    .ceo-sovereign-mark img {
+    .ceo-lion-mark-wrap .ceo-lion-mark {
       max-width: 150px;
     }
 
@@ -1284,8 +1285,15 @@ export function ExecutiveCommandCenterView({
                   </div>
                 </div>
 
-                <div className="ceo-sovereign-mark" aria-hidden="true">
-                  <img src={CEO_LION_MARK_SRC} alt="" />
+                <div className="ceo-lion-mark-wrap" aria-hidden="true">
+                  <img
+                    className="ceo-lion-mark"
+                    src={CEO_LION_MARK_SRC}
+                    alt=""
+                    width={196}
+                    height={196}
+                    decoding="async"
+                  />
                 </div>
               </div>
 

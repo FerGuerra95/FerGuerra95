@@ -2517,3 +2517,15 @@ Validation: build + truthfulness tests PASS.
 **Fix:** Swapped `public/brand/ceos-lion-mark.png` from wordmark to approved lion emblem.
 
 Validation: build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-logo-fix-hard — Approved Lion Mark Hard Replacement
+
+**Status:** COMPLETED (CEO hero asset hard bind + cache bust).
+
+**Baseline:** `435bcbc`.
+
+**Asset:** `public/brand/ceos-lion-mark.png` (SHA256 verified lion emblem, not wordmark).
+
+Validation: build + truthfulness tests PASS.

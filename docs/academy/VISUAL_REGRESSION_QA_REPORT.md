@@ -300,3 +300,13 @@
 **Fix:** Replaced wordmark PNG at `ceos-lion-mark.png` with approved lion emblem.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## 21. C.24.5A-logo-fix-hard — Approved Lion Mark Hard Replacement
+
+**Baseline:** `435bcbc`.
+
+**Fix:** Hard hero bind + cache-bust; `.ceo-lion-mark` class; verified lion PNG at public path.
+
+**Validation:** build + truthfulness tests PASS.

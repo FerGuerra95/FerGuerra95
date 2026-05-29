@@ -276,3 +276,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 ### C.24.5A-logo-fix demo safety note
 
 - Corrected hero asset only; wordmark PNG removed from hero path.
+
+### C.24.5A-logo-fix-hard demo safety note
+
+- Hard cache-bust on lion mark URL; asset-only change, no data impact.

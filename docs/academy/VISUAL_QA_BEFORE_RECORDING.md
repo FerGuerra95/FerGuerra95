@@ -581,3 +581,8 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 
 - Hero shows geometric lion emblem (not CEO's OS wordmark image).
 - Asset path `/brand/ceos-lion-mark.png` serves lion + ring + spheres only.
+
+### C.24.5A-logo-fix-hard checklist
+
+- Hero img uses `/brand/ceos-lion-mark.png?v=20260529-lion` (cache-busted).
+- No wordmark PNG in hero; `.ceo-lion-mark` class on approved emblem only.

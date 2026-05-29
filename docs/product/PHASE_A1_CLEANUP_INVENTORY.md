@@ -8259,3 +8259,15 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Fix:** Replaced with approved geometric lion emblem; hero path `/brand/ceos-lion-mark.png` unchanged.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-logo-fix-hard — Approved Lion Mark Hard Replacement
+
+**Status:** COMPLETED.
+
+**Baseline:** `435bcbc`.
+
+**Fix:** Hard hero bind to `/brand/ceos-lion-mark.png?v=20260529-lion`; `.ceo-lion-mark` class; cache-buster for stale wordmark PNG.
+
+**Validation:** build + truthfulness tests PASS.
