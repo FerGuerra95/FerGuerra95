@@ -288,3 +288,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 ### C.24.5A-final-close demo safety note
 
 - Final visual close only; scoring/truthfulness unchanged; radar labels are display-only from existing axis data.
+
+### C.24.5A-lion-integration addendum
+
+- Lion integrated via hero ambient gradient + lighten blend; no outer ring pseudo; hero ERI/priorities cards borderless inside unified hero shell.

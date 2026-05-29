@@ -1117,21 +1117,16 @@ textarea,
     linear-gradient(180deg, rgba(12, 11, 9, 0.94), rgba(7, 7, 5, 0.96)) !important;
 }
 
-.page .ceo-executive-command-page .ceo-command-card,
-.page .ceo-executive-command-page .ceo-workflow-step {
-  background: linear-gradient(180deg, rgba(15, 15, 14, 0.88), rgba(18, 17, 15, 0.86)) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(245, 197, 92, 0.05),
-    0 10px 28px rgba(0, 0, 0, 0.32) !important;
-}
-
-.page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card,
-.page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card,
-.page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card {
+.page .ceo-executive-command-page .ceo-command-hero .ceo-command-card,
+.page .ceo-executive-command-page .ceo-corporate-radar-card {
   background: transparent !important;
   border: none !important;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.08) !important;
-  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-card {
+  background: rgba(10, 9, 7, 0.28) !important;
+  border: 1px solid rgba(212, 175, 55, 0.08) !important;
   box-shadow: none !important;
 }
 
@@ -1143,14 +1138,19 @@ textarea,
   box-shadow: none !important;
 }
 
+.page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card,
+.page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card,
+.page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card,
 .page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card {
-  background:
-    radial-gradient(circle at 0% 100%, rgba(212, 175, 55, 0.05), transparent 42%),
-    linear-gradient(180deg, rgba(16, 14, 11, 0.92), rgba(9, 8, 6, 0.94)) !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .page .ceo-executive-command-page .ceo-radar-visual-wrap {
-  background:
-    radial-gradient(circle at 50% 50%, rgba(245, 197, 92, 0.1), transparent 64%),
-    linear-gradient(180deg, rgba(16, 14, 11, 0.92), rgba(9, 8, 6, 0.88)) !important;
+  background: rgba(9, 8, 6, 0.32) !important;
+  border: none !important;
+  box-shadow: inset 0 0 40px rgba(212, 175, 55, 0.04) !important;
 }
