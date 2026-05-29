@@ -2431,3 +2431,17 @@ Validation:
 Truthfulness preserved: distinct metric labels; no formula/backend changes.
 
 Validation: build + CEO/funding truthfulness tests PASS.
+
+---
+
+## C.24.5A-radar-polish — Corporate Health Radar Premium Visual Recovery
+
+**Status:** COMPLETED (CEO-only, radar visual).
+
+**Baseline:** `2a760a8`.
+
+**UX:** Executive Readiness Index remains hero; radar enlarged in §04 with premium legend.
+
+**Truthfulness:** N/A branches excluded from polygon; dashed spokes + legend; polygon only when ≥3 calculable axes.
+
+Validation: build + truthfulness tests PASS.

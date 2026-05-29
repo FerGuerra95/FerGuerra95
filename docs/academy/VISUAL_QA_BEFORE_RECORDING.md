@@ -536,3 +536,10 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Hero includes confidence + missing data + human review copy.
 - Section 04 radar is compact, gold-styled, legible (not black giant circle).
 - Unified readiness appears only as contextual footnote in §04 with distinct label.
+
+### C.24.5A-radar-polish checklist
+
+- Corporate Health Radar is visually prominent (not mini-chart).
+- Radar left ~42%, legend right ~58% on desktop.
+- Missing branches show N/A in legend; polygon excludes N/A (no silent 0).
+- Hero Executive Readiness Index unchanged.

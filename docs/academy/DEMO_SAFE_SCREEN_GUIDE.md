@@ -246,3 +246,8 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 - Hero primary chart is Executive Readiness Index only; Unified readiness is contextual in §04.
 - Corporate Health Radar preserved below module cards; no duplicate readiness calculations added.
+
+### C.24.5A-radar-polish demo safety note
+
+- Radar polygon draws only calculable branches; N/A shown in legend with dashed spoke markers.
+- No scores hardcoded; hero Executive Readiness Index unchanged.

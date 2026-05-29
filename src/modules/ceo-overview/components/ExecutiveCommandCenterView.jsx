@@ -374,61 +374,158 @@ const commandCenterCss = `
   }
 
   .ceo-corporate-radar-card {
-    gap: 10px;
-  }
-
-  .ceo-executive-command-page .executive-radar-panel {
-    display: grid;
-    grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
     gap: 12px;
-    align-items: center;
-    max-height: none;
   }
 
-  .ceo-executive-command-page .executive-radar-panel.ceo-radar-compact svg {
+  .ceo-corporate-radar-copy {
+    margin: 0;
+    font-size: 12px;
+    color: rgba(203, 213, 225, 0.72);
+    line-height: 1.45;
+  }
+
+  .ceo-executive-command-page .executive-radar-panel.ceo-radar-premium {
+    display: grid;
+    grid-template-columns: minmax(260px, 42%) minmax(0, 58%);
+    gap: 18px;
+    align-items: center;
+  }
+
+  .ceo-radar-visual-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+    padding: 8px;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 175, 55, 0.14);
+    background:
+      radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08), transparent 62%),
+      rgba(6, 6, 8, 0.55);
+  }
+
+  .ceo-executive-command-page .ceo-radar-svg {
     width: 100%;
-    max-width: 200px;
-    max-height: 200px;
-    margin: 0 auto;
+    max-width: 320px;
+    min-height: 260px;
+    height: auto;
     display: block;
+  }
+
+  .ceo-executive-command-page .executive-radar-outer-ring {
+    fill: rgba(212, 175, 55, 0.04);
+    stroke: rgba(212, 175, 55, 0.18);
+    stroke-width: 1;
   }
 
   .ceo-executive-command-page .executive-radar-grid,
   .ceo-executive-command-page .executive-radar-axis {
     fill: none;
-    stroke: rgba(212, 175, 55, 0.22);
+    stroke: rgba(212, 175, 55, 0.2);
+    stroke-width: 1;
+  }
+
+  .ceo-executive-command-page .executive-radar-axis.is-missing {
+    stroke: rgba(148, 163, 184, 0.28);
+    stroke-dasharray: 4 4;
+  }
+
+  .ceo-executive-command-page .executive-radar-reference {
+    fill: rgba(212, 175, 55, 0.05);
+    stroke: rgba(212, 175, 55, 0.16);
     stroke-width: 1;
   }
 
   .ceo-executive-command-page .executive-radar-fill {
-    fill: rgba(212, 175, 55, 0.16);
-    stroke: rgba(212, 175, 55, 0.72);
-    stroke-width: 2;
+    stroke: rgba(243, 218, 138, 0.88);
+    stroke-width: 2.2;
+    stroke-linejoin: round;
+    fill-opacity: 0.72;
   }
 
-  .ceo-executive-command-page .executive-radar-list {
+  .ceo-radar-legend-wrap {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ceo-radar-incomplete-note {
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.16);
+    background: rgba(212, 175, 55, 0.06);
+    color: rgba(243, 218, 138, 0.88);
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .ceo-executive-command-page .ceo-radar-legend {
     display: grid;
-    gap: 6px;
+    gap: 8px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .ceo-executive-command-page .executive-radar-list a {
+  .ceo-executive-command-page .ceo-radar-legend-item {
     display: flex;
     justify-content: space-between;
-    gap: 8px;
-    align-items: center;
-    padding: 7px 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(212, 175, 55, 0.12);
-    background: rgba(6, 6, 8, 0.72);
+    gap: 10px;
+    align-items: flex-start;
+    padding: 9px 11px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.14);
+    background: rgba(6, 6, 8, 0.78);
     color: inherit;
     text-decoration: none;
-    font-size: 11px;
+    transition: border-color 160ms ease, background 160ms ease;
   }
 
-  .ceo-executive-command-page .executive-radar-list a strong {
-    color: rgba(243, 218, 138, 0.92);
+  .ceo-executive-command-page .ceo-radar-legend-item:hover {
+    border-color: rgba(212, 175, 55, 0.28);
+    background: rgba(10, 10, 14, 0.92);
+  }
+
+  .ceo-executive-command-page .ceo-radar-legend-item.is-missing {
+    border-style: dashed;
+    border-color: rgba(148, 163, 184, 0.22);
+  }
+
+  .ceo-radar-legend-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-size: 11px;
+    color: rgba(226, 232, 240, 0.86);
+    min-width: 0;
+  }
+
+  .ceo-radar-swatch {
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.18);
+  }
+
+  .ceo-radar-legend-values {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    text-align: right;
+  }
+
+  .ceo-radar-legend-values strong {
+    color: rgba(243, 218, 138, 0.94);
+    font-size: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .ceo-radar-legend-values small {
+    color: rgba(148, 163, 184, 0.82);
+    font-size: 10px;
+    text-transform: capitalize;
   }
 
   .ceo-unified-context {
@@ -555,7 +652,15 @@ const commandCenterCss = `
       margin-top: 8px;
     }
 
-    .ceo-executive-command-page .executive-radar-list {
+    .ceo-executive-command-page .executive-radar-panel.ceo-radar-premium {
+      grid-template-columns: 1fr;
+    }
+
+    .ceo-radar-visual-wrap {
+      min-height: 240px;
+    }
+
+    .ceo-executive-command-page .ceo-radar-legend {
       grid-template-columns: 1fr;
     }
   }
@@ -1074,9 +1179,12 @@ export function ExecutiveCommandCenterView({
 
           <div className="ceo-readiness-radar-row">
             <article className="ceo-command-card ceo-corporate-radar-card">
-              <div className="ceo-command-card-kicker">Enterprise readiness radar</div>
-              <strong>Corporate health by branch</strong>
-              <CorporateHealthRadar axes={commandRadarAxes} className="ceo-radar-compact" />
+              <div className="ceo-command-card-kicker">Corporate Health Radar</div>
+              <strong>Enterprise readiness radar</strong>
+              <p className="ceo-corporate-radar-copy">
+                Cross-branch posture across deal, funding, compliance, risk and governance signals.
+              </p>
+              <CorporateHealthRadar axes={commandRadarAxes} />
               <p className="ceo-unified-context">
                 Unified readiness (M&A + legal blend): {unifiedReadinessLabel} · Distinct from Executive
                 Readiness Index · M&A {formatScoreLabel(maValuationSignal ?? maOverview.score)} · Legal{' '}
