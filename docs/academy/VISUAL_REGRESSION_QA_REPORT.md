@@ -258,3 +258,13 @@
 **Fix:** Lion moved into primary hero block; removed absolute watermark behind side panels.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## 17. C.24.5A-text-decontainerize — Remove Technical Text Bars / Pills
+
+**Baseline:** `2aaa20c`.
+
+**Fix:** Lighter badges, executive priority list, text status labels, premium radar legend rows.
+
+**Validation:** build + truthfulness tests PASS.

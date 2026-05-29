@@ -8207,3 +8207,15 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Fix:** Lion moved from absolute hero watermark into primary hero block grid (copy + sovereign mark); removed right-side glow behind ERI/priorities panels.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-text-decontainerize — Remove Technical Text Bars / Pills
+
+**Status:** COMPLETED.
+
+**Baseline:** `2aaa20c`.
+
+**Fix:** Lighter hero badges; executive priority list; status as text+dot not pills; softer radar legend; discrete section kickers.
+
+**Validation:** build + truthfulness tests PASS.

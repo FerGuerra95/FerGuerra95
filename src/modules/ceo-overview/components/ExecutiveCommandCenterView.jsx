@@ -185,22 +185,30 @@ const commandCenterCss = `
   .ceo-command-badge-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    align-items: center;
+    gap: 0;
   }
 
   .ceo-command-badge {
-    display: inline-flex;
-    align-items: center;
-    min-height: 26px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    border: 1px solid rgba(212, 175, 55, 0.28);
-    background: rgba(212, 175, 55, 0.08);
-    color: rgba(243, 218, 138, 0.92);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
+    display: inline;
+    min-height: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: rgba(243, 218, 138, 0.72);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
+  }
+
+  .ceo-command-badge + .ceo-command-badge::before {
+    content: '·';
+    margin: 0 9px;
+    color: rgba(212, 175, 55, 0.32);
+    font-weight: 400;
+    letter-spacing: 0;
   }
 
   .ceo-command-hero-title {
@@ -259,31 +267,29 @@ const commandCenterCss = `
 
   .ceo-command-card {
     border-radius: 15px;
-    border: 1px solid rgba(212, 175, 55, 0.22);
-    background:
-      linear-gradient(180deg, rgba(7, 7, 9, 0.98), rgba(3, 3, 4, 0.99));
-    padding: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.14);
+    background: linear-gradient(180deg, rgba(7, 7, 9, 0.96), rgba(3, 3, 4, 0.98));
+    padding: 14px 14px 12px;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.05);
-    transition: border-color 160ms ease, box-shadow 160ms ease;
+    gap: 8px;
+    box-shadow: none;
+    transition: border-color 160ms ease;
   }
 
   .ceo-command-card:hover {
-    border-color: rgba(212, 175, 55, 0.28);
-    box-shadow:
-      inset 0 1px 0 rgba(243, 218, 138, 0.06),
-      0 8px 22px rgba(0, 0, 0, 0.22);
+    border-color: rgba(212, 175, 55, 0.22);
+    box-shadow: none;
   }
 
   .ceo-command-card-kicker {
     font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: rgba(243, 218, 138, 0.86);
-    font-weight: 760;
+    letter-spacing: 0.14em;
+    color: rgba(243, 218, 138, 0.68);
+    font-weight: 650;
+    margin: 0;
   }
 
   .ceo-command-card h3 {
@@ -366,18 +372,78 @@ const commandCenterCss = `
   .ceo-readiness-meta {
     width: 100%;
     font-size: 11px;
-    color: rgba(210, 200, 180, 0.72);
+    color: rgba(210, 200, 180, 0.68);
+    line-height: 1.5;
+    margin: 0;
+    padding-top: 4px;
+    border-top: 1px solid rgba(212, 175, 55, 0.08);
+  }
+
+  .ceo-priorities-card {
+    gap: 6px;
+  }
+
+  .ceo-priority-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ceo-priority-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.07);
+  }
+
+  .ceo-priority-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .ceo-priority-item:first-child {
+    padding-top: 2px;
+  }
+
+  .ceo-priority-dot {
+    flex: 0 0 auto;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(212, 175, 55, 0.55);
+    margin-top: 6px;
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.28);
+  }
+
+  .ceo-priority-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .ceo-priority-title {
+    font-size: 11px;
+    font-weight: 650;
+    letter-spacing: 0.02em;
+    color: rgba(243, 218, 138, 0.86);
+    line-height: 1.3;
+  }
+
+  .ceo-priority-value {
+    font-size: 11px;
+    color: rgba(210, 200, 180, 0.76);
     line-height: 1.42;
   }
 
-  .ceo-priorities-card p {
+  .ceo-priority-empty {
+    margin: 0;
     font-size: 11px;
+    color: rgba(210, 200, 180, 0.68);
     line-height: 1.42;
-  }
-
-  .ceo-priorities-card p strong {
-    font-size: 11px;
-    color: rgba(243, 218, 138, 0.88);
   }
 
   .ceo-decision-queue-grid,
@@ -481,81 +547,84 @@ const commandCenterCss = `
 
   .ceo-radar-incomplete-note {
     margin: 0;
-    padding: 8px 10px;
-    border-radius: 10px;
-    border: 1px solid rgba(212, 175, 55, 0.16);
-    background: rgba(212, 175, 55, 0.06);
-    color: rgba(243, 218, 138, 0.88);
-    font-size: 11px;
+    padding: 0 0 8px;
+    border: none;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+    border-radius: 0;
+    background: transparent;
+    color: rgba(210, 200, 180, 0.68);
+    font-size: 10px;
     line-height: 1.45;
   }
 
   .ceo-executive-command-page .ceo-radar-legend {
-    display: grid;
-    gap: 4px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
 
   .ceo-executive-command-page .ceo-radar-legend-item {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
     align-items: center;
-    padding: 5px 4px;
-    border-radius: 8px;
+    padding: 7px 0;
+    border-radius: 0;
     border: none;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.06);
     background: transparent;
     color: inherit;
     text-decoration: none;
-    transition: background 160ms ease, border-color 160ms ease;
+    transition: border-color 160ms ease;
   }
 
   .ceo-executive-command-page .ceo-radar-legend-item:hover {
-    background: rgba(212, 175, 55, 0.05);
-    border-bottom-color: rgba(212, 175, 55, 0.16);
+    background: transparent;
+    border-bottom-color: rgba(212, 175, 55, 0.14);
   }
 
   .ceo-executive-command-page .ceo-radar-legend-item.is-missing {
     border-bottom-style: dashed;
-    border-bottom-color: rgba(180, 170, 150, 0.18);
+    border-bottom-color: rgba(180, 170, 150, 0.14);
   }
 
   .ceo-radar-legend-label {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
     font-size: 11px;
-    color: rgba(230, 222, 204, 0.88);
+    color: rgba(230, 222, 204, 0.86);
     min-width: 0;
   }
 
   .ceo-radar-swatch {
     flex: 0 0 auto;
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     border-radius: 999px;
-    box-shadow: 0 0 8px rgba(212, 175, 55, 0.22);
+    box-shadow: none;
   }
 
   .ceo-radar-legend-values {
     display: inline-flex;
     align-items: baseline;
-    gap: 6px;
+    gap: 8px;
     text-align: right;
     flex-shrink: 0;
   }
 
   .ceo-radar-legend-values strong {
-    color: rgba(243, 218, 138, 0.94);
+    color: rgba(243, 218, 138, 0.9);
     font-size: 11px;
+    font-weight: 650;
     letter-spacing: -0.01em;
   }
 
   .ceo-radar-legend-values small {
-    color: rgba(190, 180, 160, 0.68);
+    color: rgba(190, 180, 160, 0.62);
     font-size: 9px;
     text-transform: capitalize;
+    font-weight: 500;
   }
 
   .ceo-unified-context {
@@ -586,11 +655,18 @@ const commandCenterCss = `
 
   .ceo-workflow-step {
     border-radius: 14px;
-    border: 1px solid rgba(212, 175, 55, 0.18);
-    background: linear-gradient(180deg, rgba(12, 12, 16, 0.96), rgba(6, 6, 8, 0.98));
-    padding: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.12);
+    background: transparent;
+    padding: 12px 12px 10px;
     min-width: 0;
-    box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.04);
+    box-shadow: none;
+  }
+
+  .ceo-workflow-step .ceo-command-card-kicker {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: rgba(243, 218, 138, 0.52);
+    font-weight: 600;
   }
 
   .ceo-workflow-step strong {
@@ -608,25 +684,50 @@ const commandCenterCss = `
   }
 
   .ceo-decision-card-priority {
-    font-size: 10px;
-    font-weight: 780;
-    letter-spacing: 0.1em;
+    font-size: 9px;
+    font-weight: 650;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(243, 218, 138, 0.9);
+    color: rgba(243, 218, 138, 0.58);
   }
 
   .ceo-decision-card-status {
     margin-top: auto;
-    display: inline-flex;
-    width: fit-content;
-    border-radius: 999px;
-    padding: 4px 9px;
-    border: 1px solid rgba(212, 175, 55, 0.24);
-    background: rgba(212, 175, 55, 0.08);
-    color: rgba(243, 218, 138, 0.92);
+    padding-top: 6px;
+    display: block;
+    width: auto;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: rgba(210, 200, 180, 0.72);
     font-size: 10px;
-    font-weight: 760;
+    font-weight: 600;
     letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .ceo-decision-card-status::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(212, 175, 55, 0.5);
+    margin-right: 6px;
+    vertical-align: middle;
+    transform: translateY(-1px);
+  }
+
+  .ceo-module-score-row .ceo-decision-card-status {
+    display: inline;
+    padding-top: 0;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: rgba(243, 218, 138, 0.62);
+  }
+
+  .ceo-module-score-row .ceo-decision-card-status::before {
+    display: none;
   }
 
   .ceo-module-score-row {
@@ -657,12 +758,14 @@ const commandCenterCss = `
   }
 
   .ceo-truthfulness-banner {
-    border-radius: 14px;
-    border: 1px solid rgba(212, 175, 55, 0.22);
-    background: rgba(6, 6, 8, 0.82);
-    padding: 10px 14px;
-    font-size: 12px;
-    color: rgba(226, 232, 240, 0.82);
+    border: none;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    border-radius: 0;
+    background: transparent;
+    padding: 0 0 10px;
+    font-size: 11px;
+    color: rgba(210, 200, 180, 0.66);
+    line-height: 1.45;
   }
 
   @media (max-width: 1180px) {
@@ -699,7 +802,7 @@ const commandCenterCss = `
     }
 
     .ceo-executive-command-page .ceo-radar-legend {
-      grid-template-columns: 1fr;
+      gap: 0;
     }
   }
 
@@ -1152,13 +1255,19 @@ export function ExecutiveCommandCenterView({
               <article className="ceo-command-card ceo-priorities-card">
                 <div className="ceo-command-card-kicker">Top priorities</div>
                 {topPriorities.length ? (
-                  topPriorities.map((row) => (
-                    <p key={row.label}>
-                      <strong>{row.label}:</strong> {row.value}
-                    </p>
-                  ))
+                  <ul className="ceo-priority-list">
+                    {topPriorities.map((row) => (
+                      <li key={row.label} className="ceo-priority-item">
+                        <span className="ceo-priority-dot" aria-hidden="true" />
+                        <div className="ceo-priority-copy">
+                          <span className="ceo-priority-title">{row.label}</span>
+                          <span className="ceo-priority-value">{row.value}</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 ) : (
-                  <p>No priority rows available · Pending inputs.</p>
+                  <p className="ceo-priority-empty">No priority rows available · Pending inputs.</p>
                 )}
               </article>
             </div>

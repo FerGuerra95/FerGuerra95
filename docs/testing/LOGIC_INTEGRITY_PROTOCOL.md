@@ -2466,6 +2466,16 @@ Validation: build + truthfulness tests PASS.
 
 **Baseline:** `566e824`.
 
-**Fix:** Sovereign mark integrated inside `.ceo-command-hero-main`; no longer absolute behind readiness/priorities columns.
+Validation: build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-text-decontainerize — Remove Technical Text Bars / Pills
+
+**Status:** COMPLETED (visual only, CEO scope).
+
+**Baseline:** `2aaa20c`.
+
+**Fix:** Reduced pill/bar encapsulation on hero badges, priorities, status labels, radar legend; information preserved.
 
 Validation: build + truthfulness tests PASS.

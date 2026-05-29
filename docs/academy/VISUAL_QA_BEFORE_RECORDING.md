@@ -556,3 +556,10 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Lion lives inside primary hero block (not behind ERI / Top Priorities panels).
 - Hero grid: main block | ERI | priorities — lion only in main block.
 - No metric, formula, or backend changes.
+
+### C.24.5A-text-decontainerize checklist
+
+- Hero badges are light labels (not input-like pills).
+- Top priorities render as executive list with dot markers.
+- Status labels (HIGH/MEDIUM/WATCH) are text, not bordered pills.
+- Radar legend uses fine separators, not spreadsheet cells.

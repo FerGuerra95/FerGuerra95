@@ -260,3 +260,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 ### C.24.5A-hero-integration-fix demo safety note
 
 - Hero composition only; sovereign mark scoped to primary block; readiness/priorities cards unchanged.
+
+### C.24.5A-text-decontainerize demo safety note
+
+- Visual de-containerization only; all metrics, N/A, and insufficient_data copy unchanged.
