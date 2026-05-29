@@ -1329,6 +1329,21 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.032) !important;
 }
 
+/* C.24.5A-black-premium — Executive command center (overview workspace scoped) */
+.main-area[data-workspace='overview'] .ceo-executive-command-page {
+  color: #f8f3e7;
+}
+
+.main-area[data-workspace='overview'] .ceo-executive-command-page :is(
+  .ceo-command-card,
+  .ceo-workflow-step,
+  .ceo-command-section-shell,
+  .ceo-radar-visual-wrap
+) {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
 /* ——— Section typography (lower panels) ——— */
 
 .main-area[data-workspace] .ceos-ws-section-kicker {

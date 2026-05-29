@@ -9,22 +9,32 @@ import {
   normalizeScoreOrNull
 } from '../utils/ceoOverviewTruthfulness.js';
 
-const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png?v=20260529-blend';
+const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png?v=20260529-final';
 
 const commandCenterCss = `
   .ceo-executive-command-page {
     --ceo-gold: #d4af37;
     --ceo-gold-soft: #f3da8a;
     --ceo-gold-deep: #8a6a16;
-    --ceo-black: #060608;
-    --ceo-charcoal: #0c0c10;
-    --ceo-line: rgba(212, 175, 55, 0.22);
+    --ceo-gold-border: rgba(212, 175, 55, 0.18);
+    --ceo-gold-border-strong: rgba(245, 197, 92, 0.22);
+    --ceo-gold-glow: rgba(245, 197, 92, 0.1);
+    --ceo-gold-glow-soft: rgba(212, 175, 55, 0.14);
+    --ceo-black: #050505;
+    --ceo-charcoal: rgba(12, 11, 9, 0.94);
+    --ceo-charcoal-panel: rgba(16, 14, 11, 0.92);
+    --ceo-card-inner: rgba(15, 15, 14, 0.88);
+    --ceo-card-inner-alt: rgba(18, 17, 15, 0.86);
+    --ceo-text-primary: #f8f3e7;
+    --ceo-text-secondary: rgba(248, 243, 231, 0.68);
+    --ceo-text-muted: rgba(248, 243, 231, 0.48);
+    --ceo-line: rgba(212, 175, 55, 0.18);
     width: min(1480px, 100%);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 18px;
-    color: rgba(236, 230, 216, 0.94);
+    color: rgba(248, 243, 231, 0.94);
   }
 
   .ceo-command-section {
@@ -35,13 +45,13 @@ const commandCenterCss = `
 
   .ceo-command-section-shell {
     border-radius: 22px;
-    border: 1px solid rgba(212, 175, 55, 0.24);
+    border: 1px solid var(--ceo-gold-border-strong);
     background:
-      radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.06), transparent 42%),
-      linear-gradient(180deg, rgba(8, 8, 12, 0.98), rgba(4, 4, 6, 0.99));
+      radial-gradient(circle at 0% 0%, var(--ceo-gold-glow-soft), transparent 42%),
+      linear-gradient(180deg, var(--ceo-charcoal), rgba(7, 7, 5, 0.96));
     box-shadow:
-      0 18px 48px rgba(0, 0, 0, 0.42),
-      inset 0 1px 0 rgba(243, 218, 138, 0.06);
+      0 18px 48px rgba(0, 0, 0, 0.46),
+      inset 0 1px 0 rgba(245, 197, 92, 0.06);
     padding: 16px 16px 14px;
     display: flex;
     flex-direction: column;
@@ -78,12 +88,12 @@ const commandCenterCss = `
     margin: 0;
     font-size: 20px;
     letter-spacing: -0.03em;
-    color: rgba(248, 250, 252, 0.98);
+    color: var(--ceo-text-primary);
   }
 
   .ceo-command-section-copy {
     margin: 4px 0 0;
-    color: rgba(210, 198, 170, 0.72);
+    color: var(--ceo-text-secondary);
     line-height: 1.48;
     font-size: 12px;
   }
@@ -145,27 +155,15 @@ const commandCenterCss = `
   .ceo-lion-mark-wrap::before {
     content: '';
     position: absolute;
-    inset: 6%;
-    border-radius: 999px;
+    inset: 22%;
+    border-radius: 50%;
     background: radial-gradient(
-      circle at 50% 48%,
-      rgba(212, 175, 55, 0.28) 0%,
-      rgba(212, 175, 55, 0.08) 38%,
-      transparent 74%
+      circle at 50% 50%,
+      rgba(245, 197, 92, 0.14) 0%,
+      rgba(212, 175, 55, 0.04) 48%,
+      transparent 72%
     );
-    filter: blur(6px);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .ceo-lion-mark-wrap::after {
-    content: '';
-    position: absolute;
-    inset: 18%;
-    border-radius: 999px;
-    box-shadow:
-      inset 0 0 24px rgba(212, 175, 55, 0.08),
-      0 0 36px rgba(212, 175, 55, 0.18);
+    filter: blur(10px);
     pointer-events: none;
     z-index: 0;
   }
@@ -178,22 +176,23 @@ const commandCenterCss = `
     height: auto;
     display: block;
     object-fit: contain;
-    mix-blend-mode: lighten;
-    opacity: 0.94;
+    mix-blend-mode: screen;
+    opacity: 0.98;
     filter:
-      brightness(1.04)
-      drop-shadow(0 0 28px rgba(212, 175, 55, 0.42))
-      drop-shadow(0 0 48px rgba(212, 175, 55, 0.16));
+      brightness(1.1)
+      contrast(1.14)
+      drop-shadow(0 0 22px rgba(212, 175, 55, 0.36))
+      drop-shadow(0 0 36px rgba(245, 197, 92, 0.1));
     -webkit-mask-image: radial-gradient(
       circle at 50% 50%,
-      #000 54%,
-      rgba(0, 0, 0, 0.85) 66%,
+      #000 46%,
+      rgba(0, 0, 0, 0.55) 62%,
       transparent 78%
     );
     mask-image: radial-gradient(
       circle at 50% 50%,
-      #000 54%,
-      rgba(0, 0, 0, 0.85) 66%,
+      #000 46%,
+      rgba(0, 0, 0, 0.55) 62%,
       transparent 78%
     );
   }
@@ -222,10 +221,10 @@ const commandCenterCss = `
     border: none;
     border-radius: 0;
     background: transparent;
-    color: rgba(243, 218, 138, 0.58);
-    font-size: 9px;
-    font-weight: 550;
-    letter-spacing: 0.14em;
+    color: rgba(243, 218, 138, 0.46);
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
   }
 
@@ -242,14 +241,14 @@ const commandCenterCss = `
     font-size: clamp(28px, 3.2vw, 40px);
     line-height: 1.04;
     letter-spacing: -0.05em;
-    color: rgba(248, 250, 252, 0.98);
+    color: var(--ceo-text-primary);
   }
 
   .ceo-command-hero-title span {
     display: block;
     margin-top: 8px;
     font-size: clamp(14px, 1.5vw, 17px);
-    color: rgba(220, 210, 188, 0.74);
+    color: var(--ceo-text-secondary);
     letter-spacing: -0.02em;
     line-height: 1.45;
     font-weight: 500;
@@ -281,40 +280,84 @@ const commandCenterCss = `
 
   .ceo-gold-secondary-action.button {
     border: 1px solid rgba(212, 175, 55, 0.42);
-    color: rgba(248, 250, 252, 0.96);
-    background: rgba(6, 6, 8, 0.88);
+    color: var(--ceo-text-primary);
+    background: rgba(9, 8, 6, 0.88);
     box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.08);
   }
 
   .ceo-gold-secondary-action.button:hover:not(:disabled) {
     border-color: rgba(243, 218, 138, 0.58);
-    background: rgba(12, 12, 16, 0.96);
+    background: rgba(16, 14, 11, 0.96);
   }
 
   .ceo-command-card {
     border-radius: 15px;
-    border: 1px solid rgba(212, 175, 55, 0.12);
-    background: linear-gradient(180deg, rgba(5, 5, 6, 0.98), rgba(2, 2, 3, 0.99));
+    border: 1px solid var(--ceo-gold-border);
+    background: linear-gradient(180deg, var(--ceo-card-inner), var(--ceo-card-inner-alt));
     padding: 14px 14px 12px;
     min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    box-shadow: none;
+    box-shadow:
+      inset 0 1px 0 rgba(245, 197, 92, 0.05),
+      0 10px 28px rgba(0, 0, 0, 0.32);
     transition: border-color 160ms ease;
   }
 
   .ceo-command-card:hover {
-    border-color: rgba(212, 175, 55, 0.22);
+    border-color: var(--ceo-gold-border-strong);
+    box-shadow:
+      inset 0 1px 0 rgba(245, 197, 92, 0.07),
+      0 12px 32px rgba(0, 0, 0, 0.36);
+  }
+
+  .ceo-decision-queue-grid .ceo-command-card,
+  .ceo-intelligence-grid .ceo-command-card {
+    border: none;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+    border-radius: 0;
+    background: transparent;
     box-shadow: none;
+    padding: 12px 2px 14px;
+    gap: 6px;
+  }
+
+  .ceo-decision-queue-grid .ceo-command-card:last-child,
+  .ceo-intelligence-grid .ceo-command-card:last-child {
+    border-bottom: none;
+  }
+
+  .ceo-module-readiness-grid .ceo-command-card {
+    border: none;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.07);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 12px 2px 14px;
+    gap: 6px;
+  }
+
+  .ceo-module-readiness-grid .ceo-command-card:last-child {
+    border-bottom: none;
+  }
+
+  .ceo-briefing-grid .ceo-command-card {
+    border-color: var(--ceo-gold-border-strong);
+    background:
+      radial-gradient(circle at 0% 100%, rgba(212, 175, 55, 0.05), transparent 42%),
+      linear-gradient(180deg, var(--ceo-charcoal-panel), rgba(9, 8, 6, 0.94));
+    box-shadow:
+      inset 0 1px 0 rgba(245, 197, 92, 0.06),
+      0 8px 22px rgba(0, 0, 0, 0.28);
   }
 
   .ceo-command-card-kicker {
-    font-size: 10px;
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: rgba(243, 218, 138, 0.68);
-    font-weight: 650;
+    letter-spacing: 0.12em;
+    color: rgba(243, 218, 138, 0.48);
+    font-weight: 550;
     margin: 0;
   }
 
@@ -322,12 +365,12 @@ const commandCenterCss = `
     margin: 0;
     font-size: 24px;
     letter-spacing: -0.04em;
-    color: rgba(248, 250, 252, 0.98);
+    color: var(--ceo-text-primary);
   }
 
   .ceo-command-card p {
     margin: 0;
-    color: rgba(210, 200, 180, 0.72);
+    color: var(--ceo-text-secondary);
     line-height: 1.42;
     font-size: 12px;
   }
@@ -335,7 +378,7 @@ const commandCenterCss = `
   .ceo-command-card strong {
     font-size: 15px;
     letter-spacing: -0.02em;
-    color: rgba(248, 250, 252, 0.96);
+    color: rgba(248, 243, 231, 0.96);
   }
 
   .ceo-readiness-card {
@@ -384,7 +427,7 @@ const commandCenterCss = `
   .ceo-readiness-ring-center strong {
     font-size: 22px;
     letter-spacing: -0.04em;
-    color: rgba(248, 250, 252, 0.98);
+    color: var(--ceo-text-primary);
   }
 
   .ceo-readiness-ring-center span {
@@ -398,7 +441,7 @@ const commandCenterCss = `
   .ceo-readiness-meta {
     width: 100%;
     font-size: 11px;
-    color: rgba(210, 200, 180, 0.68);
+    color: var(--ceo-text-muted);
     line-height: 1.5;
     margin: 0;
     padding-top: 4px;
@@ -421,8 +464,8 @@ const commandCenterCss = `
     display: flex;
     gap: 10px;
     align-items: flex-start;
-    padding: 9px 0;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.07);
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.05);
   }
 
   .ceo-priority-item:last-child {
@@ -461,14 +504,14 @@ const commandCenterCss = `
 
   .ceo-priority-value {
     font-size: 11px;
-    color: rgba(210, 200, 180, 0.76);
+    color: var(--ceo-text-secondary);
     line-height: 1.42;
   }
 
   .ceo-priority-empty {
     margin: 0;
     font-size: 11px;
-    color: rgba(210, 200, 180, 0.68);
+    color: var(--ceo-text-muted);
     line-height: 1.42;
   }
 
@@ -500,7 +543,7 @@ const commandCenterCss = `
   .ceo-corporate-radar-copy {
     margin: 0;
     font-size: 12px;
-    color: rgba(210, 198, 170, 0.68);
+    color: var(--ceo-text-muted);
     line-height: 1.45;
   }
 
@@ -518,11 +561,13 @@ const commandCenterCss = `
     min-height: 300px;
     padding: 10px;
     border-radius: 18px;
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    border: 1px solid var(--ceo-gold-border-strong);
     background:
-      radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.12), transparent 64%),
-      linear-gradient(180deg, rgba(5, 5, 6, 0.72), rgba(2, 2, 3, 0.88));
-    box-shadow: inset 0 0 36px rgba(212, 175, 55, 0.06);
+      radial-gradient(circle at 50% 50%, var(--ceo-gold-glow), transparent 64%),
+      linear-gradient(180deg, var(--ceo-charcoal-panel), rgba(9, 8, 6, 0.88));
+    box-shadow:
+      inset 0 0 36px rgba(212, 175, 55, 0.06),
+      0 8px 24px rgba(0, 0, 0, 0.28);
   }
 
   .ceo-executive-command-page .ceo-radar-svg {
@@ -578,7 +623,7 @@ const commandCenterCss = `
     border-bottom: 1px solid rgba(212, 175, 55, 0.08);
     border-radius: 0;
     background: transparent;
-    color: rgba(210, 200, 180, 0.68);
+    color: var(--ceo-text-muted);
     font-size: 10px;
     line-height: 1.45;
   }
@@ -612,7 +657,7 @@ const commandCenterCss = `
   }
 
   .ceo-executive-command-page .ceo-radar-legend-item.is-missing .ceo-radar-legend-values strong {
-    color: rgba(190, 180, 160, 0.72);
+    color: var(--ceo-text-muted);
   }
 
   .ceo-radar-legend-label {
@@ -620,7 +665,7 @@ const commandCenterCss = `
     align-items: center;
     gap: 8px;
     font-size: 11px;
-    color: rgba(230, 222, 204, 0.86);
+    color: rgba(248, 243, 231, 0.82);
     min-width: 0;
   }
 
@@ -648,7 +693,7 @@ const commandCenterCss = `
   }
 
   .ceo-radar-legend-values small {
-    color: rgba(190, 180, 160, 0.62);
+    color: var(--ceo-text-muted);
     font-size: 9px;
     text-transform: capitalize;
     font-weight: 500;
@@ -659,8 +704,21 @@ const commandCenterCss = `
     padding-top: 8px;
     border-top: 1px solid rgba(212, 175, 55, 0.1);
     font-size: 11px;
-    color: rgba(203, 213, 225, 0.68);
+    color: var(--ceo-text-secondary);
     line-height: 1.45;
+  }
+
+  .ceo-executive-command-page .ceo-radar-point-label {
+    font-size: 7.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    fill: rgba(248, 243, 231, 0.78);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .ceo-executive-command-page .ceo-radar-point-label.is-missing {
+    fill: rgba(248, 243, 231, 0.42);
   }
 
   .ceo-executive-command-page .executive-readiness-card {
@@ -681,67 +739,72 @@ const commandCenterCss = `
   }
 
   .ceo-workflow-step {
-    border-radius: 14px;
-    border: 1px solid rgba(212, 175, 55, 0.12);
+    border: none;
+    border-left: 1px solid rgba(212, 175, 55, 0.14);
+    border-radius: 0;
     background: transparent;
-    padding: 12px 12px 10px;
+    padding: 10px 10px 10px 14px;
     min-width: 0;
     box-shadow: none;
   }
 
-  .ceo-workflow-step .ceo-command-card-kicker {
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    color: rgba(243, 218, 138, 0.52);
-    font-weight: 600;
+  .ceo-workflow-step .ceo-step-eyebrow {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(243, 218, 138, 0.42);
+    font-weight: 500;
+    margin: 0;
   }
 
   .ceo-workflow-step strong {
     display: block;
     margin-top: 2px;
     font-size: 13px;
-    color: rgba(248, 250, 252, 0.96);
+    color: var(--ceo-text-primary);
   }
 
   .ceo-workflow-step p {
     margin: 6px 0 0;
     font-size: 11px;
-    color: rgba(210, 198, 170, 0.64);
+    color: var(--ceo-text-muted);
     line-height: 1.42;
   }
 
   .ceo-decision-card-priority {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(243, 218, 138, 0.52);
+    color: rgba(243, 218, 138, 0.44);
+    margin: 0;
   }
 
   .ceo-decision-card-priority.is-high {
-    color: rgba(252, 211, 77, 0.72);
+    color: rgba(252, 211, 77, 0.62);
   }
 
   .ceo-decision-card-priority.is-medium {
-    color: rgba(243, 218, 138, 0.58);
+    color: rgba(243, 218, 138, 0.5);
   }
 
   .ceo-decision-card-priority.is-watch {
-    color: rgba(210, 200, 180, 0.52);
+    color: var(--ceo-text-muted);
   }
 
   .ceo-decision-card-status {
     margin-top: auto;
-    padding-top: 8px;
+    padding-top: 6px;
     display: block;
     width: auto;
     border: none;
+    border-top: 1px solid rgba(212, 175, 55, 0.06);
     border-radius: 0;
     background: transparent;
-    color: rgba(210, 200, 180, 0.62);
+    color: var(--ceo-text-muted);
     font-size: 10px;
-    font-weight: 550;
-    letter-spacing: 0.03em;
+    font-weight: 500;
+    letter-spacing: 0.02em;
     text-transform: none;
   }
 
@@ -753,7 +816,7 @@ const commandCenterCss = `
     font-size: 9px;
     letter-spacing: 0.06em;
     text-transform: none;
-    color: rgba(210, 200, 180, 0.58);
+    color: var(--ceo-text-muted);
     font-weight: 550;
   }
 
@@ -773,13 +836,13 @@ const commandCenterCss = `
   .ceo-module-score-row strong {
     font-size: 20px;
     letter-spacing: -0.03em;
-    color: rgba(248, 250, 252, 0.98);
+    color: var(--ceo-text-primary);
   }
 
   .ceo-module-progress {
     height: 6px;
     border-radius: 999px;
-    background: rgba(212, 175, 55, 0.1);
+    background: rgba(212, 175, 55, 0.08);
     overflow: hidden;
     margin-top: 2px;
   }
@@ -797,7 +860,7 @@ const commandCenterCss = `
     background: transparent;
     padding: 0 0 10px;
     font-size: 11px;
-    color: rgba(210, 200, 180, 0.66);
+    color: var(--ceo-text-muted);
     line-height: 1.45;
   }
 
@@ -879,11 +942,23 @@ function progressWidth(score) {
 function formatPostureLabel(posture) {
   const safe = String(posture || '').trim().toLowerCase();
 
-  if (!safe || safe === 'insufficient_data' || safe === 'not_available') {
+  if (!safe || safe === 'not_available') {
     return 'Pending inputs';
   }
 
-  return safe.replace(/_/g, ' ');
+  if (safe === 'insufficient_data') {
+    return 'Insufficient data';
+  }
+
+  if (safe === 'executive_attention' || safe === 'executive attention required') {
+    return 'Executive review needed';
+  }
+
+  return safe
+    .split(/[\s_]+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 function buildUnifiedReadinessNote({
@@ -1295,7 +1370,7 @@ export function ExecutiveCommandCenterView({
                 <div className="ceo-command-hero-copy">
                   <div className="ceo-command-badge-row">
                     <span className="ceo-command-badge">Executive Command Center</span>
-                    <span className="ceo-command-badge">Decision support</span>
+                    <span className="ceo-command-badge">Decision Support</span>
                     <span className="ceo-command-badge">Human review required</span>
                   </div>
 
@@ -1452,27 +1527,27 @@ export function ExecutiveCommandCenterView({
         >
           <div className="ceo-workflow-grid">
             <article className="ceo-workflow-step">
-              <div className="ceo-command-card-kicker">Step 1</div>
+              <p className="ceo-step-eyebrow">Step 1</p>
               <strong>Create Draft</strong>
               <p>Generate board review draft from current executive signals.</p>
             </article>
             <article className="ceo-workflow-step">
-              <div className="ceo-command-card-kicker">Step 2</div>
+              <p className="ceo-step-eyebrow">Step 2</p>
               <strong>Review Signals</strong>
               <p>Validate compliance, risk, funding and M&A posture.</p>
             </article>
             <article className="ceo-workflow-step">
-              <div className="ceo-command-card-kicker">Step 3</div>
+              <p className="ceo-step-eyebrow">Step 3</p>
               <strong>Executive Data Room</strong>
               <p>Confirm supporting data and unresolved dependencies.</p>
             </article>
             <article className="ceo-workflow-step">
-              <div className="ceo-command-card-kicker">Step 4</div>
+              <p className="ceo-step-eyebrow">Step 4</p>
               <strong>Board Review Draft</strong>
               <p>Prepare review context for executive discussion.</p>
             </article>
             <article className="ceo-workflow-step">
-              <div className="ceo-command-card-kicker">Step 5</div>
+              <p className="ceo-step-eyebrow">Step 5</p>
               <strong>Human Review</strong>
               <p>Share only after explicit user approval and review.</p>
             </article>

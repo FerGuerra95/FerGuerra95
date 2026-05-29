@@ -284,3 +284,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 ### C.24.5A-lion-blend-fix demo safety note
 
 - CSS-only blend polish on approved lion mark; no metrics, scores, or backend change; safe for demo recording.
+
+### C.24.5A-final-close demo safety note
+
+- Final visual close only; scoring/truthfulness unchanged; radar labels are display-only from existing axis data.

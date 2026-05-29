@@ -331,3 +331,22 @@
 | `/governance/dashboard` | PASS | No regression |
 
 **Validation:** build + truthfulness + fundingDisplayFormat tests PASS.
+
+---
+
+## 23. C.24.5A-final-close — Executive Overview Final Visual Close
+
+**Baseline:** `968eb34`.
+
+**Changes:** Lion black halo removed; labels de-containerized; black premium finish; radar point branch names.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Final close applied |
+| `/ceo/overview` | PASS | Lion clean; radar labels; black/gold |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Validation:** build + truthfulness + fundingDisplayFormat tests PASS.

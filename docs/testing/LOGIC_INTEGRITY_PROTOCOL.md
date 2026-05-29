@@ -2543,3 +2543,15 @@ Validation: build + truthfulness tests PASS.
 **Fix:** `mix-blend-mode: lighten`, radial mask, gold glow, size 196→268px desktop, cache-bust `?v=20260529-blend`.
 
 Validation: build + truthfulness + fundingDisplayFormat tests PASS.
+
+---
+
+## C.24.5A-final-close — Executive Overview Final Visual Close
+
+**Status:** COMPLETED (visual-only; no logic/scoring change).
+
+**Baseline:** `968eb34`.
+
+**Changes:** Lion halo/ring removed; text de-containerization; black premium charcoal finish; radar branch labels on chart points.
+
+Validation: build + truthfulness + fundingDisplayFormat tests PASS.

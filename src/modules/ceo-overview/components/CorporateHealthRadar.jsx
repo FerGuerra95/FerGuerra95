@@ -71,12 +71,37 @@ function formatAxisStatus(axis) {
   return 'DSS signal';
 }
 
+function radarLabelAnchor(cos) {
+  if (cos > 0.28) {
+    return 'start';
+  }
+
+  if (cos < -0.28) {
+    return 'end';
+  }
+
+  return 'middle';
+}
+
+function radarLabelPosition(angle, cx, cy, radius) {
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+
+  return {
+    x: cx + radius * cos,
+    y: cy + radius * sin,
+    anchor: radarLabelAnchor(cos),
+    dy: sin > 0.22 ? '0.35em' : sin < -0.22 ? '-0.15em' : '0.32em'
+  };
+}
+
 export function CorporateHealthRadar({ axes = [], className = '' }) {
   const safeAxes = Array.isArray(axes) ? axes.filter((axis) => axis && typeof axis === 'object') : [];
   const count = safeAxes.length || 1;
-  const cx = 120;
-  const cy = 120;
-  const rMax = 96;
+  const cx = 130;
+  const cy = 130;
+  const rMax = 92;
+  const labelRadius = rMax + 22;
   const tau = Math.PI * 2;
 
   const geometry = useMemo(
@@ -86,6 +111,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
         const score = axisScore(axis);
         const calculable = isAxisCalculable(axis);
         const radiusRatio = calculable && score !== null ? score / 100 : null;
+        const label = radarLabelPosition(angle, cx, cy, labelRadius);
 
         return {
           axis,
@@ -99,11 +125,13 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
             radiusRatio === null ? null : cx + rMax * radiusRatio * Math.cos(angle),
           pointY:
             radiusRatio === null ? null : cy + rMax * radiusRatio * Math.sin(angle),
-          labelX: cx + (rMax + 16) * Math.cos(angle),
-          labelY: cy + (rMax + 16) * Math.sin(angle)
+          labelX: label.x,
+          labelY: label.y,
+          labelAnchor: label.anchor,
+          labelDy: label.dy
         };
       }),
-    [safeAxes, count, tau]
+    [safeAxes, count, tau, cx, cy, labelRadius]
   );
 
   const polygonPoints = geometry
@@ -122,7 +150,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
       <div className="ceo-radar-visual-wrap">
         <svg
           className="ceo-radar-svg"
-          viewBox="0 0 240 240"
+          viewBox="0 0 260 260"
           role="img"
           aria-label="Corporate health radar"
         >
@@ -190,7 +218,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
                 r="5"
                 className="executive-radar-node"
                 fill={entry.tone}
-                stroke="rgba(248, 250, 252, 0.85)"
+                stroke="rgba(248, 243, 231, 0.75)"
                 strokeWidth="1.2"
               />
             ) : (
@@ -207,6 +235,19 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
               />
             )
           )}
+
+          {geometry.map((entry) => (
+            <text
+              key={`${entry.axis.key}-point-label`}
+              x={entry.labelX}
+              y={entry.labelY}
+              dy={entry.labelDy}
+              className={`ceo-radar-point-label ${entry.calculable ? '' : 'is-missing'}`.trim()}
+              textAnchor={entry.labelAnchor}
+            >
+              {entry.axis.label}
+            </text>
+          ))}
         </svg>
       </div>
 

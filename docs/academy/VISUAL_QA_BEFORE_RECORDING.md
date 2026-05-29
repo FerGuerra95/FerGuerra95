@@ -595,3 +595,12 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Gold glow present; no sticker/caja cuadrada effect.
 - Does not overlap CTA, Executive Readiness Index, or Top Priorities.
 - Corporate Health Radar unchanged in Section 04.
+
+### C.24.5A-final-close checklist
+
+- Lion uses `/brand/ceos-lion-mark.png?v=20260529-final`; no black outer ring/halo.
+- Decision/intelligence/module rows: hairline separators, no nested pill bars.
+- Workflow steps: left gold accent, no input-box look.
+- Radar chart: branch name on each point; legend retained.
+- Black premium charcoal finish; no navy SaaS cards in command center.
+- N/A / Insufficient data / Pending inputs preserved in UI copy.

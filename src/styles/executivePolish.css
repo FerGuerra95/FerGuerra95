@@ -124,7 +124,7 @@ h4 {
   [class*="command-item"],
   [class*="signal-card"],
   [class*="state-card"]
-):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card) {
+):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-corporate-radar-card):not(.ceo-workflow-step):not(.ceo-command-section-shell):not(.ceo-command-hero) {
   border: 1px solid var(--ceos-polish-line) !important;
   background: var(--ceos-polish-surface-soft) !important;
   border-radius: var(--ceos-polish-radius) !important;
@@ -1092,5 +1092,65 @@ textarea,
 .ceo-executive-command-page .ceo-gold-secondary-action.button:hover:not(:disabled),
 .ceo-executive-command-page .ceo-gold-secondary-action.button.secondary:hover:not(:disabled) {
   border-color: rgba(243, 218, 138, 0.58) !important;
-  background: rgba(12, 12, 16, 0.96) !important;
+  background: rgba(16, 14, 11, 0.96) !important;
+}
+
+/* C.24.5A-black-premium — Executive command center charcoal finish (CEO scoped only) */
+.page .ceo-executive-command-page :is(
+  .ceo-command-section-shell,
+  .ceo-command-card,
+  .ceo-priorities-card,
+  .ceo-readiness-card,
+  .ceo-corporate-radar-card,
+  .ceo-workflow-step,
+  .ceo-radar-visual-wrap
+) {
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-color: rgba(212, 175, 55, 0.18) !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-section-shell {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.08), transparent 42%),
+    linear-gradient(180deg, rgba(12, 11, 9, 0.94), rgba(7, 7, 5, 0.96)) !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-card,
+.page .ceo-executive-command-page .ceo-workflow-step {
+  background: linear-gradient(180deg, rgba(15, 15, 14, 0.88), rgba(18, 17, 15, 0.86)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(245, 197, 92, 0.05),
+    0 10px 28px rgba(0, 0, 0, 0.32) !important;
+}
+
+.page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card,
+.page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card,
+.page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.page .ceo-executive-command-page .ceo-workflow-step {
+  background: transparent !important;
+  border: none !important;
+  border-left: 1px solid rgba(212, 175, 55, 0.14) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card {
+  background:
+    radial-gradient(circle at 0% 100%, rgba(212, 175, 55, 0.05), transparent 42%),
+    linear-gradient(180deg, rgba(16, 14, 11, 0.92), rgba(9, 8, 6, 0.94)) !important;
+}
+
+.page .ceo-executive-command-page .ceo-radar-visual-wrap {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(245, 197, 92, 0.1), transparent 64%),
+    linear-gradient(180deg, rgba(16, 14, 11, 0.92), rgba(9, 8, 6, 0.88)) !important;
 }

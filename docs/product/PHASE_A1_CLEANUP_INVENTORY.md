@@ -8289,3 +8289,21 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **No-regression:** `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` — layout intact.
 
 **Validation:** build + truthfulness + fundingDisplayFormat tests PASS.
+
+---
+
+## C.24.5A-final-close — Executive Overview Final Visual Close
+
+**Status:** COMPLETED.
+
+**Baseline:** `968eb34`.
+
+**Lion cleanup:** Removed `::after` ring; softer gold-only glow; `mix-blend-mode: screen` + aggressive radial mask; cache-bust `?v=20260529-final`.
+
+**Text integration:** Hero chips lighter; decision/intelligence/module rows de-containerized (hairline separators); workflow steps as left-accent list; posture copy polish (`Insufficient data`, `Executive review needed`).
+
+**Black premium:** Charcoal section shells preserved; navy card overrides excluded from global polish.
+
+**Radar labels:** Branch names on each radar point via SVG `<text class="ceo-radar-point-label">`; legend retained.
+
+**Validation:** build + truthfulness + fundingDisplayFormat tests PASS.
