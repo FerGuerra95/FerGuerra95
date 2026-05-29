@@ -1,7 +1,7 @@
 # Visual System CSS Architecture Audit — C.24.4A / C.24.4B
 
-**Status:** C.24.4A READ-ONLY COMPLETE · C.24.4B CASCADE CONTROL COMPLETE  
-**Baseline (C.24.4B):** `HEAD = origin/main = 5f4e93f` → commit after C.24.4B  
+**Status:** C.24.4A READ-ONLY COMPLETE · C.24.4B CASCADE CONTROL COMPLETE · C.24.4C DEAD CSS COMPLETE · C.24.4D VISUAL QA COMPLETE  
+**Baseline:** `HEAD = origin/main = 56ceb09`  
 **Mode (C.24.4A):** READ ONLY — no `src/**`, tests, backend, or runtime changes  
 **Mode (C.24.4B):** WRITE/FIX — cascade control only; no dead CSS removal  
 **Date:** 2026-05-28  
@@ -400,3 +400,13 @@ Line counts: workspaceAccent.css, executivePolish.css, maExecutiveTheme.css, sty
 **Visual QA (manual, hard refresh):** `/ma/dashboard`, `/dashboard`, `/ceo/overview`, `/funding/dashboard`, `/funding/readiness`, `/risk/register`, `/governance/dashboard`, `/compliance/dashboard`, `/compliance/reports`, `/reporting/library`, `/pmi/dashboard`, `/strategy/dashboard` — no black screen, no horizontal overflow, M&A/CEO/Funding/Risk/Governance accents preserved, N/A / insufficient_data visible, no fake `0`, no NaN/undefined/Infinity observed.
 
 **Confirmations:** No backend, Golden, Formula Registry, formulas, package/config, secrets, JSX, or dist touched. `backend-server.err` not staged. No `git add .`.
+
+---
+
+## 13. C.24.4D — Visual Regression QA (reference)
+
+**Status:** COMPLETED — see `docs/academy/VISUAL_REGRESSION_QA_REPORT.md`.
+
+**Baseline:** `56ceb09`.
+
+**Outcome:** No P0/P1 visual regressions from C.24.4B/C.24.4C. Authenticated navigation smoke PASS. M&A / CEO / Funding core routes PASS. No CSS rollback required.

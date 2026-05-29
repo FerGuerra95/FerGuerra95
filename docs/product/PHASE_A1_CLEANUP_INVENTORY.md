@@ -7775,6 +7775,18 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 **Next:** C.24.4D — Visual Regression QA after CSS consolidation.
 
+### C.24.4D - Visual Regression QA after CSS consolidation (QA)
+
+**Status:** COMPLETED.
+
+**Baseline:** `56ceb09`.
+
+**Deliverable:** `docs/academy/VISUAL_REGRESSION_QA_REPORT.md`
+
+**Result:** No P0/P1 visual regressions. Navigation stability smoke PASS. M&A / CEO / Funding routes PASS (authenticated E2E). No code fixes required.
+
+**Decision:** Ready for focused product copy cleanup and recording rehearsal (operator production spot-check recommended).
+
 ---
 
 ## C.14.0B - Update AI Agent Prompt Output Discipline

@@ -460,6 +460,16 @@ Expected:
 - Funding readiness score integer `/100`; missing => `N/A`.
 - No horizontal overflow; no clipped buttons; N/A and insufficient_data visible.
 
+### C.24.4D visual regression QA (post CSS consolidation)
+
+**Report:** `docs/academy/VISUAL_REGRESSION_QA_REPORT.md`
+
+**Baseline:** `56ceb09`
+
+**Result:** No P0/P1 visual regressions from C.24.4B/C.24.4C. Navigation stability smoke PASS. Core routes M&A / CEO / Funding PASS under authenticated E2E.
+
+**Before recording:** operator hard refresh on production after deploy includes `56ceb09`.
+
 ### C.24.4C dead CSS cleanup checklist
 
 **Status:** COMPLETED (closure).

@@ -2106,6 +2106,13 @@ Validation:
 - Do not remove `ceo-branch-surface` or active `-glass-block` module classes without JSX migration plan.
 - No JSX changes in C.24.4C closure; no formula/backend/Golden changes.
 
+### C.24.4D - Visual regression QA guard
+
+- After C.24.4B/C.24.4C, run authenticated visual QA (not login-only).
+- Use `navigation-stability.spec.js` + route matrix; document in `VISUAL_REGRESSION_QA_REPORT.md`.
+- Fix only P0/P1 visual issues; no additional CSS cleanup in same phase.
+- Production QA requires operator session; do not bypass auth.
+
 ---
 
 ## C.24.3e - Cross-Branch Visual Coherence & Action Surface Integration Fix
