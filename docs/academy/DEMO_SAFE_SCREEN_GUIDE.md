@@ -280,3 +280,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 ### C.24.5A-logo-fix-hard demo safety note
 
 - Hard cache-bust on lion mark URL; asset-only change, no data impact.
+
+### C.24.5A-lion-blend-fix demo safety note
+
+- CSS-only blend polish on approved lion mark; no metrics, scores, or backend change; safe for demo recording.

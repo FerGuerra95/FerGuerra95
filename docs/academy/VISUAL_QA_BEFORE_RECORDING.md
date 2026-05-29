@@ -586,3 +586,12 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 
 - Hero img uses `/brand/ceos-lion-mark.png?v=20260529-lion` (cache-busted).
 - No wordmark PNG in hero; `.ceo-lion-mark` class on approved emblem only.
+
+### C.24.5A-lion-blend-fix checklist
+
+- Hero lion uses `/brand/ceos-lion-mark.png?v=20260529-blend` (cache-busted).
+- No visible black rectangular box around lion; mark blends into black/gold hero.
+- Lion ~25–40% larger than pre-blend; center-right in hero main block.
+- Gold glow present; no sticker/caja cuadrada effect.
+- Does not overlap CTA, Executive Readiness Index, or Top Priorities.
+- Corporate Health Radar unchanged in Section 04.

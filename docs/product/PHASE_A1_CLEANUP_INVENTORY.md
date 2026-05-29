@@ -8271,3 +8271,21 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Fix:** Hard hero bind to `/brand/ceos-lion-mark.png?v=20260529-lion`; `.ceo-lion-mark` class; cache-buster for stale wordmark PNG.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-lion-blend-fix — Approved Lion Mark Visual Integration Polish
+
+**Status:** COMPLETED.
+
+**Baseline:** `bdb3bbf`.
+
+**Problem:** Hero lion rendered as visible square black PNG box; pasted sticker look; undersized; hero imbalance.
+
+**Fix:** Scoped CSS in `ExecutiveCommandCenterView.jsx` — `mix-blend-mode: lighten` + radial mask to dissolve black rectangle; ~37% size increase (196px → 268px desktop); gold glow via `::before`/`::after` and layered drop-shadow; cache-bust `?v=20260529-blend`; grid column widened for center-right sovereign mark.
+
+**Visual QA:** `/dashboard`, `/ceo/overview` — no black box, premium integrated mark; ERI, Top Priorities, radar, CTA unchanged.
+
+**No-regression:** `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` — layout intact.
+
+**Validation:** build + truthfulness + fundingDisplayFormat tests PASS.

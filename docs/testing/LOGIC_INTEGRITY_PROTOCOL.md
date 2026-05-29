@@ -2529,3 +2529,17 @@ Validation: build + truthfulness tests PASS.
 **Asset:** `public/brand/ceos-lion-mark.png` (SHA256 verified lion emblem, not wordmark).
 
 Validation: build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-lion-blend-fix — Approved Lion Mark Visual Integration Polish
+
+**Status:** COMPLETED (CSS blend polish only; no logic change).
+
+**Baseline:** `bdb3bbf`.
+
+**Problem:** Square black PNG background visible in hero; sticker-like integration.
+
+**Fix:** `mix-blend-mode: lighten`, radial mask, gold glow, size 196→268px desktop, cache-bust `?v=20260529-blend`.
+
+Validation: build + truthfulness + fundingDisplayFormat tests PASS.

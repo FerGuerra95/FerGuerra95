@@ -310,3 +310,24 @@
 **Fix:** Hard hero bind + cache-bust; `.ceo-lion-mark` class; verified lion PNG at public path.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## 22. C.24.5A-lion-blend-fix — Approved Lion Mark Visual Integration Polish
+
+**Baseline:** `bdb3bbf`.
+
+**Problem:** Square black PNG box visible; lion too small; pasted sticker appearance.
+
+**Fix:** CSS blend (`mix-blend-mode: lighten`, radial mask, gold glow); size increase to 268px desktop; cache-bust `?v=20260529-blend`.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Lion blended; no black box; hero balanced |
+| `/ceo/overview` | PASS | Same hero; sovereign mark integrated |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Validation:** build + truthfulness + fundingDisplayFormat tests PASS.

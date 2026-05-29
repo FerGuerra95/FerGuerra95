@@ -9,7 +9,7 @@ import {
   normalizeScoreOrNull
 } from '../utils/ceoOverviewTruthfulness.js';
 
-const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png?v=20260529-lion';
+const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png?v=20260529-blend';
 
 const commandCenterCss = `
   .ceo-executive-command-page {
@@ -111,7 +111,7 @@ const commandCenterCss = `
   .ceo-command-hero-main {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(130px, 220px);
+    grid-template-columns: minmax(0, 1fr) minmax(168px, 290px);
     gap: 14px;
     align-items: center;
     min-width: 0;
@@ -133,32 +133,69 @@ const commandCenterCss = `
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 210px;
+    max-width: 290px;
     margin-left: auto;
     pointer-events: none;
     z-index: 0;
     flex-shrink: 0;
+    background: transparent;
+    overflow: visible;
   }
 
   .ceo-lion-mark-wrap::before {
     content: '';
     position: absolute;
-    inset: -4%;
+    inset: 6%;
     border-radius: 999px;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.16) 0%, transparent 72%);
+    background: radial-gradient(
+      circle at 50% 48%,
+      rgba(212, 175, 55, 0.28) 0%,
+      rgba(212, 175, 55, 0.08) 38%,
+      transparent 74%
+    );
+    filter: blur(6px);
     pointer-events: none;
+    z-index: 0;
+  }
+
+  .ceo-lion-mark-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 18%;
+    border-radius: 999px;
+    box-shadow:
+      inset 0 0 24px rgba(212, 175, 55, 0.08),
+      0 0 36px rgba(212, 175, 55, 0.18);
+    pointer-events: none;
+    z-index: 0;
   }
 
   .ceo-executive-command-page .ceo-lion-mark {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 196px;
+    max-width: 268px;
     height: auto;
     display: block;
     object-fit: contain;
-    opacity: 1;
-    filter: drop-shadow(0 0 24px rgba(212, 175, 55, 0.34));
+    mix-blend-mode: lighten;
+    opacity: 0.94;
+    filter:
+      brightness(1.04)
+      drop-shadow(0 0 28px rgba(212, 175, 55, 0.42))
+      drop-shadow(0 0 48px rgba(212, 175, 55, 0.16));
+    -webkit-mask-image: radial-gradient(
+      circle at 50% 50%,
+      #000 54%,
+      rgba(0, 0, 0, 0.85) 66%,
+      transparent 78%
+    );
+    mask-image: radial-gradient(
+      circle at 50% 50%,
+      #000 54%,
+      rgba(0, 0, 0, 0.85) 66%,
+      transparent 78%
+    );
   }
 
   .ceo-command-status-grid {
@@ -770,11 +807,15 @@ const commandCenterCss = `
     }
 
     .ceo-command-hero-main {
-      grid-template-columns: minmax(0, 1fr) minmax(110px, 180px);
+      grid-template-columns: minmax(0, 1fr) minmax(140px, 220px);
+    }
+
+    .ceo-lion-mark-wrap {
+      max-width: 220px;
     }
 
     .ceo-lion-mark-wrap .ceo-lion-mark {
-      max-width: 160px;
+      max-width: 200px;
     }
 
     .ceo-decision-queue-grid,
@@ -1290,8 +1331,8 @@ export function ExecutiveCommandCenterView({
                     className="ceo-lion-mark"
                     src={CEO_LION_MARK_SRC}
                     alt=""
-                    width={196}
-                    height={196}
+                    width={268}
+                    height={268}
                     decoding="async"
                   />
                 </div>
