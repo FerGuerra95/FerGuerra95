@@ -520,3 +520,12 @@ Expected:
 ### C.24.5A-fix composition checklist
 
 Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-center sections (no legacy radar stack, no 9-card module wall, no old executive-command-layer blocks).
+
+### C.24.5A-polish visual checklist
+
+- Primary CTA **Generate Board Review Draft** is gold (not cyan/green).
+- Each section sits inside a premium gold-bordered shell (`.ceo-command-section-shell`).
+- Hero shows black/gold treatment with visible lion/sovereign watermark.
+- Cards are charcoal/black with subtle gold borders (not blue SaaS panels).
+- Decision readiness uses circular ring indicator; missing score shows N/A.
+- No horizontal overflow; no clipped text; N/A preserved.

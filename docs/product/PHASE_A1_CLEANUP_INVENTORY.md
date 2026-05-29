@@ -8145,3 +8145,17 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Structure:** Executive Status → Decision Queue → Cross-Module Intelligence → Module Readiness → Board Review Workflow → Executive Briefing Packs.
 
 **Validation:** `npm run build` PASS; CEO + funding truthfulness unit tests PASS.
+
+---
+
+## C.24.5A-polish — Executive Overviewer Golden Command Center Polish
+
+**Status:** COMPLETED.
+
+**Baseline:** `fa06cf5`.
+
+**Motivo:** Estructura correcta tras C.24.5A-fix, pero acabado visual aún genérico (CTA cyan por `executivePolish.css`, cards azules, secciones sin marco premium).
+
+**Fix:** Gold CTA overrides scoped; section shells dorados; hero black/gold con watermark más visible; cards charcoal/gold; readiness ring circular; badges/chips dorados; confidence N/A cuando falta dato.
+
+**Validation:** `npm run build` PASS; CEO + funding truthfulness unit tests PASS.

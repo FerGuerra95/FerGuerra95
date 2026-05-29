@@ -235,3 +235,9 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 - CEO page composition is now the 6-section command center only (no legacy technical dashboard blocks in main flow).
 - Briefing/workflow language remains draft + human review only.
+
+### C.24.5A-polish demo safety note
+
+- Visual polish only: gold CTA, section shells, hero watermark ? no data or formula changes.
+- Readiness ring shows real score or N/A; confidence shows N/A when missing (no fake 0).
+- Decorative lion watermark from existing in-repo brand asset only.

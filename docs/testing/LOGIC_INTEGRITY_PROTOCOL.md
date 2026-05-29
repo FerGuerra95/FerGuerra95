@@ -2397,3 +2397,23 @@ Validation:
 **Fix:** New `ExecutiveCommandCenterView` with compact 6-section grid layout; `CEOOverviewPage` now delegates rendering and no longer mounts legacy radar/module-card stacks.
 
 Truthfulness preserved: DSS + human review, board review draft language, N/A/insufficient_data, no invented scores/timestamps.
+
+---
+
+## C.24.5A-polish — Executive Overviewer Golden Command Center Polish
+
+**Status:** COMPLETED / visual polish (CEO-only).
+
+**Baseline:** `fa06cf5`.
+
+**Motivo:** Structure correct after C.24.5A-fix but visual finish still generic — cyan primary CTA from global `executivePolish.css`, blue-tinted cards, weak section framing.
+
+**Fix:** Scoped gold CTA overrides in `executivePolish.css` + `ExecutiveCommandCenterView`; premium section shells; black/gold hero with stronger lion watermark; charcoal/gold cards; SVG readiness ring; gold badges/chips; confidence shows N/A when missing.
+
+Truthfulness preserved: no formula/data changes; no fake 0 for confidence.
+
+Validation:
+
+- `npm run build` PASS.
+- `npx vitest run tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` PASS.
+- `npx vitest run tests/unit/funding/fundingDisplayFormat.test.js` PASS.

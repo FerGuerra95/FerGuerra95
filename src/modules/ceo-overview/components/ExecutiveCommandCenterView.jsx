@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FileText } from 'lucide-react';
-import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import lionMark from '../../../assets/brand/ceos-os-emblem-lion.webp';
 import {
@@ -14,74 +13,121 @@ const commandCenterCss = `
     --ceo-gold: #d4af37;
     --ceo-gold-soft: #f3da8a;
     --ceo-gold-deep: #8a6a16;
+    --ceo-black: #060608;
+    --ceo-charcoal: #0c0c10;
+    --ceo-line: rgba(212, 175, 55, 0.22);
     width: min(1480px, 100%);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 28px;
-    color: #e2e8f0;
+    gap: 20px;
+    color: #e8edf5;
   }
 
   .ceo-command-section {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    min-width: 0;
+  }
+
+  .ceo-command-section-shell {
+    border-radius: 22px;
+    border: 1px solid rgba(212, 175, 55, 0.24);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.06), transparent 42%),
+      linear-gradient(180deg, rgba(8, 8, 12, 0.98), rgba(4, 4, 6, 0.99));
+    box-shadow:
+      0 18px 48px rgba(0, 0, 0, 0.42),
+      inset 0 1px 0 rgba(243, 218, 138, 0.06);
+    padding: 18px 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
 
   .ceo-command-section-header {
     display: flex;
     align-items: flex-start;
     gap: 14px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
   }
 
   .ceo-command-number {
     flex: 0 0 auto;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 999px;
     display: grid;
     place-items: center;
     font-size: 12px;
     font-weight: 850;
+    letter-spacing: 0.04em;
     color: #111827;
-    border: 1px solid rgba(243, 218, 138, 0.55);
-    background: linear-gradient(135deg, #f8e6a8, #d4af37);
-    box-shadow: 0 0 18px rgba(212, 175, 55, 0.22);
+    border: 1px solid rgba(243, 218, 138, 0.72);
+    background: linear-gradient(145deg, #fcecb8, #d4af37 55%, #9a7518);
+    box-shadow:
+      0 0 0 1px rgba(212, 175, 55, 0.18),
+      0 0 22px rgba(212, 175, 55, 0.28);
   }
 
   .ceo-command-section-title {
     margin: 0;
-    font-size: 22px;
+    font-size: 20px;
     letter-spacing: -0.03em;
+    color: rgba(248, 250, 252, 0.98);
   }
 
   .ceo-command-section-copy {
-    margin: 6px 0 0;
-    color: rgba(203, 213, 225, 0.78);
-    line-height: 1.55;
-    font-size: 14px;
+    margin: 4px 0 0;
+    color: rgba(203, 213, 225, 0.72);
+    line-height: 1.5;
+    font-size: 13px;
+  }
+
+  .ceo-command-section-body {
+    min-width: 0;
   }
 
   .ceo-command-hero {
     position: relative;
     overflow: hidden;
-    border-radius: 24px;
-    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: 18px;
+    border: 1px solid rgba(212, 175, 55, 0.32);
     background:
-      radial-gradient(circle at 12% 0%, rgba(212, 175, 55, 0.2), transparent 38%),
-      linear-gradient(135deg, rgba(6, 10, 24, 0.99), rgba(17, 24, 39, 0.98));
-    box-shadow: 0 28px 72px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(243, 218, 138, 0.1);
-    padding: 24px;
+      radial-gradient(circle at 78% 18%, rgba(212, 175, 55, 0.22), transparent 46%),
+      radial-gradient(circle at 12% 0%, rgba(212, 175, 55, 0.14), transparent 38%),
+      linear-gradient(135deg, rgba(4, 4, 6, 0.99), rgba(10, 10, 14, 0.98));
+    box-shadow:
+      inset 0 1px 0 rgba(243, 218, 138, 0.12),
+      0 12px 36px rgba(0, 0, 0, 0.35);
+    padding: 20px;
+  }
+
+  .ceo-command-hero::before {
+    content: '';
+    position: absolute;
+    right: 6%;
+    top: 50%;
+    width: min(38vw, 320px);
+    height: min(38vw, 320px);
+    transform: translateY(-50%);
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.04) 52%, transparent 72%);
+    pointer-events: none;
+    z-index: 0;
   }
 
   .ceo-sovereign-watermark {
     position: absolute;
-    right: 8px;
-    top: -8px;
-    width: min(32vw, 280px);
-    opacity: 0.2;
+    right: 2%;
+    top: 50%;
+    width: min(34vw, 300px);
+    opacity: 0.34;
     pointer-events: none;
-    filter: drop-shadow(0 0 28px rgba(212, 175, 55, 0.35));
+    transform: translateY(-52%);
+    filter: drop-shadow(0 0 36px rgba(212, 175, 55, 0.42));
+    z-index: 0;
   }
 
   .ceo-sovereign-watermark img {
@@ -94,32 +140,55 @@ const commandCenterCss = `
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.75fr) minmax(220px, 0.75fr);
-    gap: 14px;
+    grid-template-columns: minmax(0, 1.55fr) minmax(210px, 0.72fr) minmax(210px, 0.72fr);
+    gap: 12px;
     align-items: stretch;
   }
 
   .ceo-command-hero-main {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
     min-width: 0;
+  }
+
+  .ceo-command-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ceo-command-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    background: rgba(212, 175, 55, 0.08);
+    color: rgba(243, 218, 138, 0.92);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
   .ceo-command-hero-title {
     margin: 0;
-    font-size: clamp(30px, 3.4vw, 44px);
-    line-height: 1.02;
+    font-size: clamp(28px, 3.2vw, 40px);
+    line-height: 1.04;
     letter-spacing: -0.05em;
+    color: rgba(248, 250, 252, 0.98);
   }
 
   .ceo-command-hero-title span {
     display: block;
     margin-top: 8px;
-    font-size: clamp(15px, 1.6vw, 18px);
-    color: rgba(226, 232, 240, 0.76);
+    font-size: clamp(14px, 1.5vw, 17px);
+    color: rgba(226, 232, 240, 0.72);
     letter-spacing: -0.02em;
     line-height: 1.45;
+    font-weight: 500;
   }
 
   .ceo-command-hero-actions {
@@ -130,47 +199,146 @@ const commandCenterCss = `
   }
 
   .ceo-gold-primary-action.button {
-    border: 1px solid rgba(243, 218, 138, 0.58);
+    border: 1px solid rgba(243, 218, 138, 0.62);
     color: #111827;
-    background: linear-gradient(135deg, #f3da8a 0%, #d4af37 42%, #b2871d 100%);
-    box-shadow: 0 10px 24px rgba(212, 175, 55, 0.24);
+    background: linear-gradient(135deg, #f8e6a8 0%, #d4af37 46%, #9a7518 100%);
+    box-shadow:
+      0 12px 28px rgba(212, 175, 55, 0.32),
+      inset 0 1px 0 rgba(255, 251, 234, 0.55);
+  }
+
+  .ceo-gold-primary-action.button:hover:not(:disabled) {
+    filter: brightness(1.04);
+    box-shadow:
+      0 16px 34px rgba(212, 175, 55, 0.38),
+      0 0 22px rgba(212, 175, 55, 0.14),
+      inset 0 1px 0 rgba(255, 251, 234, 0.68);
   }
 
   .ceo-gold-secondary-action.button {
-    border: 1px solid rgba(212, 175, 55, 0.38);
-    color: rgba(248, 250, 252, 0.94);
-    background: rgba(15, 23, 42, 0.78);
+    border: 1px solid rgba(212, 175, 55, 0.42);
+    color: rgba(248, 250, 252, 0.96);
+    background: rgba(6, 6, 8, 0.88);
+    box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.08);
+  }
+
+  .ceo-gold-secondary-action.button:hover:not(:disabled) {
+    border-color: rgba(243, 218, 138, 0.58);
+    background: rgba(12, 12, 16, 0.96);
   }
 
   .ceo-command-card {
-    border-radius: 18px;
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    background: rgba(15, 23, 42, 0.62);
-    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    background:
+      linear-gradient(180deg, rgba(12, 12, 16, 0.96), rgba(6, 6, 8, 0.98));
+    padding: 14px;
     min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.04);
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+  }
+
+  .ceo-command-card:hover {
+    border-color: rgba(212, 175, 55, 0.28);
+    box-shadow:
+      inset 0 1px 0 rgba(243, 218, 138, 0.06),
+      0 8px 22px rgba(0, 0, 0, 0.22);
   }
 
   .ceo-command-card-kicker {
-    font-size: 11px;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: rgba(243, 218, 138, 0.82);
+    letter-spacing: 0.16em;
+    color: rgba(243, 218, 138, 0.86);
+    font-weight: 760;
   }
 
   .ceo-command-card h3 {
     margin: 0;
-    font-size: 28px;
+    font-size: 24px;
     letter-spacing: -0.04em;
+    color: rgba(248, 250, 252, 0.98);
   }
 
   .ceo-command-card p {
     margin: 0;
-    color: rgba(203, 213, 225, 0.78);
-    line-height: 1.5;
-    font-size: 13px;
+    color: rgba(203, 213, 225, 0.74);
+    line-height: 1.45;
+    font-size: 12px;
+  }
+
+  .ceo-command-card strong {
+    font-size: 15px;
+    letter-spacing: -0.02em;
+    color: rgba(248, 250, 252, 0.96);
+  }
+
+  .ceo-readiness-card {
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .ceo-readiness-ring-wrap {
+    position: relative;
+    width: 112px;
+    height: 112px;
+    margin: 2px auto 0;
+  }
+
+  .ceo-readiness-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .ceo-readiness-ring-track {
+    fill: none;
+    stroke: rgba(212, 175, 55, 0.14);
+    stroke-width: 7;
+  }
+
+  .ceo-readiness-ring-progress {
+    fill: none;
+    stroke: url(#ceoReadinessGold);
+    stroke-width: 7;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 420ms ease;
+  }
+
+  .ceo-readiness-ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    pointer-events: none;
+  }
+
+  .ceo-readiness-ring-center strong {
+    font-size: 22px;
+    letter-spacing: -0.04em;
+    color: rgba(248, 250, 252, 0.98);
+  }
+
+  .ceo-readiness-ring-center span {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(243, 218, 138, 0.78);
+    font-weight: 700;
+  }
+
+  .ceo-readiness-meta {
+    width: 100%;
+    font-size: 11px;
+    color: rgba(203, 213, 225, 0.72);
+    line-height: 1.45;
   }
 
   .ceo-decision-queue-grid,
@@ -178,7 +346,7 @@ const commandCenterCss = `
   .ceo-module-readiness-grid,
   .ceo-briefing-grid {
     display: grid;
-    gap: 12px;
+    gap: 10px;
   }
 
   .ceo-decision-queue-grid,
@@ -202,31 +370,33 @@ const commandCenterCss = `
 
   .ceo-workflow-step {
     border-radius: 14px;
-    border: 1px solid rgba(212, 175, 55, 0.22);
-    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    background: linear-gradient(180deg, rgba(12, 12, 16, 0.96), rgba(6, 6, 8, 0.98));
     padding: 12px;
     min-width: 0;
+    box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.04);
   }
 
   .ceo-workflow-step strong {
     display: block;
-    margin-top: 4px;
-    font-size: 14px;
+    margin-top: 2px;
+    font-size: 13px;
+    color: rgba(248, 250, 252, 0.96);
   }
 
   .ceo-workflow-step p {
     margin: 6px 0 0;
-    font-size: 12px;
-    color: rgba(203, 213, 225, 0.72);
-    line-height: 1.45;
+    font-size: 11px;
+    color: rgba(203, 213, 225, 0.68);
+    line-height: 1.42;
   }
 
   .ceo-decision-card-priority {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 780;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(243, 218, 138, 0.88);
+    color: rgba(243, 218, 138, 0.9);
   }
 
   .ceo-decision-card-status {
@@ -234,11 +404,13 @@ const commandCenterCss = `
     display: inline-flex;
     width: fit-content;
     border-radius: 999px;
-    padding: 5px 9px;
-    border: 1px solid rgba(148, 163, 184, 0.28);
-    background: rgba(148, 163, 184, 0.12);
-    font-size: 11px;
+    padding: 4px 9px;
+    border: 1px solid rgba(212, 175, 55, 0.24);
+    background: rgba(212, 175, 55, 0.08);
+    color: rgba(243, 218, 138, 0.92);
+    font-size: 10px;
     font-weight: 760;
+    letter-spacing: 0.04em;
   }
 
   .ceo-module-score-row {
@@ -249,16 +421,17 @@ const commandCenterCss = `
   }
 
   .ceo-module-score-row strong {
-    font-size: 22px;
+    font-size: 20px;
     letter-spacing: -0.03em;
+    color: rgba(248, 250, 252, 0.98);
   }
 
   .ceo-module-progress {
-    height: 7px;
+    height: 6px;
     border-radius: 999px;
-    background: rgba(15, 23, 42, 0.9);
+    background: rgba(212, 175, 55, 0.1);
     overflow: hidden;
-    margin-top: 4px;
+    margin-top: 2px;
   }
 
   .ceo-module-progress span {
@@ -269,8 +442,8 @@ const commandCenterCss = `
 
   .ceo-truthfulness-banner {
     border-radius: 14px;
-    border: 1px solid rgba(212, 175, 55, 0.24);
-    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(212, 175, 55, 0.22);
+    background: rgba(6, 6, 8, 0.82);
     padding: 10px 14px;
     font-size: 12px;
     color: rgba(226, 232, 240, 0.82);
@@ -522,17 +695,63 @@ function buildModuleReadinessCards({
   ];
 }
 
+function formatConfidenceDisplay(confidence) {
+  const value = Number(confidence);
+  if (!Number.isFinite(value)) {
+    return 'N/A';
+  }
+
+  return `${Math.round(value)}%`;
+}
+
+function ReadinessRing({ score, label }) {
+  const hasScore = Number.isFinite(Number(score));
+  const pct = hasScore ? progressWidth(score) : 0;
+  const radius = 42;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (pct / 100) * circumference;
+
+  return (
+    <div className="ceo-readiness-ring-wrap">
+      <svg className="ceo-readiness-ring" viewBox="0 0 96 96" aria-hidden="true">
+        <defs>
+          <linearGradient id="ceoReadinessGold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#f3da8a" />
+            <stop offset="52%" stopColor="#d4af37" />
+            <stop offset="100%" stopColor="#9a7518" />
+          </linearGradient>
+        </defs>
+        <circle className="ceo-readiness-ring-track" cx="48" cy="48" r={radius} />
+        <circle
+          className="ceo-readiness-ring-progress"
+          cx="48"
+          cy="48"
+          r={radius}
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+        />
+      </svg>
+      <div className="ceo-readiness-ring-center">
+        <strong>{label}</strong>
+        <span>Overall readiness</span>
+      </div>
+    </div>
+  );
+}
+
 function SectionBlock({ number, title, description, children }) {
   return (
     <section className="ceo-command-section">
-      <div className="ceo-command-section-header">
-        <div className="ceo-command-number">{number}</div>
-        <div>
-          <h2 className="ceo-command-section-title">{title}</h2>
-          <p className="ceo-command-section-copy">{description}</p>
+      <div className="ceo-command-section-shell">
+        <div className="ceo-command-section-header">
+          <div className="ceo-command-number">{number}</div>
+          <div>
+            <h2 className="ceo-command-section-title">{title}</h2>
+            <p className="ceo-command-section-copy">{description}</p>
+          </div>
         </div>
+        <div className="ceo-command-section-body">{children}</div>
       </div>
-      {children}
     </section>
   );
 }
@@ -559,6 +778,7 @@ export function ExecutiveCommandCenterView({
   const readinessScore = Number(commandReadiness?.score ?? executiveSignal?.score);
   const readinessHasScore = Number.isFinite(readinessScore);
   const readinessLabel = readinessHasScore ? `${Math.round(readinessScore)}/100` : 'N/A';
+  const readinessConfidence = formatConfidenceDisplay(commandReadiness?.confidence);
 
   const decisionQueueCards = buildDecisionQueueCards({
     complianceOverview,
@@ -611,10 +831,10 @@ export function ExecutiveCommandCenterView({
 
             <div className="ceo-command-status-grid">
               <div className="ceo-command-hero-main">
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  <Badge>Executive Command Center</Badge>
-                  <Badge>Decision support</Badge>
-                  <Badge>Human review required</Badge>
+                <div className="ceo-command-badge-row">
+                  <span className="ceo-command-badge">Executive Command Center</span>
+                  <span className="ceo-command-badge">Decision support</span>
+                  <span className="ceo-command-badge">Human review required</span>
                 </div>
 
                 <h1 className="ceo-command-hero-title">
@@ -634,27 +854,23 @@ export function ExecutiveCommandCenterView({
                     <FileText size={16} />
                     Generate Board Review Draft
                   </Button>
-                  <Button onClick={onViewExecutiveBriefing} className="ceo-gold-secondary-action">
+                  <Button
+                    onClick={onViewExecutiveBriefing}
+                    variant="secondary"
+                    className="ceo-gold-secondary-action"
+                  >
                     View Executive Briefing
                   </Button>
                 </div>
               </div>
 
-              <article className="ceo-command-card">
+              <article className="ceo-command-card ceo-readiness-card">
                 <div className="ceo-command-card-kicker">Decision readiness</div>
-                <h3>{readinessLabel}</h3>
-                <p>
-                  Trend {commandReadiness?.trend || 'stable'} · Confidence{' '}
-                  {commandReadiness?.confidence ?? 0}% · Human review required.
+                <ReadinessRing score={readinessHasScore ? readinessScore : null} label={readinessLabel} />
+                <p className="ceo-readiness-meta">
+                  Trend {commandReadiness?.trend || 'stable'} · Confidence {readinessConfidence} · Human
+                  review required.
                 </p>
-                <div className="ceo-module-progress">
-                  <span
-                    style={{
-                      width: readinessHasScore ? `${progressWidth(readinessScore)}%` : '0%',
-                      background: 'linear-gradient(90deg, #d4af37, #f3da8a)'
-                    }}
-                  />
-                </div>
               </article>
 
               <article className="ceo-command-card">
