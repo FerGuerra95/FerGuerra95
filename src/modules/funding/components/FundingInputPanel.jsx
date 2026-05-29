@@ -268,10 +268,10 @@ export function FundingInputPanel({
 
       <header className="funding-input-panel-head">
         <div className="kpi-label">Scenario workspace</div>
-        <h3>Base de financiación</h3>
+        <h3>Funding case inputs</h3>
         <p className="funding-input-panel-copy muted">
-          Inputs del escenario draft — ajustan runway, dilución y readiness sin
-          sustituir datos persistidos de rondas.
+          Scenario draft inputs adjust runway, dilution and readiness without
+          replacing persisted round records.
         </p>
       </header>
 

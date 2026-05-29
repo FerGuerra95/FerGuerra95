@@ -87,7 +87,7 @@ export function ReportHeader({
           <span style={badgeStyle}>{BOARD_REVIEW_DRAFT_LABELS.basedOnDss}</span>
         </div>
         <p style={{ margin: '10px 0 0', color: '#475569', fontSize: 12 }}>
-          Generated at: {generatedLabel}{scope ? ` - Scope: ${scope}` : ''}
+          Prepared at: {generatedLabel}{scope ? ` - Scope: ${scope}` : ''}
         </p>
       </div>
     </header>

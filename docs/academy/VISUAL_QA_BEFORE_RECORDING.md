@@ -489,3 +489,13 @@ Expected (unchanged from C.24.4B):
 - Funding composition + integer readiness score (`37/100` style).
 - Risk/Governance workspace accent on panels/tables.
 - No black screen; no horizontal overflow; no NaN/undefined/Infinity in view.
+
+### C.24.3h focused product copy cleanup
+
+**Baseline:** `2042cc3` (post C.24.4D visual QA).
+
+**Copy-only:** No CSS/layout changes in this phase. Re-check text fit on hero cards and section headers after hard refresh (longer English labels on CEO Overview and Funding).
+
+**Pilot-safe language:** DSS + human review; board review drafts (not board-approved); N/A and insufficient_data must remain visible.
+
+**Before recording:** confirm `/ceo/overview`, `/funding/dashboard`, `/compliance/reports`, `/reporting/library` read as enterprise pilot copy, not internal scaffolding.

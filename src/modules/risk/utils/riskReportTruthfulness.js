@@ -4,7 +4,7 @@
  */
 
 export const RISK_REPORT_PANEL_DISCLAIMER =
-  'Generated reports use operational DSS scoring (severity, likelihood, impact). Not a certified risk rating. Golden L×I benchmark is separate and used for validation only. Human review required.';
+  'Exported risk briefs use operational DSS scoring (severity, likelihood, impact). Not a certified risk rating. Golden L×I benchmark is separate and used for validation only. Human review required.';
 
 export const RISK_REPORT_PAGE_COPY =
   'Enterprise Risk Brief, Committee Pack, Control Effectiveness, Incident Summary and Appetite Breach exports. Scores are decision-support signals — not certified ratings. Human review required.';

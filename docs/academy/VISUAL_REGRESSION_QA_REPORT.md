@@ -103,3 +103,23 @@
 - M&A reference, CEO truthfulness tests, Funding score formatting, and workspace navigation smoke preserved.
 - No fake `0`, NaN, undefined, or Infinity detected in automated scans on reviewed routes.
 - C.24.4C dead CSS removal did not require rollback.
+
+---
+
+## 9. C.24.3h — Focused Product Copy Cleanup
+
+**Baseline:** `2042cc3` → copy commit on `main` after C.24.4D.
+
+**Scope:** Visible labels, titles, help text and microcopy only — no CSS, backend, formulas, Golden Dataset, or Formula Registry.
+
+**Routes reviewed:** `/dashboard`, `/ceo/overview`, `/funding/dashboard`, `/funding/readiness`, `/compliance/reports`, `/reporting/library`, `/risk/register`, `/governance/dashboard`, `/ma/dashboard`, `/pmi/dashboard`, `/strategy/dashboard`.
+
+**Key rewrites:** CEO Overview executive-layer / release / widget scaffolding → pilot-safe DSS language; Funding investor readiness pack → review; Reporting board pack builder → board review draft assembly; Risk “generated reports” empty state → risk briefs prepared.
+
+**Claims scan:** No new certified PDF, board-approved, autonomous AI, legal/investment advice, SOC2/ISO, or marketplace-live claims introduced. Intentional “not certified” disclaimers preserved.
+
+**Deferred (component identifiers, not user-facing copy):** `*ExecutiveWidget` React export names; Heritage module “Generated reports” (out of C.24.3h module whitelist); CSS class `report-builder-stack`.
+
+**Validations:** `npm run build` PASS; `fundingDisplayFormat.test.js` PASS (7); `ceoOverviewTruthfulness.test.js` PASS (17); `npm run test:unit` not re-run (known local better-sqlite3 ABI).
+
+**Decision:** **Ready for recording rehearsal** with operator production hard refresh after deploy.

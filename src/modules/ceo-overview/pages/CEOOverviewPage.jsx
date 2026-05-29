@@ -1391,9 +1391,9 @@ function getPmiOverview(pmiBrief = null) {
 function buildExecutivePriorityRows({ pmiOverview, fundingOverview, complianceOverview }) {
   const rows = [
     { label: 'Decision quality', value: 'Active' },
-    { label: 'Visual consistency', value: 'Active' },
+    { label: 'Workspace consistency', value: 'Under review' },
     { label: 'Executive narrative', value: 'Active' },
-    { label: 'Board outputs', value: 'Draft metadata pending' }
+    { label: 'Board review drafts', value: 'In progress' }
   ];
 
   if (pmiOverview.alerts.length > 0) {
@@ -1840,7 +1840,7 @@ export function CEOOverviewPage() {
         truthfulnessStatus: bridgeScore === null ? 'insufficient_data' : 'operational_dss',
         executiveSignalEligible: bridgeScore !== null,
         humanReviewRequired: true,
-        title: bridgeScore === null ? 'Bridge data pending' : 'Cross-module intelligence layer',
+        title: bridgeScore === null ? 'Bridge data pending' : 'Cross-module executive signals',
         posture: bridgeScore === null ? 'insufficient_data' : bridgeMetrics.bridgeHealthStatus || legacyBridgeOverview.posture,
         description:
           'Bridge consolidates cross-module signals, dependencies, conflicts and executive attention items. Human review required.',
@@ -1878,7 +1878,7 @@ export function CEOOverviewPage() {
         ? 'executive_attention'
         : 'aligned',
     description:
-      'Strategy connects objectives, initiatives, scenarios, market signals, capital dependencies and board decisions into the executive layer. DSS only — human review required.',
+      'Strategy connects objectives, initiatives, scenarios, market signals, capital dependencies and board decisions into the executive overview. DSS only — human review required.',
     recordsCount: strategySummary?.counts?.objectives || 0,
     activeRecordsCount: strategyMetrics.blockedStrategicInitiatives || strategySummary?.blockedStrategicInitiatives || 0,
     latestTitle: strategySummary?.latestObjective?.title || 'Insufficient persisted strategy data',
@@ -2047,8 +2047,8 @@ export function CEOOverviewPage() {
               <div className="ceo-badge-row">
                 <Badge>CEO Overview</Badge>
                 <Badge>Executive Command Center</Badge>
-                <Badge>Decision-support layer</Badge>
-                <Badge>Executive roadmap</Badge>
+                <Badge>Decision support</Badge>
+                <Badge>Human review required</Badge>
               </div>
 
               <h1 className="ceo-title">
@@ -2057,10 +2057,9 @@ export function CEOOverviewPage() {
               </h1>
 
               <p className="ceo-copy">
-                Capa ejecutiva que une las señales principales de M&A,
-                Compliance, Funding, PMI, Governance, Heritage y The Bridge
-                para presentar CEO’s OS como sistema operativo ejecutivo,
-                no como módulos aislados.
+                Executive operating view that unifies M&A, Compliance, Funding,
+                PMI, Governance, Heritage and Bridge signals as decision-support
+                intelligence — not isolated modules. Human review required.
               </p>
 
               <div className="ceo-hero-actions">
@@ -2073,10 +2072,10 @@ export function CEOOverviewPage() {
                   Generate Board Review Draft
                 </Button>
                 <span className="ceo-report-trace">
-                  Last Report Generated:{' '}
+                  Last board review draft prepared:{' '}
                   {lastReportGeneratedAt
                     ? new Date(lastReportGeneratedAt).toLocaleString('en-GB')
-                    : 'Not generated yet'}
+                    : 'Not prepared yet'}
                 </span>
               </div>
 
@@ -2324,8 +2323,8 @@ export function CEOOverviewPage() {
           <SectionHeader
             kicker="CEO Command Center"
             icon={Gauge}
-            title="Enterprise executive layer"
-            description="Capa consolidada desde /api/executive/overview: readiness, señales, decisiones, board view y calendario. Human review required."
+            title="Executive operating view"
+            description="Consolidated readiness, signals, decisions, board view and calendar from the executive overview service. Human review required."
           />
 
           <div className="executive-command-layer">
@@ -2367,15 +2366,15 @@ export function CEOOverviewPage() {
             kicker="Executive snapshot"
             icon={Activity}
             title="CEO’s OS at a glance"
-            description="Lectura rápida del estado del release ejecutivo: módulos, señales, riesgos, funding y entregables para el board."
+            description="Quick read of pilot readiness: modules, signals, risks, funding posture and board review drafts."
           />
 
           <div className="ceo-grid ceo-grid-kpis">
             <KpiCard
               branch="overview"
-              label="Release readiness"
-              value="Closing"
-              description="Producto entrando en cierre vendible."
+              label="Pilot readiness"
+              value="In review"
+              description="Executive workspace prepared for pilot review — decision support only."
               icon={CheckCircle2}
               tone="text-success"
             />
@@ -2390,9 +2389,9 @@ export function CEOOverviewPage() {
 
             <KpiCard
               branch="compliance"
-              label="Board packs"
+              label="Board review drafts"
               value={availablePacks.length}
-              description="Exportaciones premium imprimibles."
+              description="Exportable review drafts — human review required before board use."
               icon={Download}
             />
 
@@ -2411,8 +2410,8 @@ export function CEOOverviewPage() {
           <SectionHeader
             kicker="Operating modules"
             icon={Layers3}
-            title="Enterprise branches feeding one executive layer"
-            description="Esta vista conecta core, post-merger execution y ramas enterprise sin desacoplar los módulos que ya funcionan."
+            title="Enterprise branches in one executive view"
+            description="Connects core, post-merger execution and enterprise branches without decoupling active workspaces."
           />
 
           <div className="ceo-grid ceo-grid-three">
@@ -2449,7 +2448,7 @@ export function CEOOverviewPage() {
                 { label: 'Evidence items', value: complianceOverview.evidenceCount }
               ]}
               primaryLink={{ to: '/compliance/dashboard', label: 'Open Compliance' }}
-              secondaryLink={{ to: '/compliance/reports', label: 'Board Pack' }}
+              secondaryLink={{ to: '/compliance/reports', label: 'Review drafts' }}
             />
 
             <ModuleCard
@@ -2679,8 +2678,8 @@ export function CEOOverviewPage() {
           <SectionHeader
             kicker="Funding Bridge"
             icon={Rocket}
-            title="Liquidity & Runway Widget"
-            description="Funding data bridged from enterprise backend summary."
+            title="Liquidity and runway signal"
+            description="Funding posture from enterprise funding summary. Human review required."
           />
           <FundingExecutiveWidget
             summary={{
@@ -2735,7 +2734,7 @@ export function CEOOverviewPage() {
                 <h3 className="ceo-panel-title">Available executive outputs</h3>
 
                 <p className="muted ceo-panel-copy">
-                  Entregables ejecutivos listos para demostrar valor en cierre comercial.
+                  Executive outputs prepared as board review drafts — human review required before distribution.
                 </p>
               </div>
 
@@ -2786,31 +2785,31 @@ export function CEOOverviewPage() {
           <SectionHeader
             kicker="Next actions"
             icon={TrendingUp}
-            title="Close the executive release without opening new product branches"
-            description="Las próximas acciones deben enfocarse en QA, datos demo enterprise y validación comercial de las ramas conectadas."
+            title="Recommended next steps"
+            description="Validate connected branches, enterprise demo data and executive review paths before recording."
           />
 
           <div className="ceo-grid ceo-grid-three">
             <ActionCard
               icon={LockKeyhole}
-              title="Run final QA"
-              description="Revisar rutas, exportaciones y que no existan cortes visuales o datos incoherentes."
+              title="Validate key routes"
+              description="Review routes, exports and data coherence across connected branches."
               to="/ma/dashboard"
               label="Start with M&A"
             />
 
             <ActionCard
               icon={Sparkles}
-              title="Integrate logo"
-              description="Mantener marca para una fase posterior y priorizar ahora la validación operativa de ramas enterprise."
+              title="Review governance posture"
+              description="Confirm governance signals and decision-support disclaimers before executive review."
               to="/governance/dashboard"
               label="Review governance"
             />
 
             <ActionCard
               icon={FileText}
-              title="Prepare executive demo"
-              description="Preparar demo enterprise de 20 minutos recorriendo M&A, Compliance, Funding, PMI y ramas ecosystem."
+              title="Prepare recording walkthrough"
+              description="20-minute enterprise walkthrough across M&A, Compliance, Funding, PMI and connected branches."
               to="/dashboard"
               label="Use this overview"
             />

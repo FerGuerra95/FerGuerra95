@@ -1357,7 +1357,7 @@ function buildFundingHtml({ fundingInputs = {}, fundingSettings = {}, derived = 
               </div>
 
               <div class="section">
-                <h2>Investor Readiness Pack</h2>
+                <h2>Investor readiness review</h2>
 
                 <div class="prepared-panel avoid-break">
                   ${buildPreparedRows(readinessRows)}

@@ -20,10 +20,10 @@ function formatMonths(value) {
 export function FundingExecutiveWidget({
   summary = {},
   currency = 'EUR',
-  title = 'Liquidity & Runway',
+  title = 'Liquidity and runway',
   className = '',
-  sourceBadge = 'Enterprise rounds summary',
-  sourceHint = 'From backend summary and stored funding rounds.'
+  sourceBadge = 'Funding rounds summary',
+  sourceHint = 'From enterprise funding rounds and stored round records.'
 }) {
   const runwayStatus = getRunwayStatusLabel(summary.projectedRunwayMonths);
   const monthlyBurnRate = toSafeNumber(summary.monthlyBurnRate);

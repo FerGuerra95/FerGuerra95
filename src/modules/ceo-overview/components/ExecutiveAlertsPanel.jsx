@@ -5,7 +5,7 @@ export function ExecutiveAlertsPanel({ alerts = [] }) {
   return (
     <article className="executive-command-card">
       <span className="executive-eyebrow">Executive Alerts</span>
-      <h3>Attention classification.</h3>
+      <h3>Executive priorities</h3>
       <div className="executive-list">
         {items.slice(0, 5).map((alert) => (
           <div key={`${alert.module}-${alert.title}`} className="executive-row">

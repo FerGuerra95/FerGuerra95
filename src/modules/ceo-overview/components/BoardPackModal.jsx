@@ -321,10 +321,10 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           <div>
             <div className="board-pack-kicker">
               <FileText size={14} />
-              Executive Board Pack
+              Executive board review draft
             </div>
-            <h2>Consolidated Board Report</h2>
-            <p>{generatedAt ? `Generated ${generatedAt}` : 'Preparing consolidated executive view.'}</p>
+            <h2>Consolidated board review draft</h2>
+            <p>{generatedAt ? `Prepared ${generatedAt}` : 'Preparing consolidated executive view.'}</p>
           </div>
           <button type="button" className="board-pack-icon-button" onClick={onClose} aria-label="Close Board Pack">
             <X size={18} />
@@ -332,9 +332,9 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
         </div>
 
         {loading ? (
-          <div className="board-pack-empty">Generating board pack.</div>
+          <div className="board-pack-empty">Preparing board review draft.</div>
         ) : error ? (
-          <div className="board-pack-empty">{error.message || 'Board Pack could not be generated.'}</div>
+          <div className="board-pack-empty">{error.message || 'Board review draft could not be prepared.'}</div>
         ) : (
           <>
             <section className="board-pack-summary">

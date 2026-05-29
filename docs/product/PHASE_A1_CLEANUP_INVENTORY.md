@@ -8068,3 +8068,33 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 - `npm run build` PASS.
 - `npm run test:unit` PASS: 552 tests.
 - `npx playwright test tests/e2e/smoke/navigation-stability.spec.js` P2/env: Vite was not running at `http://127.0.0.1:5173`, so navigation smoke could not start.
+
+---
+
+## C.24.3h — Focused Product Copy Cleanup
+
+**Status:** COMPLETED.
+
+**Baseline:** `2042cc3` (after C.24.4D visual regression QA).
+
+**Scope:** Frontend visible copy in CEO Overview, Funding, Compliance (prior pass), Reporting, Risk, Governance context routes — no visual/CSS/backend/formula changes.
+
+**Removed / rewritten scaffolding copy (examples):**
+
+| Old (visible) | New (visible) | Area |
+|---|---|---|
+| Enterprise executive layer | Executive operating view | CEO Overview |
+| Liquidity & Runway Widget | Liquidity and runway signal | CEO Overview |
+| Close the executive release… | Recommended next steps | CEO Overview |
+| Attention classification | Executive priorities | CEO Alerts |
+| Investor Readiness Pack | Investor readiness review | Funding |
+| Board pack builder | Board review draft assembly | Reporting |
+| No generated reports yet | No risk briefs prepared yet | Risk |
+
+**Claims reviewed:** No new certified/board-approved/autonomous/legal/investment/marketplace-live claims. Existing “not certified” disclaimers kept.
+
+**Deferred:** `*ExecutiveWidget` component export names; Heritage “Generated reports”; CSS `report-builder-stack` class token.
+
+**Validation:** `npm run build` PASS; funding + CEO truthfulness unit tests PASS (24).
+
+**Next:** C.24.5 recording rehearsal or operator production spot-check before external recording.

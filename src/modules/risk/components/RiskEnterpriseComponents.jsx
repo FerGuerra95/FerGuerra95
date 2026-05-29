@@ -237,7 +237,7 @@ export function RiskReportsPanel({ items = [] }) {
       <h3>Risk reports</h3>
       <p className="risk-report-disclaimer">{payloadTruthfulness.disclaimer || RISK_REPORT_PANEL_DISCLAIMER}</p>
       {items.length === 0 ? (
-        <div className="risk-enterprise-empty">No generated reports yet · Human review required before board use</div>
+        <div className="risk-enterprise-empty">No risk briefs prepared yet · Human review required before board use</div>
       ) : null}
       {items.length > 0 ? (
         <div className="risk-table-scroll ceos-enterprise-table-wrap">

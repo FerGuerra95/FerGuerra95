@@ -2003,7 +2003,7 @@ export function FundingDashboardPage() {
             <FundingPremiumPanel
               kicker="Readiness pack"
               icon={Target}
-              title="Investor Readiness Pack"
+              title="Investor readiness review"
               description="Resumen de tracción, data room, growth, margen, interés inversor y capacidad de financiación alternativa."
             >
               <div className="funding-premium-row-grid">
@@ -2210,7 +2210,7 @@ export function FundingDashboardPage() {
                 kicker="Investor readiness"
                 icon={ShieldCheck}
                 title="Investor Readiness"
-                description="Scenario draft readiness — from workspace engine, distinct from backend capital efficiency."
+                description="Scenario draft readiness — from workspace inputs, distinct from persisted capital efficiency score."
               />
 
               <ReadinessChecklistCard

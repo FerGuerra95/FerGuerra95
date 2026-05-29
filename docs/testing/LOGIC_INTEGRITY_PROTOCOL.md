@@ -2317,3 +2317,41 @@ Validation:
 - `npm run build` PASS.
 - `npm run test:unit` PASS: 552 tests.
 - Playwright navigation smoke blocked by environment because `http://127.0.0.1:5173` was not serving Vite; classify as P2/env, not product evidence.
+
+---
+
+## C.24.3h — Focused Product Copy Cleanup
+
+**Status:** COMPLETED / copy-only pilot language pass.
+
+**Baseline:** `2042cc3` (C.24.4D visual regression QA).
+
+Logic-integrity constraints preserved:
+
+- No formulas, Golden Dataset, Formula Registry, backend, auth/router, migrations, package/config, or secrets touched.
+- No CSS, layout, handlers, scores, permissions, or multi-tenant behavior changed.
+- DSS, Human Review Required, Board Review Draft, Not Board Approved, no certified PDF, no legal advice, and no investment advice boundaries preserved.
+- N/A and insufficient_data remain visible; missing data was not converted to `0`.
+
+Copy corrections (representative):
+
+- CEO Overview: removed `/api/executive/overview` visible path, “Enterprise executive layer”, “Liquidity & Runway Widget”, release/cierre comercial scaffolding, “Close the executive release…” section title.
+- Executive Alerts: “Attention classification” → “Executive priorities”.
+- Funding: “Investor Readiness Pack” → “Investor readiness review”; “Base de financiación” → “Funding case inputs”; workspace-engine wording softened.
+- Reporting: “Board pack builder” → “Board review draft assembly”; “Generated at” → “Prepared at”.
+- Risk: empty-state “generated reports” → “risk briefs prepared”; export disclaimer “Generated reports” → “Exported risk briefs”.
+
+Deferred (valid reasons):
+
+- React component names `*ExecutiveWidget` (not user-visible labels).
+- Heritage `Generated reports` panel title (module outside C.24.3h whitelist).
+- CSS selector `report-builder-stack` (class name only).
+
+Validation:
+
+- `npm run build` PASS.
+- `fundingDisplayFormat.test.js` PASS (7).
+- `ceoOverviewTruthfulness.test.js` PASS (17).
+- `npm run test:unit` not re-run (known local better-sqlite3 ABI).
+
+**Decision:** Ready for C.24.5 recording rehearsal / operator production spot-check.

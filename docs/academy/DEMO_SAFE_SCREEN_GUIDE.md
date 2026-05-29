@@ -215,3 +215,10 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - Funding readiness score is rounded for display only; underlying engine unchanged.
 - Re-check `/risk/register` and `/governance/dashboard` before recording ? tables should not look washed out.
 - M&A and CEO remain reference / preserved surfaces.
+
+### C.24.3h demo safety note (focused product copy)
+
+- Copy cleanup only: no formula, score, permission, or data-path changes.
+- CEO Overview and Funding dashboards use enterprise DSS language (decision support, human review, board review drafts).
+- Do not narrate exports as certified, board-approved, or investment advice.
+- N/A and insufficient_data remain valid demo outcomes ? do not substitute zeros.
