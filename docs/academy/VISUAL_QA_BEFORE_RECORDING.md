@@ -576,3 +576,8 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Hero shows clean lion mark from `/brand/ceos-lion-mark.png`.
 - No branch wheel / M&A·Compliance labels in hero logo.
 - Lion remains inside primary hero block (not behind Top Priorities).
+
+### C.24.5A-logo-fix checklist
+
+- Hero shows geometric lion emblem (not CEO's OS wordmark image).
+- Asset path `/brand/ceos-lion-mark.png` serves lion + ring + spheres only.

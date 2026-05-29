@@ -290,3 +290,13 @@
 **Fix:** CEO hero sovereign mark uses clean lion emblem; legacy wheel logo removed from hero.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## 20. C.24.5A-logo-fix — Replace Wrong CEO Wordmark with Approved Lion Emblem
+
+**Baseline:** `a3f6af2`.
+
+**Fix:** Replaced wordmark PNG at `ceos-lion-mark.png` with approved lion emblem.
+
+**Validation:** build + truthfulness tests PASS.

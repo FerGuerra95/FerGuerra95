@@ -155,8 +155,9 @@ const commandCenterCss = `
     max-width: 196px;
     height: auto;
     display: block;
-    opacity: 0.96;
-    filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.32));
+    object-fit: contain;
+    opacity: 0.98;
+    filter: drop-shadow(0 0 24px rgba(212, 175, 55, 0.36));
   }
 
   .ceo-command-status-grid {

@@ -2505,3 +2505,15 @@ Validation: build + truthfulness tests PASS.
 **Fix:** Clean lion emblem in hero; branch wheel logo removed from CEO hero reference.
 
 Validation: build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-logo-fix — Replace Wrong CEO Wordmark with Approved Lion Emblem
+
+**Status:** COMPLETED (asset correction, CEO hero scope).
+
+**Baseline:** `a3f6af2`.
+
+**Fix:** Swapped `public/brand/ceos-lion-mark.png` from wordmark to approved lion emblem.
+
+Validation: build + truthfulness tests PASS.

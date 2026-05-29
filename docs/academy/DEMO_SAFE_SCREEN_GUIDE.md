@@ -272,3 +272,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 ### C.24.5A-logo-integration demo safety note
 
 - Asset swap only; no metric, formula, or API changes.
+
+### C.24.5A-logo-fix demo safety note
+
+- Corrected hero asset only; wordmark PNG removed from hero path.
