@@ -278,3 +278,15 @@
 **Fix:** Black/gold card texture; executive unified-readiness note; flat module postures; softer legend.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## 19. C.24.5A-logo-integration — New CEO Lion Mark Integration
+
+**Baseline:** `2a09781`.
+
+**Asset:** `public/brand/ceos-lion-mark.png`.
+
+**Fix:** CEO hero sovereign mark uses clean lion emblem; legacy wheel logo removed from hero.
+
+**Validation:** build + truthfulness tests PASS.

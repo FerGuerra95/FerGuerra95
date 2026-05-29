@@ -268,3 +268,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 ### C.24.5A-texture-polish demo safety note
 
 - Unified readiness footnote uses executive phrasing; incomplete inputs still disclosed.
+
+### C.24.5A-logo-integration demo safety note
+
+- Asset swap only; no metric, formula, or API changes.

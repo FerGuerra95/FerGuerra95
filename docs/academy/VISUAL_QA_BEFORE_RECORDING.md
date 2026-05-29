@@ -570,3 +570,9 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Module postures show Pending inputs, not raw insufficient_data pills.
 - Unified readiness note is executive copy, still truthfulness-safe.
 - Decision queue HIGH/MEDIUM/WATCH are text accents, not form bars.
+
+### C.24.5A-logo-integration checklist
+
+- Hero shows clean lion mark from `/brand/ceos-lion-mark.png`.
+- No branch wheel / M&A·Compliance labels in hero logo.
+- Lion remains inside primary hero block (not behind Top Priorities).

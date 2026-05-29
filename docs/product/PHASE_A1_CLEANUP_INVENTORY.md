@@ -8231,3 +8231,17 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Fix:** Warmer black/gold cards; flat module postures; executive unified-readiness note; softer radar legend rows; priority accent colors.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-logo-integration — New CEO Lion Mark Integration
+
+**Status:** COMPLETED.
+
+**Baseline:** `2a09781`.
+
+**Asset:** `public/brand/ceos-lion-mark.png`.
+
+**Fix:** CEO hero uses clean lion emblem (no branch wheel); legacy `ceos-os-emblem-lion.webp` no longer referenced in hero.
+
+**Validation:** build + truthfulness tests PASS.

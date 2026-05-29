@@ -2491,3 +2491,17 @@ Validation: build + truthfulness tests PASS.
 **Fix:** Black/gold texture pass; executive unified-readiness copy; flat posture labels; legend de-table.
 
 Validation: build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-logo-integration — New CEO Lion Mark Integration
+
+**Status:** COMPLETED (asset + CEO hero scope).
+
+**Baseline:** `2a09781`.
+
+**Asset:** `public/brand/ceos-lion-mark.png`.
+
+**Fix:** Clean lion emblem in hero; branch wheel logo removed from CEO hero reference.
+
+Validation: build + truthfulness tests PASS.

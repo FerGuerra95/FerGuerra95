@@ -2,13 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FileText } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
-import lionMark from '../../../assets/brand/ceos-os-emblem-lion.webp';
 import { CorporateHealthRadar } from './CorporateHealthRadar.jsx';
 import {
   formatModuleScoreDisplay,
   formatScoreLabel,
   normalizeScoreOrNull
 } from '../utils/ceoOverviewTruthfulness.js';
+
+const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png';
 
 const commandCenterCss = `
   .ceo-executive-command-page {
@@ -132,7 +133,7 @@ const commandCenterCss = `
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 220px;
+    max-width: 210px;
     margin-left: auto;
     pointer-events: none;
     z-index: 0;
@@ -141,21 +142,9 @@ const commandCenterCss = `
   .ceo-sovereign-mark::before {
     content: '';
     position: absolute;
-    inset: -8%;
+    inset: -4%;
     border-radius: 999px;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.28) 0%, rgba(212, 175, 55, 0.06) 52%, transparent 76%);
-    pointer-events: none;
-  }
-
-  .ceo-sovereign-mark::after {
-    content: '';
-    position: absolute;
-    inset: 6%;
-    border-radius: 999px;
-    border: 1px solid rgba(212, 175, 55, 0.18);
-    box-shadow:
-      inset 0 0 24px rgba(212, 175, 55, 0.1),
-      0 0 32px rgba(212, 175, 55, 0.12);
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -163,13 +152,11 @@ const commandCenterCss = `
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 200px;
+    max-width: 196px;
     height: auto;
     display: block;
-    opacity: 0.88;
-    filter:
-      drop-shadow(0 0 28px rgba(212, 175, 55, 0.42))
-      sepia(0.22) saturate(1.14) brightness(1.04);
+    opacity: 0.96;
+    filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.32));
   }
 
   .ceo-command-status-grid {
@@ -1297,7 +1284,7 @@ export function ExecutiveCommandCenterView({
                 </div>
 
                 <div className="ceo-sovereign-mark" aria-hidden="true">
-                  <img src={lionMark} alt="" />
+                  <img src={CEO_LION_MARK_SRC} alt="" />
                 </div>
               </div>
 
