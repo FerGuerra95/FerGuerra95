@@ -8245,3 +8245,17 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Fix:** CEO hero uses clean lion emblem (no branch wheel); legacy `ceos-os-emblem-lion.webp` no longer referenced in hero.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-logo-fix — Replace Wrong CEO Wordmark with Approved Lion Emblem
+
+**Status:** COMPLETED.
+
+**Baseline:** `a3f6af2`.
+
+**Root cause:** `ceos-lion-mark.png` had been populated from wordmark PNG by mistake.
+
+**Fix:** Replaced with approved geometric lion emblem; hero path `/brand/ceos-lion-mark.png` unchanged.
+
+**Validation:** build + truthfulness tests PASS.
