@@ -152,3 +152,15 @@
 - `fundingDisplayFormat.test.js` PASS.
 
 **Decision:** Ready for production spot-check and recording rehearsal.
+
+---
+
+## 11. C.24.5A-fix — Executive Command Center Composition Fix
+
+**Baseline:** `fff7874`.
+
+**Issue:** C.24.5A did not match approved reference — old layout remained under new labels.
+
+**Fix:** Composition replaced via `ExecutiveCommandCenterView.jsx`; legacy CEO dashboard sections removed from render path.
+
+**Validation:** `npm run build` PASS; truthfulness unit tests PASS.

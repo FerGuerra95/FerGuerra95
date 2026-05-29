@@ -230,3 +230,8 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - CTA language remains draft/review-oriented, never certified or board-approved.
 - Executive flow remains DSS decision support with human review required.
 - Missing signals continue to show N/A/insufficient_data, not fabricated values.
+
+### C.24.5A-fix demo safety note
+
+- CEO page composition is now the 6-section command center only (no legacy technical dashboard blocks in main flow).
+- Briefing/workflow language remains draft + human review only.

@@ -8129,3 +8129,19 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Validation:** `npm run build` PASS; `ceoOverviewTruthfulness.test.js` PASS; `fundingDisplayFormat.test.js` PASS.
 
 **Recording readiness:** Ready for production spot-check + recording rehearsal.
+
+---
+
+## C.24.5A-fix — Executive Overviewer Command Center Composition Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `fff7874`.
+
+**Root cause:** C.24.5A renamed headers and added gold styling but kept the legacy CEO layout (radar blocks, `ModuleCard` grid, `executive-command-layer`, long vertical dashboard sections).
+
+**Fix:** Replaced page composition with `ExecutiveCommandCenterView.jsx` implementing the real 6-section command center layout and removed legacy JSX from `CEOOverviewPage.jsx` render path.
+
+**Structure:** Executive Status → Decision Queue → Cross-Module Intelligence → Module Readiness → Board Review Workflow → Executive Briefing Packs.
+
+**Validation:** `npm run build` PASS; CEO + funding truthfulness unit tests PASS.

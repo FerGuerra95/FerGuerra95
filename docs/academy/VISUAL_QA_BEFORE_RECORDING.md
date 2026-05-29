@@ -516,3 +516,7 @@ Expected:
 - Sections are numbered and ordered by executive decision flow.
 - Decision queue, cross-module summary, readiness overview, workflow, and briefing packs are visible.
 - N/A and insufficient_data remain visible; no NaN/undefined/Infinity.
+
+### C.24.5A-fix composition checklist
+
+Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-center sections (no legacy radar stack, no 9-card module wall, no old executive-command-layer blocks).
