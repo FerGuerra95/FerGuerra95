@@ -8171,3 +8171,27 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **UX decision:** Hero primary metric = **Executive Readiness Index**; radar preserved in Section 04; Unified readiness contextual only.
 
 **Validation:** `npm run build` PASS; truthfulness unit tests PASS.
+
+---
+
+## C.24.5A-radar-polish — Corporate Health Radar Premium Visual Recovery
+
+**Status:** COMPLETED.
+
+**Baseline:** `2a760a8`.
+
+**Fix:** Premium radar 42/58 layout, larger SVG, gold glow, branch legend; N/A excluded from polygon.
+
+**Validation:** build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-radar-polish — Corporate Health Radar Premium Visual Recovery
+
+**Status:** COMPLETED.
+
+**Baseline:** `2a760a8`.
+
+**Fix:** Premium radar 42/58 layout, larger SVG, gold glow, branch legend; N/A excluded from polygon.
+
+**Validation:** build + truthfulness tests PASS.
