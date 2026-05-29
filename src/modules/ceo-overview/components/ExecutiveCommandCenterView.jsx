@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import { FileText } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import lionMark from '../../../assets/brand/ceos-os-emblem-lion.webp';
+import { CorporateHealthRadar } from './CorporateHealthRadar.jsx';
+import { ReadinessIndexCard } from './ReadinessIndexCard.jsx';
 import {
   formatModuleScoreDisplay,
-  formatScoreLabel
+  formatScoreLabel,
+  normalizeScoreOrNull
 } from '../utils/ceoOverviewTruthfulness.js';
 
 const commandCenterCss = `
@@ -358,6 +361,28 @@ const commandCenterCss = `
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .ceo-readiness-radar-row {
+    display: grid;
+    grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1.1fr);
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .ceo-readiness-radar-panel {
+    min-width: 0;
+  }
+
+  .ceo-executive-command-page .executive-readiness-card {
+    border: none;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .ceo-executive-command-page .executive-radar-panel {
+    gap: 12px;
+  }
+
   .ceo-briefing-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -460,6 +485,10 @@ const commandCenterCss = `
     .ceo-briefing-grid,
     .ceo-workflow-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ceo-readiness-radar-row {
+      grid-template-columns: 1fr;
     }
   }
 
@@ -695,15 +724,6 @@ function buildModuleReadinessCards({
   ];
 }
 
-function formatConfidenceDisplay(confidence) {
-  const value = Number(confidence);
-  if (!Number.isFinite(value)) {
-    return 'N/A';
-  }
-
-  return `${Math.round(value)}%`;
-}
-
 function ReadinessRing({ score, label }) {
   const hasScore = Number.isFinite(Number(score));
   const pct = hasScore ? progressWidth(score) : 0;
@@ -733,7 +753,7 @@ function ReadinessRing({ score, label }) {
       </svg>
       <div className="ceo-readiness-ring-center">
         <strong>{label}</strong>
-        <span>Overall readiness</span>
+        <span>Unified readiness</span>
       </div>
     </div>
   );
@@ -759,6 +779,11 @@ function SectionBlock({ number, title, description, children }) {
 export function ExecutiveCommandCenterView({
   executiveSignal,
   commandReadiness,
+  commandRadarAxes = [],
+  dealReadinessCombined,
+  complianceDragPenalty,
+  legalHealthRadar,
+  maValuationSignal,
   commandDecisionQueue,
   commandAlerts,
   maOverview,
@@ -775,10 +800,8 @@ export function ExecutiveCommandCenterView({
   onGenerateBoardPack,
   onViewExecutiveBriefing
 }) {
-  const readinessScore = Number(commandReadiness?.score ?? executiveSignal?.score);
-  const readinessHasScore = Number.isFinite(readinessScore);
-  const readinessLabel = readinessHasScore ? `${Math.round(readinessScore)}/100` : 'N/A';
-  const readinessConfidence = formatConfidenceDisplay(commandReadiness?.confidence);
+  const unifiedReadinessScore = normalizeScoreOrNull(dealReadinessCombined);
+  const unifiedReadinessLabel = formatModuleScoreDisplay(unifiedReadinessScore);
 
   const decisionQueueCards = buildDecisionQueueCards({
     complianceOverview,
@@ -865,11 +888,16 @@ export function ExecutiveCommandCenterView({
               </div>
 
               <article className="ceo-command-card ceo-readiness-card">
-                <div className="ceo-command-card-kicker">Decision readiness</div>
-                <ReadinessRing score={readinessHasScore ? readinessScore : null} label={readinessLabel} />
+                <div className="ceo-command-card-kicker">Unified readiness</div>
+                <ReadinessRing
+                  score={unifiedReadinessScore}
+                  label={unifiedReadinessLabel}
+                />
                 <p className="ceo-readiness-meta">
-                  Trend {commandReadiness?.trend || 'stable'} · Confidence {readinessConfidence} · Human
-                  review required.
+                  M&A valuation ({formatScoreLabel(maValuationSignal ?? maOverview.score)}) + legal/compliance
+                  ({formatScoreLabel(legalHealthRadar)}) blend · Compliance drag{' '}
+                  {complianceDragPenalty != null ? `${complianceDragPenalty} pts` : 'N/A'} · Human review
+                  required.
                 </p>
               </article>
 
@@ -953,6 +981,17 @@ export function ExecutiveCommandCenterView({
                 <p>{formatScoreLabel(module.overview.score)} · DSS signal</p>
               </Link>
             ))}
+          </div>
+
+          <div className="ceo-readiness-radar-row">
+            <article className="ceo-command-card ceo-readiness-radar-panel">
+              <ReadinessIndexCard readiness={commandReadiness} />
+            </article>
+            <article className="ceo-command-card ceo-readiness-radar-panel">
+              <div className="ceo-command-card-kicker">Corporate health radar</div>
+              <strong>Readiness by enterprise branch</strong>
+              <CorporateHealthRadar axes={commandRadarAxes} />
+            </article>
           </div>
         </SectionBlock>
 

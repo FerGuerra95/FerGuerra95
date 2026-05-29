@@ -5,6 +5,8 @@ export function ReadinessIndexCard({ readiness = {} }) {
   const hasScore = Number.isFinite(parsed);
   const scoreLabel = hasScore ? `${Math.round(parsed)}/100` : 'N/A';
   const progressWidth = hasScore ? Math.max(0, Math.min(100, Math.round(parsed))) : 0;
+  const confidenceValue = Number(readiness.confidence);
+  const confidenceLabel = Number.isFinite(confidenceValue) ? `${Math.round(confidenceValue)}%` : 'N/A';
 
   return (
     <article className="executive-command-card executive-readiness-card">
@@ -13,7 +15,7 @@ export function ReadinessIndexCard({ readiness = {} }) {
         <h3>{scoreLabel}</h3>
       </div>
       <p>
-        Trend {readiness.trend || 'stable'} · Confidence {readiness.confidence ?? 0}% · Human review required.
+        Trend {readiness.trend || 'stable'} · Confidence {confidenceLabel} · Human review required.
       </p>
       <div className="executive-progress">
         <span style={{ width: hasScore ? `${progressWidth}%` : '0%' }} />

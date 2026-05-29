@@ -2178,6 +2178,11 @@ export function CEOOverviewPage() {
       <ExecutiveCommandCenterView
         executiveSignal={executiveSignal}
         commandReadiness={commandReadiness}
+        commandRadarAxes={commandRadarAxes}
+        dealReadinessCombined={dealReadinessCombined}
+        complianceDragPenalty={complianceDragPenalty}
+        legalHealthRadar={legalHealthRadar}
+        maValuationSignal={maValuationSignal}
         commandDecisionQueue={commandDecisionQueue}
         commandAlerts={commandAlerts}
         maOverview={maOverview}
