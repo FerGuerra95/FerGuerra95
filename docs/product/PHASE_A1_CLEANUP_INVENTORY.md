@@ -8098,3 +8098,34 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Validation:** `npm run build` PASS; funding + CEO truthfulness unit tests PASS (24).
 
 **Next:** C.24.5 recording rehearsal or operator production spot-check before external recording.
+
+---
+
+## C.24.5A — Executive Overviewer Premium Command Center Redesign
+
+**Status:** COMPLETED.
+
+**Baseline:** `00725cc` (`copy(ui): refine enterprise pilot language`).
+
+**Scope:** Targeted redesign of `src/modules/ceo-overview/pages/CEOOverviewPage.jsx` only; no backend, formula, or cross-module branch redesign.
+
+**Structure implemented:**
+
+1. Executive Status (hero)
+2. Executive Decision Queue
+3. Cross-Module Intelligence Summary
+4. Module Readiness Overview
+5. Board Review Workflow
+6. Executive Briefing Packs
+
+**Sovereign mark strategy:** Reused existing repo asset `src/assets/brand/ceos-os-emblem-lion.webp` as subtle hero watermark (low opacity, non-interactive, does not block content).
+
+**Gold CTA:** Primary CTA styled as premium gold gradient (`Generate Board Review Draft`), secondary dark CTA (`View Executive Briefing`).
+
+**Truthfulness preserved:** DSS language, human review required, board review draft posture, no board-approved/certified/autonomous claims.
+
+**Claims scan:** No unsafe certified/approved/autonomous/procurement/SOC2/ISO claims added in CEO Overview.
+
+**Validation:** `npm run build` PASS; `ceoOverviewTruthfulness.test.js` PASS; `fundingDisplayFormat.test.js` PASS.
+
+**Recording readiness:** Ready for production spot-check + recording rehearsal.

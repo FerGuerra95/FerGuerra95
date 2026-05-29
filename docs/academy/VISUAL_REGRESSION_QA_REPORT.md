@@ -123,3 +123,32 @@
 **Validations:** `npm run build` PASS; `fundingDisplayFormat.test.js` PASS (7); `ceoOverviewTruthfulness.test.js` PASS (17); `npm run test:unit` not re-run (known local better-sqlite3 ABI).
 
 **Decision:** **Ready for recording rehearsal** with operator production hard refresh after deploy.
+
+---
+
+## 10. C.24.5A — Executive Overviewer Premium Command Center Redesign
+
+**Baseline:** `00725cc`.
+
+**Scope:** CEO Overview visual redesign only (`src/modules/ceo-overview/pages/CEOOverviewPage.jsx`).
+
+**Visual changes applied:**
+
+- Premium dark hero with gold accent hierarchy.
+- Sovereign watermark using existing lion brand asset (`ceos-os-emblem-lion.webp`).
+- Gold primary CTA (`Generate Board Review Draft`) and dark secondary CTA (`View Executive Briefing`).
+- Numbered section flow with compact command cards.
+
+**Safety/truthfulness:**
+
+- DSS + human review language preserved.
+- Board review draft framing preserved.
+- No board-approved/certified/autonomous/legal/investment advice claims introduced.
+
+**Validation:**
+
+- `npm run build` PASS.
+- `ceoOverviewTruthfulness.test.js` PASS.
+- `fundingDisplayFormat.test.js` PASS.
+
+**Decision:** Ready for production spot-check and recording rehearsal.

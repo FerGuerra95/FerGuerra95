@@ -2355,3 +2355,40 @@ Validation:
 - `npm run test:unit` not re-run (known local better-sqlite3 ABI).
 
 **Decision:** Ready for C.24.5 recording rehearsal / operator production spot-check.
+
+---
+
+## C.24.5A — Executive Overviewer Premium Command Center Redesign
+
+**Status:** COMPLETED / visual page redesign (CEO-only scope).
+
+**Baseline:** `00725cc`.
+
+Logic-integrity constraints preserved:
+
+- No formulas changed.
+- No Golden Dataset or Formula Registry changes.
+- No backend/auth/router/migration/package changes.
+- No cross-module source-of-truth changes.
+- N/A and insufficient_data preserved for missing signals.
+- No fake `0` introduced for missing inputs.
+
+Visual/design result:
+
+- CEO hero redesigned to premium dark command center style with gold accent.
+- Added subtle sovereign watermark using existing lion brand asset from repository.
+- Added section numbering for executive workflow readability (01–06).
+- Added gold primary CTA and dark secondary CTA while preserving existing action behavior.
+- Reorganized page content into: Executive Status, Decision Queue, Cross-Module Summary, Module Readiness, Board Review Workflow, Executive Briefing Packs.
+
+Truthfulness guard:
+
+- Maintains DSS + human review framing.
+- Uses board review draft terminology.
+- No board-approved, certified, autonomous AI, legal advice, or investment advice claims introduced.
+
+Validation:
+
+- `npm run build` PASS.
+- `npx vitest run tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` PASS.
+- `npx vitest run tests/unit/funding/fundingDisplayFormat.test.js` PASS.

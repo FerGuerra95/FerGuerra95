@@ -499,3 +499,20 @@ Expected (unchanged from C.24.4B):
 **Pilot-safe language:** DSS + human review; board review drafts (not board-approved); N/A and insufficient_data must remain visible.
 
 **Before recording:** confirm `/ceo/overview`, `/funding/dashboard`, `/compliance/reports`, `/reporting/library` read as enterprise pilot copy, not internal scaffolding.
+
+### C.24.5A Executive Overviewer premium command center checklist
+
+Focus routes:
+
+- `/dashboard`
+- `/ceo/overview`
+- Non-regression spot-check: `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard`
+
+Expected:
+
+- CEO page clearly reads as premium executive command center (dark + gold hierarchy).
+- Hero shows subtle lion/sovereign watermark integrated in background.
+- Primary CTA appears gold and visually dominant; secondary CTA is dark and subordinate.
+- Sections are numbered and ordered by executive decision flow.
+- Decision queue, cross-module summary, readiness overview, workflow, and briefing packs are visible.
+- N/A and insufficient_data remain visible; no NaN/undefined/Infinity.

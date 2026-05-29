@@ -73,6 +73,7 @@ import {
   getOptimalFundingWindowLabel,
   getRunwayStatusLabel
 } from '../../funding/utils/fundingExecutiveMetrics.js';
+import lionMark from '../../../assets/brand/ceos-os-emblem-lion.webp';
 
 const ceoOverviewCss = `
   .ceo-overview-page {
@@ -81,6 +82,12 @@ const ceoOverviewCss = `
     display: flex;
     flex-direction: column;
     gap: 38px;
+  }
+
+  .ceo-executive-command-page {
+    --ceo-gold: #d4af37;
+    --ceo-gold-soft: #f3da8a;
+    --ceo-gold-deep: #8a6a16;
   }
 
   .ceo-hero {
@@ -97,6 +104,35 @@ const ceoOverviewCss = `
     box-shadow:
       0 24px 72px rgba(0, 0, 0, 0.34),
       inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .ceo-command-hero {
+    border: 1px solid rgba(212, 175, 55, 0.24);
+    background:
+      radial-gradient(circle at 10% 0%, rgba(212, 175, 55, 0.18), transparent 34%),
+      radial-gradient(circle at 78% 6%, rgba(212, 175, 55, 0.09), transparent 32%),
+      linear-gradient(135deg, rgba(6, 10, 24, 0.99), rgba(17, 24, 39, 0.98));
+    box-shadow:
+      0 30px 84px rgba(0, 0, 0, 0.38),
+      0 0 44px rgba(212, 175, 55, 0.12),
+      inset 0 1px 0 rgba(243, 218, 138, 0.12);
+  }
+
+  .ceo-command-hero-mark {
+    position: absolute;
+    right: 18px;
+    top: 12px;
+    width: min(27vw, 300px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.15;
+    filter: saturate(1.1) drop-shadow(0 0 22px rgba(212, 175, 55, 0.22));
+  }
+
+  .ceo-command-hero-mark img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   .ceo-hero::before {
@@ -193,6 +229,34 @@ const ceoOverviewCss = `
     gap: 14px;
     align-items: center;
     margin-top: 28px;
+  }
+
+  .ceo-gold-primary-action.button {
+    border: 1px solid rgba(243, 218, 138, 0.58);
+    color: #111827;
+    background:
+      linear-gradient(135deg, #f3da8a 0%, #d4af37 42%, #b2871d 100%);
+    box-shadow:
+      0 10px 24px rgba(212, 175, 55, 0.22),
+      inset 0 1px 0 rgba(255, 251, 234, 0.5);
+  }
+
+  .ceo-gold-primary-action.button:hover:not(:disabled) {
+    filter: brightness(1.05);
+    box-shadow:
+      0 14px 26px rgba(212, 175, 55, 0.28),
+      inset 0 1px 0 rgba(255, 251, 234, 0.62);
+  }
+
+  .ceo-gold-secondary-action.button {
+    border: 1px solid rgba(212, 175, 55, 0.38);
+    color: rgba(248, 250, 252, 0.94);
+    background: rgba(15, 23, 42, 0.74);
+  }
+
+  .ceo-gold-secondary-action.button:hover:not(:disabled) {
+    border-color: rgba(243, 218, 138, 0.5);
+    background: rgba(30, 41, 59, 0.84);
   }
 
   .ceo-report-trace {
@@ -353,6 +417,26 @@ const ceoOverviewCss = `
     justify-content: space-between;
     gap: 28px;
     align-items: flex-end;
+  }
+
+  .ceo-command-section-header {
+    align-items: center;
+  }
+
+  .ceo-command-number {
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    color: rgba(17, 24, 39, 0.96);
+    border: 1px solid rgba(243, 218, 138, 0.52);
+    background: linear-gradient(135deg, #f8e6a8, #d4af37);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.2);
   }
 
   .ceo-kicker {
@@ -718,6 +802,49 @@ const ceoOverviewCss = `
     border-radius: 24px;
   }
 
+  .ceo-command-card {
+    border-radius: 24px;
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    background:
+      linear-gradient(140deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012)),
+      rgba(15, 23, 42, 0.68);
+  }
+
+  .ceo-command-card .ceo-kicker {
+    color: rgba(243, 218, 138, 0.82);
+  }
+
+  .ceo-command-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .ceo-briefing-pack-card {
+    border-radius: 18px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    background: rgba(15, 23, 42, 0.5);
+    padding: 14px;
+  }
+
+  .ceo-workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .ceo-workflow-step {
+    border-radius: 16px;
+    border: 1px solid rgba(243, 218, 138, 0.2);
+    background: rgba(15, 23, 42, 0.55);
+    padding: 14px 12px;
+  }
+
+  .ceo-workflow-step strong {
+    display: block;
+    margin-top: 6px;
+  }
+
   .ceo-muted-tight {
     margin-bottom: 0;
   }
@@ -1078,11 +1205,18 @@ const ceoOverviewCss = `
     .ceo-grid-kpis {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .ceo-command-summary-grid,
+    .ceo-workflow-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   @media (max-width: 780px) {
     .ceo-command-bar,
     .ceo-grid-kpis,
+    .ceo-command-summary-grid,
+    .ceo-workflow-grid,
     .executive-module-grid,
     .executive-radar-panel,
     .executive-snapshot-grid {
@@ -1457,7 +1591,7 @@ function SignalRow({ label, value }) {
 
 function SectionHeader({ kicker, icon: Icon, title, description }) {
   return (
-    <div className="ceo-section-header">
+    <div className="ceo-section-header ceo-command-section-header">
       <div>
         <div className="ceo-kicker">
           <Icon size={14} />
@@ -1466,6 +1600,24 @@ function SectionHeader({ kicker, icon: Icon, title, description }) {
 
         <h2>{title}</h2>
 
+        <p className="muted">{description}</p>
+      </div>
+    </div>
+  );
+}
+
+function NumberedSectionHeader({ number, kicker, icon, title, description }) {
+  const Icon = icon;
+
+  return (
+    <div className="ceo-section-header ceo-command-section-header">
+      <div className="ceo-command-number">{number}</div>
+      <div>
+        <div className="ceo-kicker">
+          <Icon size={14} />
+          {kicker}
+        </div>
+        <h2>{title}</h2>
         <p className="muted">{description}</p>
       </div>
     </div>
@@ -1779,6 +1931,10 @@ export function CEOOverviewPage() {
     window.print();
   }
 
+  function handleViewExecutiveBriefing() {
+    navigate('/reporting/library');
+  }
+
   const complianceEngine = useComplianceEngine({
     suppliers: safeSuppliers,
     alerts: safeAlerts,
@@ -2040,20 +2196,23 @@ export function CEOOverviewPage() {
     <div className="page">
       <style>{ceoOverviewCss}</style>
 
-      <div className="ceo-overview-page">
-        <section className="ceo-hero ceos-ws-hero ceo-branch-surface ceo-branch-overview">
+      <div className="ceo-overview-page ceo-executive-command-page">
+        <section className="ceo-hero ceo-command-hero ceos-ws-hero ceo-branch-surface ceo-branch-overview">
+          <div className="ceo-command-hero-mark" aria-hidden="true">
+            <img src={lionMark} alt="" />
+          </div>
           <div className="ceo-hero-layout">
             <div>
               <div className="ceo-badge-row">
-                <Badge>CEO Overview</Badge>
+                <Badge>01 Executive Status</Badge>
                 <Badge>Executive Command Center</Badge>
                 <Badge>Decision support</Badge>
                 <Badge>Human review required</Badge>
               </div>
 
               <h1 className="ceo-title">
-                Executive Command Center.
-                <span>One view for corporate intelligence.</span>
+                Operational with priority reviews.
+                <span>Critical systems are active. Priority items require executive review.</span>
               </h1>
 
               <p className="ceo-copy">
@@ -2067,9 +2226,16 @@ export function CEOOverviewPage() {
                   onClick={handleGenerateBoardPack}
                   loading={boardPackLoading}
                   disabled={!canGenerateBoardPack}
+                  className="ceo-gold-primary-action"
                 >
                   <FileText size={16} />
                   Generate Board Review Draft
+                </Button>
+                <Button
+                  onClick={handleViewExecutiveBriefing}
+                  className="ceo-gold-secondary-action"
+                >
+                  View Executive Briefing
                 </Button>
                 <span className="ceo-report-trace">
                   Last board review draft prepared:{' '}
@@ -2320,11 +2486,12 @@ export function CEOOverviewPage() {
         </section>
 
         <section className="ceo-section" data-testid="ceo-command-center-enterprise">
-          <SectionHeader
-            kicker="CEO Command Center"
+          <NumberedSectionHeader
+            number="02"
+            kicker="Executive Decision Queue"
             icon={Gauge}
-            title="Executive operating view"
-            description="Consolidated readiness, signals, decisions, board view and calendar from the executive overview service. Human review required."
+            title="Priority decisions requiring review"
+            description="Compliance exposure, risk radar, funding window and M&A opportunity updates. Decision support only."
           />
 
           <div className="executive-command-layer">
@@ -2362,11 +2529,12 @@ export function CEOOverviewPage() {
         </section>
 
         <section className="ceo-section">
-          <SectionHeader
-            kicker="Executive snapshot"
+          <NumberedSectionHeader
+            number="03"
+            kicker="Cross-Module Intelligence Summary"
             icon={Activity}
-            title="CEO’s OS at a glance"
-            description="Quick read of pilot readiness: modules, signals, risks, funding posture and board review drafts."
+            title="Executive summary of highest-impact signals"
+            description="Compact intelligence view across modules with truthful fallbacks when inputs are incomplete."
           />
 
           <div className="ceo-grid ceo-grid-kpis">
@@ -2407,11 +2575,12 @@ export function CEOOverviewPage() {
         </section>
 
         <section className="ceo-section">
-          <SectionHeader
-            kicker="Operating modules"
+          <NumberedSectionHeader
+            number="04"
+            kicker="Module Readiness Overview"
             icon={Layers3}
-            title="Enterprise branches in one executive view"
-            description="Connects core, post-merger execution and enterprise branches without decoupling active workspaces."
+            title="Branch readiness and posture"
+            description="Scores use existing DSS signals. Missing inputs remain visible as N/A or insufficient_data."
           />
 
           <div className="ceo-grid ceo-grid-three">
@@ -2675,54 +2844,51 @@ export function CEOOverviewPage() {
         </section>
 
         <section className="ceo-section">
-          <SectionHeader
-            kicker="Funding Bridge"
+          <NumberedSectionHeader
+            number="05"
+            kicker="Board Review Workflow"
             icon={Rocket}
-            title="Liquidity and runway signal"
-            description="Funding posture from enterprise funding summary. Human review required."
+            title="Draft-first workflow with human review"
+            description="Workflow supports review and draft assembly. It does not imply board approval or autonomous decisions."
           />
-          <FundingExecutiveWidget
-            summary={{
-              ...fundingSummary,
-              totalAmountRaised:
-                fundingSummary?.totalAmountRaised ?? fundingSummary?.totalRaised ?? 0
-            }}
-            currency={fundingOverview.currency}
-            className="ceo-panel ceo-branch-surface ceo-glass-branch ceo-branch-funding"
-          />
-          <Card className="ceo-panel ceo-branch-surface ceo-glass-branch ceo-branch-overview">
-            <div className="ceo-panel-head">
-              <div>
-                <div className="ceo-kicker">
-                  <Sparkles size={14} />
-                  Executive Synergy Signal
-                </div>
-                <h3 className="ceo-panel-title">M&A + Compliance + Funding + PMI + Ecosystem bridge</h3>
-                <p className="muted ceo-panel-copy">
-                  CEO’s OS combines core transaction, risk, capital, integration and enterprise branch signals
-                  as decision-support intelligence. Outputs require human review before legal, financial,
-                  investor or governance action.
-                </p>
-              </div>
-              <div className="ceo-panel-icon">
-                <Sparkles size={18} />
-              </div>
-            </div>
-            <div className="ceo-list">
-              <MiniRow label="M&A valuation source" value={fundingOverview.suggestedValuationSource} />
-              <MiniRow label="Compliance status" value={fundingOverview.complianceStatus} />
-              <MiniRow label="Funding window" value={fundingOverview.fundingWindowStatus} />
-              <MiniRow label="PMI posture" value={pmiOverview.posture} />
-              <MiniRow label="Ecosystem posture" value={ecosystemBrief?.posture || 'Activate branch records'} />
-              <MiniRow
-                label="Human review"
-                value={fundingOverview.humanReviewRequired ? 'Required' : 'Recommended'}
-              />
-            </div>
-          </Card>
+          <div className="ceo-workflow-grid">
+            <article className="ceo-workflow-step">
+              <div className="kpi-label">Step 1</div>
+              <strong>Create Draft</strong>
+              <p className="muted">Generate board review draft from current executive signals.</p>
+            </article>
+            <article className="ceo-workflow-step">
+              <div className="kpi-label">Step 2</div>
+              <strong>Review Signals</strong>
+              <p className="muted">Validate compliance, risk, funding and M&A signal posture.</p>
+            </article>
+            <article className="ceo-workflow-step">
+              <div className="kpi-label">Step 3</div>
+              <strong>Executive Data Room</strong>
+              <p className="muted">Confirm supporting data and unresolved dependencies.</p>
+            </article>
+            <article className="ceo-workflow-step">
+              <div className="kpi-label">Step 4</div>
+              <strong>Board Review Draft</strong>
+              <p className="muted">Prepare review context for executive discussion.</p>
+            </article>
+            <article className="ceo-workflow-step">
+              <div className="kpi-label">Step 5</div>
+              <strong>Human Review</strong>
+              <p className="muted">Share only after user approval and final human review.</p>
+            </article>
+          </div>
         </section>
 
-        <section className="ceo-grid ceo-grid-two">
+        <section className="ceo-section">
+          <NumberedSectionHeader
+            number="06"
+            kicker="Executive Briefing Packs"
+            icon={FileText}
+            title="Draft packs and review status"
+            description="Prepared context for executive review. Draft states never imply approval or certification."
+          />
+          <div className="ceo-grid ceo-grid-two">
           <Card className="ceo-panel ceo-branch-surface ceo-glass-branch ceo-branch-overview">
             <div className="ceo-panel-head">
               <div>
@@ -2744,12 +2910,22 @@ export function CEOOverviewPage() {
             </div>
 
             <div className="ceo-list">
-              {availablePacks.map((pack) => (
-                <div className="ceo-mini-row" key={pack}>
-                  <span className="muted">{pack}</span>
-                  <strong>Ready</strong>
-                </div>
-              ))}
+              <article className="ceo-briefing-pack-card">
+                <strong>Board review draft</strong>
+                <p className="muted">Status: Draft</p>
+              </article>
+              <article className="ceo-briefing-pack-card">
+                <strong>Compliance review</strong>
+                <p className="muted">Status: In review</p>
+              </article>
+              <article className="ceo-briefing-pack-card">
+                <strong>Strategic review</strong>
+                <p className="muted">Status: Prepared</p>
+              </article>
+              <article className="ceo-briefing-pack-card">
+                <strong>Funding review</strong>
+                <p className="muted">Status: {fundingOverview.executiveSignalEligible ? 'Prepared' : 'Pending inputs'}</p>
+              </article>
             </div>
           </Card>
 
@@ -2779,40 +2955,6 @@ export function CEOOverviewPage() {
               ))}
             </div>
           </Card>
-        </section>
-
-        <section className="ceo-section">
-          <SectionHeader
-            kicker="Next actions"
-            icon={TrendingUp}
-            title="Recommended next steps"
-            description="Validate connected branches, enterprise demo data and executive review paths before recording."
-          />
-
-          <div className="ceo-grid ceo-grid-three">
-            <ActionCard
-              icon={LockKeyhole}
-              title="Validate key routes"
-              description="Review routes, exports and data coherence across connected branches."
-              to="/ma/dashboard"
-              label="Start with M&A"
-            />
-
-            <ActionCard
-              icon={Sparkles}
-              title="Review governance posture"
-              description="Confirm governance signals and decision-support disclaimers before executive review."
-              to="/governance/dashboard"
-              label="Review governance"
-            />
-
-            <ActionCard
-              icon={FileText}
-              title="Prepare recording walkthrough"
-              description="20-minute enterprise walkthrough across M&A, Compliance, Funding, PMI and connected branches."
-              to="/dashboard"
-              label="Use this overview"
-            />
           </div>
         </section>
       </div>

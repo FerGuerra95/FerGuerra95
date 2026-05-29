@@ -222,3 +222,11 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - CEO Overview and Funding dashboards use enterprise DSS language (decision support, human review, board review drafts).
 - Do not narrate exports as certified, board-approved, or investment advice.
 - N/A and insufficient_data remain valid demo outcomes ? do not substitute zeros.
+
+### C.24.5A demo safety note (Executive Command Center redesign)
+
+- CEO redesign is visual-only and scoped to the Executive Overview page.
+- Lion/sovereign mark is decorative watermark from existing internal brand asset (no external media).
+- CTA language remains draft/review-oriented, never certified or board-approved.
+- Executive flow remains DSS decision support with human review required.
+- Missing signals continue to show N/A/insufficient_data, not fabricated values.
