@@ -2555,3 +2555,19 @@ Validation: build + truthfulness + fundingDisplayFormat tests PASS.
 **Changes:** Lion halo/ring removed; text de-containerization; black premium charcoal finish; radar branch labels on chart points.
 
 Validation: build + truthfulness + fundingDisplayFormat tests PASS.
+
+---
+
+## C.24.5A-final-correction-hard — Runtime-targeted final Executive Overview correction
+
+**Status:** COMPLETED (visual-only; no formulas/scoring/Golden Dataset change).
+
+**Baseline:** `d6c299f`.
+
+**Lion asset check:** PNG is RGB without alpha — CSS blend/mask disguise removed per integrity rule; transparent asset required for full integration.
+
+**Branch accents:** `ceoBranchAccents.js` reads `WORKSPACE_THEMES`; radar/module readiness display tones only — scores unchanged.
+
+**Radar labels:** Display abbreviations only; N/A and insufficient_data preserved; no fake 0.
+
+Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

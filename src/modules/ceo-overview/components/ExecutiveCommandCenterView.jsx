@@ -8,6 +8,7 @@ import {
   formatScoreLabel,
   normalizeScoreOrNull
 } from '../utils/ceoOverviewTruthfulness.js';
+import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 
 const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png?v=20260529-integrate';
 
@@ -173,26 +174,9 @@ const commandCenterCss = `
     height: auto;
     display: block;
     object-fit: contain;
-    mix-blend-mode: lighten;
-    opacity: 0.9;
-    filter:
-      brightness(1.12)
-      contrast(1.08)
-      saturate(1.04)
-      drop-shadow(0 10px 28px rgba(0, 0, 0, 0.45))
-      drop-shadow(0 0 26px rgba(212, 175, 55, 0.22));
-    -webkit-mask-image: radial-gradient(
-      ellipse 92% 92% at 50% 48%,
-      #000 32%,
-      rgba(0, 0, 0, 0.72) 52%,
-      transparent 70%
-    );
-    mask-image: radial-gradient(
-      ellipse 92% 92% at 50% 48%,
-      #000 32%,
-      rgba(0, 0, 0, 0.72) 52%,
-      transparent 70%
-    );
+    opacity: 1;
+    filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.18));
+    /* Asset is RGB without alpha — integration requires transparent PNG (see LION ASSET CHECK) */
   }
 
   .ceo-command-status-grid {
@@ -244,11 +228,12 @@ const commandCenterCss = `
     border: none;
     border-radius: 0;
     background: transparent;
-    color: rgba(243, 218, 138, 0.46);
-    font-size: 8px;
+    color: rgba(243, 218, 138, 0.52);
+    font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
+    line-height: 1.35;
   }
 
   .ceo-command-badge + .ceo-command-badge::before {
@@ -375,12 +360,24 @@ const commandCenterCss = `
   }
 
   .ceo-command-card-kicker {
-    font-size: 9px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: rgba(243, 218, 138, 0.48);
+    letter-spacing: 0.1em;
+    color: rgba(243, 218, 138, 0.52);
     font-weight: 550;
     margin: 0;
+    line-height: 1.35;
+  }
+
+  .ceo-module-branch-dot {
+    flex: 0 0 auto;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    box-shadow: 0 0 8px currentColor;
   }
 
   .ceo-command-card h3 {
@@ -393,8 +390,8 @@ const commandCenterCss = `
   .ceo-command-card p {
     margin: 0;
     color: var(--ceo-text-secondary);
-    line-height: 1.42;
-    font-size: 12px;
+    line-height: 1.48;
+    font-size: 13px;
   }
 
   .ceo-command-card strong {
@@ -517,17 +514,17 @@ const commandCenterCss = `
   }
 
   .ceo-priority-title {
-    font-size: 11px;
-    font-weight: 650;
-    letter-spacing: 0.02em;
-    color: rgba(243, 218, 138, 0.86);
-    line-height: 1.3;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: rgba(243, 218, 138, 0.82);
+    line-height: 1.38;
   }
 
   .ceo-priority-value {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--ceo-text-secondary);
-    line-height: 1.42;
+    line-height: 1.45;
   }
 
   .ceo-priority-empty {
@@ -686,9 +683,10 @@ const commandCenterCss = `
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: 11px;
-    color: rgba(248, 243, 231, 0.82);
+    font-size: 12px;
+    color: rgba(248, 243, 231, 0.86);
     min-width: 0;
+    line-height: 1.35;
   }
 
   .ceo-radar-swatch {
@@ -709,14 +707,14 @@ const commandCenterCss = `
 
   .ceo-radar-legend-values strong {
     color: rgba(243, 218, 138, 0.9);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 650;
     letter-spacing: -0.01em;
   }
 
   .ceo-radar-legend-values small {
     color: var(--ceo-text-muted);
-    font-size: 9px;
+    font-size: 10px;
     text-transform: capitalize;
     font-weight: 500;
   }
@@ -731,16 +729,17 @@ const commandCenterCss = `
   }
 
   .ceo-executive-command-page .ceo-radar-point-label {
-    font-size: 7.5px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    fill: rgba(248, 243, 231, 0.78);
+    font-size: 8.5px;
+    font-weight: 650;
+    letter-spacing: 0.02em;
+    fill: rgba(248, 243, 231, 0.86);
     pointer-events: none;
     user-select: none;
   }
 
   .ceo-executive-command-page .ceo-radar-point-label.is-missing {
-    fill: rgba(248, 243, 231, 0.42);
+    fill: rgba(248, 243, 231, 0.5);
+    opacity: 0.85;
   }
 
   .ceo-executive-command-page .executive-readiness-card {
@@ -771,35 +770,38 @@ const commandCenterCss = `
   }
 
   .ceo-workflow-step .ceo-step-eyebrow {
-    font-size: 8px;
-    letter-spacing: 0.14em;
+    font-size: 9px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(243, 218, 138, 0.42);
+    color: rgba(243, 218, 138, 0.48);
     font-weight: 500;
     margin: 0;
+    line-height: 1.35;
   }
 
   .ceo-workflow-step strong {
     display: block;
     margin-top: 2px;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--ceo-text-primary);
+    line-height: 1.3;
   }
 
   .ceo-workflow-step p {
     margin: 6px 0 0;
-    font-size: 11px;
-    color: var(--ceo-text-muted);
-    line-height: 1.42;
+    font-size: 12px;
+    color: var(--ceo-text-secondary);
+    line-height: 1.48;
   }
 
   .ceo-decision-card-priority {
-    font-size: 8px;
+    font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(243, 218, 138, 0.44);
+    color: rgba(243, 218, 138, 0.5);
     margin: 0;
+    line-height: 1.35;
   }
 
   .ceo-decision-card-priority.is-high {
@@ -824,10 +826,11 @@ const commandCenterCss = `
     border-radius: 0;
     background: transparent;
     color: var(--ceo-text-muted);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.02em;
     text-transform: none;
+    line-height: 1.4;
   }
 
   .ceo-decision-card-status::before {
@@ -835,16 +838,18 @@ const commandCenterCss = `
   }
 
   .ceo-module-posture {
-    font-size: 9px;
-    letter-spacing: 0.06em;
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.04em;
     text-transform: none;
-    color: var(--ceo-text-muted);
-    font-weight: 550;
+    color: var(--ceo-text-secondary);
+    font-weight: 500;
+    line-height: 1.35;
   }
 
   .ceo-module-score-row .ceo-module-posture {
     text-align: right;
-    max-width: 48%;
+    max-width: 52%;
     line-height: 1.35;
   }
 
@@ -856,7 +861,7 @@ const commandCenterCss = `
   }
 
   .ceo-module-score-row strong {
-    font-size: 20px;
+    font-size: 21px;
     letter-spacing: -0.03em;
     color: var(--ceo-text-primary);
   }
@@ -1190,35 +1195,47 @@ function buildModuleReadinessCards({
   strategyOverview
 }) {
   return [
-    { key: 'ma', label: 'M&A', overview: maOverview, tone: '#10b981', route: '/ma/dashboard' },
+    { key: 'ma', label: 'M&A', overview: maOverview, tone: getCeoBranchAccentHex('ma'), route: '/ma/dashboard' },
     {
       key: 'funding',
       label: 'Funding',
       overview: fundingOverview,
-      tone: '#f59e0b',
+      tone: getCeoBranchAccentHex('funding'),
       route: '/funding/dashboard'
     },
     {
       key: 'compliance',
       label: 'Compliance',
       overview: complianceOverview,
-      tone: '#3b82f6',
+      tone: getCeoBranchAccentHex('compliance'),
       route: '/compliance/dashboard'
     },
-    { key: 'risk', label: 'Risk', overview: riskOverview, tone: '#ef4444', route: '/risk/dashboard' },
-    { key: 'pmi', label: 'PMI / Synergies', overview: pmiOverview, tone: '#a855f7', route: '/pmi/dashboard' },
+    {
+      key: 'risk',
+      label: 'Risk',
+      overview: riskOverview,
+      tone: getCeoBranchAccentHex('risk'),
+      route: '/risk/dashboard'
+    },
+    {
+      key: 'pmi',
+      label: 'PMI / Synergies',
+      overview: pmiOverview,
+      tone: getCeoBranchAccentHex('pmi'),
+      route: '/pmi/dashboard'
+    },
     {
       key: 'governance',
       label: 'Governance',
       overview: governanceOverview,
-      tone: '#0ea5e9',
+      tone: getCeoBranchAccentHex('governance'),
       route: '/governance/dashboard'
     },
     {
       key: 'strategy',
       label: 'Strategy',
       overview: strategyOverview,
-      tone: '#38bdf8',
+      tone: getCeoBranchAccentHex('strategy'),
       route: '/strategy/dashboard'
     }
   ];
@@ -1509,7 +1526,14 @@ export function ExecutiveCommandCenterView({
                 className="ceo-command-card"
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
-                <div className="ceo-command-card-kicker">{module.label}</div>
+                <div className="ceo-command-card-kicker">
+                  <span
+                    className="ceo-module-branch-dot"
+                    style={{ background: module.tone, color: module.tone }}
+                    aria-hidden="true"
+                  />
+                  <span>{module.label}</span>
+                </div>
                 <div className="ceo-module-score-row">
                   <strong>{formatModuleScoreDisplay(module.overview.score)}</strong>
                   <span className="ceo-module-posture">

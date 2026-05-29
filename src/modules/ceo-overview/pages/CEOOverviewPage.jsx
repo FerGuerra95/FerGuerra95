@@ -57,6 +57,7 @@ import {
   normalizeScoreOrNull,
   resolveLegalHealthRadarScore
 } from '../utils/ceoOverviewTruthfulness.js';
+import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 import { boardPackApi } from '../services/boardPackApi.js';
 import { BoardPackModal } from '../components/BoardPackModal.jsx';
 import { ExecutiveCommandCenterView } from '../components/ExecutiveCommandCenterView.jsx';
@@ -2085,63 +2086,63 @@ export function CEOOverviewPage() {
       label: 'Legal',
       score: legalHealthRadar,
       route: '/compliance/audit-runs',
-      tone: '#60a5fa'
+      tone: getCeoBranchAccentHex('legal')
     }),
     buildRadarAxis({
       key: 'financial',
       label: 'Financial · M&A',
       score: maFinancialRadar.score,
       route: '/ma/valuation',
-      tone: '#34d399'
+      tone: getCeoBranchAccentHex('financial')
     }),
     buildRadarAxis({
       key: 'ops',
       label: 'Operational',
       score: operationalRadarScore,
       route: '/compliance/suppliers',
-      tone: '#a78bfa'
+      tone: getCeoBranchAccentHex('ops')
     }),
     buildRadarAxis({
       key: 'esg',
       label: 'ESG & reputational risk',
       score: governanceOverview.score,
       route: '/compliance/dashboard',
-      tone: '#4ade80'
+      tone: getCeoBranchAccentHex('esg')
     }),
     buildRadarAxis({
       key: 'funding',
       label: 'Funding',
       score: fundingRadarScore,
       route: '/funding/dashboard',
-      tone: '#fbbf24'
+      tone: getCeoBranchAccentHex('funding')
     }),
     buildRadarAxis({
       key: 'risk',
       label: 'Enterprise Risk',
       score: riskOverview.score,
       route: '/risk/dashboard',
-      tone: '#f87171'
+      tone: getCeoBranchAccentHex('risk')
     }),
     buildRadarAxis({
       key: 'strategy',
       label: 'Strategy',
       score: strategyOverview.score,
       route: '/strategy/dashboard',
-      tone: '#38bdf8'
+      tone: getCeoBranchAccentHex('strategy')
     }),
     buildRadarAxis({
       key: 'bridge',
       label: 'Bridge',
       score: bridgeOverview.score,
       route: '/bridge/dashboard',
-      tone: '#22d3ee'
+      tone: getCeoBranchAccentHex('bridge')
     }),
     buildRadarAxis({
       key: 'heritage',
       label: 'Heritage',
       score: heritageOverview.score,
       route: '/heritage/dashboard',
-      tone: '#d4af37'
+      tone: getCeoBranchAccentHex('heritage')
     })
   ];
 

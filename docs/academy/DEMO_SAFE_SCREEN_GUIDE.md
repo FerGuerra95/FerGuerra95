@@ -292,3 +292,9 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 ### C.24.5A-lion-integration addendum
 
 - Lion integrated via hero ambient gradient + lighten blend; no outer ring pseudo; hero ERI/priorities cards borderless inside unified hero shell.
+
+### C.24.5A-final-correction-hard demo safety note
+
+- Visual-only: branch accent colors, radar abbreviations, typography, black premium ? no scoring or API change.
+- Lion PNG lacks alpha; do not claim seamless blend until transparent asset is deployed.
+- N/A / insufficient_data / Pending inputs remain visible in demo narration.

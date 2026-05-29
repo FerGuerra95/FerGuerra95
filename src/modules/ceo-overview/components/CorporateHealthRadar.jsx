@@ -1,20 +1,23 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 
-const BRANCH_TONES = {
-  legal: '#60a5fa',
-  financial: '#34d399',
-  ma: '#34d399',
-  ops: '#a78bfa',
-  esg: '#4ade80',
-  funding: '#fbbf24',
-  risk: '#f87171',
-  strategy: '#38bdf8',
-  bridge: '#22d3ee',
-  heritage: '#d4af37',
-  compliance: '#3b82f6',
-  governance: '#0ea5e9',
-  pmi: '#a855f7'
+const RADAR_LABEL_SHORT = {
+  'Financial · M&A': 'M&A',
+  'ESG & reputational risk': 'ESG',
+  'Enterprise Risk': 'Risk',
+  Compliance: 'Comp.',
+  Governance: 'Gov.',
+  'PMI / Synergies': 'PMI',
+  Operational: 'Ops',
+  Heritage: 'Herit.',
+  Reporting: 'Report.',
+  Strategy: 'Strat.',
+  Funding: 'Funding',
+  Bridge: 'Bridge',
+  Legal: 'Legal',
+  'M&A': 'M&A',
+  Risk: 'Risk'
 };
 
 function normalizeScore(value) {
@@ -47,7 +50,28 @@ function axisScore(axis) {
 }
 
 function axisTone(axis) {
-  return axis?.tone || BRANCH_TONES[axis?.key] || '#d4af37';
+  if (axis?.tone) {
+    return axis.tone;
+  }
+
+  return getCeoBranchAccentHex(axis?.key);
+}
+
+function radarShortLabel(label) {
+  const safe = String(label || '').trim();
+  if (!safe) {
+    return '';
+  }
+
+  if (RADAR_LABEL_SHORT[safe]) {
+    return RADAR_LABEL_SHORT[safe];
+  }
+
+  if (safe.length <= 9) {
+    return safe;
+  }
+
+  return safe.split(/\s+/)[0];
 }
 
 function formatAxisDisplay(axis) {
@@ -98,10 +122,10 @@ function radarLabelPosition(angle, cx, cy, radius) {
 export function CorporateHealthRadar({ axes = [], className = '' }) {
   const safeAxes = Array.isArray(axes) ? axes.filter((axis) => axis && typeof axis === 'object') : [];
   const count = safeAxes.length || 1;
-  const cx = 130;
-  const cy = 130;
-  const rMax = 92;
-  const labelRadius = rMax + 22;
+  const cx = 140;
+  const cy = 140;
+  const rMax = 88;
+  const labelRadius = rMax + 28;
   const tau = Math.PI * 2;
 
   const geometry = useMemo(
@@ -112,13 +136,15 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
         const calculable = isAxisCalculable(axis);
         const radiusRatio = calculable && score !== null ? score / 100 : null;
         const label = radarLabelPosition(angle, cx, cy, labelRadius);
+        const tone = axisTone(axis);
 
         return {
           axis,
           angle,
           calculable,
           score,
-          tone: axisTone(axis),
+          tone,
+          shortLabel: radarShortLabel(axis.label),
           outerX: cx + rMax * Math.cos(angle),
           outerY: cy + rMax * Math.sin(angle),
           pointX:
@@ -150,7 +176,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
       <div className="ceo-radar-visual-wrap">
         <svg
           className="ceo-radar-svg"
-          viewBox="0 0 260 260"
+          viewBox="0 0 280 280"
           role="img"
           aria-label="Corporate health radar"
         >
@@ -244,8 +270,9 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
               dy={entry.labelDy}
               className={`ceo-radar-point-label ${entry.calculable ? '' : 'is-missing'}`.trim()}
               textAnchor={entry.labelAnchor}
+              fill={entry.tone}
             >
-              {entry.axis.label}
+              {entry.shortLabel}
             </text>
           ))}
         </svg>
@@ -266,11 +293,15 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
               className={`ceo-radar-legend-item ${entry.calculable ? '' : 'is-missing'}`.trim()}
             >
               <span className="ceo-radar-legend-label">
-                <span className="ceo-radar-swatch" style={{ background: entry.tone }} aria-hidden="true" />
+                <span
+                  className="ceo-radar-swatch"
+                  style={{ background: entry.tone, color: entry.tone }}
+                  aria-hidden="true"
+                />
                 <span>{entry.axis.label}</span>
               </span>
               <span className="ceo-radar-legend-values">
-                <strong>{formatAxisDisplay(entry.axis)}</strong>
+                <strong style={{ color: entry.tone }}>{formatAxisDisplay(entry.axis)}</strong>
                 <small>{formatAxisStatus(entry.axis)}</small>
               </span>
             </Link>

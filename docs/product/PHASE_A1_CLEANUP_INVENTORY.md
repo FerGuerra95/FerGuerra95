@@ -8307,3 +8307,27 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Radar labels:** Branch names on each radar point via SVG `<text class="ceo-radar-point-label">`; legend retained.
 
 **Validation:** build + truthfulness + fundingDisplayFormat tests PASS.
+
+---
+
+## C.24.5A-final-correction-hard — Runtime-targeted final Executive Overview correction
+
+**Status:** COMPLETED (visual-only; lion transparency asset blocker documented).
+
+**Baseline:** `d6c299f`.
+
+**Lion asset check:** `public/brand/ceos-lion-mark.png` — IHDR colorType 2 (RGB), **no alpha channel**; outer corners opaque black. Removed blend/mask CSS camouflage; honest `drop-shadow` only + cache-bust `?v=20260529-integrate`. **Pending:** approved transparent RGBA PNG replacement for full DONE criteria #1–2.
+
+**Runtime targeting report (scoped):** `.ceo-executive-command-page` hero chips, decision queue labels, module posture badges, workflow steps, radar legend rows — de-containerized via hairline separators and transparent card overrides in `executivePolish.css` / `workspaceAccent.css`. Radar panel navy reduced via `.ceo-radar-visual-wrap` charcoal shell.
+
+**Branch colors restored:** New `src/modules/ceo-overview/utils/ceoBranchAccents.js` — hex accents from `WORKSPACE_THEMES` (`workspaceTheme.js`) applied to Module Readiness bars/dots, Corporate Health Radar points/legend, and legacy `CEOOverviewPage` radar axes.
+
+**Radar labels:** Abbreviations (M&A, Comp., Funding, Gov., PMI, Risk, Bridge, Report., Strat., Herit.); expanded SVG viewBox; anchor-aware `<text class="ceo-radar-point-label">`; no truncated labels.
+
+**Typography:** Eyebrow/legend/workflow/status sizes bumped for legibility without oversized UI.
+
+**Visual QA:** `/dashboard`, `/ceo/overview` — black premium, branch accents, radar labels; lion still shows RGB black disc until asset swap.
+
+**No-regression:** `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` — unchanged.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

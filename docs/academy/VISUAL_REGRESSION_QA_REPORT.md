@@ -350,3 +350,24 @@
 | `/governance/dashboard` | PASS | No regression |
 
 **Validation:** build + truthfulness + fundingDisplayFormat tests PASS.
+
+---
+
+## 24. C.24.5A-final-correction-hard — Runtime-targeted final Executive Overview correction
+
+**Baseline:** `d6c299f`.
+
+**Lion asset check:** `public/brand/ceos-lion-mark.png` — colorType RGB (2), **no alpha**; opaque black outer background. CSS blend/mask removed; requires transparent PNG for full integration.
+
+**Runtime fixes:** Branch colors via `ceoBranchAccents.js` + `WORKSPACE_THEMES`; radar abbreviations + expanded viewBox; CEO-scoped navy suppression in `workspaceAccent.css`; typography legibility bumps; de-containerized status/legend rows.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Command center black premium + branch accents |
+| `/ceo/overview` | PARTIAL | Lion RGB disc until transparent asset |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

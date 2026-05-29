@@ -604,3 +604,13 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Radar chart: branch name on each point; legend retained.
 - Black premium charcoal finish; no navy SaaS cards in command center.
 - N/A / Insufficient data / Pending inputs preserved in UI copy.
+
+### C.24.5A-final-correction-hard checklist
+
+- Lion asset verified RGB without alpha — no CSS black-box disguise; transparent PNG still required for full blend.
+- Module Readiness + Corporate Health Radar use workspace branch accent colors (from `WORKSPACE_THEMES`).
+- Radar point labels use abbreviations; none truncated; legend readable executive list (not spreadsheet).
+- Decision/intelligence/module/workflow text: no pseudo-input bars; hairline separators only.
+- Black premium charcoal dominates; navy card surfaces suppressed inside `.ceo-executive-command-page`.
+- Executive Readiness Index remains top hero metric; Corporate Health Radar in Section 04; gold CTA preserved.
+- N/A / Insufficient data / Pending inputs visible; no fake 0 / NaN / undefined.
