@@ -7,10 +7,10 @@ function clamp(value) {
   return Math.max(0, Math.min(100, Math.round(number)));
 }
 
-export function CorporateHealthRadar({ axes = [] }) {
+export function CorporateHealthRadar({ axes = [], className = '' }) {
   const safeAxes = axes.length ? axes : [];
   return (
-    <div className="executive-radar-panel">
+    <div className={`executive-radar-panel ${className}`.trim()}>
       <svg viewBox="0 0 220 220" role="img" aria-label="Corporate health radar">
         <circle cx="110" cy="110" r="84" className="executive-radar-grid" />
         <circle cx="110" cy="110" r="56" className="executive-radar-grid" />

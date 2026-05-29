@@ -179,6 +179,16 @@
 
 ---
 
+## 13. C.24.5A-exec-polish — CEO-Oriented Final Overview
+
+**Baseline:** `e6cc109`.
+
+**Fix:** Executive Readiness Index in hero; radar preserved compact in §04 with re-scoped CSS; metrics labels separated.
+
+**Validation:** build + truthfulness tests PASS.
+
+---
+
 ## 12. C.24.5A-polish — Golden Command Center Visual Polish
 
 **Baseline:** `fa06cf5`.
@@ -188,3 +198,13 @@
 **Fix:** Scoped gold button overrides; section shells; black/gold hero; readiness ring; charcoal/gold cards.
 
 **Validation:** `npm run build` PASS; truthfulness unit tests PASS.
+
+---
+
+## 13. C.24.5A-exec-polish — CEO-Oriented Final Overview
+
+**Baseline:** `e6cc109`.
+
+**Fix:** Executive Readiness Index in hero; radar preserved compact in §04 with re-scoped CSS; metrics labels separated.
+
+**Validation:** build + truthfulness tests PASS.

@@ -529,3 +529,10 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Cards are charcoal/black with subtle gold borders (not blue SaaS panels).
 - Decision readiness uses circular ring indicator; missing score shows N/A.
 - No horizontal overflow; no clipped text; N/A preserved.
+
+### C.24.5A-exec-polish CEO flow checklist
+
+- Hero ring shows **Executive Readiness Index** (not Unified readiness).
+- Hero includes confidence + missing data + human review copy.
+- Section 04 radar is compact, gold-styled, legible (not black giant circle).
+- Unified readiness appears only as contextual footnote in §04 with distinct label.

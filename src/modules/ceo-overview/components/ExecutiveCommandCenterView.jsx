@@ -4,7 +4,6 @@ import { FileText } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import lionMark from '../../../assets/brand/ceos-os-emblem-lion.webp';
 import { CorporateHealthRadar } from './CorporateHealthRadar.jsx';
-import { ReadinessIndexCard } from './ReadinessIndexCard.jsx';
 import {
   formatModuleScoreDisplay,
   formatScoreLabel,
@@ -123,13 +122,13 @@ const commandCenterCss = `
 
   .ceo-sovereign-watermark {
     position: absolute;
-    right: 2%;
+    right: 1%;
     top: 50%;
-    width: min(34vw, 300px);
-    opacity: 0.34;
+    width: min(36vw, 340px);
+    opacity: 0.44;
     pointer-events: none;
     transform: translateY(-52%);
-    filter: drop-shadow(0 0 36px rgba(212, 175, 55, 0.42));
+    filter: drop-shadow(0 0 42px rgba(212, 175, 55, 0.48));
     z-index: 0;
   }
 
@@ -306,7 +305,6 @@ const commandCenterCss = `
 
   .ceo-readiness-ring-progress {
     fill: none;
-    stroke: url(#ceoReadinessGold);
     stroke-width: 7;
     stroke-linecap: round;
     transition: stroke-dashoffset 420ms ease;
@@ -344,6 +342,16 @@ const commandCenterCss = `
     line-height: 1.45;
   }
 
+  .ceo-priorities-card p {
+    font-size: 11px;
+    line-height: 1.42;
+  }
+
+  .ceo-priorities-card p strong {
+    font-size: 11px;
+    color: rgba(243, 218, 138, 0.88);
+  }
+
   .ceo-decision-queue-grid,
   .ceo-intelligence-grid,
   .ceo-module-readiness-grid,
@@ -362,14 +370,74 @@ const commandCenterCss = `
   }
 
   .ceo-readiness-radar-row {
-    display: grid;
-    grid-template-columns: minmax(240px, 0.9fr) minmax(0, 1.1fr);
-    gap: 10px;
     margin-top: 10px;
   }
 
-  .ceo-readiness-radar-panel {
-    min-width: 0;
+  .ceo-corporate-radar-card {
+    gap: 10px;
+  }
+
+  .ceo-executive-command-page .executive-radar-panel {
+    display: grid;
+    grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    max-height: none;
+  }
+
+  .ceo-executive-command-page .executive-radar-panel.ceo-radar-compact svg {
+    width: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .ceo-executive-command-page .executive-radar-grid,
+  .ceo-executive-command-page .executive-radar-axis {
+    fill: none;
+    stroke: rgba(212, 175, 55, 0.22);
+    stroke-width: 1;
+  }
+
+  .ceo-executive-command-page .executive-radar-fill {
+    fill: rgba(212, 175, 55, 0.16);
+    stroke: rgba(212, 175, 55, 0.72);
+    stroke-width: 2;
+  }
+
+  .ceo-executive-command-page .executive-radar-list {
+    display: grid;
+    gap: 6px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ceo-executive-command-page .executive-radar-list a {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: center;
+    padding: 7px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.12);
+    background: rgba(6, 6, 8, 0.72);
+    color: inherit;
+    text-decoration: none;
+    font-size: 11px;
+  }
+
+  .ceo-executive-command-page .executive-radar-list a strong {
+    color: rgba(243, 218, 138, 0.92);
+    font-size: 11px;
+  }
+
+  .ceo-unified-context {
+    margin: 4px 0 0;
+    padding-top: 8px;
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
+    font-size: 11px;
+    color: rgba(203, 213, 225, 0.68);
+    line-height: 1.45;
   }
 
   .ceo-executive-command-page .executive-readiness-card {
@@ -377,10 +445,6 @@ const commandCenterCss = `
     background: transparent;
     padding: 0;
     box-shadow: none;
-  }
-
-  .ceo-executive-command-page .executive-radar-panel {
-    gap: 12px;
   }
 
   .ceo-briefing-grid {
@@ -488,6 +552,10 @@ const commandCenterCss = `
     }
 
     .ceo-readiness-radar-row {
+      margin-top: 8px;
+    }
+
+    .ceo-executive-command-page .executive-radar-list {
       grid-template-columns: 1fr;
     }
   }
@@ -724,18 +792,19 @@ function buildModuleReadinessCards({
   ];
 }
 
-function ReadinessRing({ score, label }) {
+function ReadinessRing({ score, label, sublabel = 'Executive readiness' }) {
   const hasScore = Number.isFinite(Number(score));
   const pct = hasScore ? progressWidth(score) : 0;
   const radius = 42;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (pct / 100) * circumference;
+  const ringGradientId = `ceoReadinessGold-${sublabel.replace(/\s+/g, '-').toLowerCase()}`;
 
   return (
     <div className="ceo-readiness-ring-wrap">
       <svg className="ceo-readiness-ring" viewBox="0 0 96 96" aria-hidden="true">
         <defs>
-          <linearGradient id="ceoReadinessGold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={ringGradientId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#f3da8a" />
             <stop offset="52%" stopColor="#d4af37" />
             <stop offset="100%" stopColor="#9a7518" />
@@ -747,15 +816,47 @@ function ReadinessRing({ score, label }) {
           cx="48"
           cy="48"
           r={radius}
+          stroke={`url(#${ringGradientId})`}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
         />
       </svg>
       <div className="ceo-readiness-ring-center">
         <strong>{label}</strong>
-        <span>Unified readiness</span>
+        <span>{sublabel}</span>
       </div>
     </div>
+  );
+}
+
+function formatConfidenceDisplay(confidence) {
+  const value = Number(confidence);
+  if (!Number.isFinite(value)) {
+    return 'N/A';
+  }
+
+  return `${Math.round(value)}%`;
+}
+
+function ExecutiveReadinessHeroCard({ readiness }) {
+  const executiveScore = normalizeScoreOrNull(readiness?.score);
+  const scoreLabel = formatModuleScoreDisplay(executiveScore);
+  const missingBranches = (readiness?.missingData || []).filter(Boolean);
+
+  return (
+    <article className="ceo-command-card ceo-readiness-card">
+      <div className="ceo-command-card-kicker">Executive Readiness Index</div>
+      <ReadinessRing
+        score={executiveScore}
+        label={scoreLabel}
+        sublabel="Executive readiness"
+      />
+      <p className="ceo-readiness-meta">
+        Confidence {formatConfidenceDisplay(readiness?.confidence)}
+        {missingBranches.length ? ` · Missing data: ${missingBranches.join(', ')}` : ''}
+        · Trend {readiness?.trend || 'stable'} · Human review required.
+      </p>
+    </article>
   );
 }
 
@@ -887,21 +988,9 @@ export function ExecutiveCommandCenterView({
                 </div>
               </div>
 
-              <article className="ceo-command-card ceo-readiness-card">
-                <div className="ceo-command-card-kicker">Unified readiness</div>
-                <ReadinessRing
-                  score={unifiedReadinessScore}
-                  label={unifiedReadinessLabel}
-                />
-                <p className="ceo-readiness-meta">
-                  M&A valuation ({formatScoreLabel(maValuationSignal ?? maOverview.score)}) + legal/compliance
-                  ({formatScoreLabel(legalHealthRadar)}) blend · Compliance drag{' '}
-                  {complianceDragPenalty != null ? `${complianceDragPenalty} pts` : 'N/A'} · Human review
-                  required.
-                </p>
-              </article>
+              <ExecutiveReadinessHeroCard readiness={commandReadiness} />
 
-              <article className="ceo-command-card">
+              <article className="ceo-command-card ceo-priorities-card">
                 <div className="ceo-command-card-kicker">Top priorities</div>
                 {topPriorities.length ? (
                   topPriorities.map((row) => (
@@ -984,13 +1073,16 @@ export function ExecutiveCommandCenterView({
           </div>
 
           <div className="ceo-readiness-radar-row">
-            <article className="ceo-command-card ceo-readiness-radar-panel">
-              <ReadinessIndexCard readiness={commandReadiness} />
-            </article>
-            <article className="ceo-command-card ceo-readiness-radar-panel">
-              <div className="ceo-command-card-kicker">Corporate health radar</div>
-              <strong>Readiness by enterprise branch</strong>
-              <CorporateHealthRadar axes={commandRadarAxes} />
+            <article className="ceo-command-card ceo-corporate-radar-card">
+              <div className="ceo-command-card-kicker">Enterprise readiness radar</div>
+              <strong>Corporate health by branch</strong>
+              <CorporateHealthRadar axes={commandRadarAxes} className="ceo-radar-compact" />
+              <p className="ceo-unified-context">
+                Unified readiness (M&A + legal blend): {unifiedReadinessLabel} · Distinct from Executive
+                Readiness Index · M&A {formatScoreLabel(maValuationSignal ?? maOverview.score)} · Legal{' '}
+                {formatScoreLabel(legalHealthRadar)}
+                {complianceDragPenalty != null ? ` · Compliance drag ${complianceDragPenalty} pts` : ''}.
+              </p>
             </article>
           </div>
         </SectionBlock>

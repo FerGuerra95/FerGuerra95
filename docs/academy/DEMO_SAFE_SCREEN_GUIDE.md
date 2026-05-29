@@ -241,3 +241,8 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - Visual polish only: gold CTA, section shells, hero watermark ? no data or formula changes.
 - Readiness ring shows real score or N/A; confidence shows N/A when missing (no fake 0).
 - Decorative lion watermark from existing in-repo brand asset only.
+
+### C.24.5A-exec-polish demo safety note
+
+- Hero primary chart is Executive Readiness Index only; Unified readiness is contextual in §04.
+- Corporate Health Radar preserved below module cards; no duplicate readiness calculations added.

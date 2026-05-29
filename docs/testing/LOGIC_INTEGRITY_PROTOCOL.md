@@ -2417,3 +2417,17 @@ Validation:
 - `npm run build` PASS.
 - `npx vitest run tests/unit/ceo-overview/ceoOverviewTruthfulness.test.js` PASS.
 - `npx vitest run tests/unit/funding/fundingDisplayFormat.test.js` PASS.
+
+---
+
+## C.24.5A-exec-polish — CEO-Oriented Final Overview Polish
+
+**Status:** COMPLETED (CEO-only).
+
+**Baseline:** `e6cc109`.
+
+**UX:** Hero = Executive Readiness Index from `commandReadiness`; Section 04 = Corporate Health Radar + module cards; Unified readiness footnote only.
+
+Truthfulness preserved: distinct metric labels; no formula/backend changes.
+
+Validation: build + CEO/funding truthfulness tests PASS.
