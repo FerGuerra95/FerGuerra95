@@ -256,3 +256,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 - Visual-only CSS/SVG sizing polish; no metric, formula, or API changes.
 - Executive Readiness Index remains hero; Corporate Health Radar remains in §04.
+
+### C.24.5A-hero-integration-fix demo safety note
+
+- Hero composition only; sovereign mark scoped to primary block; readiness/priorities cards unchanged.

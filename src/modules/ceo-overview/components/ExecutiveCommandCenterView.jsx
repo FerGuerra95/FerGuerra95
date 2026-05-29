@@ -97,8 +97,8 @@ const commandCenterCss = `
     border-radius: 18px;
     border: 1px solid rgba(212, 175, 55, 0.38);
     background:
-      radial-gradient(circle at 82% 22%, rgba(212, 175, 55, 0.24), transparent 48%),
-      radial-gradient(circle at 10% 0%, rgba(212, 175, 55, 0.12), transparent 40%),
+      radial-gradient(circle at 22% 28%, rgba(212, 175, 55, 0.16), transparent 44%),
+      radial-gradient(circle at 8% 0%, rgba(212, 175, 55, 0.1), transparent 38%),
       linear-gradient(145deg, rgba(2, 2, 3, 0.99), rgba(8, 7, 5, 0.98));
     box-shadow:
       inset 0 1px 0 rgba(243, 218, 138, 0.14),
@@ -107,53 +107,69 @@ const commandCenterCss = `
     padding: 18px;
   }
 
-  .ceo-command-hero::before {
-    content: '';
-    position: absolute;
-    right: 5%;
-    top: 50%;
-    width: min(40vw, 340px);
-    height: min(40vw, 340px);
-    transform: translateY(-50%);
-    border-radius: 999px;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.05) 48%, transparent 74%);
-    pointer-events: none;
-    z-index: 0;
+  .ceo-command-hero-main {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(130px, 220px);
+    gap: 14px;
+    align-items: center;
+    min-width: 0;
+    padding: 4px 2px 4px 0;
   }
 
-  .ceo-command-hero::after {
-    content: '';
-    position: absolute;
-    right: 14%;
-    top: 50%;
-    width: min(28vw, 220px);
-    height: min(28vw, 220px);
-    transform: translateY(-50%);
-    border-radius: 999px;
-    border: 1px solid rgba(212, 175, 55, 0.14);
-    box-shadow: inset 0 0 28px rgba(212, 175, 55, 0.08);
-    pointer-events: none;
-    z-index: 0;
+  .ceo-command-hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
   }
 
-  .ceo-sovereign-watermark {
-    position: absolute;
-    right: 0.5%;
-    top: 50%;
-    width: min(38vw, 360px);
-    opacity: 0.52;
-    pointer-events: none;
-    transform: translateY(-52%);
-    filter: drop-shadow(0 0 48px rgba(212, 175, 55, 0.55));
-    z-index: 0;
-    mix-blend-mode: soft-light;
-  }
-
-  .ceo-sovereign-watermark img {
+  .ceo-sovereign-mark {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
+    max-width: 220px;
+    margin-left: auto;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ceo-sovereign-mark::before {
+    content: '';
+    position: absolute;
+    inset: -8%;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.28) 0%, rgba(212, 175, 55, 0.06) 52%, transparent 76%);
+    pointer-events: none;
+  }
+
+  .ceo-sovereign-mark::after {
+    content: '';
+    position: absolute;
+    inset: 6%;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    box-shadow:
+      inset 0 0 24px rgba(212, 175, 55, 0.1),
+      0 0 32px rgba(212, 175, 55, 0.12);
+    pointer-events: none;
+  }
+
+  .ceo-sovereign-mark img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 200px;
     height: auto;
     display: block;
-    filter: sepia(0.28) saturate(1.12) brightness(1.06);
+    opacity: 0.88;
+    filter:
+      drop-shadow(0 0 28px rgba(212, 175, 55, 0.42))
+      sepia(0.22) saturate(1.14) brightness(1.04);
   }
 
   .ceo-command-status-grid {
@@ -165,12 +181,6 @@ const commandCenterCss = `
     align-items: stretch;
   }
 
-  .ceo-command-hero-main {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-width: 0;
-  }
 
   .ceo-command-badge-row {
     display: flex;
@@ -660,6 +670,14 @@ const commandCenterCss = `
       grid-template-columns: 1fr;
     }
 
+    .ceo-command-hero-main {
+      grid-template-columns: minmax(0, 1fr) minmax(110px, 180px);
+    }
+
+    .ceo-sovereign-mark img {
+      max-width: 160px;
+    }
+
     .ceo-decision-queue-grid,
     .ceo-intelligence-grid,
     .ceo-module-readiness-grid,
@@ -686,6 +704,20 @@ const commandCenterCss = `
   }
 
   @media (max-width: 720px) {
+    .ceo-command-hero-main {
+      grid-template-columns: 1fr;
+    }
+
+    .ceo-sovereign-mark {
+      max-width: 180px;
+      margin: 0 auto;
+      order: -1;
+    }
+
+    .ceo-sovereign-mark img {
+      max-width: 150px;
+    }
+
     .ceo-decision-queue-grid,
     .ceo-intelligence-grid,
     .ceo-module-readiness-grid,
@@ -1074,42 +1106,44 @@ export function ExecutiveCommandCenterView({
           description="Operational posture, decision readiness and top executive priorities."
         >
           <div className="ceo-command-hero">
-            <div className="ceo-sovereign-watermark" aria-hidden="true">
-              <img src={lionMark} alt="" />
-            </div>
-
             <div className="ceo-command-status-grid">
               <div className="ceo-command-hero-main">
-                <div className="ceo-command-badge-row">
-                  <span className="ceo-command-badge">Executive Command Center</span>
-                  <span className="ceo-command-badge">Decision support</span>
-                  <span className="ceo-command-badge">Human review required</span>
+                <div className="ceo-command-hero-copy">
+                  <div className="ceo-command-badge-row">
+                    <span className="ceo-command-badge">Executive Command Center</span>
+                    <span className="ceo-command-badge">Decision support</span>
+                    <span className="ceo-command-badge">Human review required</span>
+                  </div>
+
+                  <h1 className="ceo-command-hero-title">
+                    Operational with priority reviews.
+                    <span>
+                      Critical systems are active. Priority items require executive review.
+                    </span>
+                  </h1>
+
+                  <div className="ceo-command-hero-actions">
+                    <Button
+                      onClick={onGenerateBoardPack}
+                      loading={boardPackLoading}
+                      disabled={!canGenerateBoardPack}
+                      className="ceo-gold-primary-action"
+                    >
+                      <FileText size={16} />
+                      Generate Board Review Draft
+                    </Button>
+                    <Button
+                      onClick={onViewExecutiveBriefing}
+                      variant="secondary"
+                      className="ceo-gold-secondary-action"
+                    >
+                      View Executive Briefing
+                    </Button>
+                  </div>
                 </div>
 
-                <h1 className="ceo-command-hero-title">
-                  Operational with priority reviews.
-                  <span>
-                    Critical systems are active. Priority items require executive review.
-                  </span>
-                </h1>
-
-                <div className="ceo-command-hero-actions">
-                  <Button
-                    onClick={onGenerateBoardPack}
-                    loading={boardPackLoading}
-                    disabled={!canGenerateBoardPack}
-                    className="ceo-gold-primary-action"
-                  >
-                    <FileText size={16} />
-                    Generate Board Review Draft
-                  </Button>
-                  <Button
-                    onClick={onViewExecutiveBriefing}
-                    variant="secondary"
-                    className="ceo-gold-secondary-action"
-                  >
-                    View Executive Briefing
-                  </Button>
+                <div className="ceo-sovereign-mark" aria-hidden="true">
+                  <img src={lionMark} alt="" />
                 </div>
               </div>
 

@@ -2457,3 +2457,15 @@ Validation: build + truthfulness tests PASS.
 **Fix:** Final radar/legend/hero/lion/card polish; no data or metric changes.
 
 Validation: build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-hero-integration-fix — Lion Integration and Hero Composition
+
+**Status:** COMPLETED (visual only, CEO scope).
+
+**Baseline:** `566e824`.
+
+**Fix:** Sovereign mark integrated inside `.ceo-command-hero-main`; no longer absolute behind readiness/priorities columns.
+
+Validation: build + truthfulness tests PASS.

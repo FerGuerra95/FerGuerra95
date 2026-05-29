@@ -8195,3 +8195,15 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Fix:** Radar 46/54 + 360px SVG; lighter legend rows; hero black/gold + sovereign seal ring; lion soft-light; warmer charcoal cards.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## C.24.5A-hero-integration-fix — Lion Integration and Hero Composition
+
+**Status:** COMPLETED.
+
+**Baseline:** `566e824`.
+
+**Fix:** Lion moved from absolute hero watermark into primary hero block grid (copy + sovereign mark); removed right-side glow behind ERI/priorities panels.
+
+**Validation:** build + truthfulness tests PASS.

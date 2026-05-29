@@ -248,3 +248,13 @@
 **Fix:** Radar 46/54 + larger SVG (max 360px); lighter legend rows; hero black/gold; premium lion watermark; tighter vertical spacing.
 
 **Validation:** build + truthfulness tests PASS.
+
+---
+
+## 16. C.24.5A-hero-integration-fix — Lion Integration and Hero Composition
+
+**Baseline:** `566e824`.
+
+**Fix:** Lion moved into primary hero block; removed absolute watermark behind side panels.
+
+**Validation:** build + truthfulness tests PASS.

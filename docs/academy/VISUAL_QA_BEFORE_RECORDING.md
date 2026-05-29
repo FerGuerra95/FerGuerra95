@@ -550,3 +550,9 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Legend rows thin/transparent (not table boxes).
 - Hero reads black/gold; lion watermark with seal ring aura.
 - Gold CTA unchanged; ERI hero metric unchanged.
+
+### C.24.5A-hero-integration-fix checklist
+
+- Lion lives inside primary hero block (not behind ERI / Top Priorities panels).
+- Hero grid: main block | ERI | priorities — lion only in main block.
+- No metric, formula, or backend changes.
