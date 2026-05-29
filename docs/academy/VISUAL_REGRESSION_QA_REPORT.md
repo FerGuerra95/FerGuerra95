@@ -189,6 +189,16 @@
 
 ---
 
+## 14. C.24.5A-radar-polish — Corporate Health Radar Visual Recovery
+
+**Baseline:** `2a760a8`.
+
+**Fix:** Premium radar layout, larger SVG, branch legend swatches, N/A-safe polygon.
+
+**Validation:** build + truthfulness tests PASS.
+
+---
+
 ## 12. C.24.5A-polish — Golden Command Center Visual Polish
 
 **Baseline:** `fa06cf5`.
@@ -206,5 +216,15 @@
 **Baseline:** `e6cc109`.
 
 **Fix:** Executive Readiness Index in hero; radar preserved compact in §04 with re-scoped CSS; metrics labels separated.
+
+**Validation:** build + truthfulness tests PASS.
+
+---
+
+## 14. C.24.5A-radar-polish — Corporate Health Radar Visual Recovery
+
+**Baseline:** `2a760a8`.
+
+**Fix:** Premium radar layout, larger SVG, branch legend swatches, N/A-safe polygon.
 
 **Validation:** build + truthfulness tests PASS.
