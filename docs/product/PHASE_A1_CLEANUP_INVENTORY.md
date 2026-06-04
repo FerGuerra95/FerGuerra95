@@ -8331,3 +8331,24 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **No-regression:** `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` — unchanged.
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+---
+
+## C.24.5A-final-close-authorized - Executive Overview transparent asset close
+
+**Status:** COMPLETED.
+
+**Baseline:** `b216182`.
+
+**Asset replacement:** Authorized transparent source `public/brand/ceos-lion-mark.png.png` was copied into `public/brand/ceos-lion-mark.png`; the duplicate `png.png` was removed after verification.
+
+**Lion asset check:** final PNG exists, `Format32bppArgb`, alpha channel present, sampled outer background alpha `0,0,0,0,0,0,0,0`, safe for hero use.
+
+**Runtime selector targeting:** `.ceo-command-badge`, `.ceo-command-hero`, `.ceo-command-status-grid`, `.ceo-priorities-card`, `.ceo-priority-item`, `.ceo-decision-card-priority`, `.ceo-module-posture`, `.ceo-module-progress`, `.ceo-radar-visual-wrap`, `.ceo-radar-point-label`, `.ceo-workflow-step`, `.ceo-step-eyebrow`, `.ceo-lion-mark`.
+
+**Fixes:** hero now uses `/brand/ceos-lion-mark.png`; radar point labels no longer duplicate SVG title text; priority labels are text accents, not navy card-like pills; CEO material CSS is imported and scoped to `.ceo-executive-command-page`.
+
+**Branch colors:** existing `WORKSPACE_THEMES` accents remain the source via CEO branch accent utilities; no new palette or score changes.
+
+**Visual QA:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` PASS; no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

@@ -1,0 +1,294 @@
+/*
+  C.24.5C — Executive Command Center material system.
+  Scoped to overview workspace command page only.
+  Loaded via ExecutiveCommandCenterView; paired with workspaceAccent cascade wins.
+*/
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page {
+  --ceo-mat-void: #030303;
+  --ceo-mat-obsidian: #050505;
+  --ceo-mat-graphite: #0a0a0a;
+  --ceo-mat-slate: #0e0e0e;
+  --ceo-mat-gold-atmo: rgba(212, 175, 55, 0.09);
+  --ceo-mat-gold-whisper: rgba(243, 218, 138, 0.06);
+  --ceo-mat-shadow-deep: 0 40px 100px rgba(0, 0, 0, 0.72);
+  --ceo-mat-shadow-lift: 0 16px 48px rgba(0, 0, 0, 0.55);
+  --ceo-mat-inset-top: inset 0 1px 0 rgba(255, 248, 230, 0.05);
+  --ceo-mat-inset-depth: inset 0 -28px 56px rgba(0, 0, 0, 0.42);
+  --ceo-mat-carved: linear-gradient(168deg, #0d0d0d 0%, #060606 46%, #090909 100%);
+  --ceo-mat-module: linear-gradient(155deg, rgba(18, 18, 17, 0.94) 0%, rgba(8, 8, 8, 0.98) 100%);
+  --ceo-mat-hero: radial-gradient(ellipse 70% 85% at 58% 42%, rgba(212, 175, 55, 0.11), transparent 62%),
+    radial-gradient(ellipse 45% 55% at 12% 18%, rgba(212, 175, 55, 0.04), transparent 58%),
+    linear-gradient(152deg, #040404 0%, #080808 48%, #030303 100%);
+  gap: 32px !important;
+}
+
+/* ——— Carved section shells ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-section-shell {
+  border: none !important;
+  border-radius: 28px !important;
+  background: var(--ceo-mat-carved) !important;
+  box-shadow: var(--ceo-mat-shadow-deep), var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth) !important;
+  padding: 28px 28px 24px !important;
+  gap: 20px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-section-header {
+  padding-bottom: 8px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-section-title {
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+  color: #faf6eb !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-section-copy {
+  font-size: 0.92rem !important;
+  line-height: 1.6 !important;
+  color: rgba(248, 243, 231, 0.62) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-number {
+  width: 46px !important;
+  height: 46px !important;
+  box-shadow: 0 0 28px rgba(212, 175, 55, 0.35), var(--ceo-mat-inset-top) !important;
+}
+
+/* ——— Cinematic hero ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero {
+  border: none !important;
+  border-radius: 22px !important;
+  background: var(--ceo-mat-hero) !important;
+  box-shadow: var(--ceo-mat-shadow-lift), var(--ceo-mat-inset-top), inset 0 0 80px rgba(0, 0, 0, 0.35) !important;
+  padding: 28px 26px 26px !important;
+  overflow: hidden !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main {
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 360px) !important;
+  gap: 8px !important;
+  align-items: center !important;
+  min-height: 220px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title {
+  font-size: clamp(2rem, 3.6vw, 2.75rem) !important;
+  line-height: 1.06 !important;
+  font-weight: 650 !important;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title span {
+  font-size: clamp(1rem, 1.7vw, 1.15rem) !important;
+  margin-top: 12px !important;
+  color: rgba(248, 243, 231, 0.66) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-badge {
+  font-size: 0.68rem !important;
+  letter-spacing: 0.16em !important;
+  color: rgba(243, 218, 138, 0.72) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap {
+  max-width: 340px !important;
+  margin-left: auto !important;
+  margin-right: -8px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap::before {
+  inset: -28% -20% !important;
+  background: radial-gradient(
+    circle at 50% 46%,
+    rgba(212, 175, 55, 0.28) 0%,
+    rgba(212, 175, 55, 0.1) 28%,
+    rgba(212, 175, 55, 0.03) 52%,
+    transparent 72%
+  ) !important;
+  filter: blur(8px) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark {
+  max-width: 320px !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.32)) drop-shadow(0 0 80px rgba(212, 175, 55, 0.12))
+    drop-shadow(0 16px 32px rgba(0, 0, 0, 0.5)) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-status-grid {
+  margin-top: 24px !important;
+  padding-top: 24px !important;
+  border-top: none !important;
+  box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.06) !important;
+  gap: 20px !important;
+  grid-template-columns: minmax(0, 1.45fr) minmax(220px, 0.75fr) minmax(220px, 0.75fr) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priorities-card {
+  background: linear-gradient(160deg, rgba(14, 14, 13, 0.88), rgba(6, 6, 6, 0.95)) !important;
+  border: none !important;
+  border-radius: 18px !important;
+  box-shadow: var(--ceo-mat-inset-top), inset 0 -16px 32px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.35) !important;
+  padding: 18px 16px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card {
+  box-shadow: var(--ceo-mat-inset-top), inset 0 -16px 32px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* ——— Operational modules (decision / intelligence / readiness) ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid {
+  gap: 16px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card {
+  background: var(--ceo-mat-module) !important;
+  border: none !important;
+  border-radius: 18px !important;
+  box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 10px 36px rgba(0, 0, 0, 0.4) !important;
+  padding: 20px 18px !important;
+  transition: transform 200ms ease, box-shadow 200ms ease !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card + .ceo-command-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card + .ceo-command-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card + .ceo-command-card {
+  box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 10px 36px rgba(0, 0, 0, 0.4) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card:hover,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card:hover,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--ceo-mat-inset-top), 0 18px 48px rgba(0, 0, 0, 0.48), 0 0 24px rgba(212, 175, 55, 0.06) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card strong {
+  font-size: 1.05rem !important;
+  font-weight: 650 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card p {
+  font-size: 0.9rem !important;
+  line-height: 1.58 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-card-priority {
+  width: auto !important;
+  max-width: max-content !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 0.72rem !important;
+  line-height: 1.45 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-score-row strong {
+  font-size: 1.65rem !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-branch-dot {
+  width: 9px !important;
+  height: 9px !important;
+}
+
+/* ——— Executive radar ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-corporate-radar-card {
+  padding: 12px 0 0 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap {
+  max-width: 520px !important;
+  min-height: 400px !important;
+  padding: 24px !important;
+  border-radius: 24px !important;
+  background: radial-gradient(circle at 50% 42%, rgba(212, 175, 55, 0.08), transparent 58%),
+    linear-gradient(180deg, rgba(12, 12, 11, 0.96), rgba(4, 4, 4, 0.98)) !important;
+  box-shadow: var(--ceo-mat-shadow-lift), var(--ceo-mat-inset-top), inset 0 0 100px rgba(212, 175, 55, 0.04) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-svg {
+  max-width: 460px !important;
+  min-height: 380px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-point-label {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+/* ——— Workflow progression ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-grid {
+  gap: 12px !important;
+  position: relative !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step {
+  background: var(--ceo-mat-module) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  border-top: none !important;
+  box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 8px 28px rgba(0, 0, 0, 0.38) !important;
+  padding: 20px 16px 18px !important;
+  min-height: 120px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step .ceo-step-eyebrow {
+  font-size: 0.68rem !important;
+  color: rgba(243, 218, 138, 0.65) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step strong {
+  font-size: 1.12rem !important;
+  margin-top: 8px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step p {
+  font-size: 0.88rem !important;
+  line-height: 1.55 !important;
+}
+
+/* ——— Briefing packs ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid {
+  gap: 16px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card {
+  background: var(--ceo-mat-module) !important;
+  border: none !important;
+  border-radius: 18px !important;
+  box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 12px 40px rgba(0, 0, 0, 0.42) !important;
+  padding: 22px 20px !important;
+  min-height: 96px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: var(--ceo-mat-inset-top), 0 20px 52px rgba(0, 0, 0, 0.5), 0 0 28px rgba(212, 175, 55, 0.08) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card strong {
+  font-size: 1.08rem !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-title {
+  font-size: 0.9rem !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-truthfulness-banner {
+  font-size: 0.78rem !important;
+  color: rgba(248, 243, 231, 0.45) !important;
+  letter-spacing: 0.02em !important;
+}

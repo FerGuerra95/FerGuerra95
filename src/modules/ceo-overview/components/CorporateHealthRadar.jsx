@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
-
 const RADAR_LABEL_SHORT = {
   'Financial · M&A': 'M&A',
   'ESG & reputational risk': 'ESG',
@@ -74,27 +72,6 @@ function radarShortLabel(label) {
   return safe.split(/\s+/)[0];
 }
 
-function formatAxisDisplay(axis) {
-  if (axis?.displayLabel) {
-    return axis.displayLabel;
-  }
-
-  const score = axisScore(axis);
-  return score === null ? 'N/A' : `${score}%`;
-}
-
-function formatAxisStatus(axis) {
-  if (!isAxisCalculable(axis)) {
-    return 'Pending inputs';
-  }
-
-  if (axis?.status && axis.status !== 'normal') {
-    return axis.status.replace(/_/g, ' ');
-  }
-
-  return 'DSS signal';
-}
-
 function radarLabelAnchor(cos) {
   if (cos > 0.28) {
     return 'start';
@@ -122,10 +99,10 @@ function radarLabelPosition(angle, cx, cy, radius) {
 export function CorporateHealthRadar({ axes = [], className = '' }) {
   const safeAxes = Array.isArray(axes) ? axes.filter((axis) => axis && typeof axis === 'object') : [];
   const count = safeAxes.length || 1;
-  const cx = 140;
-  const cy = 140;
-  const rMax = 88;
-  const labelRadius = rMax + 28;
+  const cx = 160;
+  const cy = 160;
+  const rMax = 98;
+  const labelRadius = rMax + 40;
   const tau = Math.PI * 2;
 
   const geometry = useMemo(
@@ -176,7 +153,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
       <div className="ceo-radar-visual-wrap">
         <svg
           className="ceo-radar-svg"
-          viewBox="0 0 280 280"
+          viewBox="0 0 320 320"
           role="img"
           aria-label="Corporate health radar"
         >
@@ -186,10 +163,17 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
               <stop offset="52%" stopColor="rgba(212, 175, 55, 0.34)" />
               <stop offset="100%" stopColor="rgba(154, 117, 24, 0.28)" />
             </linearGradient>
-            <filter id="ceoRadarGlow" x="-24%" y="-24%" width="148%" height="148%">
-              <feGaussianBlur stdDeviation="3.2" result="blur" />
+            <filter id="ceoRadarGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <filter id="ceoRadarNodeGlow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="2.5" result="nodeBlur" />
+              <feMerge>
+                <feMergeNode in="nodeBlur" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
@@ -231,6 +215,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
               className="executive-radar-fill"
               points={polygonPoints}
               fill={`url(#${gradientId})`}
+              fillOpacity="0.82"
               filter="url(#ceoRadarGlow)"
             />
           ) : null}
@@ -241,11 +226,12 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
                 key={`${entry.axis.key}-node`}
                 cx={entry.pointX}
                 cy={entry.pointY}
-                r="5"
+                r="6"
                 className="executive-radar-node"
                 fill={entry.tone}
-                stroke="rgba(248, 243, 231, 0.75)"
-                strokeWidth="1.2"
+                stroke="rgba(248, 243, 231, 0.82)"
+                strokeWidth="1.4"
+                filter="url(#ceoRadarNodeGlow)"
               />
             ) : (
               <circle
@@ -271,6 +257,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
               className={`ceo-radar-point-label ${entry.calculable ? '' : 'is-missing'}`.trim()}
               textAnchor={entry.labelAnchor}
               fill={entry.tone}
+              aria-label={entry.axis.label}
             >
               {entry.shortLabel}
             </text>
@@ -278,36 +265,11 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
         </svg>
       </div>
 
-      <div className="ceo-radar-legend-wrap">
-        {missingCount > 0 ? (
-          <p className="ceo-radar-incomplete-note">
-            Some branches require additional inputs before a complete executive posture can be shown.
-          </p>
-        ) : null}
-
-        <div className="executive-radar-list ceo-radar-legend">
-          {geometry.map((entry) => (
-            <Link
-              key={entry.axis.key}
-              to={entry.axis.route || '/dashboard'}
-              className={`ceo-radar-legend-item ${entry.calculable ? '' : 'is-missing'}`.trim()}
-            >
-              <span className="ceo-radar-legend-label">
-                <span
-                  className="ceo-radar-swatch"
-                  style={{ background: entry.tone, color: entry.tone }}
-                  aria-hidden="true"
-                />
-                <span>{entry.axis.label}</span>
-              </span>
-              <span className="ceo-radar-legend-values">
-                <strong style={{ color: entry.tone }}>{formatAxisDisplay(entry.axis)}</strong>
-                <small>{formatAxisStatus(entry.axis)}</small>
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
+      {missingCount > 0 ? (
+        <p className="ceo-radar-incomplete-note">
+          Some branches require additional inputs before a complete executive posture can be shown.
+        </p>
+      ) : null}
     </div>
   );
 }

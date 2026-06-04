@@ -614,3 +614,15 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Black premium charcoal dominates; navy card surfaces suppressed inside `.ceo-executive-command-page`.
 - Executive Readiness Index remains top hero metric; Corporate Health Radar in Section 04; gold CTA preserved.
 - N/A / Insufficient data / Pending inputs visible; no fake 0 / NaN / undefined.
+### C.24.5A-final-close-authorized checklist
+
+- Transparent lion asset deployed at `/brand/ceos-lion-mark.png`; final PNG has alpha and transparent outer background.
+- Hero lion uses the public PNG path; no webp fallback or CSS camouflage for an opaque asset.
+- Hero chips and priority labels are lightweight text accents, not input bars or technical pills.
+- Decision priority labels no longer inherit global `[class*="card"]` navy surfaces.
+- Radar point labels are readable abbreviations only: Legal, M&A, Ops, ESG, Funding, Risk, Strat., Bridge.
+- Black/charcoal/gold material finish remains scoped to Executive Overview.
+- Branch colors continue to use existing workspace accents; no invented palette.
+- `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` checked with no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
+- Executive Readiness Index remains top hero metric; Corporate Health Radar remains Section 04; gold CTA preserved.
+- N/A / insufficient_data / Pending inputs visible; no fake 0.

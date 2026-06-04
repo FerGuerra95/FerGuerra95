@@ -298,3 +298,12 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - Visual-only: branch accent colors, radar abbreviations, typography, black premium ? no scoring or API change.
 - Lion PNG lacks alpha; do not claim seamless blend until transparent asset is deployed.
 - N/A / insufficient_data / Pending inputs remain visible in demo narration.
+
+### C.24.5A-final-close-authorized demo safety note
+
+- Transparent lion asset is now deployed at `/brand/ceos-lion-mark.png`; no opaque black PNG workaround is used.
+- Executive Overview final close is visual-only: hero asset, CEO-scoped material finish, runtime-targeted label cleanup and radar label readability.
+- Decision priority states remain visible as text accents; they are not hidden or converted into scores.
+- Branch colors come from existing workspace accents; no new palette or data values were introduced.
+- DSS, Human Review Required, Board Review Draft, N/A and insufficient_data language remains safe for synthetic demo narration.
+- No backend, formula, Golden Dataset, Formula Registry, package/config, route or demo data changes.

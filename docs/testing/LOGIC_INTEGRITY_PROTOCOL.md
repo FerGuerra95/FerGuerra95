@@ -2571,3 +2571,20 @@ Validation: build + truthfulness + fundingDisplayFormat tests PASS.
 **Radar labels:** Display abbreviations only; N/A and insufficient_data preserved; no fake 0.
 
 Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+---
+
+## C.24.5A-final-close-authorized - Logic integrity note
+
+**Status:** COMPLETED (visual-only; no formulas/scoring/Golden Dataset change).
+
+**Baseline:** `b216182`.
+
+**Asset:** `public/brand/ceos-lion-mark.png` replaced with authorized transparent RGBA PNG; asset verification PASS.
+
+**Runtime CSS scope:** Executive Overview selectors only under `.ceo-executive-command-page`; `ceoMaterialSystem.css` is imported by `ExecutiveCommandCenterView.jsx` and scoped to `main-area[data-workspace='overview']`.
+
+**Truthfulness:** Executive Readiness Index remains the hero metric; Corporate Health Radar remains Section 04; N/A, insufficient_data, Pending inputs and human review language preserved.
+
+**No logic impact:** no backend, API, formula helper, score normalization, Golden Dataset, Formula Registry, package/config, route or demo data changes.
+
+Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

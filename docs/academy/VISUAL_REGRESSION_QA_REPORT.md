@@ -371,3 +371,25 @@
 | `/governance/dashboard` | PASS | No regression |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+---
+
+## 25. C.24.5A-final-close-authorized - Executive Overview Transparent Lion Close
+
+**Baseline:** `b216182`.
+
+**Asset:** `public/brand/ceos-lion-mark.png.png` authorized as transparent source; copied to `public/brand/ceos-lion-mark.png`; duplicate removed. Final asset check PASS: `Format32bppArgb`, alpha true, outer sampled alpha all zero.
+
+**Runtime targeting:** `.ceo-command-badge`, `.ceo-command-hero`, `.ceo-command-status-grid`, `.ceo-priorities-card`, `.ceo-priority-item`, `.ceo-decision-card-priority`, `.ceo-module-posture`, `.ceo-module-progress`, `.ceo-radar-visual-wrap`, `.ceo-radar-point-label`, `.ceo-workflow-step`, `.ceo-step-eyebrow`, `.ceo-lion-mark`.
+
+**Fixes:** hero image now resolves to `/brand/ceos-lion-mark.png`; radar SVG labels no longer duplicate `<title>` text; decision priority labels are transparent text accents; CEO material CSS confirmed imported and scoped.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Transparent lion path, readable radar labels, no overflow |
+| `/ceo/overview` | PASS | Same command center render, no ErrorBoundary |
+| `/ma/dashboard` | PASS | No regression quick check |
+| `/funding/dashboard` | PASS | No regression quick check |
+| `/risk/register` | PASS | No regression quick check |
+| `/governance/dashboard` | PASS | No regression quick check |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

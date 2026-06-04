@@ -1340,13 +1340,67 @@
   box-shadow: inset 0 0 40px rgba(212, 175, 55, 0.04) !important;
 }
 
-/* C.24.5A-final-correction-hard — suppress navy sticker surfaces inside command center only */
-.main-area[data-workspace='overview'] .ceo-executive-command-page :is(.ceo-command-card, .ceo-readiness-card, .ceo-priorities-card) {
+/* Hero sub-cards material — ceoMaterialSystem.css owns readiness/priorities surfaces */
+.main-area[data-workspace='overview'] .ceo-executive-command-page .ceo-command-hero .ceo-command-card:not(.ceo-readiness-card):not(.ceo-priorities-card) {
   background: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+}
+
+/* C.24.5B-hard-runtime — highest cascade: overview command center black premium */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page {
+  gap: 26px !important;
+  color: #f8f3e7 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero {
+  background:
+    radial-gradient(ellipse 55% 68% at 82% 38%, rgba(212, 175, 55, 0.1), transparent 58%),
+    linear-gradient(155deg, #050505, #080808 52%, #050505) !important;
+  border-color: rgba(212, 175, 55, 0.1) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-section-shell {
+  background: linear-gradient(180deg, rgba(10, 9, 8, 0.96), rgba(5, 5, 5, 0.98)) !important;
+  border-color: rgba(212, 175, 55, 0.12) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page :is(
+  .executive-radar-panel,
+  .ceo-corporate-radar-card
+) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-progress {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: none !important;
+  height: 5px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-item {
+  border-bottom: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-status-grid {
+  border-top-color: rgba(212, 175, 55, 0.05) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute;
+  inset: -18% -12%;
+  background: radial-gradient(
+    circle at 50% 44%,
+    rgba(212, 175, 55, 0.18) 0%,
+    rgba(212, 175, 55, 0.06) 32%,
+    transparent 72%
+  ) !important;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* ——— Section typography (lower panels) ——— */
@@ -1569,7 +1623,7 @@
   [class*='-hero'],
   .ceo-hero,
   .suppliers-hero
-) {
+):not(.ceo-command-hero) {
   background: var(--ws-hero-gradient) !important;
   border-color: var(--ws-accent-border) !important;
 }

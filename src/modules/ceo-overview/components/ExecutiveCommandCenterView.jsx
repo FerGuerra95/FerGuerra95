@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FileText } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import { CorporateHealthRadar } from './CorporateHealthRadar.jsx';
+import '../styles/ceoMaterialSystem.css';
 import {
   formatModuleScoreDisplay,
   formatScoreLabel,
@@ -10,32 +11,33 @@ import {
 } from '../utils/ceoOverviewTruthfulness.js';
 import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 
-const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png?v=20260529-integrate';
+const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png';
 
 const commandCenterCss = `
   .ceo-executive-command-page {
     --ceo-gold: #d4af37;
     --ceo-gold-soft: #f3da8a;
     --ceo-gold-deep: #8a6a16;
-    --ceo-gold-border: rgba(212, 175, 55, 0.18);
-    --ceo-gold-border-strong: rgba(245, 197, 92, 0.22);
-    --ceo-gold-glow: rgba(245, 197, 92, 0.1);
-    --ceo-gold-glow-soft: rgba(212, 175, 55, 0.14);
+    --ceo-gold-border: rgba(212, 175, 55, 0.14);
+    --ceo-gold-border-strong: rgba(245, 197, 92, 0.16);
+    --ceo-gold-glow: rgba(245, 197, 92, 0.08);
+    --ceo-gold-glow-soft: rgba(212, 175, 55, 0.12);
     --ceo-black: #050505;
-    --ceo-charcoal: rgba(12, 11, 9, 0.94);
-    --ceo-charcoal-panel: rgba(16, 14, 11, 0.92);
-    --ceo-card-inner: rgba(15, 15, 14, 0.88);
-    --ceo-card-inner-alt: rgba(18, 17, 15, 0.86);
+    --ceo-graphite: #070707;
+    --ceo-charcoal: rgba(10, 9, 8, 0.96);
+    --ceo-charcoal-panel: rgba(12, 11, 9, 0.94);
+    --ceo-card-inner: rgba(14, 13, 12, 0.82);
+    --ceo-card-inner-alt: rgba(16, 15, 13, 0.78);
     --ceo-text-primary: #f8f3e7;
-    --ceo-text-secondary: rgba(248, 243, 231, 0.68);
-    --ceo-text-muted: rgba(248, 243, 231, 0.48);
-    --ceo-line: rgba(212, 175, 55, 0.18);
+    --ceo-text-secondary: rgba(248, 243, 231, 0.72);
+    --ceo-text-muted: rgba(248, 243, 231, 0.52);
+    --ceo-line: rgba(212, 175, 55, 0.1);
     width: min(1480px, 100%);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    color: rgba(248, 243, 231, 0.94);
+    gap: 26px;
+    color: rgba(248, 243, 231, 0.96);
   }
 
   .ceo-command-section {
@@ -45,26 +47,27 @@ const commandCenterCss = `
   }
 
   .ceo-command-section-shell {
-    border-radius: 22px;
-    border: 1px solid var(--ceo-gold-border-strong);
+    border-radius: 24px;
+    border: 1px solid var(--ceo-gold-border);
     background:
-      radial-gradient(circle at 0% 0%, var(--ceo-gold-glow-soft), transparent 42%),
-      linear-gradient(180deg, var(--ceo-charcoal), rgba(7, 7, 5, 0.96));
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212, 175, 55, 0.05), transparent 55%),
+      radial-gradient(circle at 100% 100%, rgba(8, 10, 18, 0.35), transparent 48%),
+      linear-gradient(180deg, var(--ceo-charcoal), rgba(5, 5, 5, 0.98));
     box-shadow:
-      0 18px 48px rgba(0, 0, 0, 0.46),
-      inset 0 1px 0 rgba(245, 197, 92, 0.06);
-    padding: 16px 16px 14px;
+      0 24px 56px rgba(0, 0, 0, 0.52),
+      inset 0 1px 0 rgba(245, 197, 92, 0.04);
+    padding: 22px 22px 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
   }
 
   .ceo-command-section-header {
     display: flex;
     align-items: flex-start;
-    gap: 14px;
-    padding-bottom: 2px;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    gap: 16px;
+    padding-bottom: 4px;
+    border-bottom: none;
   }
 
   .ceo-command-number {
@@ -87,16 +90,17 @@ const commandCenterCss = `
 
   .ceo-command-section-title {
     margin: 0;
-    font-size: 20px;
+    font-size: 22px;
+    font-weight: 700;
     letter-spacing: -0.03em;
     color: var(--ceo-text-primary);
   }
 
   .ceo-command-section-copy {
-    margin: 4px 0 0;
+    margin: 6px 0 0;
     color: var(--ceo-text-secondary);
-    line-height: 1.48;
-    font-size: 12px;
+    line-height: 1.55;
+    font-size: 13px;
   }
 
   .ceo-command-section-body {
@@ -106,16 +110,16 @@ const commandCenterCss = `
   .ceo-command-hero {
     position: relative;
     overflow: hidden;
-    border-radius: 18px;
-    border: 1px solid rgba(212, 175, 55, 0.14);
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
     background:
-      radial-gradient(circle at 78% 42%, rgba(212, 175, 55, 0.11), transparent 46%),
-      radial-gradient(circle at 18% 18%, rgba(212, 175, 55, 0.08), transparent 40%),
-      linear-gradient(145deg, rgba(5, 5, 5, 0.99), rgba(9, 8, 6, 0.98));
+      radial-gradient(ellipse 55% 70% at 82% 38%, rgba(212, 175, 55, 0.09), transparent 58%),
+      radial-gradient(ellipse 40% 50% at 12% 20%, rgba(212, 175, 55, 0.05), transparent 52%),
+      linear-gradient(155deg, rgba(4, 4, 4, 0.99), rgba(8, 7, 6, 0.98) 48%, rgba(5, 5, 5, 0.99));
     box-shadow:
-      inset 0 1px 0 rgba(243, 218, 138, 0.08),
-      0 14px 40px rgba(0, 0, 0, 0.42);
-    padding: 18px;
+      inset 0 1px 0 rgba(243, 218, 138, 0.05),
+      0 18px 48px rgba(0, 0, 0, 0.48);
+    padding: 24px 22px 22px;
   }
 
   .ceo-command-hero::before {
@@ -123,11 +127,20 @@ const commandCenterCss = `
     position: absolute;
     inset: 0;
     background: radial-gradient(
-      ellipse 42% 58% at 82% 38%,
-      rgba(212, 175, 55, 0.07) 0%,
-      rgba(9, 8, 6, 0.55) 42%,
-      transparent 72%
+      ellipse 48% 62% at 84% 36%,
+      rgba(212, 175, 55, 0.08) 0%,
+      rgba(7, 6, 5, 0.45) 38%,
+      transparent 68%
     );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ceo-command-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 90% 85% at 50% 50%, transparent 42%, rgba(0, 0, 0, 0.42) 100%);
     pointer-events: none;
     z-index: 0;
   }
@@ -157,7 +170,7 @@ const commandCenterCss = `
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 290px;
+    max-width: 300px;
     margin-left: auto;
     pointer-events: none;
     z-index: 1;
@@ -166,17 +179,37 @@ const commandCenterCss = `
     overflow: visible;
   }
 
+  .ceo-lion-mark-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -18% -12%;
+    background: radial-gradient(
+      circle at 50% 44%,
+      rgba(212, 175, 55, 0.16) 0%,
+      rgba(212, 175, 55, 0.06) 32%,
+      rgba(5, 5, 5, 0.2) 58%,
+      transparent 72%
+    );
+    z-index: 0;
+    filter: blur(2px);
+  }
+
   .ceo-executive-command-page .ceo-lion-mark {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 268px;
+    max-width: 276px;
     height: auto;
     display: block;
     object-fit: contain;
-    opacity: 1;
-    filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.18));
-    /* Asset is RGB without alpha — integration requires transparent PNG (see LION ASSET CHECK) */
+    opacity: 0.96;
+    mix-blend-mode: screen;
+    filter:
+      drop-shadow(0 0 32px rgba(212, 175, 55, 0.24))
+      drop-shadow(0 0 64px rgba(212, 175, 55, 0.08))
+      drop-shadow(0 12px 28px rgba(0, 0, 0, 0.38));
+    -webkit-mask-image: radial-gradient(ellipse 88% 88% at 50% 48%, #000 58%, transparent 100%);
+    mask-image: radial-gradient(ellipse 88% 88% at 50% 48%, #000 58%, transparent 100%);
   }
 
   .ceo-command-status-grid {
@@ -186,9 +219,9 @@ const commandCenterCss = `
     grid-template-columns: minmax(0, 1.55fr) minmax(210px, 0.72fr) minmax(210px, 0.72fr);
     gap: 0;
     align-items: stretch;
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid rgba(212, 175, 55, 0.07);
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(212, 175, 55, 0.05);
   }
 
   .ceo-command-hero .ceo-command-card {
@@ -196,12 +229,13 @@ const commandCenterCss = `
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    padding: 0 14px;
+    padding: 0 18px;
   }
 
   .ceo-command-hero .ceo-readiness-card {
-    border-left: 1px solid rgba(212, 175, 55, 0.07);
-    border-right: 1px solid rgba(212, 175, 55, 0.07);
+    border-left: none;
+    border-right: none;
+    box-shadow: inset 1px 0 0 rgba(212, 175, 55, 0.05), inset -1px 0 0 rgba(212, 175, 55, 0.05);
   }
 
   .ceo-command-hero .ceo-priorities-card {
@@ -228,12 +262,12 @@ const commandCenterCss = `
     border: none;
     border-radius: 0;
     background: transparent;
-    color: rgba(243, 218, 138, 0.52);
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
+    color: rgba(243, 218, 138, 0.62);
+    font-size: 10px;
+    font-weight: 550;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    line-height: 1.35;
+    line-height: 1.4;
   }
 
   .ceo-command-badge + .ceo-command-badge::before {
@@ -254,12 +288,12 @@ const commandCenterCss = `
 
   .ceo-command-hero-title span {
     display: block;
-    margin-top: 8px;
-    font-size: clamp(14px, 1.5vw, 17px);
+    margin-top: 10px;
+    font-size: clamp(15px, 1.6vw, 18px);
     color: var(--ceo-text-secondary);
-    letter-spacing: -0.02em;
-    line-height: 1.45;
-    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.5;
+    font-weight: 450;
   }
 
   .ceo-command-hero-actions {
@@ -319,12 +353,17 @@ const commandCenterCss = `
   .ceo-decision-queue-grid .ceo-command-card,
   .ceo-intelligence-grid .ceo-command-card {
     border: none;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+    border-bottom: none;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    padding: 12px 2px 14px;
-    gap: 6px;
+    padding: 14px 4px 16px;
+    gap: 8px;
+  }
+
+  .ceo-decision-queue-grid .ceo-command-card + .ceo-command-card,
+  .ceo-intelligence-grid .ceo-command-card + .ceo-command-card {
+    box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.04);
   }
 
   .ceo-decision-queue-grid .ceo-command-card:last-child,
@@ -334,12 +373,21 @@ const commandCenterCss = `
 
   .ceo-module-readiness-grid .ceo-command-card {
     border: none;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.07);
+    border-bottom: none;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    padding: 12px 2px 14px;
-    gap: 6px;
+    padding: 16px 4px 18px;
+    gap: 10px;
+    transition: opacity 160ms ease;
+  }
+
+  .ceo-module-readiness-grid .ceo-command-card + .ceo-command-card {
+    box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.04);
+  }
+
+  .ceo-module-readiness-grid .ceo-command-card:hover {
+    opacity: 0.92;
   }
 
   .ceo-module-readiness-grid .ceo-command-card:last-child {
@@ -348,11 +396,23 @@ const commandCenterCss = `
 
   .ceo-briefing-grid .ceo-command-card {
     border: none;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.07);
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    padding: 12px 2px 14px;
+    border-bottom: none;
+    border-radius: 14px;
+    background: rgba(8, 7, 6, 0.32);
+    box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.04);
+    padding: 18px 16px 16px;
+    transition:
+      background 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .ceo-briefing-grid .ceo-command-card:hover {
+    background: rgba(12, 11, 9, 0.48);
+    box-shadow:
+      inset 0 1px 0 rgba(212, 175, 55, 0.08),
+      0 8px 24px rgba(0, 0, 0, 0.28);
+    transform: translateY(-1px);
   }
 
   .ceo-briefing-grid .ceo-command-card:last-child {
@@ -362,22 +422,22 @@ const commandCenterCss = `
   .ceo-command-card-kicker {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    font-size: 10px;
+    gap: 8px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(243, 218, 138, 0.52);
-    font-weight: 550;
+    letter-spacing: 0.12em;
+    color: rgba(243, 218, 138, 0.62);
+    font-weight: 600;
     margin: 0;
-    line-height: 1.35;
+    line-height: 1.4;
   }
 
   .ceo-module-branch-dot {
     flex: 0 0 auto;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 999px;
-    box-shadow: 0 0 8px currentColor;
+    box-shadow: 0 0 14px currentColor, 0 0 4px currentColor;
   }
 
   .ceo-command-card h3 {
@@ -390,14 +450,15 @@ const commandCenterCss = `
   .ceo-command-card p {
     margin: 0;
     color: var(--ceo-text-secondary);
-    line-height: 1.48;
-    font-size: 13px;
+    line-height: 1.55;
+    font-size: 14px;
   }
 
   .ceo-command-card strong {
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: 650;
     letter-spacing: -0.02em;
-    color: rgba(248, 243, 231, 0.96);
+    color: rgba(248, 243, 231, 0.98);
   }
 
   .ceo-readiness-card {
@@ -514,24 +575,24 @@ const commandCenterCss = `
   }
 
   .ceo-priority-title {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.01em;
-    color: rgba(243, 218, 138, 0.82);
-    line-height: 1.38;
+    color: rgba(243, 218, 138, 0.88);
+    line-height: 1.42;
   }
 
   .ceo-priority-value {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--ceo-text-secondary);
-    line-height: 1.45;
+    line-height: 1.48;
   }
 
   .ceo-priority-empty {
     margin: 0;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--ceo-text-muted);
-    line-height: 1.42;
+    line-height: 1.48;
   }
 
   .ceo-decision-queue-grid,
@@ -539,7 +600,7 @@ const commandCenterCss = `
   .ceo-module-readiness-grid,
   .ceo-briefing-grid {
     display: grid;
-    gap: 10px;
+    gap: 14px;
   }
 
   .ceo-decision-queue-grid,
@@ -556,11 +617,13 @@ const commandCenterCss = `
   }
 
   .ceo-corporate-radar-card {
-    gap: 10px;
+    gap: 14px;
     border: none;
     background: transparent;
     box-shadow: none;
-    padding: 4px 0 0;
+    padding: 8px 0 0;
+    align-items: center;
+    text-align: center;
   }
 
   .ceo-corporate-radar-copy {
@@ -571,28 +634,35 @@ const commandCenterCss = `
   }
 
   .ceo-executive-command-page .executive-radar-panel.ceo-radar-premium {
-    display: grid;
-    grid-template-columns: minmax(280px, 46%) minmax(0, 54%);
-    gap: 16px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    gap: 12px;
+    width: 100%;
   }
 
   .ceo-radar-visual-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 300px;
-    padding: 8px;
-    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    min-height: 340px;
+    padding: 16px;
+    border-radius: 16px;
     border: none;
-    background: rgba(9, 8, 6, 0.32);
-    box-shadow: inset 0 0 40px rgba(212, 175, 55, 0.04);
+    background:
+      radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.06), transparent 62%),
+      rgba(6, 5, 4, 0.55);
+    box-shadow:
+      inset 0 0 60px rgba(212, 175, 55, 0.05),
+      0 12px 40px rgba(0, 0, 0, 0.32);
   }
 
   .ceo-executive-command-page .ceo-radar-svg {
     width: 100%;
-    max-width: 360px;
-    min-height: 290px;
+    max-width: 400px;
+    min-height: 320px;
     height: auto;
     display: block;
   }
@@ -629,22 +699,20 @@ const commandCenterCss = `
   }
 
   .ceo-radar-legend-wrap {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: none;
   }
 
   .ceo-radar-incomplete-note {
     margin: 0;
-    padding: 0 0 8px;
+    padding: 0;
     border: none;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
     border-radius: 0;
     background: transparent;
     color: var(--ceo-text-muted);
-    font-size: 10px;
-    line-height: 1.45;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
+    max-width: 520px;
   }
 
   .ceo-executive-command-page .ceo-radar-legend {
@@ -719,22 +787,17 @@ const commandCenterCss = `
     font-weight: 500;
   }
 
-  .ceo-unified-context {
-    margin: 4px 0 0;
-    padding-top: 8px;
-    border-top: 1px solid rgba(212, 175, 55, 0.1);
-    font-size: 11px;
-    color: var(--ceo-text-secondary);
-    line-height: 1.45;
-  }
-
   .ceo-executive-command-page .ceo-radar-point-label {
-    font-size: 8.5px;
-    font-weight: 650;
-    letter-spacing: 0.02em;
-    fill: rgba(248, 243, 231, 0.86);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    fill: rgba(248, 243, 231, 0.92);
     pointer-events: none;
     user-select: none;
+    paint-order: stroke fill;
+    stroke: rgba(5, 5, 5, 0.72);
+    stroke-width: 2.5px;
+    stroke-linejoin: round;
   }
 
   .ceo-executive-command-page .ceo-radar-point-label.is-missing {
@@ -756,52 +819,61 @@ const commandCenterCss = `
   .ceo-workflow-grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 10px;
+    gap: 14px;
   }
 
   .ceo-workflow-step {
     border: none;
-    border-left: 1px solid rgba(212, 175, 55, 0.14);
+    border-top: 2px solid rgba(212, 175, 55, 0.12);
     border-radius: 0;
     background: transparent;
-    padding: 10px 10px 10px 14px;
+    padding: 16px 12px 14px 4px;
     min-width: 0;
     box-shadow: none;
   }
 
   .ceo-workflow-step .ceo-step-eyebrow {
-    font-size: 9px;
-    letter-spacing: 0.12em;
+    font-size: 10px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(243, 218, 138, 0.48);
-    font-weight: 500;
+    color: rgba(243, 218, 138, 0.58);
+    font-weight: 600;
     margin: 0;
-    line-height: 1.35;
+    line-height: 1.4;
   }
 
   .ceo-workflow-step strong {
     display: block;
-    margin-top: 2px;
-    font-size: 14px;
+    margin-top: 6px;
+    font-size: 17px;
+    font-weight: 650;
     color: var(--ceo-text-primary);
-    line-height: 1.3;
+    line-height: 1.32;
+    letter-spacing: -0.02em;
   }
 
   .ceo-workflow-step p {
-    margin: 6px 0 0;
-    font-size: 12px;
+    margin: 8px 0 0;
+    font-size: 13px;
     color: var(--ceo-text-secondary);
-    line-height: 1.48;
+    line-height: 1.52;
   }
 
   .ceo-decision-card-priority {
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
+    display: inline-flex;
+    width: max-content;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(243, 218, 138, 0.5);
+    color: rgba(243, 218, 138, 0.58);
     margin: 0;
-    line-height: 1.35;
+    line-height: 1.4;
   }
 
   .ceo-decision-card-priority.is-high {
@@ -839,56 +911,70 @@ const commandCenterCss = `
 
   .ceo-module-posture {
     display: inline-block;
-    font-size: 10px;
-    letter-spacing: 0.04em;
+    font-size: 11px;
+    letter-spacing: 0.02em;
     text-transform: none;
     color: var(--ceo-text-secondary);
     font-weight: 500;
-    line-height: 1.35;
-  }
-
-  .ceo-module-score-row .ceo-module-posture {
-    text-align: right;
-    max-width: 52%;
-    line-height: 1.35;
+    line-height: 1.4;
   }
 
   .ceo-module-score-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+  }
+
+  .ceo-module-score-row .ceo-module-posture {
+    text-align: right;
+    max-width: 54%;
+    line-height: 1.4;
   }
 
   .ceo-module-score-row strong {
-    font-size: 21px;
-    letter-spacing: -0.03em;
+    font-size: 24px;
+    letter-spacing: -0.04em;
     color: var(--ceo-text-primary);
   }
 
   .ceo-module-progress {
-    height: 6px;
+    height: 5px;
     border-radius: 999px;
-    background: rgba(212, 175, 55, 0.08);
-    overflow: hidden;
-    margin-top: 2px;
+    background: rgba(255, 255, 255, 0.04);
+    overflow: visible;
+    margin-top: 4px;
   }
 
   .ceo-module-progress span {
     display: block;
     height: 100%;
     border-radius: inherit;
+    box-shadow: 0 0 12px currentColor;
   }
 
   .ceo-truthfulness-banner {
     border: none;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    border-bottom: none;
     border-radius: 0;
     background: transparent;
-    padding: 0 0 10px;
-    font-size: 11px;
+    padding: 0 0 4px;
+    font-size: 12px;
     color: var(--ceo-text-muted);
-    line-height: 1.45;
+    line-height: 1.5;
+  }
+
+  .ceo-unified-context {
+    margin: 8px 0 0;
+    padding-top: 0;
+    border-top: none;
+    font-size: 12px;
+    color: var(--ceo-text-secondary);
+    line-height: 1.52;
+    text-align: center;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   @media (max-width: 1180px) {
@@ -917,19 +1003,11 @@ const commandCenterCss = `
     }
 
     .ceo-readiness-radar-row {
-      margin-top: 8px;
-    }
-
-    .ceo-executive-command-page .executive-radar-panel.ceo-radar-premium {
-      grid-template-columns: 1fr;
+      margin-top: 12px;
     }
 
     .ceo-radar-visual-wrap {
-      min-height: 250px;
-    }
-
-    .ceo-executive-command-page .ceo-radar-legend {
-      gap: 0;
+      min-height: 280px;
     }
   }
 
@@ -1445,8 +1523,8 @@ export function ExecutiveCommandCenterView({
                     className="ceo-lion-mark"
                     src={CEO_LION_MARK_SRC}
                     alt=""
-                    width={268}
-                    height={268}
+                    width={320}
+                    height={320}
                     decoding="async"
                   />
                 </div>
@@ -1544,7 +1622,8 @@ export function ExecutiveCommandCenterView({
                   <span
                     style={{
                       width: `${progressWidth(module.overview.score)}%`,
-                      background: module.tone
+                      background: module.tone,
+                      color: module.tone
                     }}
                   />
                 </div>

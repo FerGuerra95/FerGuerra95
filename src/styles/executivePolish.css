@@ -100,7 +100,7 @@ h4 {
   [class*="box"],
   [class*="block"],
   [class*="metric"]
-):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card)::before,
+):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card):not(.ceo-command-hero):not(.ceo-lion-mark-wrap):not(.ceo-executive-command-page)::before,
 .page :is(
   [class*="hero"],
   [class*="card"],
@@ -108,7 +108,7 @@ h4 {
   [class*="box"],
   [class*="block"],
   [class*="metric"]
-):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card)::after {
+):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card):not(.ceo-command-hero):not(.ceo-lion-mark-wrap):not(.ceo-executive-command-page)::after {
   display: none !important;
   content: none !important;
 }
@@ -124,14 +124,14 @@ h4 {
   [class*="command-item"],
   [class*="signal-card"],
   [class*="state-card"]
-):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-corporate-radar-card):not(.ceo-workflow-step):not(.ceo-command-section-shell):not(.ceo-command-hero) {
+):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-corporate-radar-card):not(.ceo-workflow-step):not(.ceo-command-section-shell):not(.ceo-command-hero):not(.executive-radar-panel):not(.ceo-radar-visual-wrap):not(.ceo-decision-card-priority):not(.ceo-executive-command-page) {
   border: 1px solid var(--ceos-polish-line) !important;
   background: var(--ceos-polish-surface-soft) !important;
   border-radius: var(--ceos-polish-radius) !important;
 }
 
-.page :is([class*="panel"], [class*="card"]):not(.ceos-executive-inner-surface)
-  :is([class*="card"], [class*="box"], [class*="block"], [class*="metric"]):not(.ceos-executive-inner-surface) {
+.page :is([class*="panel"], [class*="card"]):not(.ceos-executive-inner-surface):not(.ceo-executive-command-page)
+  :is([class*="card"], [class*="box"], [class*="block"], [class*="metric"]):not(.ceos-executive-inner-surface):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-workflow-step):not(.executive-radar-panel):not(.ceo-radar-visual-wrap):not(.ceo-decision-card-priority) {
   background: rgba(2, 6, 23, 0.26) !important;
   border-color: var(--ceos-polish-line-soft) !important;
 }
@@ -1095,62 +1095,99 @@ textarea,
   background: rgba(16, 14, 11, 0.96) !important;
 }
 
-/* C.24.5A-black-premium — Executive command center charcoal finish (CEO scoped only) */
-.page .ceo-executive-command-page :is(
-  .ceo-command-section-shell,
-  .ceo-command-card,
-  .ceo-priorities-card,
-  .ceo-readiness-card,
-  .ceo-corporate-radar-card,
-  .ceo-workflow-step,
-  .ceo-radar-visual-wrap
-) {
-  background-image: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-color: rgba(212, 175, 55, 0.18) !important;
-}
-
+/* C.24.5B-hard-runtime — Executive command center: black premium (wins over polish flatten) */
 .page .ceo-executive-command-page .ceo-command-section-shell {
   background:
-    radial-gradient(circle at 0% 0%, rgba(212, 175, 55, 0.08), transparent 42%),
-    linear-gradient(180deg, rgba(12, 11, 9, 0.94), rgba(7, 7, 5, 0.96)) !important;
+    radial-gradient(ellipse 80% 55% at 50% 0%, rgba(212, 175, 55, 0.06), transparent 58%),
+    linear-gradient(180deg, rgba(10, 9, 8, 0.96), rgba(5, 5, 5, 0.98)) !important;
+  border: 1px solid rgba(212, 175, 55, 0.12) !important;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.52), inset 0 1px 0 rgba(245, 197, 92, 0.04) !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-hero {
+  background:
+    radial-gradient(ellipse 55% 68% at 82% 38%, rgba(212, 175, 55, 0.1), transparent 58%),
+    radial-gradient(ellipse 38% 48% at 10% 18%, rgba(212, 175, 55, 0.04), transparent 52%),
+    linear-gradient(155deg, #050505, #080808 52%, #050505) !important;
+  border: 1px solid rgba(212, 175, 55, 0.1) !important;
+  box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.05), 0 18px 48px rgba(0, 0, 0, 0.48) !important;
 }
 
 .page .ceo-executive-command-page .ceo-command-hero .ceo-command-card,
-.page .ceo-executive-command-page .ceo-corporate-radar-card {
+.page .ceo-executive-command-page .ceo-corporate-radar-card,
+.page .ceo-executive-command-page .executive-radar-panel {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
 }
 
-.page .ceo-executive-command-page .ceo-command-card {
-  background: rgba(10, 9, 7, 0.28) !important;
-  border: 1px solid rgba(212, 175, 55, 0.08) !important;
-  box-shadow: none !important;
-}
-
-.page .ceo-executive-command-page .ceo-workflow-step {
-  background: transparent !important;
-  border: none !important;
-  border-left: 1px solid rgba(212, 175, 55, 0.14) !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
+/* Grid/briefing module surfaces — ceoMaterialSystem.css (do not flatten here) */
 
 .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card,
 .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card,
-.page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card,
+.page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card {
+  /* Material surfaces — see ceoMaterialSystem.css */
+  border-bottom: none !important;
+}
+
 .page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card {
-  background: transparent !important;
+  /* Material surfaces — see ceoMaterialSystem.css */
   border: none !important;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.08) !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+}
+
+.page .ceo-executive-command-page .ceo-workflow-step {
+  /* Material surfaces — see ceoMaterialSystem.css */
+  border-left: none !important;
+  border-top: none !important;
 }
 
 .page .ceo-executive-command-page .ceo-radar-visual-wrap {
-  background: rgba(9, 8, 6, 0.32) !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.06), transparent 62%),
+    rgba(8, 8, 8, 0.72) !important;
   border: none !important;
-  box-shadow: inset 0 0 40px rgba(212, 175, 55, 0.04) !important;
+  box-shadow: inset 0 0 60px rgba(212, 175, 55, 0.05), 0 12px 40px rgba(0, 0, 0, 0.32) !important;
+}
+
+.page .ceo-executive-command-page .ceo-lion-mark {
+  /* Transparent emblem via Vite asset — glow only, no screen blend */
+  mix-blend-mode: normal !important;
+  filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.32)) drop-shadow(0 0 80px rgba(212, 175, 55, 0.12))
+    drop-shadow(0 16px 32px rgba(0, 0, 0, 0.5)) !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-section-title {
+  font-size: 22px !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-section-copy,
+.page .ceo-executive-command-page .ceo-command-card p {
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-card strong {
+  font-size: 17px !important;
+}
+
+.page .ceo-executive-command-page .ceo-decision-card-priority {
+  font-size: 10px !important;
+}
+
+.page .ceo-executive-command-page .ceo-workflow-step strong {
+  font-size: 17px !important;
+}
+
+.page .ceo-executive-command-page .ceo-workflow-step p {
+  font-size: 13px !important;
+}
+
+.page .ceo-executive-command-page .ceo-module-score-row strong {
+  font-size: 24px !important;
+}
+
+.page .ceo-executive-command-page .ceo-radar-point-label {
+  font-size: 10px !important;
 }
