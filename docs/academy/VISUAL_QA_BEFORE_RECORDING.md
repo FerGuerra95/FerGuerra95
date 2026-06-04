@@ -639,14 +639,15 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` checked with no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
 - N/A / insufficient_data / Pending inputs visible; no fake 0.
 
-### C.24.5C surface recovery checklist
+### C.24.5C final readability/surface balance checklist
 
-- Hero command area uses a wider main surface with the lion and copy together; readiness and priorities remain in the hero as the right-side executive stack.
+- Baseline `189614f`; Executive Overview final pass is visual-only.
+- Hero command area feels stronger and denser while preserving the transparent lion, gold CTA, Executive Readiness Index and Top Priorities.
 - CTA primary and secondary render in one integrated action row; no secondary rectangle/block behind the button.
-- Executive surfaces have charcoal/gold depth again: cards are not flat, not sticker-like, and not navy SaaS panels.
-- Legacy global polish excludes CEO command cards/workflow/radar from shadow flattening.
-- Radar labels are key-based and professional: Comp., M&A, Ops, Gov., Funding, Risk, Strategy, Bridge.
-- Radar SVG uses expanded viewBox/label geometry; no labels clipped in `/dashboard` or `/ceo/overview`.
+- Executive surfaces have charcoal/gold depth: cards are not flat, not sticker-like, and not navy SaaS panels.
+- Radar uses a chart plus lightweight branch status list; no heavy table.
+- Radar labels are key-based and professional: M&A, Comp., Funding, Gov., PMI, Bridge, Risk, Report., Strategy.
+- Radar SVG and side list fit in `/dashboard` and `/ceo/overview`; no labels clipped.
 - Hero text, decision cards, module readiness, workflow, briefing packs and radar labels are readable without zoom.
 - Lion remains `/brand/ceos-lion-mark.png`, transparent and not distorted.
 - Branch colors remain existing workspace accents only; no invented palette.

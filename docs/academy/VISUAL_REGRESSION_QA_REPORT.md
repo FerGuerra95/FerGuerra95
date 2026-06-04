@@ -392,19 +392,19 @@
 | `/risk/register` | PASS | No regression quick check |
 | `/governance/dashboard` | PASS | No regression quick check |
 
-**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7; unit global PASS (88 files / 557 tests).
 
 ---
 
-## 27. C.24.5C - Executive Overview Surface Recovery
+## 27. C.24.5C - Final Executive Readability & Surface Balance
 
-**Baseline:** `9667778`.
+**Baseline:** `189614f`.
 
-**Runtime before:** hero used a 660px main column with 390px copy, CTA row wrapped to two rows, and global polish still flattened CEO command shadows. Radar labels were visible but still used mixed labels (Comp./Ops/Gov./Strategy needed final key-based cleanup).
+**Runtime before:** hero measured 1061x627 with a 559px status grid and large dark mass between copy, lion and right rail. Decision, intelligence, readiness, workflow and briefing cards were readable but still needed stronger recording presence. Radar panel measured 1061x796 while the actual chart was centered at 540x520, leaving side dead space.
 
-**Runtime after:** hero main is a wider named grid area with readiness/priorities stacked on the right; CTA row is one line; CEO command cards regain charcoal/gold surface depth; radar uses key-based labels and a 360 viewBox.
+**Runtime after:** hero remains black/gold with transparent lion, gold CTA and top Executive Readiness Index. Runtime measured no horizontal overflow. Radar now uses Option B: chart plus branch status list, with 9 legend items and labels M&A, Comp., Funding, Gov., PMI, Bridge, Risk, Report., Strategy.
 
-**Fixes:** CEO-only overrides in `workspaceAccent.css`, `executivePolish.css`, and `ceoMaterialSystem.css`; `CorporateHealthRadar.jsx` display labels and geometry updated. No backend, data, score, route or formula changes.
+**Fixes:** CEO material CSS tuned hero density, surface depth, typography, workflow/briefing/card presence and radar panel layout. `CorporateHealthRadar.jsx` adds a display-only branch status list using existing values, N/A handling and branch colors. No backend, data, score, route or formula changes.
 
 | Route | Status | Notes |
 |---|---|---|

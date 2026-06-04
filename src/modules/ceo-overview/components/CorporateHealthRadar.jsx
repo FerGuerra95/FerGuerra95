@@ -31,6 +31,24 @@ const RADAR_LABEL_SHORT = {
   Risk: 'Risk'
 };
 
+const RADAR_STATUS_LABEL = {
+  healthy: 'Complete',
+  strong: 'Complete',
+  good: 'Complete',
+  ready: 'Complete',
+  operational: 'Complete',
+  active: 'Complete',
+  watch: 'Attention',
+  warning: 'Attention',
+  review: 'Review',
+  medium: 'Review',
+  high: 'Review',
+  low: 'Review',
+  insufficient_data: 'Missing input',
+  missing: 'Missing input',
+  pending: 'Pending input'
+};
+
 function normalizeScore(value) {
   if (value === null || value === undefined || value === '') {
     return null;
@@ -89,6 +107,16 @@ function radarShortLabel(axis) {
   }
 
   return safe.split(/\s+/)[0];
+}
+
+function radarStatusLabel(axis, calculable) {
+  if (!calculable) {
+    return 'Missing input';
+  }
+
+  const status = String(axis?.status || axis?.posture || axis?.dataSource || '').trim().toLowerCase();
+
+  return RADAR_STATUS_LABEL[status] || 'Review';
 }
 
 function radarLabelAnchor(cos) {
@@ -284,11 +312,34 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
         </svg>
       </div>
 
-      {missingCount > 0 ? (
-        <p className="ceo-radar-incomplete-note">
-          Some branches require additional inputs before a complete executive posture can be shown.
-        </p>
-      ) : null}
+      <div className="ceo-radar-legend-wrap" aria-label="Corporate health branch status">
+        <div className="ceo-radar-legend">
+          {geometry.map((entry) => (
+            <div
+              key={`${entry.axis.key}-legend`}
+              className={`ceo-radar-legend-item ${entry.calculable ? '' : 'is-missing'}`.trim()}
+            >
+              <span className="ceo-radar-legend-label">
+                <span
+                  className="ceo-radar-swatch"
+                  style={{ background: entry.tone, color: entry.tone }}
+                  aria-hidden="true"
+                />
+                <span>{entry.shortLabel}</span>
+              </span>
+              <span className="ceo-radar-legend-values">
+                <strong>{entry.calculable ? `${entry.score}%` : 'N/A'}</strong>
+                <small>{radarStatusLabel(entry.axis, entry.calculable)}</small>
+              </span>
+            </div>
+          ))}
+        </div>
+        {missingCount > 0 ? (
+          <p className="ceo-radar-incomplete-note">
+            Some branches require additional inputs before a complete executive posture can be shown.
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

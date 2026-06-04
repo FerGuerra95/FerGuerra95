@@ -2587,23 +2587,23 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 
 **No logic impact:** no backend, API, formula helper, score normalization, Golden Dataset, Formula Registry, package/config, route or demo data changes.
 
-Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7; unit global PASS (88 files / 557 tests).
 
 ---
 
-## C.24.5C - Executive Overview surface recovery
+## C.24.5C - Final Executive Readability & Surface Balance
 
 **Status:** COMPLETED (visual-only; no formulas/scoring/Golden Dataset change).
 
-**Baseline:** `9667778`.
+**Baseline:** `189614f`.
 
-**Scope:** Executive Overview CSS/layout/radar display only: `ExecutiveCommandCenterView`, `CorporateHealthRadar`, CEO material CSS, CEO-scoped `workspaceAccent.css` / `executivePolish.css`.
+**Scope:** Executive Overview CSS/layout/radar display only: `ExecutiveCommandCenterView`, `CorporateHealthRadar`, CEO material CSS.
 
-**Runtime targeting:** `.ceo-command-hero`, `.ceo-command-status-grid`, `.ceo-command-hero-main`, `.ceo-command-hero-copy`, `.ceo-command-hero-title`, `.ceo-command-hero-actions`, `.ceo-readiness-card`, `.ceo-priorities-card`, `.ceo-decision-queue-grid .ceo-command-card`, `.ceo-corporate-radar-card`, `.ceo-radar-visual-wrap`, `.ceo-radar-point-label`.
+**Runtime targeting:** `.ceo-command-hero`, `.ceo-command-status-grid`, `.ceo-command-hero-main`, `.ceo-command-hero-copy`, `.ceo-command-hero-title`, `.ceo-command-hero-actions`, `.ceo-lion-mark`, `.ceo-readiness-card`, `.ceo-priorities-card`, `.ceo-decision-queue-grid .ceo-command-card`, `.ceo-intelligence-grid .ceo-command-card`, `.ceo-module-readiness-grid .ceo-command-card`, `.ceo-workflow-step`, `.ceo-briefing-grid .ceo-command-card`, `.ceo-corporate-radar-card`, `.executive-radar-panel.ceo-radar-premium`, `.ceo-radar-visual-wrap`, `.ceo-radar-legend-wrap`, `.ceo-radar-point-label`.
 
 **Truthfulness:** Executive Readiness Index remains the hero metric; Corporate Health Radar remains Section 04. N/A, insufficient_data, Pending inputs, DSS and human review language remain visible.
 
-**No logic impact:** no backend, API, formula helper, score normalization, Golden Dataset, Formula Registry, package/config, route or demo data changes. Radar label changes are display-only and do not alter values.
+**No logic impact:** no backend, API, formula helper, score normalization, Golden Dataset, Formula Registry, package/config, route or demo data changes. Radar status list is display-only and uses existing axis values/calculability.
 
 Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
 

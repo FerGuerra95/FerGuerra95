@@ -8351,23 +8351,23 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 **Visual QA:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` PASS; no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
 
-**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7; unit global PASS (88 files / 557 tests).
 
 ---
 
-## C.24.5C - Executive Overview surface recovery
+## C.24.5C - Final Executive Readability & Surface Balance
 
 **Status:** COMPLETED.
 
-**Baseline:** `9667778`.
+**Baseline:** `189614f`.
 
-**Hero recovery:** Runtime targeting showed the hero copy at 390px, CTA actions wrapping to two rows, and the section still reading as separated pieces. The hero grid now uses a wider main command area with readiness/priorities in a right-side stack, the CTA row is integrated in one line, and the lion remains centered inside the primary command surface.
+**Hero balance:** Runtime targeting showed the hero still carried too much dark mass and a tall right rail. CEO-scoped material CSS now tightens the hero shell, strengthens the headline, keeps the transparent lion in the primary command surface, preserves the gold CTA row and keeps Executive Readiness Index plus Top Priorities in the hero.
 
-**Surface/card presence:** CEO-only cascade exclusions prevent the legacy global flattening layer from removing Executive Overview shadows. Decision Queue, Cross-Module Summary, Module Readiness, Board Review Workflow, Briefing Packs, readiness/priorities and radar surfaces now use charcoal/gold depth without returning to navy SaaS panels.
+**Surface/card presence:** Decision Queue, Cross-Module Summary, Module Readiness, Board Review Workflow, Briefing Packs, readiness/priorities and radar surfaces now use warmer charcoal/gold borders, stronger shadows and more readable internal hierarchy without returning to navy SaaS panels.
 
-**Radar final label fix:** `CorporateHealthRadar.jsx` uses stable key-based labels and a wider 360 viewBox. Runtime QA shows visible labels with no clipping: Comp., M&A, Ops, Gov., Funding, Risk, Strategy, Bridge.
+**Radar improvement:** Option B selected. `CorporateHealthRadar.jsx` now keeps the existing radar values and adds a lightweight branch status list using existing branch colors, score display and N/A for missing inputs. Runtime QA shows labels intact: M&A, Comp., Funding, Gov., PMI, Bridge, Risk, Report., Strategy.
 
-**Typography/readability:** Hero headline size/width, CTA font/padding, card copy, status labels, workflow and radar labels were tuned for recording readability while keeping N/A, insufficient_data and DSS/human-review language visible.
+**Typography/readability:** Hero headline, section copy, card bodies, status labels, module scores, workflow text, briefing packs and radar note/list labels were tuned for recording readability while keeping N/A, insufficient_data and DSS/human-review language visible.
 
 **Branch colors:** Existing CEO branch accent utilities remain the color source for radar nodes/labels and Module Readiness bars/dots; no new palette and no score changes.
 

@@ -317,18 +317,18 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - No backend, formula, Golden Dataset, Formula Registry, package/config, route or demo data changes.
 ---
 
-## C.24.5C - Executive Overview surface recovery
+## C.24.5C - Final Executive Readability & Surface Balance
 
 **Status:** COMPLETED.
 
-**Baseline:** `9667778`.
+**Baseline:** `189614f`.
 
-**Recording-safe result:** Executive Overview hero uses a wider integrated command surface, transparent lion remains in place, Executive Readiness Index remains top hero metric, Top Priorities remain in the hero, and Corporate Health Radar remains in Section 04.
+**Recording-safe result:** Executive Overview hero is denser and more legible while preserving the transparent lion, gold CTA, Executive Readiness Index as the top hero metric, Top Priorities in the hero, and Corporate Health Radar in Section 04.
 
-**Surface recovery:** CEO-only CSS restores charcoal/gold depth to command cards, workflow, briefing packs, readiness/priorities and radar while avoiding navy SaaS panels and avoiding global CSS contamination.
+**Surface balance:** CEO-only material CSS improves charcoal/gold depth, warm borders, shadows and text hierarchy for command cards, workflow, briefing packs, readiness/priorities and radar while avoiding navy SaaS panels.
 
-**Radar labels:** Corporate Health Radar labels are display-only, key-based and unclipped: Comp., M&A, Ops, Gov., Funding, Risk, Strategy, Bridge. Values and calculability logic are unchanged; N/A and insufficient_data remain visible.
+**Radar:** Corporate Health Radar keeps existing values and calculability logic, then adds a lightweight branch status list for recording readability. Labels are display-only and unclipped: M&A, Comp., Funding, Gov., PMI, Bridge, Risk, Report., Strategy. N/A and insufficient_data remain visible.
 
 **Visual QA routes:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` PASS; no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
 
-**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7; unit global PASS (88 files / 557 tests).
