@@ -307,3 +307,11 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - Branch colors come from existing workspace accents; no new palette or data values were introduced.
 - DSS, Human Review Required, Board Review Draft, N/A and insufficient_data language remains safe for synthetic demo narration.
 - No backend, formula, Golden Dataset, Formula Registry, package/config, route or demo data changes.
+### C.24.5B layout/readability demo safety note
+
+- Executive Overview layout/readability pass is visual-only: hero composition, density, radar labels and typography.
+- Hero keeps Executive Readiness Index and Top Priorities above the fold; Corporate Health Radar remains in Section 04.
+- Lion remains `/brand/ceos-lion-mark.png`; no asset replacement or wordmark fallback.
+- Branch colors remain existing workspace accents; no new palette, scores or data values were introduced.
+- N/A, insufficient_data, Pending inputs, DSS and Human Review Required copy remain visible.
+- No backend, formula, Golden Dataset, Formula Registry, package/config, route or demo data changes.

@@ -2588,3 +2588,21 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **No logic impact:** no backend, API, formula helper, score normalization, Golden Dataset, Formula Registry, package/config, route or demo data changes.
 
 Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+
+---
+
+## C.24.5B - Executive Overview layout and readability pass
+
+**Status:** COMPLETED (visual-only; no formulas/scoring/Golden Dataset change).
+
+**Baseline:** `ed8a9dc`.
+
+**Scope:** CEO Overview layout density, typography and radar label geometry only.
+
+**Runtime targeting:** `.ceo-command-status-grid`, `.ceo-command-hero-main`, `.ceo-command-hero-copy`, `.ceo-command-hero-title`, `.ceo-lion-mark-wrap`, `.ceo-readiness-card`, `.ceo-priorities-card`, `.ceo-decision-card-status`, `.ceo-command-card-kicker`, `.ceo-radar-visual-wrap`, `.ceo-radar-point-label`, `.ceo-workflow-step`, `.ceo-briefing-grid`.
+
+**Truthfulness:** N/A, insufficient_data, Pending inputs, DSS and human review language preserved. Executive Readiness Index remains the top hero metric; Corporate Health Radar remains Section 04.
+
+**No logic impact:** no backend, API, formula helper, score normalization, Golden Dataset, Formula Registry, package/config, route or demo data changes.
+
+Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

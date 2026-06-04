@@ -8352,3 +8352,25 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Visual QA:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` PASS; no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+
+---
+
+## C.24.5B - Executive Overview layout and readability pass
+
+**Status:** COMPLETED.
+
+**Baseline:** `ed8a9dc`.
+
+**Hero composition:** runtime measured hero text at 106px wide with 12 headline line fragments and 758px hero height. The CEO material CSS now gives the hero copy 300px, reduces lion footprint to 240px, prevents readiness/priorities stretch, and lowers hero height to 476px.
+
+**Empty space reduction:** readiness/priorities cards no longer stretch to 656px; hero grid is aligned to start; radar and briefing packs use denser, more present spacing without turning into tables.
+
+**Radar labels:** `CorporateHealthRadar.jsx` moves point labels inward (`labelRadius = rMax + 28`). Runtime QA shows all labels visible with no clipping: Legal, M&A, Ops, ESG, Funding, Risk, Strat., Bridge.
+
+**Typography/readability:** Decision Queue, Cross-Module Summary, Module Readiness, Workflow, Briefing Packs and radar labels received CEO-scoped font-size/line-height increases. Micro-status labels remain visible and no longer inherit navy card wrappers.
+
+**Branch colors:** existing workspace accents remain the display source for Module Readiness and Corporate Health Radar; no new palette or data values.
+
+**Visual QA:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` PASS; no ErrorBoundary, no overflow, no NaN/undefined/Infinity.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

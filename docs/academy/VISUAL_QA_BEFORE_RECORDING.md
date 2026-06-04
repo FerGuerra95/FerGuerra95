@@ -626,3 +626,15 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` checked with no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
 - Executive Readiness Index remains top hero metric; Corporate Health Radar remains Section 04; gold CTA preserved.
 - N/A / insufficient_data / Pending inputs visible; no fake 0.
+
+### C.24.5B layout/readability checklist
+
+- Hero text column widened from 106px runtime width to 300px; headline no longer compressed into thin stacked fragments.
+- Hero height reduced from 758px to 476px; readiness/priorities cards no longer stretch to 656px.
+- Lion remains `/brand/ceos-lion-mark.png`, transparent, integrated and not distorted.
+- Radar labels moved inward; no clipped labels in `/dashboard` or `/ceo/overview`.
+- Decision Queue, Cross-Module Summary, Module Readiness, Workflow and Briefing Packs have larger, more readable type.
+- Micro-labels and statuses are text accents, not navy card wrappers.
+- Black/charcoal/gold finish and workspace branch accents preserved.
+- `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` checked with no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
+- N/A / insufficient_data / Pending inputs visible; no fake 0.

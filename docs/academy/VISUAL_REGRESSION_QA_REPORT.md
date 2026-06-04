@@ -393,3 +393,26 @@
 | `/governance/dashboard` | PASS | No regression quick check |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+
+---
+
+## 26. C.24.5B - Executive Overview Layout and Readability Pass
+
+**Baseline:** `ed8a9dc`.
+
+**Runtime before:** hero copy 106px wide, headline 12 fragments, hero height 758px, readiness/priorities stretched to 656px, `Strat.` radar label clipped at x=-11.
+
+**Runtime after:** hero copy 300px wide, headline 6 fragments including subtitle, hero height 476px, readiness 291px, priorities 250px, no radar labels clipped.
+
+**Fixes:** CEO material CSS adjusts hero grid, lion footprint, grid alignment, radar density, briefing pack presence and typography. `CorporateHealthRadar.jsx` moves labels inward. `executivePolish.css` excludes CEO micro-label classes from broad legacy card treatment.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Hero balanced, radar labels readable, no overflow |
+| `/ceo/overview` | PASS | Same command center render, no ErrorBoundary |
+| `/ma/dashboard` | PASS | No regression quick check |
+| `/funding/dashboard` | PASS | No regression quick check |
+| `/risk/register` | PASS | No regression quick check |
+| `/governance/dashboard` | PASS | No regression quick check |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

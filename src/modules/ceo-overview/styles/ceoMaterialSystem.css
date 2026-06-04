@@ -62,28 +62,39 @@
   border-radius: 22px !important;
   background: var(--ceo-mat-hero) !important;
   box-shadow: var(--ceo-mat-shadow-lift), var(--ceo-mat-inset-top), inset 0 0 80px rgba(0, 0, 0, 0.35) !important;
-  padding: 28px 26px 26px !important;
+  padding: 24px 24px 24px !important;
   overflow: hidden !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main {
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 360px) !important;
-  gap: 8px !important;
+  grid-template-columns: minmax(300px, 1fr) minmax(190px, 270px) !important;
+  gap: 18px !important;
   align-items: center !important;
-  min-height: 220px !important;
+  min-height: 250px !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-copy {
+  width: min(100%, 460px) !important;
+  max-width: 460px !important;
+  background: transparent !important;
+  border: 0 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title {
-  font-size: clamp(2rem, 3.6vw, 2.75rem) !important;
-  line-height: 1.06 !important;
+  font-size: clamp(2.15rem, 3.25vw, 2.7rem) !important;
+  line-height: 1.04 !important;
   font-weight: 650 !important;
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45) !important;
+  max-width: 11.8ch !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title span {
-  font-size: clamp(1rem, 1.7vw, 1.15rem) !important;
+  font-size: clamp(1rem, 1.25vw, 1.12rem) !important;
   margin-top: 12px !important;
   color: rgba(248, 243, 231, 0.66) !important;
+  max-width: 25rem !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-badge {
@@ -93,9 +104,9 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap {
-  max-width: 340px !important;
+  max-width: 270px !important;
   margin-left: auto !important;
-  margin-right: -8px !important;
+  margin-right: 0 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap::before {
@@ -111,7 +122,7 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark {
-  max-width: 320px !important;
+  max-width: 270px !important;
   mix-blend-mode: normal !important;
   opacity: 1 !important;
   -webkit-mask-image: none !important;
@@ -121,12 +132,13 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-status-grid {
-  margin-top: 24px !important;
-  padding-top: 24px !important;
+  margin-top: 20px !important;
+  padding-top: 20px !important;
   border-top: none !important;
   box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.06) !important;
-  gap: 20px !important;
-  grid-template-columns: minmax(0, 1.45fr) minmax(220px, 0.75fr) minmax(220px, 0.75fr) !important;
+  gap: 18px !important;
+  grid-template-columns: minmax(560px, 1.55fr) minmax(210px, 0.6fr) minmax(220px, 0.65fr) !important;
+  align-items: start !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card,
@@ -136,6 +148,8 @@
   border-radius: 18px !important;
   box-shadow: var(--ceo-mat-inset-top), inset 0 -16px 32px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.35) !important;
   padding: 18px 16px !important;
+  min-height: 250px !important;
+  align-self: start !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card {
@@ -174,13 +188,30 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card strong {
-  font-size: 1.05rem !important;
+  font-size: 1.12rem !important;
   font-weight: 650 !important;
+  line-height: 1.35 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card p {
-  font-size: 0.9rem !important;
-  line-height: 1.58 !important;
+  font-size: 0.96rem !important;
+  line-height: 1.62 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card-kicker,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-card-status {
+  width: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-card-status {
+  font-size: 0.82rem !important;
+  line-height: 1.5 !important;
+  color: rgba(248, 243, 231, 0.58) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-card-priority {
@@ -196,7 +227,7 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-score-row strong {
-  font-size: 1.65rem !important;
+  font-size: 1.72rem !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-branch-dot {
@@ -206,13 +237,17 @@
 
 /* ——— Executive radar ——— */
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-corporate-radar-card {
-  padding: 12px 0 0 !important;
+  padding: 18px 18px 20px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-radar-row {
+  margin-top: 18px !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap {
-  max-width: 520px !important;
-  min-height: 400px !important;
-  padding: 24px !important;
+  max-width: 560px !important;
+  min-height: 410px !important;
+  padding: 20px 28px 22px !important;
   border-radius: 24px !important;
   background: radial-gradient(circle at 50% 42%, rgba(212, 175, 55, 0.08), transparent 58%),
     linear-gradient(180deg, rgba(12, 12, 11, 0.96), rgba(4, 4, 4, 0.98)) !important;
@@ -220,12 +255,12 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-svg {
-  max-width: 460px !important;
-  min-height: 380px !important;
+  max-width: 500px !important;
+  min-height: 390px !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-point-label {
-  font-size: 11px !important;
+  font-size: 11.5px !important;
   font-weight: 700 !important;
 }
 
@@ -246,18 +281,18 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step .ceo-step-eyebrow {
-  font-size: 0.68rem !important;
+  font-size: 0.76rem !important;
   color: rgba(243, 218, 138, 0.65) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step strong {
-  font-size: 1.12rem !important;
+  font-size: 1.18rem !important;
   margin-top: 8px !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step p {
-  font-size: 0.88rem !important;
-  line-height: 1.55 !important;
+  font-size: 0.94rem !important;
+  line-height: 1.58 !important;
 }
 
 /* ——— Briefing packs ——— */
@@ -271,7 +306,7 @@
   border-radius: 18px !important;
   box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 12px 40px rgba(0, 0, 0, 0.42) !important;
   padding: 22px 20px !important;
-  min-height: 96px !important;
+  min-height: 112px !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card:hover {
@@ -280,11 +315,11 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card strong {
-  font-size: 1.08rem !important;
+  font-size: 1.16rem !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-title {
-  font-size: 0.9rem !important;
+  font-size: 0.96rem !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-truthfulness-banner {

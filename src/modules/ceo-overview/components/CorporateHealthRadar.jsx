@@ -102,7 +102,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
   const cx = 160;
   const cy = 160;
   const rMax = 98;
-  const labelRadius = rMax + 40;
+  const labelRadius = rMax + 28;
   const tau = Math.PI * 2;
 
   const geometry = useMemo(
