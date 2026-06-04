@@ -638,3 +638,17 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Black/charcoal/gold finish and workspace branch accents preserved.
 - `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` checked with no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
 - N/A / insufficient_data / Pending inputs visible; no fake 0.
+
+### C.24.5C surface recovery checklist
+
+- Hero command area uses a wider main surface with the lion and copy together; readiness and priorities remain in the hero as the right-side executive stack.
+- CTA primary and secondary render in one integrated action row; no secondary rectangle/block behind the button.
+- Executive surfaces have charcoal/gold depth again: cards are not flat, not sticker-like, and not navy SaaS panels.
+- Legacy global polish excludes CEO command cards/workflow/radar from shadow flattening.
+- Radar labels are key-based and professional: Comp., M&A, Ops, Gov., Funding, Risk, Strategy, Bridge.
+- Radar SVG uses expanded viewBox/label geometry; no labels clipped in `/dashboard` or `/ceo/overview`.
+- Hero text, decision cards, module readiness, workflow, briefing packs and radar labels are readable without zoom.
+- Lion remains `/brand/ceos-lion-mark.png`, transparent and not distorted.
+- Branch colors remain existing workspace accents only; no invented palette.
+- `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` checked with no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
+- N/A / insufficient_data / Pending inputs visible; no fake 0.

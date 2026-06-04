@@ -1,19 +1,32 @@
 import React, { useMemo } from 'react';
 import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 const RADAR_LABEL_SHORT = {
+  legal: 'Comp.',
+  financial: 'M&A',
+  ops: 'Ops',
+  esg: 'Gov.',
+  funding: 'Funding',
+  risk: 'Risk',
+  strategy: 'Strategy',
+  bridge: 'Bridge',
+  heritage: 'Heritage',
+  reporting: 'Report.',
+  compliance: 'Comp.',
+  pmi: 'PMI',
+  ma: 'M&A',
   'Financial · M&A': 'M&A',
-  'ESG & reputational risk': 'ESG',
+  'ESG & reputational risk': 'Gov.',
   'Enterprise Risk': 'Risk',
   Compliance: 'Comp.',
   Governance: 'Gov.',
   'PMI / Synergies': 'PMI',
   Operational: 'Ops',
-  Heritage: 'Herit.',
+  Heritage: 'Heritage',
   Reporting: 'Report.',
-  Strategy: 'Strat.',
+  Strategy: 'Strategy',
   Funding: 'Funding',
   Bridge: 'Bridge',
-  Legal: 'Legal',
+  Legal: 'Comp.',
   'M&A': 'M&A',
   Risk: 'Risk'
 };
@@ -55,7 +68,13 @@ function axisTone(axis) {
   return getCeoBranchAccentHex(axis?.key);
 }
 
-function radarShortLabel(label) {
+function radarShortLabel(axis) {
+  const key = String(axis?.key || '').trim().toLowerCase();
+  if (key && RADAR_LABEL_SHORT[key]) {
+    return RADAR_LABEL_SHORT[key];
+  }
+
+  const label = axis?.label;
   const safe = String(label || '').trim();
   if (!safe) {
     return '';
@@ -99,10 +118,10 @@ function radarLabelPosition(angle, cx, cy, radius) {
 export function CorporateHealthRadar({ axes = [], className = '' }) {
   const safeAxes = Array.isArray(axes) ? axes.filter((axis) => axis && typeof axis === 'object') : [];
   const count = safeAxes.length || 1;
-  const cx = 160;
-  const cy = 160;
-  const rMax = 98;
-  const labelRadius = rMax + 28;
+  const cx = 180;
+  const cy = 180;
+  const rMax = 104;
+  const labelRadius = rMax + 20;
   const tau = Math.PI * 2;
 
   const geometry = useMemo(
@@ -121,7 +140,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
           calculable,
           score,
           tone,
-          shortLabel: radarShortLabel(axis.label),
+          shortLabel: radarShortLabel(axis),
           outerX: cx + rMax * Math.cos(angle),
           outerY: cy + rMax * Math.sin(angle),
           pointX:
@@ -153,7 +172,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
       <div className="ceo-radar-visual-wrap">
         <svg
           className="ceo-radar-svg"
-          viewBox="0 0 320 320"
+          viewBox="0 0 360 360"
           role="img"
           aria-label="Corporate health radar"
         >

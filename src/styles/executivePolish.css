@@ -78,7 +78,7 @@ h4 {
   [class*="command-item"],
   [class*="signal-card"],
   [class*="state-card"]
-):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card),
+):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-corporate-radar-card):not(.ceo-workflow-step):not(.ceo-command-section-shell):not(.ceo-command-hero):not(.executive-radar-panel):not(.ceo-radar-visual-wrap),
 .ceos-main-build-strip,
 .topbar,
 .sidebar.ceos-sidebar,
@@ -1190,4 +1190,162 @@ textarea,
 
 .page .ceo-executive-command-page .ceo-radar-point-label {
   font-size: 10px !important;
+}
+
+/* C.24.5C-surface-recovery — scoped Executive Overview runtime corrections */
+.page .ceo-executive-command-page .ceo-command-hero {
+  background:
+    radial-gradient(ellipse 68% 76% at 64% 42%, rgba(212, 175, 55, 0.13), transparent 62%),
+    radial-gradient(ellipse 42% 52% at 10% 18%, rgba(243, 218, 138, 0.045), transparent 56%),
+    linear-gradient(152deg, #050505 0%, #0b0a08 50%, #040404 100%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.14) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(243, 218, 138, 0.07),
+    inset 0 -42px 90px rgba(0, 0, 0, 0.38),
+    0 24px 68px rgba(0, 0, 0, 0.58) !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-status-grid {
+  grid-template-columns: minmax(740px, 1fr) minmax(220px, 0.32fr) !important;
+  grid-template-areas:
+    "main readiness"
+    "main priorities" !important;
+  gap: 16px !important;
+  align-items: start !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-hero-main {
+  grid-area: main !important;
+  grid-template-columns: minmax(480px, 1fr) minmax(210px, 270px) !important;
+  gap: 22px !important;
+  min-height: 230px !important;
+}
+
+.page .ceo-executive-command-page .ceo-readiness-card {
+  grid-area: readiness !important;
+}
+
+.page .ceo-executive-command-page .ceo-priorities-card {
+  grid-area: priorities !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-hero-copy {
+  width: min(100%, 640px) !important;
+  max-width: 640px !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-hero-title {
+  max-width: 20ch !important;
+  font-size: clamp(2rem, 2.65vw, 2.45rem) !important;
+  line-height: 1.02 !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-hero-title span {
+  max-width: 31rem !important;
+  font-size: clamp(1.02rem, 1.18vw, 1.14rem) !important;
+  line-height: 1.48 !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-hero-actions {
+  gap: 8px !important;
+  align-items: center !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-hero-actions .button {
+  min-height: 46px !important;
+  border-radius: 999px !important;
+  padding-inline: 12px !important;
+  font-size: 0.84rem !important;
+}
+
+.page .ceo-executive-command-page .ceo-gold-secondary-action.button,
+.page .ceo-executive-command-page .ceo-gold-secondary-action.button.secondary {
+  background: linear-gradient(180deg, rgba(22, 19, 13, 0.9), rgba(8, 8, 7, 0.94)) !important;
+  border-color: rgba(212, 175, 55, 0.28) !important;
+  color: rgba(248, 243, 231, 0.88) !important;
+  box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.08), 0 8px 20px rgba(0, 0, 0, 0.28) !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-hero .ceo-readiness-card,
+.page .ceo-executive-command-page .ceo-command-hero .ceo-priorities-card,
+.page .ceo-executive-command-page .ceo-corporate-radar-card {
+  background:
+    radial-gradient(ellipse 90% 85% at 16% 0%, rgba(212, 175, 55, 0.055), transparent 56%),
+    linear-gradient(160deg, rgba(20, 19, 17, 0.94), rgba(7, 7, 7, 0.98)) !important;
+  border: 1px solid rgba(212, 175, 55, 0.12) !important;
+  border-radius: 18px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 230, 0.05),
+    inset 0 -16px 32px rgba(0, 0, 0, 0.35),
+    0 10px 34px rgba(0, 0, 0, 0.42) !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-hero .ceo-readiness-card,
+.page .ceo-executive-command-page .ceo-command-hero .ceo-priorities-card {
+  min-height: 0 !important;
+  padding: 18px 15px !important;
+}
+
+.page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card,
+.page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card,
+.page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card,
+.page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card,
+.page .ceo-executive-command-page .ceo-workflow-step {
+  background:
+    radial-gradient(ellipse 78% 70% at 18% 0%, rgba(212, 175, 55, 0.045), transparent 52%),
+    linear-gradient(155deg, rgba(24, 23, 20, 0.95) 0%, rgba(10, 10, 9, 0.98) 100%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.105) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 230, 0.05),
+    inset 0 -26px 54px rgba(0, 0, 0, 0.4),
+    0 14px 42px rgba(0, 0, 0, 0.48) !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-card strong,
+.page .ceo-executive-command-page .ceo-workflow-step strong {
+  font-size: 18px !important;
+  line-height: 1.35 !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-card p,
+.page .ceo-executive-command-page .ceo-workflow-step p {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: rgba(248, 243, 231, 0.68) !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-card-kicker,
+.page .ceo-executive-command-page .ceo-decision-card-status {
+  font-size: 13px !important;
+  line-height: 1.48 !important;
+  color: rgba(248, 243, 231, 0.62) !important;
+}
+
+.page .ceo-executive-command-page .ceo-decision-card-priority {
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+
+.page .ceo-executive-command-page .ceo-radar-visual-wrap {
+  max-width: 540px !important;
+  min-height: 390px !important;
+  padding: 18px 26px 20px !important;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(212, 175, 55, 0.085), transparent 58%),
+    linear-gradient(180deg, rgba(16, 15, 13, 0.96), rgba(5, 5, 5, 0.98)) !important;
+  border: 1px solid rgba(212, 175, 55, 0.1) !important;
+  box-shadow:
+    0 18px 52px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 248, 230, 0.05),
+    inset 0 0 100px rgba(212, 175, 55, 0.045) !important;
+}
+
+.page .ceo-executive-command-page .ceo-radar-svg {
+  max-width: 480px !important;
+  min-height: 370px !important;
+}
+
+.page .ceo-executive-command-page .ceo-radar-point-label {
+  font-size: 12px !important;
+  font-weight: 750 !important;
 }

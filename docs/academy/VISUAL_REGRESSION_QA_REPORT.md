@@ -396,6 +396,29 @@
 
 ---
 
+## 27. C.24.5C - Executive Overview Surface Recovery
+
+**Baseline:** `9667778`.
+
+**Runtime before:** hero used a 660px main column with 390px copy, CTA row wrapped to two rows, and global polish still flattened CEO command shadows. Radar labels were visible but still used mixed labels (Comp./Ops/Gov./Strategy needed final key-based cleanup).
+
+**Runtime after:** hero main is a wider named grid area with readiness/priorities stacked on the right; CTA row is one line; CEO command cards regain charcoal/gold surface depth; radar uses key-based labels and a 360 viewBox.
+
+**Fixes:** CEO-only overrides in `workspaceAccent.css`, `executivePolish.css`, and `ceoMaterialSystem.css`; `CorporateHealthRadar.jsx` display labels and geometry updated. No backend, data, score, route or formula changes.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Hero recovered; CTA integrated; radar labels unclipped |
+| `/ceo/overview` | PASS | Same command center render, no ErrorBoundary |
+| `/ma/dashboard` | PASS | No regression quick check |
+| `/funding/dashboard` | PASS | No regression quick check |
+| `/risk/register` | PASS | No regression quick check |
+| `/governance/dashboard` | PASS | No regression quick check |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+
+---
+
 ## 26. C.24.5B - Executive Overview Layout and Readability Pass
 
 **Baseline:** `ed8a9dc`.

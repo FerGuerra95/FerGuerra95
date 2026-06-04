@@ -315,3 +315,20 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - Branch colors remain existing workspace accents; no new palette, scores or data values were introduced.
 - N/A, insufficient_data, Pending inputs, DSS and Human Review Required copy remain visible.
 - No backend, formula, Golden Dataset, Formula Registry, package/config, route or demo data changes.
+---
+
+## C.24.5C - Executive Overview surface recovery
+
+**Status:** COMPLETED.
+
+**Baseline:** `9667778`.
+
+**Recording-safe result:** Executive Overview hero uses a wider integrated command surface, transparent lion remains in place, Executive Readiness Index remains top hero metric, Top Priorities remain in the hero, and Corporate Health Radar remains in Section 04.
+
+**Surface recovery:** CEO-only CSS restores charcoal/gold depth to command cards, workflow, briefing packs, readiness/priorities and radar while avoiding navy SaaS panels and avoiding global CSS contamination.
+
+**Radar labels:** Corporate Health Radar labels are display-only, key-based and unclipped: Comp., M&A, Ops, Gov., Funding, Risk, Strategy, Bridge. Values and calculability logic are unchanged; N/A and insufficient_data remain visible.
+
+**Visual QA routes:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` PASS; no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

@@ -12,11 +12,12 @@
   --ceo-mat-gold-atmo: rgba(212, 175, 55, 0.09);
   --ceo-mat-gold-whisper: rgba(243, 218, 138, 0.06);
   --ceo-mat-shadow-deep: 0 40px 100px rgba(0, 0, 0, 0.72);
-  --ceo-mat-shadow-lift: 0 16px 48px rgba(0, 0, 0, 0.55);
+  --ceo-mat-shadow-lift: 0 20px 54px rgba(0, 0, 0, 0.58);
   --ceo-mat-inset-top: inset 0 1px 0 rgba(255, 248, 230, 0.05);
   --ceo-mat-inset-depth: inset 0 -28px 56px rgba(0, 0, 0, 0.42);
   --ceo-mat-carved: linear-gradient(168deg, #0d0d0d 0%, #060606 46%, #090909 100%);
-  --ceo-mat-module: linear-gradient(155deg, rgba(18, 18, 17, 0.94) 0%, rgba(8, 8, 8, 0.98) 100%);
+  --ceo-mat-module: radial-gradient(ellipse 80% 70% at 18% 0%, rgba(212, 175, 55, 0.045), transparent 52%),
+    linear-gradient(155deg, rgba(24, 23, 20, 0.95) 0%, rgba(10, 10, 9, 0.98) 100%);
   --ceo-mat-hero: radial-gradient(ellipse 70% 85% at 58% 42%, rgba(212, 175, 55, 0.11), transparent 62%),
     radial-gradient(ellipse 45% 55% at 12% 18%, rgba(212, 175, 55, 0.04), transparent 58%),
     linear-gradient(152deg, #040404 0%, #080808 48%, #030303 100%);
@@ -67,8 +68,8 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main {
-  grid-template-columns: minmax(300px, 1fr) minmax(190px, 270px) !important;
-  gap: 18px !important;
+  grid-template-columns: minmax(390px, 1fr) minmax(210px, 270px) !important;
+  gap: 22px !important;
   align-items: center !important;
   min-height: 250px !important;
   background: transparent !important;
@@ -76,18 +77,18 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-copy {
-  width: min(100%, 460px) !important;
-  max-width: 460px !important;
+  width: min(100%, 560px) !important;
+  max-width: 560px !important;
   background: transparent !important;
   border: 0 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title {
-  font-size: clamp(2.15rem, 3.25vw, 2.7rem) !important;
+  font-size: clamp(2rem, 2.65vw, 2.45rem) !important;
   line-height: 1.04 !important;
   font-weight: 650 !important;
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45) !important;
-  max-width: 11.8ch !important;
+  max-width: 20ch !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title span {
@@ -136,19 +137,35 @@
   padding-top: 20px !important;
   border-top: none !important;
   box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.06) !important;
-  gap: 18px !important;
-  grid-template-columns: minmax(560px, 1.55fr) minmax(210px, 0.6fr) minmax(220px, 0.65fr) !important;
+  gap: 16px !important;
+  grid-template-columns: minmax(740px, 1fr) minmax(220px, 0.32fr) !important;
+  grid-template-areas:
+    "main readiness"
+    "main priorities" !important;
   align-items: start !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main {
+  grid-area: main !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card {
+  grid-area: readiness !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priorities-card {
+  grid-area: priorities !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priorities-card {
-  background: linear-gradient(160deg, rgba(14, 14, 13, 0.88), rgba(6, 6, 6, 0.95)) !important;
-  border: none !important;
+  background: radial-gradient(ellipse 90% 85% at 16% 0%, rgba(212, 175, 55, 0.055), transparent 56%),
+    linear-gradient(160deg, rgba(20, 19, 17, 0.94), rgba(7, 7, 7, 0.98)) !important;
+  border: 1px solid rgba(212, 175, 55, 0.12) !important;
   border-radius: 18px !important;
   box-shadow: var(--ceo-mat-inset-top), inset 0 -16px 32px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.35) !important;
-  padding: 18px 16px !important;
-  min-height: 250px !important;
+  padding: 18px 15px !important;
+  min-height: 0 !important;
   align-self: start !important;
 }
 
@@ -167,9 +184,9 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card {
   background: var(--ceo-mat-module) !important;
-  border: none !important;
+  border: 1px solid rgba(212, 175, 55, 0.105) !important;
   border-radius: 18px !important;
-  box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 10px 36px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 14px 42px rgba(0, 0, 0, 0.48) !important;
   padding: 20px 18px !important;
   transition: transform 200ms ease, box-shadow 200ms ease !important;
 }
@@ -245,9 +262,9 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap {
-  max-width: 560px !important;
-  min-height: 410px !important;
-  padding: 20px 28px 22px !important;
+  max-width: 540px !important;
+  min-height: 390px !important;
+  padding: 18px 26px 20px !important;
   border-radius: 24px !important;
   background: radial-gradient(circle at 50% 42%, rgba(212, 175, 55, 0.08), transparent 58%),
     linear-gradient(180deg, rgba(12, 12, 11, 0.96), rgba(4, 4, 4, 0.98)) !important;
@@ -255,12 +272,12 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-svg {
-  max-width: 500px !important;
-  min-height: 390px !important;
+  max-width: 480px !important;
+  min-height: 370px !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-point-label {
-  font-size: 11.5px !important;
+  font-size: 12px !important;
   font-weight: 700 !important;
 }
 
@@ -302,7 +319,7 @@
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card {
   background: var(--ceo-mat-module) !important;
-  border: none !important;
+  border: 1px solid rgba(212, 175, 55, 0.105) !important;
   border-radius: 18px !important;
   box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 12px 40px rgba(0, 0, 0, 0.42) !important;
   padding: 22px 20px !important;

@@ -2591,6 +2591,24 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 
 ---
 
+## C.24.5C - Executive Overview surface recovery
+
+**Status:** COMPLETED (visual-only; no formulas/scoring/Golden Dataset change).
+
+**Baseline:** `9667778`.
+
+**Scope:** Executive Overview CSS/layout/radar display only: `ExecutiveCommandCenterView`, `CorporateHealthRadar`, CEO material CSS, CEO-scoped `workspaceAccent.css` / `executivePolish.css`.
+
+**Runtime targeting:** `.ceo-command-hero`, `.ceo-command-status-grid`, `.ceo-command-hero-main`, `.ceo-command-hero-copy`, `.ceo-command-hero-title`, `.ceo-command-hero-actions`, `.ceo-readiness-card`, `.ceo-priorities-card`, `.ceo-decision-queue-grid .ceo-command-card`, `.ceo-corporate-radar-card`, `.ceo-radar-visual-wrap`, `.ceo-radar-point-label`.
+
+**Truthfulness:** Executive Readiness Index remains the hero metric; Corporate Health Radar remains Section 04. N/A, insufficient_data, Pending inputs, DSS and human review language remain visible.
+
+**No logic impact:** no backend, API, formula helper, score normalization, Golden Dataset, Formula Registry, package/config, route or demo data changes. Radar label changes are display-only and do not alter values.
+
+Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+
+---
+
 ## C.24.5B - Executive Overview layout and readability pass
 
 **Status:** COMPLETED (visual-only; no formulas/scoring/Golden Dataset change).

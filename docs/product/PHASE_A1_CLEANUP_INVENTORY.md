@@ -8355,6 +8355,28 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 ---
 
+## C.24.5C - Executive Overview surface recovery
+
+**Status:** COMPLETED.
+
+**Baseline:** `9667778`.
+
+**Hero recovery:** Runtime targeting showed the hero copy at 390px, CTA actions wrapping to two rows, and the section still reading as separated pieces. The hero grid now uses a wider main command area with readiness/priorities in a right-side stack, the CTA row is integrated in one line, and the lion remains centered inside the primary command surface.
+
+**Surface/card presence:** CEO-only cascade exclusions prevent the legacy global flattening layer from removing Executive Overview shadows. Decision Queue, Cross-Module Summary, Module Readiness, Board Review Workflow, Briefing Packs, readiness/priorities and radar surfaces now use charcoal/gold depth without returning to navy SaaS panels.
+
+**Radar final label fix:** `CorporateHealthRadar.jsx` uses stable key-based labels and a wider 360 viewBox. Runtime QA shows visible labels with no clipping: Comp., M&A, Ops, Gov., Funding, Risk, Strategy, Bridge.
+
+**Typography/readability:** Hero headline size/width, CTA font/padding, card copy, status labels, workflow and radar labels were tuned for recording readability while keeping N/A, insufficient_data and DSS/human-review language visible.
+
+**Branch colors:** Existing CEO branch accent utilities remain the color source for radar nodes/labels and Module Readiness bars/dots; no new palette and no score changes.
+
+**Visual QA:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` PASS; no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+
+---
+
 ## C.24.5B - Executive Overview layout and readability pass
 
 **Status:** COMPLETED.
