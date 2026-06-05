@@ -48,14 +48,15 @@ import {
   formatModuleScoreDisplay,
   formatModuleSignalValue,
   formatScoreLabel,
-  mapExecutiveCorporateRadarAxis,
+  mergeExecutiveCorporateRadarAxes,
   getComplianceOverview,
   getEcosystemBranchOverview,
   getExecutiveSignal,
   getMAOverview,
   getRiskOverview,
   normalizeScoreOrNull,
-  resolveLegalHealthRadarScore
+  resolveLegalHealthRadarScore,
+  statusIndicatesInsufficientData
 } from '../utils/ceoOverviewTruthfulness.js';
 import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 import { boardPackApi } from '../services/boardPackApi.js';
@@ -1987,7 +1988,10 @@ export function CEOOverviewPage() {
     latestTitle: 'Insufficient persisted bridge data'
   });
   const bridgeMetrics = bridgeSummary?.metrics || {};
-  const bridgeScore = normalizeScoreOrNull(bridgeMetrics.crossModuleReadiness);
+  const bridgeStatus = bridgeMetrics.bridgeHealthStatus || bridgeSummary?.status || bridgeSummary?.posture;
+  const bridgeScore = statusIndicatesInsufficientData(bridgeStatus, bridgeMetrics.dataSource)
+    ? null
+    : normalizeScoreOrNull(bridgeMetrics.crossModuleReadiness);
   const bridgeOverview = bridgeSummary
     ? {
         ...legacyBridgeOverview,
@@ -1997,7 +2001,7 @@ export function CEOOverviewPage() {
         executiveSignalEligible: bridgeScore !== null,
         humanReviewRequired: true,
         title: bridgeScore === null ? 'Bridge data pending' : 'Cross-module executive signals',
-        posture: bridgeScore === null ? 'insufficient_data' : bridgeMetrics.bridgeHealthStatus || legacyBridgeOverview.posture,
+        posture: bridgeScore === null ? 'insufficient_data' : bridgeStatus || legacyBridgeOverview.posture,
         description:
           'Bridge consolidates cross-module signals, dependencies, conflicts and executive attention items. Human review required.',
         metrics: {
@@ -2170,23 +2174,12 @@ export function CEOOverviewPage() {
     missingData: ['executive_api'],
     humanReviewPosture: 'human_review_required'
   };
-  const commandRadarAxes = Array.isArray(executiveCommand.corporateHealthRadar)
-    ? [
-        ...executiveCommand.corporateHealthRadar,
-        ...radarAxes.filter(
-          (fallbackAxis) =>
-            fallbackAxis &&
-            typeof fallbackAxis === 'object' &&
-            !executiveCommand.corporateHealthRadar.some(
-              (axis) => String(axis?.key || '').toLowerCase() === String(fallbackAxis.key || '').toLowerCase()
-            )
-        )
-      ]
-        .filter((axis) => axis && typeof axis === 'object')
-        .map((axis) => mapExecutiveCorporateRadarAxis(axis))
-    : radarAxes
-        .filter((axis) => axis && typeof axis === 'object')
-        .map((axis) => mapExecutiveCorporateRadarAxis(axis));
+  const commandRadarAxes = mergeExecutiveCorporateRadarAxes(
+    Array.isArray(executiveCommand.corporateHealthRadar)
+      ? executiveCommand.corporateHealthRadar
+      : [],
+    radarAxes
+  );
   const commandSignals = Array.isArray(executiveCommand.signals) ? executiveCommand.signals : [];
   const commandDecisionQueue = Array.isArray(executiveCommand.decisionQueue) ? executiveCommand.decisionQueue : [];
   const commandBoardView = executiveCommand.boardView || {};

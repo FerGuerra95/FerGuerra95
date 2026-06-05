@@ -311,6 +311,28 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 - Executive Overview layout/readability pass is visual-only: hero composition, density, radar labels and typography.
 - Hero keeps Executive Readiness Index and Top Priorities above the fold; Corporate Health Radar remains in Section 04.
+---
+
+## C.24.5E - Executive Overview radar integrity safe narration
+
+**Status:** COMPLETED.
+
+**Baseline:** `15bc867`.
+
+**Recording-safe result:** Corporate Health Radar now presents a single canonical branch set: M&A, Funding, Compliance, Risk, PMI, Governance, Strategy, Reporting, Bridge and Heritage.
+
+**Safe narration:** "The radar consolidates executive branch signals into one canonical view. Branches with pending or insufficient inputs stay marked as N/A until reviewed data exists."
+
+**Bridge wording:** "Bridge is visible as a cross-module coordination branch. Its inputs are pending here, so no readiness score is claimed."
+
+**Heritage wording:** "Heritage is visible as a premium/future branch in the executive command center; inputs are pending, so no readiness score is claimed."
+
+**Do not say:** Bridge is 100/100, Heritage is scored, any branch is certified, complete, board-approved, legally validated or investment-grade unless a future audited source-of-truth phase validates that claim.
+
+**Validation:** build PASS; CEO truthfulness PASS; funding display-format PASS; global unit PASS; authenticated Playwright route smoke PASS.
+
+---
+
 - Lion remains `/brand/ceos-lion-mark.png`; no asset replacement or wordmark fallback.
 - Branch colors remain existing workspace accents; no new palette, scores or data values were introduced.
 - N/A, insufficient_data, Pending inputs, DSS and Human Review Required copy remain visible.

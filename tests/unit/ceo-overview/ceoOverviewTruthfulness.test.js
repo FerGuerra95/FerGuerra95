@@ -12,6 +12,7 @@ import {
   getMAOverview,
   getRiskOverview,
   mapExecutiveCorporateRadarAxis,
+  mergeExecutiveCorporateRadarAxes,
   resolveLegalHealthRadarScore
 } from '../../../src/modules/ceo-overview/utils/ceoOverviewTruthfulness.js';
 
@@ -155,6 +156,60 @@ describe('CEO overview truthfulness helpers', () => {
       status: 'watch',
       executiveSignalEligible: false
     });
+    expect(axis.value).toBeNull();
+    expect(axis.displayLabel).toBe('N/A');
+    expect(axis.status).toBe('insufficient_data');
+    expect(axis.isCalculable).toBe(false);
+  });
+
+  it('deduplicates radar aliases into canonical executive branches', () => {
+    const axes = mergeExecutiveCorporateRadarAxes(
+      [
+        { key: 'legal', label: 'Legal', value: 72, status: 'watch' },
+        { key: 'financial', label: 'Financial · M&A', value: 68, status: 'watch' },
+        { key: 'ops', label: 'Operational', value: 55, status: 'watch' },
+        { key: 'esg', label: 'ESG & reputational risk', value: 61, status: 'watch' }
+      ],
+      [
+        buildRadarAxis({ key: 'compliance', label: 'Compliance', score: null, route: '/compliance/dashboard' }),
+        buildRadarAxis({ key: 'ma', label: 'M&A', score: null, route: '/ma/dashboard' }),
+        buildRadarAxis({ key: 'pmi', label: 'PMI', score: null, route: '/pmi/dashboard' }),
+        buildRadarAxis({ key: 'governance', label: 'Governance', score: null, route: '/governance/dashboard' }),
+        buildRadarAxis({ key: 'heritage', label: 'Heritage', score: null, route: '/heritage/dashboard' })
+      ]
+    );
+    const keys = axes.map((axis) => axis.key);
+
+    expect(keys).toEqual(['ma', 'compliance', 'pmi', 'governance', 'heritage']);
+    expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it('does not display a Bridge score when status is pending inputs', () => {
+    const axis = mapExecutiveCorporateRadarAxis({
+      key: 'bridge',
+      label: 'Bridge',
+      value: 100,
+      status: 'Pending inputs',
+      executiveSignalEligible: true
+    });
+
+    expect(axis.key).toBe('bridge');
+    expect(axis.value).toBeNull();
+    expect(axis.displayLabel).toBe('N/A');
+    expect(axis.status).toBe('insufficient_data');
+    expect(axis.isCalculable).toBe(false);
+  });
+
+  it('keeps Heritage without data as N/A pending inputs', () => {
+    const axis = mapExecutiveCorporateRadarAxis({
+      key: 'heritage',
+      label: 'Heritage',
+      value: null,
+      status: 'insufficient_data',
+      executiveSignalEligible: false
+    });
+
+    expect(axis.key).toBe('heritage');
     expect(axis.value).toBeNull();
     expect(axis.displayLabel).toBe('N/A');
     expect(axis.status).toBe('insufficient_data');

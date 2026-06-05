@@ -2603,6 +2603,28 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 
 **Truthfulness:** Executive Readiness Index remains the hero metric; Corporate Health Radar remains Section 04. N/A, insufficient_data, Pending inputs, DSS and human review language remain visible.
 
+---
+
+## C.24.5E - Executive Overview radar branch integrity
+
+**Status:** COMPLETED (display logic/truthfulness only; no formula, backend or Golden Dataset change).
+
+**Baseline:** `15bc867`.
+
+**Source-of-truth posture:** Executive Overview remains an aggregator. The radar display must consume backend `corporateHealthRadar` axes when present, merge fallback axes only after canonical branch-key normalization, and never treat legacy alias keys as separate branches.
+
+**Canonical branch contract:** Radar branches are ordered as `ma`, `funding`, `compliance`, `risk`, `pmi`, `governance`, `strategy`, `reporting`, `bridge`, `heritage`. Legacy display aliases map into those keys: `legal -> compliance`, `financial -> ma`, `ops/operational -> pmi`, `esg -> governance`.
+
+**Truthfulness guard:** Any axis with non-calculable source, `executiveSignalEligible: false`, `isCalculable: false`, or pending/insufficient/missing status maps to `score: null`, `value: null`, `displayScore: null`, `displayLabel: N/A`, and `isCalculable: false`.
+
+**Bridge regression fixed:** A Bridge axis carrying `value: 100` but `status: Pending inputs` is not displayable as `100/100`; it is rendered as `N/A` / `Pending inputs`.
+
+**Heritage rule preserved:** Heritage can be visible in Executive Overview, but absent/non-calculable Heritage inputs remain `N/A` / `Pending inputs`; no score or certified maturity claim is inferred.
+
+**Validation:** targeted CEO truthfulness tests PASS (20/20), funding display-format PASS (7/7), build PASS, global unit PASS (88 files / 560 tests), authenticated Playwright smoke PASS on the six executive demo routes with duplicate radar alias payload.
+
+---
+
 **No logic impact:** no backend, API, formula helper, score normalization, Golden Dataset, Formula Registry, package/config, route or demo data changes. Radar status list is display-only and uses existing axis values/calculability.
 
 Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.

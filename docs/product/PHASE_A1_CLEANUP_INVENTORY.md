@@ -8377,6 +8377,28 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 ---
 
+---
+
+## C.24.5E - Executive Overview radar and branch integrity fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `15bc867`.
+
+**Scope:** Executive Overview radar/readiness branch integrity only. No redesign, backend, formulas, Golden Dataset, Formula Registry, package/config, auth/router, migration or cross-module implementation changes.
+
+**Issue corrected:** C.24.5D could display duplicate Executive Overview radar branches when backend axes used canonical keys and fallback axes used legacy aliases (`legal`, `financial`, `ops`, `esg`). Radar merge now canonicalizes aliases before deduping.
+
+**Canonical radar order:** M&A, Funding, Compliance, Risk, PMI, Governance, Strategy, Reporting, Bridge, Heritage.
+
+**Bridge truthfulness:** Bridge no longer displays `100/100` when the underlying posture/status is `Pending inputs` or otherwise insufficient. In that state it remains `N/A` / `Pending inputs`.
+
+**Heritage truthfulness:** Heritage remains visible as an executive branch, but missing/non-calculable inputs stay `N/A` / `Pending inputs`; no fake Heritage score or formula was introduced.
+
+**Validation:** `npm run build` PASS; `ceoOverviewTruthfulness` 20/20 PASS; `fundingDisplayFormat` 7/7 PASS; `npm run test:unit` PASS (88 files / 560 tests). Playwright route smoke PASS for `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard`; `/ceo/overview` checked with duplicate legacy/canonical radar payload and Bridge `100` + `Pending inputs` source data.
+
+---
+
 ## C.24.5D - Executive Overview final recording polish with Heritage branch
 
 **Status:** COMPLETED.

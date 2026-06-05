@@ -423,6 +423,33 @@
 
 **Baseline:** `2ce5a45`.
 
+---
+
+## 28. C.24.5E - Executive Overview Radar and Branch Integrity Fix
+
+**Baseline:** `15bc867`.
+
+**Runtime intent:** Prevent duplicate branch identities in Executive Overview radar/readiness surfaces and preserve DSS truthfulness for Bridge and Heritage before recording.
+
+**Fixes:** Radar merge now canonicalizes legacy aliases before deduping. `legal`, `financial`, `ops` and `esg` no longer render as extra branches beside Compliance, M&A, PMI and Governance. Corporate Health Radar also defensively dedupes canonical axes at render time.
+
+**Truthfulness:** Bridge with source `100` but `Pending inputs` renders as `N/A` / `Pending inputs`, not `100/100`. Heritage remains visible but non-calculable inputs render as `N/A` / `Pending inputs`.
+
+**Canonical branch order:** M&A, Funding, Compliance, Risk, PMI, Governance, Strategy, Reporting, Bridge, Heritage.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Authenticated route smoke; no ErrorBoundary, overflow or forbidden render tokens. |
+| `/ceo/overview` | PASS | Duplicate alias/canonical radar payload deduped; Bridge fake-100 blocked; Heritage pending/N/A shown. |
+| `/ma/dashboard` | PASS | No regression quick check. |
+| `/funding/dashboard` | PASS | No regression quick check. |
+| `/risk/register` | PASS | No regression quick check. |
+| `/governance/dashboard` | PASS | No regression quick check. |
+
+**Validation:** build PASS; CEO truthfulness PASS (20/20); funding display-format PASS (7/7); global unit PASS (88 files / 560 tests).
+
+---
+
 **Runtime intent:** Add Heritage visibly to Executive Overview before recording while preserving DSS truthfulness, black/gold premium finish and existing branch accent source.
 
 **Changes:** Module Readiness now includes Reporting, Bridge and Heritage alongside the existing branch cards. Heritage uses the existing workspace accent and shows `N/A` / `Pending inputs` when no persisted score exists. Corporate Health Radar/status list includes Heritage and clear full branch names in the list.

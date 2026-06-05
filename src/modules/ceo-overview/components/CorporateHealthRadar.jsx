@@ -1,5 +1,10 @@
 import React, { useMemo } from 'react';
 import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
+import {
+  EXECUTIVE_RADAR_BRANCH_LABELS,
+  EXECUTIVE_RADAR_BRANCH_ORDER,
+  normalizeExecutiveRadarBranchKey
+} from '../utils/ceoOverviewTruthfulness.js';
 const RADAR_LABEL_SHORT = {
   legal: 'Comp.',
   financial: 'M&A',
@@ -115,11 +120,11 @@ function axisTone(axis) {
     return axis.tone;
   }
 
-  return getCeoBranchAccentHex(axis?.key);
+  return getCeoBranchAccentHex(normalizeExecutiveRadarBranchKey(axis));
 }
 
 function radarShortLabel(axis) {
-  const key = String(axis?.key || '').trim().toLowerCase();
+  const key = normalizeExecutiveRadarBranchKey(axis);
   if (key && RADAR_LABEL_SHORT[key]) {
     return RADAR_LABEL_SHORT[key];
   }
@@ -152,9 +157,9 @@ function radarStatusLabel(axis, calculable) {
 }
 
 function radarLegendLabel(axis) {
-  const key = String(axis?.key || '').trim().toLowerCase();
-  if (key && RADAR_LABEL_FULL[key]) {
-    return RADAR_LABEL_FULL[key];
+  const key = normalizeExecutiveRadarBranchKey(axis);
+  if (key && EXECUTIVE_RADAR_BRANCH_LABELS[key]) {
+    return EXECUTIVE_RADAR_BRANCH_LABELS[key];
   }
 
   const label = String(axis?.label || '').trim();
@@ -163,6 +168,29 @@ function radarLegendLabel(axis) {
   }
 
   return RADAR_LABEL_FULL[label] || label;
+}
+
+function dedupeRadarAxes(axes) {
+  const byBranch = new Map();
+  const safeAxes = Array.isArray(axes) ? axes.filter((axis) => axis && typeof axis === 'object') : [];
+
+  safeAxes.forEach((axis) => {
+    const key = normalizeExecutiveRadarBranchKey(axis);
+    if (!EXECUTIVE_RADAR_BRANCH_ORDER.includes(key)) return;
+
+    const canonicalAxis = {
+      ...axis,
+      key,
+      label: EXECUTIVE_RADAR_BRANCH_LABELS[key] || axis.label
+    };
+    const current = byBranch.get(key);
+
+    if (!current || (!isAxisCalculable(current) && isAxisCalculable(canonicalAxis))) {
+      byBranch.set(key, canonicalAxis);
+    }
+  });
+
+  return EXECUTIVE_RADAR_BRANCH_ORDER.map((key) => byBranch.get(key)).filter(Boolean);
 }
 
 function radarLabelAnchor(cos) {
@@ -190,7 +218,7 @@ function radarLabelPosition(angle, cx, cy, radius) {
 }
 
 export function CorporateHealthRadar({ axes = [], className = '' }) {
-  const safeAxes = Array.isArray(axes) ? axes.filter((axis) => axis && typeof axis === 'object') : [];
+  const safeAxes = useMemo(() => dedupeRadarAxes(axes), [axes]);
   const count = safeAxes.length || 1;
   const cx = 180;
   const cy = 180;

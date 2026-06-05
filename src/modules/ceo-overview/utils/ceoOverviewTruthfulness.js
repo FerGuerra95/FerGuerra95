@@ -24,6 +24,91 @@ export function formatExecutiveScoreNumber(score, fallbackLabel = 'N/A') {
   return normalized === null ? fallbackLabel : String(normalized);
 }
 
+export const EXECUTIVE_RADAR_BRANCH_ORDER = [
+  'ma',
+  'funding',
+  'compliance',
+  'risk',
+  'pmi',
+  'governance',
+  'strategy',
+  'reporting',
+  'bridge',
+  'heritage'
+];
+
+export const EXECUTIVE_RADAR_BRANCH_LABELS = {
+  ma: 'M&A',
+  funding: 'Funding',
+  compliance: 'Compliance',
+  risk: 'Risk',
+  pmi: 'PMI',
+  governance: 'Governance',
+  strategy: 'Strategy',
+  reporting: 'Reporting',
+  bridge: 'Bridge',
+  heritage: 'Heritage'
+};
+
+const EXECUTIVE_RADAR_BRANCH_ALIASES = {
+  legal: 'compliance',
+  compliance: 'compliance',
+  financial: 'ma',
+  ma: 'ma',
+  'm&a': 'ma',
+  ops: 'pmi',
+  operational: 'pmi',
+  pmi: 'pmi',
+  esg: 'governance',
+  governance: 'governance',
+  funding: 'funding',
+  risk: 'risk',
+  strategy: 'strategy',
+  reporting: 'reporting',
+  bridge: 'bridge',
+  heritage: 'heritage',
+  'financial · m&a': 'ma',
+  'financial â· m&a': 'ma',
+  'financial â€¢ m&a': 'ma',
+  'financial a· m&a': 'ma',
+  'esg & reputational risk': 'governance',
+  'enterprise risk': 'risk',
+  'pmi / synergies': 'pmi'
+};
+
+export function normalizeExecutiveRadarBranchKey(axis = {}) {
+  const key = String(axis?.key || '').trim().toLowerCase();
+  if (key && EXECUTIVE_RADAR_BRANCH_ALIASES[key]) {
+    return EXECUTIVE_RADAR_BRANCH_ALIASES[key];
+  }
+
+  const label = String(axis?.label || '').trim().toLowerCase();
+  return EXECUTIVE_RADAR_BRANCH_ALIASES[label] || key || label;
+}
+
+function statusImpliesPendingInputs(value) {
+  const safe = String(value || '').trim().toLowerCase();
+  if (!safe) {
+    return false;
+  }
+
+  return (
+    safe === 'insufficient_data' ||
+    safe === 'not_available' ||
+    safe === 'empty' ||
+    safe === 'missing' ||
+    safe === 'pending' ||
+    safe === 'pending_inputs' ||
+    safe.includes('pending input') ||
+    safe.includes('missing input') ||
+    safe.includes('insufficient')
+  );
+}
+
+export function statusIndicatesInsufficientData(...values) {
+  return values.some((value) => statusImpliesPendingInputs(value));
+}
+
 export function getRadarGeometryValue(score) {
   const normalized = normalizeScoreOrNull(score);
   return normalized === null ? 0 : normalized;
@@ -42,13 +127,13 @@ export function resolveLegalHealthRadarScore(hubBrief) {
 
 export function mapExecutiveCorporateRadarAxis(axis) {
   const safeAxis = axis && typeof axis === 'object' ? axis : {};
+  const key = normalizeExecutiveRadarBranchKey(safeAxis);
   const score = normalizeScoreOrNull(safeAxis.value ?? safeAxis.score);
   const insufficient =
     score === null ||
     safeAxis.isCalculable === false ||
     safeAxis.executiveSignalEligible === false ||
-    ['insufficient_data', 'not_available', 'empty'].includes(safeAxis.status) ||
-    ['insufficient_data', 'not_available', 'empty'].includes(safeAxis.dataSource);
+    statusIndicatesInsufficientData(safeAxis.status, safeAxis.posture, safeAxis.dataSource);
   const displayScore = insufficient ? null : score;
 
   const status = insufficient
@@ -56,9 +141,10 @@ export function mapExecutiveCorporateRadarAxis(axis) {
     : safeAxis.status || (displayScore < 60 ? 'watch' : 'normal');
 
   return {
-    key: safeAxis.key,
-    label: safeAxis.label,
+    key,
+    label: EXECUTIVE_RADAR_BRANCH_LABELS[key] || safeAxis.label,
     route: safeAxis.route,
+    tone: safeAxis.tone,
     score: displayScore,
     value: displayScore,
     displayLabel: formatScoreLabel(displayScore),
@@ -66,6 +152,30 @@ export function mapExecutiveCorporateRadarAxis(axis) {
     isCalculable: displayScore !== null,
     executiveSignalEligible: displayScore !== null
   };
+}
+
+export function mergeExecutiveCorporateRadarAxes(primaryAxes = [], fallbackAxes = []) {
+  const byBranch = new Map();
+  const axes = [
+    ...(Array.isArray(primaryAxes) ? primaryAxes : []),
+    ...(Array.isArray(fallbackAxes) ? fallbackAxes : [])
+  ];
+
+  axes.forEach((axis) => {
+    if (!axis || typeof axis !== 'object') return;
+
+    const mapped = mapExecutiveCorporateRadarAxis(axis);
+    const key = normalizeExecutiveRadarBranchKey(mapped);
+
+    if (!EXECUTIVE_RADAR_BRANCH_ORDER.includes(key)) return;
+
+    const current = byBranch.get(key);
+    if (!current || (!current.isCalculable && mapped.isCalculable)) {
+      byBranch.set(key, mapped);
+    }
+  });
+
+  return EXECUTIVE_RADAR_BRANCH_ORDER.map((key) => byBranch.get(key)).filter(Boolean);
 }
 
 export function buildRadarAxis({ key, label, score, route, tone }) {

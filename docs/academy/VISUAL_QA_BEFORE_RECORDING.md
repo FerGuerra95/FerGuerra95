@@ -627,6 +627,18 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Executive Readiness Index remains top hero metric; Corporate Health Radar remains Section 04; gold CTA preserved.
 - N/A / insufficient_data / Pending inputs visible; no fake 0.
 
+### C.24.5E radar/branch integrity checklist
+
+- Baseline `15bc867`; Executive Overview fix is display/truthfulness only.
+- Corporate Health Radar must show one canonical branch per executive domain: M&A, Funding, Compliance, Risk, PMI, Governance, Strategy, Reporting, Bridge and Heritage.
+- Legacy aliases must not appear as extra radar branches: Legal, Financial - M&A, Operational, ESG & reputational risk.
+- Bridge must not show `100/100` or `100%` when its status/posture is `Pending inputs`, insufficient, missing or otherwise non-calculable.
+- Bridge pending state should read as `N/A` / `Pending inputs`.
+- Heritage remains visible, but with `N/A` / `Pending inputs` unless a future audited source-of-truth phase supplies a validated score.
+- `/ceo/overview` must be checked with a duplicate alias/canonical payload and must dedupe before rendering.
+- `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` checked with no ErrorBoundary, no horizontal overflow and no real NaN/undefined/Infinity render tokens.
+- Validation complete: build PASS; CEO truthfulness 20/20; funding display-format 7/7; global unit 88 files / 560 tests; Playwright route smoke PASS.
+
 ### C.24.5B layout/readability checklist
 
 - Hero text column widened from 106px runtime width to 300px; headline no longer compressed into thin stacked fragments.
