@@ -653,3 +653,16 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Branch colors remain existing workspace accents only; no invented palette.
 - `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` checked with no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
 - N/A / insufficient_data / Pending inputs visible; no fake 0.
+
+### C.24.5D final recording polish with Heritage checklist
+
+- Baseline `2ce5a45`; Executive Overview pass remains visual/display-truthfulness only.
+- Module Readiness shows all expected branches: M&A, Funding, Compliance, Risk, PMI / Synergies, Governance, Strategy, Reporting, Bridge and Heritage.
+- Heritage appears with its branch accent and honest `N/A` / `Pending inputs` when no persisted score exists.
+- Corporate Health Radar includes Heritage in the chart/status list; missing branches show dashed/missing treatment and `N/A`, not `0%`.
+- Radar chart labels remain concise: M&A, Comp., Funding, Gov., PMI, Risk, Bridge, Report., Strategy, Heritage.
+- Radar status list uses clear names and consistent `Pending inputs`; no heavy table look.
+- Module cards have subtle branch accent rails/washes, readable titles, readable body text, readable status labels and no saturated card backgrounds.
+- Executive Readiness Index remains the top hero metric; Corporate Health Radar remains in Section 04; gold CTA and transparent lion are preserved.
+- `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` must be checked with no ErrorBoundary, no horizontal overflow, no text clipping and no NaN/undefined/Infinity.
+- Local frontend-only route smoke PASS for those six routes; authenticated Playwright navigation smoke blocked because backend API was not running on `127.0.0.1:4000`.

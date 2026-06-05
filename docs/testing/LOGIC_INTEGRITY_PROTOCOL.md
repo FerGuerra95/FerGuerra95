@@ -2609,6 +2609,24 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 
 ---
 
+## C.24.5D - Executive Overview final recording polish with Heritage branch
+
+**Status:** COMPLETED (visual/display-truthfulness only; no formulas/scoring/Golden Dataset change).
+
+**Baseline:** `2ce5a45`.
+
+**Scope:** Executive Overview branch display and radar/status readability: `CEOOverviewPage`, `ExecutiveCommandCenterView`, `CorporateHealthRadar`, and CEO truthfulness helpers.
+
+**Heritage truthfulness:** Heritage is visible in Module Readiness and Corporate Health Radar/status list. When no persisted Heritage score exists, it remains `N/A` / `Pending inputs`; no fake `0`, hardcoded score, backend value, formula or Golden Dataset output was introduced.
+
+**Display guardrail:** Insufficient radar axes with `isCalculable: false`, `executiveSignalEligible: false` or `insufficient_data` source/status map to `score: null` and `isCalculable: false`, preventing fallback geometry values from being displayed as real `0%` scores.
+
+**No logic impact:** no backend, API, scoring formula, source-of-truth migration, Golden Dataset, Formula Registry, package/config, route or demo data changes. Executive Overview remains an aggregator and DSS display.
+
+Validation: `npm run build` PASS; `ceoOverviewTruthfulness` 17/17 PASS; `fundingDisplayFormat` 7/7 PASS; `npm run test:unit` PASS (88 files / 557 tests). Frontend-only route smoke PASS with API interception; authenticated Playwright navigation smoke blocked by backend API not running on `127.0.0.1:4000`.
+
+---
+
 ## C.24.5B - Executive Overview layout and readability pass
 
 **Status:** COMPLETED (visual-only; no formulas/scoring/Golden Dataset change).

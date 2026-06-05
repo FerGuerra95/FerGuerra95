@@ -8377,6 +8377,24 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 ---
 
+## C.24.5D - Executive Overview final recording polish with Heritage branch
+
+**Status:** COMPLETED.
+
+**Baseline:** `2ce5a45`.
+
+**Scope:** Executive Overview visual/data-display plumbing only. Module Readiness now shows M&A, Funding, Compliance, Risk, PMI / Synergies, Governance, Strategy, Reporting, Bridge and Heritage using existing branch accent colors.
+
+**Heritage:** Added to Module Readiness and Corporate Health Radar/status list as a visible branch with honest `N/A` / `Pending inputs` handling when no persisted score exists. No Heritage score, formula, backend source, Golden Dataset or Formula Registry output was invented.
+
+**Radar and readability:** Corporate Health Radar keeps calculable values only in the polygon; non-calculable branches remain `N/A`. The branch status list uses clear names and `Pending inputs` consistently. Branch cards received subtle accent rails/washes and stronger readable text without changing the black/gold premium direction.
+
+**Safety:** No backend, auth/router, package/config, migrations, Golden Dataset, Formula Registry, cross-module source-of-truth, report logic or executive formulas changed. `backend-server.err` and screenshots remain untracked-only noise.
+
+**Validation:** `npm run build` PASS; `ceoOverviewTruthfulness` 17/17 PASS; `fundingDisplayFormat` 7/7 PASS; `npm run test:unit` PASS (88 files / 557 tests). Frontend-only route smoke PASS for `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard`; authenticated Playwright navigation smoke blocked by backend API not running on `127.0.0.1:4000`.
+
+---
+
 ## C.24.5B - Executive Overview layout and readability pass
 
 **Status:** COMPLETED.

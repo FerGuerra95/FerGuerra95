@@ -1,4 +1,4 @@
-# Demo-Safe Screen Guide
+ï»¿# Demo-Safe Screen Guide
 
 Use this guide to decide what can be shown in external visuals.
 
@@ -147,7 +147,7 @@ Validation: `npm run build` PASS after C.24.3g-b. Operator visual pass required 
 
 ---
 
-## C.24.3g-c â?? Runtime Override Visual Fix
+## C.24.3g-c Ã¢?? Runtime Override Visual Fix
 
 | Screen | Classification | Reason | Required wording | Notes |
 |---|---|---|---|---|
@@ -244,7 +244,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 ### C.24.5A-exec-polish demo safety note
 
-- Hero primary chart is Executive Readiness Index only; Unified readiness is contextual in §04.
+- Hero primary chart is Executive Readiness Index only; Unified readiness is contextual in Â§04.
 - Corporate Health Radar preserved below module cards; no duplicate readiness calculations added.
 
 ### C.24.5A-radar-polish demo safety note
@@ -255,7 +255,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 ### C.24.5A-final-polish demo safety note
 
 - Visual-only CSS/SVG sizing polish; no metric, formula, or API changes.
-- Executive Readiness Index remains hero; Corporate Health Radar remains in §04.
+- Executive Readiness Index remains hero; Corporate Health Radar remains in Â§04.
 
 ### C.24.5A-hero-integration-fix demo safety note
 
@@ -331,4 +331,23 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Visual QA routes:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` PASS; no ErrorBoundary, no horizontal overflow, no NaN/undefined/Infinity.
 
-**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7; unit global PASS (88 files / 557 tests).
+**Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7; unit global PASS (88 files / 557 tests).---
+
+## C.24.5D - Executive Overview final recording polish with Heritage
+
+**Status:** COMPLETED.
+
+**Baseline:** `2ce5a45`.
+
+**Recording-safe result:** Heritage is now visible in Executive Overview Module Readiness and Corporate Health Radar/status list as a DSS branch with `N/A` / `Pending inputs` when no persisted score exists.
+
+**Safe narration:** "Heritage is visible as a premium/future branch in the executive command center; inputs are pending, so no readiness score is claimed."
+
+**Do not say:** Heritage is certified, scored, complete, board-approved, legally validated or production-mature unless a future audited source-of-truth phase explicitly implements and validates that claim.
+
+**Branch identity:** Module cards use existing workspace accent colors only; the visual accent is branch identity, not a new metric or new source of truth.
+
+**Radar:** Corporate Health Radar displays missing/non-calculable branches as `N/A` and `Pending inputs`; no fake `0%`, no hardcoded score and no hidden insufficient-data state.
+
+**Validation:** build PASS; CEO truthfulness PASS; funding display-format PASS; global unit PASS. Frontend-only route smoke PASS; authenticated Playwright navigation smoke blocked by backend API not running on `127.0.0.1:4000`.
+

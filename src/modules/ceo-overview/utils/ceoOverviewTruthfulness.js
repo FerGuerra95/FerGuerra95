@@ -45,23 +45,26 @@ export function mapExecutiveCorporateRadarAxis(axis) {
   const score = normalizeScoreOrNull(safeAxis.value ?? safeAxis.score);
   const insufficient =
     score === null ||
+    safeAxis.isCalculable === false ||
     safeAxis.executiveSignalEligible === false ||
-    ['insufficient_data', 'not_available', 'empty'].includes(safeAxis.status);
+    ['insufficient_data', 'not_available', 'empty'].includes(safeAxis.status) ||
+    ['insufficient_data', 'not_available', 'empty'].includes(safeAxis.dataSource);
+  const displayScore = insufficient ? null : score;
 
   const status = insufficient
     ? 'insufficient_data'
-    : safeAxis.status || (score < 60 ? 'watch' : 'normal');
+    : safeAxis.status || (displayScore < 60 ? 'watch' : 'normal');
 
   return {
     key: safeAxis.key,
     label: safeAxis.label,
     route: safeAxis.route,
-    score,
-    value: score,
-    displayLabel: formatScoreLabel(score),
+    score: displayScore,
+    value: displayScore,
+    displayLabel: formatScoreLabel(displayScore),
     status,
-    isCalculable: score !== null,
-    executiveSignalEligible: score !== null
+    isCalculable: displayScore !== null,
+    executiveSignalEligible: displayScore !== null
   };
 }
 
@@ -384,7 +387,8 @@ export function buildInsufficientFallbackModuleCards() {
     ['bridge', 'Bridge', '/bridge/dashboard'],
     ['risk', 'Risk', '/risk/dashboard'],
     ['reporting', 'Reporting', '/reporting/dashboard'],
-    ['strategy', 'Strategy', '/strategy/dashboard']
+    ['strategy', 'Strategy', '/strategy/dashboard'],
+    ['heritage', 'Heritage', '/heritage/dashboard']
   ].map(([key, title, route]) => ({
     key,
     title,

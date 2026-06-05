@@ -419,6 +419,29 @@
 
 ---
 
+## 28. C.24.5D - Executive Overview Final Recording Polish With Heritage
+
+**Baseline:** `2ce5a45`.
+
+**Runtime intent:** Add Heritage visibly to Executive Overview before recording while preserving DSS truthfulness, black/gold premium finish and existing branch accent source.
+
+**Changes:** Module Readiness now includes Reporting, Bridge and Heritage alongside the existing branch cards. Heritage uses the existing workspace accent and shows `N/A` / `Pending inputs` when no persisted score exists. Corporate Health Radar/status list includes Heritage and clear full branch names in the list.
+
+**Truthfulness:** Missing/non-calculable radar axes stay `N/A` and `isCalculable: false`; fallback geometry values are not displayed as real `0%` scores. No hardcoded scores, backend formulas, Golden Dataset, Formula Registry or package/config changes.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Heritage card/radar status present; no overflow; no NaN/undefined/Infinity; no fake Heritage 0. |
+| `/ceo/overview` | PASS | Ten branch cards, clear radar labels/list, ERI preserved. |
+| `/ma/dashboard` | PASS | Frontend-only smoke; no ErrorBoundary, overflow or forbidden markers. |
+| `/funding/dashboard` | PASS | Frontend-only smoke; no ErrorBoundary, overflow or forbidden markers. |
+| `/risk/register` | PASS | Frontend-only smoke; no ErrorBoundary, overflow or forbidden markers. |
+| `/governance/dashboard` | PASS | Frontend-only smoke; no ErrorBoundary, overflow or forbidden markers. |
+
+**Validation:** build PASS; CEO truthfulness PASS; funding display-format PASS; global unit PASS. Authenticated Playwright navigation smoke blocked by backend API not running on `127.0.0.1:4000`.
+
+---
+
 ## 26. C.24.5B - Executive Overview Layout and Readability Pass
 
 **Baseline:** `ed8a9dc`.

@@ -372,14 +372,43 @@ const commandCenterCss = `
   }
 
   .ceo-module-readiness-grid .ceo-command-card {
+    position: relative;
+    overflow: hidden;
     border: none;
     border-bottom: none;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    padding: 16px 4px 18px;
+    padding: 18px 12px 18px 14px;
     gap: 10px;
-    transition: opacity 160ms ease;
+    transition:
+      background 160ms ease,
+      opacity 160ms ease;
+  }
+
+  .ceo-module-readiness-grid .ceo-command-card::before {
+    content: '';
+    position: absolute;
+    inset: 12px auto 12px 0;
+    width: 2px;
+    border-radius: 999px;
+    background: var(--branch-tone, var(--ceo-gold));
+    box-shadow: 0 0 14px var(--branch-tone, rgba(212, 175, 55, 0.4));
+    opacity: 0.78;
+  }
+
+  .ceo-module-readiness-grid .ceo-command-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--branch-wash, rgba(212, 175, 55, 0.08)), transparent 58%);
+    opacity: 0.32;
+    pointer-events: none;
+  }
+
+  .ceo-module-readiness-grid .ceo-command-card > * {
+    position: relative;
+    z-index: 1;
   }
 
   .ceo-module-readiness-grid .ceo-command-card + .ceo-command-card {
@@ -387,6 +416,7 @@ const commandCenterCss = `
   }
 
   .ceo-module-readiness-grid .ceo-command-card:hover {
+    background: rgba(255, 255, 255, 0.018);
     opacity: 0.92;
   }
 
@@ -434,10 +464,10 @@ const commandCenterCss = `
 
   .ceo-module-branch-dot {
     flex: 0 0 auto;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 999px;
-    box-shadow: 0 0 14px currentColor, 0 0 4px currentColor;
+    box-shadow: 0 0 16px currentColor, 0 0 5px currentColor;
   }
 
   .ceo-command-card h3 {
@@ -699,7 +729,9 @@ const commandCenterCss = `
   }
 
   .ceo-radar-legend-wrap {
-    display: none;
+    display: grid;
+    gap: 10px;
+    width: min(560px, 100%);
   }
 
   .ceo-radar-incomplete-note {
@@ -751,16 +783,16 @@ const commandCenterCss = `
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
-    color: rgba(248, 243, 231, 0.86);
+    font-size: 13px;
+    color: rgba(248, 243, 231, 0.9);
     min-width: 0;
     line-height: 1.35;
   }
 
   .ceo-radar-swatch {
     flex: 0 0 auto;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 999px;
     box-shadow: none;
   }
@@ -775,16 +807,16 @@ const commandCenterCss = `
 
   .ceo-radar-legend-values strong {
     color: rgba(243, 218, 138, 0.9);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 650;
     letter-spacing: -0.01em;
   }
 
   .ceo-radar-legend-values small {
-    color: var(--ceo-text-muted);
-    font-size: 10px;
-    text-transform: capitalize;
-    font-weight: 500;
+    color: var(--ceo-text-secondary);
+    font-size: 11px;
+    text-transform: none;
+    font-weight: 560;
   }
 
   .ceo-executive-command-page .ceo-radar-point-label {
@@ -854,9 +886,9 @@ const commandCenterCss = `
 
   .ceo-workflow-step p {
     margin: 8px 0 0;
-    font-size: 13px;
-    color: var(--ceo-text-secondary);
-    line-height: 1.52;
+    font-size: 13.5px;
+    color: rgba(248, 243, 231, 0.75);
+    line-height: 1.58;
   }
 
   .ceo-decision-card-priority {
@@ -897,9 +929,9 @@ const commandCenterCss = `
     border-top: none;
     border-radius: 0;
     background: transparent;
-    color: var(--ceo-text-muted);
-    font-size: 11px;
-    font-weight: 500;
+    color: rgba(243, 218, 138, 0.76);
+    font-size: 12px;
+    font-weight: 620;
     letter-spacing: 0.02em;
     text-transform: none;
     line-height: 1.4;
@@ -911,11 +943,11 @@ const commandCenterCss = `
 
   .ceo-module-posture {
     display: inline-block;
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.02em;
     text-transform: none;
-    color: var(--ceo-text-secondary);
-    font-weight: 500;
+    color: rgba(248, 243, 231, 0.78);
+    font-weight: 560;
     line-height: 1.4;
   }
 
@@ -1051,8 +1083,8 @@ function formatPostureLabel(posture) {
     return 'Pending inputs';
   }
 
-  if (safe === 'insufficient_data') {
-    return 'Insufficient data';
+  if (safe === 'insufficient_data' || safe.includes('insufficient') || safe.includes('missing')) {
+    return 'Pending inputs';
   }
 
   if (safe === 'executive_attention' || safe === 'executive attention required') {
@@ -1270,7 +1302,10 @@ function buildModuleReadinessCards({
   riskOverview,
   pmiOverview,
   governanceOverview,
-  strategyOverview
+  strategyOverview,
+  reportingOverview,
+  bridgeOverview,
+  heritageOverview
 }) {
   return [
     { key: 'ma', label: 'M&A', overview: maOverview, tone: getCeoBranchAccentHex('ma'), route: '/ma/dashboard' },
@@ -1315,6 +1350,27 @@ function buildModuleReadinessCards({
       overview: strategyOverview,
       tone: getCeoBranchAccentHex('strategy'),
       route: '/strategy/dashboard'
+    },
+    {
+      key: 'reporting',
+      label: 'Reporting',
+      overview: reportingOverview,
+      tone: getCeoBranchAccentHex('reporting'),
+      route: '/reporting/dashboard'
+    },
+    {
+      key: 'bridge',
+      label: 'Bridge',
+      overview: bridgeOverview,
+      tone: getCeoBranchAccentHex('bridge'),
+      route: '/bridge/dashboard'
+    },
+    {
+      key: 'heritage',
+      label: 'Heritage',
+      overview: heritageOverview,
+      tone: getCeoBranchAccentHex('heritage'),
+      route: '/heritage/dashboard'
     }
   ];
 }
@@ -1421,6 +1477,9 @@ export function ExecutiveCommandCenterView({
   governanceOverview,
   riskOverview,
   strategyOverview,
+  reportingOverview,
+  bridgeOverview,
+  heritageOverview,
   executivePriorityRows,
   lastReportGeneratedAt,
   canGenerateBoardPack,
@@ -1454,7 +1513,10 @@ export function ExecutiveCommandCenterView({
     riskOverview,
     pmiOverview,
     governanceOverview,
-    strategyOverview
+    strategyOverview,
+    reportingOverview,
+    bridgeOverview,
+    heritageOverview
   });
 
   const topPriorities = executivePriorityRows.slice(0, 3);
@@ -1602,7 +1664,12 @@ export function ExecutiveCommandCenterView({
                 key={module.key}
                 to={module.route}
                 className="ceo-command-card"
-                style={{ textDecoration: 'none', color: 'inherit' }}
+                style={{
+                  '--branch-tone': module.tone,
+                  '--branch-wash': `${module.tone}26`,
+                  textDecoration: 'none',
+                  color: 'inherit'
+                }}
               >
                 <div className="ceo-command-card-kicker">
                   <span

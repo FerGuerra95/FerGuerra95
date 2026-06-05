@@ -1970,6 +1970,14 @@ export function CEOOverviewPage() {
     route: '/heritage/dashboard',
     latestTitle: 'Insufficient persisted heritage data'
   });
+  const reportingOverview = getEcosystemBranchOverview(ecosystemBrief, 'reporting', {
+    title: 'Reporting data pending',
+    posture: 'insufficient_data',
+    description:
+      'Reporting assembles executive KPIs, board packs and report-library context. Insufficient persisted reporting data for a readiness score.',
+    route: '/reporting/dashboard',
+    latestTitle: 'Insufficient persisted reporting data'
+  });
   const legacyBridgeOverview = getEcosystemBranchOverview(ecosystemBrief, 'bridge', {
     title: 'Bridge opportunity pipeline',
     posture: 'insufficient_data',
@@ -2045,6 +2053,7 @@ export function CEOOverviewPage() {
     pmiOverview,
     governanceOverview,
     heritageOverview,
+    reportingOverview,
     bridgeOverview,
     riskOverview,
     strategyOverview
@@ -2131,6 +2140,13 @@ export function CEOOverviewPage() {
       tone: getCeoBranchAccentHex('strategy')
     }),
     buildRadarAxis({
+      key: 'reporting',
+      label: 'Reporting',
+      score: reportingOverview.score,
+      route: '/reporting/dashboard',
+      tone: getCeoBranchAccentHex('reporting')
+    }),
+    buildRadarAxis({
       key: 'bridge',
       label: 'Bridge',
       score: bridgeOverview.score,
@@ -2155,11 +2171,21 @@ export function CEOOverviewPage() {
     humanReviewPosture: 'human_review_required'
   };
   const commandRadarAxes = Array.isArray(executiveCommand.corporateHealthRadar)
-    ? executiveCommand.corporateHealthRadar
+    ? [
+        ...executiveCommand.corporateHealthRadar,
+        ...radarAxes.filter(
+          (fallbackAxis) =>
+            fallbackAxis &&
+            typeof fallbackAxis === 'object' &&
+            !executiveCommand.corporateHealthRadar.some(
+              (axis) => String(axis?.key || '').toLowerCase() === String(fallbackAxis.key || '').toLowerCase()
+            )
+        )
+      ]
         .filter((axis) => axis && typeof axis === 'object')
         .map((axis) => mapExecutiveCorporateRadarAxis(axis))
     : radarAxes
-        .filter((axis) => axis && typeof axis === 'object' && !['heritage'].includes(axis.key))
+        .filter((axis) => axis && typeof axis === 'object')
         .map((axis) => mapExecutiveCorporateRadarAxis(axis));
   const commandSignals = Array.isArray(executiveCommand.signals) ? executiveCommand.signals : [];
   const commandDecisionQueue = Array.isArray(executiveCommand.decisionQueue) ? executiveCommand.decisionQueue : [];
@@ -2193,6 +2219,9 @@ export function CEOOverviewPage() {
         governanceOverview={governanceOverview}
         riskOverview={riskOverview}
         strategyOverview={strategyOverview}
+        reportingOverview={reportingOverview}
+        bridgeOverview={bridgeOverview}
+        heritageOverview={heritageOverview}
         executivePriorityRows={executivePriorityRows}
         lastReportGeneratedAt={lastReportGeneratedAt}
         canGenerateBoardPack={canGenerateBoardPack}

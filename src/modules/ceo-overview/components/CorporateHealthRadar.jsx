@@ -3,7 +3,7 @@ import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 const RADAR_LABEL_SHORT = {
   legal: 'Comp.',
   financial: 'M&A',
-  ops: 'Ops',
+  ops: 'PMI',
   esg: 'Gov.',
   funding: 'Funding',
   risk: 'Risk',
@@ -20,13 +20,45 @@ const RADAR_LABEL_SHORT = {
   Compliance: 'Comp.',
   Governance: 'Gov.',
   'PMI / Synergies': 'PMI',
-  Operational: 'Ops',
+  Operational: 'PMI',
   Heritage: 'Heritage',
   Reporting: 'Report.',
   Strategy: 'Strategy',
   Funding: 'Funding',
   Bridge: 'Bridge',
   Legal: 'Comp.',
+  'M&A': 'M&A',
+  Risk: 'Risk'
+};
+
+const RADAR_LABEL_FULL = {
+  legal: 'Compliance',
+  financial: 'M&A',
+  ops: 'PMI',
+  esg: 'Governance',
+  funding: 'Funding',
+  risk: 'Risk',
+  strategy: 'Strategy',
+  bridge: 'Bridge',
+  heritage: 'Heritage',
+  reporting: 'Reporting',
+  compliance: 'Compliance',
+  pmi: 'PMI',
+  ma: 'M&A',
+  'Financial · M&A': 'M&A',
+  'Financial Â· M&A': 'M&A',
+  'ESG & reputational risk': 'Governance',
+  'Enterprise Risk': 'Risk',
+  Compliance: 'Compliance',
+  Governance: 'Governance',
+  'PMI / Synergies': 'PMI',
+  Operational: 'PMI',
+  Heritage: 'Heritage',
+  Reporting: 'Reporting',
+  Strategy: 'Strategy',
+  Funding: 'Funding',
+  Bridge: 'Bridge',
+  Legal: 'Compliance',
   'M&A': 'M&A',
   Risk: 'Risk'
 };
@@ -44,9 +76,9 @@ const RADAR_STATUS_LABEL = {
   medium: 'Review',
   high: 'Review',
   low: 'Review',
-  insufficient_data: 'Missing input',
-  missing: 'Missing input',
-  pending: 'Pending input'
+  insufficient_data: 'Pending inputs',
+  missing: 'Pending inputs',
+  pending: 'Pending inputs'
 };
 
 function normalizeScore(value) {
@@ -111,12 +143,26 @@ function radarShortLabel(axis) {
 
 function radarStatusLabel(axis, calculable) {
   if (!calculable) {
-    return 'Missing input';
+    return 'Pending inputs';
   }
 
   const status = String(axis?.status || axis?.posture || axis?.dataSource || '').trim().toLowerCase();
 
   return RADAR_STATUS_LABEL[status] || 'Review';
+}
+
+function radarLegendLabel(axis) {
+  const key = String(axis?.key || '').trim().toLowerCase();
+  if (key && RADAR_LABEL_FULL[key]) {
+    return RADAR_LABEL_FULL[key];
+  }
+
+  const label = String(axis?.label || '').trim();
+  if (!label) {
+    return '';
+  }
+
+  return RADAR_LABEL_FULL[label] || label;
 }
 
 function radarLabelAnchor(cos) {
@@ -325,7 +371,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
                   style={{ background: entry.tone, color: entry.tone }}
                   aria-hidden="true"
                 />
-                <span>{entry.shortLabel}</span>
+                <span>{radarLegendLabel(entry.axis)}</span>
               </span>
               <span className="ceo-radar-legend-values">
                 <strong>{entry.calculable ? `${entry.score}%` : 'N/A'}</strong>
