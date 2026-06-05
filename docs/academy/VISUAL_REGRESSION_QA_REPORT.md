@@ -425,6 +425,33 @@
 
 ---
 
+## 29. C.24.5F - Executive Overview Compliance Radar Consistency Check
+
+**Baseline:** `ce18cad`.
+
+**Runtime issue:** A local Compliance readiness score could render as `4/100` in Module Readiness while Corporate Health Radar rendered the command Compliance branch as `0% Attention`.
+
+**Source analysis:** The local card score came from frontend supplier/evidence/review readiness (`getComplianceOverview`). The radar score came from the Executive API canonical radar branch (`corporateHealthRadar`), which reflects backend Compliance legal-health posture when available.
+
+**Fix:** The Compliance Module Readiness card now aligns to the canonical command radar branch when that branch exists. The local Compliance overview remains fallback-only when the command branch is absent.
+
+**Truthfulness:** Eligible command zero remains `0`; pending/insufficient command data becomes `N/A` / `Pending inputs`. No scores, formulas or data were invented.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Authenticated route smoke; no ErrorBoundary, overflow or forbidden render tokens. |
+| `/ceo/overview` | PASS | Conflict fixture verified: local Compliance would be `4/100`, visible card/radar now align as `0/100` and `0% Attention`; Bridge/Heritage remain safe. |
+| `/ma/dashboard` | PASS | No regression quick check. |
+| `/funding/dashboard` | PASS | No regression quick check. |
+| `/risk/register` | PASS | No regression quick check. |
+| `/governance/dashboard` | PASS | No regression quick check. |
+
+**Validation:** build PASS; CEO truthfulness PASS (22/22); funding display-format PASS (7/7); global unit PASS (88 files / 562 tests).
+
+---
+
+---
+
 ## 28. C.24.5E - Executive Overview Radar and Branch Integrity Fix
 
 **Baseline:** `15bc867`.

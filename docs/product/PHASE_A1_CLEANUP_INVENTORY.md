@@ -8379,6 +8379,26 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 ---
 
+## C.24.5F - Executive Overview Compliance radar consistency check
+
+**Status:** COMPLETED.
+
+**Baseline:** `ce18cad`.
+
+**Finding:** Module Readiness Compliance could show a local frontend supplier-readiness score such as `4/100` while Corporate Health Radar showed the backend Executive API Compliance branch as `0% Attention`.
+
+**Source analysis:** Module Readiness used `getComplianceOverview()` from local Compliance supplier/evidence/review inputs. Corporate Health Radar preferred `executiveCommand.corporateHealthRadar`, where Compliance is the backend executive legal-health score derived from the latest Compliance audit baseline (`legalHealthScore`). Those were different display sources for the same visible branch.
+
+**Decision:** When a canonical Executive API radar branch exists for Compliance, the Compliance Module Readiness card now aligns its displayed score to that same branch. Local supplier scoring remains fallback-only when no command Compliance branch exists.
+
+**Truthfulness:** Real zero remains displayable when the command Compliance branch is eligible. Pending/insufficient Compliance radar data maps the module card to `N/A` / `Pending inputs`, not fake `0`. Bridge still blocks `100` with `Pending inputs`; Heritage remains `N/A` / `Pending inputs` without invented score.
+
+**Validation:** `npm run build` PASS; `ceoOverviewTruthfulness` 22/22 PASS; `fundingDisplayFormat` 7/7 PASS; `npm run test:unit` PASS (88 files / 562 tests). Playwright route smoke PASS for `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` using a conflict fixture where local Compliance would be `4/100` and command radar Compliance is `0%`.
+
+---
+
+---
+
 ## C.24.5E - Executive Overview radar and branch integrity fix
 
 **Status:** COMPLETED.

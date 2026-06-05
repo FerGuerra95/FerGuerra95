@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  alignOverviewScoreWithRadarBranch,
   buildInsufficientFallbackModuleCards,
   buildRadarAxis,
   estimateMaFinancialRadar,
@@ -228,5 +229,59 @@ describe('CEO overview truthfulness helpers', () => {
     expect(axis.displayLabel).toBe('0%');
     expect(axis.status).toBe('watch');
     expect(axis.isCalculable).toBe(true);
+  });
+
+  it('aligns compliance overview display score with canonical radar branch when available', () => {
+    const overview = getComplianceOverview({
+      suppliers: [{ id: 's1', name: 'Acme', riskScore: 96 }],
+      alerts: [],
+      evidenceItems: [],
+      reviews: []
+    });
+    const aligned = alignOverviewScoreWithRadarBranch(
+      overview,
+      [
+        mapExecutiveCorporateRadarAxis({
+          key: 'compliance',
+          label: 'Compliance',
+          value: 0,
+          status: 'watch',
+          executiveSignalEligible: true
+        })
+      ],
+      'compliance'
+    );
+
+    expect(overview.score).toBe(4);
+    expect(aligned.score).toBe(0);
+    expect(aligned.executiveSignalEligible).toBe(true);
+    expect(aligned.supplierCount).toBe(1);
+  });
+
+  it('aligns compliance overview to N/A when radar branch is pending inputs', () => {
+    const overview = getComplianceOverview({
+      suppliers: [{ id: 's1', name: 'Acme', riskScore: 96 }],
+      alerts: [],
+      evidenceItems: [],
+      reviews: []
+    });
+    const aligned = alignOverviewScoreWithRadarBranch(
+      overview,
+      [
+        mapExecutiveCorporateRadarAxis({
+          key: 'compliance',
+          label: 'Compliance',
+          value: null,
+          status: 'insufficient_data',
+          executiveSignalEligible: false
+        })
+      ],
+      'compliance'
+    );
+
+    expect(aligned.score).toBeNull();
+    expect(aligned.posture).toBe('insufficient_data');
+    expect(aligned.executiveSignalEligible).toBe(false);
+    expect(aligned.score).not.toBe(0);
   });
 });

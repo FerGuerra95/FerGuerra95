@@ -313,6 +313,26 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 - Hero keeps Executive Readiness Index and Top Priorities above the fold; Corporate Health Radar remains in Section 04.
 ---
 
+## C.24.5F - Compliance radar consistency safe narration
+
+**Status:** COMPLETED.
+
+**Baseline:** `ce18cad`.
+
+**Recording-safe result:** The visible Compliance branch no longer mixes a local supplier-readiness value with a different command radar value. When the Executive API command branch exists, Module Readiness and Corporate Health Radar use the same Compliance branch score.
+
+**Safe narration:** "Compliance is shown as a decision-support branch. Its visible readiness follows the command-level Compliance branch when available, and pending inputs remain marked as N/A."
+
+**Do not say:** Compliance is certified, legally validated, audit-certified, complete, board-approved or risk-free. A `0` means an eligible command-level signal reported zero readiness/health for this display, not a legal certification.
+
+**Bridge/Heritage note:** Bridge pending inputs remain N/A rather than fake 100; Heritage remains visible but unscored until validated inputs exist.
+
+**Validation:** build PASS; CEO truthfulness PASS; funding display-format PASS; global unit PASS; authenticated Playwright route smoke PASS.
+
+---
+
+---
+
 ## C.24.5E - Executive Overview radar integrity safe narration
 
 **Status:** COMPLETED.

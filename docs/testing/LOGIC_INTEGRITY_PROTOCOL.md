@@ -2605,6 +2605,26 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 
 ---
 
+## C.24.5F - Executive Overview Compliance radar consistency
+
+**Status:** COMPLETED (display source alignment only; no backend, formula, Golden Dataset or Formula Registry change).
+
+**Baseline:** `ce18cad`.
+
+**Issue:** Compliance had two active display sources on the Executive Overview screen. Module Readiness used local frontend `getComplianceOverview()` supplier/evidence/review scoring. Corporate Health Radar used the canonical Executive API `corporateHealthRadar` branch, which for Compliance is based on backend `legalHealthScore` from the latest audit baseline.
+
+**Decision:** If a canonical Compliance radar branch exists, Module Readiness displays that same branch score/status posture. If no command Compliance branch exists, the existing local Compliance overview remains the fallback.
+
+**Truthfulness rule:** Real `0` is preserved only when the command branch is eligible/calculable. Missing, pending or insufficient Compliance branch data remains `N/A` / `Pending inputs`; missing data is not coerced to `0`.
+
+**Regression coverage:** Added CEO truthfulness tests for local `4/100` aligning to command radar `0`, and for pending Compliance radar data forcing `N/A` rather than fake zero. Existing Bridge pending-100 and Heritage N/A tests remain green.
+
+**Validation:** build PASS; CEO truthfulness PASS (22/22); funding display-format PASS (7/7); global unit PASS (88 files / 562 tests); authenticated Playwright smoke PASS on six routes.
+
+---
+
+---
+
 ## C.24.5E - Executive Overview radar branch integrity
 
 **Status:** COMPLETED (display logic/truthfulness only; no formula, backend or Golden Dataset change).

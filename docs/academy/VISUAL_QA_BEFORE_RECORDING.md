@@ -627,6 +627,18 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Executive Readiness Index remains top hero metric; Corporate Health Radar remains Section 04; gold CTA preserved.
 - N/A / insufficient_data / Pending inputs visible; no fake 0.
 
+### C.24.5F Compliance radar consistency checklist
+
+- Baseline `ce18cad`; no general design changes.
+- If local Compliance supplier inputs would produce `4/100` but Executive API radar Compliance is `0%`, Module Readiness must display `0/100` so the visible branch does not contradict the radar.
+- Compliance `0` is allowed only when the command branch is calculable/eligible.
+- If command Compliance is pending, missing or insufficient, Module Readiness must show `N/A` / `Pending inputs`, not `0`.
+- Bridge must not show `100/100` or `100%` while status is `Pending inputs`.
+- Heritage remains visible but must stay `N/A` / `Pending inputs` unless validated inputs exist.
+- Corporate Health Radar still shows one canonical branch per domain, with no Legal/Financial/Operational/ESG duplicate aliases.
+- `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` checked with no ErrorBoundary, no horizontal overflow and no real NaN/undefined/Infinity render tokens.
+- Validation complete: build PASS; CEO truthfulness 22/22; funding display-format 7/7; global unit 88 files / 562 tests; Playwright route smoke PASS.
+
 ### C.24.5E radar/branch integrity checklist
 
 - Baseline `15bc867`; Executive Overview fix is display/truthfulness only.

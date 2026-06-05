@@ -178,6 +178,44 @@ export function mergeExecutiveCorporateRadarAxes(primaryAxes = [], fallbackAxes 
   return EXECUTIVE_RADAR_BRANCH_ORDER.map((key) => byBranch.get(key)).filter(Boolean);
 }
 
+export function alignOverviewScoreWithRadarBranch(overview = {}, axes = [], branchKey = '') {
+  const safeAxes = Array.isArray(axes) ? axes : [];
+  const targetKey = normalizeExecutiveRadarBranchKey({ key: branchKey });
+  const axis = safeAxes.find((item) => normalizeExecutiveRadarBranchKey(item) === targetKey);
+
+  if (!axis) {
+    return overview;
+  }
+
+  const score = normalizeScoreOrNull(axis.value ?? axis.score);
+  const insufficient =
+    score === null ||
+    axis.isCalculable === false ||
+    axis.executiveSignalEligible === false ||
+    statusIndicatesInsufficientData(axis.status, axis.posture, axis.dataSource);
+
+  if (insufficient) {
+    return {
+      ...overview,
+      score: null,
+      dataSource: 'insufficient_data',
+      truthfulnessStatus: 'insufficient_data',
+      executiveSignalEligible: false,
+      posture: 'insufficient_data',
+      scoreDisplay: null
+    };
+  }
+
+  return {
+    ...overview,
+    score,
+    dataSource: axis.dataSource || overview.dataSource || 'operational_dss',
+    truthfulnessStatus: overview.truthfulnessStatus || 'operational_dss',
+    executiveSignalEligible: true,
+    scoreDisplay: null
+  };
+}
+
 export function buildRadarAxis({ key, label, score, route, tone }) {
   const normalized = normalizeScoreOrNull(score);
   return {

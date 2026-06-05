@@ -43,6 +43,7 @@ import { executiveApi } from '../services/executiveApi.js';
 import {
   buildInsufficientFallbackModuleCards,
   buildRadarAxis,
+  alignOverviewScoreWithRadarBranch,
   estimateMaFinancialRadar,
   formatExecutiveScoreNumber,
   formatModuleScoreDisplay,
@@ -2186,11 +2187,16 @@ export function CEOOverviewPage() {
   const commandAlerts = Array.isArray(executiveCommand.alerts) ? executiveCommand.alerts : [];
   const commandCalendar = Array.isArray(executiveCommand.calendar) ? executiveCommand.calendar : [];
   const commandModuleCards = Array.isArray(executiveCommand.moduleCards) ? executiveCommand.moduleCards : [];
+  const displayComplianceOverview = alignOverviewScoreWithRadarBranch(
+    complianceOverview,
+    commandRadarAxes,
+    'compliance'
+  );
 
   const executivePriorityRows = buildExecutivePriorityRows({
     pmiOverview,
     fundingOverview,
-    complianceOverview
+    complianceOverview: displayComplianceOverview
   });
 
   return (
@@ -2206,7 +2212,7 @@ export function CEOOverviewPage() {
         commandDecisionQueue={commandDecisionQueue}
         commandAlerts={commandAlerts}
         maOverview={maOverview}
-        complianceOverview={complianceOverview}
+        complianceOverview={displayComplianceOverview}
         fundingOverview={fundingOverview}
         pmiOverview={pmiOverview}
         governanceOverview={governanceOverview}
