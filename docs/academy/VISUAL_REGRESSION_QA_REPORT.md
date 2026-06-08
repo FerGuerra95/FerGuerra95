@@ -516,3 +516,26 @@
 | `/governance/dashboard` | PASS | No regression quick check |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+
+---
+
+## 27. C.24.5H — Visible premium gold accents and Module Readiness shell correction
+
+**Baseline:** `11da2fa`.
+
+**Issue:** C.24.5G gold accents were too subtle in runtime. Module Readiness parent shell (`.ceo-module-readiness-block`) appeared navy because semi-transparent charcoal let section-shell blue (`rgba(8, 10, 18, …)`) bleed through.
+
+**Runtime selectors:** `.ceo-command-hero`, `.ceo-readiness-card`, `.ceo-priorities-card`, `.ceo-decision-queue-grid .ceo-command-card`, `.ceo-intelligence-grid .ceo-command-card`, `.ceo-workflow-step`, `.ceo-briefing-grid .ceo-command-card`, `.ceo-module-readiness-block`, `.ceo-corporate-radar-card`, `.ceo-radar-visual-wrap`, `.ceo-radar-legend-wrap`.
+
+**Fix:** Raised warm gold opacities (`rgba(245, 197, 92, 0.18–0.28)`). Module Readiness parent uses opaque black/charcoal gradient + gold border/halo. Branch cards keep `--branch-tone` borders/glow; generic gold kickers excluded on branch cards.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Gold visible on hero/general cards; Module Readiness parent black/gold not navy |
+| `/ceo/overview` | PASS | Branch cards keep branch colors; radar/list truthfulness unchanged |
+| `/ma/dashboard` | PASS | No regression quick check |
+| `/funding/dashboard` | PASS | No regression quick check |
+| `/risk/register` | PASS | No regression quick check |
+| `/governance/dashboard` | PASS | No regression quick check |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` PASS; `fundingDisplayFormat` PASS. Visual-only; no logic/formula/backend changes.

@@ -8456,3 +8456,15 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Visual QA:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` PASS; no ErrorBoundary, no overflow, no NaN/undefined/Infinity.
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+
+---
+
+## C.24.5H — Visible premium gold accents and Module Readiness shell correction
+
+**Baseline:** `11da2fa`.
+
+**Problem:** C.24.5G gold too subtle; `.ceo-module-readiness-block` navy bleed from transparent shell over section blue gradient.
+
+**Fix files:** `ceoMaterialSystem.css`, `ExecutiveCommandCenterView.jsx`, `CorporateHealthRadar.jsx`, `executivePolish.css`, `workspaceAccent.css`.
+
+**Outcome:** Visible warm gold on general Executive Overview surfaces; opaque black/gold Module Readiness parent; branch cards unchanged (`--branch-tone`). No logic/backend/formula changes.

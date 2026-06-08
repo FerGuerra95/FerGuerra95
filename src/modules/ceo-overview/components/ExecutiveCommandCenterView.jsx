@@ -50,12 +50,12 @@ const commandCenterCss = `
     border-radius: 24px;
     border: 1px solid var(--ceo-gold-border);
     background:
-      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212, 175, 55, 0.05), transparent 55%),
-      radial-gradient(circle at 100% 100%, rgba(8, 10, 18, 0.35), transparent 48%),
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245, 197, 92, 0.1), transparent 55%),
+      radial-gradient(circle at 100% 100%, rgba(18, 16, 12, 0.42), transparent 48%),
       linear-gradient(180deg, var(--ceo-charcoal), rgba(5, 5, 5, 0.98));
     box-shadow:
       0 24px 56px rgba(0, 0, 0, 0.52),
-      inset 0 1px 0 rgba(245, 197, 92, 0.04);
+      inset 0 1px 0 rgba(245, 197, 92, 0.12);
     padding: 22px 22px 20px;
     display: flex;
     flex-direction: column;
@@ -334,7 +334,7 @@ const commandCenterCss = `
   }
 
   .ceo-gold-secondary-action.button {
-    border: 1px solid rgba(212, 175, 55, 0.42);
+    border: 1px solid rgba(245, 197, 92, 0.48);
     color: var(--ceo-text-primary);
     background: rgba(9, 8, 6, 0.88);
     box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.08);
@@ -408,11 +408,13 @@ const commandCenterCss = `
     gap: 16px;
     padding: 18px 16px 16px;
     border-radius: 20px;
-    border: 1px solid rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(245, 197, 92, 0.22);
     background:
-      radial-gradient(ellipse 90% 55% at 50% 0%, rgba(212, 175, 55, 0.04), transparent 58%),
-      linear-gradient(180deg, rgba(8, 8, 7, 0.36), rgba(4, 4, 4, 0.14));
-    box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.04);
+      radial-gradient(ellipse 92% 58% at 50% 0%, rgba(245, 197, 92, 0.1), transparent 58%),
+      linear-gradient(180deg, #0b0a09 0%, #060606 52%, #040404 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(245, 197, 92, 0.14),
+      0 0 40px rgba(245, 197, 92, 0.08);
   }
 
   .ceo-module-readiness-grid .ceo-command-card::before {
@@ -735,8 +737,8 @@ const commandCenterCss = `
   .ceo-executive-command-page .executive-radar-grid,
   .ceo-executive-command-page .executive-radar-axis {
     fill: none;
-    stroke: rgba(212, 175, 55, 0.34);
-    stroke-width: 1.15;
+    stroke: rgba(245, 197, 92, 0.38);
+    stroke-width: 1.2;
   }
 
   .ceo-executive-command-page .executive-radar-axis.is-missing {
@@ -891,7 +893,7 @@ const commandCenterCss = `
 
   .ceo-workflow-step {
     border: none;
-    border-top: 2px solid rgba(212, 175, 55, 0.12);
+    border-top: 2px solid rgba(245, 197, 92, 0.26);
     border-radius: 0;
     background: transparent;
     padding: 16px 12px 14px 4px;

@@ -2684,3 +2684,15 @@ Validation: `npm run build` PASS; `ceoOverviewTruthfulness` 17/17 PASS; `funding
 **No logic impact:** no backend, API, formula helper, score normalization, Golden Dataset, Formula Registry, package/config, route or demo data changes.
 
 Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 7/7.
+
+---
+
+## C.24.5H — Visible premium gold accents and Module Readiness shell correction
+
+**Status:** COMPLETED (visual-only).
+
+**Baseline:** `11da2fa`.
+
+**Scope:** Strengthen visible warm gold on Executive Overview general surfaces; replace navy-bleeding Module Readiness parent shell with opaque black/charcoal + gold frame. Branch cards preserve `--branch-tone`.
+
+**No logic impact:** no backend, formulas, scores, Golden Dataset, Formula Registry, or data changes.

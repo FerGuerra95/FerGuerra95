@@ -690,3 +690,13 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Executive Readiness Index remains the top hero metric; Corporate Health Radar remains in Section 04; gold CTA and transparent lion are preserved.
 - `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` must be checked with no ErrorBoundary, no horizontal overflow, no text clipping and no NaN/undefined/Infinity.
 - Local frontend-only route smoke PASS for those six routes; authenticated Playwright navigation smoke blocked because backend API was not running on `127.0.0.1:4000`.
+
+### C.24.5H visible gold accents + Module Readiness shell checklist
+
+- Baseline `11da2fa`; visual-only pass.
+- Hero, readiness, priorities, decision queue, cross-module, workflow, briefing and radar show **visible** warm gold borders/halos (not gaming/metallic).
+- CTA secondary has clearly visible gold border.
+- `.ceo-module-readiness-block` is opaque black/charcoal with gold frame — **no navy/blue dominant shell**.
+- Branch cards (M&A, Funding, Compliance, Risk, PMI, Governance, Strategy, Reporting, Bridge, Heritage) keep `--branch-tone` identity; no generic gold card override.
+- Bridge/Heritage/Compliance truthfulness unchanged: N/A / Pending inputs preserved; no fake scores.
+- `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` — no ErrorBoundary, overflow, or NaN/undefined/Infinity.

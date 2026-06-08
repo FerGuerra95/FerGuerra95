@@ -393,3 +393,15 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; CEO truthfulness PASS; funding display-format PASS; global unit PASS. Frontend-only route smoke PASS; authenticated Playwright navigation smoke blocked by backend API not running on `127.0.0.1:4000`.
 
+### C.24.5H demo safety note
+
+**Baseline:** `11da2fa`.
+
+**Recording-safe result:** Executive Overview shows visible warm gold on general surfaces (hero, decision cards, workflow, briefing, radar frame). Module Readiness parent shell is black/charcoal with gold frame — not navy. Branch cards still use workspace accent colors only.
+
+**Safe narration:** "The command center uses a black premium finish with subtle gold hierarchy; each branch keeps its own accent in readiness cards."
+
+**Do not say:** All cards are gold-themed; Heritage/Bridge have invented scores; Compliance is certified.
+
+**Validation:** build PASS; CEO truthfulness PASS; funding display-format PASS. Visual-only change.
+
