@@ -1823,3 +1823,46 @@
   font-size: 12px !important;
   font-weight: 750 !important;
 }
+
+/* C.24.5J — Executive Overview workspace rail: two controlled rows (5 + 6), no horizontal scroll */
+@media (min-width: 921px) {
+  .main-area[data-workspace='overview'] .ceos-workspace-rail-shell {
+    border-radius: 16px !important;
+    padding: 6px 8px !important;
+    align-items: stretch !important;
+  }
+
+  .main-area[data-workspace='overview'] .ceos-workspace-rail-scroll-btn {
+    display: none !important;
+  }
+
+  .main-area[data-workspace='overview'] .ceos-workspace-rail {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    flex: 1 1 auto !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    overflow: visible !important;
+    padding: 2px 0 !important;
+  }
+
+  .main-area[data-workspace='overview'] .ceos-workspace-rail-item {
+    flex: 0 0 auto !important;
+    min-width: 0 !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+  }
+
+  .main-area[data-workspace='overview'] .ceos-workspace-rail-item:nth-child(-n + 5) {
+    flex-basis: calc((100% - 24px) / 5) !important;
+    max-width: calc((100% - 24px) / 5) !important;
+  }
+
+  .main-area[data-workspace='overview'] .ceos-workspace-rail-item:nth-child(n + 6) {
+    flex-basis: calc((100% - 30px) / 6) !important;
+    max-width: calc((100% - 30px) / 6) !important;
+    font-size: 11px !important;
+    padding: 6px 8px !important;
+  }
+}
