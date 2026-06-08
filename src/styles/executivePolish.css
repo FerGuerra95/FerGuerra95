@@ -1261,9 +1261,19 @@ textarea,
 .page .ceo-executive-command-page .ceo-gold-secondary-action.button,
 .page .ceo-executive-command-page .ceo-gold-secondary-action.button.secondary {
   background: linear-gradient(180deg, rgba(22, 19, 13, 0.9), rgba(8, 8, 7, 0.94)) !important;
-  border-color: rgba(212, 175, 55, 0.28) !important;
+  border-color: rgba(212, 175, 55, 0.32) !important;
   color: rgba(248, 243, 231, 0.88) !important;
   box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.08), 0 8px 20px rgba(0, 0, 0, 0.28) !important;
+}
+
+.page .ceo-executive-command-page .ceo-gold-secondary-action.button:hover:not(:disabled),
+.page .ceo-executive-command-page .ceo-gold-secondary-action.button.secondary:hover:not(:disabled) {
+  border-color: rgba(243, 218, 138, 0.52) !important;
+  background: linear-gradient(180deg, rgba(28, 24, 16, 0.96), rgba(12, 11, 9, 0.98)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(243, 218, 138, 0.12),
+    0 0 18px rgba(212, 175, 55, 0.08),
+    0 10px 24px rgba(0, 0, 0, 0.32) !important;
 }
 
 .page .ceo-executive-command-page .ceo-command-hero .ceo-readiness-card,
@@ -1288,7 +1298,6 @@ textarea,
 
 .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card,
 .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card,
-.page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card,
 .page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card,
 .page .ceo-executive-command-page .ceo-workflow-step {
   background:
@@ -1348,4 +1357,21 @@ textarea,
 .page .ceo-executive-command-page .ceo-radar-point-label {
   font-size: 12px !important;
   font-weight: 750 !important;
+}
+
+/* C.24.5G — premium gold accent polish (Executive Overview general surfaces) */
+.page .ceo-executive-command-page .ceo-command-section-title {
+  text-shadow: 0 1px 18px rgba(212, 175, 55, 0.06) !important;
+}
+
+.page .ceo-executive-command-page .ceo-command-section-copy {
+  color: rgba(248, 243, 231, 0.66) !important;
+}
+
+.page .ceo-executive-command-page .ceo-decision-card-priority {
+  color: rgba(243, 218, 138, 0.72) !important;
+}
+
+.page .ceo-executive-command-page .ceo-module-readiness-block .ceo-corporate-radar-card {
+  margin-top: 4px !important;
 }

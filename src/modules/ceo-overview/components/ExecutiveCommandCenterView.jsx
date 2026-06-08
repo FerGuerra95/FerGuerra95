@@ -262,7 +262,7 @@ const commandCenterCss = `
     border: none;
     border-radius: 0;
     background: transparent;
-    color: rgba(243, 218, 138, 0.62);
+    color: rgba(243, 218, 138, 0.74);
     font-size: 10px;
     font-weight: 550;
     letter-spacing: 0.14em;
@@ -270,10 +270,23 @@ const commandCenterCss = `
     line-height: 1.4;
   }
 
+  .ceo-command-badge-row .ceo-command-badge:first-child::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    margin-right: 8px;
+    border-radius: 999px;
+    background: rgba(243, 218, 138, 0.58);
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.28);
+    vertical-align: middle;
+    transform: translateY(-1px);
+  }
+
   .ceo-command-badge + .ceo-command-badge::before {
     content: '·';
     margin: 0 10px;
-    color: rgba(212, 175, 55, 0.24);
+    color: rgba(212, 175, 55, 0.34);
     font-weight: 400;
     letter-spacing: 0;
   }
@@ -330,6 +343,9 @@ const commandCenterCss = `
   .ceo-gold-secondary-action.button:hover:not(:disabled) {
     border-color: rgba(243, 218, 138, 0.58);
     background: rgba(16, 14, 11, 0.96);
+    box-shadow:
+      inset 0 1px 0 rgba(243, 218, 138, 0.1),
+      0 0 16px rgba(212, 175, 55, 0.07);
   }
 
   .ceo-command-card {
@@ -386,23 +402,36 @@ const commandCenterCss = `
       opacity 160ms ease;
   }
 
+  .ceo-module-readiness-block {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 18px 16px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    background:
+      radial-gradient(ellipse 90% 55% at 50% 0%, rgba(212, 175, 55, 0.04), transparent 58%),
+      linear-gradient(180deg, rgba(8, 8, 7, 0.36), rgba(4, 4, 4, 0.14));
+    box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.04);
+  }
+
   .ceo-module-readiness-grid .ceo-command-card::before {
     content: '';
     position: absolute;
-    inset: 12px auto 12px 0;
+    inset: 10px auto 10px 0;
     width: 2px;
     border-radius: 999px;
     background: var(--branch-tone, var(--ceo-gold));
-    box-shadow: 0 0 14px var(--branch-tone, rgba(212, 175, 55, 0.4));
-    opacity: 0.78;
+    box-shadow: 0 0 16px var(--branch-tone, rgba(212, 175, 55, 0.4));
+    opacity: 0.88;
   }
 
   .ceo-module-readiness-grid .ceo-command-card::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, var(--branch-wash, rgba(212, 175, 55, 0.08)), transparent 58%);
-    opacity: 0.32;
+    background: linear-gradient(90deg, var(--branch-wash, rgba(212, 175, 55, 0.08)), transparent 62%);
+    opacity: 0.38;
     pointer-events: none;
   }
 
@@ -706,8 +735,8 @@ const commandCenterCss = `
   .ceo-executive-command-page .executive-radar-grid,
   .ceo-executive-command-page .executive-radar-axis {
     fill: none;
-    stroke: rgba(212, 175, 55, 0.28);
-    stroke-width: 1.1;
+    stroke: rgba(212, 175, 55, 0.34);
+    stroke-width: 1.15;
   }
 
   .ceo-executive-command-page .executive-radar-axis.is-missing {
@@ -722,10 +751,16 @@ const commandCenterCss = `
   }
 
   .ceo-executive-command-page .executive-radar-fill {
-    stroke: rgba(252, 236, 180, 0.92);
-    stroke-width: 2.6;
+    stroke: rgba(252, 236, 180, 0.88);
+    stroke-width: 2.2;
     stroke-linejoin: round;
-    fill-opacity: 0.78;
+    fill-opacity: 0.76;
+  }
+
+  .ceo-executive-command-page .executive-radar-center-focus {
+    fill: rgba(212, 175, 55, 0.08);
+    stroke: rgba(243, 218, 138, 0.22);
+    stroke-width: 1;
   }
 
   .ceo-radar-legend-wrap {
@@ -1658,6 +1693,7 @@ export function ExecutiveCommandCenterView({
           title="Module Readiness Overview"
           description="Branch readiness scores from existing DSS signals. Missing data remains N/A."
         >
+          <div className="ceo-module-readiness-block">
           <div className="ceo-module-readiness-grid">
             {moduleCards.map((module) => (
               <Link
@@ -1709,6 +1745,7 @@ export function ExecutiveCommandCenterView({
               <CorporateHealthRadar axes={commandRadarAxes} />
               <p className="ceo-unified-context">{unifiedReadinessNote}</p>
             </article>
+          </div>
           </div>
         </SectionBlock>
 

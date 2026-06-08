@@ -280,9 +280,9 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
         >
           <defs>
             <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(243, 218, 138, 0.42)" />
-              <stop offset="52%" stopColor="rgba(212, 175, 55, 0.34)" />
-              <stop offset="100%" stopColor="rgba(154, 117, 24, 0.28)" />
+              <stop offset="0%" stopColor="rgba(243, 218, 138, 0.38)" />
+              <stop offset="52%" stopColor="rgba(212, 175, 55, 0.3)" />
+              <stop offset="100%" stopColor="rgba(154, 117, 24, 0.24)" />
             </linearGradient>
             <filter id="ceoRadarGlow" x="-30%" y="-30%" width="160%" height="160%">
               <feGaussianBlur stdDeviation="4" result="blur" />
@@ -305,7 +305,14 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
             cy={cy}
             r={rMax}
             className="executive-radar-outer-ring"
-            fill="rgba(212, 175, 55, 0.03)"
+            fill="rgba(212, 175, 55, 0.04)"
+          />
+
+          <circle
+            cx={cx}
+            cy={cy}
+            r="10"
+            className="executive-radar-center-focus"
           />
 
           {[0.33, 0.66, 1].map((ratio) => (
@@ -336,7 +343,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
               className="executive-radar-fill"
               points={polygonPoints}
               fill={`url(#${gradientId})`}
-              fillOpacity="0.82"
+              fillOpacity="0.78"
               filter="url(#ceoRadarGlow)"
             />
           ) : null}

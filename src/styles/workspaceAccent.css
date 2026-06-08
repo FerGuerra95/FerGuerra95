@@ -1723,9 +1723,18 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-gold-secondary-action.button,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-gold-secondary-action.button.secondary {
   background: linear-gradient(180deg, rgba(22, 19, 13, 0.9), rgba(8, 8, 7, 0.94)) !important;
-  border-color: rgba(212, 175, 55, 0.28) !important;
+  border-color: rgba(212, 175, 55, 0.32) !important;
   color: rgba(248, 243, 231, 0.88) !important;
   box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.08), 0 8px 20px rgba(0, 0, 0, 0.28) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-gold-secondary-action.button:hover:not(:disabled),
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-gold-secondary-action.button.secondary:hover:not(:disabled) {
+  border-color: rgba(243, 218, 138, 0.52) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(243, 218, 138, 0.12),
+    0 0 18px rgba(212, 175, 55, 0.08),
+    0 10px 24px rgba(0, 0, 0, 0.32) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-readiness-card,
@@ -1733,7 +1742,6 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-corporate-radar-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-command-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step {
   background:
@@ -1744,6 +1752,11 @@
     inset 0 1px 0 rgba(255, 248, 230, 0.05),
     inset 0 -26px 54px rgba(0, 0, 0, 0.4),
     0 14px 42px rgba(0, 0, 0, 0.48) !important;
+}
+
+/* C.24.5G — module readiness parent shell only; branch cards keep --branch-tone */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-block {
+  border-color: rgba(212, 175, 55, 0.11) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-readiness-card,
