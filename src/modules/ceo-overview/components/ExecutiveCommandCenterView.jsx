@@ -1,6 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FileText } from 'lucide-react';
+import {
+  BarChart3,
+  Briefcase,
+  Coins,
+  Database,
+  FileText,
+  LineChart,
+  PenLine,
+  ScanSearch,
+  ScrollText,
+  Shield,
+  Sparkles,
+  Target,
+  TriangleAlert,
+  UserCheck,
+  Zap
+} from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import { CorporateHealthRadar } from './CorporateHealthRadar.jsx';
 import '../styles/ceoMaterialSystem.css';
@@ -12,6 +28,65 @@ import {
 import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 
 const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png';
+
+const DECISION_QUEUE_ICONS = {
+  'Compliance Exposure': Shield,
+  'Risk Radar Alert': TriangleAlert,
+  'Funding Window': LineChart,
+  'M&A Opportunity Update': Briefcase
+};
+
+const INTELLIGENCE_ICONS = {
+  'Highest Impact': Zap,
+  'Best Opportunity': Sparkles,
+  'Focus Area': Target,
+  'Board Review Draft': FileText
+};
+
+const WORKFLOW_STEPS = [
+  {
+    eyebrow: 'Step 1',
+    title: 'Create Draft',
+    copy: 'Generate board review draft from current executive signals.',
+    icon: PenLine
+  },
+  {
+    eyebrow: 'Step 2',
+    title: 'Review Signals',
+    copy: 'Validate compliance, risk, funding and M&A posture.',
+    icon: ScanSearch
+  },
+  {
+    eyebrow: 'Step 3',
+    title: 'Executive Data Room',
+    copy: 'Confirm supporting data and unresolved dependencies.',
+    icon: Database
+  },
+  {
+    eyebrow: 'Step 4',
+    title: 'Board Review Draft',
+    copy: 'Prepare review context for executive discussion.',
+    icon: ScrollText
+  },
+  {
+    eyebrow: 'Step 5',
+    title: 'Human Review',
+    copy: 'Share only after explicit user approval and review.',
+    icon: UserCheck
+  }
+];
+
+function CeoGoldCardIcon({ icon: Icon }) {
+  if (!Icon) {
+    return null;
+  }
+
+  return (
+    <span className="ceo-gold-card-icon" aria-hidden="true">
+      <Icon size={15} strokeWidth={1.75} />
+    </span>
+  );
+}
 
 const commandCenterCss = `
   .ceo-executive-command-page {
@@ -417,23 +492,56 @@ const commandCenterCss = `
       0 0 40px rgba(245, 197, 92, 0.08);
   }
 
+  .ceo-gold-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    color: rgba(245, 197, 92, 0.84);
+    background: rgba(245, 197, 92, 0.08);
+    border: 1px solid rgba(245, 197, 92, 0.18);
+    box-shadow: 0 0 10px rgba(245, 197, 92, 0.08);
+  }
+
+  .ceo-card-title-row,
+  .ceo-card-kicker-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .ceo-card-title-row strong {
+    min-width: 0;
+  }
+
+  .ceo-workflow-step-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
   .ceo-module-readiness-grid .ceo-command-card::before {
     content: '';
     position: absolute;
-    inset: 10px auto 10px 0;
-    width: 2px;
+    inset: 8px auto 8px 0;
+    width: 3px;
     border-radius: 999px;
     background: var(--branch-tone, var(--ceo-gold));
-    box-shadow: 0 0 16px var(--branch-tone, rgba(212, 175, 55, 0.4));
-    opacity: 0.88;
+    box-shadow: 0 0 20px var(--branch-tone, rgba(212, 175, 55, 0.4));
+    opacity: 0.96;
   }
 
   .ceo-module-readiness-grid .ceo-command-card::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, var(--branch-wash, rgba(212, 175, 55, 0.08)), transparent 62%);
-    opacity: 0.38;
+    background: linear-gradient(90deg, var(--branch-wash, rgba(212, 175, 55, 0.08)), transparent 68%);
+    opacity: 0.5;
     pointer-events: none;
   }
 
@@ -495,10 +603,10 @@ const commandCenterCss = `
 
   .ceo-module-branch-dot {
     flex: 0 0 auto;
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
     border-radius: 999px;
-    box-shadow: 0 0 16px currentColor, 0 0 5px currentColor;
+    box-shadow: 0 0 18px currentColor, 0 0 6px currentColor;
   }
 
   .ceo-command-card h3 {
@@ -828,8 +936,8 @@ const commandCenterCss = `
 
   .ceo-radar-swatch {
     flex: 0 0 auto;
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
     border-radius: 999px;
     box-shadow: none;
   }
@@ -911,9 +1019,9 @@ const commandCenterCss = `
     line-height: 1.4;
   }
 
-  .ceo-workflow-step strong {
+  .ceo-workflow-step-head strong {
     display: block;
-    margin-top: 6px;
+    margin-top: 0;
     font-size: 17px;
     font-weight: 650;
     color: var(--ceo-text-primary);
@@ -1666,7 +1774,10 @@ export function ExecutiveCommandCenterView({
                 >
                   {card.priority}
                 </div>
-                <strong>{card.title}</strong>
+                <div className="ceo-card-title-row">
+                  <CeoGoldCardIcon icon={DECISION_QUEUE_ICONS[card.title]} />
+                  <strong>{card.title}</strong>
+                </div>
                 <p>{card.summary}</p>
                 <span className="ceo-decision-card-status">{card.status}</span>
               </article>
@@ -1682,7 +1793,10 @@ export function ExecutiveCommandCenterView({
           <div className="ceo-intelligence-grid">
             {intelligenceCards.map((card) => (
               <article key={card.title} className="ceo-command-card">
-                <div className="ceo-command-card-kicker">{card.title}</div>
+                <div className="ceo-command-card-kicker ceo-card-kicker-row">
+                  <CeoGoldCardIcon icon={INTELLIGENCE_ICONS[card.title]} />
+                  <span>{card.title}</span>
+                </div>
                 <p>{card.summary}</p>
                 <span className="ceo-decision-card-status">{card.status}</span>
               </article>
@@ -1704,7 +1818,7 @@ export function ExecutiveCommandCenterView({
                 className="ceo-command-card"
                 style={{
                   '--branch-tone': module.tone,
-                  '--branch-wash': `${module.tone}26`,
+                  '--branch-wash': `${module.tone}44`,
                   textDecoration: 'none',
                   color: 'inherit'
                 }}
@@ -1757,31 +1871,16 @@ export function ExecutiveCommandCenterView({
           description="Draft-first workflow. Human review required before any distribution."
         >
           <div className="ceo-workflow-grid">
-            <article className="ceo-workflow-step">
-              <p className="ceo-step-eyebrow">Step 1</p>
-              <strong>Create Draft</strong>
-              <p>Generate board review draft from current executive signals.</p>
-            </article>
-            <article className="ceo-workflow-step">
-              <p className="ceo-step-eyebrow">Step 2</p>
-              <strong>Review Signals</strong>
-              <p>Validate compliance, risk, funding and M&A posture.</p>
-            </article>
-            <article className="ceo-workflow-step">
-              <p className="ceo-step-eyebrow">Step 3</p>
-              <strong>Executive Data Room</strong>
-              <p>Confirm supporting data and unresolved dependencies.</p>
-            </article>
-            <article className="ceo-workflow-step">
-              <p className="ceo-step-eyebrow">Step 4</p>
-              <strong>Board Review Draft</strong>
-              <p>Prepare review context for executive discussion.</p>
-            </article>
-            <article className="ceo-workflow-step">
-              <p className="ceo-step-eyebrow">Step 5</p>
-              <strong>Human Review</strong>
-              <p>Share only after explicit user approval and review.</p>
-            </article>
+            {WORKFLOW_STEPS.map((step) => (
+              <article key={step.eyebrow} className="ceo-workflow-step">
+                <p className="ceo-step-eyebrow">{step.eyebrow}</p>
+                <div className="ceo-workflow-step-head">
+                  <CeoGoldCardIcon icon={step.icon} />
+                  <strong>{step.title}</strong>
+                </div>
+                <p>{step.copy}</p>
+              </article>
+            ))}
           </div>
         </SectionBlock>
 
@@ -1792,11 +1891,17 @@ export function ExecutiveCommandCenterView({
         >
           <div className="ceo-briefing-grid">
             <article className="ceo-command-card">
-              <strong>Board review draft</strong>
+              <div className="ceo-card-title-row">
+                <CeoGoldCardIcon icon={FileText} />
+                <strong>Board review draft</strong>
+              </div>
               <p>Status: {lastReportGeneratedAt ? 'Prepared' : 'Draft'}</p>
             </article>
             <article className="ceo-command-card">
-              <strong>Compliance review</strong>
+              <div className="ceo-card-title-row">
+                <CeoGoldCardIcon icon={Shield} />
+                <strong>Compliance review</strong>
+              </div>
               <p>
                 Status:{' '}
                 {complianceOverview.openAlerts > 0
@@ -1807,14 +1912,20 @@ export function ExecutiveCommandCenterView({
               </p>
             </article>
             <article className="ceo-command-card">
-              <strong>Strategic review</strong>
+              <div className="ceo-card-title-row">
+                <CeoGoldCardIcon icon={BarChart3} />
+                <strong>Strategic review</strong>
+              </div>
               <p>
                 Status:{' '}
                 {strategyOverview.posture === 'insufficient_data' ? 'Pending inputs' : 'In review'}
               </p>
             </article>
             <article className="ceo-command-card">
-              <strong>Funding review</strong>
+              <div className="ceo-card-title-row">
+                <CeoGoldCardIcon icon={Coins} />
+                <strong>Funding review</strong>
+              </div>
               <p>
                 Status:{' '}
                 {fundingOverview.executiveSignalEligible ? 'Prepared' : 'Pending inputs'}
