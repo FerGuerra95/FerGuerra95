@@ -83,7 +83,7 @@ function CeoGoldCardIcon({ icon: Icon }) {
 
   return (
     <span className="ceo-gold-card-icon" aria-hidden="true">
-      <Icon size={15} strokeWidth={1.75} />
+      <Icon size={14} strokeWidth={1.65} />
     </span>
   );
 }
@@ -497,13 +497,22 @@ const commandCenterCss = `
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    width: 26px;
-    height: 26px;
-    border-radius: 8px;
-    color: rgba(245, 197, 92, 0.84);
-    background: rgba(245, 197, 92, 0.08);
-    border: 1px solid rgba(245, 197, 92, 0.18);
-    box-shadow: 0 0 10px rgba(245, 197, 92, 0.08);
+    width: auto;
+    height: auto;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: rgba(245, 197, 92, 0.78);
+  }
+
+  .ceo-card-title-row,
+  .ceo-card-kicker-row,
+  .ceo-workflow-step-head {
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
 
   .ceo-card-title-row,

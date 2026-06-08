@@ -674,15 +674,26 @@
   }
 }
 
-/* ——— C.24.5H gold card icons + branch accent refinement ——— */
+/* ——— C.24.5I gold icon cleanup — line icons only, no pill/strip backgrounds ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-gold-card-icon,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-card-title-row,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-card-kicker-row,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step-head {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-gold-card-icon {
-  width: 26px !important;
-  height: 26px !important;
-  border-radius: 8px !important;
-  color: rgba(245, 197, 92, 0.84) !important;
-  background: rgba(245, 197, 92, 0.08) !important;
-  border: 1px solid rgba(245, 197, 92, 0.18) !important;
-  box-shadow: 0 0 10px rgba(245, 197, 92, 0.08) !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  color: rgba(245, 197, 92, 0.78) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card-kicker.ceo-card-kicker-row::before {
+  display: none !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step-head strong {

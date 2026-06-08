@@ -124,14 +124,14 @@ h4 {
   [class*="command-item"],
   [class*="signal-card"],
   [class*="state-card"]
-):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-corporate-radar-card):not(.ceo-workflow-step):not(.ceo-command-section-shell):not(.ceo-command-hero):not(.executive-radar-panel):not(.ceo-radar-visual-wrap):not(.ceo-decision-card-priority):not(.ceo-decision-card-status):not(.ceo-command-card-kicker):not(.ceo-module-readiness-block):not(.ceo-executive-command-page) {
+):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-corporate-radar-card):not(.ceo-workflow-step):not(.ceo-command-section-shell):not(.ceo-command-hero):not(.executive-radar-panel):not(.ceo-radar-visual-wrap):not(.ceo-decision-card-priority):not(.ceo-decision-card-status):not(.ceo-command-card-kicker):not(.ceo-module-readiness-block):not(.ceo-gold-card-icon):not(.ceo-card-title-row):not(.ceo-card-kicker-row):not(.ceo-executive-command-page) {
   border: 1px solid var(--ceos-polish-line) !important;
   background: var(--ceos-polish-surface-soft) !important;
   border-radius: var(--ceos-polish-radius) !important;
 }
 
 .page :is([class*="panel"], [class*="card"]):not(.ceos-executive-inner-surface):not(.ceo-executive-command-page)
-  :is([class*="card"], [class*="box"], [class*="block"], [class*="metric"]):not(.ceos-executive-inner-surface):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-workflow-step):not(.executive-radar-panel):not(.ceo-radar-visual-wrap):not(.ceo-decision-card-priority):not(.ceo-decision-card-status):not(.ceo-command-card-kicker):not(.ceo-module-readiness-block):not(.ceo-module-readiness-grid) {
+  :is([class*="card"], [class*="box"], [class*="block"], [class*="metric"]):not(.ceos-executive-inner-surface):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-workflow-step):not(.executive-radar-panel):not(.ceo-radar-visual-wrap):not(.ceo-decision-card-priority):not(.ceo-decision-card-status):not(.ceo-command-card-kicker):not(.ceo-module-readiness-block):not(.ceo-module-readiness-grid):not(.ceo-gold-card-icon):not(.ceo-card-title-row):not(.ceo-card-kicker-row) {
   background: rgba(2, 6, 23, 0.26) !important;
   border-color: var(--ceos-polish-line-soft) !important;
 }
