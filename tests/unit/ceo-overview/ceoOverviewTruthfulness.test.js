@@ -530,7 +530,7 @@ describe('CEO overview truthfulness helpers', () => {
     expect(actions[0].actionLabel).toMatch(/review source module|complete source inputs/i);
   });
 
-  it('caps recommended actions at five items', () => {
+  it('caps recommended actions at three main items plus one pending group', () => {
     const alerts = Array.from({ length: 10 }, (_, index) => ({
       title: `Executive alert ${index + 1}`,
       module: ['M&A', 'Funding', 'Compliance', 'Risk', 'PMI', 'Governance', 'Strategy', 'Reporting', 'Bridge', 'Heritage'][
@@ -539,10 +539,18 @@ describe('CEO overview truthfulness helpers', () => {
       severity: index < 2 ? 'critical' : 'watch',
       recommendedAction: `Action ${index + 1}`
     }));
+    const signals = [
+      { title: 'Funding signal not available', module: 'Funding', severity: 'watch' },
+      { title: 'Governance signal not available', module: 'Governance', severity: 'watch' }
+    ];
 
-    const actions = buildExecutiveRecommendedActions({ alerts, signals: [], limit: 5 });
+    const actions = buildExecutiveRecommendedActions({ alerts, signals, limit: 3 });
+    const mainActions = actions.filter((item) => !item.isGroupedPending);
+    const groupedActions = actions.filter((item) => item.isGroupedPending);
 
-    expect(actions.length).toBeLessThanOrEqual(5);
+    expect(mainActions.length).toBeLessThanOrEqual(3);
+    expect(groupedActions.length).toBeLessThanOrEqual(1);
+    expect(actions.length).toBeLessThanOrEqual(4);
   });
 
   it('collapses duplicate module actions to one recommended item', () => {
@@ -609,6 +617,45 @@ describe('CEO overview truthfulness helpers', () => {
 
     expect(actions[0].whyItMatters).toMatch(/pending inputs/i);
     expect(actions[0].whyItMatters).toMatch(/not treated as failed performance/i);
+  });
+
+  it('does not duplicate the same module in hero executive attention rows', () => {
+    const rows = buildExecutivePriorityRows({
+      decisionQueue: [
+        {
+          title: 'Compliance exposure',
+          module: 'Compliance',
+          severity: 'risk',
+          recommendedAction: 'Review supplier evidence.'
+        },
+        { title: 'PMI integration gap', module: 'PMI', severity: 'watch' }
+      ],
+      alerts: [{ title: 'Compliance alert', module: 'Compliance', severity: 'risk' }],
+      signals: [],
+      pmiOverview: { alerts: [] },
+      fundingOverview: { requiresExecutiveUpdate: false },
+      complianceOverview: { openAlerts: 3 }
+    });
+
+    const complianceRows = rows.filter(
+      (row) => row.moduleKey === 'compliance' || row.label === 'Compliance'
+    );
+
+    expect(complianceRows).toHaveLength(1);
+    expect(rows.length).toBeLessThanOrEqual(3);
+    expect(rows.some((row) => row.label === 'PMI')).toBe(true);
+  });
+
+  it('does not emit Review Executive generic recommended action title', () => {
+    const actions = buildExecutiveRecommendedActions({
+      alerts: [{ title: 'Executive posture signal', module: 'Executive', severity: 'watch' }],
+      signals: []
+    });
+    const serialized = JSON.stringify(actions);
+
+    expect(actions[0].title).not.toMatch(/^Review Executive$/i);
+    expect(actions[0].title).toMatch(/readiness blockers|board readiness/i);
+    expect(serialized).not.toMatch(/approved|certified/i);
   });
 
   it('humanizes compliance and risk blocker copy for executives', () => {

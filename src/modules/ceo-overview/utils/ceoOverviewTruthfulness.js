@@ -757,6 +757,16 @@ function buildRecommendedActionFallbackLabel(source = {}, route = '') {
   return 'Complete source inputs before board circulation.';
 }
 
+function isGenericExecutiveScope(moduleKey, module = '') {
+  const safeModule = String(module || '').trim().toLowerCase();
+  return (
+    moduleKey === 'enterprise' ||
+    moduleKey === 'executive' ||
+    safeModule === 'enterprise' ||
+    safeModule === 'executive'
+  );
+}
+
 function summarizeRecommendedActionTitle(source = {}) {
   const title = String(source?.title || '').trim();
   const moduleKey = normalizeExecutiveModuleKey(source?.module);
@@ -766,8 +776,16 @@ function summarizeRecommendedActionTitle(source = {}) {
     return null;
   }
 
-  if (/exposure|alert|escalation|review|decision|opportunity/i.test(title)) {
+  if (isGenericExecutiveScope(moduleKey, source?.module)) {
+    return 'Review readiness blockers';
+  }
+
+  if (/exposure|alert|escalation|review|decision|opportunity|blocker|readiness/i.test(title)) {
     return title;
+  }
+
+  if (/^review\s+executive$/i.test(`Review ${label}`)) {
+    return 'Validate board readiness inputs';
   }
 
   return `Review ${label}`;
@@ -843,7 +861,7 @@ export function buildExecutiveRecommendedActions({
   alerts = [],
   signals = [],
   decisionQueue = [],
-  limit = 5
+  limit = 3
 } = {}) {
   const combined = [
     ...(Array.isArray(alerts) ? alerts : []),
@@ -853,7 +871,7 @@ export function buildExecutiveRecommendedActions({
     return [];
   }
 
-  const maxItems = Math.min(5, Math.max(1, Number(limit) || 5));
+  const mainLimit = Math.min(3, Math.max(1, Number(limit) || 3));
   const queueItems = buildExecutiveLiveDecisionQueueItems(decisionQueue, { limit: 12 });
   const queueLiteralPhrases = new Set(
     queueItems.flatMap((item) => {
@@ -894,7 +912,8 @@ export function buildExecutiveRecommendedActions({
   const usedModules = new Set();
 
   for (const candidate of rankedCandidates) {
-    if (actions.length >= maxItems) {
+    const mainCount = actions.filter((item) => !item.isGroupedPending).length;
+    if (mainCount >= mainLimit) {
       break;
     }
 
@@ -913,11 +932,11 @@ export function buildExecutiveRecommendedActions({
   }
 
   const groupedPending = buildGroupedPendingSignalsAction(unavailableModuleKeys);
-  if (groupedPending && actions.length < maxItems) {
+  if (groupedPending) {
     actions.push(groupedPending);
   }
 
-  return actions.slice(0, maxItems);
+  return actions;
 }
 
 function blockerDescriptionRank(description = '') {
@@ -1261,59 +1280,114 @@ const INFORMATIONAL_PRIORITY_ROWS = [
   }
 ];
 
+function summarizeExecutiveAttentionValue({ moduleKey, title, recommendedAction } = {}) {
+  const action = String(recommendedAction || '').trim();
+  if (action) {
+    return action;
+  }
+
+  const safeTitle = String(title || '').trim();
+  if (moduleKey === 'compliance') {
+    return 'Compliance posture requires executive review';
+  }
+  if (moduleKey === 'pmi') {
+    return 'Integration value capture requires attention';
+  }
+  if (moduleKey === 'funding') {
+    return 'Capital readiness requires executive review';
+  }
+  if (moduleKey === 'risk') {
+    return 'Risk posture requires executive review';
+  }
+  if (moduleKey === 'governance') {
+    return 'Governance decisions require executive review';
+  }
+  if (safeTitle && !/signal not available/i.test(safeTitle)) {
+    return safeTitle;
+  }
+
+  return `${executiveModuleDisplayLabel(moduleKey)} requires executive attention`;
+}
+
 export function buildExecutivePriorityRows({
   decisionQueue = [],
   alerts = [],
   signals = [],
   pmiOverview = {},
   fundingOverview = {},
-  complianceOverview = {}
+  complianceOverview = {},
+  readiness = {}
 } = {}) {
   const realRows = [];
-  const seen = new Set();
+  const usedModuleKeys = new Set();
 
   const addRow = (row) => {
-    const key = `${row.label}::${row.value}`.toLowerCase();
-    if (seen.has(key)) {
+    const moduleKey = row.moduleKey || normalizeExecutiveModuleKey(row.label);
+    if (usedModuleKeys.has(moduleKey)) {
       return;
     }
-    seen.add(key);
-    realRows.push({ ...row, isInformational: false });
+    usedModuleKeys.add(moduleKey);
+    realRows.push({ ...row, moduleKey, isInformational: false });
   };
 
-  buildExecutiveLiveDecisionQueueItems(decisionQueue, { limit: 3 }).forEach((item) => {
+  buildExecutiveLiveDecisionQueueItems(decisionQueue, { limit: 6 }).forEach((item) => {
+    const moduleKey = normalizeExecutiveModuleKey(item.module);
     addRow({
-      label: item.module,
-      value: item.title,
-      severity: item.severity
-    });
-  });
-
-  buildExecutiveRecommendedActions({ alerts, signals, limit: 3 }).forEach((action) => {
-    addRow({
-      label: action.module,
-      value: action.title,
-      severity: action.severity
+      label: executiveModuleDisplayLabel(moduleKey, item.module),
+      value: summarizeExecutiveAttentionValue({
+        moduleKey,
+        title: item.title,
+        recommendedAction: item.recommendedAction
+      }),
+      severity: item.severity,
+      moduleKey
     });
   });
 
   if (Array.isArray(pmiOverview.alerts) && pmiOverview.alerts.length > 0) {
-    addRow({ label: 'PMI escalation', value: pmiOverview.alerts[0] });
+    addRow({
+      label: 'PMI',
+      value: pmiOverview.alerts[0] || 'Integration value capture requires attention',
+      moduleKey: 'pmi'
+    });
   }
 
   if (fundingOverview.requiresExecutiveUpdate) {
-    addRow({ label: 'Funding update', value: 'Executive review required' });
+    addRow({
+      label: 'Funding',
+      value: 'Executive review required before board circulation',
+      moduleKey: 'funding'
+    });
   }
 
   if (Number(complianceOverview.openAlerts) > 0) {
     addRow({
-      label: 'Compliance control',
-      value: `${complianceOverview.openAlerts} open alerts`
+      label: 'Compliance',
+      value: 'Compliance posture requires executive review',
+      moduleKey: 'compliance'
+    });
+  }
+
+  const missingData = Array.isArray(readiness.missingData) ? readiness.missingData : [];
+  const hasExplicitPendingInputs =
+    missingData.length > 0 ||
+    (readiness.score !== undefined && normalizeScoreOrNull(readiness.score) === null);
+  if (realRows.length < 3 && hasExplicitPendingInputs) {
+    addRow({
+      label: 'Board readiness',
+      value: 'Pending inputs before distribution',
+      moduleKey: 'board-readiness'
+    });
+  } else if (realRows.length < 3 && readiness.humanReviewRequired === true) {
+    addRow({
+      label: 'Board readiness',
+      value: 'Human review required before distribution',
+      moduleKey: 'board-readiness'
     });
   }
 
   if (realRows.length) {
-    return realRows.slice(0, 6);
+    return realRows.slice(0, 3);
   }
 
   return INFORMATIONAL_PRIORITY_ROWS.slice(0, 4);

@@ -1694,7 +1694,7 @@ export function ExecutiveCommandCenterView({
     alerts: commandAlerts,
     signals: commandSignals,
     decisionQueue: commandDecisionQueue,
-    limit: 5
+    limit: 3
   });
   const inputBlockers = buildExecutiveInputBlockers({
     readiness: commandReadiness,
@@ -1870,7 +1870,7 @@ export function ExecutiveCommandCenterView({
                       </p>
                       {item.route ? (
                         <Link to={item.route} className="ceo-live-queue-link">
-                          Open module
+                          Review source module
                         </Link>
                       ) : null}
                     </li>
@@ -1900,7 +1900,7 @@ export function ExecutiveCommandCenterView({
                       <p className="ceo-live-queue-action">{action.actionLabel}</p>
                       {action.route ? (
                         <Link to={action.route} className="ceo-live-queue-link">
-                          Open module
+                          Review source module
                         </Link>
                       ) : null}
                     </li>
@@ -2039,14 +2039,14 @@ export function ExecutiveCommandCenterView({
                   Status: <strong>{boardReadinessSummary.statusLabel}</strong>
                 </p>
                 {boardReadinessSummary.requiredBeforeDistribution?.length ? (
-                  <p className="ceo-readiness-blockers-subtitle">
-                    Required before distribution:{' '}
-                    {boardReadinessSummary.requiredBeforeDistribution.join(' · ')}
-                  </p>
+                  <p className="ceo-readiness-blockers-subtitle">Required before distribution:</p>
                 ) : null}
               </div>
               <ul className="ceo-board-readiness-compact-lines">
-                {boardReadinessSummary.compactSummaryLines.map((line) => (
+                {(boardReadinessSummary.requiredBeforeDistribution?.length
+                  ? boardReadinessSummary.requiredBeforeDistribution
+                  : boardReadinessSummary.compactSummaryLines
+                ).map((line) => (
                   <li key={line}>
                     <span className="ceo-board-readiness-bullet" aria-hidden="true" />
                     <span>{line}</span>

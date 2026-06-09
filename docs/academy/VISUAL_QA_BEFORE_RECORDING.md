@@ -759,3 +759,12 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Compliance at most once in Recommended Actions; Decision Queue still detailed.
 - No invented deadlines/owners; Pending inputs preserved for grouped signals.
 - Validation: build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7.
+
+### C.24.8C Final executive copy closure checklist
+
+- Baseline `d20ac2b`; copy/dedup only — hero/radar/branch cards unchanged.
+- Hero Executive Attention: ≤3 items; Compliance not duplicated.
+- Recommended Actions: ≤3 main + 1 grouped pending; no `Review Executive`.
+- Board Readiness Summary: status + bullet list (no duplicate joined line).
+- CTAs say `Review source module` not repeated `Open module` in intelligence panels.
+- Validation: build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7.

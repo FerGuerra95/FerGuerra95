@@ -8607,3 +8607,21 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Files:** `ceoOverviewTruthfulness.js`, `ceoOverviewTruthfulness.test.js`.
 
 **Tests:** build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7.
+
+---
+
+## C.24.8C — Final Executive Copy Deduplication & Closing Pass
+
+**Status:** COMPLETED.
+
+**Baseline:** `d20ac2b` (HEAD = origin/main).
+
+**Scope:** Final copy/dedup closure — hero attention, recommended actions (3+1), board readiness bullets, CTA microcopy. No visual redesign.
+
+**Changes:**
+- Hero Executive Attention: max 3 unique modules; no Compliance duplicate; removed recommended-actions bleed into hero.
+- Recommended Actions: cap 3 main + 1 grouped pending; `Review Executive` → `Review readiness blockers`.
+- CTAs: `Open module` → `Review source module` in decision intelligence panels.
+- Board Readiness Summary: bullet list only (no duplicated joined subtitle).
+
+**Tests:** build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7.

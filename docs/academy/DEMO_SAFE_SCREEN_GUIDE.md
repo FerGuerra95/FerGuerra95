@@ -471,3 +471,13 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7. Logic-only; no data/backend changes.
 
+### C.24.8C demo safety note
+
+**Baseline:** `d20ac2b`.
+
+**Recording-safe result:** Hero Executive Attention shows ≤3 unique items (no duplicate Compliance); Recommended Actions capped at 3 main + 1 grouped pending; board readiness reads as distribution decision not pack status.
+
+**Do not say:** Ready, approved, or certified when status is Pending inputs / Human review required.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7. Copy-only; no data/backend changes.
+

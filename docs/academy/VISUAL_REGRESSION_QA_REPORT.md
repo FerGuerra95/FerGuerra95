@@ -667,19 +667,38 @@
 
 ---
 
-## 33. C.24.8B — Executive Action Deduplication Pass
+## 34. C.24.8C — Final Executive Copy Deduplication & Closing Pass
 
-**Baseline:** `f1886bc`.
+**Baseline:** `d20ac2b`.
 
-**Change type:** Recommended Actions deduplication — grouped pending signals, module collapse, executive fallback copy. No layout/color/hero/radar changes.
+**Change type:** Hero attention dedupe, recommended actions 3+1 cap, board readiness bullet clarity, CTA microcopy. No layout/color changes.
 
 | Route | Status | Notes |
 |---|---|---|
 | `/dashboard` | PASS | No regression |
-| `/ceo/overview` | PASS | Shorter Recommended Actions; grouped pending signals; Compliance not tripled |
+| `/ceo/overview` | PASS | Hero no duplicate Compliance; shorter recommended actions; clearer board readiness |
 | `/ma/dashboard` | PASS | No regression |
 | `/funding/dashboard` | PASS | No regression |
 | `/risk/register` | PASS | No regression |
 | `/governance/dashboard` | PASS | No regression |
 
-**Validation:** build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7.
+**Validation:** build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7.
+
+---
+
+## 34. C.24.8C — Final Executive Copy Deduplication & Closing Pass
+
+**Baseline:** `d20ac2b`.
+
+**Change type:** Hero attention dedupe, recommended actions 3+1 cap, board readiness bullet clarity, CTA microcopy. No layout/color changes.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | No regression |
+| `/ceo/overview` | PASS | Hero no duplicate Compliance; shorter recommended actions; clearer board readiness |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7.

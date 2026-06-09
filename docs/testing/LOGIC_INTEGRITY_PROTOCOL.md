@@ -2785,3 +2785,15 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Helpers:** `buildExecutiveRecommendedActions` — module dedupe, severity ranking, `buildGroupedPendingSignalsAction`, queue literal-phrase dedupe vs live Decision Queue.
 
 **Tests:** build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7; global unit 572 passed (4 sqlite env skips unrelated).
+
+---
+
+## C.24.8C — Final Executive Copy Deduplication & Closing Pass
+
+**Status:** COMPLETED.
+
+**Baseline:** `d20ac2b`.
+
+**Integrity:** Copy/dedup only. Hero attention module-key dedupe; recommended actions 3 main + 1 grouped pending; no `Review Executive`; no approved/certified; pending inputs preserved.
+
+**Tests:** build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7.
