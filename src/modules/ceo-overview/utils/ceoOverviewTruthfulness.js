@@ -675,6 +675,30 @@ function mergeExecutiveBlocker(existing, candidate) {
   };
 }
 
+const EXECUTIVE_BLOCKER_MODULE_PRIORITY = {
+  funding: 100,
+  governance: 90,
+  risk: 85,
+  compliance: 80,
+  ma: 70,
+  pmi: 65,
+  reporting: 60,
+  strategy: 55,
+  bridge: 50,
+  heritage: 45
+};
+
+function blockerActionabilityScore(blocker = {}) {
+  let score = EXECUTIVE_BLOCKER_MODULE_PRIORITY[blocker.moduleKey] || 0;
+  if (blocker.effect === 'Blocks complete executive posture') {
+    score += 30;
+  } else if (blocker.effect === 'Blocks board readiness signal') {
+    score += 20;
+  }
+  score += blockerDescriptionRank(blocker.description) / 10;
+  return score;
+}
+
 function sortExecutiveBlockers(blockers = []) {
   const orderIndex = new Map(EXECUTIVE_RADAR_BRANCH_ORDER.map((key, index) => [key, index]));
   return [...blockers].sort((left, right) => {
@@ -682,6 +706,25 @@ function sortExecutiveBlockers(blockers = []) {
     const rightIndex = orderIndex.get(right.moduleKey) ?? Number.MAX_SAFE_INTEGER;
     return leftIndex - rightIndex;
   });
+}
+
+export function prioritizeExecutiveBlockers(blockers = []) {
+  const orderIndex = new Map(EXECUTIVE_RADAR_BRANCH_ORDER.map((key, index) => [key, index]));
+  return [...blockers].sort((left, right) => {
+    const scoreDelta = blockerActionabilityScore(right) - blockerActionabilityScore(left);
+    if (scoreDelta !== 0) {
+      return scoreDelta;
+    }
+    const leftIndex = orderIndex.get(left.moduleKey) ?? Number.MAX_SAFE_INTEGER;
+    const rightIndex = orderIndex.get(right.moduleKey) ?? Number.MAX_SAFE_INTEGER;
+    return leftIndex - rightIndex;
+  });
+}
+
+export function formatExecutiveBlockerSummaryLine(blocker = {}) {
+  const description = String(blocker.description || 'Pending inputs').trim();
+  const effect = String(blocker.effect || 'Blocks executive posture').trim();
+  return `${description} · ${effect}`;
 }
 
 export function buildExecutiveInputBlockers({ readiness = {}, moduleOverviews = {} } = {}) {
@@ -762,9 +805,10 @@ export function buildExecutiveInputBlockers({ readiness = {}, moduleOverviews = 
   return sortExecutiveBlockers(Array.from(byModule.values()));
 }
 
-export function summarizeExecutiveInputBlockers(blockers = [], { maxVisible = 6 } = {}) {
-  const total = Array.isArray(blockers) ? blockers.length : 0;
-  const visible = Array.isArray(blockers) ? blockers.slice(0, maxVisible) : [];
+export function summarizeExecutiveInputBlockers(blockers = [], { maxVisible = 4 } = {}) {
+  const prioritized = prioritizeExecutiveBlockers(Array.isArray(blockers) ? blockers : []);
+  const total = prioritized.length;
+  const visible = prioritized.slice(0, maxVisible);
   return {
     blockers: visible,
     total,

@@ -581,3 +581,22 @@
 | `/governance/dashboard` | PASS | No regression quick check |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 33/33; `fundingDisplayFormat` 7/7.
+
+---
+
+## 30. C.24.6D — Executive Blockers Final Compression & Surface Fix
+
+**Baseline:** `597339c`.
+
+**Change type:** Blockers moved outside module-readiness shell; opaque black/gold surface; 4-item cap with priority; board readiness card widened.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Blockers compact executive summary |
+| `/ceo/overview` | PASS | Board readiness card integrated above workflow |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.

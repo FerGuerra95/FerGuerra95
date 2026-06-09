@@ -720,3 +720,11 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Decision Queue Live and Recommended Actions unchanged unless spacing-only.
 - Hero, lion, radar, branch cards 5+5 intact.
 - Validation: build PASS; `ceoOverviewTruthfulness` 33/33; `fundingDisplayFormat` 7/7.
+
+### C.24.6D Executive Blockers Final Compression checklist
+
+- Baseline `597339c`; blockers + board readiness card only.
+- Executive Readiness Blockers: opaque black/gold; not inside module-readiness navy shell; max 4 rows; one line per module; no Open column; no table/grid feel.
+- Board readiness summary: integrated mini-card above workflow; readable bullets with gold dots; not tiny/isolated.
+- Hero, radar, branch cards 5+5, decision queue unchanged.
+- Validation: build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.

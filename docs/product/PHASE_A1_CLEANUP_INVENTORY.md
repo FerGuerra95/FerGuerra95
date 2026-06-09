@@ -8514,3 +8514,19 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Board readiness:** Integrated mini-card above workflow steps with status + compact summary lines.
 
 **Tests:** `ceoOverviewTruthfulness` 33/33; `fundingDisplayFormat` 7/7; build PASS.
+
+---
+
+## C.24.6D — Executive Blockers Final Compression & Surface Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `597339c`.
+
+**Scope:** Blockers surface + compression only; light Board Readiness card polish. No data/backend/formula changes.
+
+**Blockers:** Moved outside `ceo-module-readiness-block` shell; opaque black/gold card; max 4 visible with priority sort; one-line `description · effect`; no Open column; `+X additional blockers require review`.
+
+**Board readiness:** Wider integrated mini-card (720px), gold bullets, clearer status head.
+
+**Tests:** `ceoOverviewTruthfulness` 35/35; build PASS.

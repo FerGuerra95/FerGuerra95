@@ -7,6 +7,8 @@ import {
   buildExecutiveLiveDecisionQueueItems,
   buildExecutivePriorityRows,
   buildExecutiveRecommendedActions,
+  formatExecutiveBlockerSummaryLine,
+  prioritizeExecutiveBlockers,
   summarizeExecutiveInputBlockers,
   buildInsufficientFallbackModuleCards,
   buildRadarAxis,
@@ -347,7 +349,7 @@ describe('CEO overview truthfulness helpers', () => {
     expect(blockers[0].effect).toBe('Blocks complete executive posture');
   });
 
-  it('caps visible blockers while preserving additional count', () => {
+  it('caps visible blockers at four while preserving additional count', () => {
     const blockers = buildExecutiveInputBlockers({
       readiness: {
         missingData: ['ma', 'funding', 'compliance', 'risk', 'pmi', 'governance', 'strategy'],
@@ -355,11 +357,35 @@ describe('CEO overview truthfulness helpers', () => {
       },
       moduleOverviews: {}
     });
-    const summary = summarizeExecutiveInputBlockers(blockers, { maxVisible: 6 });
+    const summary = summarizeExecutiveInputBlockers(blockers, { maxVisible: 4 });
 
-    expect(summary.blockers).toHaveLength(6);
+    expect(summary.blockers).toHaveLength(4);
     expect(summary.total).toBe(7);
-    expect(summary.additionalCount).toBe(1);
+    expect(summary.additionalCount).toBe(3);
+  });
+
+  it('prioritizes funding and governance blockers ahead of lower-priority modules', () => {
+    const blockers = buildExecutiveInputBlockers({
+      readiness: {
+        missingData: ['heritage', 'bridge', 'funding', 'governance'],
+        insufficientModules: []
+      },
+      moduleOverviews: {}
+    });
+    const prioritized = prioritizeExecutiveBlockers(blockers);
+
+    expect(prioritized[0].moduleKey).toBe('funding');
+    expect(prioritized[1].moduleKey).toBe('governance');
+  });
+
+  it('formats blocker summary as description and effect on one line', () => {
+    const line = formatExecutiveBlockerSummaryLine({
+      description: 'Pending inputs',
+      effect: 'Blocks complete executive posture'
+    });
+
+    expect(line).toBe('Pending inputs · Blocks complete executive posture');
+    expect(line).not.toMatch(/approved|certified/i);
   });
 
   it('shows no blockers identified only when blocker sources are empty', () => {

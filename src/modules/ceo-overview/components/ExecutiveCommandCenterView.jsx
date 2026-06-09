@@ -25,6 +25,7 @@ import {
   buildExecutiveInputBlockers,
   buildExecutiveLiveDecisionQueueItems,
   buildExecutiveRecommendedActions,
+  formatExecutiveBlockerSummaryLine,
   summarizeExecutiveInputBlockers,
   formatModuleScoreDisplay,
   formatScoreLabel,
@@ -1707,7 +1708,7 @@ export function ExecutiveCommandCenterView({
       heritage: heritageOverview
     }
   });
-  const blockerSummary = summarizeExecutiveInputBlockers(inputBlockers, { maxVisible: 6 });
+  const blockerSummary = summarizeExecutiveInputBlockers(inputBlockers, { maxVisible: 4 });
   const boardReadinessSummary = buildExecutiveBoardReadinessSummary({
     boardView: commandBoardView,
     readiness: commandReadiness,
@@ -1931,7 +1932,6 @@ export function ExecutiveCommandCenterView({
           title="Module Readiness Overview"
           description="Branch readiness scores from existing DSS signals. Missing data remains N/A."
         >
-          <div className="ceo-module-readiness-block">
           <article className="ceo-readiness-blockers-compact">
             <div className="ceo-readiness-blockers-head">
               <div className="ceo-command-card-kicker">Executive Readiness Blockers</div>
@@ -1944,16 +1944,10 @@ export function ExecutiveCommandCenterView({
                 <ul className="ceo-blockers-compact-list">
                   {blockerSummary.blockers.map((blocker) => (
                     <li key={blocker.moduleKey || blocker.branch} className="ceo-blocker-compact-item">
-                      <div className="ceo-blocker-compact-copy">
-                        <strong className="ceo-blocker-compact-branch">{blocker.branch}</strong>
-                        <span className="ceo-blocker-compact-description">{blocker.description}</span>
-                        <span className="ceo-blocker-compact-effect">{blocker.effect}</span>
-                      </div>
-                      {blocker.route ? (
-                        <Link to={blocker.route} className="ceo-blocker-compact-link">
-                          Open
-                        </Link>
-                      ) : null}
+                      <strong className="ceo-blocker-compact-branch">{blocker.branch}</strong>
+                      <span className="ceo-blocker-compact-line">
+                        {formatExecutiveBlockerSummaryLine(blocker)}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -1969,6 +1963,7 @@ export function ExecutiveCommandCenterView({
             )}
           </article>
 
+          <div className="ceo-module-readiness-block">
           <div className="ceo-module-readiness-grid">
             {moduleCards.map((module) => (
               <Link
@@ -2031,13 +2026,18 @@ export function ExecutiveCommandCenterView({
         >
           <div className="ceo-workflow-board-stack">
             <article className="ceo-board-readiness-mini-card">
-              <div className="ceo-command-card-kicker">Board readiness summary</div>
-              <p className="ceo-board-readiness-status-line">
-                Status: <strong>{boardReadinessSummary.statusLabel}</strong>
-              </p>
+              <div className="ceo-board-readiness-mini-head">
+                <div className="ceo-command-card-kicker">Board readiness summary</div>
+                <p className="ceo-board-readiness-status-line">
+                  Status: <strong>{boardReadinessSummary.statusLabel}</strong>
+                </p>
+              </div>
               <ul className="ceo-board-readiness-compact-lines">
                 {boardReadinessSummary.compactSummaryLines.map((line) => (
-                  <li key={line}>{line}</li>
+                  <li key={line}>
+                    <span className="ceo-board-readiness-bullet" aria-hidden="true" />
+                    <span>{line}</span>
+                  </li>
                 ))}
               </ul>
             </article>

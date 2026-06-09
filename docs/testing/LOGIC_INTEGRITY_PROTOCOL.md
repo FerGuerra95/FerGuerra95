@@ -2727,3 +2727,15 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Integrity preserved:** Blocker dedup collapses overlapping module sources without hiding unique modules; `summarizeExecutiveInputBlockers` caps display at 6 while preserving `additionalCount`; N/A / Pending inputs / human review / no approved-certified language unchanged.
 
 **Tests added:** dedup per module, cap with overflow count, no approved/certified copy (33 total). Build PASS.
+
+---
+
+## C.24.6D — Executive Blockers Final Compression & Surface Fix
+
+**Status:** COMPLETED (presentation-only).
+
+**Baseline:** `597339c`.
+
+**Integrity:** Blocker dedup unchanged; visible cap reduced to 4 with `prioritizeExecutiveBlockers`; `additionalCount` preserved; N/A / Pending inputs / human review language unchanged; no approved/certified copy.
+
+**Tests:** 35/35 `ceoOverviewTruthfulness`; build PASS.

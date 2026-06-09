@@ -431,3 +431,13 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 33/33; `fundingDisplayFormat` 7/7. Presentation-only; no data/backend changes.
 
+### C.24.6D demo safety note
+
+**Baseline:** `597339c`.
+
+**Recording-safe result:** Blockers read as a short executive summary (4 branches max); board readiness is a clear draft-status card above the workflow.
+
+**Do not say:** All blockers are resolved; only four modules have issues (overflow may exist).
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 35/35. Presentation-only.
+
