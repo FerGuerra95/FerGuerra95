@@ -451,3 +451,13 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7. Presentation-only; no data/backend changes.
 
+### C.24.8 demo safety note
+
+**Baseline:** `7aa9450`.
+
+**Recording-safe result:** CEO Overview copy reads more executive — blockers explain missing inputs vs failures; board readiness states distribution requirements; N/A clarified in Module Readiness.
+
+**Do not say:** Board-ready, approved, certified, or that N/A means poor performance.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 41/41; `fundingDisplayFormat` 7/7. Copy-only; no data/backend changes.
+

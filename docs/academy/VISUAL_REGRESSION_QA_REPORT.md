@@ -626,3 +626,22 @@
 **Validation:** build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.
 
 **Remaining:** per-module JSX inline navy deferred to C.24.7C.
+
+---
+
+## 32. C.24.8 — Executive Copy & Decision Clarity Pass
+
+**Baseline:** `7aa9450`.
+
+**Change type:** Copy-only — executive conclusion, humanized blockers, N/A clarification, board readiness distribution gates, deduplicated recommended actions. No layout/color changes.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | No regression |
+| `/ceo/overview` | PASS | Clearer hero conclusion; blockers humanized; N/A note in Module Readiness |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 41/41; `fundingDisplayFormat` 7/7.

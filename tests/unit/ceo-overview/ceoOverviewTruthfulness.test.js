@@ -3,11 +3,13 @@ import { describe, expect, it } from 'vitest';
 import {
   alignOverviewScoreWithRadarBranch,
   buildExecutiveBoardReadinessSummary,
+  buildExecutiveConclusion,
   buildExecutiveInputBlockers,
   buildExecutiveLiveDecisionQueueItems,
   buildExecutivePriorityRows,
   buildExecutiveRecommendedActions,
   formatExecutiveBlockerSummaryLine,
+  MODULE_READINESS_NA_CLARIFICATION,
   prioritizeExecutiveBlockers,
   summarizeExecutiveInputBlockers,
   buildInsufficientFallbackModuleCards,
@@ -320,7 +322,7 @@ describe('CEO overview truthfulness helpers', () => {
 
     expect(actions).toHaveLength(1);
     expect(actions[0].recommendedAction).toBeNull();
-    expect(actions[0].actionLabel).toBe('Review required');
+    expect(actions[0].actionLabel).toMatch(/review required|open module/i);
     expect(actions[0].actionLabel).not.toMatch(/cost of inaction/i);
   });
 
@@ -345,8 +347,8 @@ describe('CEO overview truthfulness helpers', () => {
 
     expect(blockers).toHaveLength(1);
     expect(blockers[0].branch).toBe('Funding');
-    expect(blockers[0].description).toMatch(/pending/i);
-    expect(blockers[0].effect).toBe('Blocks complete executive posture');
+    expect(blockers[0].description).toMatch(/funding cannot be assessed/i);
+    expect(blockers[0].effect).toMatch(/executive posture incomplete|required before board/i);
   });
 
   it('caps visible blockers at four while preserving additional count', () => {
@@ -384,8 +386,9 @@ describe('CEO overview truthfulness helpers', () => {
       effect: 'Blocks complete executive posture'
     });
 
-    expect(line).toBe('Pending inputs · Blocks complete executive posture');
+    expect(line).toMatch(/inputs pending|cannot be assessed/i);
     expect(line).not.toMatch(/approved|certified/i);
+    expect(line).not.toMatch(/blocks complete executive posture/i);
   });
 
   it('shows no blockers identified only when blocker sources are empty', () => {
@@ -427,6 +430,7 @@ describe('CEO overview truthfulness helpers', () => {
 
     expect(rows.every((row) => row.isInformational)).toBe(true);
     expect(rows[0].label).toBe('Decision quality');
+    expect(rows[0].value).toMatch(/not a scored signal/i);
   });
 
   it('prefers real priority rows from decision queue over static posture copy', () => {
@@ -478,5 +482,76 @@ describe('CEO overview truthfulness helpers', () => {
     expect(serialized).not.toMatch(/since last review/i);
     expect(serialized).not.toMatch(/what changed/i);
     expect(serialized).not.toMatch(/cost of inaction/i);
+  });
+
+  it('exposes N/A clarification that missing data is not failed performance', () => {
+    expect(MODULE_READINESS_NA_CLARIFICATION).toMatch(/not poor operational performance/i);
+    expect(MODULE_READINESS_NA_CLARIFICATION).not.toMatch(/approved|certified/i);
+  });
+
+  it('builds executive conclusion without approved or invented change claims', () => {
+    const conclusion = buildExecutiveConclusion({
+      readiness: { score: null, missingData: ['funding'], humanReviewRequired: true },
+      blockerCount: 2,
+      hasLivePriorities: false
+    });
+    const serialized = JSON.stringify(conclusion);
+
+    expect(conclusion.headline).toMatch(/priority reviews/i);
+    expect(conclusion.subline).toMatch(/missing inputs/i);
+    expect(conclusion.subline).toMatch(/human review/i);
+    expect(serialized).not.toMatch(/approved|certified|since last review|cost of inaction/i);
+  });
+
+  it('deduplicates recommended actions already present in the live decision queue', () => {
+    const queueItem = {
+      title: 'Compliance exposure',
+      module: 'Compliance',
+      severity: 'risk',
+      recommendedAction: 'Review supplier evidence.'
+    };
+    const actions = buildExecutiveRecommendedActions({
+      decisionQueue: [queueItem],
+      alerts: [queueItem],
+      signals: [],
+      limit: 5
+    });
+
+    expect(actions).toHaveLength(0);
+  });
+
+  it('does not invent deadlines in recommended action labels', () => {
+    const actions = buildExecutiveRecommendedActions({
+      alerts: [{ title: 'Funding signal', module: 'Funding', severity: 'watch' }],
+      signals: []
+    });
+
+    expect(actions[0].actionLabel).not.toMatch(/due |deadline/i);
+    expect(actions[0].actionLabel).toMatch(/review required|open module/i);
+  });
+
+  it('humanizes compliance and risk blocker copy for executives', () => {
+    const blockers = buildExecutiveInputBlockers({
+      readiness: { missingData: ['compliance', 'risk'], insufficientModules: [] },
+      moduleOverviews: {}
+    });
+
+    expect(blockers.find((item) => item.moduleKey === 'compliance')?.description).toMatch(
+      /compliance signal requires/i
+    );
+    expect(blockers.find((item) => item.moduleKey === 'risk')?.description).toMatch(
+      /risk posture cannot be reviewed/i
+    );
+  });
+
+  it('surfaces required-before-distribution lines in board readiness summary', () => {
+    const board = buildExecutiveBoardReadinessSummary({
+      boardView: { humanReviewRequired: true, reportingReadiness: 72 },
+      readiness: { score: null, missingData: ['ma', 'funding'], humanReviewRequired: true }
+    });
+
+    expect(board.statusLabel).not.toBe('Ready');
+    expect(board.requiredBeforeDistribution).toContain('Human review');
+    expect(board.requiredBeforeDistribution.some((line) => /module score/i.test(line))).toBe(true);
   });
 });

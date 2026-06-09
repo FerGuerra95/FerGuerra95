@@ -24,6 +24,93 @@ export function formatExecutiveScoreNumber(score, fallbackLabel = 'N/A') {
   return normalized === null ? fallbackLabel : String(normalized);
 }
 
+export const MODULE_READINESS_NA_CLARIFICATION =
+  'N/A means insufficient available data, not poor operational performance.';
+
+export const INFORMATIONAL_POSTURE_NOTE = 'Operating posture · not a scored signal';
+
+const EXECUTIVE_BLOCKER_BRANCH_COPY = {
+  funding:
+    'Funding cannot be assessed until executive funding inputs are available.',
+  risk: 'Risk posture cannot be reviewed without persisted risk data.',
+  governance: 'Governance needs board-control inputs before executive review.',
+  compliance:
+    'Compliance signal requires persisted supplier and evidence inputs.',
+  ma: 'M&A posture cannot be scored until a persisted deal or case is available.',
+  pmi: 'PMI integration signal remains pending until source inputs are available.',
+  reporting:
+    'Reporting signal may be available, but board readiness still requires review.',
+  strategy: 'Strategy inputs remain pending for executive scoring.',
+  bridge: 'Bridge signal remains pending until source inputs are available.',
+  heritage: 'Heritage inputs remain pending for executive scoring.'
+};
+
+function humanizeExecutiveBlockerDescription(moduleKey, rawDescription = '') {
+  const key = String(moduleKey || '').trim().toLowerCase();
+  const raw = String(rawDescription || '').trim();
+  const rawLower = raw.toLowerCase();
+
+  if (EXECUTIVE_BLOCKER_BRANCH_COPY[key]) {
+    if (
+      rawLower.includes('pending') ||
+      rawLower.includes('insufficient') ||
+      rawLower.includes('missing') ||
+      !raw
+    ) {
+      return EXECUTIVE_BLOCKER_BRANCH_COPY[key];
+    }
+  }
+
+  if (rawLower.includes('insufficient persisted module data')) {
+    return (
+      EXECUTIVE_BLOCKER_BRANCH_COPY[key] ||
+      'Module inputs remain pending before executive scoring.'
+    );
+  }
+
+  if (rawLower.includes('missing') && rawLower.includes('executive score')) {
+    const branch = EXECUTIVE_RADAR_BRANCH_LABELS[key] || key;
+    return (
+      EXECUTIVE_BLOCKER_BRANCH_COPY[key] ||
+      `${branch} inputs are pending — not treated as a failed score.`
+    );
+  }
+
+  if (!raw || rawLower === 'pending inputs' || rawLower.includes('insufficient data')) {
+    return (
+      EXECUTIVE_BLOCKER_BRANCH_COPY[key] ||
+      'Inputs pending before executive review — not a performance failure.'
+    );
+  }
+
+  return raw;
+}
+
+function humanizeExecutiveBlockerEffect(effect = '') {
+  const safe = String(effect || '').trim();
+  if (safe === 'Blocks complete executive posture') {
+    return 'Executive posture incomplete until inputs arrive';
+  }
+  if (safe === 'Blocks board readiness signal' || safe === 'Blocks executive posture') {
+    return 'Required before board circulation';
+  }
+  return safe || 'Required before board circulation';
+}
+
+export function humanizeExecutiveBlocker(blocker = {}) {
+  const description = humanizeExecutiveBlockerDescription(
+    blocker.moduleKey,
+    blocker.description
+  );
+  const effect = humanizeExecutiveBlockerEffect(blocker.effect);
+  return {
+    ...blocker,
+    description,
+    effect,
+    summaryLine: description
+  };
+}
+
 export const EXECUTIVE_RADAR_BRANCH_ORDER = [
   'ma',
   'funding',
@@ -600,7 +687,12 @@ export function buildExecutiveLiveDecisionQueueItems(decisionQueue = [], { limit
   }));
 }
 
-export function buildExecutiveRecommendedActions({ alerts = [], signals = [], limit = 5 } = {}) {
+export function buildExecutiveRecommendedActions({
+  alerts = [],
+  signals = [],
+  decisionQueue = [],
+  limit = 5
+} = {}) {
   const combined = [
     ...(Array.isArray(alerts) ? alerts : []),
     ...(Array.isArray(signals) ? signals : [])
@@ -609,6 +701,12 @@ export function buildExecutiveRecommendedActions({ alerts = [], signals = [], li
     return [];
   }
 
+  const queueFingerprints = new Set(
+    buildExecutiveLiveDecisionQueueItems(decisionQueue, { limit: 12 }).map(
+      (item) => `${String(item.module).toLowerCase()}::${String(item.title).toLowerCase()}`
+    )
+  );
+
   const seen = new Set();
   const actions = [];
 
@@ -616,21 +714,34 @@ export function buildExecutiveRecommendedActions({ alerts = [], signals = [], li
     const title = String(source?.title || '').trim();
     const module = String(source?.module || 'Enterprise').trim();
     const key = `${module}::${title}`.toLowerCase();
-    if (!title || seen.has(key)) {
+    if (!title || seen.has(key) || queueFingerprints.has(key)) {
       continue;
     }
     seen.add(key);
 
     const recommendedAction = String(source?.recommendedAction || '').trim();
+    const route = resolveExecutiveModuleRoute(module);
+    const actionLabel = recommendedAction
+      ? recommendedAction
+      : route
+        ? 'Open module · confirm source data before board circulation'
+        : 'Review required · confirm source data';
     actions.push({
       id: `${module}-${actions.length}`,
       title,
       module,
       severity: String(source?.severity || 'watch').trim(),
       recommendedAction: recommendedAction || null,
-      actionLabel: recommendedAction || 'Review required',
-      status: String(source?.status || '').trim() || (recommendedAction ? 'Suggested action' : 'Review required'),
-      route: resolveExecutiveModuleRoute(module)
+      actionLabel,
+      whyItMatters:
+        String(source?.severity || '').toLowerCase() === 'critical' ||
+        String(source?.severity || '').toLowerCase() === 'risk'
+          ? 'Elevated attention across executive posture'
+          : 'Supports board-ready review',
+      status:
+        String(source?.status || '').trim() ||
+        (recommendedAction ? 'Suggested action' : 'Review required'),
+      route
     });
 
     if (actions.length >= limit) {
@@ -656,23 +767,23 @@ function blockerDescriptionRank(description = '') {
 }
 
 function mergeExecutiveBlocker(existing, candidate) {
-  const keepCandidate = blockerDescriptionRank(candidate.description) > blockerDescriptionRank(existing.description);
-  const description = keepCandidate ? candidate.description : existing.description;
-  const effect =
-    existing.effect === 'Blocks complete executive posture' ||
-    candidate.effect === 'Blocks complete executive posture'
-      ? 'Blocks complete executive posture'
-      : keepCandidate
-        ? candidate.effect
-        : existing.effect;
-
-  return {
+  const keepCandidate =
+    blockerDescriptionRank(candidate.description) > blockerDescriptionRank(existing.description);
+  const merged = {
     branch: existing.branch,
     moduleKey: existing.moduleKey,
-    description,
-    effect,
+    description: keepCandidate ? candidate.description : existing.description,
+    effect:
+      existing.effect === 'Blocks complete executive posture' ||
+      candidate.effect === 'Blocks complete executive posture'
+        ? 'Blocks complete executive posture'
+        : keepCandidate
+          ? candidate.effect
+          : existing.effect,
     route: candidate.route || existing.route || ''
   };
+
+  return humanizeExecutiveBlocker(merged);
 }
 
 const EXECUTIVE_BLOCKER_MODULE_PRIORITY = {
@@ -722,9 +833,8 @@ export function prioritizeExecutiveBlockers(blockers = []) {
 }
 
 export function formatExecutiveBlockerSummaryLine(blocker = {}) {
-  const description = String(blocker.description || 'Pending inputs').trim();
-  const effect = String(blocker.effect || 'Blocks executive posture').trim();
-  return `${description} · ${effect}`;
+  const humanized = humanizeExecutiveBlocker(blocker);
+  return humanized.summaryLine;
 }
 
 export function buildExecutiveInputBlockers({ readiness = {}, moduleOverviews = {} } = {}) {
@@ -802,7 +912,9 @@ export function buildExecutiveInputBlockers({ readiness = {}, moduleOverviews = 
     byModule.set(key, blocker);
   });
 
-  return sortExecutiveBlockers(Array.from(byModule.values()));
+  return sortExecutiveBlockers(
+    Array.from(byModule.values()).map((blocker) => humanizeExecutiveBlocker(blocker))
+  );
 }
 
 export function summarizeExecutiveInputBlockers(blockers = [], { maxVisible = 4 } = {}) {
@@ -832,13 +944,34 @@ export function buildExecutiveBoardReadinessSummary({
     boardView.readinessStatus === 'insufficient_data' ||
     boardView.dataSource === 'insufficient_data';
 
-  let statusLabel = 'Not ready';
+  let statusLabel = 'Not ready for distribution';
   if (hasPendingInputs) {
     statusLabel = 'Pending inputs';
   } else if (humanReviewRequired) {
     statusLabel = 'Human review required';
   } else if (readinessScore !== null) {
-    statusLabel = 'Ready';
+    statusLabel = 'Signals available — review required';
+  }
+
+  const reportingSignalAvailable =
+    boardView.reportingReadiness !== null &&
+    boardView.reportingReadiness !== undefined &&
+    boardView.reportingReadiness !== 'Insufficient data';
+
+  const requiredBeforeDistribution = [];
+  if (humanReviewRequired) {
+    requiredBeforeDistribution.push('Human review');
+  }
+  if (missingData.length > 0) {
+    requiredBeforeDistribution.push(
+      `${missingData.length} module score${missingData.length === 1 ? '' : 's'} pending`
+    );
+  }
+  if (!briefingDraftPrepared) {
+    requiredBeforeDistribution.push('Board review draft not yet prepared');
+  }
+  if (reportingSignalAvailable) {
+    requiredBeforeDistribution.push('Reporting signal available');
   }
 
   const bullets = [
@@ -883,41 +1016,81 @@ export function buildExecutiveBoardReadinessSummary({
     });
   }
 
-  const compactSummaryLines = [
-    briefingDraftPrepared ? 'Draft prepared' : 'Not yet prepared',
-    humanReviewRequired ? 'Human review required' : null,
-    missingData.length > 0 ? `${missingData.length} module score${missingData.length === 1 ? '' : 's'} pending` : null,
-    boardView.reportingReadiness !== null &&
-    boardView.reportingReadiness !== undefined &&
-    boardView.reportingReadiness !== 'Insufficient data'
-      ? 'Reporting signal available'
-      : hasPendingInputs
-        ? 'Reporting pending inputs'
-        : null
-  ].filter(Boolean);
+  const compactSummaryLines =
+    requiredBeforeDistribution.length > 0
+      ? requiredBeforeDistribution.slice(0, 4)
+      : [statusLabel];
 
   return {
     statusLabel,
     humanReviewRequired,
     hasPendingInputs,
+    requiredBeforeDistribution: requiredBeforeDistribution.slice(0, 5),
     bullets: bullets.slice(0, 5),
-    compactSummaryLines: compactSummaryLines.slice(0, 4),
+    compactSummaryLines,
     fallbackCopy:
       hasPendingInputs && humanReviewRequired
-        ? 'Not ready · Pending inputs · Human review required'
+        ? 'Not ready for distribution · Pending inputs · Human review required'
         : hasPendingInputs
-          ? 'Not ready · Pending inputs'
+          ? 'Not ready for distribution · Pending inputs'
           : humanReviewRequired
-            ? 'Not ready · Human review required'
+            ? 'Not ready for distribution · Human review required'
             : statusLabel
   };
 }
 
+export function buildExecutiveConclusion({
+  readiness = {},
+  blockerCount = 0,
+  hasLivePriorities = false
+} = {}) {
+  const missingData = Array.isArray(readiness.missingData) ? readiness.missingData : [];
+  const hasPendingInputs =
+    missingData.length > 0 || normalizeScoreOrNull(readiness.score) === null;
+  const humanReview = readiness.humanReviewRequired !== false;
+  const lines = [];
+
+  if (hasLivePriorities || blockerCount > 0) {
+    lines.push('Priority reviews required.');
+  }
+  if (missingData.length > 0 || normalizeScoreOrNull(readiness.score) === null) {
+    lines.push('Missing inputs remain.');
+  }
+  if (humanReview) {
+    lines.push('Human review required before board distribution.');
+  }
+
+  const headline =
+    hasPendingInputs || blockerCount > 0
+      ? 'Operational with priority reviews.'
+      : 'Operational posture under executive review.';
+
+  return {
+    headline,
+    subline:
+      lines.length > 0
+        ? lines.join(' ')
+        : 'Signals available for review — decision support only.'
+  };
+}
+
 const INFORMATIONAL_PRIORITY_ROWS = [
-  { label: 'Decision quality', value: 'Active', isInformational: true },
-  { label: 'Workspace consistency', value: 'Under review', isInformational: true },
-  { label: 'Executive narrative', value: 'Active', isInformational: true },
-  { label: 'Board review drafts', value: 'In progress', isInformational: true }
+  { label: 'Decision quality', value: 'Active · not a scored signal', isInformational: true },
+  {
+    label: 'Workspace consistency',
+    value: 'Under review · not a scored signal',
+    isInformational: true
+  },
+  {
+    label: 'Executive narrative',
+    value: 'Active · not a scored signal',
+    isInformational: true
+  },
+  {
+    label: 'Board review drafts',
+    value: 'In progress · not a scored signal',
+    isInformational: true
+  }
 ];
 
 export function buildExecutivePriorityRows({

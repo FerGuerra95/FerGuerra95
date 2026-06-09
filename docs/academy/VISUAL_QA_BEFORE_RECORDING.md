@@ -739,3 +739,14 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Hard-refresh smoke: `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/compliance/dashboard`, `/risk/register`, `/governance/dashboard`, `/pmi/dashboard`, `/reporting/library`, `/login`.
 - Validation: build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.
 - Remaining inline module navy → C.24.7C if needed.
+
+### C.24.8 Executive Copy & Decision Clarity checklist
+
+- Baseline `7aa9450`; copy-only — no hero/radar/branch-card visual changes.
+- Hero conclusion reflects priority reviews, missing inputs, human review (no approved/certified).
+- Blockers use executive language; missing data ≠ poor performance.
+- Module Readiness section explains N/A once.
+- Board readiness shows status + required-before-distribution (not "Ready" with pending inputs).
+- Recommended actions deduped from live queue; no invented deadlines.
+- Static priority rows labeled `not a scored signal`.
+- Validation: build PASS; `ceoOverviewTruthfulness` 41/41; `fundingDisplayFormat` 7/7.

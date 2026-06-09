@@ -8563,3 +8563,26 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Tests:** `npm run build` PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.
 
 **Remaining C.24.7C:** per-module JSX inline `rgba(15,23,42,…)` navy in module pages (50+ files) — not touched in this phase.
+
+---
+
+## C.24.8 — Executive Copy & Decision Clarity Pass
+
+**Status:** COMPLETED.
+
+**Baseline:** `7aa9450` (HEAD = origin/main).
+
+**Scope:** Copy-only — executive language, deduplication, blocker humanization, board readiness clarity. No visual redesign; hero/radar/branch cards unchanged.
+
+**Copy improvements:**
+- `buildExecutiveConclusion()` drives hero headline/subline from readiness + blockers.
+- `MODULE_READINESS_NA_CLARIFICATION` in Module Readiness section header.
+- Recommended actions deduped from live decision queue; honest fallbacks without deadlines.
+- Board readiness: `requiredBeforeDistribution`, status never bare "Ready" when inputs/review pending.
+- Static priority rows labeled `· not a scored signal`.
+
+**Deduplication:** Intelligence "Board Review Draft" card → "Input gaps"; recommended actions skip queue duplicates; section descriptions clarify non-overlap.
+
+**Blockers humanized:** per-branch executive copy (funding, risk, compliance, governance, etc.) — missing data ≠ performance failure.
+
+**Tests:** `ceoOverviewTruthfulness` 41/41; `fundingDisplayFormat` 7/7; build PASS.

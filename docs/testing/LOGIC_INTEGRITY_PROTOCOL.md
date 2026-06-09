@@ -2757,3 +2757,17 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Tests:** build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.
 
 **Deferred:** C.24.7C — module JSX inline navy cleanup if visual smoke shows per-module bleed.
+
+---
+
+## C.24.8 — Executive Copy & Decision Clarity Pass
+
+**Status:** COMPLETED (copy-only).
+
+**Baseline:** `7aa9450`.
+
+**Integrity:** No formula, score, backend, Golden Dataset, or Formula Registry changes. N/A / Pending inputs preserved; no fake 0; no invented owners/deadlines; no approved/certified/since-last-review/cost-of-inaction copy.
+
+**Helpers:** `buildExecutiveConclusion`, `humanizeExecutiveBlocker`, `MODULE_READINESS_NA_CLARIFICATION`, recommended-action queue dedupe, board `requiredBeforeDistribution`.
+
+**Tests:** build PASS; `ceoOverviewTruthfulness` 41/41; `fundingDisplayFormat` 7/7.

@@ -22,10 +22,12 @@ import { CorporateHealthRadar } from './CorporateHealthRadar.jsx';
 import '../styles/ceoMaterialSystem.css';
 import {
   buildExecutiveBoardReadinessSummary,
+  buildExecutiveConclusion,
   buildExecutiveInputBlockers,
   buildExecutiveLiveDecisionQueueItems,
   buildExecutiveRecommendedActions,
   formatExecutiveBlockerSummaryLine,
+  MODULE_READINESS_NA_CLARIFICATION,
   summarizeExecutiveInputBlockers,
   formatModuleScoreDisplay,
   formatScoreLabel,
@@ -46,7 +48,7 @@ const INTELLIGENCE_ICONS = {
   'Highest Impact': Zap,
   'Best Opportunity': Sparkles,
   'Focus Area': Target,
-  'Board Review Draft': FileText
+  'Input gaps': Database
 };
 
 const WORKFLOW_STEPS = [
@@ -1324,10 +1326,10 @@ function buildDecisionQueueCards({
       summary:
         complianceApi?.recommendedAction ||
         (complianceOverview.openAlerts > 0
-          ? `${complianceOverview.openAlerts} open alerts require executive review.`
+          ? `${complianceOverview.openAlerts} open alert${complianceOverview.openAlerts === 1 ? '' : 's'} need executive review before board circulation.`
           : complianceOverview.posture === 'insufficient_data'
-            ? 'Insufficient persisted compliance inputs.'
-            : 'Compliance posture available for review.'),
+            ? 'Compliance inputs are pending — not a performance failure.'
+            : 'Compliance posture is available for human review.'),
       status:
         complianceApi?.status ||
         mapQueueStatus(complianceOverview.posture, {
@@ -1344,8 +1346,8 @@ function buildDecisionQueueCards({
         riskApi?.recommendedAction ||
         riskOverview.latestTitle ||
         (riskOverview.posture === 'insufficient_data'
-          ? 'Risk register data pending for executive signal.'
-          : 'Risk posture available for human review.'),
+          ? 'Risk posture cannot be reviewed without persisted risk data.'
+          : 'Risk posture is available for human review.'),
       status:
         riskApi?.status ||
         mapQueueStatus(riskOverview.posture, {
@@ -1359,7 +1361,7 @@ function buildDecisionQueueCards({
         fundingApi?.recommendedAction ||
         (fundingOverview.executiveSignalEligible
           ? `Funding window: ${fundingOverview.fundingWindowStatus}. Runway signal requires review.`
-          : 'Funding inputs pending for executive readiness signal.'),
+          : 'Funding cannot be assessed until executive funding inputs are available.'),
       status:
         fundingApi?.status ||
         mapQueueStatus(fundingOverview.posture, {
@@ -1373,8 +1375,8 @@ function buildDecisionQueueCards({
         maApi?.recommendedAction ||
         maOverview.targetName ||
         (maOverview.posture === 'insufficient_data'
-          ? 'No persisted deal or case eligible for executive scoring.'
-          : 'M&A posture available for executive review.'),
+          ? 'M&A posture cannot be scored until a persisted deal or case is available.'
+          : 'M&A posture is available for executive review.'),
       status:
         maApi?.status ||
         mapQueueStatus(maOverview.posture, {
@@ -1430,11 +1432,11 @@ function buildIntelligenceCards({
       status: 'Review'
     },
     {
-      title: 'Board Review Draft',
+      title: 'Input gaps',
       summary: lastReportPrepared
-        ? 'Board review draft prepared for executive review.'
-        : 'Draft assembly pending supporting inputs.',
-      status: lastReportPrepared ? 'Prepared' : 'Draft'
+        ? 'Some branch inputs still pending before a complete executive posture.'
+        : 'Module inputs remain pending across executive branches.',
+      status: lastReportPrepared ? 'Review' : 'Pending inputs'
     }
   ];
 }
@@ -1691,6 +1693,7 @@ export function ExecutiveCommandCenterView({
   const recommendedActions = buildExecutiveRecommendedActions({
     alerts: commandAlerts,
     signals: commandSignals,
+    decisionQueue: commandDecisionQueue,
     limit: 5
   });
   const inputBlockers = buildExecutiveInputBlockers({
@@ -1722,6 +1725,11 @@ export function ExecutiveCommandCenterView({
     legalHealthRadar,
     complianceDragPenalty
   });
+  const executiveConclusion = buildExecutiveConclusion({
+    readiness: commandReadiness,
+    blockerCount: blockerSummary.total,
+    hasLivePriorities: !prioritiesAreInformational
+  });
 
   return (
     <>
@@ -1736,7 +1744,7 @@ export function ExecutiveCommandCenterView({
         <SectionBlock
           number="01"
           title="Executive Status"
-          description="Operational posture, decision readiness and top executive priorities."
+          description="Current posture, readiness index, and where executive attention is required."
         >
           <div className="ceo-command-hero">
             <div className="ceo-command-status-grid">
@@ -1749,10 +1757,8 @@ export function ExecutiveCommandCenterView({
                   </div>
 
                   <h1 className="ceo-command-hero-title">
-                    Operational with priority reviews.
-                    <span>
-                      Critical systems are active. Priority items require executive review.
-                    </span>
+                    {executiveConclusion.headline}
+                    <span>{executiveConclusion.subline}</span>
                   </h1>
 
                   <div className="ceo-command-hero-actions">
@@ -1795,7 +1801,7 @@ export function ExecutiveCommandCenterView({
                 </div>
                 {prioritiesAreInformational ? (
                   <p className="ceo-priority-informational-note">
-                    Informational posture · not a scored signal
+                    Operating posture · not a scored signal
                   </p>
                 ) : null}
                 {topPriorities.length ? (
@@ -1821,7 +1827,7 @@ export function ExecutiveCommandCenterView({
         <SectionBlock
           number="02"
           title="Executive Decision Queue"
-          description="Priority decisions across compliance, risk, funding and M&A."
+          description="Top decisions to review now. Live queue below adds backend-prioritized items."
         >
           <div className="ceo-decision-queue-grid">
             {decisionQueueCards.map((card) => (
@@ -1890,6 +1896,7 @@ export function ExecutiveCommandCenterView({
                         </span>
                       </div>
                       <p className="ceo-live-queue-meta">{action.module}</p>
+                      <p className="ceo-live-queue-meta">{action.whyItMatters}</p>
                       <p className="ceo-live-queue-action">{action.actionLabel}</p>
                       {action.route ? (
                         <Link to={action.route} className="ceo-live-queue-link">
@@ -1911,7 +1918,7 @@ export function ExecutiveCommandCenterView({
         <SectionBlock
           number="03"
           title="Cross-Module Intelligence Summary"
-          description="Highest-impact signals and review focus across branches."
+          description="Cross-branch focus — complements the decision queue without repeating it."
         >
           <div className="ceo-intelligence-grid">
             {intelligenceCards.map((card) => (
@@ -1930,13 +1937,13 @@ export function ExecutiveCommandCenterView({
         <SectionBlock
           number="04"
           title="Module Readiness Overview"
-          description="Branch readiness scores from existing DSS signals. Missing data remains N/A."
+          description={`Branch readiness from DSS signals. ${MODULE_READINESS_NA_CLARIFICATION}`}
         >
           <article className="ceo-readiness-blockers-compact">
             <div className="ceo-readiness-blockers-head">
               <div className="ceo-command-card-kicker">Executive Readiness Blockers</div>
               <p className="ceo-readiness-blockers-subtitle">
-                Inputs blocking complete executive posture.
+                What is blocking a complete executive and board-ready posture.
               </p>
             </div>
             {blockerSummary.total ? (
@@ -2031,6 +2038,12 @@ export function ExecutiveCommandCenterView({
                 <p className="ceo-board-readiness-status-line">
                   Status: <strong>{boardReadinessSummary.statusLabel}</strong>
                 </p>
+                {boardReadinessSummary.requiredBeforeDistribution?.length ? (
+                  <p className="ceo-readiness-blockers-subtitle">
+                    Required before distribution:{' '}
+                    {boardReadinessSummary.requiredBeforeDistribution.join(' · ')}
+                  </p>
+                ) : null}
               </div>
               <ul className="ceo-board-readiness-compact-lines">
                 {boardReadinessSummary.compactSummaryLines.map((line) => (
