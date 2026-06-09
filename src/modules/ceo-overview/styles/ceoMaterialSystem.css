@@ -264,6 +264,11 @@
   gap: 18px !important;
 }
 
+/* C.24.5J-corrected — Module Readiness branch cards: 5 columns × 2 rows on desktop */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+}
+
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card {
   position: relative !important;
@@ -613,6 +618,10 @@
 }
 
 @media (max-width: 1180px) {
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-status-grid {
     grid-template-columns: 1fr !important;
     grid-template-areas:
@@ -637,6 +646,10 @@
 }
 
 @media (max-width: 720px) {
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid {
+    grid-template-columns: 1fr !important;
+  }
+
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-section-shell {
     padding: 22px 18px 20px !important;
   }
