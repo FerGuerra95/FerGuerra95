@@ -2,6 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import {
   alignOverviewScoreWithRadarBranch,
+  buildExecutiveBoardReadinessSummary,
+  buildExecutiveInputBlockers,
+  buildExecutiveLiveDecisionQueueItems,
+  buildExecutivePriorityRows,
+  buildExecutiveRecommendedActions,
   buildInsufficientFallbackModuleCards,
   buildRadarAxis,
   estimateMaFinancialRadar,
@@ -283,5 +288,126 @@ describe('CEO overview truthfulness helpers', () => {
     expect(aligned.posture).toBe('insufficient_data');
     expect(aligned.executiveSignalEligible).toBe(false);
     expect(aligned.score).not.toBe(0);
+  });
+
+  it('surfaces live decision queue without replacing null scores with zero', () => {
+    const items = buildExecutiveLiveDecisionQueueItems([
+      {
+        id: 'funding-1',
+        title: 'Confirm funding window decision',
+        module: 'Funding',
+        severity: 'risk',
+        recommendedAction: 'Confirm timing and board memo readiness.',
+        priorityScore: 78,
+        dueDate: ''
+      }
+    ]);
+
+    expect(items).toHaveLength(1);
+    expect(items[0].priorityScore).toBe(78);
+    expect(items[0].dueDate).toBeNull();
+    expect(items[0].recommendedAction).toBe('Confirm timing and board memo readiness.');
+  });
+
+  it('does not render fake recommendations when recommendedAction is missing', () => {
+    const actions = buildExecutiveRecommendedActions({
+      alerts: [{ title: 'Compliance exposure', module: 'Compliance', severity: 'risk' }],
+      signals: []
+    });
+
+    expect(actions).toHaveLength(1);
+    expect(actions[0].recommendedAction).toBeNull();
+    expect(actions[0].actionLabel).toBe('Review required');
+    expect(actions[0].actionLabel).not.toMatch(/cost of inaction/i);
+  });
+
+  it('preserves blockers from readiness missingData', () => {
+    const blockers = buildExecutiveInputBlockers({
+      readiness: { missingData: ['compliance', 'funding'], insufficientModules: [] },
+      moduleOverviews: {}
+    });
+
+    expect(blockers.length).toBeGreaterThan(0);
+    expect(blockers.some((item) => item.branch === 'Compliance')).toBe(true);
+    expect(blockers.some((item) => item.branch === 'Funding')).toBe(true);
+  });
+
+  it('shows no blockers identified only when blocker sources are empty', () => {
+    const blockers = buildExecutiveInputBlockers({
+      readiness: { missingData: [], insufficientModules: [] },
+      moduleOverviews: {
+        ma: { score: 72, posture: 'watch' },
+        compliance: { score: 68, posture: 'watch' }
+      }
+    });
+
+    expect(blockers).toHaveLength(0);
+  });
+
+  it('does not show board readiness Ready when human review or missing inputs exist', () => {
+    const withMissing = buildExecutiveBoardReadinessSummary({
+      boardView: { humanReviewRequired: true, readinessStatus: 'insufficient_data' },
+      readiness: { score: null, missingData: ['ma'], humanReviewRequired: true }
+    });
+    expect(withMissing.statusLabel).not.toBe('Ready');
+    expect(withMissing.statusLabel).toBe('Pending inputs');
+
+    const withHumanReview = buildExecutiveBoardReadinessSummary({
+      boardView: { humanReviewRequired: true, readinessStatus: 'operational_dss' },
+      readiness: { score: 82, missingData: [], humanReviewRequired: true }
+    });
+    expect(withHumanReview.statusLabel).toBe('Human review required');
+  });
+
+  it('labels static priority rows as informational when no live executive rows exist', () => {
+    const rows = buildExecutivePriorityRows({
+      decisionQueue: [],
+      alerts: [],
+      signals: [],
+      pmiOverview: { alerts: [] },
+      fundingOverview: { requiresExecutiveUpdate: false },
+      complianceOverview: { openAlerts: 0 }
+    });
+
+    expect(rows.every((row) => row.isInformational)).toBe(true);
+    expect(rows[0].label).toBe('Decision quality');
+  });
+
+  it('prefers real priority rows from decision queue over static posture copy', () => {
+    const rows = buildExecutivePriorityRows({
+      decisionQueue: [
+        {
+          title: 'Resolve critical governance decisions',
+          module: 'Governance',
+          severity: 'blocked',
+          recommendedAction: 'Schedule board review.'
+        }
+      ],
+      alerts: [],
+      signals: [],
+      pmiOverview: { alerts: [] },
+      fundingOverview: { requiresExecutiveUpdate: false },
+      complianceOverview: { openAlerts: 0 }
+    });
+
+    expect(rows[0].label).toBe('Governance');
+    expect(rows[0].isInformational).toBe(false);
+    expect(rows.some((row) => row.label === 'Decision quality')).toBe(false);
+  });
+
+  it('does not emit since last review or cost of inaction copy in decision intelligence helpers', () => {
+    const actions = buildExecutiveRecommendedActions({
+      alerts: [{ title: 'Risk signal', module: 'Risk', severity: 'critical' }],
+      signals: [{ title: 'Funding signal', module: 'Funding', severity: 'watch' }]
+    });
+    const board = buildExecutiveBoardReadinessSummary({
+      boardView: { humanReviewRequired: true },
+      readiness: { score: null, missingData: ['strategy'], humanReviewRequired: true }
+    });
+    const serialized = JSON.stringify({ actions, board });
+
+    expect(serialized).not.toMatch(/since last review/i);
+    expect(serialized).not.toMatch(/what changed/i);
+    expect(serialized).not.toMatch(/cost of inaction/i);
   });
 });

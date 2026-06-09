@@ -555,3 +555,298 @@ export function formatModuleSignalValue(overview) {
   }
   return formatScoreLabel(overview?.score);
 }
+
+export const EXECUTIVE_MODULE_ROUTES = {
+  ma: '/ma/dashboard',
+  'm&a': '/ma/dashboard',
+  funding: '/funding/dashboard',
+  compliance: '/compliance/dashboard',
+  risk: '/risk/register',
+  pmi: '/pmi/dashboard',
+  governance: '/governance/dashboard',
+  strategy: '/strategy/dashboard',
+  reporting: '/reporting/dashboard',
+  bridge: '/bridge/dashboard',
+  heritage: '/heritage/dashboard'
+};
+
+function resolveExecutiveModuleRoute(module = '') {
+  const key = String(module || '')
+    .trim()
+    .toLowerCase();
+  return EXECUTIVE_MODULE_ROUTES[key] || '';
+}
+
+function hasPersistedDueDate(value) {
+  const safe = String(value || '').trim();
+  return Boolean(safe) && safe !== 'N/A';
+}
+
+export function buildExecutiveLiveDecisionQueueItems(decisionQueue = [], { limit = 12 } = {}) {
+  if (!Array.isArray(decisionQueue) || decisionQueue.length === 0) {
+    return [];
+  }
+
+  return decisionQueue.slice(0, limit).map((item, index) => ({
+    id: item?.id || `queue-${index}`,
+    title: String(item?.title || 'Executive decision').trim(),
+    module: String(item?.module || 'Enterprise').trim(),
+    severity: String(item?.severity || 'watch').trim(),
+    recommendedAction: String(item?.recommendedAction || '').trim() || null,
+    priorityScore: Number.isFinite(Number(item?.priorityScore)) ? Number(item.priorityScore) : null,
+    dueDate: hasPersistedDueDate(item?.dueDate) ? String(item.dueDate).trim() : null,
+    status: String(item?.status || 'open').trim(),
+    route: resolveExecutiveModuleRoute(item?.module)
+  }));
+}
+
+export function buildExecutiveRecommendedActions({ alerts = [], signals = [], limit = 5 } = {}) {
+  const combined = [
+    ...(Array.isArray(alerts) ? alerts : []),
+    ...(Array.isArray(signals) ? signals : [])
+  ];
+  if (!combined.length) {
+    return [];
+  }
+
+  const seen = new Set();
+  const actions = [];
+
+  for (const source of combined) {
+    const title = String(source?.title || '').trim();
+    const module = String(source?.module || 'Enterprise').trim();
+    const key = `${module}::${title}`.toLowerCase();
+    if (!title || seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+
+    const recommendedAction = String(source?.recommendedAction || '').trim();
+    actions.push({
+      id: `${module}-${actions.length}`,
+      title,
+      module,
+      severity: String(source?.severity || 'watch').trim(),
+      recommendedAction: recommendedAction || null,
+      actionLabel: recommendedAction || 'Review required',
+      status: String(source?.status || '').trim() || (recommendedAction ? 'Suggested action' : 'Review required'),
+      route: resolveExecutiveModuleRoute(module)
+    });
+
+    if (actions.length >= limit) {
+      break;
+    }
+  }
+
+  return actions;
+}
+
+export function buildExecutiveInputBlockers({ readiness = {}, moduleOverviews = {} } = {}) {
+  const blockers = [];
+  const seen = new Set();
+
+  const pushBlocker = ({ branch, description, effect, route }) => {
+    const key = `${branch}::${description}`.toLowerCase();
+    if (seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    blockers.push({ branch, description, effect, route: route || '' });
+  };
+
+  const missingData = Array.isArray(readiness.missingData) ? readiness.missingData : [];
+  missingData.forEach((key) => {
+    const branch = EXECUTIVE_RADAR_BRANCH_LABELS[key] || String(key);
+    pushBlocker({
+      branch,
+      description: `Missing ${branch} executive score`,
+      effect: 'Blocks complete executive posture',
+      route: resolveExecutiveModuleRoute(key)
+    });
+  });
+
+  const insufficientModules = Array.isArray(readiness.insufficientModules)
+    ? readiness.insufficientModules
+    : [];
+  insufficientModules.forEach((key) => {
+    const branch = EXECUTIVE_RADAR_BRANCH_LABELS[key] || String(key);
+    pushBlocker({
+      branch,
+      description: 'Insufficient persisted module data',
+      effect: 'Blocks board readiness signal',
+      route: resolveExecutiveModuleRoute(key)
+    });
+  });
+
+  Object.entries(moduleOverviews).forEach(([key, overview]) => {
+    if (!overview) {
+      return;
+    }
+    const posture = String(overview.posture || '').toLowerCase();
+    const score = normalizeScoreOrNull(overview.score);
+    if (posture !== 'insufficient_data' && score !== null) {
+      return;
+    }
+
+    const branch = EXECUTIVE_RADAR_BRANCH_LABELS[key] || String(key);
+    pushBlocker({
+      branch,
+      description: overview.scoreDisplay || 'Pending inputs',
+      effect:
+        posture === 'insufficient_data'
+          ? 'Blocks complete executive posture'
+          : 'Blocks board readiness signal',
+      route: resolveExecutiveModuleRoute(key)
+    });
+  });
+
+  return blockers;
+}
+
+export function buildExecutiveBoardReadinessSummary({
+  boardView = {},
+  readiness = {},
+  briefingDraftPrepared = false,
+  boardPackGeneratedAt = null
+} = {}) {
+  const missingData = Array.isArray(readiness.missingData) ? readiness.missingData : [];
+  const humanReviewRequired =
+    readiness.humanReviewRequired !== false && boardView.humanReviewRequired !== false;
+  const readinessScore = normalizeScoreOrNull(readiness.score ?? boardView.readinessScore);
+  const hasPendingInputs =
+    missingData.length > 0 ||
+    readinessScore === null ||
+    boardView.readinessStatus === 'insufficient_data' ||
+    boardView.dataSource === 'insufficient_data';
+
+  let statusLabel = 'Not ready';
+  if (hasPendingInputs) {
+    statusLabel = 'Pending inputs';
+  } else if (humanReviewRequired) {
+    statusLabel = 'Human review required';
+  } else if (readinessScore !== null) {
+    statusLabel = 'Ready';
+  }
+
+  const bullets = [
+    {
+      label: 'Board review draft',
+      value: briefingDraftPrepared ? 'Draft prepared' : 'Not yet prepared'
+    },
+    {
+      label: 'Missing evidence',
+      value:
+        missingData.length > 0
+          ? `${missingData.length} module score(s) pending`
+          : 'No missing score keys reported'
+    },
+    {
+      label: 'Governance critical decisions',
+      value:
+        Number.isFinite(Number(boardView.governanceBottlenecks)) &&
+        Number(boardView.governanceBottlenecks) > 0
+          ? `${boardView.governanceBottlenecks} pending`
+          : 'None flagged in board snapshot'
+    },
+    {
+      label: 'Human review',
+      value: humanReviewRequired ? 'Required before distribution' : 'Review posture unavailable'
+    },
+    {
+      label: 'Data room readiness',
+      value:
+        boardView.reportingReadiness !== null &&
+        boardView.reportingReadiness !== undefined &&
+        boardView.reportingReadiness !== 'Insufficient data'
+          ? 'Reporting signal available'
+          : 'Pending inputs'
+    }
+  ];
+
+  if (boardPackGeneratedAt) {
+    bullets.push({
+      label: 'Board pack generated',
+      value: String(boardPackGeneratedAt)
+    });
+  }
+
+  return {
+    statusLabel,
+    humanReviewRequired,
+    hasPendingInputs,
+    bullets: bullets.slice(0, 5),
+    fallbackCopy:
+      hasPendingInputs && humanReviewRequired
+        ? 'Not ready · Pending inputs · Human review required'
+        : hasPendingInputs
+          ? 'Not ready · Pending inputs'
+          : humanReviewRequired
+            ? 'Not ready · Human review required'
+            : statusLabel
+  };
+}
+
+const INFORMATIONAL_PRIORITY_ROWS = [
+  { label: 'Decision quality', value: 'Active', isInformational: true },
+  { label: 'Workspace consistency', value: 'Under review', isInformational: true },
+  { label: 'Executive narrative', value: 'Active', isInformational: true },
+  { label: 'Board review drafts', value: 'In progress', isInformational: true }
+];
+
+export function buildExecutivePriorityRows({
+  decisionQueue = [],
+  alerts = [],
+  signals = [],
+  pmiOverview = {},
+  fundingOverview = {},
+  complianceOverview = {}
+} = {}) {
+  const realRows = [];
+  const seen = new Set();
+
+  const addRow = (row) => {
+    const key = `${row.label}::${row.value}`.toLowerCase();
+    if (seen.has(key)) {
+      return;
+    }
+    seen.add(key);
+    realRows.push({ ...row, isInformational: false });
+  };
+
+  buildExecutiveLiveDecisionQueueItems(decisionQueue, { limit: 3 }).forEach((item) => {
+    addRow({
+      label: item.module,
+      value: item.title,
+      severity: item.severity
+    });
+  });
+
+  buildExecutiveRecommendedActions({ alerts, signals, limit: 3 }).forEach((action) => {
+    addRow({
+      label: action.module,
+      value: action.title,
+      severity: action.severity
+    });
+  });
+
+  if (Array.isArray(pmiOverview.alerts) && pmiOverview.alerts.length > 0) {
+    addRow({ label: 'PMI escalation', value: pmiOverview.alerts[0] });
+  }
+
+  if (fundingOverview.requiresExecutiveUpdate) {
+    addRow({ label: 'Funding update', value: 'Executive review required' });
+  }
+
+  if (Number(complianceOverview.openAlerts) > 0) {
+    addRow({
+      label: 'Compliance control',
+      value: `${complianceOverview.openAlerts} open alerts`
+    });
+  }
+
+  if (realRows.length) {
+    return realRows.slice(0, 6);
+  }
+
+  return INFORMATIONAL_PRIORITY_ROWS.slice(0, 4);
+}

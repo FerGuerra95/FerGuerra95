@@ -21,6 +21,10 @@ import { Button } from '../../../shared/components/ui/Button.jsx';
 import { CorporateHealthRadar } from './CorporateHealthRadar.jsx';
 import '../styles/ceoMaterialSystem.css';
 import {
+  buildExecutiveBoardReadinessSummary,
+  buildExecutiveInputBlockers,
+  buildExecutiveLiveDecisionQueueItems,
+  buildExecutiveRecommendedActions,
   formatModuleScoreDisplay,
   formatScoreLabel,
   normalizeScoreOrNull
@@ -1624,6 +1628,9 @@ export function ExecutiveCommandCenterView({
   maValuationSignal,
   commandDecisionQueue,
   commandAlerts,
+  commandSignals = [],
+  commandBoardView = {},
+  boardPackGeneratedAt = null,
   maOverview,
   complianceOverview,
   fundingOverview,
@@ -1674,6 +1681,37 @@ export function ExecutiveCommandCenterView({
   });
 
   const topPriorities = executivePriorityRows.slice(0, 3);
+  const prioritiesAreInformational = executivePriorityRows.every((row) => row.isInformational);
+
+  const liveDecisionQueueItems = buildExecutiveLiveDecisionQueueItems(commandDecisionQueue, {
+    limit: 12
+  });
+  const recommendedActions = buildExecutiveRecommendedActions({
+    alerts: commandAlerts,
+    signals: commandSignals,
+    limit: 5
+  });
+  const inputBlockers = buildExecutiveInputBlockers({
+    readiness: commandReadiness,
+    moduleOverviews: {
+      ma: maOverview,
+      funding: fundingOverview,
+      compliance: complianceOverview,
+      risk: riskOverview,
+      pmi: pmiOverview,
+      governance: governanceOverview,
+      strategy: strategyOverview,
+      reporting: reportingOverview,
+      bridge: bridgeOverview,
+      heritage: heritageOverview
+    }
+  });
+  const boardReadinessSummary = buildExecutiveBoardReadinessSummary({
+    boardView: commandBoardView,
+    readiness: commandReadiness,
+    briefingDraftPrepared: Boolean(boardPackGeneratedAt),
+    boardPackGeneratedAt
+  });
   const unifiedReadinessNote = buildUnifiedReadinessNote({
     unifiedReadinessScore,
     maValuationSignal,
@@ -1749,11 +1787,18 @@ export function ExecutiveCommandCenterView({
               <ExecutiveReadinessHeroCard readiness={commandReadiness} />
 
               <article className="ceo-command-card ceo-priorities-card">
-                <div className="ceo-command-card-kicker">Top priorities</div>
+                <div className="ceo-command-card-kicker">
+                  {prioritiesAreInformational ? 'Operating posture' : 'Executive attention'}
+                </div>
+                {prioritiesAreInformational ? (
+                  <p className="ceo-priority-informational-note">
+                    Informational posture · not a scored signal
+                  </p>
+                ) : null}
                 {topPriorities.length ? (
                   <ul className="ceo-priority-list">
                     {topPriorities.map((row) => (
-                      <li key={row.label} className="ceo-priority-item">
+                      <li key={`${row.label}-${row.value}`} className="ceo-priority-item">
                         <span className="ceo-priority-dot" aria-hidden="true" />
                         <div className="ceo-priority-copy">
                           <span className="ceo-priority-title">{row.label}</span>
@@ -1792,6 +1837,72 @@ export function ExecutiveCommandCenterView({
               </article>
             ))}
           </div>
+
+          <div className="ceo-decision-intelligence-row">
+            <article className="ceo-command-card ceo-live-queue-panel">
+              <div className="ceo-command-card-kicker">Executive Decision Queue — Live</div>
+              {liveDecisionQueueItems.length ? (
+                <ul className="ceo-live-queue-list">
+                  {liveDecisionQueueItems.map((item) => (
+                    <li key={item.id} className="ceo-live-queue-item">
+                      <div className="ceo-live-queue-head">
+                        <strong>{item.title}</strong>
+                        <span className={`ceo-live-queue-severity is-${item.severity}`}>
+                          {item.severity}
+                        </span>
+                      </div>
+                      <p className="ceo-live-queue-meta">
+                        {item.module}
+                        {item.priorityScore !== null ? ` · Priority ${item.priorityScore}` : ''}
+                        {item.dueDate ? ` · Due ${item.dueDate}` : ''}
+                      </p>
+                      <p className="ceo-live-queue-action">
+                        {item.recommendedAction || 'Review required'}
+                      </p>
+                      {item.route ? (
+                        <Link to={item.route} className="ceo-live-queue-link">
+                          Open module
+                        </Link>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="ceo-panel-fallback">
+                  No prioritized decisions queued · Confirm module data availability
+                </p>
+              )}
+            </article>
+
+            <article className="ceo-command-card ceo-recommended-actions-panel">
+              <div className="ceo-command-card-kicker">Recommended Actions</div>
+              {recommendedActions.length ? (
+                <ul className="ceo-recommended-actions-list">
+                  {recommendedActions.map((action) => (
+                    <li key={action.id} className="ceo-recommended-action-item">
+                      <div className="ceo-live-queue-head">
+                        <strong>{action.title}</strong>
+                        <span className={`ceo-live-queue-severity is-${action.severity}`}>
+                          {action.severity}
+                        </span>
+                      </div>
+                      <p className="ceo-live-queue-meta">{action.module}</p>
+                      <p className="ceo-live-queue-action">{action.actionLabel}</p>
+                      {action.route ? (
+                        <Link to={action.route} className="ceo-live-queue-link">
+                          Open module
+                        </Link>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="ceo-panel-fallback">
+                  Pending inputs — no recommended actions until module summaries load
+                </p>
+              )}
+            </article>
+          </div>
         </SectionBlock>
 
         <SectionBlock
@@ -1819,6 +1930,30 @@ export function ExecutiveCommandCenterView({
           description="Branch readiness scores from existing DSS signals. Missing data remains N/A."
         >
           <div className="ceo-module-readiness-block">
+          <article className="ceo-command-card ceo-blockers-panel">
+            <div className="ceo-command-card-kicker">Blocked by Missing Inputs</div>
+            {inputBlockers.length ? (
+              <ul className="ceo-blockers-list">
+                {inputBlockers.map((blocker) => (
+                  <li key={`${blocker.branch}-${blocker.description}`} className="ceo-blocker-item">
+                    <div className="ceo-live-queue-head">
+                      <strong>{blocker.branch}</strong>
+                      <span className="ceo-blocker-effect">{blocker.effect}</span>
+                    </div>
+                    <p className="ceo-live-queue-meta">{blocker.description}</p>
+                    {blocker.route ? (
+                      <Link to={blocker.route} className="ceo-live-queue-link">
+                        Open module
+                      </Link>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="ceo-panel-fallback">No blockers identified</p>
+            )}
+          </article>
+
           <div className="ceo-module-readiness-grid">
             {moduleCards.map((module) => (
               <Link
@@ -1879,6 +2014,22 @@ export function ExecutiveCommandCenterView({
           title="Board Review Workflow"
           description="Draft-first workflow. Human review required before any distribution."
         >
+          <article className="ceo-command-card ceo-board-readiness-panel">
+            <div className="ceo-command-card-kicker">Board Readiness Summary</div>
+            <p className="ceo-board-readiness-status">
+              Status: <strong>{boardReadinessSummary.statusLabel}</strong>
+            </p>
+            <p className="ceo-board-readiness-fallback">{boardReadinessSummary.fallbackCopy}</p>
+            <ul className="ceo-board-readiness-bullets">
+              {boardReadinessSummary.bullets.map((bullet) => (
+                <li key={bullet.label}>
+                  <span>{bullet.label}</span>
+                  <strong>{bullet.value}</strong>
+                </li>
+              ))}
+            </ul>
+          </article>
+
           <div className="ceo-workflow-grid">
             {WORKFLOW_STEPS.map((step) => (
               <article key={step.eyebrow} className="ceo-workflow-step">

@@ -2696,3 +2696,22 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Scope:** Strengthen visible warm gold on Executive Overview general surfaces; replace navy-bleeding Module Readiness parent shell with opaque black/charcoal + gold frame. Branch cards preserve `--branch-tone`.
 
 **No logic impact:** no backend, formulas, scores, Golden Dataset, Formula Registry, or data changes.
+
+---
+
+## C.24.6B — Executive Decision Intelligence MVP
+
+**Status:** COMPLETED (frontend wiring only).
+
+**Baseline:** `2353cc0`.
+
+**Integrity rules enforced:**
+
+- Decision queue items surface backend `priorityScore` and `dueDate` only when persisted; no client-side reorder or scoring.
+- Recommended actions use backend `recommendedAction` when present; otherwise `Review required` — never invented recommendations.
+- Blockers from `readiness.missingData`, `insufficientModules` and module `insufficient_data` / null scores; `No blockers identified` only when all sources empty.
+- Board readiness never shows `Ready` when `humanReviewRequired` or missing inputs exist; no approved/certified language.
+- Static priority copy labeled `Operating posture · not a scored signal` when no live executive rows exist.
+- No `since last review`, `what changed`, or `cost of inaction` copy.
+
+**Tests added:** `ceoOverviewTruthfulness.test.js` — 8 defensive cases for C.24.6B (30 total). Build PASS; `fundingDisplayFormat` PASS.

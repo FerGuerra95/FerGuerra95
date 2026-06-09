@@ -405,3 +405,17 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; CEO truthfulness PASS; funding display-format PASS. Visual-only change.
 
+### C.24.6B demo safety note
+
+**Baseline:** `2353cc0`.
+
+**Recording-safe result:** Executive Overview now surfaces a minimal CEO decision cockpit layer: live decision queue, recommended actions from alerts/signals, missing-input blockers and board readiness summary — all from existing executive API payloads.
+
+**Safe narration:** "The command center now shows queued decisions, suggested review actions and what is blocking readiness — all from current module signals. Human review is still required before any board distribution."
+
+**Do not say:** Decisions are auto-prioritized by a new formula; owners are assigned; deadlines are enforced; board pack is approved/certified; posture improved since last review; cost of inaction is quantified.
+
+**Static fallback:** When no live queue/alerts exist, hero shows **Operating posture · not a scored signal** — not live scored priorities.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 30/30; `fundingDisplayFormat` 7/7. No backend, Golden Dataset or Formula Registry changes.
+

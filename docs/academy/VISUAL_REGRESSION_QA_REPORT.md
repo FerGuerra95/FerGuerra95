@@ -539,3 +539,24 @@
 | `/governance/dashboard` | PASS | No regression quick check |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` PASS; `fundingDisplayFormat` PASS. Visual-only; no logic/formula/backend changes.
+
+---
+
+## 28. C.24.6B — Executive Decision Intelligence MVP
+
+**Baseline:** `2353cc0`.
+
+**Change type:** Frontend data wiring — compact actionable panels integrated into existing black/gold surfaces. No hero, lion, radar polygon, branch card grid or workspace rail redesign.
+
+**New runtime selectors:** `.ceo-decision-intelligence-row`, `.ceo-live-queue-panel`, `.ceo-recommended-actions-panel`, `.ceo-blockers-panel`, `.ceo-board-readiness-panel`, `.ceo-priority-informational-note`.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | New intelligence panels visible; hero/radar/branch cards unchanged |
+| `/ceo/overview` | PASS | Live queue, recommended actions, blockers, board readiness summary present |
+| `/ma/dashboard` | PASS | No regression quick check |
+| `/funding/dashboard` | PASS | No regression quick check |
+| `/risk/register` | PASS | No regression quick check |
+| `/governance/dashboard` | PASS | No regression quick check |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 30/30; `fundingDisplayFormat` 7/7.

@@ -700,3 +700,14 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Branch cards (M&A, Funding, Compliance, Risk, PMI, Governance, Strategy, Reporting, Bridge, Heritage) keep `--branch-tone` identity; no generic gold card override.
 - Bridge/Heritage/Compliance truthfulness unchanged: N/A / Pending inputs preserved; no fake scores.
 - `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` — no ErrorBoundary, overflow, or NaN/undefined/Infinity.
+
+### C.24.6B Executive Decision Intelligence MVP checklist
+
+- Baseline `2353cc0`; frontend wiring only — no hero, lion, radar visual, branch cards or gold redesign.
+- Section 02: existing four decision cards unchanged; new compact panels **Executive Decision Queue — Live** and **Recommended Actions** below grid.
+- Section 04: **Blocked by Missing Inputs** panel above Module Readiness grid; N/A / Pending inputs preserved on branch cards.
+- Section 05: **Board Readiness Summary** panel above workflow steps; status uses Pending inputs / Human review required — never approved or certified.
+- Hero priorities: live rows labeled **Executive attention**; static fallback labeled **Operating posture · not a scored signal**.
+- No `since last review`, `cost of inaction`, or invented owners/deadlines in new panels.
+- `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` — no ErrorBoundary, horizontal overflow, or NaN/undefined/Infinity.
+- Validation: build PASS; `ceoOverviewTruthfulness` 30/30; `fundingDisplayFormat` 7/7.

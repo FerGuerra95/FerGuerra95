@@ -8468,3 +8468,33 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Fix files:** `ceoMaterialSystem.css`, `ExecutiveCommandCenterView.jsx`, `CorporateHealthRadar.jsx`, `executivePolish.css`, `workspaceAccent.css`.
 
 **Outcome:** Visible warm gold on general Executive Overview surfaces; opaque black/gold Module Readiness parent; branch cards unchanged (`--branch-tone`). No logic/backend/formula changes.
+
+---
+
+## C.24.6B — Executive Decision Intelligence MVP
+
+**Status:** COMPLETED.
+
+**Baseline:** `2353cc0` (HEAD = origin/main).
+
+**Scope:** Frontend wiring only — Executive Overview actionable layer from existing executive API sources. No visual redesign; hero, lion, radar visual, branch cards and gold system unchanged.
+
+**Sources wired:**
+
+| Source | Used for | File |
+|---|---|---|
+| `GET /executive/overview` → `decisionQueue` | Executive Decision Queue — Live | `ExecutiveCommandCenterView.jsx`, `ceoOverviewTruthfulness.js` |
+| `alerts` + `signals` | Recommended Actions | same |
+| `readiness.missingData` + module postures | Blocked by Missing Inputs | same |
+| `boardView` + readiness + board pack `generatedAt` | Board Readiness Summary | same |
+| `decisionQueue` / alerts / signals | Executive attention priority rows (real first) | `ceoOverviewTruthfulness.js`, `CEOOverviewPage.jsx` |
+
+**In scope:** Live queue (≤12 items, backend order), recommended actions (3–5), input blockers, board readiness summary, informational fallback for static priority copy.
+
+**Out of scope preserved:** What changed since last review; cost of inaction; synthetic deadlines; real owner assignment; new ranking formula; snapshot diff; backend changes.
+
+**Truthfulness:** N/A / Pending inputs / insufficient_data preserved; no fake 0; no invented owners/deadlines; DSS + Human Review Required; Board Review Draft only; `localStorage` not used as board-pack SoT.
+
+**Tests:** `ceoOverviewTruthfulness` 30/30; `fundingDisplayFormat` 7/7; `npm run build` PASS.
+
+**Visual QA:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` — no hero/radar/branch-card redesign; new compact panels visible in Sections 02, 04, 05.

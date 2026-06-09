@@ -41,6 +41,7 @@ import { riskApi } from '../../risk/services/riskApi.js';
 import { strategyApi } from '../../strategy/services/strategyApi.js';
 import { executiveApi } from '../services/executiveApi.js';
 import {
+  buildExecutivePriorityRows,
   buildInsufficientFallbackModuleCards,
   buildRadarAxis,
   alignOverviewScoreWithRadarBranch,
@@ -1516,38 +1517,6 @@ function getPmiOverview(pmiBrief = null) {
   };
 }
 
-function buildExecutivePriorityRows({ pmiOverview, fundingOverview, complianceOverview }) {
-  const rows = [
-    { label: 'Decision quality', value: 'Active' },
-    { label: 'Workspace consistency', value: 'Under review' },
-    { label: 'Executive narrative', value: 'Active' },
-    { label: 'Board review drafts', value: 'In progress' }
-  ];
-
-  if (pmiOverview.alerts.length > 0) {
-    rows.unshift({
-      label: 'PMI escalation',
-      value: pmiOverview.alerts[0]
-    });
-  }
-
-  if (fundingOverview.requiresExecutiveUpdate) {
-    rows.unshift({
-      label: 'Funding update',
-      value: 'Executive review required'
-    });
-  }
-
-  if (complianceOverview.openAlerts > 0) {
-    rows.unshift({
-      label: 'Compliance control',
-      value: `${complianceOverview.openAlerts} open alerts`
-    });
-  }
-
-  return rows.slice(0, 6);
-}
-
 function CommandItem({ label, value, branch = 'overview', to = '' }) {
   const content = (
     <>
@@ -2194,6 +2163,9 @@ export function CEOOverviewPage() {
   );
 
   const executivePriorityRows = buildExecutivePriorityRows({
+    decisionQueue: commandDecisionQueue,
+    alerts: commandAlerts,
+    signals: commandSignals,
     pmiOverview,
     fundingOverview,
     complianceOverview: displayComplianceOverview
@@ -2211,6 +2183,9 @@ export function CEOOverviewPage() {
         maValuationSignal={maValuationSignal}
         commandDecisionQueue={commandDecisionQueue}
         commandAlerts={commandAlerts}
+        commandSignals={commandSignals}
+        commandBoardView={commandBoardView}
+        boardPackGeneratedAt={boardPack?.generatedAt || null}
         maOverview={maOverview}
         complianceOverview={displayComplianceOverview}
         fundingOverview={fundingOverview}

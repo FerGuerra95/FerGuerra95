@@ -747,3 +747,92 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-legend-label .ceo-radar-swatch {
   box-shadow: 0 0 10px currentColor, 0 0 3px currentColor !important;
 }
+
+/* ——— C.24.6B executive decision intelligence panels ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-intelligence-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-list,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-recommended-actions-list,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blockers-list,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-item,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-recommended-action-item,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blocker-item {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-severity {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(248, 243, 231, 0.62);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-meta,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-action,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-panel-fallback,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-informational-note,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-fallback {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: rgba(248, 243, 231, 0.62);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(245, 197, 92, 0.86);
+  text-decoration: none;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blockers-panel {
+  margin-bottom: 16px;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blocker-effect {
+  font-size: 11px;
+  color: rgba(248, 243, 231, 0.52);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-panel {
+  margin-bottom: 16px;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-status {
+  margin: 8px 0 0;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-bullets li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+
+@media (max-width: 960px) {
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-intelligence-row {
+    grid-template-columns: 1fr;
+  }
+}
