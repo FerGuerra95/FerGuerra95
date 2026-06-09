@@ -1061,34 +1061,40 @@ textarea,
 
 /* C.24.5A-polish — CEO executive command center gold actions (scoped only) */
 .ceo-executive-command-page .ceo-gold-primary-action.button.primary {
-  border: 1px solid rgba(243, 218, 138, 0.62) !important;
+  border: 1px solid rgba(243, 218, 138, 0.78) !important;
   color: #111827 !important;
-  background: linear-gradient(135deg, #f8e6a8 0%, #d4af37 46%, #9a7518 100%) !important;
+  background: linear-gradient(135deg, #fcecb8 0%, #d4af37 46%, #9a7518 100%) !important;
   box-shadow:
-    0 12px 28px rgba(212, 175, 55, 0.32),
-    inset 0 1px 0 rgba(255, 251, 234, 0.55) !important;
+    0 14px 32px rgba(212, 175, 55, 0.42),
+    0 0 24px rgba(245, 197, 92, 0.12),
+    inset 0 1px 0 rgba(255, 251, 234, 0.62) !important;
 }
 
 .ceo-executive-command-page .ceo-gold-primary-action.button.primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #fcecb8 0%, #e0c04a 44%, #b2871d 100%) !important;
+  background: linear-gradient(135deg, #fff2cc 0%, #e8c84f 44%, #b2871d 100%) !important;
   box-shadow:
-    0 16px 34px rgba(212, 175, 55, 0.38),
-    0 0 22px rgba(212, 175, 55, 0.14),
-    inset 0 1px 0 rgba(255, 251, 234, 0.68) !important;
+    0 18px 38px rgba(212, 175, 55, 0.48),
+    0 0 28px rgba(212, 175, 55, 0.2),
+    inset 0 1px 0 rgba(255, 251, 234, 0.72) !important;
 }
 
 .ceo-executive-command-page .ceo-gold-secondary-action.button,
 .ceo-executive-command-page .ceo-gold-secondary-action.button.secondary {
-  border: 1px solid rgba(212, 175, 55, 0.42) !important;
+  border: 1px solid rgba(212, 175, 55, 0.52) !important;
   color: rgba(248, 250, 252, 0.96) !important;
   background: rgba(6, 6, 8, 0.88) !important;
-  box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(212, 175, 55, 0.12),
+    0 0 16px rgba(212, 175, 55, 0.06) !important;
 }
 
 .ceo-executive-command-page .ceo-gold-secondary-action.button:hover:not(:disabled),
 .ceo-executive-command-page .ceo-gold-secondary-action.button.secondary:hover:not(:disabled) {
-  border-color: rgba(243, 218, 138, 0.58) !important;
+  border-color: rgba(243, 218, 138, 0.68) !important;
   background: rgba(16, 14, 11, 0.96) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(243, 218, 138, 0.14),
+    0 0 22px rgba(212, 175, 55, 0.1) !important;
 }
 
 /* C.24.5B-hard-runtime — Executive command center: black premium (wins over polish flatten) */

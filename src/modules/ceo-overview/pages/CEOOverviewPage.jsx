@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Activity,
@@ -91,11 +91,11 @@ const ceoOverviewCss = `
     min-height: 0;
     border-radius: 32px;
     padding: 36px 38px 40px;
-    border: 1px solid rgba(148, 163, 184, 0.14);
+    border: 1px solid rgba(212, 175, 55, 0.14);
     background:
       radial-gradient(circle at 8% 2%, rgba(212, 175, 55, 0.1), transparent 32%),
       radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.08), transparent 28%),
-      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97));
+      linear-gradient(135deg, #050504 0%, #0a0908 52%, #080807 100%);
     box-shadow:
       0 24px 72px rgba(0, 0, 0, 0.34),
       inset 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -106,7 +106,7 @@ const ceoOverviewCss = `
     background:
       radial-gradient(circle at 10% 0%, rgba(212, 175, 55, 0.18), transparent 34%),
       radial-gradient(circle at 78% 6%, rgba(212, 175, 55, 0.09), transparent 32%),
-      linear-gradient(135deg, rgba(6, 10, 24, 0.99), rgba(17, 24, 39, 0.98));
+      linear-gradient(135deg, #050504 0%, #0a0908 52%, #080807 100%);
     box-shadow:
       0 30px 84px rgba(0, 0, 0, 0.38),
       0 0 44px rgba(212, 175, 55, 0.12),
@@ -200,7 +200,7 @@ const ceoOverviewCss = `
     gap: 14px;
     margin-top: 34px;
     padding-top: 28px;
-    border-top: 1px solid rgba(148, 163, 184, 0.16);
+    border-top: 1px solid rgba(212, 175, 55, 0.16);
   }
 
   .ceo-command-item {
@@ -246,7 +246,7 @@ const ceoOverviewCss = `
   .ceo-gold-secondary-action.button {
     border: 1px solid rgba(212, 175, 55, 0.38);
     color: rgba(248, 250, 252, 0.94);
-    background: rgba(15, 23, 42, 0.74);
+    background: rgba(8, 7, 6, 0.74);
   }
 
   .ceo-gold-secondary-action.button:hover:not(:disabled) {
@@ -274,8 +274,8 @@ const ceoOverviewCss = `
     justify-self: end;
     border-radius: 24px;
     padding: 22px;
-    background: rgba(15, 23, 42, 0.52);
-    border: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(8, 7, 6, 0.52);
+    border: 1px solid rgba(212, 175, 55, 0.14);
     backdrop-filter: none;
     box-shadow: none;
     overflow: hidden;
@@ -308,8 +308,8 @@ const ceoOverviewCss = `
     display: grid;
     place-items: center;
     border-radius: 18px;
-    background: rgba(37, 99, 235, 0.16);
-    border: 1px solid rgba(96, 165, 250, 0.24);
+    background: rgba(212, 175, 55, 0.14);
+    border: 1px solid rgba(245, 197, 92, 0.28);
   }
 
   .ceo-icon-box {
@@ -360,7 +360,7 @@ const ceoOverviewCss = `
     border-radius: 999px;
     display: grid;
     place-items: center;
-    background: rgba(15, 23, 42, 0.97);
+    background: rgba(8, 7, 6, 0.97);
     border: 1px solid rgba(255,255,255,0.08);
   }
 
@@ -382,7 +382,7 @@ const ceoOverviewCss = `
   .ceo-signal-table {
     display: grid;
     border-radius: 18px;
-    border: 1px solid rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.1);
     background: rgba(255, 255, 255, 0.02);
     padding: 4px 14px;
   }
@@ -393,7 +393,7 @@ const ceoOverviewCss = `
     gap: 14px;
     align-items: center;
     padding: 12px 0;
-    border-top: 1px solid rgba(148, 163, 184, 0.14);
+    border-top: 1px solid rgba(212, 175, 55, 0.14);
   }
 
   .ceo-signal-row strong {
@@ -443,7 +443,7 @@ const ceoOverviewCss = `
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.17em;
-    color: rgba(148, 163, 184, 0.96);
+    color: rgba(212, 175, 55, 0.96);
   }
 
   .ceo-section-header h2,
@@ -491,8 +491,8 @@ const ceoOverviewCss = `
   .executive-command-card,
   .executive-module-card {
     border-radius: 20px;
-    border: 1px solid rgba(148, 163, 184, 0.12);
-    background: rgba(15, 23, 42, 0.48);
+    border: 1px solid rgba(212, 175, 55, 0.12);
+    background: rgba(8, 7, 6, 0.48);
     box-shadow: none;
     padding: 20px 22px;
     min-width: 0;
@@ -512,7 +512,7 @@ const ceoOverviewCss = `
   }
 
   .executive-eyebrow {
-    color: rgba(148, 163, 184, 0.86);
+    color: rgba(212, 175, 55, 0.86);
     font-size: 11px;
     font-weight: 780;
     letter-spacing: 0;
@@ -522,7 +522,7 @@ const ceoOverviewCss = `
   .executive-progress {
     height: 9px;
     border-radius: 999px;
-    background: rgba(15, 23, 42, 0.9);
+    background: rgba(8, 7, 6, 0.9);
     overflow: hidden;
     margin: 16px 0 10px;
   }
@@ -549,7 +549,7 @@ const ceoOverviewCss = `
   .executive-radar-grid,
   .executive-radar-axis {
     fill: none;
-    stroke: rgba(148, 163, 184, 0.25);
+    stroke: rgba(212, 175, 55, 0.25);
     stroke-width: 1;
   }
 
@@ -571,7 +571,7 @@ const ceoOverviewCss = `
     gap: 12px;
     align-items: center;
     padding: 11px 0;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.12);
   }
 
   .executive-radar-list a {
@@ -594,8 +594,8 @@ const ceoOverviewCss = `
     flex: 0 0 auto;
     border-radius: 999px;
     padding: 6px 9px;
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    background: rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    background: rgba(212, 175, 55, 0.1);
     color: rgba(226, 232, 240, 0.9);
     font-size: 11px;
     font-weight: 760;
@@ -618,7 +618,7 @@ const ceoOverviewCss = `
 
   .executive-insufficient_data,
   .executive-not_available {
-    border-color: rgba(148, 163, 184, 0.24);
+    border-color: rgba(212, 175, 55, 0.24);
     background: rgba(71, 85, 105, 0.16);
   }
 
@@ -639,7 +639,7 @@ const ceoOverviewCss = `
 
   .executive-snapshot-grid span {
     display: block;
-    color: rgba(148, 163, 184, 0.88);
+    color: rgba(212, 175, 55, 0.88);
     font-size: 11px;
   }
 
@@ -671,10 +671,10 @@ const ceoOverviewCss = `
     width: 100%;
     height: 100%;
     border-radius: 31px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
+    border: 1px solid rgba(212, 175, 55, 0.16);
     background:
       linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
-      rgba(15, 23, 42, 0.64);
+      rgba(8, 7, 6, 0.64);
     box-shadow:
       0 24px 70px rgba(0, 0, 0, 0.21),
       inset 0 1px 0 rgba(255,255,255,0.035);
@@ -752,7 +752,7 @@ const ceoOverviewCss = `
     justify-content: space-between;
     gap: 14px;
     padding: 12px 0;
-    border-top: 1px solid rgba(148, 163, 184, 0.13);
+    border-top: 1px solid rgba(212, 175, 55, 0.13);
   }
 
   .ceo-mini-row strong {
@@ -775,8 +775,8 @@ const ceoOverviewCss = `
     border-radius: 999px;
     padding: 10px 13px;
     color: rgba(226, 232, 240, 0.94);
-    background: rgba(37, 99, 235, 0.16);
-    border: 1px solid rgba(96, 165, 250, 0.24);
+    background: rgba(212, 175, 55, 0.14);
+    border: 1px solid rgba(245, 197, 92, 0.28);
     text-decoration: none;
     font-size: 13px;
     font-weight: 800;
@@ -802,7 +802,7 @@ const ceoOverviewCss = `
     border: 1px solid rgba(212, 175, 55, 0.18);
     background:
       linear-gradient(140deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012)),
-      rgba(15, 23, 42, 0.68);
+      rgba(8, 7, 6, 0.68);
   }
 
   .ceo-command-card .ceo-kicker {
@@ -818,7 +818,7 @@ const ceoOverviewCss = `
   .ceo-briefing-pack-card {
     border-radius: 18px;
     border: 1px solid rgba(212, 175, 55, 0.2);
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba(8, 7, 6, 0.5);
     padding: 14px;
   }
 
@@ -831,7 +831,7 @@ const ceoOverviewCss = `
   .ceo-workflow-step {
     border-radius: 16px;
     border: 1px solid rgba(243, 218, 138, 0.2);
-    background: rgba(15, 23, 42, 0.55);
+    background: rgba(8, 7, 6, 0.55);
     padding: 14px 12px;
   }
 
@@ -875,7 +875,7 @@ const ceoOverviewCss = `
     height: auto;
     border-radius: 30px;
     padding: 26px;
-    border: 1px solid rgba(148, 163, 184, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.12);
     background: rgba(255, 255, 255, 0.03);
     box-shadow: none;
     backdrop-filter: none;
@@ -895,7 +895,7 @@ const ceoOverviewCss = `
       radial-gradient(circle at 8% 2%, rgba(212, 175, 55, 0.14), transparent 32%),
       radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.12), transparent 28%),
       radial-gradient(circle at 60% 110%, rgba(245, 158, 11, 0.08), transparent 30%),
-      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97)) !important;
+      linear-gradient(135deg, #050504 0%, #0a0908 52%, #080807 100%) !important;
     box-shadow:
       0 38px 120px rgba(0, 0, 0, 0.42),
       inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
@@ -1089,7 +1089,7 @@ const ceoOverviewCss = `
         rgba(255,255,255,0.016) 44%,
         rgba(var(--ceo-branch-b), 0.066) 100%
       ),
-      rgba(15, 23, 42, 0.56) !important;
+      rgba(8, 7, 6, 0.56) !important;
     box-shadow:
       0 28px 82px rgba(0, 0, 0, 0.30),
       0 0 42px rgba(var(--ceo-branch-glow), 0.130),

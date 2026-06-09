@@ -119,7 +119,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           display: grid;
           place-items: center;
           padding: 24px;
-          background: rgba(2, 6, 23, 0.72);
+          background: rgba(5, 5, 4, 0.82);
           backdrop-filter: blur(18px);
         }
 
@@ -128,10 +128,10 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           max-height: min(880px, calc(100vh - 48px));
           overflow: auto;
           border-radius: 28px;
-          border: 1px solid rgba(148, 163, 184, 0.2);
+          border: 1px solid rgba(212, 175, 55, 0.24);
           background:
-            linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)),
-            rgba(15, 23, 42, 0.96);
+            linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+            linear-gradient(180deg, #0a0908 0%, #050504 100%);
           box-shadow: 0 36px 110px rgba(0, 0, 0, 0.45);
           padding: 28px;
         }
@@ -162,7 +162,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           display: inline-flex;
           gap: 8px;
           align-items: center;
-          color: rgba(148, 163, 184, 0.96);
+          color: rgba(243, 218, 138, 0.88);
           text-transform: uppercase;
           letter-spacing: 0.16em;
           font-size: 11px;
@@ -188,14 +188,14 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           gap: 18px;
           padding: 20px;
           border-radius: 22px;
-          border: 1px solid rgba(148, 163, 184, 0.16);
+          border: 1px solid rgba(212, 175, 55, 0.18);
           background: rgba(255,255,255,0.04);
         }
 
         .board-pack-summary span,
         .board-pack-metric span,
         .board-pack-bar-top span {
-          color: rgba(148, 163, 184, 0.92);
+          color: rgba(212, 175, 55, 0.82);
           font-size: 11px;
           text-transform: uppercase;
           letter-spacing: 0.12em;
@@ -220,7 +220,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
         .board-pack-panel,
         .board-pack-metric {
           border-radius: 22px;
-          border: 1px solid rgba(148, 163, 184, 0.16);
+          border: 1px solid rgba(212, 175, 55, 0.18);
           background: rgba(255,255,255,0.04);
           padding: 18px;
         }
@@ -239,12 +239,12 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
         .board-pack-radar-grid,
         .board-pack-radar-axis {
           fill: none;
-          stroke: rgba(148, 163, 184, 0.18);
+          stroke: rgba(212, 175, 55, 0.22);
         }
 
         .board-pack-radar-fill {
-          fill: rgba(96, 165, 250, 0.2);
-          stroke: rgba(96, 165, 250, 0.86);
+          fill: rgba(245, 197, 92, 0.16);
+          stroke: rgba(245, 197, 92, 0.82);
           stroke-width: 2;
         }
 
@@ -258,7 +258,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           display: grid;
           gap: 8px;
           padding: 10px 0;
-          border-top: 1px solid rgba(148, 163, 184, 0.12);
+          border-top: 1px solid rgba(212, 175, 55, 0.12);
         }
 
         .board-pack-bar-track {
@@ -300,7 +300,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           align-items: center;
           margin-top: 22px;
           padding-top: 18px;
-          border-top: 1px solid rgba(148, 163, 184, 0.16);
+          border-top: 1px solid rgba(212, 175, 55, 0.16);
         }
 
         @media (max-width: 820px) {

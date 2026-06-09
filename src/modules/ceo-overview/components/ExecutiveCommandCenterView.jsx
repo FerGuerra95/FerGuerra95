@@ -99,10 +99,10 @@ const commandCenterCss = `
     --ceo-gold: #d4af37;
     --ceo-gold-soft: #f3da8a;
     --ceo-gold-deep: #8a6a16;
-    --ceo-gold-border: rgba(212, 175, 55, 0.14);
-    --ceo-gold-border-strong: rgba(245, 197, 92, 0.16);
-    --ceo-gold-glow: rgba(245, 197, 92, 0.08);
-    --ceo-gold-glow-soft: rgba(212, 175, 55, 0.12);
+    --ceo-gold-border: rgba(212, 175, 55, 0.24);
+    --ceo-gold-border-strong: rgba(245, 197, 92, 0.28);
+    --ceo-gold-glow: rgba(245, 197, 92, 0.14);
+    --ceo-gold-glow-soft: rgba(212, 175, 55, 0.18);
     --ceo-black: #050505;
     --ceo-graphite: #070707;
     --ceo-charcoal: rgba(10, 9, 8, 0.96);
@@ -192,10 +192,10 @@ const commandCenterCss = `
     position: relative;
     overflow: hidden;
     border-radius: 20px;
-    border: 1px solid rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.28);
     background:
-      radial-gradient(ellipse 55% 70% at 82% 38%, rgba(212, 175, 55, 0.09), transparent 58%),
-      radial-gradient(ellipse 40% 50% at 12% 20%, rgba(212, 175, 55, 0.05), transparent 52%),
+      radial-gradient(ellipse 55% 70% at 82% 38%, rgba(212, 175, 55, 0.16), transparent 58%),
+      radial-gradient(ellipse 40% 50% at 12% 20%, rgba(212, 175, 55, 0.08), transparent 52%),
       linear-gradient(155deg, rgba(4, 4, 4, 0.99), rgba(8, 7, 6, 0.98) 48%, rgba(5, 5, 5, 0.99));
     box-shadow:
       inset 0 1px 0 rgba(243, 218, 138, 0.05),
@@ -852,15 +852,15 @@ const commandCenterCss = `
   }
 
   .ceo-executive-command-page .executive-radar-outer-ring {
-    fill: rgba(212, 175, 55, 0.05);
-    stroke: rgba(212, 175, 55, 0.24);
+    fill: rgba(212, 175, 55, 0.08);
+    stroke: rgba(212, 175, 55, 0.34);
     stroke-width: 1.1;
   }
 
   .ceo-executive-command-page .executive-radar-grid,
   .ceo-executive-command-page .executive-radar-axis {
     fill: none;
-    stroke: rgba(245, 197, 92, 0.38);
+    stroke: rgba(245, 197, 92, 0.48);
     stroke-width: 1.2;
   }
 
@@ -870,13 +870,13 @@ const commandCenterCss = `
   }
 
   .ceo-executive-command-page .executive-radar-reference {
-    fill: rgba(212, 175, 55, 0.06);
-    stroke: rgba(212, 175, 55, 0.22);
+    fill: rgba(212, 175, 55, 0.09);
+    stroke: rgba(212, 175, 55, 0.3);
     stroke-width: 1.1;
   }
 
   .ceo-executive-command-page .executive-radar-fill {
-    stroke: rgba(252, 236, 180, 0.88);
+    stroke: rgba(252, 236, 180, 0.94);
     stroke-width: 2.2;
     stroke-linejoin: round;
     fill-opacity: 0.76;

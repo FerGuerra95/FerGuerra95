@@ -305,7 +305,7 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
             cy={cy}
             r={rMax}
             className="executive-radar-outer-ring"
-            fill="rgba(245, 197, 92, 0.06)"
+            fill="rgba(245, 197, 92, 0.09)"
           />
 
           <circle

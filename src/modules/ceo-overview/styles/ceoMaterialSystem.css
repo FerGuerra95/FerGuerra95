@@ -1,5 +1,5 @@
 /*
-  C.24.5I — Executive Command Center material system.
+  C.24.5I / C.24.7C — Executive Command Center material system.
   Scoped to overview workspace command page only.
   Loaded via ExecutiveCommandCenterView; paired with workspaceAccent cascade wins.
   Module Readiness branch cards preserve --branch-tone identity (no generic gold override).
@@ -10,20 +10,20 @@
   --ceo-mat-obsidian: #050505;
   --ceo-mat-graphite: #0a0a0a;
   --ceo-mat-slate: #0e0e0e;
-  --ceo-mat-gold-atmo: rgba(245, 197, 92, 0.16);
-  --ceo-mat-gold-whisper: rgba(255, 214, 112, 0.14);
-  --ceo-mat-gold-border: rgba(245, 197, 92, 0.22);
-  --ceo-mat-gold-border-soft: rgba(212, 175, 55, 0.18);
-  --ceo-mat-gold-halo: rgba(245, 197, 92, 0.12);
+  --ceo-mat-gold-atmo: rgba(245, 197, 92, 0.22);
+  --ceo-mat-gold-whisper: rgba(255, 214, 112, 0.18);
+  --ceo-mat-gold-border: rgba(245, 197, 92, 0.32);
+  --ceo-mat-gold-border-soft: rgba(212, 175, 55, 0.24);
+  --ceo-mat-gold-halo: rgba(245, 197, 92, 0.18);
   --ceo-mat-shadow-deep: 0 40px 100px rgba(0, 0, 0, 0.72);
   --ceo-mat-shadow-lift: 0 20px 54px rgba(0, 0, 0, 0.58);
   --ceo-mat-inset-top: inset 0 1px 0 rgba(255, 248, 230, 0.05);
   --ceo-mat-inset-depth: inset 0 -28px 56px rgba(0, 0, 0, 0.42);
   --ceo-mat-carved: linear-gradient(168deg, #0d0d0d 0%, #060606 46%, #090909 100%);
-  --ceo-mat-module: radial-gradient(ellipse 80% 70% at 18% 0%, rgba(245, 197, 92, 0.14), transparent 54%),
+  --ceo-mat-module: radial-gradient(ellipse 80% 70% at 18% 0%, rgba(245, 197, 92, 0.18), transparent 54%),
     linear-gradient(155deg, #141210 0%, #080807 100%);
-  --ceo-mat-hero: radial-gradient(ellipse 70% 85% at 58% 42%, rgba(245, 197, 92, 0.18), transparent 62%),
-    radial-gradient(ellipse 45% 55% at 12% 18%, rgba(255, 214, 112, 0.08), transparent 58%),
+  --ceo-mat-hero: radial-gradient(ellipse 70% 85% at 58% 42%, rgba(245, 197, 92, 0.24), transparent 62%),
+    radial-gradient(ellipse 45% 55% at 12% 18%, rgba(255, 214, 112, 0.12), transparent 58%),
     linear-gradient(152deg, #040404 0%, #080808 48%, #030303 100%);
   gap: 28px !important;
 }
@@ -34,7 +34,7 @@
   border-radius: 28px !important;
   background: var(--ceo-mat-carved) !important;
   box-shadow: var(--ceo-mat-shadow-deep), var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth),
-    inset 0 0 0 1px rgba(245, 197, 92, 0.14) !important;
+    inset 0 0 0 1px rgba(245, 197, 92, 0.22) !important;
   padding: 26px 28px 24px !important;
   gap: 18px !important;
 }
@@ -72,7 +72,7 @@
     var(--ceo-mat-shadow-lift),
     var(--ceo-mat-inset-top),
     inset 0 0 80px rgba(0, 0, 0, 0.35),
-    0 0 64px var(--ceo-mat-gold-halo) !important;
+    0 0 72px var(--ceo-mat-gold-halo) !important;
   padding: 22px 24px 22px !important;
   overflow: hidden !important;
 }
@@ -88,9 +88,9 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(245, 197, 92, 0.38) 18%,
-    rgba(212, 175, 55, 0.24) 50%,
-    rgba(245, 197, 92, 0.38) 82%,
+    rgba(245, 197, 92, 0.52) 18%,
+    rgba(212, 175, 55, 0.34) 50%,
+    rgba(245, 197, 92, 0.52) 82%,
     transparent
   ) !important;
   pointer-events: none !important;
@@ -131,8 +131,8 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-badge {
   font-size: 0.68rem !important;
   letter-spacing: 0.16em !important;
-  color: rgba(243, 218, 138, 0.78) !important;
-  text-shadow: 0 0 18px rgba(212, 175, 55, 0.12) !important;
+  color: rgba(243, 218, 138, 0.9) !important;
+  text-shadow: 0 0 22px rgba(212, 175, 55, 0.2) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap {
@@ -190,7 +190,7 @@
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priorities-card {
-  background: radial-gradient(ellipse 90% 85% at 16% 0%, rgba(245, 197, 92, 0.12), transparent 56%),
+  background: radial-gradient(ellipse 90% 85% at 16% 0%, rgba(245, 197, 92, 0.16), transparent 56%),
     linear-gradient(160deg, #121110, #070707) !important;
   border: 1px solid var(--ceo-mat-gold-border-soft) !important;
   border-radius: 18px !important;
@@ -235,26 +235,26 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card {
-  border-color: rgba(245, 197, 92, 0.28) !important;
+  border-color: rgba(245, 197, 92, 0.36) !important;
   box-shadow:
     var(--ceo-mat-inset-top),
     inset 0 -16px 32px rgba(0, 0, 0, 0.35),
     0 8px 32px rgba(0, 0, 0, 0.35),
-    0 0 36px rgba(245, 197, 92, 0.14) !important;
+    0 0 42px rgba(245, 197, 92, 0.2) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priorities-card {
-  border-color: rgba(245, 197, 92, 0.24) !important;
+  border-color: rgba(245, 197, 92, 0.32) !important;
   box-shadow:
     var(--ceo-mat-inset-top),
     inset 0 -16px 32px rgba(0, 0, 0, 0.35),
     0 8px 32px rgba(0, 0, 0, 0.35),
-    0 0 28px rgba(212, 175, 55, 0.1) !important;
+    0 0 36px rgba(212, 175, 55, 0.16) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-dot {
-  background: rgba(245, 197, 92, 0.78) !important;
-  box-shadow: 0 0 10px rgba(245, 197, 92, 0.42) !important;
+  background: rgba(245, 197, 92, 0.88) !important;
+  box-shadow: 0 0 12px rgba(245, 197, 92, 0.52) !important;
 }
 
 /* ——— Operational modules (decision / intelligence / readiness) ——— */
@@ -280,8 +280,8 @@
     var(--ceo-mat-inset-top),
     var(--ceo-mat-inset-depth),
     0 16px 44px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 214, 112, 0.08),
-    0 0 24px rgba(245, 197, 92, 0.06) !important;
+    0 0 0 1px rgba(255, 214, 112, 0.14),
+    0 0 32px rgba(245, 197, 92, 0.1) !important;
   padding: 22px 20px !important;
   transition: transform 200ms ease, box-shadow 200ms ease !important;
 }
@@ -297,7 +297,7 @@
   box-shadow:
     var(--ceo-mat-inset-top),
     0 18px 48px rgba(0, 0, 0, 0.48),
-    0 0 32px rgba(245, 197, 92, 0.1) !important;
+    0 0 40px rgba(245, 197, 92, 0.14) !important;
 }
 
 /* C.24.5I — Module Readiness parent shell: opaque black/charcoal (no navy bleed) */
@@ -306,11 +306,11 @@
   border: 1px solid var(--ceo-mat-gold-border) !important;
   background-color: #050504 !important;
   background-image:
-    radial-gradient(ellipse 92% 58% at 50% 0%, rgba(245, 197, 92, 0.09), transparent 58%),
+    radial-gradient(ellipse 92% 58% at 50% 0%, rgba(245, 197, 92, 0.14), transparent 58%),
     linear-gradient(180deg, #0b0a09 0%, #060606 52%, #040404 100%) !important;
   box-shadow:
-    inset 0 1px 0 rgba(245, 197, 92, 0.14),
-    0 0 40px rgba(245, 197, 92, 0.08),
+    inset 0 1px 0 rgba(245, 197, 92, 0.2),
+    0 0 48px rgba(245, 197, 92, 0.12),
     0 14px 40px rgba(0, 0, 0, 0.45) !important;
   padding: 18px 16px 16px !important;
   gap: 16px !important;
@@ -321,12 +321,12 @@
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card {
   background: rgba(8, 7, 6, 0.28) !important;
-  border: 1px solid color-mix(in srgb, var(--branch-tone, rgba(212, 175, 55, 0.35)) 36%, rgba(255, 255, 255, 0.04)) !important;
-  border-top: 2px solid color-mix(in srgb, var(--branch-tone, rgba(212, 175, 55, 0.5)) 44%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--branch-tone, rgba(212, 175, 55, 0.35)) 44%, rgba(255, 255, 255, 0.04)) !important;
+  border-top: 2px solid color-mix(in srgb, var(--branch-tone, rgba(212, 175, 55, 0.5)) 52%, transparent) !important;
   border-radius: 14px !important;
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--branch-tone, rgba(212, 175, 55, 0.4)) 18%, transparent),
-    0 0 16px color-mix(in srgb, var(--branch-tone, rgba(212, 175, 55, 0.5)) 10%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--branch-tone, rgba(212, 175, 55, 0.4)) 24%, transparent),
+    0 0 20px color-mix(in srgb, var(--branch-tone, rgba(212, 175, 55, 0.5)) 16%, transparent),
     0 8px 24px rgba(0, 0, 0, 0.28) !important;
   padding: 18px 14px 16px 16px !important;
   transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease !important;
@@ -357,7 +357,7 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid .ceo-command-card-kicker {
-  color: color-mix(in srgb, var(--branch-tone, rgba(243, 218, 138, 0.72)) 72%, rgba(248, 243, 231, 0.88)) !important;
+  color: color-mix(in srgb, var(--branch-tone, rgba(243, 218, 138, 0.72)) 82%, rgba(248, 243, 231, 0.88)) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card strong {
@@ -375,7 +375,7 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card-kicker {
   font-size: 0.78rem !important;
   line-height: 1.45 !important;
-  color: rgba(243, 218, 138, 0.72) !important;
+  color: rgba(243, 218, 138, 0.84) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card-kicker,
@@ -404,7 +404,7 @@
   box-shadow: none !important;
   font-size: 0.78rem !important;
   line-height: 1.45 !important;
-  color: rgba(243, 218, 138, 0.74) !important;
+  color: rgba(243, 218, 138, 0.86) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-score-row strong {
@@ -426,11 +426,11 @@
   border: 1px solid var(--ceo-mat-gold-border-soft) !important;
   border-radius: 20px !important;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245, 197, 92, 0.12), transparent 58%),
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245, 197, 92, 0.16), transparent 58%),
     linear-gradient(165deg, #0e0d0b, #050505) !important;
   box-shadow:
-    inset 0 1px 0 rgba(245, 197, 92, 0.12),
-    0 0 36px rgba(245, 197, 92, 0.08),
+    inset 0 1px 0 rgba(245, 197, 92, 0.18),
+    0 0 44px rgba(245, 197, 92, 0.12),
     0 14px 40px rgba(0, 0, 0, 0.42) !important;
 }
 
@@ -454,13 +454,13 @@
   border-radius: 24px !important;
   border: 1px solid var(--ceo-mat-gold-border-soft) !important;
   background:
-    radial-gradient(circle at 50% 42%, rgba(245, 197, 92, 0.14), transparent 58%),
+    radial-gradient(circle at 50% 42%, rgba(245, 197, 92, 0.2), transparent 58%),
     linear-gradient(180deg, #0c0b0a, #040404) !important;
   box-shadow:
     var(--ceo-mat-shadow-lift),
     var(--ceo-mat-inset-top),
-    inset 0 0 100px rgba(245, 197, 92, 0.08),
-    0 0 36px rgba(245, 197, 92, 0.08) !important;
+    inset 0 0 100px rgba(245, 197, 92, 0.12),
+    0 0 48px rgba(245, 197, 92, 0.14) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-svg {
@@ -484,7 +484,7 @@
   border-radius: 22px !important;
   border: 1px solid var(--ceo-mat-gold-border-soft) !important;
   background:
-    radial-gradient(ellipse 85% 70% at 12% 0%, rgba(245, 197, 92, 0.1), transparent 56%),
+    radial-gradient(ellipse 85% 70% at 12% 0%, rgba(245, 197, 92, 0.14), transparent 56%),
     linear-gradient(165deg, #121110, #060605) !important;
   box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 14px 38px rgba(0, 0, 0, 0.42) !important;
 }
@@ -497,7 +497,7 @@
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-legend-item {
   padding: 8px 0 !important;
-  border-top: 1px solid rgba(212, 175, 55, 0.055) !important;
+  border-top: 1px solid rgba(212, 175, 55, 0.1) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-legend-item:first-child {
@@ -543,7 +543,7 @@
   background: var(--ceo-mat-module) !important;
   border: 1px solid var(--ceo-mat-gold-border-soft) !important;
   border-radius: 16px !important;
-  border-top: 2px solid rgba(245, 197, 92, 0.28) !important;
+  border-top: 2px solid rgba(245, 197, 92, 0.38) !important;
   box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 8px 28px rgba(0, 0, 0, 0.38) !important;
   padding: 20px 16px 18px !important;
   min-height: 120px !important;
@@ -556,14 +556,14 @@
   height: 5px !important;
   margin-right: 6px !important;
   border-radius: 999px !important;
-  background: rgba(245, 197, 92, 0.72) !important;
-  box-shadow: 0 0 10px rgba(245, 197, 92, 0.38) !important;
+  background: rgba(245, 197, 92, 0.82) !important;
+  box-shadow: 0 0 12px rgba(245, 197, 92, 0.48) !important;
   vertical-align: middle !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step .ceo-step-eyebrow {
   font-size: 0.76rem !important;
-  color: rgba(243, 218, 138, 0.65) !important;
+  color: rgba(243, 218, 138, 0.78) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step strong {
@@ -702,7 +702,7 @@
   width: auto !important;
   height: auto !important;
   padding: 0 !important;
-  color: rgba(245, 197, 92, 0.78) !important;
+  color: rgba(245, 197, 92, 0.9) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card-kicker.ceo-card-kicker-row::before {
@@ -724,7 +724,7 @@
   left: 0 !important;
   right: 0 !important;
   height: 2px !important;
-  background: linear-gradient(90deg, rgba(245, 197, 92, 0.42), rgba(212, 175, 55, 0.16) 42%, transparent 78%) !important;
+  background: linear-gradient(90deg, rgba(245, 197, 92, 0.55), rgba(212, 175, 55, 0.22) 42%, transparent 78%) !important;
   pointer-events: none !important;
 }
 
@@ -771,7 +771,7 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-item,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-recommended-action-item {
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.14);
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-head {
@@ -813,13 +813,14 @@
   margin-bottom: 12px !important;
   padding: 12px 14px 10px !important;
   border-radius: 14px !important;
-  border: 1px solid rgba(245, 197, 92, 0.2) !important;
+  border: 1px solid rgba(245, 197, 92, 0.3) !important;
   background-color: #050504 !important;
   background-image:
-    radial-gradient(ellipse 88% 52% at 50% 0%, rgba(245, 197, 92, 0.09), transparent 58%),
+    radial-gradient(ellipse 88% 52% at 50% 0%, rgba(245, 197, 92, 0.14), transparent 58%),
     linear-gradient(180deg, #0a0908 0%, #050504 100%) !important;
   box-shadow:
-    inset 0 1px 0 rgba(245, 197, 92, 0.12),
+    inset 0 1px 0 rgba(245, 197, 92, 0.18),
+    0 0 32px rgba(245, 197, 92, 0.08),
     0 8px 24px rgba(0, 0, 0, 0.35) !important;
   isolation: isolate !important;
 }
@@ -873,13 +874,14 @@
   max-width: min(720px, 100%) !important;
   padding: 16px 18px 14px !important;
   border-radius: 16px !important;
-  border: 1px solid rgba(245, 197, 92, 0.22) !important;
+  border: 1px solid rgba(245, 197, 92, 0.32) !important;
   background-color: #050504 !important;
   background-image:
-    radial-gradient(ellipse 88% 52% at 50% 0%, rgba(245, 197, 92, 0.09), transparent 58%),
+    radial-gradient(ellipse 88% 52% at 50% 0%, rgba(245, 197, 92, 0.14), transparent 58%),
     linear-gradient(180deg, #0a0908 0%, #050504 100%) !important;
   box-shadow:
-    inset 0 1px 0 rgba(245, 197, 92, 0.12),
+    inset 0 1px 0 rgba(245, 197, 92, 0.18),
+    0 0 36px rgba(245, 197, 92, 0.1),
     0 10px 28px rgba(0, 0, 0, 0.38) !important;
 }
 
@@ -913,8 +915,8 @@
   height: 5px !important;
   margin-top: 7px !important;
   border-radius: 999px !important;
-  background: rgba(245, 197, 92, 0.72) !important;
-  box-shadow: 0 0 6px rgba(245, 197, 92, 0.35) !important;
+  background: rgba(245, 197, 92, 0.86) !important;
+  box-shadow: 0 0 10px rgba(245, 197, 92, 0.48) !important;
 }
 
 @media (max-width: 960px) {
