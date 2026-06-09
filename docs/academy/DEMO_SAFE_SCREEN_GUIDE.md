@@ -441,3 +441,13 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 35/35. Presentation-only.
 
+### C.24.7B demo safety note
+
+**Baseline:** `c684b2c`.
+
+**Recording-safe result:** Suite-wide surfaces read as black premium charcoal; branch color accents still visible on M&A/Funding/Compliance/Risk modules; CEO blockers and board readiness no longer show navy/blue panel bleed.
+
+**Do not say:** All navy removed everywhere (module inline styles may remain until C.24.7C).
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7. Presentation-only; no data/backend changes.
+

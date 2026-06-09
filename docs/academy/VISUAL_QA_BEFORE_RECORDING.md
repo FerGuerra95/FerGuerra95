@@ -728,3 +728,14 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Board readiness summary: integrated mini-card above workflow; readable bullets with gold dots; not tiny/isolated.
 - Hero, radar, branch cards 5+5, decision queue unchanged.
 - Validation: build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.
+
+### C.24.7B Global Black Premium Surface Token Migration checklist
+
+- Baseline `c684b2c`; token-only migration at design-system root.
+- Global surfaces: warm black/charcoal (`#080807`, `#0D0C0A`, `#11100D`); no navy SaaS base.
+- Branch accents: emerald/cyan/blue/purple/red/orange preserved on progress, dots, charts, icons — not as global surface.
+- CEO Overview: blockers + board readiness mini-card — no navy bleed, no blue `::before` halo.
+- Hero, lion, radar visual, branch cards 5+5, decision queue layout unchanged.
+- Hard-refresh smoke: `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/compliance/dashboard`, `/risk/register`, `/governance/dashboard`, `/pmi/dashboard`, `/reporting/library`, `/login`.
+- Validation: build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.
+- Remaining inline module navy → C.24.7C if needed.

@@ -6,10 +6,10 @@
 
 :root {
   --ceos-polish-bg: #000000;
-  --ceos-polish-surface: rgba(11, 15, 25, 0.92);
-  --ceos-polish-surface-soft: rgba(15, 23, 42, 0.72);
-  --ceos-polish-line: rgba(148, 163, 184, 0.13);
-  --ceos-polish-line-soft: rgba(148, 163, 184, 0.08);
+  --ceos-polish-surface: rgba(5, 5, 5, 0.98);
+  --ceos-polish-surface-soft: rgba(8, 7, 6, 0.92);
+  --ceos-polish-line: rgba(212, 175, 55, 0.14);
+  --ceos-polish-line-soft: rgba(212, 175, 55, 0.08);
   --ceos-polish-radius: 22px;
   --ceos-polish-radius-lg: 28px;
 }
@@ -72,7 +72,6 @@ h4 {
   [class*="panel"],
   [class*="card"],
   [class*="box"],
-  [class*="block"],
   [class*="metric"],
   [class*="kpi"],
   [class*="command-item"],
@@ -98,7 +97,6 @@ h4 {
   [class*="card"],
   [class*="panel"],
   [class*="box"],
-  [class*="block"],
   [class*="metric"]
 ):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card):not(.ceo-command-hero):not(.ceo-lion-mark-wrap):not(.ceo-executive-command-page)::before,
 .page :is(
@@ -106,7 +104,6 @@ h4 {
   [class*="card"],
   [class*="panel"],
   [class*="box"],
-  [class*="block"],
   [class*="metric"]
 ):not(.ceos-executive-inner-surface):not(.ceos-ws-hero):not(.ceos-ws-panel):not(.ceos-ws-card-accent):not(.ma-signal-card):not(.ma-pipeline-signal-card):not(.waterfall-signal-card):not(.buyer-signal-card):not(.deals-signal-card):not(.ceo-command-hero):not(.ceo-lion-mark-wrap):not(.ceo-executive-command-page)::after {
   display: none !important;
@@ -118,7 +115,6 @@ h4 {
   [class*="panel"],
   [class*="card"],
   [class*="box"],
-  [class*="block"],
   [class*="metric"],
   [class*="kpi"],
   [class*="command-item"],
@@ -131,8 +127,8 @@ h4 {
 }
 
 .page :is([class*="panel"], [class*="card"]):not(.ceos-executive-inner-surface):not(.ceo-executive-command-page)
-  :is([class*="card"], [class*="box"], [class*="block"], [class*="metric"]):not(.ceos-executive-inner-surface):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-workflow-step):not(.executive-radar-panel):not(.ceo-radar-visual-wrap):not(.ceo-decision-card-priority):not(.ceo-decision-card-status):not(.ceo-command-card-kicker):not(.ceo-module-readiness-block):not(.ceo-module-readiness-grid):not(.ceo-gold-card-icon):not(.ceo-card-title-row):not(.ceo-card-kicker-row):not(.ceo-readiness-blockers-compact):not(.ceo-readiness-blockers-head):not(.ceo-readiness-blockers-subtitle):not(.ceo-blockers-compact-list):not(.ceo-blocker-compact-item):not(.ceo-blocker-compact-branch):not(.ceo-blocker-compact-line):not(.ceo-blockers-overflow-note):not(.ceo-board-readiness-mini-card):not(.ceo-board-readiness-mini-head):not(.ceo-board-readiness-status-line):not(.ceo-board-readiness-compact-lines):not(.ceo-board-readiness-bullet):not(.ceo-workflow-board-stack) {
-  background: rgba(2, 6, 23, 0.26) !important;
+  :is([class*="card"], [class*="box"], [class*="metric"]):not(.ceos-executive-inner-surface):not(.ceo-command-card):not(.ceo-readiness-card):not(.ceo-priorities-card):not(.ceo-workflow-step):not(.executive-radar-panel):not(.ceo-radar-visual-wrap):not(.ceo-decision-card-priority):not(.ceo-decision-card-status):not(.ceo-command-card-kicker):not(.ceo-module-readiness-block):not(.ceo-module-readiness-grid):not(.ceo-gold-card-icon):not(.ceo-card-title-row):not(.ceo-card-kicker-row):not(.ceo-readiness-blockers-compact):not(.ceo-readiness-blockers-head):not(.ceo-readiness-blockers-subtitle):not(.ceo-blockers-compact-list):not(.ceo-blocker-compact-item):not(.ceo-blocker-compact-branch):not(.ceo-blocker-compact-line):not(.ceo-blockers-overflow-note):not(.ceo-board-readiness-mini-card):not(.ceo-board-readiness-mini-head):not(.ceo-board-readiness-status-line):not(.ceo-board-readiness-compact-lines):not(.ceo-board-readiness-bullet):not(.ceo-workflow-board-stack) {
+  background: rgba(8, 7, 6, 0.4) !important;
   border-color: var(--ceos-polish-line-soft) !important;
 }
 
@@ -159,7 +155,7 @@ textarea,
 .button.danger,
 .button.warning,
 .button.success {
-  background: rgba(2, 6, 23, 0.72) !important;
+  background: rgba(8, 7, 6, 0.72) !important;
 }
 
 .button.primary {
@@ -174,7 +170,7 @@ textarea,
 }
 
 .ceos-main-build-strip {
-  background: rgba(2, 6, 23, 0.88) !important;
+  background: rgba(8, 7, 6, 0.88) !important;
   border-color: rgba(148, 163, 184, 0.12) !important;
 }
 
@@ -190,7 +186,7 @@ textarea,
 
 .ceos-workspace-card,
 .ceos-build-card {
-  background: rgba(2, 6, 23, 0.54) !important;
+  background: rgba(8, 7, 6, 0.54) !important;
   border-color: rgba(212, 175, 55, 0.12) !important;
 }
 
@@ -233,8 +229,8 @@ textarea,
   padding: 34px !important;
   border-radius: var(--ceos-polish-radius-lg) !important;
   background:
-    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(5, 10, 18, 0.98)) !important;
-  border-color: rgba(148, 163, 184, 0.14) !important;
+    linear-gradient(135deg, #11100d 0%, #080807 52%, #050505 100%) !important;
+  border-color: rgba(212, 175, 55, 0.14) !important;
 }
 
 .ma-executive-page :is(.ma-title),
@@ -286,7 +282,7 @@ textarea,
 }
 
 .ma-bridge-row {
-  background: rgba(2, 6, 23, 0.24) !important;
+  background: rgba(8, 7, 6, 0.4) !important;
 }
 
 .ma-bridge-number,
@@ -569,12 +565,12 @@ textarea,
 */
 
 :root {
-  --ma-enterprise-bg: #02040a;
-  --ma-enterprise-surface: rgba(10, 15, 25, 0.94);
-  --ma-enterprise-surface-2: rgba(15, 23, 42, 0.86);
-  --ma-enterprise-surface-3: rgba(2, 6, 23, 0.44);
-  --ma-enterprise-line: rgba(148, 163, 184, 0.14);
-  --ma-enterprise-line-strong: rgba(148, 163, 184, 0.22);
+  --ma-enterprise-bg: #050505;
+  --ma-enterprise-surface: rgba(8, 7, 6, 0.94);
+  --ma-enterprise-surface-2: rgba(13, 12, 10, 0.86);
+  --ma-enterprise-surface-3: rgba(8, 7, 6, 0.44);
+  --ma-enterprise-line: rgba(212, 175, 55, 0.14);
+  --ma-enterprise-line-strong: rgba(212, 175, 55, 0.22);
   --ma-enterprise-text: rgba(248, 250, 252, 0.96);
   --ma-enterprise-muted: rgba(203, 213, 225, 0.68);
   --ma-enterprise-accent: #20c997;
@@ -615,7 +611,7 @@ textarea,
   padding: 28px !important;
   border-radius: 20px !important;
   background:
-    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98)) !important;
+    linear-gradient(135deg, #11100d 0%, #080807 52%, #050505 100%) !important;
   border: 1px solid var(--ma-enterprise-line-strong) !important;
 }
 

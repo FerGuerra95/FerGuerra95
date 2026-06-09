@@ -35,10 +35,10 @@ function buildTheme(rgb, label, overrides = {}) {
     overrides.accentSurfaceStrong ?? `rgba(${rgb}, 0.16)`;
   const heroGradient =
     overrides.heroGradient ??
-    `linear-gradient(135deg, rgba(${rgb}, 0.20) 0%, rgba(3, 7, 18, 0.94) 48%, rgba(15, 23, 42, 0.97) 100%)`;
+    `linear-gradient(135deg, rgba(${rgb}, 0.18) 0%, #050505 52%, #080807 100%)`;
   const cardGradient =
     overrides.cardGradient ??
-    `linear-gradient(145deg, rgba(${rgb}, 0.12) 0%, rgba(15, 23, 42, 0.90) 55%, rgba(2, 6, 23, 0.92) 100%)`;
+    `linear-gradient(145deg, rgba(${rgb}, 0.12) 0%, #0a0908 55%, #050504 100%)`;
   const iconSurface =
     overrides.iconSurface ??
     `linear-gradient(135deg, rgba(${rgb}, 0.22), rgba(${rgb}, 0.06))`;
@@ -100,9 +100,9 @@ export const WORKSPACE_THEMES = {
     accentSurface: 'rgba(220, 38, 38, 0.08)',
     accentSurfaceStrong: 'rgba(220, 38, 38, 0.11)',
     heroGradient:
-      'linear-gradient(135deg, rgba(220, 38, 38, 0.12) 0%, rgba(10, 4, 6, 0.96) 52%, rgba(15, 23, 42, 0.98) 100%)',
+      'linear-gradient(135deg, rgba(220, 38, 38, 0.12) 0%, #0a0406 52%, #080707 100%)',
     cardGradient:
-      'linear-gradient(145deg, rgba(220, 38, 38, 0.08) 0%, rgba(15, 23, 42, 0.92) 58%, rgba(6, 3, 4, 0.94) 100%)',
+      'linear-gradient(145deg, rgba(220, 38, 38, 0.08) 0%, #0a0908 58%, #050404 100%)',
     iconSurface:
       'linear-gradient(135deg, rgba(220, 38, 38, 0.16), rgba(220, 38, 38, 0.05))'
   }),

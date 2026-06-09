@@ -1,8 +1,8 @@
 :root {
   --bg: #000000;
-  --surface: #05070d;
-  --surface-2: #070a12;
-  --surface-3: #0a0e18;
+  --surface: #080807;
+  --surface-2: #0D0C0A;
+  --surface-3: #11100D;
   --surface-glass: rgba(255,255,255,0.035);
   --border: rgba(255,255,255,0.065);
   --border-strong: rgba(255,255,255,0.115);

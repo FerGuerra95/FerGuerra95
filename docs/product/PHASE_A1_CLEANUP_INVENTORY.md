@@ -8530,3 +8530,36 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Board readiness:** Wider integrated mini-card (720px), gold bullets, clearer status head.
 
 **Tests:** `ceoOverviewTruthfulness` 35/35; build PASS.
+
+---
+
+## C.24.7B — Global Black Premium Surface Token Migration
+
+**Status:** COMPLETED.
+
+**Baseline:** `c684b2c` (HEAD = origin/main).
+
+**Scope:** Token-only migration at design-system root — global navy/blue surfaces → black premium charcoal; branch accent RGB preserved; no logic/backend/formula changes; module JSX inline styles deferred to C.24.7C.
+
+**Tokens migrated:**
+
+| File | Token/selector | Before | After |
+|---|---|---|---|
+| `src/styles.css` | `--surface` / `--surface-2` / `--surface-3` | `#05070d` / `#070a12` / `#0a0e18` | `#080807` / `#0D0C0A` / `#11100D` |
+| `workspaceTheme.js` | `buildTheme()` hero/card gradients | navy tail `rgba(15,23,42)` / `rgba(2,6,23)` | `#050505`→`#080807` / `#0a0908`→`#050504` |
+| `workspaceTheme.js` | risk branch override gradients | navy tail | black/charcoal tail |
+| `executivePolish.css` | polish surface tokens + M&A enterprise surfaces | navy `rgba(15,23,42)` | `rgba(5,5,5,0.98)` / `rgba(8,7,6,0.92)` |
+| `executivePolish.css` | `[class*="block"]` flatten | broad substring navy bleed | removed from flatten selectors |
+| `workspaceAccent.css` | `--ws-hero-gradient` / `--ws-card-gradient` defaults | navy tail | black/charcoal tail |
+| `workspaceAccent.css` | `.ceos-executive-inner-surface` + `::before` | `rgba(15,23,42)` + blue radial | `#0a0908` charcoal + gold ambient |
+| `ExecutiveCommandCenterView.jsx` | blockers/board cards | `ceos-executive-inner-surface` (re-applied navy) | overview-only black/gold classes |
+
+**Branch accents preserved:** all `workspaceTheme.js` branch RGB maps; `--branch-tone`; `getCeoBranchAccentHex()`; compliance blue, funding cyan, risk red progress/chart accents; danger/warning/info/success; gold system.
+
+**CEO Overview fix:** removed `ceos-executive-inner-surface` from blockers and board readiness cards; `ceoMaterialSystem.css` black premium styles apply without blue `::before` bleed.
+
+**Visual smoke routes:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/ma/valuation`, `/funding/dashboard`, `/compliance/dashboard`, `/risk/register`, `/governance/dashboard`, `/pmi/dashboard`, `/reporting/library`, `/login`.
+
+**Tests:** `npm run build` PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.
+
+**Remaining C.24.7C:** per-module JSX inline `rgba(15,23,42,…)` navy in module pages (50+ files) — not touched in this phase.

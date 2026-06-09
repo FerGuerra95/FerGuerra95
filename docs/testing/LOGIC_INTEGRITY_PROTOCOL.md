@@ -2739,3 +2739,21 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Integrity:** Blocker dedup unchanged; visible cap reduced to 4 with `prioritizeExecutiveBlockers`; `additionalCount` preserved; N/A / Pending inputs / human review language unchanged; no approved/certified copy.
 
 **Tests:** 35/35 `ceoOverviewTruthfulness`; build PASS.
+
+---
+
+## C.24.7B — Global Black Premium Surface Token Migration
+
+**Status:** COMPLETED (presentation-only).
+
+**Baseline:** `c684b2c`.
+
+**Integrity:** No formula, score, metric, backend, Golden Dataset, or Formula Registry changes. N/A / Pending inputs preserved; no fake 0. Branch accent RGB unchanged.
+
+**Files:** `styles.css`, `workspaceTheme.js`, `executivePolish.css`, `workspaceAccent.css`, `ExecutiveCommandCenterView.jsx` (class removal only).
+
+**CEO fix:** blockers/board readiness no longer inherit `ceos-executive-inner-surface` navy + blue `::before`.
+
+**Tests:** build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.
+
+**Deferred:** C.24.7C — module JSX inline navy cleanup if visual smoke shows per-module bleed.

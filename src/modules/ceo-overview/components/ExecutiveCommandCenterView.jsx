@@ -1932,7 +1932,7 @@ export function ExecutiveCommandCenterView({
           title="Module Readiness Overview"
           description="Branch readiness scores from existing DSS signals. Missing data remains N/A."
         >
-          <article className="ceo-readiness-blockers-compact ceos-executive-inner-surface">
+          <article className="ceo-readiness-blockers-compact">
             <div className="ceo-readiness-blockers-head">
               <div className="ceo-command-card-kicker">Executive Readiness Blockers</div>
               <p className="ceo-readiness-blockers-subtitle">
@@ -2025,7 +2025,7 @@ export function ExecutiveCommandCenterView({
           description="Draft-first workflow. Human review required before any distribution."
         >
           <div className="ceo-workflow-board-stack">
-            <article className="ceo-board-readiness-mini-card ceos-executive-inner-surface">
+            <article className="ceo-board-readiness-mini-card">
               <div className="ceo-board-readiness-mini-head">
                 <div className="ceo-command-card-kicker">Board readiness summary</div>
                 <p className="ceo-board-readiness-status-line">

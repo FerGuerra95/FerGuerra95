@@ -600,3 +600,29 @@
 | `/governance/dashboard` | PASS | No regression |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.
+
+---
+
+## 31. C.24.7B — Global Black Premium Surface Token Migration
+
+**Baseline:** `c684b2c`.
+
+**Change type:** Root design-system surface tokens navy → black premium charcoal; branch accents preserved as local tints; CEO blockers/board readiness blue bleed eliminated.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Global surface warmer black; branch accents intact |
+| `/ceo/overview` | PASS | Blockers/board readiness no navy/blue bleed; hero/radar/branch cards intact |
+| `/ma/dashboard` | PASS | Hero/panels charcoal base; emerald accent preserved |
+| `/ma/valuation` | PASS | No layout break |
+| `/funding/dashboard` | PASS | Cyan accent preserved; base black/charcoal |
+| `/compliance/dashboard` | PASS | Blue branch accent preserved; surface not navy SaaS |
+| `/risk/register` | PASS | Red accent preserved |
+| `/governance/dashboard` | PASS | Branch accent preserved |
+| `/pmi/dashboard` | PASS | No dominant blue base |
+| `/reporting/library` | PASS | No regression |
+| `/login` | PASS | No evident rupture |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 35/35; `fundingDisplayFormat` 7/7.
+
+**Remaining:** per-module JSX inline navy deferred to C.24.7C.
