@@ -7,6 +7,7 @@ import {
   buildExecutiveLiveDecisionQueueItems,
   buildExecutivePriorityRows,
   buildExecutiveRecommendedActions,
+  summarizeExecutiveInputBlockers,
   buildInsufficientFallbackModuleCards,
   buildRadarAxis,
   estimateMaFinancialRadar,
@@ -332,6 +333,35 @@ describe('CEO overview truthfulness helpers', () => {
     expect(blockers.some((item) => item.branch === 'Funding')).toBe(true);
   });
 
+  it('deduplicates blockers to one row per module when sources overlap', () => {
+    const blockers = buildExecutiveInputBlockers({
+      readiness: { missingData: ['funding'], insufficientModules: ['funding'] },
+      moduleOverviews: {
+        funding: { score: null, posture: 'insufficient_data', scoreDisplay: 'Pending inputs' }
+      }
+    });
+
+    expect(blockers).toHaveLength(1);
+    expect(blockers[0].branch).toBe('Funding');
+    expect(blockers[0].description).toMatch(/pending/i);
+    expect(blockers[0].effect).toBe('Blocks complete executive posture');
+  });
+
+  it('caps visible blockers while preserving additional count', () => {
+    const blockers = buildExecutiveInputBlockers({
+      readiness: {
+        missingData: ['ma', 'funding', 'compliance', 'risk', 'pmi', 'governance', 'strategy'],
+        insufficientModules: []
+      },
+      moduleOverviews: {}
+    });
+    const summary = summarizeExecutiveInputBlockers(blockers, { maxVisible: 6 });
+
+    expect(summary.blockers).toHaveLength(6);
+    expect(summary.total).toBe(7);
+    expect(summary.additionalCount).toBe(1);
+  });
+
   it('shows no blockers identified only when blocker sources are empty', () => {
     const blockers = buildExecutiveInputBlockers({
       readiness: { missingData: [], insufficientModules: [] },
@@ -393,6 +423,19 @@ describe('CEO overview truthfulness helpers', () => {
     expect(rows[0].label).toBe('Governance');
     expect(rows[0].isInformational).toBe(false);
     expect(rows.some((row) => row.label === 'Decision quality')).toBe(false);
+  });
+
+  it('does not emit approved or certified copy in board readiness summary', () => {
+    const board = buildExecutiveBoardReadinessSummary({
+      boardView: { humanReviewRequired: true, reportingReadiness: 72 },
+      readiness: { score: 80, missingData: [], humanReviewRequired: true },
+      briefingDraftPrepared: true
+    });
+    const serialized = JSON.stringify(board);
+
+    expect(serialized).not.toMatch(/approved/i);
+    expect(serialized).not.toMatch(/certified/i);
+    expect(board.compactSummaryLines.length).toBeGreaterThan(0);
   });
 
   it('does not emit since last review or cost of inaction copy in decision intelligence helpers', () => {

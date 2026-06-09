@@ -758,8 +758,8 @@
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-list,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-recommended-actions-list,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blockers-list,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-bullets {
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blockers-compact-list,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-compact-lines {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -769,8 +769,7 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-item,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-recommended-action-item,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blocker-item {
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-recommended-action-item {
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(212, 175, 55, 0.08);
 }
@@ -793,7 +792,8 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-action,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-panel-fallback,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-informational-note,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-fallback {
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-blockers-subtitle,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blockers-overflow-note {
   margin: 6px 0 0;
   font-size: 13px;
   color: rgba(248, 243, 231, 0.62);
@@ -807,28 +807,98 @@
   text-decoration: none;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blockers-panel {
-  margin-bottom: 16px;
+/* ——— C.24.6C compact executive intelligence panels ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-blockers-compact {
+  margin-bottom: 14px;
+  padding: 14px 16px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(245, 197, 92, 0.16);
+  background:
+    linear-gradient(180deg, rgba(8, 7, 6, 0.98) 0%, rgba(5, 5, 5, 0.98) 100%);
+  box-shadow: inset 0 1px 0 rgba(245, 197, 92, 0.08);
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blocker-effect {
-  font-size: 11px;
-  color: rgba(248, 243, 231, 0.52);
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-blockers-head {
+  margin-bottom: 10px;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-panel {
-  margin-bottom: 16px;
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-blockers-subtitle {
+  margin-top: 4px;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-status {
-  margin: 8px 0 0;
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blockers-compact-list {
+  gap: 8px;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-bullets li {
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blocker-compact-item {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
+  padding: 8px 0;
+  border-bottom: none;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blocker-compact-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blocker-compact-branch {
+  font-size: 14px;
+  color: rgba(248, 243, 231, 0.94);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blocker-compact-description,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blocker-compact-effect {
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(248, 243, 231, 0.58);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blocker-compact-link {
+  flex: 0 0 auto;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: rgba(245, 197, 92, 0.82);
+  text-decoration: none;
+  padding-top: 2px;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-board-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-mini-card {
+  max-width: 520px;
+  padding: 14px 16px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(245, 197, 92, 0.16);
+  background:
+    linear-gradient(180deg, rgba(8, 7, 6, 0.98) 0%, rgba(5, 5, 5, 0.98) 100%);
+  box-shadow: inset 0 1px 0 rgba(245, 197, 92, 0.08);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-status-line {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: rgba(248, 243, 231, 0.82);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-compact-lines {
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-compact-lines li {
   font-size: 13px;
+  line-height: 1.45;
+  color: rgba(248, 243, 231, 0.68);
 }
 
 @media (max-width: 960px) {

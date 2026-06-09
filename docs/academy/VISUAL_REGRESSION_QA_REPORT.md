@@ -560,3 +560,24 @@
 | `/governance/dashboard` | PASS | No regression quick check |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 30/30; `fundingDisplayFormat` 7/7.
+
+---
+
+## 29. C.24.6C — Executive Intelligence Layout Compression
+
+**Baseline:** `0bae8e1`.
+
+**Change type:** Layout compression for C.24.6B panels — blockers deduped/capped; board readiness mini-card integrated above workflow.
+
+**Runtime selectors:** `.ceo-readiness-blockers-compact`, `.ceo-blockers-compact-list`, `.ceo-board-readiness-mini-card`, `.ceo-workflow-board-stack`.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | Blockers compact; board readiness card integrated |
+| `/ceo/overview` | PASS | No hero/radar/branch-card regression |
+| `/ma/dashboard` | PASS | No regression quick check |
+| `/funding/dashboard` | PASS | No regression quick check |
+| `/risk/register` | PASS | No regression quick check |
+| `/governance/dashboard` | PASS | No regression quick check |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 33/33; `fundingDisplayFormat` 7/7.

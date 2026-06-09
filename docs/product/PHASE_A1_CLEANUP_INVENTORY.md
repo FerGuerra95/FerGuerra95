@@ -8498,3 +8498,19 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Tests:** `ceoOverviewTruthfulness` 30/30; `fundingDisplayFormat` 7/7; `npm run build` PASS.
 
 **Visual QA:** `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` — no hero/radar/branch-card redesign; new compact panels visible in Sections 02, 04, 05.
+
+---
+
+## C.24.6C — Executive Intelligence Layout Compression
+
+**Status:** COMPLETED.
+
+**Baseline:** `0bae8e1`.
+
+**Scope:** Compress and reorder C.24.6B intelligence panels only — no new data, no backend, no hero/radar/branch-card changes.
+
+**Blockers:** Renamed to **Executive Readiness Blockers**; deduplicated one row per module; capped at 6 visible with `+X additional blockers require review`; opaque black/gold compact card (no navy table/grid).
+
+**Board readiness:** Integrated mini-card above workflow steps with status + compact summary lines.
+
+**Tests:** `ceoOverviewTruthfulness` 33/33; `fundingDisplayFormat` 7/7; build PASS.

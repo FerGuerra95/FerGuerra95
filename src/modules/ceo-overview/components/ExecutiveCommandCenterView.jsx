@@ -25,6 +25,7 @@ import {
   buildExecutiveInputBlockers,
   buildExecutiveLiveDecisionQueueItems,
   buildExecutiveRecommendedActions,
+  summarizeExecutiveInputBlockers,
   formatModuleScoreDisplay,
   formatScoreLabel,
   normalizeScoreOrNull
@@ -1706,6 +1707,7 @@ export function ExecutiveCommandCenterView({
       heritage: heritageOverview
     }
   });
+  const blockerSummary = summarizeExecutiveInputBlockers(inputBlockers, { maxVisible: 6 });
   const boardReadinessSummary = buildExecutiveBoardReadinessSummary({
     boardView: commandBoardView,
     readiness: commandReadiness,
@@ -1930,25 +1932,38 @@ export function ExecutiveCommandCenterView({
           description="Branch readiness scores from existing DSS signals. Missing data remains N/A."
         >
           <div className="ceo-module-readiness-block">
-          <article className="ceo-command-card ceo-blockers-panel">
-            <div className="ceo-command-card-kicker">Blocked by Missing Inputs</div>
-            {inputBlockers.length ? (
-              <ul className="ceo-blockers-list">
-                {inputBlockers.map((blocker) => (
-                  <li key={`${blocker.branch}-${blocker.description}`} className="ceo-blocker-item">
-                    <div className="ceo-live-queue-head">
-                      <strong>{blocker.branch}</strong>
-                      <span className="ceo-blocker-effect">{blocker.effect}</span>
-                    </div>
-                    <p className="ceo-live-queue-meta">{blocker.description}</p>
-                    {blocker.route ? (
-                      <Link to={blocker.route} className="ceo-live-queue-link">
-                        Open module
-                      </Link>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
+          <article className="ceo-readiness-blockers-compact">
+            <div className="ceo-readiness-blockers-head">
+              <div className="ceo-command-card-kicker">Executive Readiness Blockers</div>
+              <p className="ceo-readiness-blockers-subtitle">
+                Inputs blocking complete executive posture.
+              </p>
+            </div>
+            {blockerSummary.total ? (
+              <>
+                <ul className="ceo-blockers-compact-list">
+                  {blockerSummary.blockers.map((blocker) => (
+                    <li key={blocker.moduleKey || blocker.branch} className="ceo-blocker-compact-item">
+                      <div className="ceo-blocker-compact-copy">
+                        <strong className="ceo-blocker-compact-branch">{blocker.branch}</strong>
+                        <span className="ceo-blocker-compact-description">{blocker.description}</span>
+                        <span className="ceo-blocker-compact-effect">{blocker.effect}</span>
+                      </div>
+                      {blocker.route ? (
+                        <Link to={blocker.route} className="ceo-blocker-compact-link">
+                          Open
+                        </Link>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+                {blockerSummary.additionalCount > 0 ? (
+                  <p className="ceo-blockers-overflow-note">
+                    +{blockerSummary.additionalCount} additional blocker
+                    {blockerSummary.additionalCount === 1 ? '' : 's'} require review
+                  </p>
+                ) : null}
+              </>
             ) : (
               <p className="ceo-panel-fallback">No blockers identified</p>
             )}
@@ -2014,33 +2029,31 @@ export function ExecutiveCommandCenterView({
           title="Board Review Workflow"
           description="Draft-first workflow. Human review required before any distribution."
         >
-          <article className="ceo-command-card ceo-board-readiness-panel">
-            <div className="ceo-command-card-kicker">Board Readiness Summary</div>
-            <p className="ceo-board-readiness-status">
-              Status: <strong>{boardReadinessSummary.statusLabel}</strong>
-            </p>
-            <p className="ceo-board-readiness-fallback">{boardReadinessSummary.fallbackCopy}</p>
-            <ul className="ceo-board-readiness-bullets">
-              {boardReadinessSummary.bullets.map((bullet) => (
-                <li key={bullet.label}>
-                  <span>{bullet.label}</span>
-                  <strong>{bullet.value}</strong>
-                </li>
-              ))}
-            </ul>
-          </article>
+          <div className="ceo-workflow-board-stack">
+            <article className="ceo-board-readiness-mini-card">
+              <div className="ceo-command-card-kicker">Board readiness summary</div>
+              <p className="ceo-board-readiness-status-line">
+                Status: <strong>{boardReadinessSummary.statusLabel}</strong>
+              </p>
+              <ul className="ceo-board-readiness-compact-lines">
+                {boardReadinessSummary.compactSummaryLines.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </article>
 
-          <div className="ceo-workflow-grid">
-            {WORKFLOW_STEPS.map((step) => (
-              <article key={step.eyebrow} className="ceo-workflow-step">
-                <p className="ceo-step-eyebrow">{step.eyebrow}</p>
-                <div className="ceo-workflow-step-head">
-                  <CeoGoldCardIcon icon={step.icon} />
-                  <strong>{step.title}</strong>
-                </div>
-                <p>{step.copy}</p>
-              </article>
-            ))}
+            <div className="ceo-workflow-grid">
+              {WORKFLOW_STEPS.map((step) => (
+                <article key={step.eyebrow} className="ceo-workflow-step">
+                  <p className="ceo-step-eyebrow">{step.eyebrow}</p>
+                  <div className="ceo-workflow-step-head">
+                    <CeoGoldCardIcon icon={step.icon} />
+                    <strong>{step.title}</strong>
+                  </div>
+                  <p>{step.copy}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </SectionBlock>
 

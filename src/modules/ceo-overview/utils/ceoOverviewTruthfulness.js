@@ -641,26 +641,70 @@ export function buildExecutiveRecommendedActions({ alerts = [], signals = [], li
   return actions;
 }
 
-export function buildExecutiveInputBlockers({ readiness = {}, moduleOverviews = {} } = {}) {
-  const blockers = [];
-  const seen = new Set();
+function blockerDescriptionRank(description = '') {
+  const safe = String(description || '').trim().toLowerCase();
+  if (safe === 'pending inputs' || safe.includes('pending input')) {
+    return 100;
+  }
+  if (safe.includes('insufficient data') || safe.includes('insufficient persisted')) {
+    return 75;
+  }
+  if (safe.startsWith('missing')) {
+    return 40;
+  }
+  return 85;
+}
 
-  const pushBlocker = ({ branch, description, effect, route }) => {
-    const key = `${branch}::${description}`.toLowerCase();
-    if (seen.has(key)) {
-      return;
-    }
-    seen.add(key);
-    blockers.push({ branch, description, effect, route: route || '' });
+function mergeExecutiveBlocker(existing, candidate) {
+  const keepCandidate = blockerDescriptionRank(candidate.description) > blockerDescriptionRank(existing.description);
+  const description = keepCandidate ? candidate.description : existing.description;
+  const effect =
+    existing.effect === 'Blocks complete executive posture' ||
+    candidate.effect === 'Blocks complete executive posture'
+      ? 'Blocks complete executive posture'
+      : keepCandidate
+        ? candidate.effect
+        : existing.effect;
+
+  return {
+    branch: existing.branch,
+    moduleKey: existing.moduleKey,
+    description,
+    effect,
+    route: candidate.route || existing.route || ''
+  };
+}
+
+function sortExecutiveBlockers(blockers = []) {
+  const orderIndex = new Map(EXECUTIVE_RADAR_BRANCH_ORDER.map((key, index) => [key, index]));
+  return [...blockers].sort((left, right) => {
+    const leftIndex = orderIndex.get(left.moduleKey) ?? Number.MAX_SAFE_INTEGER;
+    const rightIndex = orderIndex.get(right.moduleKey) ?? Number.MAX_SAFE_INTEGER;
+    return leftIndex - rightIndex;
+  });
+}
+
+export function buildExecutiveInputBlockers({ readiness = {}, moduleOverviews = {} } = {}) {
+  const raw = [];
+
+  const pushRawBlocker = ({ branch, moduleKey, description, effect, route }) => {
+    raw.push({
+      branch,
+      moduleKey,
+      description,
+      effect,
+      route: route || ''
+    });
   };
 
   const missingData = Array.isArray(readiness.missingData) ? readiness.missingData : [];
   missingData.forEach((key) => {
     const branch = EXECUTIVE_RADAR_BRANCH_LABELS[key] || String(key);
-    pushBlocker({
+    pushRawBlocker({
       branch,
+      moduleKey: key,
       description: `Missing ${branch} executive score`,
-      effect: 'Blocks complete executive posture',
+      effect: 'Blocks board readiness signal',
       route: resolveExecutiveModuleRoute(key)
     });
   });
@@ -670,8 +714,9 @@ export function buildExecutiveInputBlockers({ readiness = {}, moduleOverviews = 
     : [];
   insufficientModules.forEach((key) => {
     const branch = EXECUTIVE_RADAR_BRANCH_LABELS[key] || String(key);
-    pushBlocker({
+    pushRawBlocker({
       branch,
+      moduleKey: key,
       description: 'Insufficient persisted module data',
       effect: 'Blocks board readiness signal',
       route: resolveExecutiveModuleRoute(key)
@@ -689,8 +734,9 @@ export function buildExecutiveInputBlockers({ readiness = {}, moduleOverviews = 
     }
 
     const branch = EXECUTIVE_RADAR_BRANCH_LABELS[key] || String(key);
-    pushBlocker({
+    pushRawBlocker({
       branch,
+      moduleKey: key,
       description: overview.scoreDisplay || 'Pending inputs',
       effect:
         posture === 'insufficient_data'
@@ -700,7 +746,30 @@ export function buildExecutiveInputBlockers({ readiness = {}, moduleOverviews = 
     });
   });
 
-  return blockers;
+  const byModule = new Map();
+  raw.forEach((blocker) => {
+    const key = String(blocker.moduleKey || blocker.branch || '').trim().toLowerCase();
+    if (!key) {
+      return;
+    }
+    if (byModule.has(key)) {
+      byModule.set(key, mergeExecutiveBlocker(byModule.get(key), blocker));
+      return;
+    }
+    byModule.set(key, blocker);
+  });
+
+  return sortExecutiveBlockers(Array.from(byModule.values()));
+}
+
+export function summarizeExecutiveInputBlockers(blockers = [], { maxVisible = 6 } = {}) {
+  const total = Array.isArray(blockers) ? blockers.length : 0;
+  const visible = Array.isArray(blockers) ? blockers.slice(0, maxVisible) : [];
+  return {
+    blockers: visible,
+    total,
+    additionalCount: Math.max(0, total - visible.length)
+  };
 }
 
 export function buildExecutiveBoardReadinessSummary({
@@ -770,11 +839,25 @@ export function buildExecutiveBoardReadinessSummary({
     });
   }
 
+  const compactSummaryLines = [
+    briefingDraftPrepared ? 'Draft prepared' : 'Not yet prepared',
+    humanReviewRequired ? 'Human review required' : null,
+    missingData.length > 0 ? `${missingData.length} module score${missingData.length === 1 ? '' : 's'} pending` : null,
+    boardView.reportingReadiness !== null &&
+    boardView.reportingReadiness !== undefined &&
+    boardView.reportingReadiness !== 'Insufficient data'
+      ? 'Reporting signal available'
+      : hasPendingInputs
+        ? 'Reporting pending inputs'
+        : null
+  ].filter(Boolean);
+
   return {
     statusLabel,
     humanReviewRequired,
     hasPendingInputs,
     bullets: bullets.slice(0, 5),
+    compactSummaryLines: compactSummaryLines.slice(0, 4),
     fallbackCopy:
       hasPendingInputs && humanReviewRequired
         ? 'Not ready · Pending inputs · Human review required'

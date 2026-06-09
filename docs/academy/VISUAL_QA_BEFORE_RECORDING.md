@@ -711,3 +711,12 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - No `since last review`, `cost of inaction`, or invented owners/deadlines in new panels.
 - `/dashboard`, `/ceo/overview`, `/ma/dashboard`, `/funding/dashboard`, `/risk/register`, `/governance/dashboard` — no ErrorBoundary, horizontal overflow, or NaN/undefined/Infinity.
 - Validation: build PASS; `ceoOverviewTruthfulness` 30/30; `fundingDisplayFormat` 7/7.
+
+### C.24.6C Executive Intelligence Layout Compression checklist
+
+- Baseline `0bae8e1`; compression only — no new intelligence sections or data.
+- **Executive Readiness Blockers:** compact black/gold summary card; max 6 items; `+X additional blockers` overflow; no navy table/grid; no absurd module repetition.
+- **Board readiness summary:** integrated mini-card above workflow; status + compact lines; not floating misaligned text.
+- Decision Queue Live and Recommended Actions unchanged unless spacing-only.
+- Hero, lion, radar, branch cards 5+5 intact.
+- Validation: build PASS; `ceoOverviewTruthfulness` 33/33; `fundingDisplayFormat` 7/7.

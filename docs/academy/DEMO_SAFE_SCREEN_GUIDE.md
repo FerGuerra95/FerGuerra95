@@ -419,3 +419,15 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 30/30; `fundingDisplayFormat` 7/7. No backend, Golden Dataset or Formula Registry changes.
 
+### C.24.6C demo safety note
+
+**Baseline:** `0bae8e1`.
+
+**Recording-safe result:** Executive intelligence from C.24.6B is preserved but compressed — blockers read as an executive summary (one line per module, max 6 visible); board readiness is a compact mini-card above the workflow.
+
+**Safe narration:** "Here is what is blocking readiness — summarized by branch. Board readiness stays draft-first with human review required."
+
+**Do not say:** Blockers are resolved; board pack is approved; all modules are ready.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 33/33; `fundingDisplayFormat` 7/7. Presentation-only; no data/backend changes.
+

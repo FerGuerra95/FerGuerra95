@@ -2715,3 +2715,15 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 - No `since last review`, `what changed`, or `cost of inaction` copy.
 
 **Tests added:** `ceoOverviewTruthfulness.test.js` — 8 defensive cases for C.24.6B (30 total). Build PASS; `fundingDisplayFormat` PASS.
+
+---
+
+## C.24.6C — Executive Intelligence Layout Compression
+
+**Status:** COMPLETED (presentation-only compression).
+
+**Baseline:** `0bae8e1`.
+
+**Integrity preserved:** Blocker dedup collapses overlapping module sources without hiding unique modules; `summarizeExecutiveInputBlockers` caps display at 6 while preserving `additionalCount`; N/A / Pending inputs / human review / no approved-certified language unchanged.
+
+**Tests added:** dedup per module, cap with overflow count, no approved/certified copy (33 total). Build PASS.
