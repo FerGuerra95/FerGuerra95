@@ -8625,3 +8625,24 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 - Board Readiness Summary: bullet list only (no duplicated joined subtitle).
 
 **Tests:** build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7.
+
+---
+
+## C.24.9 — CEO Overview Final Demo Release Candidate
+
+**Status:** COMPLETED.
+
+**Baseline:** `dcea74f` (HEAD = origin/main).
+
+**Scope:** Final demo/video readiness — executive clarity, board distribution decision, suggested owners (labeled), blocker human copy, dedup audit. No visual redesign.
+
+**Final improvements:**
+- Hero conclusion unchanged (truthfulness-safe executive summary).
+- Recommended Actions: 3 main + 1 pending group; `Review PMI`; `Suggested owner:` labels on module actions.
+- Board Readiness: `Board distribution: Not ready` + required-before-distribution bullets.
+- Blockers: CEO human copy; N/A clarification once in Module Readiness.
+- Cross-Module Focus Area deduped from Compliance when PMI alerts exist.
+
+**Tests:** build PASS; `ceoOverviewTruthfulness` 51/51; `fundingDisplayFormat` 7/7.
+
+**Next:** production spot-check + recording rehearsal.

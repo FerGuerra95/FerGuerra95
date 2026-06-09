@@ -768,6 +768,19 @@
   gap: 12px;
 }
 
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-recommended-actions-subtitle {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(245, 230, 200, 0.72);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-suggested-owner-line {
+  font-size: 11px;
+  font-style: italic;
+  color: rgba(212, 175, 55, 0.78);
+}
+
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-item,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-recommended-action-item {
   padding-bottom: 10px;

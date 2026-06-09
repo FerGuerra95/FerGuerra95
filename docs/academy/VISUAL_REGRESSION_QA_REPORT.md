@@ -702,3 +702,22 @@
 | `/governance/dashboard` | PASS | No regression |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7.
+
+---
+
+## 35. C.24.9 — CEO Overview Final Demo Release Candidate
+
+**Baseline:** `dcea74f`.
+
+**Change type:** Final demo copy/clarity — board distribution decision, suggested owners (labeled), PMI action clarity, blocker human copy. No layout/color changes.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | No regression |
+| `/ceo/overview` | PASS | Video-ready CEO decision cockpit |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 51/51; `fundingDisplayFormat` 7/7.

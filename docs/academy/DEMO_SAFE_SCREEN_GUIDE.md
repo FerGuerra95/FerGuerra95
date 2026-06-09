@@ -481,3 +481,15 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7. Copy-only; no data/backend changes.
 
+### C.24.9 demo safety note
+
+**Baseline:** `dcea74f`.
+
+**Recording-safe result:** CEO Overview reads as decision cockpit — hero posture, top actions, blockers, board distribution not ready, draft-only output.
+
+**Say:** Suggested owner (routing hint). Board distribution: Not ready. Board review draft — not board-approved.
+
+**Do not say:** Ready for board, approved, certified, distributed, or that N/A means poor performance.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 51/51; `fundingDisplayFormat` 7/7.
+

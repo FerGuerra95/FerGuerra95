@@ -36,7 +36,7 @@ const EXECUTIVE_BLOCKER_BRANCH_COPY = {
   governance: 'Governance needs board-control inputs before executive review.',
   compliance:
     'Compliance signal requires persisted supplier and evidence inputs.',
-  ma: 'M&A posture cannot be scored until a persisted deal or case is available.',
+  ma: 'M&A posture cannot be scored until persisted deal/case data is available.',
   pmi: 'PMI integration signal remains pending until source inputs are available.',
   reporting:
     'Reporting signal may be available, but board readiness still requires review.',
@@ -739,7 +739,9 @@ function recommendedActionSeverityScore(source = {}) {
   }
 
   const moduleKey = normalizeExecutiveModuleKey(source?.module);
-  if (['compliance', 'pmi', 'risk'].includes(moduleKey)) {
+  if (moduleKey === 'pmi') {
+    score += 25;
+  } else if (['compliance', 'risk'].includes(moduleKey)) {
     score += 15;
   }
 
@@ -755,6 +757,23 @@ function buildRecommendedActionFallbackLabel(source = {}, route = '') {
     return 'Review source module before board circulation.';
   }
   return 'Complete source inputs before board circulation.';
+}
+
+const SUGGESTED_OWNER_BY_MODULE = {
+  compliance: 'Legal / Compliance',
+  funding: 'CFO / Funding',
+  pmi: 'Integration Lead',
+  governance: 'Governance Lead',
+  risk: 'Risk Lead',
+  ma: 'Corporate Development'
+};
+
+export function resolveSuggestedOwnerLabel(moduleKey, { isGroupedPending = false } = {}) {
+  if (isGroupedPending) {
+    return null;
+  }
+  const owner = SUGGESTED_OWNER_BY_MODULE[String(moduleKey || '').trim().toLowerCase()];
+  return owner ? `Suggested owner: ${owner}` : null;
 }
 
 function isGenericExecutiveScope(moduleKey, module = '') {
@@ -778,6 +797,10 @@ function summarizeRecommendedActionTitle(source = {}) {
 
   if (isGenericExecutiveScope(moduleKey, source?.module)) {
     return 'Review readiness blockers';
+  }
+
+  if (moduleKey === 'pmi') {
+    return 'Review PMI';
   }
 
   if (/exposure|alert|escalation|review|decision|opportunity|blocker|readiness/i.test(title)) {
@@ -853,7 +876,8 @@ function buildRecommendedActionEntry(source, { queueLiteralPhrases = new Set() }
       String(source?.status || '').trim() ||
       (recommendedAction ? 'Suggested action' : 'Review required'),
     route,
-    isGroupedPending: false
+    isGroupedPending: false,
+    suggestedOwner: resolveSuggestedOwnerLabel(moduleKey)
   };
 }
 
@@ -1208,8 +1232,12 @@ export function buildExecutiveBoardReadinessSummary({
       ? requiredBeforeDistribution.slice(0, 4)
       : [statusLabel];
 
+  const boardDistributionLabel =
+    hasPendingInputs || humanReviewRequired ? 'Not ready' : 'Review required before distribution';
+
   return {
     statusLabel,
+    boardDistributionLabel,
     humanReviewRequired,
     hasPendingInputs,
     requiredBeforeDistribution: requiredBeforeDistribution.slice(0, 5),

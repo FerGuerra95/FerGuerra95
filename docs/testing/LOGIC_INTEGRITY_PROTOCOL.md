@@ -2797,3 +2797,15 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Integrity:** Copy/dedup only. Hero attention module-key dedupe; recommended actions 3 main + 1 grouped pending; no `Review Executive`; no approved/certified; pending inputs preserved.
 
 **Tests:** build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7.
+
+---
+
+## C.24.9 — CEO Overview Final Demo Release Candidate
+
+**Status:** COMPLETED.
+
+**Baseline:** `dcea74f`.
+
+**Integrity:** No formula/score/backend/Golden Dataset changes. `Suggested owner:` clearly labeled — not assigned owner. `boardDistributionLabel` never Ready when pending inputs/human review. No approved/certified/distributed claims. Board Review Draft only.
+
+**Tests:** build PASS; `ceoOverviewTruthfulness` 51/51; `fundingDisplayFormat` 7/7.

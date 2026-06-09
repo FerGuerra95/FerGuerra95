@@ -768,3 +768,13 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Board Readiness Summary: status + bullet list (no duplicate joined line).
 - CTAs say `Review source module` not repeated `Open module` in intelligence panels.
 - Validation: build PASS; `ceoOverviewTruthfulness` 49/49; `fundingDisplayFormat` 7/7.
+
+### C.24.9 CEO Overview final demo release checklist
+
+- Baseline `dcea74f`; copy/clarity only — hero/radar/branch cards unchanged.
+- Hero answers posture + priority reviews + missing inputs + human review in 5 seconds.
+- Recommended Actions: ≤3 main + 1 grouped pending; `Suggested owner:` if shown.
+- Board Readiness: Status + Board distribution: Not ready + bullet requirements.
+- N/A clarification appears once near Module Readiness.
+- Demo script: posture → priorities → actions → blockers → readiness → radar → board not ready → draft only.
+- Validation: build PASS; `ceoOverviewTruthfulness` 51/51; `fundingDisplayFormat` 7/7.

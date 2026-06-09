@@ -1391,6 +1391,7 @@ function buildIntelligenceCards({
   complianceOverview,
   fundingOverview,
   maOverview,
+  pmiOverview = {},
   commandAlerts,
   lastReportPrepared
 }) {
@@ -1409,9 +1410,11 @@ function buildIntelligenceCards({
         : 'Pending inputs';
 
   const focusArea =
-    complianceOverview.posture === 'insufficient_data'
-      ? 'Compliance inputs'
-      : riskOverviewPostureLabel(complianceOverview, fundingOverview, maOverview);
+    Array.isArray(pmiOverview.alerts) && pmiOverview.alerts.length > 0
+      ? 'Integration value capture requires attention'
+      : complianceOverview.posture === 'insufficient_data'
+        ? 'Branch inputs pending — not a performance failure'
+        : riskOverviewPostureLabel(complianceOverview, fundingOverview, maOverview);
 
   return [
     {
@@ -1667,6 +1670,7 @@ export function ExecutiveCommandCenterView({
     complianceOverview,
     fundingOverview,
     maOverview,
+    pmiOverview,
     commandAlerts,
     lastReportPrepared: Boolean(lastReportGeneratedAt)
   });
@@ -1885,6 +1889,9 @@ export function ExecutiveCommandCenterView({
 
             <article className="ceo-command-card ceo-recommended-actions-panel">
               <div className="ceo-command-card-kicker">Recommended Actions</div>
+              <p className="ceo-recommended-actions-subtitle">
+                Top executive actions — summary only, not the full queue.
+              </p>
               {recommendedActions.length ? (
                 <ul className="ceo-recommended-actions-list">
                   {recommendedActions.map((action) => (
@@ -1898,6 +1905,11 @@ export function ExecutiveCommandCenterView({
                       <p className="ceo-live-queue-meta">{action.module}</p>
                       <p className="ceo-live-queue-meta">{action.whyItMatters}</p>
                       <p className="ceo-live-queue-action">{action.actionLabel}</p>
+                      {action.suggestedOwner ? (
+                        <p className="ceo-live-queue-meta ceo-suggested-owner-line">
+                          {action.suggestedOwner}
+                        </p>
+                      ) : null}
                       {action.route ? (
                         <Link to={action.route} className="ceo-live-queue-link">
                           Review source module
@@ -1943,7 +1955,7 @@ export function ExecutiveCommandCenterView({
             <div className="ceo-readiness-blockers-head">
               <div className="ceo-command-card-kicker">Executive Readiness Blockers</div>
               <p className="ceo-readiness-blockers-subtitle">
-                What is blocking a complete executive and board-ready posture.
+                What prevents a complete executive posture — missing inputs, not poor performance.
               </p>
             </div>
             {blockerSummary.total ? (
@@ -2037,6 +2049,10 @@ export function ExecutiveCommandCenterView({
                 <div className="ceo-command-card-kicker">Board readiness summary</div>
                 <p className="ceo-board-readiness-status-line">
                   Status: <strong>{boardReadinessSummary.statusLabel}</strong>
+                </p>
+                <p className="ceo-board-readiness-status-line">
+                  Board distribution:{' '}
+                  <strong>{boardReadinessSummary.boardDistributionLabel}</strong>
                 </p>
                 {boardReadinessSummary.requiredBeforeDistribution?.length ? (
                   <p className="ceo-readiness-blockers-subtitle">Required before distribution:</p>

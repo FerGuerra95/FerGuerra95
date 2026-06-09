@@ -8,6 +8,7 @@ import {
   buildExecutiveLiveDecisionQueueItems,
   buildExecutivePriorityRows,
   buildExecutiveRecommendedActions,
+  resolveSuggestedOwnerLabel,
   formatExecutiveBlockerSummaryLine,
   MODULE_READINESS_NA_CLARIFICATION,
   prioritizeExecutiveBlockers,
@@ -598,15 +599,15 @@ describe('CEO overview truthfulness helpers', () => {
     expect(actions[0].moduleKey).toBe('compliance');
   });
 
-  it('does not invent owners in recommended actions', () => {
+  it('labels suggested owners clearly without implying assignment', () => {
     const actions = buildExecutiveRecommendedActions({
       alerts: [{ title: 'Risk escalation', module: 'Risk', severity: 'risk' }],
       signals: []
     });
-    const serialized = JSON.stringify(actions);
 
-    expect(serialized).not.toMatch(/owner/i);
+    expect(actions[0].suggestedOwner).toMatch(/^Suggested owner:/i);
     expect(actions[0]).not.toHaveProperty('owner');
+    expect(resolveSuggestedOwnerLabel('enterprise', { isGroupedPending: true })).toBeNull();
   });
 
   it('preserves pending inputs labeling for grouped unavailable signals', () => {
@@ -679,7 +680,25 @@ describe('CEO overview truthfulness helpers', () => {
     });
 
     expect(board.statusLabel).not.toBe('Ready');
+    expect(board.boardDistributionLabel).toBe('Not ready');
     expect(board.requiredBeforeDistribution).toContain('Human review');
     expect(board.requiredBeforeDistribution.some((line) => /module score/i.test(line))).toBe(true);
+  });
+
+  it('uses Review PMI title for PMI recommended actions', () => {
+    const actions = buildExecutiveRecommendedActions({
+      alerts: [{ title: 'PMI integration watch', module: 'PMI', severity: 'watch' }],
+      signals: []
+    });
+
+    expect(actions[0].title).toBe('Review PMI');
+    expect(actions[0].suggestedOwner).toMatch(/^Suggested owner: Integration Lead/i);
+  });
+
+  it('exposes N/A clarification constant once for module readiness', () => {
+    expect(MODULE_READINESS_NA_CLARIFICATION).toMatch(
+      /insufficient available data, not poor operational performance/i
+    );
+    expect(MODULE_READINESS_NA_CLARIFICATION).not.toMatch(/approved|certified/i);
   });
 });
