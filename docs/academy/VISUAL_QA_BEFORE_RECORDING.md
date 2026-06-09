@@ -778,3 +778,13 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - N/A clarification appears once near Module Readiness.
 - Demo script: posture → priorities → actions → blockers → readiness → radar → board not ready → draft only.
 - Validation: build PASS; `ceoOverviewTruthfulness` 51/51; `fundingDisplayFormat` 7/7.
+
+### C.24.10B Buttons & provenance demo safety checklist
+
+- Baseline `ad1f779`; display/copy safety only.
+- Briefing Packs show status-only note on each card.
+- BoardPackModal button says Print draft preview (not Export PDF).
+- Null metrics show N/A, not 0.
+- Board review draft: session prepared vs Previous draft trace (not localStorage Prepared).
+- Generate disabled shows admin/board_member hint.
+- Validation: build PASS; `ceoOverviewTruthfulness` 54/54; `boardPackModalDisplay` 3/3.

@@ -8646,3 +8646,21 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Tests:** build PASS; `ceoOverviewTruthfulness` 51/51; `fundingDisplayFormat` 7/7.
 
 **Next:** production spot-check + recording rehearsal.
+
+---
+
+## C.24.10B — Buttons & Provenance Demo Safety Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `ad1f779`.
+
+**Demo safety fixes:**
+- Briefing Packs: status-only microcopy on every card; section header clarifies not downloadable.
+- BoardPackModal: `Print draft preview` + browser print hint; null metrics → N/A (no fake 0).
+- Board review draft status: session `generatedAt` preferred over localStorage trace (`Previous draft trace`).
+- Generate Board Review Draft: disabled hint for non-admin/board_member roles.
+
+**Tests:** build PASS; `ceoOverviewTruthfulness` 54/54; `boardPackModalDisplay` 3/3; `fundingDisplayFormat` 7/7.
+
+**Next:** production spot-check + recording rehearsal.

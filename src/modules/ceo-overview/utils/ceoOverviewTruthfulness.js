@@ -27,6 +27,41 @@ export function formatExecutiveScoreNumber(score, fallbackLabel = 'N/A') {
 export const MODULE_READINESS_NA_CLARIFICATION =
   'N/A means insufficient available data, not poor operational performance.';
 
+export const BRIEFING_PACK_STATUS_ONLY_NOTE =
+  'Status only · not a downloadable or certified pack';
+
+export const BOARD_PACK_GENERATE_DISABLED_HINT =
+  'Board draft generation requires admin or board member role';
+
+export const BOARD_PACK_PRINT_DRAFT_HINT = 'Uses browser print. Draft only.';
+
+export function resolveBoardReviewDraftPackStatus({
+  sessionGeneratedAt = null,
+  lastDraftTraceAt = null
+} = {}) {
+  const session = String(sessionGeneratedAt || '').trim();
+  const trace = String(lastDraftTraceAt || '').trim();
+
+  if (session) {
+    return {
+      statusLabel: 'Draft prepared this session',
+      statusNote: BRIEFING_PACK_STATUS_ONLY_NOTE
+    };
+  }
+
+  if (trace) {
+    return {
+      statusLabel: 'Previous draft trace',
+      statusNote: BRIEFING_PACK_STATUS_ONLY_NOTE
+    };
+  }
+
+  return {
+    statusLabel: 'Draft',
+    statusNote: BRIEFING_PACK_STATUS_ONLY_NOTE
+  };
+}
+
 export const INFORMATIONAL_POSTURE_NOTE = 'Operating posture · not a scored signal';
 
 const EXECUTIVE_BLOCKER_BRANCH_COPY = {

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Download, FileText, X } from 'lucide-react';
+import { FileText, Printer, X } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
+import { BOARD_PACK_PRINT_DRAFT_HINT } from '../utils/ceoOverviewTruthfulness.js';
 
 const branchMeta = [
   { key: 'ma', label: 'M&A', tone: '#34d399' },
@@ -13,18 +14,74 @@ const branchMeta = [
   { key: 'heritage', label: 'Heritage', tone: '#d4af37' }
 ];
 
-function toNumber(value) {
+function isPresentMetricValue(value) {
+  return value !== null && value !== undefined && value !== '';
+}
+
+export function formatBoardPackScore100(value) {
+  if (!isPresentMetricValue(value)) {
+    return 'N/A';
+  }
   const number = Number(value);
-  return Number.isFinite(number) ? number : 0;
+  if (!Number.isFinite(number)) {
+    return 'N/A';
+  }
+  return `${Math.round(number)}/100`;
 }
 
-function clamp(value) {
-  return Math.max(0, Math.min(100, Math.round(toNumber(value))));
+export function formatBoardPackPercent(value) {
+  if (!isPresentMetricValue(value)) {
+    return 'N/A';
+  }
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return 'N/A';
+  }
+  return `${Math.round(number)}%`;
 }
 
-function formatMonths(value) {
-  const number = toNumber(value);
-  return number > 0 ? `${number.toFixed(1)} months` : 'N/A';
+export function formatBoardPackCount(value) {
+  if (!isPresentMetricValue(value)) {
+    return 'N/A';
+  }
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return 'N/A';
+  }
+  return String(number);
+}
+
+export function formatBoardPackCurrency(value, currency = 'EUR') {
+  if (!isPresentMetricValue(value)) {
+    return 'N/A';
+  }
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return 'N/A';
+  }
+  return formatCurrency(number, currency);
+}
+
+export function formatBoardPackMonths(value) {
+  if (!isPresentMetricValue(value)) {
+    return 'N/A';
+  }
+  const number = Number(value);
+  if (!Number.isFinite(number) || number <= 0) {
+    return 'N/A';
+  }
+  return `${number.toFixed(1)} months`;
+}
+
+function clampScore100(value) {
+  if (!isPresentMetricValue(value)) {
+    return null;
+  }
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return null;
+  }
+  return Math.max(0, Math.min(100, Math.round(number)));
 }
 
 function RadarChart({ branches = {} }) {
@@ -32,7 +89,8 @@ function RadarChart({ branches = {} }) {
   const radius = 62;
   const points = branchMeta.map((item, index) => {
     const angle = -Math.PI / 2 + (index * Math.PI * 2) / branchMeta.length;
-    const value = clamp(branches[item.key]?.score ?? 0) / 100;
+    const score = clampScore100(branches[item.key]?.score);
+    const value = score === null ? 0 : score / 100;
 
     return {
       ...item,
@@ -40,7 +98,8 @@ function RadarChart({ branches = {} }) {
       y: center + Math.sin(angle) * radius * value,
       axisX: center + Math.cos(angle) * radius,
       axisY: center + Math.sin(angle) * radius,
-      value: clamp(branches[item.key]?.score ?? 0)
+      value: score,
+      calculable: score !== null
     };
   });
   const polygon = points.map((point) => `${point.x},${point.y}`).join(' ');
@@ -74,18 +133,23 @@ function RadarChart({ branches = {} }) {
 }
 
 function BranchBar({ label, value, tone }) {
-  const safeValue = clamp(value);
+  const safeValue = clampScore100(value);
+  const display = formatBoardPackScore100(value);
 
   return (
     <div className="board-pack-bar-row">
       <div className="board-pack-bar-top">
         <span>{label}</span>
-        <strong>{safeValue}/100</strong>
+        <strong>{display}</strong>
       </div>
       <div className="board-pack-bar-track">
         <div
           className="board-pack-bar-fill"
-          style={{ width: `${safeValue}%`, backgroundColor: tone }}
+          style={{
+            width: safeValue === null ? '0%' : `${safeValue}%`,
+            backgroundColor: tone,
+            opacity: safeValue === null ? 0.35 : 1
+          }}
         />
       </div>
     </div>
@@ -297,10 +361,28 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
         }
 
         .board-pack-footer {
-          align-items: center;
           margin-top: 22px;
           padding-top: 18px;
           border-top: 1px solid rgba(212, 175, 55, 0.16);
+        }
+
+        .board-pack-footer-actions {
+          display: flex;
+          justify-content: space-between;
+          gap: 18px;
+          align-items: flex-end;
+        }
+
+        .board-pack-print-action {
+          display: grid;
+          gap: 6px;
+          justify-items: end;
+        }
+
+        .board-pack-print-hint {
+          margin: 0;
+          font-size: 11px;
+          color: rgba(203, 213, 225, 0.72);
         }
 
         @media (max-width: 820px) {
@@ -340,7 +422,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             <section className="board-pack-summary">
               <div>
                 <span>Consolidated score</span>
-                <strong>{boardPack.score}/100</strong>
+                <strong>{formatBoardPackScore100(boardPack.score)}</strong>
               </div>
               <p>{boardPack.executiveSummary}</p>
             </section>
@@ -367,46 +449,106 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             <section className="board-pack-metrics">
               <Metric
                 label="M&A valuation"
-                value={formatCurrency(branches.ma?.valuation || 0, 'EUR')}
+                value={formatBoardPackCurrency(branches.ma?.valuation, 'EUR')}
               />
               <Metric label="Applied multiple" value={branches.ma?.multipleLabel || 'N/A'} />
-              <Metric label="Compliance health" value={`${branches.compliance?.healthScore ?? 0}/100`} />
-              <Metric label="Critical findings" value={branches.compliance?.criticalFindings ?? 0} />
-              <Metric label="Runway" value={formatMonths(branches.funding?.runwayMonths)} />
+              <Metric
+                label="Compliance health"
+                value={formatBoardPackScore100(branches.compliance?.healthScore)}
+              />
+              <Metric
+                label="Critical findings"
+                value={formatBoardPackCount(branches.compliance?.criticalFindings)}
+              />
+              <Metric label="Runway" value={formatBoardPackMonths(branches.funding?.runwayMonths)} />
               <Metric
                 label="Capital raised"
-                value={formatCurrency(branches.funding?.capitalRaised || 0, 'EUR')}
+                value={formatBoardPackCurrency(branches.funding?.capitalRaised, 'EUR')}
               />
-              <Metric label="PMI completion" value={`${branches.pmi?.integrationProgress ?? 0}%`} />
-              <Metric label="Synergy capture" value={`${branches.pmi?.synergyCaptureRate ?? 0}%`} />
-              <Metric label="Ledger capture" value={`${branches.pmi?.ledgerCaptureRate ?? 0}%`} />
-              <Metric label="Playbook progress" value={`${branches.pmi?.playbookProgress ?? 0}%`} />
-              <Metric label="Blocked dependencies" value={branches.pmi?.blockedDependenciesCount ?? 0} />
+              <Metric
+                label="PMI completion"
+                value={formatBoardPackPercent(branches.pmi?.integrationProgress)}
+              />
+              <Metric
+                label="Synergy capture"
+                value={formatBoardPackPercent(branches.pmi?.synergyCaptureRate)}
+              />
+              <Metric
+                label="Ledger capture"
+                value={formatBoardPackPercent(branches.pmi?.ledgerCaptureRate)}
+              />
+              <Metric
+                label="Playbook progress"
+                value={formatBoardPackPercent(branches.pmi?.playbookProgress)}
+              />
+              <Metric
+                label="Blocked dependencies"
+                value={formatBoardPackCount(branches.pmi?.blockedDependenciesCount)}
+              />
               <Metric
                 label="Bridge weighted pipeline"
-                value={formatCurrency(branches.bridge?.weightedPipelineValue || 0, 'EUR')}
+                value={formatBoardPackCurrency(branches.bridge?.weightedPipelineValue, 'EUR')}
               />
-              <Metric label="Bridge intros" value={branches.bridge?.introductionsCount ?? 0} />
+              <Metric
+                label="Bridge intros"
+                value={formatBoardPackCount(branches.bridge?.introductionsCount)}
+              />
               <Metric
                 label="Bridge confidentiality"
-                value={branches.bridge?.confidentialityExceptionsCount ?? 0}
+                value={formatBoardPackCount(branches.bridge?.confidentialityExceptionsCount)}
               />
-              <Metric label="Bridge documents" value={branches.bridge?.documentsCount ?? 0} />
-              <Metric label="Bridge reports" value={branches.bridge?.reportsCount ?? 0} />
-              <Metric label="Governance controls" value={branches.governance?.controlsCount ?? 0} />
-              <Metric label="Governance evidence" value={`${branches.governance?.evidenceReadiness ?? 0}%`} />
-              <Metric label="Open board decisions" value={branches.governance?.openDecisionsCount ?? 0} />
-              <Metric label="Board readiness" value={`${branches.governance?.boardReadinessScore ?? 0}%`} />
-              <Metric label="Approval bottlenecks" value={branches.governance?.approvalBottlenecks ?? 0} />
-              <Metric label="Policy review risk" value={branches.governance?.policyReviewRisk ?? 0} />
+              <Metric
+                label="Bridge documents"
+                value={formatBoardPackCount(branches.bridge?.documentsCount)}
+              />
+              <Metric
+                label="Bridge reports"
+                value={formatBoardPackCount(branches.bridge?.reportsCount)}
+              />
+              <Metric
+                label="Governance controls"
+                value={formatBoardPackCount(branches.governance?.controlsCount)}
+              />
+              <Metric
+                label="Governance evidence"
+                value={formatBoardPackPercent(branches.governance?.evidenceReadiness)}
+              />
+              <Metric
+                label="Open board decisions"
+                value={formatBoardPackCount(branches.governance?.openDecisionsCount)}
+              />
+              <Metric
+                label="Board readiness"
+                value={formatBoardPackPercent(branches.governance?.boardReadinessScore)}
+              />
+              <Metric
+                label="Approval bottlenecks"
+                value={formatBoardPackCount(branches.governance?.approvalBottlenecks)}
+              />
+              <Metric
+                label="Policy review risk"
+                value={formatBoardPackCount(branches.governance?.policyReviewRisk)}
+              />
               <Metric
                 label="Heritage mapped value"
-                value={formatCurrency(branches.heritage?.totalAssetValue || 0, 'EUR')}
+                value={formatBoardPackCurrency(branches.heritage?.totalAssetValue, 'EUR')}
               />
-              <Metric label="Heritage succession" value={`${branches.heritage?.successionReadiness ?? 0}%`} />
-              <Metric label="Heritage protection" value={`${branches.heritage?.protectionCoverage ?? 0}%`} />
-              <Metric label="Heritage documents" value={branches.heritage?.documentsCount ?? 0} />
-              <Metric label="Heritage reports" value={branches.heritage?.reportsCount ?? 0} />
+              <Metric
+                label="Heritage succession"
+                value={formatBoardPackPercent(branches.heritage?.successionReadiness)}
+              />
+              <Metric
+                label="Heritage protection"
+                value={formatBoardPackPercent(branches.heritage?.protectionCoverage)}
+              />
+              <Metric
+                label="Heritage documents"
+                value={formatBoardPackCount(branches.heritage?.documentsCount)}
+              />
+              <Metric
+                label="Heritage reports"
+                value={formatBoardPackCount(branches.heritage?.reportsCount)}
+              />
             </section>
 
             <section className="board-pack-panel">
@@ -421,13 +563,18 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
         )}
 
         <div className="board-pack-footer">
-          <Button variant="secondary" onClick={onClose}>
-            Close
-          </Button>
-          <Button onClick={onExport} disabled={!boardPack || loading}>
-            <Download size={16} />
-            Exportar a PDF
-          </Button>
+          <div className="board-pack-footer-actions">
+            <Button variant="secondary" onClick={onClose}>
+              Close
+            </Button>
+            <div className="board-pack-print-action">
+              <Button onClick={onExport} disabled={!boardPack || loading}>
+                <Printer size={16} />
+                Print draft preview
+              </Button>
+              <p className="board-pack-print-hint">{BOARD_PACK_PRINT_DRAFT_HINT}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

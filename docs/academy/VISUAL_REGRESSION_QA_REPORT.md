@@ -721,3 +721,21 @@
 | `/governance/dashboard` | PASS | No regression |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 51/51; `fundingDisplayFormat` 7/7.
+
+---
+
+## 36. C.24.10B — Buttons & Provenance Demo Safety Fix
+
+**Baseline:** `ad1f779`.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | No regression |
+| `/ceo/overview` | PASS | Briefing status-only; generate hint; print draft label |
+| `/reporting/library` | PASS | View Executive Briefing navigation |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 54/54; `boardPackModalDisplay` 3/3.

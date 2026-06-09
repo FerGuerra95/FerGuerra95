@@ -26,8 +26,11 @@ import {
   buildExecutiveInputBlockers,
   buildExecutiveLiveDecisionQueueItems,
   buildExecutiveRecommendedActions,
+  BOARD_PACK_GENERATE_DISABLED_HINT,
+  BRIEFING_PACK_STATUS_ONLY_NOTE,
   formatExecutiveBlockerSummaryLine,
   MODULE_READINESS_NA_CLARIFICATION,
+  resolveBoardReviewDraftPackStatus,
   summarizeExecutiveInputBlockers,
   formatModuleScoreDisplay,
   formatScoreLabel,
@@ -1665,6 +1668,11 @@ export function ExecutiveCommandCenterView({
     commandDecisionQueue
   });
 
+  const boardReviewDraftPackStatus = resolveBoardReviewDraftPackStatus({
+    sessionGeneratedAt: boardPackGeneratedAt,
+    lastDraftTraceAt: lastReportGeneratedAt
+  });
+
   const intelligenceCards = buildIntelligenceCards({
     executiveSignal,
     complianceOverview,
@@ -1672,7 +1680,7 @@ export function ExecutiveCommandCenterView({
     maOverview,
     pmiOverview,
     commandAlerts,
-    lastReportPrepared: Boolean(lastReportGeneratedAt)
+    lastReportPrepared: Boolean(boardPackGeneratedAt)
   });
 
   const moduleCards = buildModuleReadinessCards({
@@ -1766,15 +1774,28 @@ export function ExecutiveCommandCenterView({
                   </h1>
 
                   <div className="ceo-command-hero-actions">
-                    <Button
-                      onClick={onGenerateBoardPack}
-                      loading={boardPackLoading}
-                      disabled={!canGenerateBoardPack}
-                      className="ceo-gold-primary-action"
-                    >
-                      <FileText size={16} />
-                      Generate Board Review Draft
-                    </Button>
+                    <div className="ceo-generate-draft-action-wrap">
+                      <Button
+                        onClick={onGenerateBoardPack}
+                        loading={boardPackLoading}
+                        disabled={!canGenerateBoardPack}
+                        className="ceo-gold-primary-action"
+                        title={
+                          !canGenerateBoardPack ? BOARD_PACK_GENERATE_DISABLED_HINT : undefined
+                        }
+                        aria-label={
+                          !canGenerateBoardPack
+                            ? `Generate Board Review Draft — ${BOARD_PACK_GENERATE_DISABLED_HINT}`
+                            : 'Generate Board Review Draft'
+                        }
+                      >
+                        <FileText size={16} />
+                        Generate Board Review Draft
+                      </Button>
+                      {!canGenerateBoardPack ? (
+                        <p className="ceo-generate-draft-hint">{BOARD_PACK_GENERATE_DISABLED_HINT}</p>
+                      ) : null}
+                    </div>
                     <Button
                       onClick={onViewExecutiveBriefing}
                       variant="secondary"
@@ -2089,17 +2110,18 @@ export function ExecutiveCommandCenterView({
         <SectionBlock
           number="06"
           title="Executive Briefing Packs"
-          description="Draft review packs prepared for executive review — not certified outputs."
+          description="Draft review pack status only — not downloadable or certified outputs."
         >
           <div className="ceo-briefing-grid">
-            <article className="ceo-command-card">
+            <article className="ceo-command-card ceo-briefing-status-card">
               <div className="ceo-card-title-row">
                 <CeoGoldCardIcon icon={FileText} />
                 <strong>Board review draft</strong>
               </div>
-              <p>Status: {lastReportGeneratedAt ? 'Prepared' : 'Draft'}</p>
+              <p>Status: {boardReviewDraftPackStatus.statusLabel}</p>
+              <p className="ceo-briefing-status-note">{boardReviewDraftPackStatus.statusNote}</p>
             </article>
-            <article className="ceo-command-card">
+            <article className="ceo-command-card ceo-briefing-status-card">
               <div className="ceo-card-title-row">
                 <CeoGoldCardIcon icon={Shield} />
                 <strong>Compliance review</strong>
@@ -2110,10 +2132,11 @@ export function ExecutiveCommandCenterView({
                   ? 'In review'
                   : complianceOverview.posture === 'insufficient_data'
                     ? 'Pending inputs'
-                    : 'Prepared'}
+                    : 'Signals available'}
               </p>
+              <p className="ceo-briefing-status-note">{BRIEFING_PACK_STATUS_ONLY_NOTE}</p>
             </article>
-            <article className="ceo-command-card">
+            <article className="ceo-command-card ceo-briefing-status-card">
               <div className="ceo-card-title-row">
                 <CeoGoldCardIcon icon={BarChart3} />
                 <strong>Strategic review</strong>
@@ -2122,16 +2145,18 @@ export function ExecutiveCommandCenterView({
                 Status:{' '}
                 {strategyOverview.posture === 'insufficient_data' ? 'Pending inputs' : 'In review'}
               </p>
+              <p className="ceo-briefing-status-note">{BRIEFING_PACK_STATUS_ONLY_NOTE}</p>
             </article>
-            <article className="ceo-command-card">
+            <article className="ceo-command-card ceo-briefing-status-card">
               <div className="ceo-card-title-row">
                 <CeoGoldCardIcon icon={Coins} />
                 <strong>Funding review</strong>
               </div>
               <p>
                 Status:{' '}
-                {fundingOverview.executiveSignalEligible ? 'Prepared' : 'Pending inputs'}
+                {fundingOverview.executiveSignalEligible ? 'Signals available' : 'Pending inputs'}
               </p>
+              <p className="ceo-briefing-status-note">{BRIEFING_PACK_STATUS_ONLY_NOTE}</p>
             </article>
           </div>
         </SectionBlock>

@@ -493,3 +493,15 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 51/51; `fundingDisplayFormat` 7/7.
 
+### C.24.10B demo safety note
+
+**Baseline:** `ad1f779`.
+
+**Recording-safe result:** Briefing Packs are status-only (not downloadable). Board pack modal prints draft preview via browser — not certified PDF. Null metrics show N/A.
+
+**Do not say:** Export PDF, certified pack, or Prepared from old browser trace alone.
+
+**Say:** Print draft preview; Previous draft trace; Status only.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 54/54; `boardPackModalDisplay` 3/3.
+

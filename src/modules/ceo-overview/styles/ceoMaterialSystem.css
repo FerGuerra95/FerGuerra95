@@ -781,6 +781,26 @@
   color: rgba(212, 175, 55, 0.78);
 }
 
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-generate-draft-action-wrap {
+  display: grid;
+  gap: 6px;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-generate-draft-hint {
+  margin: 0;
+  max-width: 280px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: rgba(203, 213, 225, 0.72);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-status-note {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: rgba(203, 213, 225, 0.72);
+}
+
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-item,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-recommended-action-item {
   padding-bottom: 10px;

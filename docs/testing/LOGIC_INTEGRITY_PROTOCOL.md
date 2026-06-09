@@ -2809,3 +2809,15 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Integrity:** No formula/score/backend/Golden Dataset changes. `Suggested owner:` clearly labeled — not assigned owner. `boardDistributionLabel` never Ready when pending inputs/human review. No approved/certified/distributed claims. Board Review Draft only.
 
 **Tests:** build PASS; `ceoOverviewTruthfulness` 51/51; `fundingDisplayFormat` 7/7.
+
+---
+
+## C.24.10B — Buttons & Provenance Demo Safety Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `ad1f779`.
+
+**Integrity:** Display-only changes. localStorage not enterprise SoT — `Previous draft trace` only. Null board pack metrics render N/A. Print label not certified PDF. No formula/score/backend changes.
+
+**Tests:** build PASS; `ceoOverviewTruthfulness` 54/54; `boardPackModalDisplay` 3/3; `fundingDisplayFormat` 7/7.

@@ -8,6 +8,10 @@ import {
   buildExecutiveLiveDecisionQueueItems,
   buildExecutivePriorityRows,
   buildExecutiveRecommendedActions,
+  BOARD_PACK_GENERATE_DISABLED_HINT,
+  BOARD_PACK_PRINT_DRAFT_HINT,
+  BRIEFING_PACK_STATUS_ONLY_NOTE,
+  resolveBoardReviewDraftPackStatus,
   resolveSuggestedOwnerLabel,
   formatExecutiveBlockerSummaryLine,
   MODULE_READINESS_NA_CLARIFICATION,
@@ -700,5 +704,34 @@ describe('CEO overview truthfulness helpers', () => {
       /insufficient available data, not poor operational performance/i
     );
     expect(MODULE_READINESS_NA_CLARIFICATION).not.toMatch(/approved|certified/i);
+  });
+
+  it('labels briefing packs as status-only without downloadable claims', () => {
+    expect(BRIEFING_PACK_STATUS_ONLY_NOTE).toMatch(/status only/i);
+    expect(BRIEFING_PACK_STATUS_ONLY_NOTE).toMatch(/not a downloadable/i);
+    expect(BRIEFING_PACK_STATUS_ONLY_NOTE).toMatch(/not a downloadable or certified pack/i);
+  });
+
+  it('prefers session generatedAt over localStorage trace for board review draft status', () => {
+    const session = resolveBoardReviewDraftPackStatus({
+      sessionGeneratedAt: '2026-06-08T12:00:00.000Z',
+      lastDraftTraceAt: '2026-06-01T12:00:00.000Z'
+    });
+    const traceOnly = resolveBoardReviewDraftPackStatus({
+      lastDraftTraceAt: '2026-06-01T12:00:00.000Z'
+    });
+    const empty = resolveBoardReviewDraftPackStatus({});
+
+    expect(session.statusLabel).toMatch(/draft prepared this session/i);
+    expect(traceOnly.statusLabel).toBe('Previous draft trace');
+    expect(traceOnly.statusLabel).not.toBe('Prepared');
+    expect(empty.statusLabel).toBe('Draft');
+  });
+
+  it('exposes generate disabled and print draft hints without certified export claims', () => {
+    expect(BOARD_PACK_GENERATE_DISABLED_HINT).toMatch(/admin or board member/i);
+    expect(BOARD_PACK_PRINT_DRAFT_HINT).toMatch(/browser print/i);
+    expect(BOARD_PACK_PRINT_DRAFT_HINT).toMatch(/draft only/i);
+    expect(BOARD_PACK_PRINT_DRAFT_HINT).not.toMatch(/export pdf|certified/i);
   });
 });
