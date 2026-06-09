@@ -2771,3 +2771,17 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Helpers:** `buildExecutiveConclusion`, `humanizeExecutiveBlocker`, `MODULE_READINESS_NA_CLARIFICATION`, recommended-action queue dedupe, board `requiredBeforeDistribution`.
 
 **Tests:** build PASS; `ceoOverviewTruthfulness` 41/41; `fundingDisplayFormat` 7/7.
+
+---
+
+## C.24.8B — Executive Action Deduplication Pass
+
+**Status:** COMPLETED.
+
+**Baseline:** `f1886bc`.
+
+**Integrity:** No formula, score, backend, Golden Dataset, or Formula Registry changes. N/A / Pending inputs preserved; grouped unavailable signals remain visible as one pending row; no invented owners/deadlines; no cost-of-inaction or since-last-review copy.
+
+**Helpers:** `buildExecutiveRecommendedActions` — module dedupe, severity ranking, `buildGroupedPendingSignalsAction`, queue literal-phrase dedupe vs live Decision Queue.
+
+**Tests:** build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7; global unit 572 passed (4 sqlite env skips unrelated).

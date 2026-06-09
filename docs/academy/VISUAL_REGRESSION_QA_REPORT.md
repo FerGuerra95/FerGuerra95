@@ -645,3 +645,41 @@
 | `/governance/dashboard` | PASS | No regression |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 41/41; `fundingDisplayFormat` 7/7.
+
+---
+
+## 33. C.24.8B — Executive Action Deduplication Pass
+
+**Baseline:** `f1886bc`.
+
+**Change type:** Recommended Actions deduplication — grouped pending signals, module collapse, executive fallback copy. No layout/color/hero/radar changes.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | No regression |
+| `/ceo/overview` | PASS | Shorter Recommended Actions; grouped pending signals; Compliance not tripled |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7.
+
+---
+
+## 33. C.24.8B — Executive Action Deduplication Pass
+
+**Baseline:** `f1886bc`.
+
+**Change type:** Recommended Actions deduplication — grouped pending signals, module collapse, executive fallback copy. No layout/color/hero/radar changes.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | No regression |
+| `/ceo/overview` | PASS | Shorter Recommended Actions; grouped pending signals; Compliance not tripled |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7.

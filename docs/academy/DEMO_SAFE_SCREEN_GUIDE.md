@@ -461,3 +461,13 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 41/41; `fundingDisplayFormat` 7/7. Copy-only; no data/backend changes.
 
+### C.24.8B demo safety note
+
+**Baseline:** `f1886bc`.
+
+**Recording-safe result:** Recommended Actions is a short executive summary (≤5 items); multiple unavailable module signals appear as one `Pending module signals` row instead of four duplicate lines.
+
+**Do not say:** That missing signals mean failed performance — grouped row states pending inputs explicitly.
+
+**Validation:** build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7. Logic-only; no data/backend changes.
+

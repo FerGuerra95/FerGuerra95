@@ -322,7 +322,7 @@ describe('CEO overview truthfulness helpers', () => {
 
     expect(actions).toHaveLength(1);
     expect(actions[0].recommendedAction).toBeNull();
-    expect(actions[0].actionLabel).toMatch(/review required|open module/i);
+    expect(actions[0].actionLabel).toMatch(/review source module|complete source inputs/i);
     expect(actions[0].actionLabel).not.toMatch(/cost of inaction/i);
   });
 
@@ -527,7 +527,88 @@ describe('CEO overview truthfulness helpers', () => {
     });
 
     expect(actions[0].actionLabel).not.toMatch(/due |deadline/i);
-    expect(actions[0].actionLabel).toMatch(/review required|open module/i);
+    expect(actions[0].actionLabel).toMatch(/review source module|complete source inputs/i);
+  });
+
+  it('caps recommended actions at five items', () => {
+    const alerts = Array.from({ length: 10 }, (_, index) => ({
+      title: `Executive alert ${index + 1}`,
+      module: ['M&A', 'Funding', 'Compliance', 'Risk', 'PMI', 'Governance', 'Strategy', 'Reporting', 'Bridge', 'Heritage'][
+        index
+      ],
+      severity: index < 2 ? 'critical' : 'watch',
+      recommendedAction: `Action ${index + 1}`
+    }));
+
+    const actions = buildExecutiveRecommendedActions({ alerts, signals: [], limit: 5 });
+
+    expect(actions.length).toBeLessThanOrEqual(5);
+  });
+
+  it('collapses duplicate module actions to one recommended item', () => {
+    const actions = buildExecutiveRecommendedActions({
+      alerts: [
+        { title: 'Funding runway exposure', module: 'Funding', severity: 'critical', recommendedAction: 'Review runway.' },
+        { title: 'Funding signal watch', module: 'Funding', severity: 'watch', recommendedAction: 'Secondary funding note.' }
+      ],
+      signals: []
+    });
+
+    expect(actions.filter((item) => item.moduleKey === 'funding')).toHaveLength(1);
+    expect(actions[0].recommendedAction).toBe('Review runway.');
+  });
+
+  it('groups multiple signal-not-available items into one pending signals row', () => {
+    const actions = buildExecutiveRecommendedActions({
+      alerts: [],
+      signals: [
+        { title: 'FUNDING signal not available', module: 'Funding', severity: 'watch' },
+        { title: 'Governance signal not available', module: 'Governance', severity: 'watch' },
+        { title: 'Bridge signal not available', module: 'Bridge', severity: 'watch' },
+        { title: 'Risk signal not available', module: 'Risk', severity: 'watch' }
+      ]
+    });
+
+    expect(actions).toHaveLength(1);
+    expect(actions[0].title).toMatch(/pending module signals/i);
+    expect(actions[0].actionLabel).toMatch(/funding · governance · bridge · risk/i);
+    expect(actions[0].actionLabel).toMatch(/require source inputs before board circulation/i);
+    expect(actions[0].status).toBe('Pending inputs');
+  });
+
+  it('includes compliance at most once in recommended actions', () => {
+    const actions = buildExecutiveRecommendedActions({
+      alerts: [
+        { title: 'Compliance exposure', module: 'Compliance', severity: 'critical', recommendedAction: 'Review audit ledger.' },
+        { title: 'Compliance remediation watch', module: 'Compliance', severity: 'risk', recommendedAction: 'Review remediation.' },
+        { title: 'Risk escalation', module: 'Risk', severity: 'risk', recommendedAction: 'Review risk register.' }
+      ],
+      signals: []
+    });
+
+    expect(actions.filter((item) => item.moduleKey === 'compliance')).toHaveLength(1);
+    expect(actions[0].moduleKey).toBe('compliance');
+  });
+
+  it('does not invent owners in recommended actions', () => {
+    const actions = buildExecutiveRecommendedActions({
+      alerts: [{ title: 'Risk escalation', module: 'Risk', severity: 'risk' }],
+      signals: []
+    });
+    const serialized = JSON.stringify(actions);
+
+    expect(serialized).not.toMatch(/owner/i);
+    expect(actions[0]).not.toHaveProperty('owner');
+  });
+
+  it('preserves pending inputs labeling for grouped unavailable signals', () => {
+    const actions = buildExecutiveRecommendedActions({
+      alerts: [{ title: 'Strategy signal not available', module: 'Strategy', severity: 'watch' }],
+      signals: []
+    });
+
+    expect(actions[0].whyItMatters).toMatch(/pending inputs/i);
+    expect(actions[0].whyItMatters).toMatch(/not treated as failed performance/i);
   });
 
   it('humanizes compliance and risk blocker copy for executives', () => {

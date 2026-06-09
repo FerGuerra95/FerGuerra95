@@ -750,3 +750,12 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Recommended actions deduped from live queue; no invented deadlines.
 - Static priority rows labeled `not a scored signal`.
 - Validation: build PASS; `ceoOverviewTruthfulness` 41/41; `fundingDisplayFormat` 7/7.
+
+### C.24.8B Executive Action Deduplication checklist
+
+- Baseline `f1886bc`; logic-only in Recommended Actions — no hero/radar/branch-card visual changes.
+- Recommended Actions shows ≤5 items; no 4× separate `signal not available` rows.
+- Pending module signals grouped: `Funding · Governance · Bridge · Risk require source inputs…`
+- Compliance at most once in Recommended Actions; Decision Queue still detailed.
+- No invented deadlines/owners; Pending inputs preserved for grouped signals.
+- Validation: build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7.

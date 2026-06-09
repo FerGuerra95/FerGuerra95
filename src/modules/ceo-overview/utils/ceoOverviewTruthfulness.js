@@ -687,6 +687,158 @@ export function buildExecutiveLiveDecisionQueueItems(decisionQueue = [], { limit
   }));
 }
 
+function normalizeExecutiveModuleKey(module = '') {
+  const safe = String(module || '').trim().toLowerCase();
+  if (safe === 'm&a' || safe === 'ma') {
+    return 'ma';
+  }
+  if (EXECUTIVE_MODULE_ROUTES[safe]) {
+    return safe;
+  }
+
+  const labelMatch = Object.entries(EXECUTIVE_RADAR_BRANCH_LABELS).find(
+    ([, label]) => label.toLowerCase() === safe
+  );
+  return labelMatch?.[0] || safe.replace(/\s+/g, '');
+}
+
+function executiveModuleDisplayLabel(moduleKey, fallbackModule = '') {
+  return EXECUTIVE_RADAR_BRANCH_LABELS[moduleKey] || String(fallbackModule || moduleKey).trim();
+}
+
+function isUnavailableSignalSource(source = {}) {
+  const title = String(source?.title || '').toLowerCase();
+  const status = String(source?.status || '').toLowerCase();
+  const severity = String(source?.severity || '').toLowerCase();
+
+  return (
+    title.includes('signal not available') ||
+    title.includes('not available') ||
+    severity === 'insufficient_data' ||
+    status === 'insufficient_data' ||
+    status === 'not_available'
+  );
+}
+
+function recommendedActionSeverityScore(source = {}) {
+  const severity = String(source?.severity || '').toLowerCase();
+  let score = 0;
+
+  if (severity === 'critical' || severity === 'blocked') {
+    score += 100;
+  } else if (severity === 'risk' || severity === 'high') {
+    score += 80;
+  } else if (severity === 'watch' || severity === 'medium') {
+    score += 50;
+  } else {
+    score += 20;
+  }
+
+  if (String(source?.recommendedAction || '').trim()) {
+    score += 30;
+  }
+
+  const moduleKey = normalizeExecutiveModuleKey(source?.module);
+  if (['compliance', 'pmi', 'risk'].includes(moduleKey)) {
+    score += 15;
+  }
+
+  return score;
+}
+
+function buildRecommendedActionFallbackLabel(source = {}, route = '') {
+  const recommendedAction = String(source?.recommendedAction || '').trim();
+  if (recommendedAction) {
+    return recommendedAction;
+  }
+  if (route) {
+    return 'Review source module before board circulation.';
+  }
+  return 'Complete source inputs before board circulation.';
+}
+
+function summarizeRecommendedActionTitle(source = {}) {
+  const title = String(source?.title || '').trim();
+  const moduleKey = normalizeExecutiveModuleKey(source?.module);
+  const label = executiveModuleDisplayLabel(moduleKey, source?.module);
+
+  if (!title || isUnavailableSignalSource(source)) {
+    return null;
+  }
+
+  if (/exposure|alert|escalation|review|decision|opportunity/i.test(title)) {
+    return title;
+  }
+
+  return `Review ${label}`;
+}
+
+function buildGroupedPendingSignalsAction(moduleKeys = []) {
+  const uniqueKeys = [...new Set(moduleKeys.filter(Boolean))];
+  if (!uniqueKeys.length) {
+    return null;
+  }
+
+  const labels = uniqueKeys.map((key) => executiveModuleDisplayLabel(key));
+  const moduleList = labels.join(' · ');
+
+  return {
+    id: 'pending-module-signals',
+    title: uniqueKeys.length > 1 ? 'Pending module signals' : `${labels[0]} signal pending`,
+    module: 'Enterprise',
+    moduleKey: 'enterprise',
+    severity: 'watch',
+    recommendedAction: null,
+    actionLabel:
+      uniqueKeys.length > 1
+        ? `${moduleList} require source inputs before board circulation.`
+        : `${labels[0]} requires source inputs before board circulation.`,
+    whyItMatters: 'Pending inputs — not treated as failed performance',
+    status: 'Pending inputs',
+    route: null,
+    isGroupedPending: true
+  };
+}
+
+function buildRecommendedActionEntry(source, { queueLiteralPhrases = new Set() } = {}) {
+  const module = String(source?.module || 'Enterprise').trim();
+  const moduleKey = normalizeExecutiveModuleKey(module);
+  const title = summarizeRecommendedActionTitle(source);
+  if (!title) {
+    return null;
+  }
+
+  const recommendedAction = String(source?.recommendedAction || '').trim();
+  const route = resolveExecutiveModuleRoute(module);
+  const actionLabel = buildRecommendedActionFallbackLabel(source, route);
+  const literalPhrase = `${title}::${actionLabel}`.toLowerCase();
+
+  if (queueLiteralPhrases.has(literalPhrase)) {
+    return null;
+  }
+
+  const severity = String(source?.severity || 'watch').trim();
+
+  return {
+    id: `${moduleKey}-${title}`,
+    title,
+    module,
+    moduleKey,
+    severity,
+    recommendedAction: recommendedAction || null,
+    actionLabel,
+    whyItMatters:
+      severity.toLowerCase() === 'critical' || severity.toLowerCase() === 'risk'
+        ? 'Elevated attention across executive posture'
+        : 'Supports board-ready review',
+    status:
+      String(source?.status || '').trim() ||
+      (recommendedAction ? 'Suggested action' : 'Review required'),
+    route,
+    isGroupedPending: false
+  };
+}
+
 export function buildExecutiveRecommendedActions({
   alerts = [],
   signals = [],
@@ -701,55 +853,71 @@ export function buildExecutiveRecommendedActions({
     return [];
   }
 
-  const queueFingerprints = new Set(
-    buildExecutiveLiveDecisionQueueItems(decisionQueue, { limit: 12 }).map(
-      (item) => `${String(item.module).toLowerCase()}::${String(item.title).toLowerCase()}`
-    )
+  const maxItems = Math.min(5, Math.max(1, Number(limit) || 5));
+  const queueItems = buildExecutiveLiveDecisionQueueItems(decisionQueue, { limit: 12 });
+  const queueLiteralPhrases = new Set(
+    queueItems.flatMap((item) => {
+      const title = String(item.title || '').trim();
+      const action = String(item.recommendedAction || 'Review required').trim();
+      return [`${title}::${action}`.toLowerCase()];
+    })
   );
 
-  const seen = new Set();
-  const actions = [];
+  const seenSourceKeys = new Set();
+  const unavailableModuleKeys = [];
+  const rankedCandidates = [];
 
-  for (const source of combined) {
+  combined.forEach((source) => {
     const title = String(source?.title || '').trim();
-    const module = String(source?.module || 'Enterprise').trim();
-    const key = `${module}::${title}`.toLowerCase();
-    if (!title || seen.has(key) || queueFingerprints.has(key)) {
-      continue;
+    const moduleKey = normalizeExecutiveModuleKey(source?.module);
+    const sourceKey = `${moduleKey}::${title.toLowerCase()}`;
+    if (!title || seenSourceKeys.has(sourceKey)) {
+      return;
     }
-    seen.add(key);
+    seenSourceKeys.add(sourceKey);
 
-    const recommendedAction = String(source?.recommendedAction || '').trim();
-    const route = resolveExecutiveModuleRoute(module);
-    const actionLabel = recommendedAction
-      ? recommendedAction
-      : route
-        ? 'Open module · confirm source data before board circulation'
-        : 'Review required · confirm source data';
-    actions.push({
-      id: `${module}-${actions.length}`,
-      title,
-      module,
-      severity: String(source?.severity || 'watch').trim(),
-      recommendedAction: recommendedAction || null,
-      actionLabel,
-      whyItMatters:
-        String(source?.severity || '').toLowerCase() === 'critical' ||
-        String(source?.severity || '').toLowerCase() === 'risk'
-          ? 'Elevated attention across executive posture'
-          : 'Supports board-ready review',
-      status:
-        String(source?.status || '').trim() ||
-        (recommendedAction ? 'Suggested action' : 'Review required'),
-      route
+    if (isUnavailableSignalSource(source)) {
+      unavailableModuleKeys.push(moduleKey);
+      return;
+    }
+
+    rankedCandidates.push({
+      source,
+      moduleKey,
+      score: recommendedActionSeverityScore(source)
     });
+  });
 
-    if (actions.length >= limit) {
+  rankedCandidates.sort((left, right) => right.score - left.score);
+
+  const actions = [];
+  const usedModules = new Set();
+
+  for (const candidate of rankedCandidates) {
+    if (actions.length >= maxItems) {
       break;
     }
+
+    const { source, moduleKey } = candidate;
+    if (usedModules.has(moduleKey)) {
+      continue;
+    }
+
+    const entry = buildRecommendedActionEntry(source, { queueLiteralPhrases });
+    if (!entry) {
+      continue;
+    }
+
+    usedModules.add(moduleKey);
+    actions.push(entry);
   }
 
-  return actions;
+  const groupedPending = buildGroupedPendingSignalsAction(unavailableModuleKeys);
+  if (groupedPending && actions.length < maxItems) {
+    actions.push(groupedPending);
+  }
+
+  return actions.slice(0, maxItems);
 }
 
 function blockerDescriptionRank(description = '') {

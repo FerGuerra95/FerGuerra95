@@ -8586,3 +8586,24 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Blockers humanized:** per-branch executive copy (funding, risk, compliance, governance, etc.) — missing data ≠ performance failure.
 
 **Tests:** `ceoOverviewTruthfulness` 41/41; `fundingDisplayFormat` 7/7; build PASS.
+
+---
+
+## C.24.8B — Executive Action Deduplication Pass
+
+**Status:** COMPLETED.
+
+**Baseline:** `f1886bc` (HEAD = origin/main).
+
+**Scope:** Recommended Actions deduplication only — no hero/radar/module readiness/board workflow/branch card changes.
+
+**Deduplication rules:**
+- Cap at 5 executive recommended actions; one primary action per module.
+- Priority: critical/high → real `recommendedAction` → compliance/pmi/risk → grouped pending signals last.
+- Multiple `signal not available` rows collapse to one `Pending module signals` item.
+- Compliance appears at most once in Recommended Actions; Decision Queue retains detail.
+- Fallback copy: `Review source module before board circulation.` / `Complete source inputs before board circulation.` (no repeated `Open module` rows).
+
+**Files:** `ceoOverviewTruthfulness.js`, `ceoOverviewTruthfulness.test.js`.
+
+**Tests:** build PASS; `ceoOverviewTruthfulness` 47/47; `fundingDisplayFormat` 7/7.
