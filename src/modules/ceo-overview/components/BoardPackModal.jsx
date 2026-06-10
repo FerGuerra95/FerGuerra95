@@ -6,6 +6,7 @@ import { BOARD_PACK_PRINT_DRAFT_HINT } from '../utils/ceoOverviewTruthfulness.js
 
 export const BOARD_PACK_PRINT_ROOT_CLASS = 'board-pack-print-root';
 export const BOARD_PACK_NO_PRINT_CLASS = 'board-pack-no-print';
+export const BOARD_PACK_PRINTING_BODY_CLASS = 'printing-board-pack';
 export const BOARD_PACK_PRINT_BUTTON_LABEL = 'Print draft preview';
 export const BOARD_PACK_PRINT_DRAFT_BANNER =
   'Board review draft · Decision support only · Human review required · Not board-approved';
@@ -169,6 +170,31 @@ function Metric({ label, value }) {
       <strong>{value}</strong>
     </div>
   );
+}
+
+export function runBoardPackPrintPreview() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return;
+  }
+
+  const body = document.body;
+  if (!body) {
+    return;
+  }
+
+  const cleanup = () => {
+    body.classList.remove(BOARD_PACK_PRINTING_BODY_CLASS);
+  };
+
+  body.classList.add(BOARD_PACK_PRINTING_BODY_CLASS);
+  window.addEventListener('afterprint', cleanup, { once: true });
+  window.setTimeout(cleanup, 1500);
+
+  try {
+    window.print();
+  } catch {
+    cleanup();
+  }
 }
 
 export function BoardPackModal({ boardPack, loading = false, error = null, onClose, onExport }) {
@@ -415,23 +441,25 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           }
 
           html,
-          body {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} {
             background: #fff !important;
             height: auto !important;
             overflow: visible !important;
           }
 
-          body * {
-            visibility: hidden;
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .sidebar,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-sidebar,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .topbar,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-build-strip,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .page > *:not(.board-pack-backdrop),
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .${BOARD_PACK_NO_PRINT_CLASS},
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-footer,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-icon-button,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-action {
+            display: none !important;
           }
 
-          .board-pack-backdrop,
-          .board-pack-backdrop .${BOARD_PACK_PRINT_ROOT_CLASS},
-          .board-pack-backdrop .${BOARD_PACK_PRINT_ROOT_CLASS} * {
-            visibility: visible;
-          }
-
-          .board-pack-backdrop {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-backdrop {
             position: static !important;
             inset: auto !important;
             display: block !important;
@@ -439,13 +467,16 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             margin: 0 !important;
             background: #fff !important;
             backdrop-filter: none !important;
+            visibility: visible !important;
           }
 
-          .${BOARD_PACK_PRINT_ROOT_CLASS} {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .${BOARD_PACK_PRINT_ROOT_CLASS} {
+            position: static !important;
+            left: auto !important;
+            top: auto !important;
+            display: block !important;
+            visibility: visible !important;
+            width: 100% !important;
             max-height: none !important;
             overflow: visible !important;
             border: none !important;
@@ -456,15 +487,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             color: #111827 !important;
           }
 
-          .${BOARD_PACK_NO_PRINT_CLASS},
-          .board-pack-footer,
-          .board-pack-icon-button,
-          .board-pack-print-action {
-            display: none !important;
-            visibility: hidden !important;
-          }
-
-          .board-pack-print-only-banner {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-only-banner {
             display: block !important;
             margin: 0 0 14px;
             padding: 10px 12px;
@@ -479,74 +502,67 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             font-weight: 700;
           }
 
-          .board-pack-header h2,
-          .board-pack-panel h3,
-          .board-pack-summary strong,
-          .board-pack-metric strong,
-          .board-pack-bar-top strong {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-header h2,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel h3,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-summary strong,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric strong,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-bar-top strong {
             color: #111827 !important;
           }
 
-          .board-pack-header p,
-          .board-pack-summary p,
-          .board-pack-recommendations p {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-header p,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-summary p,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-recommendations p {
             color: #374151 !important;
           }
 
-          .board-pack-kicker,
-          .board-pack-summary span,
-          .board-pack-metric span,
-          .board-pack-bar-top span {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-kicker,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-summary span,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric span,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-bar-top span {
             color: #6b7280 !important;
           }
 
-          .board-pack-summary,
-          .board-pack-panel,
-          .board-pack-metric {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-summary,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric {
             border: 1px solid #d1d5db !important;
             background: #fff !important;
             break-inside: avoid;
             page-break-inside: avoid;
           }
 
-          .board-pack-section {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-section {
             break-inside: avoid;
             page-break-inside: avoid;
           }
 
-          .board-pack-grid,
-          .board-pack-metrics {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-grid,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metrics {
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 12px;
           }
 
-          .board-pack-radar {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-radar {
             max-width: 280px;
           }
 
-          .board-pack-radar-grid,
-          .board-pack-radar-axis {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-radar-grid,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-radar-axis {
             stroke: #9ca3af !important;
           }
 
-          .board-pack-radar-fill {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-radar-fill {
             fill: rgba(180, 140, 40, 0.18) !important;
             stroke: #92700c !important;
           }
 
-          .board-pack-radar-label {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-radar-label {
             fill: #111827 !important;
           }
 
-          .board-pack-bar-track {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-bar-track {
             background: #e5e7eb !important;
-          }
-
-          .ceos-sidebar,
-          .sidebar,
-          .topbar,
-          .app-shell > :not(.board-pack-backdrop) {
-            display: none !important;
           }
         }
       `}</style>
@@ -732,7 +748,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             </Button>
             <div className={`board-pack-print-action ${BOARD_PACK_NO_PRINT_CLASS}`}>
               <Button
-                onClick={onExport}
+                onClick={runBoardPackPrintPreview}
                 disabled={!boardPack || loading}
                 className={BOARD_PACK_NO_PRINT_CLASS}
               >
