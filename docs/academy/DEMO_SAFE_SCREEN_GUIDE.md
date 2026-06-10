@@ -547,3 +547,13 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
 
+### C.24.11C board review draft final print polish note
+
+**Baseline:** `8c4a4dc`.
+
+**Recording-safe result:** Print output excludes app chrome (build strip, BACKEND ACTIVO, logout). Page 2 layout fills A4; improved legibility for demo.
+
+**Print dialog:** Disable browser headers and footers; enable background graphics.
+
+**Validation:** build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+

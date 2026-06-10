@@ -23,6 +23,13 @@ export const BOARD_PACK_HUMAN_REVIEW_BADGE = 'Human Review Required';
 export const BOARD_PACK_PRINT_CLEAN_OUTPUT_HINT =
   'For clean output, disable browser headers and footers in print settings.';
 export const BOARD_PACK_PRINT_DOCUMENT_CLASS = 'board-pack-print-document';
+export const BOARD_PACK_PRINT_HIDDEN_APP_CHROME_MARKERS = [
+  'ceos-main-build-strip',
+  'ceos-build-strip-tagline',
+  'ceos-build-strip-actions',
+  'ceos-logout-btn',
+  'ceos-topbar-premium'
+];
 export const BOARD_PACK_EXEC_READINESS_LABEL = 'Executive Readiness Score';
 export const BOARD_PACK_GENERATED_UNAVAILABLE = 'Generated timestamp unavailable';
 export const BOARD_PACK_EXEC_DISCLAIMER =
@@ -732,11 +739,22 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             print-color-adjust: exact;
           }
 
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .app-shell > .sidebar,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .app-shell > .ceos-sidebar,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .main-area > .topbar,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .main-area > .ceos-main-build-strip,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-build-strip-copy,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-build-strip-tagline,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-build-strip-actions,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-build-strip-badge,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-build-strip-user,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-logout-btn,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-topbar-premium,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-topbar-shell,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .page > *:not(.board-pack-backdrop),
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .sidebar,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-sidebar,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .topbar,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-build-strip,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .page > *:not(.board-pack-backdrop),
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .${BOARD_PACK_NO_PRINT_CLASS},
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-footer,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-icon-button,
@@ -771,8 +789,8 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             padding: 0 !important;
             background: #050505 !important;
             color: #f8f3e7 !important;
-            font-size: 10px;
-            line-height: 1.35;
+            font-size: 11px;
+            line-height: 1.45;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
           }
@@ -788,7 +806,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page {
-            gap: 7px !important;
+            gap: 9px !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page-1 {
@@ -796,24 +814,35 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             break-after: page;
           }
 
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page-2 {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 272mm !important;
+            gap: 10px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page-2 .board-pack-premium-footer {
+            margin-top: auto !important;
+          }
+
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-only-banner {
             display: block !important;
-            margin: 0 0 6px;
-            padding: 5px 8px;
+            margin: 0 0 8px;
+            padding: 6px 10px;
             border: 1px solid rgba(214, 168, 74, 0.45);
             border-radius: 6px;
             background: #11100d !important;
             color: #f0c96a !important;
-            font-size: 7px;
-            line-height: 1.35;
+            font-size: 8px;
+            line-height: 1.4;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             font-weight: 700;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-header {
-            padding: 7px 8px !important;
-            gap: 8px !important;
+            padding: 9px 10px !important;
+            gap: 10px !important;
             border-radius: 8px !important;
             border: 1px solid rgba(214, 168, 74, 0.45) !important;
             background:
@@ -822,20 +851,20 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-brand-wrap {
-            width: 42px !important;
-            height: 42px !important;
+            width: 48px !important;
+            height: 48px !important;
             border-radius: 8px !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-title {
-            font-size: 13px !important;
+            font-size: 15px !important;
             letter-spacing: 0.1em !important;
             color: #f0c96a !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-subtitle,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-meta {
-            font-size: 7px !important;
+            font-size: 8px !important;
             color: #c7bda7 !important;
           }
 
@@ -845,8 +874,8 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-badge {
-            padding: 2px 6px !important;
-            font-size: 6px !important;
+            padding: 3px 7px !important;
+            font-size: 7.5px !important;
             border: 1px solid rgba(214, 168, 74, 0.42) !important;
             background: rgba(255, 255, 255, 0.04) !important;
             color: #f0c96a !important;
@@ -854,9 +883,9 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-panel {
             margin-top: 0 !important;
-            grid-template-columns: 92px minmax(0, 1fr) !important;
-            gap: 8px !important;
-            padding: 8px !important;
+            grid-template-columns: 104px minmax(0, 1fr) !important;
+            gap: 10px !important;
+            padding: 10px !important;
             border-radius: 8px !important;
             border: 1px solid rgba(214, 168, 74, 0.38) !important;
             background: rgba(255, 255, 255, 0.04) !important;
@@ -867,25 +896,25 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel-eyebrow,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-inline-metric span,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metrics-group-title {
-            font-size: 6.5px !important;
+            font-size: 8px !important;
             color: #d6a84a !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-score-value {
-            font-size: 22px !important;
+            font-size: 26px !important;
             margin-top: 4px !important;
             color: #f8f3e7 !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-summary {
-            font-size: 8.5px !important;
-            line-height: 1.4 !important;
+            font-size: 9.5px !important;
+            line-height: 1.5 !important;
             color: #f8f3e7 !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-disclaimer {
-            margin-top: 5px !important;
-            font-size: 7px !important;
+            margin-top: 6px !important;
+            font-size: 8px !important;
             color: #c7bda7 !important;
           }
 
@@ -894,18 +923,22 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metrics-group-title {
-            margin-bottom: 4px !important;
+            margin-bottom: 6px !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metrics-grid {
-            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-            gap: 4px !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 6px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page-1 .board-pack-metrics-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric-card {
-            padding: 4px 5px !important;
-            border-radius: 6px !important;
-            gap: 2px !important;
+            padding: 6px 7px !important;
+            border-radius: 7px !important;
+            gap: 4px !important;
             border: 1px solid rgba(214, 168, 74, 0.35) !important;
             background: rgba(255, 255, 255, 0.04) !important;
             break-inside: auto !important;
@@ -913,17 +946,18 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric-value {
-            font-size: 9px !important;
+            font-size: 11px !important;
             color: #f8f3e7 !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-bottom-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 6px !important;
+            gap: 8px !important;
+            flex: 1 1 auto !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel {
-            padding: 6px 7px !important;
+            padding: 8px 9px !important;
             border-radius: 8px !important;
             border: 1px solid rgba(214, 168, 74, 0.35) !important;
             background: rgba(255, 255, 255, 0.04) !important;
@@ -932,38 +966,42 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel-title {
-            margin-bottom: 4px !important;
-            font-size: 7px !important;
+            margin-bottom: 6px !important;
+            font-size: 8.5px !important;
             color: #f0c96a !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-inline-metric {
-            padding: 3px 0 !important;
-            gap: 6px !important;
+            padding: 4px 0 !important;
+            gap: 8px !important;
             border-top-color: rgba(214, 168, 74, 0.2) !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-inline-metric strong {
-            font-size: 8px !important;
+            font-size: 9.5px !important;
             color: #f8f3e7 !important;
           }
 
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page-2 .board-pack-panel.board-pack-section {
+            flex: 0 0 auto !important;
+          }
+
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-recommendations {
-            gap: 4px !important;
+            gap: 6px !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-recommendations p {
-            font-size: 7.5px !important;
-            line-height: 1.35 !important;
+            font-size: 9px !important;
+            line-height: 1.45 !important;
             color: #f8f3e7 !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-footer {
-            margin-top: 6px !important;
-            padding: 6px 8px !important;
+            margin-top: 8px !important;
+            padding: 8px 10px !important;
             border-radius: 6px !important;
-            font-size: 6px !important;
-            line-height: 1.45 !important;
+            font-size: 7.5px !important;
+            line-height: 1.5 !important;
             border: 1px solid rgba(214, 168, 74, 0.28) !important;
             background: #080807 !important;
             color: #c7bda7 !important;

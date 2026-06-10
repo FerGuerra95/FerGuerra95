@@ -13,6 +13,7 @@ import {
   BOARD_PACK_PRINT_CLEAN_OUTPUT_HINT,
   BOARD_PACK_PRINT_DRAFT_BANNER,
   BOARD_PACK_PRINT_DOCUMENT_CLASS,
+  BOARD_PACK_PRINT_HIDDEN_APP_CHROME_MARKERS,
   BOARD_PACK_PRINT_ROOT_CLASS,
   BOARD_PACK_PRINTING_BODY_CLASS,
   BoardPackModal,
@@ -142,6 +143,29 @@ describe('BoardPackModal display formatting', () => {
 
     const printButton = screen.getByRole('button', { name: BOARD_PACK_PRINT_BUTTON_LABEL });
     expect(printButton.classList.contains(BOARD_PACK_NO_PRINT_CLASS)).toBe(true);
+  });
+
+  it('scopes print CSS to hide app chrome markers outside the board pack root', () => {
+    render(
+      React.createElement(BoardPackModal, {
+        boardPack: sampleBoardPack,
+        onClose: () => {}
+      })
+    );
+
+    const printRoot = document.querySelector(`.${BOARD_PACK_PRINT_ROOT_CLASS}`);
+    const styleText = document.querySelector('.board-pack-backdrop style')?.textContent || '';
+
+    BOARD_PACK_PRINT_HIDDEN_APP_CHROME_MARKERS.forEach((marker) => {
+      expect(styleText).toContain(marker);
+    });
+
+    expect(printRoot.textContent).not.toMatch(/BACKEND ACTIVO/i);
+    expect(printRoot.textContent).not.toMatch(/Cerrar sesión/i);
+    expect(printRoot.textContent).not.toMatch(/Fernando · admin/i);
+    expect(printRoot.textContent).not.toMatch(
+      /M&A, Compliance, Funding y PMI consolidados/i
+    );
   });
 
   it('adds and removes the printing body class around browser print', () => {

@@ -823,3 +823,12 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Confirm: non-blank, gold border document, compact metric grids, draft/human review/not certified visible.
 - Do not say certified PDF, board-approved, or Export PDF.
 - Validation: build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+### C.24.11C Board review draft final print polish checklist
+
+- Baseline `8c4a4dc`; final print polish in `BoardPackModal` only.
+- Print must exclude app chrome: build strip tagline, BACKEND ACTIVO, user/admin, Cerrar sesión.
+- Page 2 fills A4 with footer anchored; no large unintentional void.
+- Legible text/cards for demo; target 2 pages.
+- Disable browser headers/footers in print dialog.
+- Validation: build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.

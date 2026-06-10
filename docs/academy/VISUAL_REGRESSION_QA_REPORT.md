@@ -742,6 +742,18 @@
 
 ---
 
+## 40. C.24.11C — Board Review Draft Final Print Polish
+
+**Status:** COMPLETED.
+
+**Baseline:** `8c4a4dc`.
+
+**Scope:** `BoardPackModal.jsx` — hide `ceos-main-build-strip` and app chrome in print; page 2 flex fill; increased print typography.
+
+**Manual QA:** Pending — confirm no build strip/logout in print preview.
+
+---
+
 ## 39. C.24.11B — Premium Board Review Draft Print Layout Polish
 
 **Status:** COMPLETED.

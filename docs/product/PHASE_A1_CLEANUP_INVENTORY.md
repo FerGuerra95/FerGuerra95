@@ -8725,3 +8725,19 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Tests:** `boardPackModalDisplay` (ceo-overview + reporting); build; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
 
 **Next:** production spot-check + recording rehearsal; future dedicated PDF renderer if browser print remains insufficient.
+
+---
+
+## C.24.11C — Board Review Draft Final Print Polish
+
+**Status:** COMPLETED.
+
+**Baseline:** `8c4a4dc` (C.24.11B).
+
+**Fixes:** Print CSS now hides real app chrome (`ceos-main-build-strip`, build strip tagline/actions, logout, topbar). Page 2 flex layout fills A4 with footer anchored; font/card sizes increased for demo legibility while keeping 2-page target.
+
+**Browser limitation:** Disable browser headers/footers in print dialog for clean recording — app cannot remove them via CSS.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); build; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+**Next:** production spot-check + recording rehearsal.

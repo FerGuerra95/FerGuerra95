@@ -2861,3 +2861,13 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Integrity:** Print layout compaction only — two-page structure, compact metric grids, black/gold print tokens, `@page` 8mm margin. Browser header/footer limitation documented; no claim app removes them. C.24.10D print mechanism preserved. Recommendations display further softened. No backend/formula/Golden changes.
 
 **Tests:** `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; build + `fundingDisplayFormat`.
+
+---
+
+## C.24.11C — Board Review Draft Final Print Polish
+
+**Status:** COMPLETED.
+
+**Baseline:** `8c4a4dc`.
+
+**Integrity:** Print CSS only — correct app chrome selectors (`ceos-main-build-strip`, logout, topbar); page 2 flex fill; improved legibility. Truthfulness unchanged. No backend/formula/Golden changes.

@@ -10,6 +10,7 @@ import {
   BOARD_PACK_PREMIUM_TITLE,
   BOARD_PACK_PRINT_BUTTON_LABEL,
   BOARD_PACK_PRINT_DOCUMENT_CLASS,
+  BOARD_PACK_PRINT_HIDDEN_APP_CHROME_MARKERS,
   BOARD_PACK_PRINT_ROOT_CLASS,
   BOARD_PACK_PRINTING_BODY_CLASS,
   BoardPackModal,
@@ -64,5 +65,10 @@ describe('Board pack modal print preview safety', () => {
     expect(printRoot.textContent).toContain('Core Metrics');
     expect(printRoot.textContent).toContain('Board Recommendations');
     expect(document.querySelector(`.board-pack-footer.${BOARD_PACK_NO_PRINT_CLASS}`)).toBeTruthy();
+
+    const styleText = document.querySelector('.board-pack-backdrop style')?.textContent || '';
+    expect(BOARD_PACK_PRINT_HIDDEN_APP_CHROME_MARKERS).toContain('ceos-main-build-strip');
+    expect(styleText).toContain('ceos-main-build-strip');
+    expect(printRoot.textContent).not.toMatch(/BACKEND ACTIVO|Cerrar sesión/i);
   });
 });
