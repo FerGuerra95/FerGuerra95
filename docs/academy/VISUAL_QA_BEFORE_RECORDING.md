@@ -842,3 +842,12 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Disable browser headers/footers in print dialog; enable background graphics.
 - Confirm: draft-only, human review, not certified; no Export PDF; N/A and explicit 0 preserved.
 - Validation: build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+### C.24.12B Demo button safety checklist
+
+- Reporting CTA: **Open reporting workspace** → `/reporting/dashboard`.
+- Safe to click: Generate Board Review Draft; Close modal; Module Readiness cards; Open reporting workspace; M&A/Compliance via module cards.
+- Safe to show, not click: Section 03 intelligence; Corporate Health Radar; Section 05 workflow; Section 06 briefing pack status cards.
+- Avoid: Print draft preview (unless rehearsed); `/bridge/marketplace`; Reporting Create; PMI mutations; Funding demo tools; Bridge Recalculate.
+- Confirm `status only · not clickable` on static sections.
+- Validation: build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.

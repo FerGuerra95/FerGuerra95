@@ -34,6 +34,45 @@ import {
   BOARD_PACK_PRINT_DRAFT_HINT,
   BRIEFING_PACK_STATUS_ONLY_NOTE
 } from '../../../src/modules/ceo-overview/utils/ceoOverviewTruthfulness.js';
+import {
+  CEO_BRIEFING_PACKS_SECTION_NOTE,
+  CEO_EXECUTIVE_SIGNAL_STATUS_NOTE,
+  CEO_REPORTING_WORKSPACE_BUTTON_LABEL,
+  CEO_REPORTING_WORKSPACE_ROUTE,
+  CEO_WORKFLOW_STATUS_NOTE,
+  ExecutiveCommandCenterView
+} from '../../../src/modules/ceo-overview/components/ExecutiveCommandCenterView.jsx';
+import { MemoryRouter } from 'react-router-dom';
+
+const commandCenterFixture = {
+  executiveSignal: { score: 72, title: 'Executive signal' },
+  commandReadiness: { score: 72, trend: 'stable', confidence: 80, humanReviewRequired: true },
+  commandRadarAxes: [],
+  dealReadinessCombined: null,
+  complianceDragPenalty: null,
+  legalHealthRadar: null,
+  maValuationSignal: null,
+  commandDecisionQueue: [],
+  commandAlerts: [],
+  commandSignals: [],
+  commandBoardView: {},
+  maOverview: { score: 70, posture: 'ready', executiveSignalEligible: true },
+  complianceOverview: { score: 65, posture: 'ready', openAlerts: 0 },
+  fundingOverview: { score: 60, posture: 'ready', executiveSignalEligible: true },
+  pmiOverview: { score: 55, posture: 'ready' },
+  governanceOverview: { score: 68, posture: 'ready' },
+  riskOverview: { score: 70, posture: 'ready' },
+  strategyOverview: { score: null, posture: 'insufficient_data' },
+  reportingOverview: { score: null, posture: 'insufficient_data' },
+  bridgeOverview: { score: null, posture: 'insufficient_data' },
+  heritageOverview: { score: null, posture: 'insufficient_data' },
+  executivePriorityRows: [],
+  lastReportGeneratedAt: '',
+  canGenerateBoardPack: true,
+  boardPackLoading: false,
+  onGenerateBoardPack: () => {},
+  onOpenReportingWorkspace: () => {}
+};
 
 const sampleBoardPack = {
   score: 72,
@@ -195,6 +234,36 @@ describe('BoardPackModal display formatting', () => {
     expect(styleText).toContain(BOARD_PACK_PRINT_PAGE_BREAK_CLASS);
     expect(styleText).toMatch(/break-before:\s*page/i);
     expect(styleText).not.toMatch(/board-pack-print-page-1[\s\S]*page-break-after:\s*always/i);
+  });
+
+  it('marks static executive sections with status-only affordance and honest reporting CTA', () => {
+    render(
+      React.createElement(
+        MemoryRouter,
+        null,
+        React.createElement(ExecutiveCommandCenterView, commandCenterFixture)
+      )
+    );
+
+    const root = document.querySelector('[data-testid="ceo-command-center-enterprise"]');
+    expect(root).toBeTruthy();
+    expect(root.textContent).toContain(CEO_REPORTING_WORKSPACE_BUTTON_LABEL);
+    expect(root.textContent).not.toMatch(/view executive briefing/i);
+    expect(root.textContent).toContain(CEO_EXECUTIVE_SIGNAL_STATUS_NOTE);
+    expect(root.textContent).toContain(CEO_WORKFLOW_STATUS_NOTE);
+    expect(root.textContent).toContain(CEO_BRIEFING_PACKS_SECTION_NOTE);
+    expect(root.textContent).toContain(BRIEFING_PACK_STATUS_ONLY_NOTE);
+    expect(root.textContent).not.toMatch(/export pdf|approved pack|certified pdf/i);
+    expect(root.textContent).toMatch(/not board-approved/i);
+    expect(root.textContent).toMatch(/not downloadable or certified pack/i);
+
+    expect(document.querySelectorAll('.ceo-intelligence-grid .ceo-static-card').length).toBe(4);
+    expect(document.querySelectorAll('.ceo-workflow-step-static').length).toBe(5);
+    expect(document.querySelectorAll('.ceo-briefing-grid .ceo-status-only-card').length).toBe(4);
+    expect(document.querySelector('.ceo-briefing-grid a')).toBeNull();
+    expect(document.querySelector(`a[href="${CEO_REPORTING_WORKSPACE_ROUTE}"]`)).toBeTruthy();
+    expect(document.querySelector('a.ceo-command-card[href="/ma/dashboard"]')).toBeTruthy();
+    expect(screen.getByRole('button', { name: /generate board review draft/i })).toBeTruthy();
   });
 
   it('adds and removes the printing body class around browser print', () => {

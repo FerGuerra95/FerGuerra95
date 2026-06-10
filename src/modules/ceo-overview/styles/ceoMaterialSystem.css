@@ -957,3 +957,69 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ——— C.24.12B Status-only affordance (not clickable) ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-section-status-note {
+  margin: 0 0 12px !important;
+  font-size: 0.72rem !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: rgba(248, 243, 231, 0.48) !important;
+  font-weight: 600 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-static-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-status-only-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step-static {
+  cursor: default !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-static-card:hover,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-status-only-card:hover,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-corporate-radar-card.ceo-static-card:hover,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step-static:hover {
+  transform: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-status-only-card:hover {
+  box-shadow:
+    var(--ceo-mat-inset-top),
+    var(--ceo-mat-inset-depth),
+    0 12px 40px rgba(0, 0, 0, 0.42),
+    0 0 24px rgba(245, 197, 92, 0.06) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-reporting-workspace-hint {
+  margin: 6px 0 0 !important;
+  font-size: 0.72rem !important;
+  line-height: 1.45 !important;
+  color: rgba(248, 243, 231, 0.52) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-reporting-section-cta {
+  margin-top: 14px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-reporting-section-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  border-radius: 999px !important;
+  padding: 10px 14px !important;
+  border: 1px solid rgba(245, 197, 92, 0.42) !important;
+  background: rgba(8, 7, 6, 0.88) !important;
+  color: rgba(248, 243, 231, 0.94) !important;
+  font-size: 0.82rem !important;
+  font-weight: 760 !important;
+  text-decoration: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-reporting-section-link:hover {
+  border-color: rgba(243, 218, 138, 0.58) !important;
+  background: rgba(16, 14, 11, 0.96) !important;
+}

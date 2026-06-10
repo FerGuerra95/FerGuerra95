@@ -1889,13 +1889,8 @@ export function CEOOverviewPage() {
     }
   }
 
-  function handleExportBoardPack() {
-    if (typeof window === 'undefined') return;
-    window.print();
-  }
-
-  function handleViewExecutiveBriefing() {
-    navigate('/reporting/library');
+  function handleOpenReportingWorkspace() {
+    navigate('/reporting/dashboard');
   }
 
   const complianceEngine = useComplianceEngine({
@@ -2202,7 +2197,7 @@ export function CEOOverviewPage() {
         canGenerateBoardPack={canGenerateBoardPack}
         boardPackLoading={boardPackLoading}
         onGenerateBoardPack={handleGenerateBoardPack}
-        onViewExecutiveBriefing={handleViewExecutiveBriefing}
+        onOpenReportingWorkspace={handleOpenReportingWorkspace}
       />
 
       {isBoardPackOpen ? (
@@ -2211,7 +2206,6 @@ export function CEOOverviewPage() {
           loading={boardPackLoading}
           error={boardPackError}
           onClose={() => setIsBoardPackOpen(false)}
-          onExport={handleExportBoardPack}
         />
       ) : null}
     </div>

@@ -40,6 +40,17 @@ import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 
 const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png';
 
+export const CEO_REPORTING_WORKSPACE_BUTTON_LABEL = 'Open reporting workspace';
+export const CEO_REPORTING_WORKSPACE_ROUTE = '/reporting/dashboard';
+export const CEO_REPORTING_WORKSPACE_HINT =
+  'Review board review status, reporting metadata and draft workflow.';
+export const CEO_EXECUTIVE_SIGNAL_STATUS_NOTE =
+  'Executive signal view · status only · not clickable';
+export const CEO_WORKFLOW_STATUS_NOTE =
+  'Workflow view · process status only · not clickable';
+export const CEO_BRIEFING_PACKS_SECTION_NOTE =
+  'Status only · not downloadable or certified pack · not clickable';
+
 const DECISION_QUEUE_ICONS = {
   'Compliance Exposure': Shield,
   'Risk Radar Alert': TriangleAlert,
@@ -594,14 +605,6 @@ const commandCenterCss = `
       background 180ms ease,
       box-shadow 180ms ease,
       transform 180ms ease;
-  }
-
-  .ceo-briefing-grid .ceo-command-card:hover {
-    background: rgba(12, 11, 9, 0.48);
-    box-shadow:
-      inset 0 1px 0 rgba(212, 175, 55, 0.08),
-      0 8px 24px rgba(0, 0, 0, 0.28);
-    transform: translateY(-1px);
   }
 
   .ceo-briefing-grid .ceo-command-card:last-child {
@@ -1161,6 +1164,64 @@ const commandCenterCss = `
     line-height: 1.5;
   }
 
+  .ceo-section-status-note {
+    margin: 0 0 12px;
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ceo-text-muted);
+    font-weight: 600;
+  }
+
+  .ceo-reporting-workspace-hint {
+    margin: 6px 0 0;
+    width: 100%;
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--ceo-text-muted);
+  }
+
+  .ceo-static-card,
+  .ceo-status-only-card,
+  .ceo-workflow-step-static {
+    cursor: default;
+  }
+
+  .ceo-static-card:hover,
+  .ceo-status-only-card:hover,
+  .ceo-workflow-step-static:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .ceo-reporting-section-cta {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ceo-reporting-section-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 10px 14px;
+    border: 1px solid rgba(245, 197, 92, 0.42);
+    background: rgba(8, 7, 6, 0.88);
+    color: rgba(248, 243, 231, 0.94);
+    font-size: 13px;
+    font-weight: 760;
+    text-decoration: none;
+  }
+
+  .ceo-reporting-section-link:hover {
+    border-color: rgba(243, 218, 138, 0.58);
+    background: rgba(16, 14, 11, 0.96);
+  }
+
   .ceo-unified-context {
     margin: 8px 0 0;
     padding-top: 0;
@@ -1656,7 +1717,7 @@ export function ExecutiveCommandCenterView({
   canGenerateBoardPack,
   boardPackLoading,
   onGenerateBoardPack,
-  onViewExecutiveBriefing
+  onOpenReportingWorkspace
 }) {
   const unifiedReadinessScore = normalizeScoreOrNull(dealReadinessCombined);
 
@@ -1796,13 +1857,16 @@ export function ExecutiveCommandCenterView({
                         <p className="ceo-generate-draft-hint">{BOARD_PACK_GENERATE_DISABLED_HINT}</p>
                       ) : null}
                     </div>
-                    <Button
-                      onClick={onViewExecutiveBriefing}
-                      variant="secondary"
-                      className="ceo-gold-secondary-action"
-                    >
-                      View Executive Briefing
-                    </Button>
+                    <div className="ceo-reporting-workspace-action-wrap">
+                      <Button
+                        onClick={onOpenReportingWorkspace}
+                        variant="secondary"
+                        className="ceo-gold-secondary-action"
+                      >
+                        {CEO_REPORTING_WORKSPACE_BUTTON_LABEL}
+                      </Button>
+                      <p className="ceo-reporting-workspace-hint">{CEO_REPORTING_WORKSPACE_HINT}</p>
+                    </div>
                   </div>
                 </div>
 
@@ -1953,9 +2017,10 @@ export function ExecutiveCommandCenterView({
           title="Cross-Module Intelligence Summary"
           description="Cross-branch focus — complements the decision queue without repeating it."
         >
+          <p className="ceo-section-status-note">{CEO_EXECUTIVE_SIGNAL_STATUS_NOTE}</p>
           <div className="ceo-intelligence-grid">
             {intelligenceCards.map((card) => (
-              <article key={card.title} className="ceo-command-card">
+              <article key={card.title} className="ceo-command-card ceo-static-card">
                 <div className="ceo-command-card-kicker ceo-card-kicker-row">
                   <CeoGoldCardIcon icon={INTELLIGENCE_ICONS[card.title]} />
                   <span>{card.title}</span>
@@ -2046,8 +2111,9 @@ export function ExecutiveCommandCenterView({
           </div>
 
           <div className="ceo-readiness-radar-row">
-            <article className="ceo-command-card ceo-corporate-radar-card">
+            <article className="ceo-command-card ceo-corporate-radar-card ceo-static-card ceo-status-only-card">
               <div className="ceo-command-card-kicker">Corporate Health Radar</div>
+              <p className="ceo-section-status-note">{CEO_EXECUTIVE_SIGNAL_STATUS_NOTE}</p>
               <strong>Enterprise readiness radar</strong>
               <p className="ceo-corporate-radar-copy">
                 Cross-branch posture across deal, funding, compliance, risk and governance signals.
@@ -2062,10 +2128,11 @@ export function ExecutiveCommandCenterView({
         <SectionBlock
           number="05"
           title="Board Review Workflow"
-          description="Draft-first workflow. Human review required before any distribution."
+          description="Draft-first workflow narrative. Human review required before any distribution."
         >
+          <p className="ceo-section-status-note">{CEO_WORKFLOW_STATUS_NOTE}</p>
           <div className="ceo-workflow-board-stack">
-            <article className="ceo-board-readiness-mini-card">
+            <article className="ceo-board-readiness-mini-card ceo-static-card">
               <div className="ceo-board-readiness-mini-head">
                 <div className="ceo-command-card-kicker">Board readiness summary</div>
                 <p className="ceo-board-readiness-status-line">
@@ -2094,7 +2161,7 @@ export function ExecutiveCommandCenterView({
 
             <div className="ceo-workflow-grid">
               {WORKFLOW_STEPS.map((step) => (
-                <article key={step.eyebrow} className="ceo-workflow-step">
+                <article key={step.eyebrow} className="ceo-workflow-step ceo-workflow-step-static">
                   <p className="ceo-step-eyebrow">{step.eyebrow}</p>
                   <div className="ceo-workflow-step-head">
                     <CeoGoldCardIcon icon={step.icon} />
@@ -2112,8 +2179,9 @@ export function ExecutiveCommandCenterView({
           title="Executive Briefing Packs"
           description="Draft review pack status only — not downloadable or certified outputs."
         >
+          <p className="ceo-section-status-note">{CEO_BRIEFING_PACKS_SECTION_NOTE}</p>
           <div className="ceo-briefing-grid">
-            <article className="ceo-command-card ceo-briefing-status-card">
+            <article className="ceo-command-card ceo-briefing-status-card ceo-status-only-card">
               <div className="ceo-card-title-row">
                 <CeoGoldCardIcon icon={FileText} />
                 <strong>Board review draft</strong>
@@ -2121,7 +2189,7 @@ export function ExecutiveCommandCenterView({
               <p>Status: {boardReviewDraftPackStatus.statusLabel}</p>
               <p className="ceo-briefing-status-note">{boardReviewDraftPackStatus.statusNote}</p>
             </article>
-            <article className="ceo-command-card ceo-briefing-status-card">
+            <article className="ceo-command-card ceo-briefing-status-card ceo-status-only-card">
               <div className="ceo-card-title-row">
                 <CeoGoldCardIcon icon={Shield} />
                 <strong>Compliance review</strong>
@@ -2136,7 +2204,7 @@ export function ExecutiveCommandCenterView({
               </p>
               <p className="ceo-briefing-status-note">{BRIEFING_PACK_STATUS_ONLY_NOTE}</p>
             </article>
-            <article className="ceo-command-card ceo-briefing-status-card">
+            <article className="ceo-command-card ceo-briefing-status-card ceo-status-only-card">
               <div className="ceo-card-title-row">
                 <CeoGoldCardIcon icon={BarChart3} />
                 <strong>Strategic review</strong>
@@ -2147,7 +2215,7 @@ export function ExecutiveCommandCenterView({
               </p>
               <p className="ceo-briefing-status-note">{BRIEFING_PACK_STATUS_ONLY_NOTE}</p>
             </article>
-            <article className="ceo-command-card ceo-briefing-status-card">
+            <article className="ceo-command-card ceo-briefing-status-card ceo-status-only-card">
               <div className="ceo-card-title-row">
                 <CeoGoldCardIcon icon={Coins} />
                 <strong>Funding review</strong>
@@ -2158,6 +2226,12 @@ export function ExecutiveCommandCenterView({
               </p>
               <p className="ceo-briefing-status-note">{BRIEFING_PACK_STATUS_ONLY_NOTE}</p>
             </article>
+          </div>
+          <div className="ceo-reporting-section-cta">
+            <Link className="ceo-reporting-section-link" to={CEO_REPORTING_WORKSPACE_ROUTE}>
+              {CEO_REPORTING_WORKSPACE_BUTTON_LABEL}
+            </Link>
+            <span className="ceo-reporting-workspace-hint">{CEO_REPORTING_WORKSPACE_HINT}</span>
           </div>
         </SectionBlock>
       </div>

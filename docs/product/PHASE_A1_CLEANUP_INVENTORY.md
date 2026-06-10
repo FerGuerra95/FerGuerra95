@@ -8760,16 +8760,16 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 ---
 
-## C.24.11D — Board Review Draft Pagination Balance Fix
+## C.24.12B — Demo Button Safety Fix
 
 **Status:** COMPLETED.
 
-**Baseline:** `914d5e5` (C.24.11C).
+**Baseline:** `f1953cc` (C.24.12A audit).
 
-**Fixes:** Removed hard `page-break-after` on page 1 wrapper that stranded Execution Metrics on page 2. Execution Metrics moved into page 1 flow. Intentional `break-before: page` on Governance / Bridge / Heritage section. Page 2 flex layout without forced `min-height: 272mm`; footer anchored with `margin-top: auto`. Compact 5-column Execution Metrics grid on page 1.
+**Fixes:** `View Executive Briefing` replaced with `Open reporting workspace` → `/reporting/dashboard`. Sections 03/05/06 marked status-only; removed misleading hover affordance on static cards. Section 06 adds reporting workspace CTA below status cards.
 
-**Preserved:** Browser print only; draft-only/human review/not certified copy; no backend/PDF server-side; no formula or score changes; app chrome hidden from print.
+**Preserved:** Generate Board Review Draft; Module Readiness links; BoardPackModal print unchanged.
 
-**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); build; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+**Tests:** `boardPackModalDisplay`; `ceoOverviewTruthfulness`; build; `fundingDisplayFormat`.
 
-**Next:** final production spot-check + recording rehearsal.
+**Next:** production spot-check + recording rehearsal.

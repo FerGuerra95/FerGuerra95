@@ -768,6 +768,20 @@
 
 ---
 
+## 42. C.24.12B — Demo Button Safety Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `f1953cc`.
+
+**Scope:** `ExecutiveCommandCenterView.jsx`, `CEOOverviewPage.jsx`, `ceoMaterialSystem.css` — honest reporting workspace CTA; status-only affordance on sections 03/05/06.
+
+**Manual QA:** Pending — confirm static sections no longer look clickable; Module Readiness links still work.
+
+**Tests:** `boardPackModalDisplay`; `ceoOverviewTruthfulness`; build; `fundingDisplayFormat`.
+
+---
+
 ## 39. C.24.11B — Premium Board Review Draft Print Layout Polish
 
 **Status:** COMPLETED.

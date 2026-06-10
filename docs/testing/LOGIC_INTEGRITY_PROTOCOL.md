@@ -2883,3 +2883,13 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Integrity:** Print layout pagination only — page break after Core Metrics removed; Execution Metrics allowed on page 1; intentional break before Governance / Bridge / Heritage; page 2 balanced without forced min-height void. `break-inside: avoid` retained on metric cards only. Truthfulness unchanged. Browser print only. No backend/formula/Golden changes.
 
 **Tests:** `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; build + `fundingDisplayFormat`.
+
+---
+
+## C.24.12B — Demo Button Safety Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `f1953cc`.
+
+**Integrity:** UI affordance/copy only — honest reporting workspace CTA; status-only sections 03/05/06; no fake click targets on static cards. BoardPackModal print CSS unchanged. No backend/formula/Golden changes.
