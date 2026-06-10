@@ -8685,3 +8685,25 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Manual print QA:** Generate Board Review Draft → Print draft preview → confirm draft-only content, no shell/buttons.
 
 **Next:** production spot-check + recording rehearsal; defer print click during recording if browser layout still varies.
+
+---
+
+## C.24.11 — Premium Board Review Draft Print Renderer
+
+**Status:** COMPLETED.
+
+**Baseline:** `aca9d79` (C.24.10D blank print fix).
+
+**Renderer:** Premium HTML/CSS layout in `BoardPackModal.jsx` — black/gold executive header with CEO's OS lion emblem, draft badges, grouped metric cards, execution profile, readiness/risk summary, briefing pack status, softened recommendations, legal footer.
+
+**Print:** Browser print only via `runBoardPackPrintPreview()` + `printing-board-pack` body class. No server-side PDF. `print-color-adjust: exact` for premium backgrounds where supported.
+
+**Truthfulness:** Draft-only · Human review required · Not certified · Not board-approved · Status only · N/A preserved · No Export PDF claim.
+
+**No changes:** backend, formulas, Golden Dataset, Formula Registry.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; `fundingDisplayFormat`; build.
+
+**Manual print QA:** Generate Board Review Draft → Print draft preview → confirm premium layout, no blank page, no app shell.
+
+**Next:** production spot-check + recording rehearsal.

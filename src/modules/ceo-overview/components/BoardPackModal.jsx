@@ -1,8 +1,12 @@
 import React from 'react';
-import { FileText, Printer, X } from 'lucide-react';
+import { Printer, X } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
+import { BrandLogo } from '../../../shared/components/brand/BrandLogo.jsx';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
-import { BOARD_PACK_PRINT_DRAFT_HINT } from '../utils/ceoOverviewTruthfulness.js';
+import {
+  BOARD_PACK_PRINT_DRAFT_HINT,
+  BRIEFING_PACK_STATUS_ONLY_NOTE
+} from '../utils/ceoOverviewTruthfulness.js';
 
 export const BOARD_PACK_PRINT_ROOT_CLASS = 'board-pack-print-root';
 export const BOARD_PACK_NO_PRINT_CLASS = 'board-pack-no-print';
@@ -10,6 +14,23 @@ export const BOARD_PACK_PRINTING_BODY_CLASS = 'printing-board-pack';
 export const BOARD_PACK_PRINT_BUTTON_LABEL = 'Print draft preview';
 export const BOARD_PACK_PRINT_DRAFT_BANNER =
   'Board review draft · Decision support only · Human review required · Not board-approved';
+export const BOARD_PACK_PREMIUM_TITLE = 'BOARD REVIEW DRAFT';
+export const BOARD_PACK_PREMIUM_SUBTITLE = "CEO's OS | Private Executive Intelligence";
+export const BOARD_PACK_DRAFT_BADGE = 'DRAFT ONLY';
+export const BOARD_PACK_NOT_CERTIFIED_BADGE = 'Not Certified';
+export const BOARD_PACK_HUMAN_REVIEW_BADGE = 'Human Review Required';
+export const BOARD_PACK_EXEC_READINESS_LABEL = 'Executive Readiness Score';
+export const BOARD_PACK_GENERATED_UNAVAILABLE = 'Generated timestamp unavailable';
+export const BOARD_PACK_EXEC_DISCLAIMER =
+  'Draft-only. Subject to human review. Not board-approved.';
+export const BOARD_PACK_FOOTER_LEGAL =
+  'DRAFT FOR REVIEW PURPOSES ONLY · CONFIDENTIAL · Human review required · Not certified · Not board-approved · Browser-print style draft · Subject to change';
+
+export const BOARD_PACK_RECOMMENDATION_GUARDRAILS = [
+  'Confirm owners and timing before external circulation.',
+  'Review evidence before board distribution.',
+  'Keep draft recommendations under human review.'
+];
 
 const branchMeta = [
   { key: 'ma', label: 'M&A', tone: '#34d399' },
@@ -80,6 +101,26 @@ export function formatBoardPackMonths(value) {
   return `${number.toFixed(1)} months`;
 }
 
+export function softenBoardPackRecommendation(text) {
+  if (typeof text !== 'string' || !text.trim()) {
+    return text;
+  }
+
+  if (/named owners and board-level due dates/i.test(text)) {
+    return 'Confirm owners and timing before external circulation.';
+  }
+
+  let result = text;
+  result = result.replace(/named owners/gi, 'confirmed owners');
+  result = result.replace(/board-level due dates/gi, 'agreed timing before external circulation');
+  result = result.replace(
+    /assign remediation owners/gi,
+    'confirm remediation owners before circulation'
+  );
+  result = result.replace(/succession owners/gi, 'succession accountability');
+  return result;
+}
+
 function clampScore100(value) {
   if (!isPresentMetricValue(value)) {
     return null;
@@ -89,6 +130,19 @@ function clampScore100(value) {
     return null;
   }
   return Math.max(0, Math.min(100, Math.round(number)));
+}
+
+function hasRadarData(branches = {}) {
+  return branchMeta.some((item) => clampScore100(branches[item.key]?.score) !== null);
+}
+
+function buildDisplayedRecommendations(recommendations = []) {
+  const softened = recommendations
+    .map((item) => softenBoardPackRecommendation(item))
+    .filter((item) => typeof item === 'string' && item.trim());
+
+  const combined = [...softened, ...BOARD_PACK_RECOMMENDATION_GUARDRAILS];
+  return combined.filter((item, index) => combined.indexOf(item) === index);
 }
 
 function RadarChart({ branches = {} }) {
@@ -105,8 +159,7 @@ function RadarChart({ branches = {} }) {
       y: center + Math.sin(angle) * radius * value,
       axisX: center + Math.cos(angle) * radius,
       axisY: center + Math.sin(angle) * radius,
-      value: score,
-      calculable: score !== null
+      value: score
     };
   });
   const polygon = points.map((point) => `${point.x},${point.y}`).join(' ');
@@ -139,37 +192,126 @@ function RadarChart({ branches = {} }) {
   );
 }
 
-function BranchBar({ label, value, tone }) {
-  const safeValue = clampScore100(value);
-  const display = formatBoardPackScore100(value);
-
+function PremiumMetricCard({ label, value }) {
   return (
-    <div className="board-pack-bar-row">
-      <div className="board-pack-bar-top">
-        <span>{label}</span>
-        <strong>{display}</strong>
-      </div>
-      <div className="board-pack-bar-track">
-        <div
-          className="board-pack-bar-fill"
-          style={{
-            width: safeValue === null ? '0%' : `${safeValue}%`,
-            backgroundColor: tone,
-            opacity: safeValue === null ? 0.35 : 1
-          }}
-        />
-      </div>
-    </div>
+    <article className="board-pack-metric-card">
+      <span className="board-pack-metric-label">{label}</span>
+      <strong className="board-pack-metric-value">{value}</strong>
+    </article>
   );
 }
 
-function Metric({ label, value }) {
+function PremiumPanel({ title, eyebrow, children, className = '' }) {
   return (
-    <div className="board-pack-metric">
+    <section className={`board-pack-panel board-pack-section ${className}`.trim()}>
+      {eyebrow ? <p className="board-pack-panel-eyebrow">{eyebrow}</p> : null}
+      <h3 className="board-pack-panel-title">{title}</h3>
+      {children}
+    </section>
+  );
+}
+
+function MetricRow({ label, value }) {
+  return (
+    <div className="board-pack-inline-metric">
       <span>{label}</span>
       <strong>{value}</strong>
     </div>
   );
+}
+
+function buildCoreMetrics(branches) {
+  return [
+    { label: 'M&A Valuation', value: formatBoardPackCurrency(branches.ma?.valuation, 'EUR') },
+    { label: 'Applied Multiple', value: branches.ma?.multipleLabel || 'N/A' },
+    {
+      label: 'Compliance Health',
+      value: formatBoardPackScore100(branches.compliance?.healthScore)
+    },
+    {
+      label: 'Critical Findings',
+      value: formatBoardPackCount(branches.compliance?.criticalFindings)
+    },
+    { label: 'Runway', value: formatBoardPackMonths(branches.funding?.runwayMonths) },
+    {
+      label: 'Capital Raised',
+      value: formatBoardPackCurrency(branches.funding?.capitalRaised, 'EUR')
+    }
+  ];
+}
+
+function buildExecutionMetrics(branches) {
+  return [
+    {
+      label: 'PMI Completion',
+      value: formatBoardPackPercent(branches.pmi?.integrationProgress)
+    },
+    {
+      label: 'Synergy Capture',
+      value: formatBoardPackPercent(branches.pmi?.synergyCaptureRate)
+    },
+    {
+      label: 'Ledger Capture',
+      value: formatBoardPackPercent(branches.pmi?.ledgerCaptureRate)
+    },
+    {
+      label: 'Playbook Progress',
+      value: formatBoardPackPercent(branches.pmi?.playbookProgress)
+    },
+    {
+      label: 'Blocked Dependencies',
+      value: formatBoardPackCount(branches.pmi?.blockedDependenciesCount)
+    }
+  ];
+}
+
+function buildGovernanceBridgeHeritageMetrics(branches) {
+  return [
+    {
+      label: 'Bridge Weighted Pipeline',
+      value: formatBoardPackCurrency(branches.bridge?.weightedPipelineValue, 'EUR')
+    },
+    { label: 'Bridge Intros', value: formatBoardPackCount(branches.bridge?.introductionsCount) },
+    {
+      label: 'Bridge Confidentiality',
+      value: formatBoardPackCount(branches.bridge?.confidentialityExceptionsCount)
+    },
+    { label: 'Bridge Documents', value: formatBoardPackCount(branches.bridge?.documentsCount) },
+    { label: 'Bridge Reports', value: formatBoardPackCount(branches.bridge?.reportsCount) },
+    {
+      label: 'Governance Controls',
+      value: formatBoardPackCount(branches.governance?.controlsCount)
+    },
+    {
+      label: 'Governance Evidence',
+      value: formatBoardPackPercent(branches.governance?.evidenceReadiness)
+    },
+    {
+      label: 'Open Board Decisions',
+      value: formatBoardPackCount(branches.governance?.openDecisionsCount)
+    },
+    {
+      label: 'Board Readiness',
+      value: formatBoardPackPercent(branches.governance?.boardReadinessScore)
+    },
+    {
+      label: 'Heritage Mapped Value',
+      value: formatBoardPackCurrency(branches.heritage?.totalAssetValue, 'EUR')
+    },
+    {
+      label: 'Heritage Succession',
+      value: formatBoardPackPercent(branches.heritage?.successionReadiness)
+    },
+    {
+      label: 'Heritage Protection',
+      value: formatBoardPackPercent(branches.heritage?.protectionCoverage)
+    },
+    {
+      label: 'Heritage Documents',
+      value: formatBoardPackCount(branches.heritage?.documentsCount)
+    },
+    { label: 'Heritage Reports', value: formatBoardPackCount(branches.heritage?.reportsCount) }
+  ];
 }
 
 export function runBoardPackPrintPreview() {
@@ -197,13 +339,15 @@ export function runBoardPackPrintPreview() {
   }
 }
 
-export function BoardPackModal({ boardPack, loading = false, error = null, onClose, onExport }) {
+export function BoardPackModal({ boardPack, loading = false, error = null, onClose }) {
   if (!boardPack && !loading && !error) return null;
 
   const branches = boardPack?.branches || {};
   const generatedAt = boardPack?.generatedAt
     ? new Date(boardPack.generatedAt).toLocaleString('en-GB')
     : '';
+  const displayedRecommendations = buildDisplayedRecommendations(boardPack?.recommendations || []);
+  const showRadar = hasRadarData(branches);
 
   return (
     <div className="board-pack-backdrop" role="presentation">
@@ -215,119 +359,240 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           display: grid;
           place-items: center;
           padding: 24px;
-          background: rgba(5, 5, 4, 0.82);
+          background: rgba(5, 5, 4, 0.88);
           backdrop-filter: blur(18px);
         }
 
         .board-pack-modal {
+          position: relative;
           width: min(1080px, 100%);
-          max-height: min(880px, calc(100vh - 48px));
+          max-height: min(900px, calc(100vh - 48px));
           overflow: auto;
           border-radius: 28px;
-          border: 1px solid rgba(212, 175, 55, 0.24);
+          border: 1px solid rgba(214, 168, 74, 0.45);
           background:
-            linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
-            linear-gradient(180deg, #0a0908 0%, #050504 100%);
-          box-shadow: 0 36px 110px rgba(0, 0, 0, 0.45);
+            radial-gradient(ellipse 80% 60% at 18% 0%, rgba(240, 201, 106, 0.12), transparent 58%),
+            linear-gradient(180deg, #080807 0%, #050505 100%);
+          box-shadow: 0 36px 110px rgba(0, 0, 0, 0.55);
           padding: 28px;
-        }
-
-        .board-pack-header,
-        .board-pack-footer,
-        .board-pack-bar-top {
-          display: flex;
-          justify-content: space-between;
-          gap: 18px;
-          align-items: flex-start;
-        }
-
-        .board-pack-header h2 {
-          margin: 8px 0 6px;
-          letter-spacing: -0.045em;
-        }
-
-        .board-pack-header p,
-        .board-pack-summary p,
-        .board-pack-recommendations p {
-          margin: 0;
-          color: rgba(203, 213, 225, 0.82);
-          line-height: 1.62;
-        }
-
-        .board-pack-kicker {
-          display: inline-flex;
-          gap: 8px;
-          align-items: center;
-          color: rgba(243, 218, 138, 0.88);
-          text-transform: uppercase;
-          letter-spacing: 0.16em;
-          font-size: 11px;
-          font-weight: 850;
+          color: #f8f4ea;
         }
 
         .board-pack-icon-button {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          z-index: 2;
           width: 40px;
           height: 40px;
           display: grid;
           place-items: center;
           border-radius: 14px;
-          border: 1px solid rgba(255,255,255,0.08);
-          background: rgba(255,255,255,0.04);
-          color: rgba(226, 232, 240, 0.94);
+          border: 1px solid rgba(214, 168, 74, 0.35);
+          background: rgba(8, 8, 7, 0.82);
+          color: rgba(248, 244, 234, 0.94);
           cursor: pointer;
         }
 
-        .board-pack-summary {
-          margin-top: 24px;
+        .board-pack-premium-header {
           display: grid;
-          grid-template-columns: minmax(150px, 0.28fr) minmax(0, 1fr);
+          grid-template-columns: auto minmax(0, 1fr);
+          gap: 20px;
+          align-items: center;
+          padding: 18px 52px 18px 18px;
+          border-radius: 22px;
+          border: 1px solid rgba(214, 168, 74, 0.45);
+          background:
+            radial-gradient(circle at 12% 18%, rgba(240, 201, 106, 0.14), transparent 42%),
+            linear-gradient(135deg, rgba(17, 16, 13, 0.96), rgba(5, 5, 5, 0.98));
+        }
+
+        .board-pack-brand-wrap {
+          width: 72px;
+          height: 72px;
+          display: grid;
+          place-items: center;
+          border-radius: 18px;
+          border: 1px solid rgba(214, 168, 74, 0.35);
+          background: rgba(8, 8, 7, 0.9);
+        }
+
+        .board-pack-premium-title {
+          margin: 0;
+          font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #f0c96a;
+          font-weight: 850;
+        }
+
+        .board-pack-premium-subtitle {
+          margin: 6px 0 0;
+          color: rgba(248, 244, 234, 0.72);
+          font-size: 12px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .board-pack-premium-meta {
+          margin: 10px 0 0;
+          color: rgba(248, 244, 234, 0.58);
+          font-size: 12px;
+        }
+
+        .board-pack-badge-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 12px;
+        }
+
+        .board-pack-badge {
+          display: inline-flex;
+          align-items: center;
+          padding: 5px 10px;
+          border-radius: 999px;
+          border: 1px solid rgba(214, 168, 74, 0.42);
+          background: rgba(155, 107, 31, 0.18);
+          color: #f0c96a;
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+
+        .board-pack-print-only-banner {
+          display: none;
+        }
+
+        .board-pack-exec-panel {
+          margin-top: 20px;
+          display: grid;
+          grid-template-columns: minmax(160px, 0.32fr) minmax(0, 1fr);
           gap: 18px;
           padding: 20px;
           border-radius: 22px;
-          border: 1px solid rgba(212, 175, 55, 0.18);
-          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(214, 168, 74, 0.38);
+          background:
+            radial-gradient(circle at 80% 0%, rgba(240, 201, 106, 0.1), transparent 48%),
+            linear-gradient(155deg, #11100d 0%, #080807 100%);
         }
 
-        .board-pack-summary span,
-        .board-pack-metric span,
-        .board-pack-bar-top span {
-          color: rgba(212, 175, 55, 0.82);
+        .board-pack-exec-score-label,
+        .board-pack-metric-label,
+        .board-pack-panel-eyebrow,
+        .board-pack-inline-metric span {
+          color: rgba(240, 201, 106, 0.82);
           font-size: 11px;
           text-transform: uppercase;
           letter-spacing: 0.12em;
           font-weight: 850;
         }
 
-        .board-pack-summary strong {
+        .board-pack-exec-score-value {
           display: block;
-          margin-top: 8px;
-          font-size: 32px;
-          letter-spacing: -0.055em;
+          margin-top: 10px;
+          font-size: 40px;
+          letter-spacing: -0.05em;
+          color: #fff8eb;
         }
 
-        .board-pack-grid,
-        .board-pack-metrics {
+        .board-pack-exec-summary {
+          margin: 0;
+          color: rgba(248, 244, 234, 0.84);
+          line-height: 1.65;
+        }
+
+        .board-pack-exec-disclaimer {
+          margin: 12px 0 0;
+          color: rgba(240, 201, 106, 0.78);
+          font-size: 12px;
+          line-height: 1.55;
+        }
+
+        .board-pack-metrics-group {
+          margin-top: 20px;
+        }
+
+        .board-pack-metrics-group-title {
+          margin: 0 0 12px;
+          color: #f0c96a;
+          font-size: 12px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          font-weight: 850;
+        }
+
+        .board-pack-metrics-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 14px;
+        }
+
+        .board-pack-metric-card {
+          display: grid;
+          gap: 8px;
+          padding: 14px;
+          border-radius: 18px;
+          border: 1px solid rgba(214, 168, 74, 0.32);
+          background:
+            radial-gradient(circle at 18% 0%, rgba(240, 201, 106, 0.08), transparent 52%),
+            linear-gradient(160deg, #0e0d0b 0%, #050505 100%);
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        .board-pack-metric-value {
+          font-size: 17px;
+          color: #fff8eb;
+          overflow-wrap: anywhere;
+        }
+
+        .board-pack-columns {
+          margin-top: 20px;
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 18px;
-          margin-top: 18px;
         }
 
-        .board-pack-panel,
-        .board-pack-metric {
+        .board-pack-panel {
           border-radius: 22px;
-          border: 1px solid rgba(212, 175, 55, 0.18);
-          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(214, 168, 74, 0.32);
+          background:
+            radial-gradient(circle at 12% 0%, rgba(240, 201, 106, 0.08), transparent 50%),
+            linear-gradient(160deg, #0e0d0b 0%, #050505 100%);
           padding: 18px;
+          break-inside: avoid;
+          page-break-inside: avoid;
         }
 
-        .board-pack-panel h3 {
+        .board-pack-panel-title {
           margin: 0 0 14px;
-          letter-spacing: -0.035em;
+          color: #f0c96a;
+          font-size: 13px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+        }
+
+        .board-pack-panel-eyebrow {
+          margin: 0 0 6px;
+        }
+
+        .board-pack-inline-metric {
+          display: flex;
+          justify-content: space-between;
+          gap: 12px;
+          padding: 10px 0;
+          border-top: 1px solid rgba(214, 168, 74, 0.16);
+        }
+
+        .board-pack-inline-metric strong {
+          color: #fff8eb;
+          text-align: right;
         }
 
         .board-pack-radar {
-          width: min(330px, 100%);
+          width: min(280px, 100%);
           display: block;
           margin: 0 auto;
         }
@@ -335,48 +600,19 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
         .board-pack-radar-grid,
         .board-pack-radar-axis {
           fill: none;
-          stroke: rgba(212, 175, 55, 0.22);
+          stroke: rgba(214, 168, 74, 0.28);
         }
 
         .board-pack-radar-fill {
-          fill: rgba(245, 197, 92, 0.16);
-          stroke: rgba(245, 197, 92, 0.82);
+          fill: rgba(240, 201, 106, 0.16);
+          stroke: rgba(240, 201, 106, 0.82);
           stroke-width: 2;
         }
 
         .board-pack-radar-label {
-          fill: rgba(226, 232, 240, 0.82);
+          fill: rgba(248, 244, 234, 0.82);
           font-size: 8px;
           text-anchor: middle;
-        }
-
-        .board-pack-bar-row {
-          display: grid;
-          gap: 8px;
-          padding: 10px 0;
-          border-top: 1px solid rgba(212, 175, 55, 0.12);
-        }
-
-        .board-pack-bar-track {
-          height: 9px;
-          border-radius: 999px;
-          background: rgba(255,255,255,0.08);
-          overflow: hidden;
-        }
-
-        .board-pack-bar-fill {
-          height: 100%;
-          border-radius: 999px;
-        }
-
-        .board-pack-metric {
-          display: grid;
-          gap: 8px;
-        }
-
-        .board-pack-metric strong {
-          font-size: 18px;
-          overflow-wrap: anywhere;
         }
 
         .board-pack-recommendations {
@@ -384,18 +620,38 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           gap: 10px;
         }
 
+        .board-pack-recommendations p {
+          margin: 0;
+          color: rgba(248, 244, 234, 0.84);
+          line-height: 1.62;
+        }
+
+        .board-pack-premium-footer {
+          margin-top: 22px;
+          padding: 16px 18px;
+          border-radius: 18px;
+          border: 1px solid rgba(214, 168, 74, 0.28);
+          background: rgba(8, 8, 7, 0.92);
+          color: rgba(240, 201, 106, 0.82);
+          font-size: 11px;
+          line-height: 1.6;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
+
         .board-pack-empty {
           margin-top: 24px;
           padding: 28px;
           border-radius: 20px;
-          background: rgba(255,255,255,0.04);
-          color: rgba(203, 213, 225, 0.86);
+          border: 1px solid rgba(214, 168, 74, 0.24);
+          background: rgba(8, 8, 7, 0.88);
+          color: rgba(248, 244, 234, 0.86);
         }
 
         .board-pack-footer {
           margin-top: 22px;
           padding-top: 18px;
-          border-top: 1px solid rgba(212, 175, 55, 0.16);
+          border-top: 1px solid rgba(214, 168, 74, 0.2);
         }
 
         .board-pack-footer-actions {
@@ -414,37 +670,34 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
         .board-pack-print-hint {
           margin: 0;
           font-size: 11px;
-          color: rgba(203, 213, 225, 0.72);
+          color: rgba(248, 244, 234, 0.62);
         }
 
-        .board-pack-print-only-banner {
-          display: none;
-        }
-
-        @media (max-width: 820px) {
-          .board-pack-summary,
-          .board-pack-grid,
-          .board-pack-metrics {
+        @media (max-width: 900px) {
+          .board-pack-metrics-grid,
+          .board-pack-columns,
+          .board-pack-exec-panel {
             grid-template-columns: 1fr;
           }
 
-          .board-pack-modal {
-            padding: 20px;
-            border-radius: 22px;
+          .board-pack-premium-header {
+            grid-template-columns: 1fr;
           }
         }
 
         @media print {
           @page {
             size: A4 portrait;
-            margin: 12mm;
+            margin: 10mm;
           }
 
           html,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} {
-            background: #fff !important;
+            background: #050505 !important;
             height: auto !important;
             overflow: visible !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .sidebar,
@@ -465,7 +718,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             display: block !important;
             padding: 0 !important;
             margin: 0 !important;
-            background: #fff !important;
+            background: #050505 !important;
             backdrop-filter: none !important;
             visibility: visible !important;
           }
@@ -483,18 +736,20 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             border-radius: 0 !important;
             box-shadow: none !important;
             padding: 0 !important;
-            background: #fff !important;
-            color: #111827 !important;
+            background: #050505 !important;
+            color: #f8f4ea !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-only-banner {
             display: block !important;
             margin: 0 0 14px;
             padding: 10px 12px;
-            border: 1px solid #d1d5db;
+            border: 1px solid rgba(214, 168, 74, 0.45);
             border-radius: 8px;
-            background: #f9fafb;
-            color: #374151 !important;
+            background: #11100d;
+            color: #f0c96a !important;
             font-size: 11px;
             line-height: 1.5;
             text-transform: uppercase;
@@ -502,67 +757,14 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             font-weight: 700;
           }
 
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-header h2,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel h3,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-summary strong,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric strong,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-bar-top strong {
-            color: #111827 !important;
-          }
-
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-header p,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-summary p,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-recommendations p {
-            color: #374151 !important;
-          }
-
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-kicker,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-summary span,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric span,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-bar-top span {
-            color: #6b7280 !important;
-          }
-
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-summary,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-section,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric-card,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric {
-            border: 1px solid #d1d5db !important;
-            background: #fff !important;
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-panel,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-header,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-footer {
             break-inside: avoid;
             page-break-inside: avoid;
-          }
-
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-section {
-            break-inside: avoid;
-            page-break-inside: avoid;
-          }
-
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-grid,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metrics {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-          }
-
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-radar {
-            max-width: 280px;
-          }
-
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-radar-grid,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-radar-axis {
-            stroke: #9ca3af !important;
-          }
-
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-radar-fill {
-            fill: rgba(180, 140, 40, 0.18) !important;
-            stroke: #92700c !important;
-          }
-
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-radar-label {
-            fill: #111827 !important;
-          }
-
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-bar-track {
-            background: #e5e7eb !important;
           }
         }
       `}</style>
@@ -573,24 +775,33 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
         aria-label="Executive Board Pack preview"
       >
         <p className="board-pack-print-only-banner">{BOARD_PACK_PRINT_DRAFT_BANNER}</p>
-        <div className="board-pack-header board-pack-section">
-          <div>
-            <div className="board-pack-kicker">
-              <FileText size={14} />
-              Executive board review draft
-            </div>
-            <h2>Consolidated board review draft</h2>
-            <p>{generatedAt ? `Prepared ${generatedAt}` : 'Preparing consolidated executive view.'}</p>
+
+        <button
+          type="button"
+          className={`board-pack-icon-button ${BOARD_PACK_NO_PRINT_CLASS}`}
+          onClick={onClose}
+          aria-label="Close Board Pack"
+        >
+          <X size={18} />
+        </button>
+
+        <header className="board-pack-premium-header board-pack-section">
+          <div className="board-pack-brand-wrap">
+            <BrandLogo variant="emblem" emblemAsset="lion" size="md" surface="transparent" />
           </div>
-          <button
-            type="button"
-            className={`board-pack-icon-button ${BOARD_PACK_NO_PRINT_CLASS}`}
-            onClick={onClose}
-            aria-label="Close Board Pack"
-          >
-            <X size={18} />
-          </button>
-        </div>
+          <div>
+            <h2 className="board-pack-premium-title">{BOARD_PACK_PREMIUM_TITLE}</h2>
+            <p className="board-pack-premium-subtitle">{BOARD_PACK_PREMIUM_SUBTITLE}</p>
+            <p className="board-pack-premium-meta">
+              {generatedAt ? `Prepared ${generatedAt}` : BOARD_PACK_GENERATED_UNAVAILABLE}
+            </p>
+            <div className="board-pack-badge-row">
+              <span className="board-pack-badge">{BOARD_PACK_DRAFT_BADGE}</span>
+              <span className="board-pack-badge">{BOARD_PACK_NOT_CERTIFIED_BADGE}</span>
+              <span className="board-pack-badge">{BOARD_PACK_HUMAN_REVIEW_BADGE}</span>
+            </div>
+          </div>
+        </header>
 
         {loading ? (
           <div className="board-pack-empty">Preparing board review draft.</div>
@@ -598,146 +809,136 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           <div className="board-pack-empty">{error.message || 'Board review draft could not be prepared.'}</div>
         ) : (
           <>
-            <section className="board-pack-summary board-pack-section">
+            <section className="board-pack-exec-panel board-pack-section">
               <div>
-                <span>Consolidated score</span>
-                <strong>{formatBoardPackScore100(boardPack.score)}</strong>
+                <span className="board-pack-exec-score-label">{BOARD_PACK_EXEC_READINESS_LABEL}</span>
+                <strong className="board-pack-exec-score-value">
+                  {formatBoardPackScore100(boardPack.score)}
+                </strong>
               </div>
-              <p>{boardPack.executiveSummary}</p>
+              <div>
+                <p className="board-pack-exec-summary">{boardPack.executiveSummary}</p>
+                <p className="board-pack-exec-disclaimer">{BOARD_PACK_EXEC_DISCLAIMER}</p>
+              </div>
             </section>
 
-            <section className="board-pack-grid board-pack-section">
-              <div className="board-pack-panel board-pack-section">
-                <h3>Branch balance</h3>
-                <RadarChart branches={branches} />
-              </div>
-
-              <div className="board-pack-panel board-pack-section">
-                <h3>Operating balance</h3>
-                {branchMeta.map((item) => (
-                  <BranchBar
-                    key={item.key}
-                    label={item.label}
-                    value={branches[item.key]?.score}
-                    tone={item.tone}
-                  />
+            <section className="board-pack-metrics-group board-pack-section">
+              <h3 className="board-pack-metrics-group-title">Core Metrics</h3>
+              <div className="board-pack-metrics-grid">
+                {buildCoreMetrics(branches).map((metric) => (
+                  <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
                 ))}
               </div>
             </section>
 
-            <section className="board-pack-metrics board-pack-section">
-              <Metric
-                label="M&A valuation"
-                value={formatBoardPackCurrency(branches.ma?.valuation, 'EUR')}
-              />
-              <Metric label="Applied multiple" value={branches.ma?.multipleLabel || 'N/A'} />
-              <Metric
-                label="Compliance health"
-                value={formatBoardPackScore100(branches.compliance?.healthScore)}
-              />
-              <Metric
-                label="Critical findings"
-                value={formatBoardPackCount(branches.compliance?.criticalFindings)}
-              />
-              <Metric label="Runway" value={formatBoardPackMonths(branches.funding?.runwayMonths)} />
-              <Metric
-                label="Capital raised"
-                value={formatBoardPackCurrency(branches.funding?.capitalRaised, 'EUR')}
-              />
-              <Metric
-                label="PMI completion"
-                value={formatBoardPackPercent(branches.pmi?.integrationProgress)}
-              />
-              <Metric
-                label="Synergy capture"
-                value={formatBoardPackPercent(branches.pmi?.synergyCaptureRate)}
-              />
-              <Metric
-                label="Ledger capture"
-                value={formatBoardPackPercent(branches.pmi?.ledgerCaptureRate)}
-              />
-              <Metric
-                label="Playbook progress"
-                value={formatBoardPackPercent(branches.pmi?.playbookProgress)}
-              />
-              <Metric
-                label="Blocked dependencies"
-                value={formatBoardPackCount(branches.pmi?.blockedDependenciesCount)}
-              />
-              <Metric
-                label="Bridge weighted pipeline"
-                value={formatBoardPackCurrency(branches.bridge?.weightedPipelineValue, 'EUR')}
-              />
-              <Metric
-                label="Bridge intros"
+            <section className="board-pack-metrics-group board-pack-section">
+              <h3 className="board-pack-metrics-group-title">Execution Metrics</h3>
+              <div className="board-pack-metrics-grid">
+                {buildExecutionMetrics(branches).map((metric) => (
+                  <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
+                ))}
+              </div>
+            </section>
+
+            <section className="board-pack-metrics-group board-pack-section">
+              <h3 className="board-pack-metrics-group-title">Governance / Bridge / Heritage</h3>
+              <div className="board-pack-metrics-grid">
+                {buildGovernanceBridgeHeritageMetrics(branches).map((metric) => (
+                  <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
+                ))}
+              </div>
+            </section>
+
+            <div className="board-pack-columns board-pack-section">
+              <PremiumPanel title="Execution Profile">
+                {showRadar ? (
+                  <RadarChart branches={branches} />
+                ) : (
+                  <>
+                    <MetricRow
+                      label="PMI Completion"
+                      value={formatBoardPackPercent(branches.pmi?.integrationProgress)}
+                    />
+                    <MetricRow
+                      label="Ledger Capture"
+                      value={formatBoardPackPercent(branches.pmi?.ledgerCaptureRate)}
+                    />
+                    <MetricRow
+                      label="Synergy Capture"
+                      value={formatBoardPackPercent(branches.pmi?.synergyCaptureRate)}
+                    />
+                    <MetricRow
+                      label="Playbook Progress"
+                      value={formatBoardPackPercent(branches.pmi?.playbookProgress)}
+                    />
+                    <MetricRow
+                      label="Board Readiness"
+                      value={formatBoardPackPercent(branches.governance?.boardReadinessScore)}
+                    />
+                  </>
+                )}
+              </PremiumPanel>
+
+              <PremiumPanel title="Readiness & Risk Summary">
+                <MetricRow
+                  label="Compliance Health"
+                  value={formatBoardPackScore100(branches.compliance?.healthScore)}
+                />
+                <MetricRow
+                  label="Critical Findings"
+                  value={formatBoardPackCount(branches.compliance?.criticalFindings)}
+                />
+                <MetricRow
+                  label="Open Board Decisions"
+                  value={formatBoardPackCount(branches.governance?.openDecisionsCount)}
+                />
+                <MetricRow
+                  label="Board Readiness"
+                  value={formatBoardPackPercent(branches.governance?.boardReadinessScore)}
+                />
+              </PremiumPanel>
+            </div>
+
+            <PremiumPanel
+              title="Briefing Pack Status"
+              eyebrow={BRIEFING_PACK_STATUS_ONLY_NOTE}
+              className="board-pack-section"
+            >
+              <MetricRow
+                label="Bridge Intros"
                 value={formatBoardPackCount(branches.bridge?.introductionsCount)}
               />
-              <Metric
-                label="Bridge confidentiality"
-                value={formatBoardPackCount(branches.bridge?.confidentialityExceptionsCount)}
-              />
-              <Metric
-                label="Bridge documents"
+              <MetricRow
+                label="Bridge Documents"
                 value={formatBoardPackCount(branches.bridge?.documentsCount)}
               />
-              <Metric
-                label="Bridge reports"
+              <MetricRow
+                label="Bridge Reports"
                 value={formatBoardPackCount(branches.bridge?.reportsCount)}
               />
-              <Metric
-                label="Governance controls"
+              <MetricRow
+                label="Governance Controls"
                 value={formatBoardPackCount(branches.governance?.controlsCount)}
               />
-              <Metric
-                label="Governance evidence"
+              <MetricRow
+                label="Governance Evidence"
                 value={formatBoardPackPercent(branches.governance?.evidenceReadiness)}
               />
-              <Metric
-                label="Open board decisions"
-                value={formatBoardPackCount(branches.governance?.openDecisionsCount)}
+              <MetricRow
+                label="Bridge Confidentiality"
+                value={formatBoardPackCount(branches.bridge?.confidentialityExceptionsCount)}
               />
-              <Metric
-                label="Board readiness"
-                value={formatBoardPackPercent(branches.governance?.boardReadinessScore)}
-              />
-              <Metric
-                label="Approval bottlenecks"
-                value={formatBoardPackCount(branches.governance?.approvalBottlenecks)}
-              />
-              <Metric
-                label="Policy review risk"
-                value={formatBoardPackCount(branches.governance?.policyReviewRisk)}
-              />
-              <Metric
-                label="Heritage mapped value"
-                value={formatBoardPackCurrency(branches.heritage?.totalAssetValue, 'EUR')}
-              />
-              <Metric
-                label="Heritage succession"
-                value={formatBoardPackPercent(branches.heritage?.successionReadiness)}
-              />
-              <Metric
-                label="Heritage protection"
-                value={formatBoardPackPercent(branches.heritage?.protectionCoverage)}
-              />
-              <Metric
-                label="Heritage documents"
-                value={formatBoardPackCount(branches.heritage?.documentsCount)}
-              />
-              <Metric
-                label="Heritage reports"
-                value={formatBoardPackCount(branches.heritage?.reportsCount)}
-              />
-            </section>
+            </PremiumPanel>
 
-            <section className="board-pack-panel board-pack-section">
-              <h3>Board recommendations</h3>
+            <PremiumPanel title="Board Recommendations" className="board-pack-section">
               <div className="board-pack-recommendations">
-                {(boardPack.recommendations || []).map((item) => (
-                  <p key={item}>{item}</p>
+                {displayedRecommendations.map((item, index) => (
+                  <p key={`${index}-${item}`}>{item}</p>
                 ))}
               </div>
-            </section>
+            </PremiumPanel>
+
+            <footer className="board-pack-premium-footer board-pack-section">{BOARD_PACK_FOOTER_LEGAL}</footer>
           </>
         )}
 

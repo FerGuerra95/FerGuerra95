@@ -3,14 +3,17 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
 
 import {
+  BOARD_PACK_DRAFT_BADGE,
+  BOARD_PACK_HUMAN_REVIEW_BADGE,
   BOARD_PACK_NO_PRINT_CLASS,
+  BOARD_PACK_PREMIUM_TITLE,
   BOARD_PACK_PRINT_BUTTON_LABEL,
-  BOARD_PACK_PRINT_DRAFT_BANNER,
   BOARD_PACK_PRINT_ROOT_CLASS,
   BOARD_PACK_PRINTING_BODY_CLASS,
   BoardPackModal,
   formatBoardPackScore100
 } from '../../../src/modules/ceo-overview/components/BoardPackModal.jsx';
+import { BRIEFING_PACK_STATUS_ONLY_NOTE } from '../../../src/modules/ceo-overview/utils/ceoOverviewTruthfulness.js';
 
 const sampleBoardPack = {
   score: null,
@@ -36,7 +39,7 @@ describe('Board pack modal print preview safety', () => {
     expect(formatBoardPackScore100(null)).toBe('N/A');
   });
 
-  it('renders print root with draft banner and no-print footer actions', () => {
+  it('renders premium print root with draft badges and status-only briefing language', () => {
     render(
       React.createElement(BoardPackModal, {
         boardPack: sampleBoardPack,
@@ -46,8 +49,13 @@ describe('Board pack modal print preview safety', () => {
 
     const printRoot = document.querySelector(`.${BOARD_PACK_PRINT_ROOT_CLASS}`);
     expect(printRoot).toBeTruthy();
-    expect(printRoot.textContent).toContain(BOARD_PACK_PRINT_DRAFT_BANNER);
+    expect(printRoot.textContent).toContain(BOARD_PACK_PREMIUM_TITLE);
+    expect(printRoot.textContent).toContain(BOARD_PACK_DRAFT_BADGE);
+    expect(printRoot.textContent).toContain(BOARD_PACK_HUMAN_REVIEW_BADGE);
+    expect(printRoot.textContent).toContain(BRIEFING_PACK_STATUS_ONLY_NOTE);
     expect(printRoot.textContent).toMatch(/N\/A/);
+    expect(printRoot.textContent).not.toMatch(/export pdf|certified pdf/i);
+    expect(printRoot.textContent).toMatch(/not certified/i);
     expect(document.querySelector(`.board-pack-footer.${BOARD_PACK_NO_PRINT_CLASS}`)).toBeTruthy();
   });
 });

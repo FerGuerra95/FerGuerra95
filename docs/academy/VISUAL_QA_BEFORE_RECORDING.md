@@ -800,3 +800,16 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Manual print QA: Generate Board Review Draft → Print draft preview → verify legible A4 layout.
 - If layout still poor in target browser: defer print click during recording.
 - Validation: build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+### C.24.11 Premium board review draft print renderer checklist
+
+- Baseline `aca9d79`; premium HTML/CSS renderer in `BoardPackModal` only.
+- Modal shows BOARD REVIEW DRAFT header, lion emblem, DRAFT ONLY / Not Certified / Human Review Required badges.
+- Grouped metric cards: Core, Execution, Governance/Bridge/Heritage.
+- Sections: Execution Profile, Readiness & Risk Summary, Briefing Pack Status (status only).
+- Recommendations softened — no named owners / board-level due dates in display copy.
+- Footer: draft for review, confidential, not certified, browser-print style draft.
+- Print: `printing-board-pack` body class; no blank page; no app shell/buttons in print.
+- Enable background graphics in print dialog for premium dark theme if needed.
+- Do not say Export PDF, certified, or board-approved.
+- Validation: build PASS; `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; `fundingDisplayFormat`.

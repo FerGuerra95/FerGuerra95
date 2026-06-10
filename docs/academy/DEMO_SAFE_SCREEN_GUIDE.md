@@ -519,3 +519,17 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`.
 
+### C.24.11 premium board review draft print renderer note
+
+**Baseline:** `aca9d79`.
+
+**Recording-safe result:** Premium black/gold board review draft in modal and browser print. HTML/CSS only — no image pasted as PDF, no server-side PDF.
+
+**Do not say:** Certified PDF, board-approved, Export PDF, or investment/legal advice.
+
+**Say:** BOARD REVIEW DRAFT; DRAFT ONLY; Human review required; Print draft preview; Status only; browser print.
+
+**Print caveat:** Browser print layout and background graphics vary by engine — enable background graphics for premium dark theme if needed.
+
+**Validation:** build PASS; `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+

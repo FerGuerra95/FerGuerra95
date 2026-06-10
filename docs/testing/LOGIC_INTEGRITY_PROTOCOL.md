@@ -2835,3 +2835,17 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Tests:** `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; build + `fundingDisplayFormat`.
 
 **Manual print QA required before recording:** Generate Board Review Draft → Print draft preview.
+
+---
+
+## C.24.11 — Premium Board Review Draft Print Renderer
+
+**Status:** COMPLETED.
+
+**Baseline:** `aca9d79`.
+
+**Integrity:** Display/print layout only. Premium HTML/CSS renderer in `BoardPackModal`; browser print via `printing-board-pack` (C.24.10D pattern preserved — no `body * { visibility: hidden }`). Recommendations softened for display (`softenBoardPackRecommendation`). Null metrics remain N/A. No backend/formula/Golden Dataset changes. No certified/approved claims.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; build + `fundingDisplayFormat`.
+
+**Manual print QA:** Confirm non-blank premium print; background graphics may vary by browser engine.

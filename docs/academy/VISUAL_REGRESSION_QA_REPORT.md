@@ -742,6 +742,26 @@
 
 ---
 
+## 38. C.24.11 — Premium Board Review Draft Print Renderer
+
+**Status:** COMPLETED.
+
+**Baseline:** `aca9d79`.
+
+**Scope:** `BoardPackModal.jsx` premium HTML/CSS print renderer; tests; docs.
+
+**Visual intent:** Black/charcoal premium background, gold borders, lion emblem header, draft badges, grouped metric cards, execution profile, readiness/risk summary, briefing pack status, legal footer.
+
+**Print:** `printing-board-pack` body class; static print root; no app shell in print; `print-color-adjust: exact`.
+
+**Truthfulness:** Draft-only; human review; not certified; not board-approved; N/A preserved; recommendations softened.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); build; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+**Manual QA:** Pending browser print spot-check before recording.
+
+---
+
 ## 37. C.24.10C — Board Review Draft Print Preview Demo Safety Fix
 
 **Baseline:** `a903550`.
