@@ -8707,3 +8707,21 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Manual print QA:** Generate Board Review Draft → Print draft preview → confirm premium layout, no blank page, no app shell.
 
 **Next:** production spot-check + recording rehearsal.
+
+---
+
+## C.24.11B — Premium Board Review Draft Print Layout Polish
+
+**Status:** COMPLETED.
+
+**Baseline:** `a549430` (C.24.11).
+
+**Print polish:** Two-page print structure (`board-pack-print-page-1/2`), gold-bordered `board-pack-print-document`, compact 4-column metric grids, `@page` A4 `8mm` margin, `print-color-adjust: exact`, black/gold tokens. Execution Profile hidden in print (screen-only); metrics compacted to target 2–3 pages.
+
+**Browser limitation:** App cannot remove browser print headers/footers — documented in `BOARD_PACK_PRINT_CLEAN_OUTPUT_HINT` and demo guides. Disable browser headers and footers in print dialog for clean recording/export.
+
+**Truthfulness:** Draft-only, decision support, human review, not certified, not board-approved preserved. Recommendations further softened.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); build; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+**Next:** production spot-check + recording rehearsal; future dedicated PDF renderer if browser print remains insufficient.

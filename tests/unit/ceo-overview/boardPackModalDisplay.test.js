@@ -3,13 +3,16 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 
 import {
+  BOARD_PACK_DECISION_SUPPORT_BADGE,
   BOARD_PACK_DRAFT_BADGE,
   BOARD_PACK_HUMAN_REVIEW_BADGE,
   BOARD_PACK_NO_PRINT_CLASS,
   BOARD_PACK_NOT_CERTIFIED_BADGE,
   BOARD_PACK_PREMIUM_TITLE,
   BOARD_PACK_PRINT_BUTTON_LABEL,
+  BOARD_PACK_PRINT_CLEAN_OUTPUT_HINT,
   BOARD_PACK_PRINT_DRAFT_BANNER,
+  BOARD_PACK_PRINT_DOCUMENT_CLASS,
   BOARD_PACK_PRINT_ROOT_CLASS,
   BOARD_PACK_PRINTING_BODY_CLASS,
   BoardPackModal,
@@ -98,6 +101,11 @@ describe('BoardPackModal display formatting', () => {
     expect(softenBoardPackRecommendation('Assign remediation owners before cycle.')).toMatch(
       /confirm remediation owners/i
     );
+    expect(
+      softenBoardPackRecommendation(
+        'Prioritize remediation of critical compliance findings before external circulation.'
+      )
+    ).toBe('Prioritize remediation before external circulation.');
   });
 
   it('renders premium print root with draft badges, status-only language, and no-print actions', () => {
@@ -112,8 +120,15 @@ describe('BoardPackModal display formatting', () => {
     expect(printRoot).toBeTruthy();
     expect(printRoot.textContent).toContain(BOARD_PACK_PREMIUM_TITLE);
     expect(printRoot.textContent).toContain(BOARD_PACK_DRAFT_BADGE);
+    expect(printRoot.textContent).toContain(BOARD_PACK_DECISION_SUPPORT_BADGE);
     expect(printRoot.textContent).toContain(BOARD_PACK_NOT_CERTIFIED_BADGE);
     expect(printRoot.textContent).toContain(BOARD_PACK_HUMAN_REVIEW_BADGE);
+    expect(document.querySelector(`.${BOARD_PACK_PRINT_DOCUMENT_CLASS}`)).toBeTruthy();
+    expect(printRoot.textContent).toContain('Core Metrics');
+    expect(printRoot.textContent).toContain('Execution Metrics');
+    expect(printRoot.textContent).toContain('Governance / Bridge / Heritage');
+    expect(printRoot.textContent).toContain('Board Recommendations');
+    expect(screen.getByText(BOARD_PACK_PRINT_CLEAN_OUTPUT_HINT)).toBeTruthy();
     expect(printRoot.textContent).toMatch(/draft executive summary/i);
     expect(printRoot.textContent).toContain(BRIEFING_PACK_STATUS_ONLY_NOTE);
     expect(printRoot.textContent).toMatch(/N\/A/);

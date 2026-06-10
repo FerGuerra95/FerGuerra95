@@ -813,3 +813,13 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Enable background graphics in print dialog for premium dark theme if needed.
 - Do not say Export PDF, certified, or board-approved.
 - Validation: build PASS; `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+### C.24.11B Premium board review print layout polish checklist
+
+- Baseline `a549430`; print compaction + black/gold polish in `BoardPackModal` only.
+- Print target: 2 pages ideal, 3 acceptable — avoid 6-page spread.
+- Enable **Background graphics** in print dialog for black/gold theme.
+- **Disable browser headers and footers** in print dialog for clean recording/export (app cannot remove them).
+- Confirm: non-blank, gold border document, compact metric grids, draft/human review/not certified visible.
+- Do not say certified PDF, board-approved, or Export PDF.
+- Validation: build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.

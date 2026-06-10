@@ -2849,3 +2849,15 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Tests:** `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; build + `fundingDisplayFormat`.
 
 **Manual print QA:** Confirm non-blank premium print; background graphics may vary by browser engine.
+
+---
+
+## C.24.11B — Premium Board Review Draft Print Layout Polish
+
+**Status:** COMPLETED.
+
+**Baseline:** `a549430`.
+
+**Integrity:** Print layout compaction only — two-page structure, compact metric grids, black/gold print tokens, `@page` 8mm margin. Browser header/footer limitation documented; no claim app removes them. C.24.10D print mechanism preserved. Recommendations display further softened. No backend/formula/Golden changes.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; build + `fundingDisplayFormat`.

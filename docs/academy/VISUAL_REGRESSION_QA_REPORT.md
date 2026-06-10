@@ -742,6 +742,22 @@
 
 ---
 
+## 39. C.24.11B — Premium Board Review Draft Print Layout Polish
+
+**Status:** COMPLETED.
+
+**Baseline:** `a549430`.
+
+**Scope:** `BoardPackModal.jsx` print CSS compaction — two-page structure, 4-column grids, gold-bordered document, `@page` 8mm, browser header/footer guidance.
+
+**Limitation:** Browser print headers/footers cannot be removed by app CSS — disable in print dialog for recording.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); build; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+**Manual QA:** Pending browser print page-count spot-check (target 2–3 pages).
+
+---
+
 ## 38. C.24.11 — Premium Board Review Draft Print Renderer
 
 **Status:** COMPLETED.

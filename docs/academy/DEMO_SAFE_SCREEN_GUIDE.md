@@ -533,3 +533,17 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
 
+### C.24.11B premium board review print layout polish note
+
+**Baseline:** `a549430`.
+
+**Recording-safe result:** Compacted black/gold browser print layout (2-page target). Disable browser headers and footers in print settings for clean output — the app cannot remove them.
+
+**Print dialog:** Enable background graphics for premium dark theme.
+
+**Do not say:** Certified PDF, board-approved, Export PDF.
+
+**Say:** Print draft preview; BOARD REVIEW DRAFT; disable browser headers/footers for clean export.
+
+**Validation:** build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+

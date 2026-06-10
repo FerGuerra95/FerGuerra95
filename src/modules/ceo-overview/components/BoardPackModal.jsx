@@ -17,8 +17,12 @@ export const BOARD_PACK_PRINT_DRAFT_BANNER =
 export const BOARD_PACK_PREMIUM_TITLE = 'BOARD REVIEW DRAFT';
 export const BOARD_PACK_PREMIUM_SUBTITLE = "CEO's OS | Private Executive Intelligence";
 export const BOARD_PACK_DRAFT_BADGE = 'DRAFT ONLY';
+export const BOARD_PACK_DECISION_SUPPORT_BADGE = 'Decision Support Only';
 export const BOARD_PACK_NOT_CERTIFIED_BADGE = 'Not Certified';
 export const BOARD_PACK_HUMAN_REVIEW_BADGE = 'Human Review Required';
+export const BOARD_PACK_PRINT_CLEAN_OUTPUT_HINT =
+  'For clean output, disable browser headers and footers in print settings.';
+export const BOARD_PACK_PRINT_DOCUMENT_CLASS = 'board-pack-print-document';
 export const BOARD_PACK_EXEC_READINESS_LABEL = 'Executive Readiness Score';
 export const BOARD_PACK_GENERATED_UNAVAILABLE = 'Generated timestamp unavailable';
 export const BOARD_PACK_EXEC_DISCLAIMER =
@@ -110,6 +114,14 @@ export function softenBoardPackRecommendation(text) {
     return 'Confirm owners and timing before external circulation.';
   }
 
+  if (/prioritize remediation of critical compliance findings/i.test(text)) {
+    return 'Prioritize remediation before external circulation.';
+  }
+
+  if (/board approval exceptions/i.test(text)) {
+    return 'Resolve Bridge confidentiality review items before external circulation.';
+  }
+
   let result = text;
   result = result.replace(/named owners/gi, 'confirmed owners');
   result = result.replace(/board-level due dates/gi, 'agreed timing before external circulation');
@@ -118,6 +130,9 @@ export function softenBoardPackRecommendation(text) {
     'confirm remediation owners before circulation'
   );
   result = result.replace(/succession owners/gi, 'succession accountability');
+  result = result.replace(/\bfinal recommendation\b/gi, 'draft recommendation');
+  result = result.replace(/\bfinal report\b/gi, 'draft report');
+  result = result.replace(/\bcertified recommendation\b/gi, 'draft recommendation');
   return result;
 }
 
@@ -465,6 +480,22 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           display: none;
         }
 
+        .board-pack-print-document {
+          display: grid;
+          gap: 20px;
+        }
+
+        .board-pack-print-page {
+          display: grid;
+          gap: 20px;
+        }
+
+        .board-pack-print-bottom-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 18px;
+        }
+
         .board-pack-exec-panel {
           margin-top: 20px;
           display: grid;
@@ -676,7 +707,8 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
         @media (max-width: 900px) {
           .board-pack-metrics-grid,
           .board-pack-columns,
-          .board-pack-exec-panel {
+          .board-pack-exec-panel,
+          .board-pack-print-bottom-grid {
             grid-template-columns: 1fr;
           }
 
@@ -688,7 +720,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
         @media print {
           @page {
             size: A4 portrait;
-            margin: 10mm;
+            margin: 8mm;
           }
 
           html,
@@ -708,7 +740,8 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .${BOARD_PACK_NO_PRINT_CLASS},
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-footer,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-icon-button,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-action {
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-action,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-screen-only {
             display: none !important;
           }
 
@@ -737,34 +770,203 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             box-shadow: none !important;
             padding: 0 !important;
             background: #050505 !important;
-            color: #f8f4ea !important;
+            color: #f8f3e7 !important;
+            font-size: 10px;
+            line-height: 1.35;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
           }
 
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .${BOARD_PACK_PRINT_DOCUMENT_CLASS} {
+            border: 1px solid rgba(214, 168, 74, 0.45) !important;
+            border-radius: 10px;
+            padding: 5mm;
+            background:
+              radial-gradient(ellipse 80% 50% at 12% 0%, rgba(240, 201, 106, 0.1), transparent 55%),
+              #050505 !important;
+            gap: 0 !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page {
+            gap: 7px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page-1 {
+            page-break-after: always;
+            break-after: page;
+          }
+
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-only-banner {
             display: block !important;
-            margin: 0 0 14px;
-            padding: 10px 12px;
+            margin: 0 0 6px;
+            padding: 5px 8px;
             border: 1px solid rgba(214, 168, 74, 0.45);
-            border-radius: 8px;
-            background: #11100d;
+            border-radius: 6px;
+            background: #11100d !important;
             color: #f0c96a !important;
-            font-size: 11px;
-            line-height: 1.5;
+            font-size: 7px;
+            line-height: 1.35;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.05em;
             font-weight: 700;
           }
 
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-section,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric-card,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-panel,
-          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-header,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-header {
+            padding: 7px 8px !important;
+            gap: 8px !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(214, 168, 74, 0.45) !important;
+            background:
+              radial-gradient(circle at 12% 18%, rgba(240, 201, 106, 0.12), transparent 42%),
+              #080807 !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-brand-wrap {
+            width: 42px !important;
+            height: 42px !important;
+            border-radius: 8px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-title {
+            font-size: 13px !important;
+            letter-spacing: 0.1em !important;
+            color: #f0c96a !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-subtitle,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-meta {
+            font-size: 7px !important;
+            color: #c7bda7 !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-badge-row {
+            margin-top: 5px !important;
+            gap: 4px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-badge {
+            padding: 2px 6px !important;
+            font-size: 6px !important;
+            border: 1px solid rgba(214, 168, 74, 0.42) !important;
+            background: rgba(255, 255, 255, 0.04) !important;
+            color: #f0c96a !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-panel {
+            margin-top: 0 !important;
+            grid-template-columns: 92px minmax(0, 1fr) !important;
+            gap: 8px !important;
+            padding: 8px !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(214, 168, 74, 0.38) !important;
+            background: rgba(255, 255, 255, 0.04) !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-score-label,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric-label,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel-eyebrow,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-inline-metric span,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metrics-group-title {
+            font-size: 6.5px !important;
+            color: #d6a84a !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-score-value {
+            font-size: 22px !important;
+            margin-top: 4px !important;
+            color: #f8f3e7 !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-summary {
+            font-size: 8.5px !important;
+            line-height: 1.4 !important;
+            color: #f8f3e7 !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-exec-disclaimer {
+            margin-top: 5px !important;
+            font-size: 7px !important;
+            color: #c7bda7 !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metrics-group {
+            margin-top: 0 !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metrics-group-title {
+            margin-bottom: 4px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metrics-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 4px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric-card {
+            padding: 4px 5px !important;
+            border-radius: 6px !important;
+            gap: 2px !important;
+            border: 1px solid rgba(214, 168, 74, 0.35) !important;
+            background: rgba(255, 255, 255, 0.04) !important;
+            break-inside: auto !important;
+            page-break-inside: auto !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-metric-value {
+            font-size: 9px !important;
+            color: #f8f3e7 !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-bottom-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 6px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel {
+            padding: 6px 7px !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(214, 168, 74, 0.35) !important;
+            background: rgba(255, 255, 255, 0.04) !important;
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel-title {
+            margin-bottom: 4px !important;
+            font-size: 7px !important;
+            color: #f0c96a !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-inline-metric {
+            padding: 3px 0 !important;
+            gap: 6px !important;
+            border-top-color: rgba(214, 168, 74, 0.2) !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-inline-metric strong {
+            font-size: 8px !important;
+            color: #f8f3e7 !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-recommendations {
+            gap: 4px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-recommendations p {
+            font-size: 7.5px !important;
+            line-height: 1.35 !important;
+            color: #f8f3e7 !important;
+          }
+
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-premium-footer {
-            break-inside: avoid;
-            page-break-inside: avoid;
+            margin-top: 6px !important;
+            padding: 6px 8px !important;
+            border-radius: 6px !important;
+            font-size: 6px !important;
+            line-height: 1.45 !important;
+            border: 1px solid rgba(214, 168, 74, 0.28) !important;
+            background: #080807 !important;
+            color: #c7bda7 !important;
           }
         }
       `}</style>
@@ -785,161 +987,164 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           <X size={18} />
         </button>
 
-        <header className="board-pack-premium-header board-pack-section">
-          <div className="board-pack-brand-wrap">
-            <BrandLogo variant="emblem" emblemAsset="lion" size="md" surface="transparent" />
-          </div>
-          <div>
-            <h2 className="board-pack-premium-title">{BOARD_PACK_PREMIUM_TITLE}</h2>
-            <p className="board-pack-premium-subtitle">{BOARD_PACK_PREMIUM_SUBTITLE}</p>
-            <p className="board-pack-premium-meta">
-              {generatedAt ? `Prepared ${generatedAt}` : BOARD_PACK_GENERATED_UNAVAILABLE}
-            </p>
-            <div className="board-pack-badge-row">
-              <span className="board-pack-badge">{BOARD_PACK_DRAFT_BADGE}</span>
-              <span className="board-pack-badge">{BOARD_PACK_NOT_CERTIFIED_BADGE}</span>
-              <span className="board-pack-badge">{BOARD_PACK_HUMAN_REVIEW_BADGE}</span>
-            </div>
-          </div>
-        </header>
-
         {loading ? (
           <div className="board-pack-empty">Preparing board review draft.</div>
         ) : error ? (
           <div className="board-pack-empty">{error.message || 'Board review draft could not be prepared.'}</div>
         ) : (
-          <>
-            <section className="board-pack-exec-panel board-pack-section">
-              <div>
-                <span className="board-pack-exec-score-label">{BOARD_PACK_EXEC_READINESS_LABEL}</span>
-                <strong className="board-pack-exec-score-value">
-                  {formatBoardPackScore100(boardPack.score)}
-                </strong>
-              </div>
-              <div>
-                <p className="board-pack-exec-summary">{boardPack.executiveSummary}</p>
-                <p className="board-pack-exec-disclaimer">{BOARD_PACK_EXEC_DISCLAIMER}</p>
-              </div>
-            </section>
+          <div className={BOARD_PACK_PRINT_DOCUMENT_CLASS}>
+            <div className="board-pack-print-page board-pack-print-page-1">
+              <header className="board-pack-premium-header board-pack-section">
+                <div className="board-pack-brand-wrap">
+                  <BrandLogo variant="emblem" emblemAsset="lion" size="md" surface="transparent" />
+                </div>
+                <div>
+                  <h2 className="board-pack-premium-title">{BOARD_PACK_PREMIUM_TITLE}</h2>
+                  <p className="board-pack-premium-subtitle">{BOARD_PACK_PREMIUM_SUBTITLE}</p>
+                  <p className="board-pack-premium-meta">
+                    {generatedAt ? `Prepared ${generatedAt}` : BOARD_PACK_GENERATED_UNAVAILABLE}
+                  </p>
+                  <div className="board-pack-badge-row">
+                    <span className="board-pack-badge">{BOARD_PACK_DRAFT_BADGE}</span>
+                    <span className="board-pack-badge">{BOARD_PACK_DECISION_SUPPORT_BADGE}</span>
+                    <span className="board-pack-badge">{BOARD_PACK_HUMAN_REVIEW_BADGE}</span>
+                    <span className="board-pack-badge">{BOARD_PACK_NOT_CERTIFIED_BADGE}</span>
+                  </div>
+                </div>
+              </header>
 
-            <section className="board-pack-metrics-group board-pack-section">
-              <h3 className="board-pack-metrics-group-title">Core Metrics</h3>
-              <div className="board-pack-metrics-grid">
-                {buildCoreMetrics(branches).map((metric) => (
-                  <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
-                ))}
-              </div>
-            </section>
+              <section className="board-pack-exec-panel board-pack-section">
+                <div>
+                  <span className="board-pack-exec-score-label">{BOARD_PACK_EXEC_READINESS_LABEL}</span>
+                  <strong className="board-pack-exec-score-value">
+                    {formatBoardPackScore100(boardPack.score)}
+                  </strong>
+                </div>
+                <div>
+                  <p className="board-pack-exec-summary">{boardPack.executiveSummary}</p>
+                  <p className="board-pack-exec-disclaimer">{BOARD_PACK_EXEC_DISCLAIMER}</p>
+                </div>
+              </section>
 
-            <section className="board-pack-metrics-group board-pack-section">
-              <h3 className="board-pack-metrics-group-title">Execution Metrics</h3>
-              <div className="board-pack-metrics-grid">
-                {buildExecutionMetrics(branches).map((metric) => (
-                  <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
-                ))}
-              </div>
-            </section>
-
-            <section className="board-pack-metrics-group board-pack-section">
-              <h3 className="board-pack-metrics-group-title">Governance / Bridge / Heritage</h3>
-              <div className="board-pack-metrics-grid">
-                {buildGovernanceBridgeHeritageMetrics(branches).map((metric) => (
-                  <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
-                ))}
-              </div>
-            </section>
-
-            <div className="board-pack-columns board-pack-section">
-              <PremiumPanel title="Execution Profile">
-                {showRadar ? (
-                  <RadarChart branches={branches} />
-                ) : (
-                  <>
-                    <MetricRow
-                      label="PMI Completion"
-                      value={formatBoardPackPercent(branches.pmi?.integrationProgress)}
-                    />
-                    <MetricRow
-                      label="Ledger Capture"
-                      value={formatBoardPackPercent(branches.pmi?.ledgerCaptureRate)}
-                    />
-                    <MetricRow
-                      label="Synergy Capture"
-                      value={formatBoardPackPercent(branches.pmi?.synergyCaptureRate)}
-                    />
-                    <MetricRow
-                      label="Playbook Progress"
-                      value={formatBoardPackPercent(branches.pmi?.playbookProgress)}
-                    />
-                    <MetricRow
-                      label="Board Readiness"
-                      value={formatBoardPackPercent(branches.governance?.boardReadinessScore)}
-                    />
-                  </>
-                )}
-              </PremiumPanel>
-
-              <PremiumPanel title="Readiness & Risk Summary">
-                <MetricRow
-                  label="Compliance Health"
-                  value={formatBoardPackScore100(branches.compliance?.healthScore)}
-                />
-                <MetricRow
-                  label="Critical Findings"
-                  value={formatBoardPackCount(branches.compliance?.criticalFindings)}
-                />
-                <MetricRow
-                  label="Open Board Decisions"
-                  value={formatBoardPackCount(branches.governance?.openDecisionsCount)}
-                />
-                <MetricRow
-                  label="Board Readiness"
-                  value={formatBoardPackPercent(branches.governance?.boardReadinessScore)}
-                />
-              </PremiumPanel>
+              <section className="board-pack-metrics-group board-pack-section">
+                <h3 className="board-pack-metrics-group-title">Core Metrics</h3>
+                <div className="board-pack-metrics-grid">
+                  {buildCoreMetrics(branches).map((metric) => (
+                    <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
+                  ))}
+                </div>
+              </section>
             </div>
 
-            <PremiumPanel
-              title="Briefing Pack Status"
-              eyebrow={BRIEFING_PACK_STATUS_ONLY_NOTE}
-              className="board-pack-section"
-            >
-              <MetricRow
-                label="Bridge Intros"
-                value={formatBoardPackCount(branches.bridge?.introductionsCount)}
-              />
-              <MetricRow
-                label="Bridge Documents"
-                value={formatBoardPackCount(branches.bridge?.documentsCount)}
-              />
-              <MetricRow
-                label="Bridge Reports"
-                value={formatBoardPackCount(branches.bridge?.reportsCount)}
-              />
-              <MetricRow
-                label="Governance Controls"
-                value={formatBoardPackCount(branches.governance?.controlsCount)}
-              />
-              <MetricRow
-                label="Governance Evidence"
-                value={formatBoardPackPercent(branches.governance?.evidenceReadiness)}
-              />
-              <MetricRow
-                label="Bridge Confidentiality"
-                value={formatBoardPackCount(branches.bridge?.confidentialityExceptionsCount)}
-              />
-            </PremiumPanel>
+            <div className="board-pack-print-page board-pack-print-page-2">
+              <section className="board-pack-metrics-group board-pack-section">
+                <h3 className="board-pack-metrics-group-title">Execution Metrics</h3>
+                <div className="board-pack-metrics-grid">
+                  {buildExecutionMetrics(branches).map((metric) => (
+                    <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
+                  ))}
+                </div>
+              </section>
 
-            <PremiumPanel title="Board Recommendations" className="board-pack-section">
-              <div className="board-pack-recommendations">
-                {displayedRecommendations.map((item, index) => (
-                  <p key={`${index}-${item}`}>{item}</p>
-                ))}
+              <section className="board-pack-metrics-group board-pack-section">
+                <h3 className="board-pack-metrics-group-title">Governance / Bridge / Heritage</h3>
+                <div className="board-pack-metrics-grid">
+                  {buildGovernanceBridgeHeritageMetrics(branches).map((metric) => (
+                    <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
+                  ))}
+                </div>
+              </section>
+
+              <div className="board-pack-print-bottom-grid board-pack-section">
+                <PremiumPanel title="Readiness & Risk Summary">
+                  <MetricRow
+                    label="Compliance Health"
+                    value={formatBoardPackScore100(branches.compliance?.healthScore)}
+                  />
+                  <MetricRow
+                    label="Critical Findings"
+                    value={formatBoardPackCount(branches.compliance?.criticalFindings)}
+                  />
+                  <MetricRow
+                    label="Open Board Decisions"
+                    value={formatBoardPackCount(branches.governance?.openDecisionsCount)}
+                  />
+                  <MetricRow
+                    label="Board Readiness"
+                    value={formatBoardPackPercent(branches.governance?.boardReadinessScore)}
+                  />
+                </PremiumPanel>
+
+                <PremiumPanel title="Briefing Pack Status" eyebrow={BRIEFING_PACK_STATUS_ONLY_NOTE}>
+                  <MetricRow
+                    label="Bridge Intros"
+                    value={formatBoardPackCount(branches.bridge?.introductionsCount)}
+                  />
+                  <MetricRow
+                    label="Bridge Documents"
+                    value={formatBoardPackCount(branches.bridge?.documentsCount)}
+                  />
+                  <MetricRow
+                    label="Bridge Reports"
+                    value={formatBoardPackCount(branches.bridge?.reportsCount)}
+                  />
+                  <MetricRow
+                    label="Governance Controls"
+                    value={formatBoardPackCount(branches.governance?.controlsCount)}
+                  />
+                  <MetricRow
+                    label="Governance Evidence"
+                    value={formatBoardPackPercent(branches.governance?.evidenceReadiness)}
+                  />
+                  <MetricRow
+                    label="Bridge Confidentiality"
+                    value={formatBoardPackCount(branches.bridge?.confidentialityExceptionsCount)}
+                  />
+                </PremiumPanel>
               </div>
-            </PremiumPanel>
 
-            <footer className="board-pack-premium-footer board-pack-section">{BOARD_PACK_FOOTER_LEGAL}</footer>
-          </>
+              <div className="board-pack-columns board-pack-section board-pack-screen-only">
+                <PremiumPanel title="Execution Profile">
+                  {showRadar ? (
+                    <RadarChart branches={branches} />
+                  ) : (
+                    <>
+                      <MetricRow
+                        label="PMI Completion"
+                        value={formatBoardPackPercent(branches.pmi?.integrationProgress)}
+                      />
+                      <MetricRow
+                        label="Ledger Capture"
+                        value={formatBoardPackPercent(branches.pmi?.ledgerCaptureRate)}
+                      />
+                      <MetricRow
+                        label="Synergy Capture"
+                        value={formatBoardPackPercent(branches.pmi?.synergyCaptureRate)}
+                      />
+                      <MetricRow
+                        label="Playbook Progress"
+                        value={formatBoardPackPercent(branches.pmi?.playbookProgress)}
+                      />
+                      <MetricRow
+                        label="Board Readiness"
+                        value={formatBoardPackPercent(branches.governance?.boardReadinessScore)}
+                      />
+                    </>
+                  )}
+                </PremiumPanel>
+              </div>
+
+              <PremiumPanel title="Board Recommendations" className="board-pack-section">
+                <div className="board-pack-recommendations">
+                  {displayedRecommendations.map((item, index) => (
+                    <p key={`${index}-${item}`}>{item}</p>
+                  ))}
+                </div>
+              </PremiumPanel>
+
+              <footer className="board-pack-premium-footer board-pack-section">{BOARD_PACK_FOOTER_LEGAL}</footer>
+            </div>
+          </div>
         )}
 
         <div className={`board-pack-footer ${BOARD_PACK_NO_PRINT_CLASS}`}>
@@ -957,6 +1162,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
                 {BOARD_PACK_PRINT_BUTTON_LABEL}
               </Button>
               <p className="board-pack-print-hint">{BOARD_PACK_PRINT_DRAFT_HINT}</p>
+              <p className="board-pack-print-hint">{BOARD_PACK_PRINT_CLEAN_OUTPUT_HINT}</p>
             </div>
           </div>
         </div>
