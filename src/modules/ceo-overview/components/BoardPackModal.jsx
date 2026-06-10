@@ -4,6 +4,12 @@ import { Button } from '../../../shared/components/ui/Button.jsx';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { BOARD_PACK_PRINT_DRAFT_HINT } from '../utils/ceoOverviewTruthfulness.js';
 
+export const BOARD_PACK_PRINT_ROOT_CLASS = 'board-pack-print-root';
+export const BOARD_PACK_NO_PRINT_CLASS = 'board-pack-no-print';
+export const BOARD_PACK_PRINT_BUTTON_LABEL = 'Print draft preview';
+export const BOARD_PACK_PRINT_DRAFT_BANNER =
+  'Board review draft · Decision support only · Human review required · Not board-approved';
+
 const branchMeta = [
   { key: 'ma', label: 'M&A', tone: '#34d399' },
   { key: 'compliance', label: 'Compliance', tone: '#60a5fa' },
@@ -385,6 +391,10 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           color: rgba(203, 213, 225, 0.72);
         }
 
+        .board-pack-print-only-banner {
+          display: none;
+        }
+
         @media (max-width: 820px) {
           .board-pack-summary,
           .board-pack-grid,
@@ -397,9 +407,157 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             border-radius: 22px;
           }
         }
+
+        @media print {
+          @page {
+            size: A4 portrait;
+            margin: 12mm;
+          }
+
+          html,
+          body {
+            background: #fff !important;
+            height: auto !important;
+            overflow: visible !important;
+          }
+
+          body * {
+            visibility: hidden;
+          }
+
+          .board-pack-backdrop,
+          .board-pack-backdrop .${BOARD_PACK_PRINT_ROOT_CLASS},
+          .board-pack-backdrop .${BOARD_PACK_PRINT_ROOT_CLASS} * {
+            visibility: visible;
+          }
+
+          .board-pack-backdrop {
+            position: static !important;
+            inset: auto !important;
+            display: block !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            background: #fff !important;
+            backdrop-filter: none !important;
+          }
+
+          .${BOARD_PACK_PRINT_ROOT_CLASS} {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            max-height: none !important;
+            overflow: visible !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            background: #fff !important;
+            color: #111827 !important;
+          }
+
+          .${BOARD_PACK_NO_PRINT_CLASS},
+          .board-pack-footer,
+          .board-pack-icon-button,
+          .board-pack-print-action {
+            display: none !important;
+            visibility: hidden !important;
+          }
+
+          .board-pack-print-only-banner {
+            display: block !important;
+            margin: 0 0 14px;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: #f9fafb;
+            color: #374151 !important;
+            font-size: 11px;
+            line-height: 1.5;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 700;
+          }
+
+          .board-pack-header h2,
+          .board-pack-panel h3,
+          .board-pack-summary strong,
+          .board-pack-metric strong,
+          .board-pack-bar-top strong {
+            color: #111827 !important;
+          }
+
+          .board-pack-header p,
+          .board-pack-summary p,
+          .board-pack-recommendations p {
+            color: #374151 !important;
+          }
+
+          .board-pack-kicker,
+          .board-pack-summary span,
+          .board-pack-metric span,
+          .board-pack-bar-top span {
+            color: #6b7280 !important;
+          }
+
+          .board-pack-summary,
+          .board-pack-panel,
+          .board-pack-metric {
+            border: 1px solid #d1d5db !important;
+            background: #fff !important;
+            break-inside: avoid;
+            page-break-inside: avoid;
+          }
+
+          .board-pack-section {
+            break-inside: avoid;
+            page-break-inside: avoid;
+          }
+
+          .board-pack-grid,
+          .board-pack-metrics {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+          }
+
+          .board-pack-radar {
+            max-width: 280px;
+          }
+
+          .board-pack-radar-grid,
+          .board-pack-radar-axis {
+            stroke: #9ca3af !important;
+          }
+
+          .board-pack-radar-fill {
+            fill: rgba(180, 140, 40, 0.18) !important;
+            stroke: #92700c !important;
+          }
+
+          .board-pack-radar-label {
+            fill: #111827 !important;
+          }
+
+          .board-pack-bar-track {
+            background: #e5e7eb !important;
+          }
+
+          .ceos-sidebar,
+          .sidebar,
+          .topbar,
+          .app-shell > :not(.board-pack-backdrop) {
+            display: none !important;
+          }
+        }
       `}</style>
-      <div className="board-pack-modal" role="dialog" aria-modal="true" aria-label="Executive Board Pack preview">
-        <div className="board-pack-header">
+      <div
+        className={`board-pack-modal ${BOARD_PACK_PRINT_ROOT_CLASS}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Executive Board Pack preview"
+      >
+        <p className="board-pack-print-only-banner">{BOARD_PACK_PRINT_DRAFT_BANNER}</p>
+        <div className="board-pack-header board-pack-section">
           <div>
             <div className="board-pack-kicker">
               <FileText size={14} />
@@ -408,7 +566,12 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             <h2>Consolidated board review draft</h2>
             <p>{generatedAt ? `Prepared ${generatedAt}` : 'Preparing consolidated executive view.'}</p>
           </div>
-          <button type="button" className="board-pack-icon-button" onClick={onClose} aria-label="Close Board Pack">
+          <button
+            type="button"
+            className={`board-pack-icon-button ${BOARD_PACK_NO_PRINT_CLASS}`}
+            onClick={onClose}
+            aria-label="Close Board Pack"
+          >
             <X size={18} />
           </button>
         </div>
@@ -419,7 +582,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           <div className="board-pack-empty">{error.message || 'Board review draft could not be prepared.'}</div>
         ) : (
           <>
-            <section className="board-pack-summary">
+            <section className="board-pack-summary board-pack-section">
               <div>
                 <span>Consolidated score</span>
                 <strong>{formatBoardPackScore100(boardPack.score)}</strong>
@@ -427,13 +590,13 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
               <p>{boardPack.executiveSummary}</p>
             </section>
 
-            <section className="board-pack-grid">
-              <div className="board-pack-panel">
+            <section className="board-pack-grid board-pack-section">
+              <div className="board-pack-panel board-pack-section">
                 <h3>Branch balance</h3>
                 <RadarChart branches={branches} />
               </div>
 
-              <div className="board-pack-panel">
+              <div className="board-pack-panel board-pack-section">
                 <h3>Operating balance</h3>
                 {branchMeta.map((item) => (
                   <BranchBar
@@ -446,7 +609,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
               </div>
             </section>
 
-            <section className="board-pack-metrics">
+            <section className="board-pack-metrics board-pack-section">
               <Metric
                 label="M&A valuation"
                 value={formatBoardPackCurrency(branches.ma?.valuation, 'EUR')}
@@ -551,7 +714,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
               />
             </section>
 
-            <section className="board-pack-panel">
+            <section className="board-pack-panel board-pack-section">
               <h3>Board recommendations</h3>
               <div className="board-pack-recommendations">
                 {(boardPack.recommendations || []).map((item) => (
@@ -562,15 +725,19 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           </>
         )}
 
-        <div className="board-pack-footer">
+        <div className={`board-pack-footer ${BOARD_PACK_NO_PRINT_CLASS}`}>
           <div className="board-pack-footer-actions">
-            <Button variant="secondary" onClick={onClose}>
+            <Button variant="secondary" onClick={onClose} className={BOARD_PACK_NO_PRINT_CLASS}>
               Close
             </Button>
-            <div className="board-pack-print-action">
-              <Button onClick={onExport} disabled={!boardPack || loading}>
+            <div className={`board-pack-print-action ${BOARD_PACK_NO_PRINT_CLASS}`}>
+              <Button
+                onClick={onExport}
+                disabled={!boardPack || loading}
+                className={BOARD_PACK_NO_PRINT_CLASS}
+              >
                 <Printer size={16} />
-                Print draft preview
+                {BOARD_PACK_PRINT_BUTTON_LABEL}
               </Button>
               <p className="board-pack-print-hint">{BOARD_PACK_PRINT_DRAFT_HINT}</p>
             </div>

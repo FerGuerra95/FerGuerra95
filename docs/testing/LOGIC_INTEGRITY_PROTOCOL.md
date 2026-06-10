@@ -2821,3 +2821,17 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Integrity:** Display-only changes. localStorage not enterprise SoT — `Previous draft trace` only. Null board pack metrics render N/A. Print label not certified PDF. No formula/score/backend changes.
 
 **Tests:** build PASS; `ceoOverviewTruthfulness` 54/54; `boardPackModalDisplay` 3/3; `fundingDisplayFormat` 7/7.
+
+---
+
+## C.24.10C — Board Review Draft Print Preview Demo Safety Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `a903550`.
+
+**Integrity:** Browser print only — no PDF renderer, no certified export. Scoped print CSS on `board-pack-print-root`; `board-pack-no-print` hides modal actions. Null metrics remain N/A. Draft/human-review/not board-approved banner in print. No backend/formula/Golden Dataset changes.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; build + `fundingDisplayFormat`.
+
+**Manual print QA required before recording:** Generate Board Review Draft → Print draft preview.

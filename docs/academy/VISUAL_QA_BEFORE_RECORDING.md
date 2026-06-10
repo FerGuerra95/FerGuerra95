@@ -788,3 +788,15 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Board review draft: session prepared vs Previous draft trace (not localStorage Prepared).
 - Generate disabled shows admin/board_member hint.
 - Validation: build PASS; `ceoOverviewTruthfulness` 54/54; `boardPackModalDisplay` 3/3.
+
+### C.24.10C Board review draft print preview checklist
+
+- Baseline `a903550`; print CSS scoped to `board-pack-print-root` only.
+- Print draft preview opens browser print — not certified PDF.
+- Print preview shows draft content only (no sidebar, topbar, backdrop, Close/Print buttons).
+- Print banner visible: draft, human review required, not board-approved.
+- Null metrics show N/A in print output.
+- Hint: Uses browser print. Draft only. Layout may vary by browser.
+- Manual print QA: Generate Board Review Draft → Print draft preview → verify legible A4 layout.
+- If layout still poor in target browser: defer print click during recording.
+- Validation: build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.

@@ -33,7 +33,8 @@ export const BRIEFING_PACK_STATUS_ONLY_NOTE =
 export const BOARD_PACK_GENERATE_DISABLED_HINT =
   'Board draft generation requires admin or board member role';
 
-export const BOARD_PACK_PRINT_DRAFT_HINT = 'Uses browser print. Draft only.';
+export const BOARD_PACK_PRINT_DRAFT_HINT =
+  'Uses browser print. Draft only. Layout may vary by browser.';
 
 export function resolveBoardReviewDraftPackStatus({
   sessionGeneratedAt = null,

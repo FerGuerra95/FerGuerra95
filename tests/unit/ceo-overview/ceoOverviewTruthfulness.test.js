@@ -732,6 +732,7 @@ describe('CEO overview truthfulness helpers', () => {
     expect(BOARD_PACK_GENERATE_DISABLED_HINT).toMatch(/admin or board member/i);
     expect(BOARD_PACK_PRINT_DRAFT_HINT).toMatch(/browser print/i);
     expect(BOARD_PACK_PRINT_DRAFT_HINT).toMatch(/draft only/i);
+    expect(BOARD_PACK_PRINT_DRAFT_HINT).toMatch(/layout may vary/i);
     expect(BOARD_PACK_PRINT_DRAFT_HINT).not.toMatch(/export pdf|certified/i);
   });
 });

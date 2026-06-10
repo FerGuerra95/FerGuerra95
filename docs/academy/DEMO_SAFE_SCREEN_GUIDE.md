@@ -505,3 +505,17 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 54/54; `boardPackModalDisplay` 3/3.
 
+### C.24.10C print preview demo safety note
+
+**Baseline:** `a903550`.
+
+**Recording-safe result:** Board pack uses scoped browser print CSS — draft content only on white background; app chrome hidden in print.
+
+**Do not say:** Certified PDF, board-approved pack, or guaranteed print layout.
+
+**Say:** Print draft preview; browser print; draft only; human review required; layout may vary by browser.
+
+**Before recording:** Run manual print QA on target browser. If preview remains unreliable, skip print click on camera.
+
+**Validation:** build PASS; `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`.
+

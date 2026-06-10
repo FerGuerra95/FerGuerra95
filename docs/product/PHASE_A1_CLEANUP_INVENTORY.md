@@ -8664,3 +8664,24 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Tests:** build PASS; `ceoOverviewTruthfulness` 54/54; `boardPackModalDisplay` 3/3; `fundingDisplayFormat` 7/7.
 
 **Next:** production spot-check + recording rehearsal.
+
+---
+
+## C.24.10C — Board Review Draft Print Preview Demo Safety Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `a903550` (C.24.10B).
+
+**Print preview fixes:**
+- Scoped `@media print` CSS on `BoardPackModal`: `board-pack-print-root` visibility technique hides app shell/sidebar/topbar/backdrop/buttons.
+- Print-only draft banner: decision support, human review required, not board-approved.
+- White A4-friendly layout; dark text; section page-break avoidance.
+- Button remains `Print draft preview`; hint: browser print, draft only, layout may vary by browser.
+- No certified PDF; no server-side PDF renderer.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; build + `fundingDisplayFormat`.
+
+**Manual print QA:** Generate Board Review Draft → Print draft preview → confirm draft-only content, no shell/buttons.
+
+**Next:** production spot-check + recording rehearsal; defer print click during recording if browser layout still varies.

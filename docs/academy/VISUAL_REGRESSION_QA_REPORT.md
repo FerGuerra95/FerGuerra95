@@ -739,3 +739,23 @@
 | `/governance/dashboard` | PASS | No regression |
 
 **Validation:** build PASS; `ceoOverviewTruthfulness` 54/54; `boardPackModalDisplay` 3/3.
+
+---
+
+## 37. C.24.10C — Board Review Draft Print Preview Demo Safety Fix
+
+**Baseline:** `a903550`.
+
+| Route | Status | Notes |
+|---|---|---|
+| `/dashboard` | PASS | No regression |
+| `/ceo/overview` | PASS | Print draft preview; scoped print CSS; draft banner |
+| `/reporting/library` | PASS | No regression |
+| `/ma/dashboard` | PASS | No regression |
+| `/funding/dashboard` | PASS | No regression |
+| `/risk/register` | PASS | No regression |
+| `/governance/dashboard` | PASS | No regression |
+
+**Manual print QA:** Generate Board Review Draft → Print draft preview — draft-only, no shell/buttons, legible layout (browser-dependent).
+
+**Validation:** build PASS; `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
