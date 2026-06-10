@@ -832,3 +832,13 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 - Legible text/cards for demo; target 2 pages.
 - Disable browser headers/footers in print dialog.
 - Validation: build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+### C.24.11D Board review draft pagination balance checklist
+
+- Baseline `914d5e5`; pagination balance in `BoardPackModal` only.
+- Page 1: header, executive readiness, summary, Core Metrics, Execution Metrics (no large empty void).
+- Page 2: Governance / Bridge / Heritage, Readiness & Risk + Briefing Pack (2 columns), Board Recommendations, legal footer.
+- Intentional page break before Governance — not after Core Metrics.
+- Disable browser headers/footers in print dialog; enable background graphics.
+- Confirm: draft-only, human review, not certified; no Export PDF; N/A and explicit 0 preserved.
+- Validation: build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.

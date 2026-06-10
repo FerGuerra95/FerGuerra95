@@ -754,6 +754,20 @@
 
 ---
 
+## 41. C.24.11D — Board Review Draft Pagination Balance Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `914d5e5`.
+
+**Scope:** `BoardPackModal.jsx` — move Execution Metrics to page 1; remove hard page-1 break; intentional break before Governance; page 2 balance without forced min-height.
+
+**Manual QA:** Pending — confirm page 1 includes Execution Metrics; page 2 not overcrowded at top; 2-page target; no app chrome in print.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); build; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+---
+
 ## 39. C.24.11B — Premium Board Review Draft Print Layout Polish
 
 **Status:** COMPLETED.

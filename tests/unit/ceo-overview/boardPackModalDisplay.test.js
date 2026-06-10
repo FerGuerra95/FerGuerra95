@@ -12,10 +12,15 @@ import {
   BOARD_PACK_PRINT_BUTTON_LABEL,
   BOARD_PACK_PRINT_CLEAN_OUTPUT_HINT,
   BOARD_PACK_PRINT_DRAFT_BANNER,
+  BOARD_PACK_CORE_METRICS_TITLE,
+  BOARD_PACK_EXECUTION_METRICS_TITLE,
+  BOARD_PACK_GOVERNANCE_METRICS_TITLE,
   BOARD_PACK_PRINT_DOCUMENT_CLASS,
   BOARD_PACK_PRINT_HIDDEN_APP_CHROME_MARKERS,
+  BOARD_PACK_PRINT_PAGE_BREAK_CLASS,
   BOARD_PACK_PRINT_ROOT_CLASS,
   BOARD_PACK_PRINTING_BODY_CLASS,
+  BOARD_PACK_RECOMMENDATIONS_TITLE,
   BoardPackModal,
   formatBoardPackCount,
   formatBoardPackCurrency,
@@ -125,10 +130,10 @@ describe('BoardPackModal display formatting', () => {
     expect(printRoot.textContent).toContain(BOARD_PACK_NOT_CERTIFIED_BADGE);
     expect(printRoot.textContent).toContain(BOARD_PACK_HUMAN_REVIEW_BADGE);
     expect(document.querySelector(`.${BOARD_PACK_PRINT_DOCUMENT_CLASS}`)).toBeTruthy();
-    expect(printRoot.textContent).toContain('Core Metrics');
-    expect(printRoot.textContent).toContain('Execution Metrics');
-    expect(printRoot.textContent).toContain('Governance / Bridge / Heritage');
-    expect(printRoot.textContent).toContain('Board Recommendations');
+    expect(printRoot.textContent).toContain(BOARD_PACK_CORE_METRICS_TITLE);
+    expect(printRoot.textContent).toContain(BOARD_PACK_EXECUTION_METRICS_TITLE);
+    expect(printRoot.textContent).toContain(BOARD_PACK_GOVERNANCE_METRICS_TITLE);
+    expect(printRoot.textContent).toContain(BOARD_PACK_RECOMMENDATIONS_TITLE);
     expect(screen.getByText(BOARD_PACK_PRINT_CLEAN_OUTPUT_HINT)).toBeTruthy();
     expect(printRoot.textContent).toMatch(/draft executive summary/i);
     expect(printRoot.textContent).toContain(BRIEFING_PACK_STATUS_ONLY_NOTE);
@@ -166,6 +171,30 @@ describe('BoardPackModal display formatting', () => {
     expect(printRoot.textContent).not.toMatch(
       /M&A, Compliance, Funding y PMI consolidados/i
     );
+  });
+
+  it('balances print pagination with execution metrics on page 1 and governance break on page 2', () => {
+    render(
+      React.createElement(BoardPackModal, {
+        boardPack: sampleBoardPack,
+        onClose: () => {}
+      })
+    );
+
+    const styleText = document.querySelector('.board-pack-backdrop style')?.textContent || '';
+    const pageOne = document.querySelector('.board-pack-print-page-1');
+    const pageTwo = document.querySelector('.board-pack-print-page-2');
+    const governanceSection = document.querySelector(`.${BOARD_PACK_PRINT_PAGE_BREAK_CLASS}`);
+
+    expect(pageOne?.textContent).toContain(BOARD_PACK_CORE_METRICS_TITLE);
+    expect(pageOne?.textContent).toContain(BOARD_PACK_EXECUTION_METRICS_TITLE);
+    expect(pageOne?.textContent).not.toContain(BOARD_PACK_GOVERNANCE_METRICS_TITLE);
+    expect(pageTwo?.textContent).toContain(BOARD_PACK_GOVERNANCE_METRICS_TITLE);
+    expect(pageTwo?.textContent).toContain(BOARD_PACK_RECOMMENDATIONS_TITLE);
+    expect(governanceSection).toBeTruthy();
+    expect(styleText).toContain(BOARD_PACK_PRINT_PAGE_BREAK_CLASS);
+    expect(styleText).toMatch(/break-before:\s*page/i);
+    expect(styleText).not.toMatch(/board-pack-print-page-1[\s\S]*page-break-after:\s*always/i);
   });
 
   it('adds and removes the printing body class around browser print', () => {

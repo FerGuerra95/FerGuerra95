@@ -2871,3 +2871,15 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 **Baseline:** `8c4a4dc`.
 
 **Integrity:** Print CSS only — correct app chrome selectors (`ceos-main-build-strip`, logout, topbar); page 2 flex fill; improved legibility. Truthfulness unchanged. No backend/formula/Golden changes.
+
+---
+
+## C.24.11D — Board Review Draft Pagination Balance Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `914d5e5`.
+
+**Integrity:** Print layout pagination only — page break after Core Metrics removed; Execution Metrics allowed on page 1; intentional break before Governance / Bridge / Heritage; page 2 balanced without forced min-height void. `break-inside: avoid` retained on metric cards only. Truthfulness unchanged. Browser print only. No backend/formula/Golden changes.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); `ceoOverviewTruthfulness`; build + `fundingDisplayFormat`.

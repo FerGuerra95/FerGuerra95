@@ -557,3 +557,15 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Validation:** build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
 
+### C.24.11D board review draft pagination balance note
+
+**Baseline:** `914d5e5`.
+
+**Recording-safe result:** Page 1 includes Execution Metrics; page break occurs before Governance / Bridge / Heritage; page 2 holds readiness/briefing/recommendations/footer without top-heavy crowding.
+
+**Print dialog:** Disable browser headers and footers; enable background graphics.
+
+**Do not say:** Certified PDF, board-approved, Export PDF.
+
+**Validation:** build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+

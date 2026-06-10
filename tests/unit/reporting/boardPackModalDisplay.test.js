@@ -9,8 +9,10 @@ import {
   BOARD_PACK_NOT_CERTIFIED_BADGE,
   BOARD_PACK_PREMIUM_TITLE,
   BOARD_PACK_PRINT_BUTTON_LABEL,
+  BOARD_PACK_EXECUTION_METRICS_TITLE,
   BOARD_PACK_PRINT_DOCUMENT_CLASS,
   BOARD_PACK_PRINT_HIDDEN_APP_CHROME_MARKERS,
+  BOARD_PACK_PRINT_PAGE_BREAK_CLASS,
   BOARD_PACK_PRINT_ROOT_CLASS,
   BOARD_PACK_PRINTING_BODY_CLASS,
   BoardPackModal,
@@ -63,7 +65,12 @@ describe('Board pack modal print preview safety', () => {
     expect(printRoot.textContent).toMatch(/not board-approved/i);
     expect(document.querySelector(`.${BOARD_PACK_PRINT_DOCUMENT_CLASS}`)).toBeTruthy();
     expect(printRoot.textContent).toContain('Core Metrics');
+    expect(printRoot.textContent).toContain(BOARD_PACK_EXECUTION_METRICS_TITLE);
     expect(printRoot.textContent).toContain('Board Recommendations');
+    expect(document.querySelector('.board-pack-print-page-1')?.textContent).toContain(
+      BOARD_PACK_EXECUTION_METRICS_TITLE
+    );
+    expect(document.querySelector(`.${BOARD_PACK_PRINT_PAGE_BREAK_CLASS}`)).toBeTruthy();
     expect(document.querySelector(`.board-pack-footer.${BOARD_PACK_NO_PRINT_CLASS}`)).toBeTruthy();
 
     const styleText = document.querySelector('.board-pack-backdrop style')?.textContent || '';

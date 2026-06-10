@@ -8741,3 +8741,35 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 **Tests:** `boardPackModalDisplay` (ceo-overview + reporting); build; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
 
 **Next:** production spot-check + recording rehearsal.
+
+---
+
+## C.24.11D — Board Review Draft Pagination Balance Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `914d5e5` (C.24.11C).
+
+**Fixes:** Removed hard `page-break-after` on page 1 wrapper that stranded Execution Metrics on page 2. Execution Metrics moved into page 1 flow. Intentional `break-before: page` on Governance / Bridge / Heritage section. Page 2 flex layout without forced `min-height: 272mm`; footer anchored with `margin-top: auto`. Compact 5-column Execution Metrics grid on page 1.
+
+**Preserved:** Browser print only; draft-only/human review/not certified copy; no backend/PDF server-side; no formula or score changes; app chrome hidden from print.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); build; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+**Next:** final production spot-check + recording rehearsal.
+
+---
+
+## C.24.11D — Board Review Draft Pagination Balance Fix
+
+**Status:** COMPLETED.
+
+**Baseline:** `914d5e5` (C.24.11C).
+
+**Fixes:** Removed hard `page-break-after` on page 1 wrapper that stranded Execution Metrics on page 2. Execution Metrics moved into page 1 flow. Intentional `break-before: page` on Governance / Bridge / Heritage section. Page 2 flex layout without forced `min-height: 272mm`; footer anchored with `margin-top: auto`. Compact 5-column Execution Metrics grid on page 1.
+
+**Preserved:** Browser print only; draft-only/human review/not certified copy; no backend/PDF server-side; no formula or score changes; app chrome hidden from print.
+
+**Tests:** `boardPackModalDisplay` (ceo-overview + reporting); build; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
+
+**Next:** final production spot-check + recording rehearsal.

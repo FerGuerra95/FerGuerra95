@@ -23,6 +23,11 @@ export const BOARD_PACK_HUMAN_REVIEW_BADGE = 'Human Review Required';
 export const BOARD_PACK_PRINT_CLEAN_OUTPUT_HINT =
   'For clean output, disable browser headers and footers in print settings.';
 export const BOARD_PACK_PRINT_DOCUMENT_CLASS = 'board-pack-print-document';
+export const BOARD_PACK_PRINT_PAGE_BREAK_CLASS = 'board-pack-print-page-break';
+export const BOARD_PACK_CORE_METRICS_TITLE = 'Core Metrics';
+export const BOARD_PACK_EXECUTION_METRICS_TITLE = 'Execution Metrics';
+export const BOARD_PACK_GOVERNANCE_METRICS_TITLE = 'Governance / Bridge / Heritage';
+export const BOARD_PACK_RECOMMENDATIONS_TITLE = 'Board Recommendations';
 export const BOARD_PACK_PRINT_HIDDEN_APP_CHROME_MARKERS = [
   'ceos-main-build-strip',
   'ceos-build-strip-tagline',
@@ -810,19 +815,30 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page-1 {
-            page-break-after: always;
-            break-after: page;
+            gap: 7px !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page-2 {
             display: flex !important;
             flex-direction: column !important;
-            min-height: 272mm !important;
-            gap: 10px !important;
+            gap: 9px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .${BOARD_PACK_PRINT_PAGE_BREAK_CLASS} {
+            page-break-before: always !important;
+            break-before: page !important;
+            margin-top: 0 !important;
+            padding-top: 2px !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page-2 .board-pack-premium-footer {
             margin-top: auto !important;
+            padding-top: 10px !important;
+          }
+
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-page-1 .board-pack-metrics-group:last-of-type .board-pack-metrics-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+            gap: 5px !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-print-only-banner {
@@ -961,8 +977,8 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             border-radius: 8px !important;
             border: 1px solid rgba(214, 168, 74, 0.35) !important;
             background: rgba(255, 255, 255, 0.04) !important;
-            break-inside: avoid !important;
-            page-break-inside: avoid !important;
+            break-inside: auto !important;
+            page-break-inside: auto !important;
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .board-pack-panel-title {
@@ -1065,9 +1081,18 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
               </section>
 
               <section className="board-pack-metrics-group board-pack-section">
-                <h3 className="board-pack-metrics-group-title">Core Metrics</h3>
+                <h3 className="board-pack-metrics-group-title">{BOARD_PACK_CORE_METRICS_TITLE}</h3>
                 <div className="board-pack-metrics-grid">
                   {buildCoreMetrics(branches).map((metric) => (
+                    <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
+                  ))}
+                </div>
+              </section>
+
+              <section className="board-pack-metrics-group board-pack-section">
+                <h3 className="board-pack-metrics-group-title">{BOARD_PACK_EXECUTION_METRICS_TITLE}</h3>
+                <div className="board-pack-metrics-grid">
+                  {buildExecutionMetrics(branches).map((metric) => (
                     <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
                   ))}
                 </div>
@@ -1075,17 +1100,10 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
             </div>
 
             <div className="board-pack-print-page board-pack-print-page-2">
-              <section className="board-pack-metrics-group board-pack-section">
-                <h3 className="board-pack-metrics-group-title">Execution Metrics</h3>
-                <div className="board-pack-metrics-grid">
-                  {buildExecutionMetrics(branches).map((metric) => (
-                    <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
-                  ))}
-                </div>
-              </section>
-
-              <section className="board-pack-metrics-group board-pack-section">
-                <h3 className="board-pack-metrics-group-title">Governance / Bridge / Heritage</h3>
+              <section
+                className={`board-pack-metrics-group board-pack-section ${BOARD_PACK_PRINT_PAGE_BREAK_CLASS}`}
+              >
+                <h3 className="board-pack-metrics-group-title">{BOARD_PACK_GOVERNANCE_METRICS_TITLE}</h3>
                 <div className="board-pack-metrics-grid">
                   {buildGovernanceBridgeHeritageMetrics(branches).map((metric) => (
                     <PremiumMetricCard key={metric.label} label={metric.label} value={metric.value} />
@@ -1172,7 +1190,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
                 </PremiumPanel>
               </div>
 
-              <PremiumPanel title="Board Recommendations" className="board-pack-section">
+              <PremiumPanel title={BOARD_PACK_RECOMMENDATIONS_TITLE} className="board-pack-section">
                 <div className="board-pack-recommendations">
                   {displayedRecommendations.map((item, index) => (
                     <p key={`${index}-${item}`}>{item}</p>
