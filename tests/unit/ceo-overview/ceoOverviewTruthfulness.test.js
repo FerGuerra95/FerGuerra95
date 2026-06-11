@@ -33,6 +33,7 @@ import {
 } from '../../../src/modules/ceo-overview/utils/ceoOverviewTruthfulness.js';
 import {
   CEO_BRIEFING_PACKS_SECTION_NOTE,
+  CEO_DECISION_QUEUE_STATUS_NOTE,
   CEO_EXECUTIVE_SIGNAL_STATUS_NOTE,
   CEO_REPORTING_WORKSPACE_BUTTON_LABEL,
   CEO_REPORTING_WORKSPACE_HINT,
@@ -751,7 +752,9 @@ describe('Executive command center demo affordance constants', () => {
     expect(CEO_REPORTING_WORKSPACE_ROUTE).toBe('/reporting/dashboard');
     expect(CEO_REPORTING_WORKSPACE_HINT).toMatch(/reporting metadata/i);
     expect(CEO_REPORTING_WORKSPACE_HINT).not.toMatch(/briefing pack|certified|download/i);
-    expect(CEO_EXECUTIVE_SIGNAL_STATUS_NOTE).toMatch(/status only/i);
+    expect(CEO_DECISION_QUEUE_STATUS_NOTE).toMatch(/read-only/i);
+    expect(CEO_DECISION_QUEUE_STATUS_NOTE).toMatch(/not clickable/i);
+    expect(CEO_EXECUTIVE_SIGNAL_STATUS_NOTE).toMatch(/read-only/i);
     expect(CEO_EXECUTIVE_SIGNAL_STATUS_NOTE).toMatch(/not clickable/i);
     expect(CEO_WORKFLOW_STATUS_NOTE).toMatch(/process status only/i);
     expect(CEO_BRIEFING_PACKS_SECTION_NOTE).toMatch(/not downloadable or certified pack/i);

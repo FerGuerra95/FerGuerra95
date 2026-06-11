@@ -8766,7 +8766,7 @@ Validation: `npm run build` PASS; `fundingDisplayFormat.test.js` PASS.
 
 **Baseline:** `f1953cc` (C.24.12A audit).
 
-**Fixes:** `View Executive Briefing` replaced with `Open reporting workspace` → `/reporting/dashboard`. Sections 03/05/06 marked status-only; removed misleading hover affordance on static cards. Section 06 adds reporting workspace CTA below status cards.
+**Fixes:** `View Executive Briefing` replaced with `Open reporting workspace` → `/reporting/dashboard`. Sections 02/03/05/06 marked status-only; removed misleading hover lift/glow on static cards. Section 06 adds reporting workspace CTA below status cards. **v2:** Section 02 queue cards + live/recommended panels use `ceo-readonly-card`; material system excludes static cards from CTA hover.
 
 **Preserved:** Generate Board Review Draft; Module Readiness links; BoardPackModal print unchanged.
 

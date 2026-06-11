@@ -2892,4 +2892,4 @@ Validation: build PASS; `ceoOverviewTruthfulness` 17/17; `fundingDisplayFormat` 
 
 **Baseline:** `f1953cc`.
 
-**Integrity:** UI affordance/copy only — honest reporting workspace CTA; status-only sections 03/05/06; no fake click targets on static cards. BoardPackModal print CSS unchanged. No backend/formula/Golden changes.
+**Integrity:** UI affordance/copy only — honest reporting workspace CTA; status-only sections 02/03/05/06; no fake click targets on static cards; section 02/03 hover glow removed in v2. BoardPackModal print CSS unchanged. No backend/formula/Golden changes.

@@ -774,9 +774,11 @@
 
 **Baseline:** `f1953cc`.
 
-**Scope:** `ExecutiveCommandCenterView.jsx`, `CEOOverviewPage.jsx`, `ceoMaterialSystem.css` — honest reporting workspace CTA; status-only affordance on sections 03/05/06.
+**Scope:** `ExecutiveCommandCenterView.jsx`, `ceoMaterialSystem.css` — honest reporting workspace CTA; status-only affordance on sections 02/03/05/06.
 
-**Manual QA:** Pending — confirm static sections no longer look clickable; Module Readiness links still work.
+**v2:** Section 02 decision queue + intelligence panels marked read-only (`ceo-static-card`); section 03 intelligence hover glow removed; sections 05/06 unchanged.
+
+**Manual QA:** Pending — confirm sections 02/03 no longer lift/glow on hover; Module Readiness links still work.
 
 **Tests:** `boardPackModalDisplay`; `ceoOverviewTruthfulness`; build; `fundingDisplayFormat`.
 

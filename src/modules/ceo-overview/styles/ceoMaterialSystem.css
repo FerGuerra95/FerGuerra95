@@ -291,8 +291,8 @@
   box-shadow: var(--ceo-mat-inset-top), var(--ceo-mat-inset-depth), 0 10px 36px rgba(0, 0, 0, 0.4) !important;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card:hover,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card:hover {
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card:not(.ceo-static-card):hover,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card:not(.ceo-static-card):hover {
   transform: translateY(-2px) !important;
   box-shadow:
     var(--ceo-mat-inset-top),
@@ -970,16 +970,32 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-static-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readonly-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-status-only-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step-static {
   cursor: default !important;
 }
 
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-static-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-static-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-intelligence-row .ceo-static-card {
+  transition: border-color 160ms ease !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-static-card:hover,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-static-card:hover,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-intelligence-row .ceo-static-card:hover,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-status-only-card:hover,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-corporate-radar-card.ceo-static-card:hover,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step-static:hover {
   transform: none !important;
+  box-shadow:
+    var(--ceo-mat-inset-top),
+    var(--ceo-mat-inset-depth),
+    0 16px 44px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 214, 112, 0.14),
+    0 0 32px rgba(245, 197, 92, 0.1) !important;
+  border-color: var(--ceo-mat-gold-border-soft) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-status-only-card:hover {

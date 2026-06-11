@@ -44,8 +44,10 @@ export const CEO_REPORTING_WORKSPACE_BUTTON_LABEL = 'Open reporting workspace';
 export const CEO_REPORTING_WORKSPACE_ROUTE = '/reporting/dashboard';
 export const CEO_REPORTING_WORKSPACE_HINT =
   'Review board review status, reporting metadata and draft workflow.';
+export const CEO_DECISION_QUEUE_STATUS_NOTE =
+  'Decision summary · read-only · not clickable';
 export const CEO_EXECUTIVE_SIGNAL_STATUS_NOTE =
-  'Executive signal view · status only · not clickable';
+  'Executive signal view · read-only · not clickable';
 export const CEO_WORKFLOW_STATUS_NOTE =
   'Workflow view · process status only · not clickable';
 export const CEO_BRIEFING_PACKS_SECTION_NOTE =
@@ -1183,16 +1185,19 @@ const commandCenterCss = `
   }
 
   .ceo-static-card,
+  .ceo-readonly-card,
   .ceo-status-only-card,
   .ceo-workflow-step-static {
     cursor: default;
   }
 
+  .ceo-decision-queue-grid .ceo-static-card:hover,
+  .ceo-intelligence-grid .ceo-static-card:hover,
+  .ceo-decision-intelligence-row .ceo-static-card:hover,
   .ceo-static-card:hover,
   .ceo-status-only-card:hover,
   .ceo-workflow-step-static:hover {
     transform: none;
-    box-shadow: none;
   }
 
   .ceo-reporting-section-cta {
@@ -1918,9 +1923,10 @@ export function ExecutiveCommandCenterView({
           title="Executive Decision Queue"
           description="Top decisions to review now. Live queue below adds backend-prioritized items."
         >
+          <p className="ceo-section-status-note">{CEO_DECISION_QUEUE_STATUS_NOTE}</p>
           <div className="ceo-decision-queue-grid">
             {decisionQueueCards.map((card) => (
-              <article key={card.title} className="ceo-command-card">
+              <article key={card.title} className="ceo-command-card ceo-static-card ceo-readonly-card">
                 <div
                   className={`ceo-decision-card-priority is-${String(card.priority || 'medium').toLowerCase()}`}
                 >
@@ -1937,7 +1943,7 @@ export function ExecutiveCommandCenterView({
           </div>
 
           <div className="ceo-decision-intelligence-row">
-            <article className="ceo-command-card ceo-live-queue-panel">
+            <article className="ceo-command-card ceo-static-card ceo-readonly-card ceo-live-queue-panel">
               <div className="ceo-command-card-kicker">Executive Decision Queue — Live</div>
               {liveDecisionQueueItems.length ? (
                 <ul className="ceo-live-queue-list">
@@ -1972,7 +1978,7 @@ export function ExecutiveCommandCenterView({
               )}
             </article>
 
-            <article className="ceo-command-card ceo-recommended-actions-panel">
+            <article className="ceo-command-card ceo-static-card ceo-readonly-card ceo-recommended-actions-panel">
               <div className="ceo-command-card-kicker">Recommended Actions</div>
               <p className="ceo-recommended-actions-subtitle">
                 Top executive actions — summary only, not the full queue.
@@ -2020,7 +2026,7 @@ export function ExecutiveCommandCenterView({
           <p className="ceo-section-status-note">{CEO_EXECUTIVE_SIGNAL_STATUS_NOTE}</p>
           <div className="ceo-intelligence-grid">
             {intelligenceCards.map((card) => (
-              <article key={card.title} className="ceo-command-card ceo-static-card">
+              <article key={card.title} className="ceo-command-card ceo-static-card ceo-readonly-card">
                 <div className="ceo-command-card-kicker ceo-card-kicker-row">
                   <CeoGoldCardIcon icon={INTELLIGENCE_ICONS[card.title]} />
                   <span>{card.title}</span>

@@ -575,7 +575,7 @@ Safety posture unchanged: DSS-only, human review required, and no formula/backen
 
 **Safe to click:** Generate Board Review Draft; Close modal; Module Readiness cards; Open reporting workspace (`/reporting/dashboard`).
 
-**Safe to show, not click:** Section 03 Cross-Module Intelligence; Corporate Health Radar; Section 05 Board Review Workflow; Section 06 Executive Briefing Packs status cards.
+**Safe to show, not click:** Section 02 Executive Decision Queue summary cards + live/recommended panels (links inside only via Review source module); Section 03 Cross-Module Intelligence; Corporate Health Radar; Section 05 Board Review Workflow; Section 06 Executive Briefing Packs status cards.
 
 **Avoid:** Print draft preview (unless rehearsed); `/bridge/marketplace`; Reporting Create; PMI mutations; Funding demo load/reset; Bridge Recalculate; disabled workflow buttons.
 

@@ -36,6 +36,7 @@ import {
 } from '../../../src/modules/ceo-overview/utils/ceoOverviewTruthfulness.js';
 import {
   CEO_BRIEFING_PACKS_SECTION_NOTE,
+  CEO_DECISION_QUEUE_STATUS_NOTE,
   CEO_EXECUTIVE_SIGNAL_STATUS_NOTE,
   CEO_REPORTING_WORKSPACE_BUTTON_LABEL,
   CEO_REPORTING_WORKSPACE_ROUTE,
@@ -249,6 +250,7 @@ describe('BoardPackModal display formatting', () => {
     expect(root).toBeTruthy();
     expect(root.textContent).toContain(CEO_REPORTING_WORKSPACE_BUTTON_LABEL);
     expect(root.textContent).not.toMatch(/view executive briefing/i);
+    expect(root.textContent).toContain(CEO_DECISION_QUEUE_STATUS_NOTE);
     expect(root.textContent).toContain(CEO_EXECUTIVE_SIGNAL_STATUS_NOTE);
     expect(root.textContent).toContain(CEO_WORKFLOW_STATUS_NOTE);
     expect(root.textContent).toContain(CEO_BRIEFING_PACKS_SECTION_NOTE);
@@ -257,7 +259,11 @@ describe('BoardPackModal display formatting', () => {
     expect(root.textContent).toMatch(/not board-approved/i);
     expect(root.textContent).toMatch(/not downloadable or certified pack/i);
 
+    expect(document.querySelectorAll('.ceo-decision-queue-grid .ceo-static-card').length).toBe(4);
+    expect(document.querySelectorAll('.ceo-decision-intelligence-row .ceo-static-card').length).toBe(2);
     expect(document.querySelectorAll('.ceo-intelligence-grid .ceo-static-card').length).toBe(4);
+    expect(document.querySelectorAll('.ceo-decision-queue-grid article[role="button"]').length).toBe(0);
+    expect(document.querySelectorAll('.ceo-intelligence-grid article[role="button"]').length).toBe(0);
     expect(document.querySelectorAll('.ceo-workflow-step-static').length).toBe(5);
     expect(document.querySelectorAll('.ceo-briefing-grid .ceo-status-only-card').length).toBe(4);
     expect(document.querySelector('.ceo-briefing-grid a')).toBeNull();

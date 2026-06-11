@@ -847,7 +847,7 @@ Confirm `/dashboard` and `/ceo/overview` now show only the 6 numbered command-ce
 
 - Reporting CTA: **Open reporting workspace** → `/reporting/dashboard`.
 - Safe to click: Generate Board Review Draft; Close modal; Module Readiness cards; Open reporting workspace; M&A/Compliance via module cards.
-- Safe to show, not click: Section 03 intelligence; Corporate Health Radar; Section 05 workflow; Section 06 briefing pack status cards.
+- Safe to show, not click: Section 02 decision queue cards (read-only; no card hover lift); Section 03 intelligence (no glow on hover); Corporate Health Radar; Section 05 workflow; Section 06 briefing pack status cards.
 - Avoid: Print draft preview (unless rehearsed); `/bridge/marketplace`; Reporting Create; PMI mutations; Funding demo tools; Bridge Recalculate.
 - Confirm `status only · not clickable` on static sections.
 - Validation: build PASS; `boardPackModalDisplay`; `ceoOverviewTruthfulness`; `fundingDisplayFormat`.
