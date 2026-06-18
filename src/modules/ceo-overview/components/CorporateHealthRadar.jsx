@@ -1,10 +1,36 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 import {
   EXECUTIVE_RADAR_BRANCH_LABELS,
   EXECUTIVE_RADAR_BRANCH_ORDER,
   normalizeExecutiveRadarBranchKey
 } from '../utils/ceoOverviewTruthfulness.js';
+
+/** Matches ceoRadarSweepRotate duration in ceoMaterialSystem.css */
+const RADAR_SWEEP_DURATION_SEC = 16;
+
+function radarBranchSweepDelay(branchIndex, branchCount) {
+  if (!branchCount) return '0s';
+  return `${(branchIndex / branchCount) * RADAR_SWEEP_DURATION_SEC}s`;
+}
+
+function usePrefersReducedMotion() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const syncPreference = () => setPrefersReducedMotion(mediaQuery.matches);
+    syncPreference();
+    mediaQuery.addEventListener('change', syncPreference);
+    return () => mediaQuery.removeEventListener('change', syncPreference);
+  }, []);
+
+  return prefersReducedMotion;
+}
+
+const RADAR_LABEL_WHITE = 'rgba(248, 243, 231, 0.96)';
+const RADAR_LABEL_MUTED = 'rgba(248, 243, 231, 0.38)';
+
 const RADAR_LABEL_SHORT = {
   legal: 'Comp.',
   financial: 'M&A',
@@ -218,6 +244,7 @@ function radarLabelPosition(angle, cx, cy, radius) {
 }
 
 export function CorporateHealthRadar({ axes = [], className = '' }) {
+  const prefersReducedMotion = usePrefersReducedMotion();
   const safeAxes = useMemo(() => dedupeRadarAxes(axes), [axes]);
   const count = safeAxes.length || 1;
   const cx = 180;
@@ -271,7 +298,9 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
 
   return (
     <div className={`executive-radar-panel ceo-radar-premium ${className}`.trim()}>
-      <div className="ceo-radar-visual-wrap">
+      <div className="ceo-radar-visual-wrap ceo-radar-cinematic">
+        <div className="ceo-radar-cinematic-halo" aria-hidden="true" />
+        <div className="ceo-radar-sweep-beam" aria-hidden="true" />
         <svg
           className="ceo-radar-svg"
           viewBox="0 0 360 360"
@@ -280,12 +309,17 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
         >
           <defs>
             <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(243, 218, 138, 0.38)" />
-              <stop offset="52%" stopColor="rgba(212, 175, 55, 0.3)" />
-              <stop offset="100%" stopColor="rgba(154, 117, 24, 0.24)" />
+              <stop offset="0%" stopColor="rgba(243, 218, 138, 0.36)" />
+              <stop offset="48%" stopColor="rgba(212, 175, 55, 0.26)" />
+              <stop offset="100%" stopColor="rgba(154, 117, 24, 0.16)" />
             </linearGradient>
+            <radialGradient id="ceoRadarCinematicHalo" cx="50%" cy="46%" r="58%">
+              <stop offset="0%" stopColor="rgba(245, 197, 92, 0.14)" />
+              <stop offset="55%" stopColor="rgba(212, 175, 55, 0.06)" />
+              <stop offset="100%" stopColor="rgba(212, 175, 55, 0)" />
+            </radialGradient>
             <filter id="ceoRadarGlow" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feGaussianBlur stdDeviation="3.5" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
@@ -300,6 +334,68 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
             </filter>
           </defs>
 
+          <g className="ceo-radar-cinematic-depth" aria-hidden="true">
+            <circle
+              cx={cx}
+              cy={cy}
+              r={rMax + 52}
+              fill="url(#ceoRadarCinematicHalo)"
+              opacity="0.45"
+            />
+          </g>
+
+          <g className="ceo-radar-sweep-orbit" aria-hidden="true">
+            <circle
+              cx={cx}
+              cy={cy}
+              r={rMax + 38}
+              className="ceo-radar-sweep-ring"
+              fill="none"
+              stroke="rgba(245, 197, 92, 0.22)"
+              strokeWidth="0.75"
+              strokeDasharray="18 42"
+            />
+          </g>
+
+          <g className="ceo-radar-sovereign-rings" aria-hidden="true">
+            <circle
+              cx={cx}
+              cy={cy}
+              r={rMax + 44}
+              className="ceo-radar-orbit-halo ceo-radar-orbit-halo--outer"
+              fill="none"
+              stroke="rgba(212, 175, 55, 0.1)"
+              strokeWidth="0.75"
+              strokeDasharray="3 14"
+            />
+            <circle
+              cx={cx}
+              cy={cy}
+              r={rMax + 34}
+              className="ceo-radar-orbit-halo ceo-radar-orbit-halo--mid"
+              fill="none"
+              stroke="rgba(212, 175, 55, 0.14)"
+              strokeWidth="0.8"
+            />
+            <circle
+              cx={cx}
+              cy={cy}
+              r={rMax + 20}
+              className="ceo-radar-orbit-halo ceo-radar-orbit-halo--inner"
+              fill="none"
+              stroke="rgba(245, 197, 92, 0.18)"
+              strokeWidth="0.85"
+            />
+          </g>
+          <circle
+            cx={cx}
+            cy={cy}
+            r="14"
+            className="ceo-radar-core-pulse"
+            fill="rgba(245, 197, 92, 0.14)"
+            stroke="rgba(243, 218, 138, 0.34)"
+            strokeWidth="0.9"
+          />
           <circle
             cx={cx}
             cy={cy}
@@ -321,20 +417,40 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
               cx={cx}
               cy={cy}
               r={rMax * ratio}
-              className="executive-radar-grid"
+              className={`executive-radar-grid ${ratio === 1 ? 'executive-radar-grid--outer' : 'executive-radar-grid--inner'}`.trim()}
+              strokeDasharray={ratio === 1 ? undefined : '2 7'}
             />
           ))}
 
-          <polygon points={outerRingPoints} className="executive-radar-reference" />
+          <polygon points={outerRingPoints} className="executive-radar-reference ceo-radar-stroke-motion" />
 
-          {geometry.map((entry) => (
+          {geometry.map((entry, branchIndex) => (
             <line
               key={`${entry.axis.key}-spoke`}
               x1={cx}
               y1={cy}
               x2={entry.outerX}
               y2={entry.outerY}
-              className={`executive-radar-axis ${entry.calculable ? '' : 'is-missing'}`.trim()}
+              className={`executive-radar-axis ceo-radar-axis-branch-sweep ${entry.calculable ? '' : 'is-missing'}`.trim()}
+              style={{
+                '--ceo-radar-branch-delay': radarBranchSweepDelay(branchIndex, count),
+                '--ceo-radar-branch-color': entry.tone
+              }}
+            />
+          ))}
+
+          {geometry.map((entry, branchIndex) => (
+            <circle
+              key={`${entry.axis.key}-hub`}
+              cx={entry.outerX}
+              cy={entry.outerY}
+              r="2.5"
+              className="ceo-radar-branch-hub-sweep"
+              style={{
+                '--ceo-radar-branch-delay': radarBranchSweepDelay(branchIndex, count),
+                '--ceo-radar-branch-color': entry.tone
+              }}
+              aria-hidden="true"
             />
           ))}
 
@@ -343,22 +459,29 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
               className="executive-radar-fill"
               points={polygonPoints}
               fill={`url(#${gradientId})`}
-              fillOpacity="0.78"
-              filter="url(#ceoRadarGlow)"
+              fillOpacity="0.72"
+              stroke="rgba(252, 236, 180, 0.88)"
+              strokeWidth="1.75"
+              strokeLinejoin="round"
             />
           ) : null}
 
-          {geometry.map((entry) =>
+          {geometry.map((entry, branchIndex) =>
             entry.calculable && entry.pointX !== null && entry.pointY !== null ? (
               <circle
                 key={`${entry.axis.key}-node`}
                 cx={entry.pointX}
                 cy={entry.pointY}
                 r="6"
-                className="executive-radar-node"
+                className="executive-radar-node ceo-radar-node-pulse ceo-radar-node-branch-sweep"
+                style={{
+                  '--ceo-radar-branch-delay': radarBranchSweepDelay(branchIndex, count),
+                  '--ceo-radar-node-breath-delay': `${branchIndex * 0.55}s`,
+                  '--ceo-radar-branch-color': entry.tone
+                }}
                 fill={entry.tone}
-                stroke="rgba(248, 243, 231, 0.82)"
-                strokeWidth="1.4"
+                stroke="rgba(248, 243, 231, 0.88)"
+                strokeWidth="1.5"
                 filter="url(#ceoRadarNodeGlow)"
               />
             ) : (
@@ -367,7 +490,11 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
                 cx={entry.outerX}
                 cy={entry.outerY}
                 r="3.5"
-                className="executive-radar-node-missing"
+                className="executive-radar-node-missing ceo-radar-node-branch-sweep"
+                style={{
+                  '--ceo-radar-branch-delay': radarBranchSweepDelay(branchIndex, count),
+                  '--ceo-radar-branch-color': entry.tone
+                }}
                 fill="none"
                 stroke={entry.tone}
                 strokeWidth="1.4"
@@ -376,18 +503,33 @@ export function CorporateHealthRadar({ axes = [], className = '' }) {
             )
           )}
 
-          {geometry.map((entry) => (
+          {geometry.map((entry, branchIndex) => (
             <text
               key={`${entry.axis.key}-point-label`}
               x={entry.labelX}
               y={entry.labelY}
               dy={entry.labelDy}
-              className={`ceo-radar-point-label ${entry.calculable ? '' : 'is-missing'}`.trim()}
+              className={
+                entry.calculable
+                  ? 'ceo-radar-point-label ceo-radar-label-has-data'
+                  : 'ceo-radar-point-label ceo-radar-label-no-data is-missing'
+              }
+              fill={entry.calculable ? RADAR_LABEL_WHITE : RADAR_LABEL_MUTED}
               textAnchor={entry.labelAnchor}
-              fill={entry.tone}
               aria-label={entry.axis.label}
             >
               {entry.shortLabel}
+              {entry.calculable && !prefersReducedMotion ? (
+                <animate
+                  attributeName="fill"
+                  values={`${RADAR_LABEL_WHITE};${entry.tone};${RADAR_LABEL_WHITE};${RADAR_LABEL_WHITE}`}
+                  keyTimes="0;0.018;0.045;1"
+                  dur={`${RADAR_SWEEP_DURATION_SEC}s`}
+                  begin={radarBranchSweepDelay(branchIndex, count)}
+                  repeatCount="indefinite"
+                  calcMode="linear"
+                />
+              ) : null}
             </text>
           ))}
         </svg>

@@ -141,6 +141,146 @@
   margin-right: 0 !important;
 }
 
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-wrap {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 376px !important;
+  min-height: 376px !important;
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-executive-core {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 376px !important;
+  aspect-ratio: 1 / 1 !important;
+  pointer-events: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-svg {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  filter: drop-shadow(0 0 48px rgba(212, 175, 55, 0.2)) drop-shadow(0 22px 48px rgba(0, 0, 0, 0.52)) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-orbit--ultra {
+  animation-duration: 32s !important;
+  animation-direction: reverse !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-lion-halo {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 53.75% !important;
+  height: 53.75% !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  background: radial-gradient(
+    circle at 50% 42%,
+    rgba(245, 197, 92, 0.16) 0%,
+    rgba(212, 175, 55, 0.06) 38%,
+    transparent 72%
+  ) !important;
+  box-shadow: 0 0 64px rgba(212, 175, 55, 0.12) !important;
+  animation: ceoSovCoreGlow 20s ease-in-out infinite !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-lion-medallion {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 51.25% !important;
+  height: 51.25% !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+  border: 1px solid rgba(245, 197, 92, 0.34) !important;
+  background: transparent !important;
+  box-shadow:
+    0 0 52px rgba(212, 175, 55, 0.2),
+    0 0 18px rgba(245, 197, 92, 0.12) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-lion-mark {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 40% !important;
+  opacity: 0.98 !important;
+  mix-blend-mode: normal !important;
+  transform: scale(1.1) !important;
+  transform-origin: center 40% !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  filter: sepia(0.3) saturate(1.06) brightness(0.94) contrast(1.06)
+    drop-shadow(0 0 28px rgba(212, 175, 55, 0.28)) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-pulse-aura {
+  position: absolute !important;
+  inset: 10% !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, rgba(245, 197, 92, 0.1) 0%, transparent 70%) !important;
+  animation: ceoSovCoreGlow 20s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-orbit {
+  transform-origin: 160px 160px !important;
+  animation: ceoSovCoreOrbit 24s linear infinite !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-orbit--mid {
+  animation-duration: 20s !important;
+  animation-direction: reverse !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-orbit--inner {
+  animation-duration: 30s !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-pulse-ring,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-medallion-ring {
+  animation: ceoSovCoreGlow 20s ease-in-out infinite !important;
+}
+
+@keyframes ceoSovCoreOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ceoSovCoreGlow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.98);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: scale(1.03);
+  }
+}
+
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap::before {
   inset: -28% -20% !important;
   background: radial-gradient(
@@ -636,8 +776,14 @@
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap,
-  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark {
-    max-width: 240px !important;
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-wrap {
+    max-width: 308px !important;
+    min-height: 308px !important;
+  }
+
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-executive-core {
+    max-width: 308px !important;
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-panel.ceo-radar-premium {
@@ -667,10 +813,16 @@
     max-width: 100% !important;
   }
 
-  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap {
-    max-width: 180px !important;
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-wrap {
+    max-width: 244px !important;
+    min-height: 244px !important;
     margin: 0 auto !important;
     order: -1 !important;
+  }
+
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-executive-core {
+    max-width: 244px !important;
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark {
@@ -962,10 +1114,10 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-section-status-note {
   margin: 0 0 12px !important;
   font-size: 0.72rem !important;
-  line-height: 1.5 !important;
+  line-height: 1.58 !important;
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
-  color: rgba(248, 243, 231, 0.48) !important;
+  color: rgba(248, 243, 231, 0.56) !important;
   font-weight: 600 !important;
 }
 
@@ -1038,4 +1190,724 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-reporting-section-link:hover {
   border-color: rgba(243, 218, 138, 0.58) !important;
   background: rgba(16, 14, 11, 0.96) !important;
+}
+
+/* ——— C.24.14C-CEO — Executive Intelligence Core (advanced atmosphere) ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page.ceo-intelligence-core-page {
+  position: relative !important;
+  isolation: isolate !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page.ceo-intelligence-core-page::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  left: 8% !important;
+  right: 6% !important;
+  top: 280px !important;
+  height: 520px !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  opacity: 0.55 !important;
+  background: linear-gradient(
+    118deg,
+    transparent 0%,
+    rgba(245, 197, 92, 0.04) 24%,
+    rgba(212, 175, 55, 0.09) 42%,
+    rgba(245, 197, 92, 0.05) 58%,
+    transparent 78%
+  ) !important;
+  filter: blur(18px) !important;
+  mask-image: linear-gradient(180deg, transparent, #000 18%, #000 72%, transparent) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-field {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  border-radius: inherit !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-obsidian,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-field-aura {
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    radial-gradient(ellipse 62% 78% at 74% 44%, rgba(245, 197, 92, 0.16), transparent 64%),
+    radial-gradient(ellipse 38% 52% at 18% 22%, rgba(212, 175, 55, 0.06), transparent 62%),
+    linear-gradient(148deg, rgba(2, 2, 2, 0.98) 0%, rgba(6, 5, 4, 0.94) 48%, rgba(3, 3, 3, 0.98) 100%) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-beam {
+  position: absolute !important;
+  inset: -12% 8% -8% 22% !important;
+  background: linear-gradient(
+    112deg,
+    transparent 8%,
+    rgba(245, 197, 92, 0.03) 28%,
+    rgba(243, 218, 138, 0.1) 46%,
+    rgba(212, 175, 55, 0.04) 62%,
+    transparent 82%
+  ) !important;
+  opacity: 0.88 !important;
+  mix-blend-mode: screen !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-orbitals,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-neural,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-field-network {
+  position: absolute !important;
+  inset: -8% -12% -10% 10% !important;
+  width: 114% !important;
+  height: 118% !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-orbitals {
+  opacity: 0.78 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-neural {
+  opacity: 0.82 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-orbit-group {
+  transform-origin: 900px 248px !important;
+  animation: ceoIntelCoreOrbit 26s linear infinite !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-hub,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-pulse {
+  animation: ceoIntelCoreGlow 18s ease-in-out infinite !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-pulse {
+  position: absolute !important;
+  right: 16% !important;
+  top: 42% !important;
+  width: 120px !important;
+  height: 120px !important;
+  margin: -60px -60px 0 0 !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, rgba(245, 197, 92, 0.16) 0%, rgba(212, 175, 55, 0.04) 42%, transparent 72%) !important;
+  box-shadow: 0 0 48px rgba(245, 197, 92, 0.12) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-sheen,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-field-scan {
+  position: absolute !important;
+  inset: 0 !important;
+  background: conic-gradient(
+    from 208deg at 76% 42%,
+    transparent 0deg,
+    rgba(245, 197, 92, 0.04) 14deg,
+    transparent 34deg,
+    transparent 360deg
+  ) !important;
+  opacity: 0.72 !important;
+  animation: ceoIntelCoreOrbit 26s linear infinite !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-vignette,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-field-vignette {
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    linear-gradient(102deg, rgba(2, 2, 2, 0.82) 0%, transparent 32%, transparent 56%, rgba(1, 1, 1, 0.42) 100%),
+    radial-gradient(ellipse 96% 90% at 50% 50%, transparent 34%, rgba(0, 0, 0, 0.52) 100%) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-hero,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero {
+  overflow: hidden !important;
+  box-shadow:
+    var(--ceo-mat-shadow-lift),
+    var(--ceo-mat-inset-top),
+    inset 0 0 120px rgba(0, 0, 0, 0.38),
+    0 0 88px rgba(245, 197, 92, 0.1),
+    inset 0 0 0 1px rgba(245, 197, 92, 0.16) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-status-grid > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-section-shell,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-section-body {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-readiness-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-priorities-card {
+  backdrop-filter: blur(10px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(125%) !important;
+  background:
+    linear-gradient(165deg, rgba(12, 11, 9, 0.72), rgba(6, 6, 5, 0.58)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 230, 0.06),
+    inset 0 0 0 1px rgba(245, 197, 92, 0.12),
+    0 12px 36px rgba(0, 0, 0, 0.38) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap {
+  position: relative !important;
+  isolation: isolate !important;
+  backdrop-filter: blur(8px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(245, 197, 92, 0.16), transparent 62%),
+    linear-gradient(180deg, rgba(12, 11, 9, 0.94), rgba(4, 4, 4, 0.98)) !important;
+  box-shadow:
+    var(--ceo-mat-shadow-lift),
+    var(--ceo-mat-inset-top),
+    inset 0 0 80px rgba(245, 197, 92, 0.06),
+    0 0 36px rgba(245, 197, 92, 0.1),
+    inset 0 0 0 1px rgba(245, 197, 92, 0.18) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap::before,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 46% !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+@keyframes ceoIntelCoreGlow {
+  0%,
+  100% {
+    opacity: 0.58;
+    transform: scale(0.98);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: scale(1.02);
+  }
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap::before {
+  width: min(84%, 420px) !important;
+  height: min(84%, 420px) !important;
+  border: 1px solid rgba(245, 197, 92, 0.14) !important;
+  box-shadow: inset 0 0 40px rgba(245, 197, 92, 0.05) !important;
+  transform: translate(-50%, -50%);
+  animation: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap::after {
+  width: min(94%, 470px) !important;
+  height: min(94%, 470px) !important;
+  border: 1px dashed rgba(212, 175, 55, 0.1) !important;
+  opacity: 0.8 !important;
+  transform: translate(-50%, -50%);
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap {
+  pointer-events: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-grid {
+  fill: none !important;
+  stroke: rgba(245, 197, 92, 0.26) !important;
+  stroke-width: 0.85 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-axis {
+  stroke: rgba(212, 175, 55, 0.22) !important;
+  stroke-width: 0.75 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-outer-ring {
+  fill: rgba(245, 197, 92, 0.05) !important;
+  stroke: rgba(212, 175, 55, 0.32) !important;
+  stroke-width: 1 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-reference {
+  fill: rgba(212, 175, 55, 0.05) !important;
+  stroke: rgba(212, 175, 55, 0.22) !important;
+  stroke-width: 0.9 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-fill {
+  stroke: rgba(252, 236, 180, 0.88) !important;
+  stroke-width: 1.75 !important;
+  stroke-linejoin: round !important;
+  fill-opacity: 0.76 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-center-focus {
+  fill: rgba(212, 175, 55, 0.1) !important;
+  stroke: rgba(243, 218, 138, 0.28) !important;
+  stroke-width: 0.9 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-point-label {
+  paint-order: stroke fill !important;
+  stroke: rgba(4, 4, 4, 0.72) !important;
+  stroke-width: 2.5px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-legend-item {
+  line-height: 1.5 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-legend-values small {
+  line-height: 1.48 !important;
+  color: rgba(248, 243, 231, 0.66) !important;
+}
+
+/* ——— C.24.14C radar motion (less static color, more movement) ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-cinematic {
+  overflow: hidden !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-cinematic-halo {
+  position: absolute !important;
+  left: 50% !important;
+  top: 46% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(86%, 420px) !important;
+  height: min(86%, 420px) !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: radial-gradient(
+    circle at 50% 44%,
+    rgba(245, 197, 92, 0.12) 0%,
+    rgba(212, 175, 55, 0.04) 42%,
+    transparent 72%
+  ) !important;
+  box-shadow: 0 0 48px rgba(212, 175, 55, 0.08) !important;
+  opacity: 0.85 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sweep-beam {
+  position: absolute !important;
+  left: 50% !important;
+  top: 46% !important;
+  width: min(78%, 390px) !important;
+  height: min(78%, 390px) !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 300deg,
+    rgba(245, 197, 92, 0.06) 328deg,
+    rgba(243, 218, 138, 0.22) 346deg,
+    rgba(245, 197, 92, 0.08) 356deg,
+    transparent 360deg
+  ) !important;
+  -webkit-mask-image: radial-gradient(circle, #000 38%, transparent 70%) !important;
+  mask-image: radial-gradient(circle, #000 38%, transparent 70%) !important;
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: ceoRadarSweepRotate 16s linear infinite !important;
+}
+
+@keyframes ceoRadarSweepRotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sweep-orbit {
+  transform-origin: 180px 180px !important;
+  animation: ceoRadarOrbitSpin 28s linear infinite !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sweep-ring {
+  animation: ceoRadarStrokeDash 18s linear infinite !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sovereign-rings .ceo-radar-orbit-halo--outer {
+  transform-origin: 180px 180px !important;
+  animation: ceoRadarOrbitSpin 32s linear infinite reverse !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sovereign-rings .ceo-radar-orbit-halo--mid {
+  transform-origin: 180px 180px !important;
+  animation: ceoRadarOrbitSpin 24s linear infinite !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-core-pulse {
+  transform-origin: 180px 180px !important;
+  animation: ceoRadarCorePulse 5s ease-in-out infinite !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-stroke-motion {
+  stroke-dasharray: 6 10 !important;
+  animation: ceoRadarStrokeDash 20s linear infinite !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-node-pulse {
+  animation: ceoRadarNodePulse 4.5s ease-in-out infinite !important;
+  transform-origin: center !important;
+  transform-box: fill-box !important;
+}
+
+@keyframes ceoRadarOrbitSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ceoRadarStrokeDash {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -120;
+  }
+}
+
+@keyframes ceoRadarCorePulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 0.85;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes ceoRadarNodePulse {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Branch illumination synced to 16s sweep (ceoRadarSweepRotate) */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-axis-branch-sweep {
+  animation-name: ceoRadarAxisBranchLight !important;
+  animation-duration: 16s !important;
+  animation-timing-function: linear !important;
+  animation-iteration-count: infinite !important;
+  animation-delay: var(--ceo-radar-branch-delay, 0s) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-branch-hub-sweep {
+  fill: rgba(212, 175, 55, 0.22) !important;
+  stroke: rgba(243, 218, 138, 0.28) !important;
+  stroke-width: 0.65 !important;
+  pointer-events: none !important;
+  transform-box: fill-box !important;
+  transform-origin: center !important;
+  animation-name: ceoRadarBranchHubLight !important;
+  animation-duration: 16s !important;
+  animation-timing-function: linear !important;
+  animation-iteration-count: infinite !important;
+  animation-delay: var(--ceo-radar-branch-delay, 0s) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-node-branch-sweep {
+  animation-name: ceoRadarBranchNodeLight !important;
+  animation-duration: 16s !important;
+  animation-timing-function: linear !important;
+  animation-iteration-count: infinite !important;
+  animation-delay: var(--ceo-radar-branch-delay, 0s) !important;
+  transform-box: fill-box !important;
+  transform-origin: center !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-node-pulse.ceo-radar-node-branch-sweep {
+  animation-name: ceoRadarNodePulse, ceoRadarBranchNodeLight !important;
+  animation-duration: 4.5s, 16s !important;
+  animation-timing-function: ease-in-out, linear !important;
+  animation-iteration-count: infinite, infinite !important;
+  animation-delay: var(--ceo-radar-node-breath-delay, 0s), var(--ceo-radar-branch-delay, 0s) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-label-has-data {
+  pointer-events: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-label-no-data {
+  fill: rgba(248, 243, 231, 0.38) !important;
+  opacity: 0.78 !important;
+  animation: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+}
+
+@keyframes ceoRadarAxisBranchLight {
+  0%,
+  10%,
+  100% {
+    stroke: rgba(212, 175, 55, 0.22);
+    stroke-width: 0.75;
+  }
+
+  1.8% {
+    stroke: var(--ceo-radar-branch-color, rgba(243, 218, 138, 0.82));
+    stroke-width: 1.35;
+  }
+
+  4.5% {
+    stroke: color-mix(in srgb, var(--ceo-radar-branch-color, rgba(245, 197, 92, 0.58)) 78%, rgba(245, 197, 92, 0.22));
+    stroke-width: 1.02;
+  }
+}
+
+@keyframes ceoRadarBranchHubLight {
+  0%,
+  10%,
+  100% {
+    fill: rgba(212, 175, 55, 0.2);
+    stroke: rgba(243, 218, 138, 0.24);
+    transform: scale(1);
+    opacity: 0.72;
+  }
+
+  1.8% {
+    fill: color-mix(in srgb, var(--ceo-radar-branch-color, rgba(245, 197, 92, 0.72)) 82%, rgba(245, 197, 92, 0.28));
+    stroke: color-mix(in srgb, var(--ceo-radar-branch-color, rgba(252, 236, 180, 0.88)) 75%, white);
+    transform: scale(1.5);
+    opacity: 1;
+  }
+
+  4.5% {
+    fill: color-mix(in srgb, var(--ceo-radar-branch-color, rgba(243, 218, 138, 0.42)) 68%, rgba(243, 218, 138, 0.18));
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+}
+
+@keyframes ceoRadarBranchNodeLight {
+  0%,
+  10%,
+  100% {
+    stroke: rgba(248, 243, 231, 0.88);
+    stroke-width: 1.5;
+    opacity: 0.88;
+    transform: scale(1);
+  }
+
+  1.8% {
+    stroke: color-mix(in srgb, var(--ceo-radar-branch-color, rgba(252, 236, 180, 1)) 70%, white);
+    stroke-width: 2.1;
+    opacity: 1;
+    transform: scale(1.18);
+  }
+
+  4.5% {
+    stroke: rgba(248, 243, 231, 0.94);
+    stroke-width: 1.65;
+    opacity: 0.95;
+    transform: scale(1.06);
+  }
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-cinematic-depth {
+  opacity: 0.65 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-grid--inner {
+  stroke: rgba(245, 197, 92, 0.22) !important;
+  stroke-width: 0.8 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-grid--outer {
+  stroke: rgba(243, 218, 138, 0.34) !important;
+  stroke-width: 0.95 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-fill {
+  stroke: rgba(252, 236, 180, 0.86) !important;
+  stroke-width: 1.75 !important;
+  fill-opacity: 0.72 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-corporate-radar-card {
+  box-shadow:
+    var(--ceo-mat-inset-top),
+    inset 0 0 0 1px rgba(245, 197, 92, 0.14),
+    0 18px 48px rgba(0, 0, 0, 0.46),
+    0 0 28px rgba(212, 175, 55, 0.06) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-svg {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+@keyframes ceoIntelCoreGlowRadarRing {
+  0%,
+  100% {
+    opacity: 0.58;
+    transform: translate(-50%, -50%) scale(0.98);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: translate(-50%, -50%) scale(1.02);
+  }
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sovereign-rings {
+  transform-origin: 180px 180px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-core-pulse {
+  transform-origin: 180px 180px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-static-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-intelligence-row .ceo-live-queue-panel,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-intelligence-row .ceo-recommended-actions-panel {
+  backdrop-filter: blur(8px) saturate(118%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(118%) !important;
+  background:
+    radial-gradient(ellipse 88% 76% at 12% 0%, rgba(245, 197, 92, 0.11), transparent 56%),
+    linear-gradient(168deg, rgba(13, 12, 10, 0.94), rgba(5, 5, 4, 0.98)) !important;
+  box-shadow:
+    var(--ceo-mat-inset-top),
+    var(--ceo-mat-inset-depth),
+    0 18px 48px rgba(0, 0, 0, 0.48),
+    inset 0 0 0 1px rgba(245, 197, 92, 0.16) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-mini-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-grid .ceo-status-only-card {
+  backdrop-filter: blur(8px) saturate(118%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(118%) !important;
+  background:
+    radial-gradient(ellipse 80% 70% at 10% 0%, rgba(245, 197, 92, 0.1), transparent 54%),
+    linear-gradient(165deg, rgba(12, 11, 9, 0.94), rgba(5, 5, 4, 0.98)) !important;
+  box-shadow:
+    var(--ceo-mat-inset-top),
+    inset 0 -20px 40px rgba(0, 0, 0, 0.36),
+    0 14px 40px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(245, 197, 92, 0.14) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-corporate-radar-card {
+  backdrop-filter: blur(6px) saturate(115%) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(115%) !important;
+}
+
+@keyframes ceoIntelCoreOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ceoIntelCoreGlow {
+  0%,
+  100% {
+    opacity: 0.58;
+    transform: scale(0.98);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: scale(1.02);
+  }
+}
+
+/* ——— C.24.14C Final — section legibility polish (structure unchanged) ——— */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-panel-fallback,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-meta,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-live-queue-action,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-informational-note,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-blockers-subtitle,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-blockers-overflow-note {
+  line-height: 1.58 !important;
+  color: rgba(248, 243, 231, 0.66) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-card-status {
+  line-height: 1.58 !important;
+  color: rgba(248, 243, 231, 0.72) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-briefing-status-note {
+  line-height: 1.58 !important;
+  color: rgba(248, 243, 231, 0.64) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-board-readiness-compact-lines li {
+  line-height: 1.58 !important;
+  color: rgba(248, 243, 231, 0.76) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-workflow-step-static p {
+  line-height: 1.58 !important;
+  color: rgba(248, 243, 231, 0.68) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-lion-halo,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-wrap,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-orbit,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-medallion-ring,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-pulse-ring,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-pulse-aura,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-orbit-group,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-sheen,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-field-scan,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-hub,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-pulse,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap::before,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap::after,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sweep-beam,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sweep-orbit,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sweep-ring,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-stroke-motion,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-node-pulse,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-axis-branch-sweep,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-branch-hub-sweep,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-node-branch-sweep,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sovereign-rings,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sovereign-rings .ceo-radar-orbit-halo--outer,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sovereign-rings .ceo-radar-orbit-halo--mid,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-core-pulse,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-orbit-halo {
+    animation: none !important;
+  }
+
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-label-has-data {
+    fill: rgba(248, 243, 231, 0.96) !important;
+    filter: none !important;
+  }
+
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-label-no-data {
+    fill: rgba(248, 243, 231, 0.38) !important;
+    filter: none !important;
+  }
 }

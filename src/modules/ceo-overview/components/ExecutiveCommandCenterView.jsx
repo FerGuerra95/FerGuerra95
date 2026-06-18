@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import { CorporateHealthRadar } from './CorporateHealthRadar.jsx';
+import { ExecutiveIntelligenceField } from './ExecutiveIntelligenceField.jsx';
 import '../styles/ceoMaterialSystem.css';
 import {
   buildExecutiveBoardReadinessSummary,
@@ -38,7 +39,7 @@ import {
 } from '../utils/ceoOverviewTruthfulness.js';
 import { getCeoBranchAccentHex } from '../utils/ceoBranchAccents.js';
 
-const CEO_LION_MARK_SRC = '/brand/ceos-lion-mark.png';
+import { SovereignExecutiveCore } from './SovereignExecutiveCore.jsx';
 
 export const CEO_REPORTING_WORKSPACE_BUTTON_LABEL = 'Open reporting workspace';
 export const CEO_REPORTING_WORKSPACE_ROUTE = '/reporting/dashboard';
@@ -993,7 +994,6 @@ const commandCenterCss = `
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.03em;
-    fill: rgba(248, 243, 231, 0.92);
     pointer-events: none;
     user-select: none;
     paint-order: stroke fill;
@@ -1813,7 +1813,10 @@ export function ExecutiveCommandCenterView({
     <>
       <style>{commandCenterCss}</style>
 
-      <div className="ceo-executive-command-page" data-testid="ceo-command-center-enterprise">
+      <div
+        className="ceo-executive-command-page ceo-intelligence-core-page"
+        data-testid="ceo-command-center-enterprise"
+      >
         <div className="ceo-truthfulness-banner">
           Decision-support only · Human review required · Board review draft (not board-approved) · Not
           legal or investment advice.
@@ -1824,7 +1827,8 @@ export function ExecutiveCommandCenterView({
           title="Executive Status"
           description="Current posture, readiness index, and where executive attention is required."
         >
-          <div className="ceo-command-hero">
+          <div className="ceo-command-hero ceo-intelligence-core-hero">
+            <ExecutiveIntelligenceField />
             <div className="ceo-command-status-grid">
               <div className="ceo-command-hero-main">
                 <div className="ceo-command-hero-copy">
@@ -1875,15 +1879,8 @@ export function ExecutiveCommandCenterView({
                   </div>
                 </div>
 
-                <div className="ceo-lion-mark-wrap" aria-hidden="true">
-                  <img
-                    className="ceo-lion-mark"
-                    src={CEO_LION_MARK_SRC}
-                    alt=""
-                    width={320}
-                    height={320}
-                    decoding="async"
-                  />
+                <div className="ceo-sovereign-core-wrap ceo-lion-emblem-wrap" aria-hidden="true">
+                  <SovereignExecutiveCore />
                 </div>
               </div>
 
