@@ -1,0 +1,4734 @@
+/*
+  C.24.14D/E-MA-VALUATION — Premium valuation cockpit aligned with M&A dashboard.
+  Branch token: .ma-branch-premium-page (valuation is first consumer).
+  Scoped: .ma-valuation-premium · namespace ma-val-ref-*
+*/
+
+.main-area[data-workspace='ma'] .page .ma-branch-premium-page.ma-valuation-premium {
+  /* Branch-wide premium shell — valuation instance */
+}
+
+/* Match dashboard cockpit width */
+.main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
+  --ceos-content-max: 1540px;
+}
+
+/* —— Page shell: hero → strip → body grid (flat, no nested layout wrapper) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 2vw, 32px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(14px, 1.8vw, 22px);
+  padding-bottom: 52px;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium {
+  --ma-val-bg: #010306;
+  --ma-val-surface: rgba(10, 16, 26, 0.62);
+  --ma-val-surface-solid: rgba(10, 16, 26, 0.82);
+  --ma-val-surface-raised: rgba(14, 22, 34, 0.72);
+  --ma-val-surface-inset: rgba(4, 8, 14, 0.55);
+  --ma-val-line: rgba(45, 212, 191, 0.14);
+  --ma-val-line-soft: rgba(148, 163, 184, 0.09);
+  --ma-val-line-divider: rgba(148, 163, 184, 0.06);
+  --ma-val-teal: #2dd4bf;
+  --ma-val-teal-bright: #5eead4;
+  --ma-val-teal-dim: rgba(94, 234, 212, 0.62);
+  --ma-val-teal-glow: rgba(32, 201, 151, 0.22);
+  --ma-val-gold-micro: rgba(212, 175, 55, 0.22);
+  --ma-val-gold-line: rgba(212, 175, 55, 0.14);
+  --ma-val-shadow: 0 20px 48px rgba(0, 0, 0, 0.32);
+  --ma-val-shadow-soft: 0 8px 28px rgba(0, 0, 0, 0.22);
+  --ma-val-shadow-luxury: 0 24px 56px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  --ma-val-text: #f8fafc;
+  --ma-val-muted: rgba(203, 213, 225, 0.74);
+
+  width: 100% !important;
+  max-width: 100% !important;
+  gap: 0 !important;
+  background: var(--ma-val-bg) !important;
+  background-image:
+    radial-gradient(ellipse 110% 75% at 18% -12%, rgba(32, 201, 151, 0.08), transparent 56%),
+    radial-gradient(ellipse 85% 58% at 92% 8%, rgba(45, 212, 191, 0.045), transparent 50%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(1, 3, 6, 0.85), transparent 72%) !important;
+  color: var(--ma-val-text);
+}
+
+/* Override maExecutiveTheme 1540px cap — valuation uses full content shell width */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium.ma-executive-page {
+  width: 100% !important;
+  max-width: 1480px !important;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-active-strip,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid {
+  width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-active-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-alerts,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-alerts:empty {
+  display: none;
+}
+
+/* —— Body grid: sidebar | main (two direct children, static alignment) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid > .ma-valuation-sidebar,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid > .ma-valuation-main,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid > .ma-valuation-side {
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium :is(
+  .ma-valuation-status-card,
+  .ma-valuation-command-bar,
+  .ma-state-card,
+  .ma-empty-engine,
+  .ma-premium-deal-card,
+  .ma-premium-metric,
+  .ma-closing-structure-box,
+  .ma-bridge-row,
+  .ma-closing-footer-card,
+  .ma-intelligence-panel,
+  .ma-inference-item,
+  .ma-traceability-panel,
+  .ma-input-card,
+  .ma-equity-safe-card,
+  .ma-comparables-shell,
+  .ma-comparable-row
+) {
+  border-radius: 20px !important;
+}
+
+/* Financial figures must not break across lines */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-financial-figure,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-value strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-multiple,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-score span,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-item strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-ring-core strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-multiple-block {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* —— Typography —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-kicker,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-kicker,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-kicker,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-kicker,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-kicker {
+  margin: 0 0 8px;
+  color: var(--ma-val-teal-dim);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-title {
+  margin: 0 0 10px;
+  font-size: clamp(42px, 5vw, 68px);
+  font-weight: 850;
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  color: var(--ma-val-text);
+  text-shadow:
+    0 2px 32px rgba(0, 0, 0, 0.5),
+    0 0 56px rgba(45, 212, 191, 0.08),
+    0 0 1px rgba(212, 175, 55, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-title-line {
+  display: block;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-subtitle {
+  margin: 0 0 18px;
+  color: var(--ma-val-teal-bright);
+  font-size: clamp(19px, 2.1vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-lead {
+  max-width: 640px;
+  margin: 0 0 14px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-dss {
+  margin: 0 0 18px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* —— Hero scene —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene {
+  position: relative;
+  isolation: isolate;
+  min-height: 0;
+  padding: 2px 0 0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene-atmo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 12%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 0;
+  mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene-glow {
+  position: absolute;
+  top: 44%;
+  left: 58%;
+  width: min(960px, 98%);
+  height: min(400px, 48vh);
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(ellipse 58% 72% at 50% 40%, rgba(45, 212, 191, 0.28), transparent 68%),
+    radial-gradient(ellipse 82% 52% at 48% 58%, rgba(32, 201, 151, 0.1), transparent 80%),
+    radial-gradient(ellipse 32% 24% at 66% 34%, rgba(45, 212, 191, 0.12), transparent 76%);
+  filter: blur(8px);
+  opacity: 1;
+  mask-image: linear-gradient(to bottom, black 0%, black 88%, transparent 100%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene-stage {
+  position: absolute;
+  left: 58%;
+  top: 46%;
+  width: min(920px, 72vw);
+  height: min(400px, 40vh);
+  min-width: 400px;
+  min-height: 260px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-field {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-field-vignette {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, rgba(1, 3, 6, 0.04) 0%, transparent 32%),
+    linear-gradient(to bottom, transparent 72%, rgba(1, 3, 6, 0.22) 100%);
+  z-index: 2;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-field-svg {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  filter: drop-shadow(0 20px 48px rgba(0, 0, 0, 0.38));
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-curve-base {
+  animation: ma-val-scenario-base-pulse 7s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-node-focal {
+  animation: ma-val-scenario-node-pulse 5s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-bars rect:nth-child(odd) {
+  animation: ma-val-bar-breathe 9s ease-in-out infinite;
+}
+
+@keyframes ma-val-scenario-base-pulse {
+  0%, 100% { opacity: 0.92; }
+  50% { opacity: 1; }
+}
+
+@keyframes ma-val-scenario-node-pulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes ma-val-bar-breathe {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-curve-base,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-node-focal,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-bars rect {
+    animation: none !important;
+  }
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene-mesh {
+  position: absolute;
+  inset: 0 2%;
+  bottom: 4%;
+  background-image:
+    linear-gradient(rgba(45, 212, 191, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 212, 191, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 82% 72% at 54% 46%, black 8%, transparent 80%);
+  opacity: 0.42;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene-layout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(300px, 380px);
+  gap: 16px 44px;
+  align-items: start;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene-intro {
+  max-width: none;
+  min-width: 0;
+  padding-top: 4px;
+  position: relative;
+  z-index: 3;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-actions a {
+  display: inline-flex;
+  padding: 0;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-cta-ghost {
+  color: var(--ma-val-muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 4px 0;
+  transition: color 0.15s ease;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-cta-ghost:hover,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-cta-ghost:focus-visible {
+  color: var(--ma-val-teal-bright);
+}
+
+/* —— Executive signal panel —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-signal,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-card {
+  padding: 28px 28px 30px;
+  border-radius: 22px;
+  background: linear-gradient(168deg, rgba(14, 24, 36, 0.92) 0%, rgba(8, 14, 22, 0.78) 100%);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  box-shadow:
+    var(--ma-val-shadow-luxury),
+    0 0 56px rgba(45, 212, 191, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-signal::before,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 55%;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(45, 212, 191, 0.14), transparent 68%),
+    radial-gradient(ellipse 40% 30% at 88% 8%, rgba(45, 212, 191, 0.08), transparent 72%);
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-title {
+  margin-top: 8px;
+  font-size: clamp(21px, 2vw, 27px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.16;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-icon-box,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-panel-icon,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-icon,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-empty-icon,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-icon,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-icon,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-header-icon,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-icon,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  color: var(--ma-val-teal);
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.12);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-icon-box {
+  width: 40px;
+  height: 40px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-box {
+  border-radius: 16px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--ma-val-line-soft);
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-box strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-list {
+  display: grid;
+  gap: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 14px;
+  align-items: center;
+  padding: 13px 0;
+  border-top: 1px solid var(--ma-val-line-soft);
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-row strong {
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/* —— Command strip (between hero and workspace) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0 28px;
+  margin: 0;
+  padding: 14px 24px;
+  border-radius: 18px;
+  border: 1px solid var(--ma-val-line-soft);
+  background: var(--ma-val-surface-solid);
+  box-shadow: var(--ma-val-shadow-soft);
+  position: relative;
+  z-index: 4;
+  width: 100%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-item {
+  flex: 1 1 160px;
+  padding: 4px 18px;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-item strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  color: var(--ma-val-text);
+  line-height: 1.25;
+}
+
+/* —— Body grid (sidebar | main) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-workspace {
+  display: contents;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid > .ma-valuation-sidebar,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid > .ma-valuation-side {
+  position: static;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-main {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vw, 22px);
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  align-self: start;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-main > * {
+  min-width: 0;
+  max-width: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* —— Executive shell surfaces — dashboard M&A parity (obsidian glass) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-intelligence-panel {
+  overflow: visible;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-state-card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-empty-engine,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-structure-box,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-intelligence-panel,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-empty {
+  border: 1px solid rgba(148, 163, 184, 0.06);
+  border-radius: 24px;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%);
+  box-shadow: var(--ma-val-shadow-luxury);
+  cursor: default;
+  position: relative;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card::after,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card::after,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel::after,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell::after,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-intelligence-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card::before,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card::before,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell::before,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel::before,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-intelligence-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 120px;
+  background: radial-gradient(ellipse 80% 100% at 12% 0%, rgba(45, 212, 191, 0.1), transparent 72%);
+  pointer-events: none;
+}
+
+/* Input cockpit only — flat integrated children */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-field,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-config-note {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-state-card.danger {
+  border-color: rgba(239, 68, 68, 0.22);
+  background: linear-gradient(165deg, rgba(40, 12, 12, 0.55) 0%, rgba(8, 14, 22, 0.52) 100%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-state-card.success {
+  border-color: rgba(45, 212, 191, 0.2);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-state-card.warning {
+  border-color: rgba(245, 158, 11, 0.22);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-state-card {
+  padding: 18px 20px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-empty-engine {
+  min-height: 380px;
+  padding: 36px;
+  display: grid;
+  place-items: center;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-empty-inner {
+  width: 100%;
+  max-width: 560px;
+  text-align: center;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  border-radius: 18px;
+}
+
+/* —— Deal structure —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card {
+  padding: 30px;
+  border-radius: 22px;
+  min-height: auto;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-header h3 {
+  margin: 0;
+  font-size: clamp(24px, 2.6vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  padding: 0 0 8px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.06);
+  width: 100%;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric {
+  position: relative;
+  min-height: 112px;
+  padding: 22px 20px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  border-radius: 18px !important;
+  border: 1px solid rgba(148, 163, 184, 0.06) !important;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.68) 0%, rgba(8, 14, 22, 0.5) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  overflow: hidden;
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, transparent, var(--ma-val-teal), transparent);
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric:last-child {
+  border-right: 1px solid rgba(148, 163, 184, 0.06) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric span {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(203, 213, 225, 0.78);
+  font-weight: 700;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric strong {
+  display: block;
+  font-size: clamp(20px, 1.8vw, 28px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric small {
+  display: block;
+  line-height: 1.5;
+  color: var(--ma-val-muted);
+  font-size: 13px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-structure-box {
+  margin-top: 4px;
+  padding: 22px 0 8px;
+  border: 0 !important;
+  border-top: 1px solid var(--ma-val-line-divider) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-structure-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-structure-title h4 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  color: var(--ma-val-teal-bright);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  padding: 4px 0 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-row {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) minmax(0, max-content);
+  gap: 20px 28px;
+  align-items: center;
+  padding: 22px 26px;
+  border-radius: 16px !important;
+  border: 1px solid rgba(45, 212, 191, 0.08) !important;
+  background: linear-gradient(135deg, rgba(4, 8, 14, 0.58), rgba(2, 4, 8, 0.38)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  cursor: default;
+  min-width: 0;
+  width: 100%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-row:last-child {
+  border-bottom: 1px solid rgba(45, 212, 191, 0.08) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-number {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, rgba(45, 212, 191, 0.14), rgba(45, 212, 191, 0.06));
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  color: var(--ma-val-teal-bright);
+  font-weight: 800;
+  font-size: 13px;
+  box-shadow: 0 0 16px rgba(45, 212, 191, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-copy strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 16px;
+  font-weight: 750;
+  color: var(--ma-val-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-copy p {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-value {
+  text-align: right;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-value strong {
+  display: block;
+  font-size: clamp(18px, 1.8vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-value span {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(203, 213, 225, 0.72);
+  line-height: 1.45;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+  margin-top: 20px;
+  border: 1px solid var(--ma-val-line-divider);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--ma-val-surface-inset);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-footer-card {
+  padding: 20px 22px;
+  background: transparent !important;
+  border-right: 1px solid var(--ma-val-line-divider) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-footer-card:last-of-type {
+  border-right: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-footer-card strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-footer-card p {
+  margin: 0;
+  line-height: 1.62;
+  font-size: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-arrow {
+  width: 52px;
+  display: grid;
+  place-items: center;
+  color: var(--ma-val-teal-dim);
+  background: transparent !important;
+  border-right: 1px solid var(--ma-val-line-divider) !important;
+}
+
+/* —— Intelligence / evidence —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel {
+  padding: 28px 32px 30px;
+  border-radius: 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-intelligence-panel {
+  padding: 28px;
+  border-radius: 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-panel-header h3 {
+  margin: 0;
+  font-size: clamp(21px, 2.1vw, 27px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-panel-header p {
+  margin: 10px 0 0;
+  line-height: 1.64;
+  max-width: 720px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-panel-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  padding: 2px 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-item {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px 22px;
+  border-radius: 16px !important;
+  border: 1px solid rgba(45, 212, 191, 0.08) !important;
+  background: linear-gradient(135deg, rgba(4, 8, 14, 0.52), rgba(2, 4, 8, 0.34)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-item:last-child {
+  border-bottom: 1px solid rgba(45, 212, 191, 0.08) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-item strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-item p {
+  margin: 0;
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-score {
+  flex: 0 0 auto;
+  min-width: 110px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  text-align: right;
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  background: rgba(45, 212, 191, 0.08);
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-score span {
+  display: block;
+  color: var(--ma-val-teal-bright);
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-score small {
+  display: block;
+  margin-top: 6px;
+  color: var(--ma-val-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-grid,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-row {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 24px;
+  border-radius: 16px !important;
+  border: 1px solid rgba(45, 212, 191, 0.1) !important;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.62) 0%, rgba(8, 14, 22, 0.48) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, transparent, rgba(45, 212, 191, 0.55), transparent);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-row-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ma-val-line-divider);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-title {
+  display: block;
+  margin-top: 6px;
+  font-size: 17px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 24px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-field-meta {
+  grid-column: 1 / -1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(203, 213, 225, 0.72);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-value {
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(226, 232, 240, 0.92);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-ledger-head,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-source {
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-ledger-source {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-ledger-source strong {
+  display: block;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-status-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(226, 232, 240, 0.94);
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.12), rgba(45, 212, 191, 0.05));
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-ledger-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-formula-chip {
+  justify-self: start;
+  max-width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: var(--ma-val-teal-bright);
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.14), rgba(45, 212, 191, 0.06));
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-source strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-source span {
+  display: block;
+  color: rgba(203, 213, 225, 0.78);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-source code {
+  justify-self: end;
+  max-width: 100%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: var(--ma-val-teal-bright);
+  background: rgba(45, 212, 191, 0.06);
+  border: 1px solid rgba(45, 212, 191, 0.12);
+  font-size: 11px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-docs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding-top: 0;
+  margin-top: 0;
+  border-top: 0;
+  min-width: 0;
+  grid-column: auto;
+  grid-row: auto;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-docs span,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-docs-required {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: rgba(226, 232, 240, 0.9);
+  background: rgba(4, 8, 12, 0.35);
+  border: 1px solid var(--ma-val-line-divider);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-footer {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ma-val-line-divider);
+  color: var(--ma-val-muted);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-footer svg {
+  flex: 0 0 auto;
+  color: var(--ma-val-teal);
+}
+
+/* —— Input cockpit — unified shell —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell {
+  padding: 0;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 80px;
+  background: radial-gradient(ellipse 90% 100% at 0% 0%, rgba(45, 212, 191, 0.06), transparent 70%);
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-card {
+  padding: 24px 26px;
+  border-bottom: 1px solid var(--ma-val-line-divider) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-card:last-child {
+  border-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ma-val-line-soft);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-header p {
+  margin: 8px 0 0;
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ma-val-line-soft), transparent);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--ma-val-line-divider);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--ma-val-surface-inset);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-field {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--ma-val-line-divider) !important;
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-field:last-child {
+  border-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: rgba(226, 232, 240, 0.96);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-dot {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  color: var(--ma-val-teal);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-value {
+  flex: 0 0 auto;
+  min-width: 48px;
+  text-align: right;
+  color: var(--ma-val-teal-bright);
+  font-size: 13px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-field input[type='range'] {
+  width: 100%;
+  accent-color: var(--ma-val-teal);
+  cursor: pointer;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  color: rgba(203, 213, 225, 0.68);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-config-note {
+  padding: 18px 20px;
+  margin-top: 4px;
+  border-radius: 14px !important;
+  background: rgba(45, 212, 191, 0.05) !important;
+  border: 1px solid rgba(45, 212, 191, 0.12) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-config-note strong {
+  display: block;
+  margin-bottom: 7px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-config-note p {
+  margin: 0;
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-panel.is-readonly {
+  opacity: 0.92;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-side input,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-sidebar input,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-side select,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-sidebar select,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-side textarea,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-sidebar textarea {
+  background: rgba(4, 8, 12, 0.55) !important;
+  border-color: rgba(45, 212, 191, 0.12) !important;
+}
+
+/* —— Equity hero —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card {
+  padding: 30px;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-hero-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(200px, 280px);
+  gap: 0;
+  align-items: stretch;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--ma-val-line-divider);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-secondary-band {
+  padding: 20px 0 0;
+  border-bottom: 1px solid var(--ma-val-line-divider);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-signal {
+  padding: 0 0 20px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-primary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-quality-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 22px 20px;
+  border-left: 1px solid var(--ma-val-line-divider) !important;
+  text-align: center;
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-value {
+  margin: 0;
+  color: var(--ma-val-text);
+  font-size: clamp(38px, 4.8vw, 64px);
+  line-height: 1.02;
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 40px rgba(45, 212, 191, 0.12);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-copy {
+  max-width: 920px;
+  margin: 0;
+  color: var(--ma-val-muted);
+  line-height: 1.68;
+  font-size: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-signal {
+  padding: 0 0 20px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-signal-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-signal-title {
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-signal-note {
+  margin: 14px 0 0;
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-ring {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  padding: 3px;
+  background: conic-gradient(var(--ma-val-teal) var(--score-angle), rgba(45, 212, 191, 0.08) 0deg);
+  box-shadow: 0 0 36px rgba(45, 212, 191, 0.18);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-ring-core {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 32%, rgba(45, 212, 191, 0.1), transparent 58%), rgba(4, 8, 12, 0.92);
+  border: 1px solid rgba(45, 212, 191, 0.1);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-ring-core strong {
+  color: var(--ma-val-text);
+  font-size: 26px;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-score-copy strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-score-copy p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 12px;
+  color: var(--ma-val-muted);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  padding-top: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric {
+  position: relative;
+  min-height: 120px;
+  padding: 20px 20px 18px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  border-radius: 18px !important;
+  border: 1px solid rgba(148, 163, 184, 0.06) !important;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.68) 0%, rgba(8, 14, 22, 0.5) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  overflow: hidden;
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, transparent, var(--ma-val-teal), transparent);
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric:last-child {
+  border-right: 1px solid rgba(148, 163, 184, 0.06) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-value {
+  margin-top: 8px;
+  font-size: clamp(20px, 1.8vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-description {
+  margin: 0;
+  color: rgba(203, 213, 225, 0.72);
+  line-height: 1.55;
+  font-size: 13px;
+}
+
+/* —— Comparables — unified ledger shell —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 22px;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--ma-val-line-divider);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell-header h2 {
+  margin: 0;
+  font-size: clamp(21px, 2.1vw, 27px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell-header p {
+  max-width: 720px;
+  margin: 10px 0 0;
+  line-height: 1.68;
+  font-size: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-ledger {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  padding: 2px 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-row {
+  position: relative;
+  overflow: visible;
+  padding: 24px 28px;
+  border-radius: 18px !important;
+  border: 1px solid rgba(148, 163, 184, 0.06) !important;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.66) 0%, rgba(8, 14, 22, 0.48) 100%) !important;
+  box-shadow: var(--ma-val-shadow-luxury);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: stretch;
+  cursor: default;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-row-main {
+  grid-column: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px 28px;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-row-identity {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-multiple-block {
+  flex: 0 0 auto;
+  text-align: right;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(45, 212, 191, 0.06);
+  border: 1px solid rgba(45, 212, 191, 0.1);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-multiple {
+  font-size: clamp(34px, 3.2vw, 42px);
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ma-val-teal-bright);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.1), rgba(45, 212, 191, 0.04));
+  border: 1px solid rgba(45, 212, 191, 0.16);
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-name {
+  margin: 8px 0 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  color: var(--ma-val-teal);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-multiple-label {
+  max-width: 120px;
+  text-align: right;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: 11px;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-row:last-child {
+  border-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-note {
+  margin: 0;
+  line-height: 1.65;
+  font-size: 14px;
+  color: var(--ma-val-muted);
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px;
+  padding-top: 0;
+  border-top: 0;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-empty {
+  padding: 32px;
+  border-radius: 20px;
+  border-style: dashed;
+  text-align: center;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-empty-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 16px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  color: var(--ma-val-teal);
+}
+
+/* —— Desktop cockpit width + grid —— */
+@media (min-width: 1280px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid {
+    grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+    gap: clamp(24px, 2.8vw, 36px);
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metrics-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-ledger-head,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-source {
+    display: none;
+  }
+}
+
+@media (min-width: 1600px) {
+  .main-area[data-workspace='ma']:has(.page .ma-valuation-premium) {
+    --ceos-content-max: min(1760px, calc(100vw - 180px));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid {
+    grid-template-columns: minmax(340px, 380px) minmax(0, 1fr);
+    gap: clamp(28px, 3vw, 40px);
+  }
+}
+
+/* —— Integrated module surfaces (reduce sticker collage) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell {
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-deal-structure-slot {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+/* —— Button safety: no false hover on static panels —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium :is(
+  .ma-valuation-command-item,
+  .ma-state-card,
+  .ma-premium-metric,
+  .ma-bridge-row,
+  .ma-closing-footer-card,
+  .ma-inference-item,
+  .ma-valuation-status-box,
+  .ma-evidence-ledger-row,
+  .ma-equity-safe-metric,
+  .ma-comparable-row,
+  .ma-slider-field,
+  .ma-input-card
+):hover {
+  transform: none !important;
+  filter: none !important;
+  cursor: default !important;
+}
+
+/* —— Responsive —— */
+@media (max-width: 1399px) and (min-width: 1181px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1180px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid .ma-valuation-sidebar,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid .ma-valuation-side {
+    position: static;
+    top: auto;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-ledger {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metrics-grid,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metrics,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 920px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-bar {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-row {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-value {
+    grid-column: 1 / -1;
+    text-align: left;
+    padding-left: 64px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-arrow {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-hero-band {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-quality-panel {
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 680px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene {
+    min-height: auto;
+    padding-bottom: 16px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-row strong {
+    text-align: left;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metrics-grid,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metrics,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-body {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric {
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--ma-val-line-divider) !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric:last-child,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-row-main {
+    flex-direction: column;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-header,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-structure-title {
+    flex-direction: column;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-row {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-value {
+    padding-left: 0;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-formula-chip {
+    white-space: normal;
+  }
+}
+
+/* —— C.24.14D layout shield — preserve premium surfaces; only neutralize motion/filters on shells —— */
+.page .ma-valuation-premium-page :is(
+  .ma-equity-safe-card,
+  .ma-premium-deal-card,
+  .ma-traceability-panel,
+  .ma-comparables-shell,
+  .ma-intelligence-panel,
+  .ma-input-cockpit-shell,
+  .ma-valuation-status-card,
+  .ma-valuation-command-bar,
+  .ma-evidence-ledger-row,
+  .ma-comparable-row,
+  .ma-bridge-row,
+  .ma-premium-metric,
+  .ma-equity-safe-metric,
+  .ma-inference-item,
+  .ma-valuation-surface,
+  .ma-valuation-kpi,
+  .ma-valuation-ledger
+) {
+  filter: none !important;
+  transform: none !important;
+  cursor: default !important;
+}
+
+.page .ma-valuation-premium-page .ma-valuation-hero {
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.page .ma-valuation-premium-page .ma-valuation-body-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  width: 100%;
+}
+
+.page .ma-valuation-premium-page .ma-valuation-sidebar,
+.page .ma-valuation-premium-page .ma-valuation-main {
+  min-width: 0;
+  width: 100%;
+}
+
+/* —— Input-only theme shield: flatten status boxes only; cockpit sections styled below —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-box {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
+  .ma-premium-deal-card,
+  .ma-equity-safe-card,
+  .ma-traceability-panel,
+  .ma-comparables-shell,
+  .ma-intelligence-panel,
+  .ma-input-cockpit-shell
+) {
+  border-radius: 24px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
+  .ma-premium-metric,
+  .ma-equity-safe-metric
+) strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
+  .ma-bridge-value,
+  .ma-premium-metric-value,
+  .ma-equity-safe-metric-value,
+  .ma-comparable-multiple,
+  .ma-traceability-score span
+) strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value strong {
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  white-space: nowrap !important;
+}
+
+/*
+  C.24.14D — FINAL VISUAL SURFACE POLISH
+  Dashboard M&A parity: integrated glass, teal identity, premium ledgers.
+  Does NOT touch body grid / sidebar layout.
+*/
+
+/* —— Shared premium glass (parent shells) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium :is(
+  .ma-equity-safe-card,
+  .ma-premium-deal-card,
+  .ma-traceability-panel,
+  .ma-comparables-shell,
+  .ma-intelligence-panel,
+  .ma-input-cockpit-shell
+) {
+  border-color: rgba(45, 212, 191, 0.11) !important;
+  background:
+    linear-gradient(168deg, rgba(11, 18, 28, 0.82) 0%, rgba(6, 10, 18, 0.66) 52%, rgba(4, 8, 14, 0.58) 100%) !important;
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .muted {
+  color: rgba(203, 213, 225, 0.8);
+  line-height: 1.62;
+}
+
+/* —— Equity hero + KPI mini metrics (dashboard stat slabs) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-hero-band {
+  border-bottom-color: rgba(45, 212, 191, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-value {
+  color: #f8fafc;
+  text-shadow: 0 0 42px rgba(45, 212, 191, 0.12);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-secondary-band {
+  border-bottom-color: rgba(45, 212, 191, 0.07);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric-premium,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric {
+  border-color: rgba(45, 212, 191, 0.09) !important;
+  background:
+    linear-gradient(165deg, rgba(10, 16, 26, 0.55) 0%, rgba(6, 10, 18, 0.42) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  padding: 24px 22px 22px 26px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 0 0 16px 16px;
+  background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.28), transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-icon {
+  color: rgba(94, 234, 212, 0.88);
+  background: rgba(45, 212, 191, 0.1);
+  border-color: rgba(45, 212, 191, 0.18);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-value {
+  color: #f8fafc;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric .kpi-label {
+  color: rgba(148, 163, 184, 0.92);
+  letter-spacing: 0.13em;
+}
+
+/* —— Deal structure: KPI strip + unified value ledger —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metrics-grid {
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom-color: rgba(45, 212, 191, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric {
+  border-color: rgba(45, 212, 191, 0.09) !important;
+  background:
+    linear-gradient(165deg, rgba(10, 16, 26, 0.55) 0%, rgba(6, 10, 18, 0.42) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric strong {
+  color: #f8fafc;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-list-premium {
+  gap: 0;
+  padding: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(45, 212, 191, 0.1);
+  background: rgba(4, 8, 14, 0.28);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-list-premium .ma-bridge-row {
+  border-radius: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.07) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 24px 28px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-list-premium .ma-bridge-row:last-child {
+  border-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-list-premium .ma-bridge-row:hover {
+  background: rgba(45, 212, 191, 0.03) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-footer {
+  border-color: rgba(45, 212, 191, 0.1);
+  background: rgba(4, 8, 14, 0.24);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-closing-footer-card {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 22px 24px;
+}
+
+/* —— Evidence Control: premium ledger rows —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-ledger-premium {
+  gap: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-row-premium {
+  padding: 24px 26px 22px;
+  border-color: rgba(45, 212, 191, 0.1) !important;
+  background:
+    linear-gradient(165deg, rgba(10, 16, 26, 0.58) 0%, rgba(6, 10, 18, 0.44) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-row-head {
+  border-bottom-color: rgba(45, 212, 191, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-field {
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-field-meta {
+  flex-direction: row;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-field:has(.ma-traceability-formula-chip) {
+  align-items: center;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-field:has(.ma-traceability-formula-chip) .ma-evidence-ledger-label {
+  flex-basis: 38%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-label {
+  flex: 0 0 38%;
+  color: rgba(148, 163, 184, 0.9);
+  line-height: 1.45;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-docs {
+  flex: 1 1 auto;
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-status-chip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.22);
+  color: var(--ma-val-teal-bright);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-formula-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ma-val-teal-bright);
+  background: rgba(45, 212, 191, 0.08);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-docs span,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-docs-required {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(4, 8, 14, 0.45);
+  border: 1px solid rgba(45, 212, 191, 0.08);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-score {
+  background: rgba(45, 212, 191, 0.08);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-score span {
+  color: var(--ma-val-teal-bright);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-footer {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(45, 212, 191, 0.08);
+  color: rgba(203, 213, 225, 0.82);
+  line-height: 1.6;
+}
+
+/* —— Market comparables: premium module cards —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-ledger-premium {
+  gap: 16px;
+}
+
+@media (min-width: 1100px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-ledger-premium {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-row-premium {
+  border-color: rgba(45, 212, 191, 0.1) !important;
+  background:
+    linear-gradient(165deg, rgba(10, 16, 26, 0.62) 0%, rgba(6, 10, 18, 0.48) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  padding: 26px 24px 22px;
+  gap: 16px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-row-premium::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 0 0 16px 16px;
+  background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.22), transparent);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-multiple-block {
+  background: rgba(45, 212, 191, 0.08);
+  border-color: rgba(45, 212, 191, 0.16);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-name {
+  color: #f8fafc;
+  line-height: 1.25;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-note {
+  line-height: 1.65;
+  font-size: 13px;
+}
+
+/* —— Intelligence panel integration —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-list {
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(45, 212, 191, 0.08);
+  background: rgba(4, 8, 14, 0.22);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-item {
+  border-radius: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.06) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-item:last-child {
+  border-bottom: 0 !important;
+}
+
+/* —— Sidebar input cockpit: integrated glass shell —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell {
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell::before {
+  height: 96px;
+  background: radial-gradient(ellipse 90% 100% at 0% 0%, rgba(45, 212, 191, 0.09), transparent 70%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell .ma-input-card {
+  padding: 26px 28px !important;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.07) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell .ma-input-card:last-child {
+  border-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell .ma-input-header h3 {
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-field input[type='range'] {
+  accent-color: var(--ma-val-teal);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-value {
+  color: var(--ma-val-teal-bright);
+  font-weight: 750;
+}
+
+/* —— Context strip micro polish (no layout change) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-bar {
+  border-color: rgba(45, 212, 191, 0.12);
+  background:
+    linear-gradient(165deg, rgba(10, 16, 26, 0.78) 0%, rgba(6, 10, 18, 0.62) 100%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-item strong {
+  color: #f8fafc;
+}
+
+/* —— Button safety reinforcement —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium :is(
+  .ma-comparable-row-premium,
+  .ma-evidence-ledger-row-premium,
+  .ma-bridge-list-premium .ma-bridge-row,
+  .ma-equity-safe-metric-premium,
+  .ma-premium-metric,
+  .ma-inference-item
+) {
+  cursor: default !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium :is(
+  .ma-comparable-row-premium,
+  .ma-evidence-ledger-row-premium,
+  .ma-bridge-list-premium .ma-bridge-row
+):hover {
+  transform: none !important;
+  filter: none !important;
+}
+
+/*
+  C.24.14D — INTERNAL COMPONENT POLISH
+  Mini metrics, comparables, evidence — no body grid / sidebar / hero changes.
+*/
+
+/* —— T1: Mini KPI metrics — 2x2 default, nowrap values —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metrics,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metrics-grid {
+  grid-template-columns: repeat(2, minmax(240px, 1fr)) !important;
+  gap: 16px !important;
+}
+
+/* 2x2 retained at all breakpoints — main column shares width with sidebar */
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric-premium,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric {
+  min-height: 108px;
+  min-width: 0;
+  overflow: visible !important;
+  padding: 18px 18px 16px 22px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-head {
+  align-items: center;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-head > div:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric strong {
+  margin-top: 6px;
+  font-size: clamp(17px, 1.25vw, 24px) !important;
+  line-height: 1.12 !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  font-variant-numeric: tabular-nums;
+  color: #f8fafc;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric .kpi-label,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric span {
+  font-size: 10px;
+  line-height: 1.35;
+  letter-spacing: 0.11em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric-description,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metric small {
+  font-size: 12px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* —— T2: Market comparables — horizontal premium cards —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-ledger-premium {
+  grid-template-columns: 1fr !important;
+  gap: 12px !important;
+}
+
+@media (min-width: 1180px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-ledger-premium {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 20px 16px !important;
+  min-height: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px 20px;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal .ma-comparable-name {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  overflow-wrap: break-word;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal .ma-comparable-note {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(203, 213, 225, 0.78);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal .ma-comparable-multiple-block {
+  flex: 0 0 auto;
+  text-align: right;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(45, 212, 191, 0.07);
+  border: 1px solid rgba(45, 212, 191, 0.14);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal .ma-comparable-multiple {
+  font-size: clamp(28px, 2.4vw, 36px) !important;
+  white-space: nowrap !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal .ma-comparable-footer {
+  padding-top: 0;
+  gap: 8px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal .ma-comparable-chip {
+  padding: 5px 10px;
+  font-size: 11px;
+}
+
+/* Hide legacy vertical row internals if present */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal .ma-comparable-row-main,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal .ma-comparable-row-identity,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal .ma-comparable-icon {
+  display: none;
+}
+
+/* —— T3: Evidence Control — compact elegant ledger —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-ledger-premium {
+  gap: 10px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-row-premium {
+  padding: 16px 20px 14px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-row-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-title {
+  margin-top: 4px;
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-status-chip {
+  padding: 5px 10px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  background: rgba(45, 212, 191, 0.07);
+  border-color: rgba(45, 212, 191, 0.16);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-body {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-field {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
+  padding: 0 !important;
+  border-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-field-meta {
+  grid-column: 1 / -1;
+  flex-direction: row !important;
+  justify-content: space-between;
+  padding-top: 6px;
+  margin-top: 4px;
+  border-top: 1px solid rgba(45, 212, 191, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-label {
+  flex: none;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(148, 163, 184, 0.85);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-field .ma-traceability-docs {
+  text-align: left !important;
+  justify-content: flex-start !important;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-formula-chip {
+  padding: 5px 10px;
+  font-size: 11px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-docs span,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-docs-required {
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  font-size: 13px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel {
+  padding: 24px 28px 26px !important;
+}
+
+@media (max-width: 760px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-body {
+    grid-template-columns: 1fr !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-head {
+    flex-direction: column;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal .ma-comparable-multiple-block {
+    align-self: flex-start;
+    text-align: left;
+  }
+}
+
+/* —— T4: Dashboard M&A surface finish on internal rows —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-row-premium {
+  border-color: rgba(45, 212, 191, 0.09) !important;
+  background:
+    linear-gradient(165deg, rgba(10, 16, 26, 0.52) 0%, rgba(6, 10, 18, 0.38) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal::after {
+  opacity: 0.35;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-bridge-value strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-value {
+  white-space: nowrap !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   C.24.14D — DASHBOARD VISUAL PARITY
+   Maps /ma/dashboard premium surface system onto /ma/valuation (visual only).
+   Reference: maDashboardMaterial.css — ma-reference-signal, -strip, -stat-slab,
+   -snapshot, -readout-row, -workbench-tile, -bottom-slab.
+   Does NOT alter grid, sidebar position, DOM order, or business logic.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium {
+  --ma-val-bg: #010306;
+  --ma-val-surface: rgba(10, 16, 26, 0.58);
+  --ma-val-surface-solid: rgba(10, 16, 26, 0.78);
+  --ma-val-surface-raised: rgba(12, 20, 30, 0.66);
+  --ma-val-line: rgba(45, 212, 191, 0.12);
+  --ma-val-line-soft: rgba(148, 163, 184, 0.07);
+  --ma-val-teal: #2dd4bf;
+  --ma-val-teal-bright: #5eead4;
+  --ma-val-teal-dim: rgba(94, 234, 212, 0.62);
+  --ma-val-teal-glow: rgba(32, 201, 151, 0.22);
+  --ma-val-shadow-soft: 0 8px 28px rgba(0, 0, 0, 0.22);
+  --ma-val-shadow-luxury: 0 24px 56px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  --ma-val-text: #f8fafc;
+  --ma-val-muted: rgba(203, 213, 225, 0.74);
+}
+
+/* Shared premium surface recipe (dashboard lines 109–121) */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell.ma-valuation-comparables-module,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-intelligence-panel,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-bar {
+  border: 1px solid var(--ma-val-line-soft);
+  box-shadow: var(--ma-val-shadow-luxury);
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%);
+}
+
+/* —— T1/T2: Valuation Summary as Executive Signal Panel —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary {
+  position: relative;
+  padding: 32px 32px 28px;
+  border-radius: 24px;
+  background: linear-gradient(165deg, rgba(12, 22, 32, 0.78) 0%, rgba(8, 14, 22, 0.55) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(45, 212, 191, 0.14);
+  box-shadow: var(--ma-val-shadow-luxury), 0 0 48px rgba(45, 212, 191, 0.06);
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 55%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(45, 212, 191, 0.12), transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-kicker {
+  color: var(--ma-val-teal-dim);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-value {
+  font-size: clamp(36px, 3.8vw, 52px);
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ma-val-text);
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.45), 0 0 48px rgba(45, 212, 191, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-copy {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ma-val-muted);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-quality-panel {
+  background: radial-gradient(circle at 50% 32%, rgba(45, 212, 191, 0.1), transparent 58%), rgba(4, 8, 12, 0.72);
+  border: 1px solid rgba(45, 212, 191, 0.1);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.45), 0 0 32px rgba(45, 212, 191, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-ring {
+  box-shadow: 0 0 48px rgba(45, 212, 191, 0.22), 0 0 96px rgba(32, 201, 151, 0.1), inset 0 0 24px rgba(45, 212, 191, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-ring-core strong {
+  font-size: clamp(42px, 4vw, 54px);
+  font-weight: 850;
+  text-shadow: 0 0 30px rgba(45, 212, 191, 0.25);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-signal-title,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-score-copy strong {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ma-val-teal-bright);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-hero-band,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-secondary-band {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-icon {
+  background: rgba(45, 212, 191, 0.12);
+  color: var(--ma-val-teal);
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.15);
+}
+
+/* —— T3: Mini metrics as KPI stat slabs —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 22px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Executive summary mini metrics: 2x2 only (avoids clipping with sidebar layout) */
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metric,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-val-integrated-metrics .ma-equity-safe-metric {
+  position: relative;
+  padding: 24px 20px 22px;
+  border-radius: 22px;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.68) 0%, rgba(8, 14, 22, 0.5) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.06);
+  box-shadow: var(--ma-val-shadow-luxury);
+  cursor: default;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metric::before,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-val-integrated-metrics .ma-equity-safe-metric::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, transparent, var(--ma-val-teal), transparent);
+  opacity: 0.7;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metric::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metric-icon {
+  margin-bottom: 8px;
+  color: rgba(45, 212, 191, 0.55);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metric-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metric-value {
+  font-size: clamp(17px, 1.6vw, 22px);
+  font-weight: 780;
+  font-variant-numeric: tabular-nums;
+  color: var(--ma-val-text);
+  white-space: nowrap;
+}
+
+/* —— Command strip as Active Deal strip —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-bar {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 22px;
+  padding: 20px 30px;
+  border-radius: 20px;
+  background: var(--ma-val-surface-solid);
+  box-shadow: var(--ma-val-shadow-soft);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-item strong {
+  font-size: 15px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  color: var(--ma-val-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-item span {
+  font-size: 11px;
+  color: rgba(148, 163, 184, 0.88);
+}
+
+/* —— T4: Deal Structure as Value Ledger (snapshot readout) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger {
+  padding: 32px;
+  border-radius: 24px;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.7) 0%, rgba(8, 14, 22, 0.52) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger .ma-premium-deal-header h3 {
+  font-size: clamp(21px, 2.1vw, 27px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ma-val-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger .ma-bridge-list-premium {
+  margin-top: 22px;
+  padding: 20px 22px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(4, 8, 14, 0.58), rgba(2, 4, 8, 0.38));
+  border: 1px solid rgba(45, 212, 191, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger .ma-bridge-list-premium .ma-bridge-row {
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.06);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger .ma-bridge-list-premium .ma-bridge-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger .ma-bridge-number {
+  color: var(--ma-val-teal);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger .ma-bridge-copy strong {
+  font-size: 14px;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger .ma-bridge-value strong {
+  font-size: 16px;
+  font-weight: 780;
+  color: var(--ma-val-text);
+}
+
+/* —— T5: Evidence Control as Executive Ledger —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger {
+  padding: 32px;
+  border-radius: 24px;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.7) 0%, rgba(8, 14, 22, 0.52) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger .ma-traceability-header h3 {
+  font-size: clamp(21px, 2.1vw, 27px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger .ma-evidence-ledger-row-premium {
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.66) 0%, rgba(8, 14, 22, 0.48) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.06);
+  box-shadow: var(--ma-val-shadow-soft);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger .ma-evidence-ledger-row-premium::before {
+  top: 0;
+  left: 16px;
+  right: 16px;
+  bottom: auto;
+  width: auto;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.45), transparent);
+  opacity: 0.55;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger .ma-evidence-ledger-title {
+  font-size: 14px;
+  font-weight: 780;
+  color: var(--ma-val-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger .ma-traceability-status-chip,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger .ma-traceability-formula-chip {
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  color: var(--ma-val-teal-bright);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger .ma-evidence-ledger-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(148, 163, 184, 0.88);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger .ma-evidence-ledger-value {
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+/* —— T6: Market Comparables as dashboard workbench module —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell.ma-valuation-comparables-module {
+  position: relative;
+  padding: 32px;
+  border-radius: 24px;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.7) 0%, rgba(8, 14, 22, 0.52) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.06);
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell.ma-valuation-comparables-module::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.45), transparent);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell.ma-valuation-comparables-module .ma-comparables-header h3 {
+  font-size: clamp(21px, 2.1vw, 27px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell.ma-valuation-comparables-module .ma-comparable-card-horizontal {
+  padding: 20px 22px;
+  border-radius: 20px;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.66) 0%, rgba(8, 14, 22, 0.48) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.06);
+  box-shadow: var(--ma-val-shadow-soft);
+  cursor: default;
+  transition: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell.ma-valuation-comparables-module .ma-comparable-card-horizontal:hover {
+  transform: none;
+  border-color: rgba(148, 163, 184, 0.06);
+  box-shadow: var(--ma-val-shadow-soft);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell.ma-valuation-comparables-module .ma-comparable-multiple {
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 850;
+  color: var(--ma-val-teal);
+  text-shadow: 0 0 24px rgba(45, 212, 191, 0.18);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell.ma-valuation-comparables-module .ma-comparable-name {
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--ma-val-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell.ma-valuation-comparables-module .ma-comparable-chip {
+  background: rgba(45, 212, 191, 0.08);
+  border: 1px solid rgba(45, 212, 191, 0.14);
+  color: var(--ma-val-teal-dim);
+  font-size: 10px;
+}
+
+/* —— T7: Sidebar premium surfaces (no layout change) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
+  border-radius: 24px;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%);
+  border: 1px solid var(--ma-val-line-soft);
+  box-shadow: var(--ma-val-shadow-luxury);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium .ma-input-card {
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(4, 8, 14, 0.52), rgba(2, 4, 8, 0.32));
+  border: 1px solid rgba(45, 212, 191, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium .ma-input-card h4,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium .ma-slider-field label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(203, 213, 225, 0.88);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium input,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium select {
+  background: rgba(4, 8, 14, 0.65);
+  border: 1px solid rgba(45, 212, 191, 0.1);
+  color: var(--ma-val-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium input:focus,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium select:focus {
+  border-color: rgba(45, 212, 191, 0.28);
+  box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium .ma-slider-track {
+  background: rgba(148, 163, 184, 0.12);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium .ma-slider-fill {
+  background: linear-gradient(90deg, rgba(45, 212, 191, 0.55), var(--ma-val-teal));
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium .ma-slider-thumb {
+  border-color: var(--ma-val-teal);
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.35);
+}
+
+/* —— T8: Hero micro-adjust (no globe, no layout) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene-glow {
+  opacity: 0.98;
+  filter: blur(10px);
+  background:
+    radial-gradient(ellipse 38% 52% at 50% 48%, rgba(45, 212, 191, 0.16), transparent 70%),
+    radial-gradient(ellipse 62% 40% at 48% 54%, rgba(32, 201, 151, 0.06), transparent 82%),
+    radial-gradient(ellipse 90% 70% at 56% 50%, rgba(1, 3, 6, 0.35), transparent 88%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene-mesh {
+  opacity: 0.42;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-curve-base {
+  filter: drop-shadow(0 0 18px rgba(45, 212, 191, 0.22));
+}
+
+/* Button safety: no false hover on static cards */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-row-premium,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metric {
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-intelligence-panel {
+  padding: 32px;
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page {
+  background: var(--ma-val-bg);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   C.24.14D — CASCADE FIX (executivePolish + ExecutivePremiumStyle override)
+   Scoped surface tokens beat global [class*="card"] / [class*="metric"] flatten.
+   Selectors intentionally avoid *card* / *metric* class hooks on surfaces.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-surface {
+  border: 1px solid rgba(45, 212, 191, 0.12) !important;
+  border-radius: 22px !important;
+  background:
+    linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%) !important;
+  background-image:
+    linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%) !important;
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-kpi {
+  border: 1px solid rgba(45, 212, 191, 0.1) !important;
+  border-radius: 18px !important;
+  background:
+    linear-gradient(165deg, rgba(12, 20, 30, 0.68) 0%, rgba(8, 14, 22, 0.5) 100%) !important;
+  background-image:
+    linear-gradient(165deg, rgba(12, 20, 30, 0.68) 0%, rgba(8, 14, 22, 0.5) 100%) !important;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-ledger {
+  border: 1px solid rgba(148, 163, 184, 0.06) !important;
+  border-radius: 18px !important;
+  background:
+    linear-gradient(165deg, rgba(12, 20, 30, 0.66) 0%, rgba(8, 14, 22, 0.48) 100%) !important;
+  background-image:
+    linear-gradient(165deg, rgba(12, 20, 30, 0.66) 0%, rgba(8, 14, 22, 0.48) 100%) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22) !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-surface::before,
+.main-area .page .ma-valuation-premium-page .ma-valuation-kpi::before {
+  display: block !important;
+  content: '' !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-kpi::before {
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, transparent, #2dd4bf, transparent);
+  opacity: 0.7;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-surface::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 55%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(45, 212, 191, 0.12), transparent 68%);
+  pointer-events: none;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-comparable-card.ma-valuation-surface::before {
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.45), transparent);
+  opacity: 0.55;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-chip,
+.main-area .page .ma-valuation-premium-page .ma-traceability-status-chip,
+.main-area .page .ma-valuation-premium-page .ma-traceability-formula-chip {
+  background: rgba(45, 212, 191, 0.1) !important;
+  border: 1px solid rgba(45, 212, 191, 0.18) !important;
+  color: #5eead4 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   C.24.14D — LEFT INPUT COCKPIT PREMIUM POLISH
+   Visual-only: sidebar internals (Finanzas base, sliders, Configuración).
+   Does NOT alter .ma-valuation-body-grid, sidebar position, hero, or logic.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell {
+  position: relative;
+  overflow: hidden !important;
+  border: 1px solid rgba(45, 212, 191, 0.11) !important;
+  border-radius: 24px !important;
+  background:
+    linear-gradient(168deg, rgba(11, 18, 28, 0.84) 0%, rgba(6, 10, 18, 0.68) 52%, rgba(4, 8, 14, 0.58) 100%) !important;
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 120px;
+  background:
+    radial-gradient(ellipse 90% 100% at 0% 0%, rgba(45, 212, 191, 0.1), transparent 72%),
+    radial-gradient(ellipse 60% 80% at 100% 0%, rgba(32, 201, 151, 0.05), transparent 70%);
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 22px 22px 18px;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.1);
+  background: linear-gradient(180deg, rgba(45, 212, 191, 0.07) 0%, transparent 100%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band-icon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band-kicker {
+  margin: 0 0 6px;
+  color: rgba(94, 234, 212, 0.72);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band-title {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band-lead {
+  margin: 8px 0 0;
+  max-width: 34ch;
+  line-height: 1.6;
+  font-size: 13px;
+  color: rgba(203, 213, 225, 0.76) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px !important;
+  padding: 16px 18px 22px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-valuation-input-section {
+  margin: 0 !important;
+  padding: 22px 22px 24px !important;
+  border: 1px solid rgba(45, 212, 191, 0.12) !important;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.12) !important;
+  border-radius: 18px !important;
+  background:
+    linear-gradient(165deg, rgba(12, 20, 30, 0.68) 0%, rgba(8, 14, 22, 0.48) 100%) !important;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card-inner {
+  gap: 18px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-header {
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.08) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-header h3 {
+  color: #f8fafc;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-header p.muted {
+  color: rgba(203, 213, 225, 0.74) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-stack {
+  gap: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-grid {
+  gap: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.12), transparent);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field label {
+  display: block;
+  margin: 0 0 8px;
+  color: rgba(148, 163, 184, 0.92) !important;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .input,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .select {
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 14px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(45, 212, 191, 0.14) !important;
+  background: rgba(4, 8, 14, 0.72) !important;
+  color: #f8fafc !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  font-variant-numeric: tabular-nums;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .input:focus,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .select:focus {
+  outline: none !important;
+  border-color: rgba(45, 212, 191, 0.38) !important;
+  box-shadow:
+    0 0 0 3px rgba(45, 212, 191, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .input:disabled,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .select:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-list {
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid rgba(45, 212, 191, 0.1) !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(165deg, rgba(8, 14, 22, 0.55), rgba(4, 8, 14, 0.42)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field {
+  padding: 20px 22px !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.06) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field:last-child {
+  border-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-label {
+  color: rgba(241, 245, 249, 0.96);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-dot {
+  background: rgba(45, 212, 191, 0.12);
+  border-color: rgba(45, 212, 191, 0.2);
+  color: #2dd4bf;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-value {
+  min-width: 52px;
+  color: #5eead4;
+  font-size: 13px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-track-row {
+  padding-top: 2px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit input[type='range'] {
+  width: 100%;
+  height: 6px;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(45, 212, 191, 0.42), rgba(148, 163, 184, 0.18));
+  accent-color: #2dd4bf;
+  cursor: pointer;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit input[type='range']::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #5eead4, #2dd4bf);
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 12px rgba(45, 212, 191, 0.35);
+  cursor: pointer;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit input[type='range']::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(45, 212, 191, 0.42), rgba(148, 163, 184, 0.18));
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit input[type='range']::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #5eead4, #2dd4bf);
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 12px rgba(45, 212, 191, 0.35);
+  cursor: pointer;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-foot {
+  margin-top: 10px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-foot span {
+  color: rgba(148, 163, 184, 0.78) !important;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note {
+  padding: 20px 22px !important;
+  margin-top: 2px;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(165deg, rgba(45, 212, 191, 0.08), rgba(8, 14, 22, 0.42)) !important;
+  border: 1px solid rgba(45, 212, 191, 0.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note strong {
+  color: #f8fafc !important;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note p.muted {
+  color: rgba(203, 213, 225, 0.76) !important;
+  line-height: 1.65;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   C.24.14D — FINAL METRIC CLIPPING + LEFT INPUT COCKPIT SURFACE FIX
+   Visual-only. Does NOT alter body grid, sidebar position, hero, or logic.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* —— T1/T2: Mini metrics + Deal Structure KPI row — stable 2x2 —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metrics,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-integrated-metrics,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metrics-grid,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px 16px !important;
+  width: 100%;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-integrated-metrics .ma-equity-safe-metric,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-integrated-metrics .ma-equity-safe-metric-premium,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-card .ma-equity-safe-metric,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metric {
+  min-width: 0 !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-head,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric > div:first-child {
+  min-width: 0;
+  width: 100%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metric-value {
+  font-size: clamp(15px, 1.05vw, 21px) !important;
+  line-height: 1.12 !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  font-variant-numeric: tabular-nums;
+  color: #f8fafc;
+}
+
+/* —— T3: Quality score ring — no clip —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary {
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-hero-band {
+  grid-template-columns: minmax(0, 1fr) minmax(200px, 260px);
+  gap: 12px;
+  overflow: visible;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-panel {
+  min-width: 200px !important;
+  max-width: 260px;
+  flex-shrink: 0;
+  overflow: visible !important;
+  padding: 18px 14px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-ring {
+  flex-shrink: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-score-copy {
+  width: 100%;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-score-copy strong {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  font-variant-numeric: tabular-nums;
+  color: #f8fafc;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-ring-core strong {
+  white-space: nowrap !important;
+  overflow: visible !important;
+}
+
+/* —— T4–T8: Left cockpit — beat executivePolish gold/flat flatten —— */
+.main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-section.card,
+.main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-input-card,
+.main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card {
+  border: 1px solid rgba(45, 212, 191, 0.12) !important;
+  border-radius: 18px !important;
+  background:
+    linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%) !important;
+  background-image:
+    linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%) !important;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-surface {
+  border: 1px solid rgba(45, 212, 191, 0.11) !important;
+  background:
+    linear-gradient(168deg, rgba(11, 18, 28, 0.86) 0%, rgba(6, 10, 18, 0.7) 52%, rgba(4, 8, 14, 0.6) 100%) !important;
+  background-image:
+    linear-gradient(168deg, rgba(11, 18, 28, 0.86) 0%, rgba(6, 10, 18, 0.7) 52%, rgba(4, 8, 14, 0.6) 100%) !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note {
+  border: 1px solid rgba(45, 212, 191, 0.16) !important;
+  background:
+    linear-gradient(165deg, rgba(45, 212, 191, 0.09), rgba(8, 14, 22, 0.44)) !important;
+  background-image:
+    linear-gradient(165deg, rgba(45, 212, 191, 0.09), rgba(8, 14, 22, 0.44)) !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-kicker {
+  color: rgba(94, 234, 212, 0.78) !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .input,
+.main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .select {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(45, 212, 191, 0.14) !important;
+  background: rgba(4, 8, 14, 0.76) !important;
+  color: #f8fafc !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-list {
+  border: 1px solid rgba(45, 212, 191, 0.11) !important;
+  background:
+    linear-gradient(165deg, rgba(8, 14, 22, 0.58), rgba(4, 8, 14, 0.45)) !important;
+  background-image:
+    linear-gradient(165deg, rgba(8, 14, 22, 0.58), rgba(4, 8, 14, 0.45)) !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field {
+  background: transparent !important;
+  border-color: rgba(148, 163, 184, 0.06) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   C.24.14D — FINAL COHESION: NO STICKERS + TEXT BREATHING ROOM
+   Integrated surfaces (dashboard M&A parity). Visual-only.
+   Does NOT alter body grid, sidebar position, hero, DOM, or logic.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* —— Shared: integrated panel recipe (one surface, soft inner dividers) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metrics.ma-val-integrated-metrics,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card .ma-premium-metrics-grid,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-list.ma-bridge-list-premium,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-ledger.ma-traceability-ledger-premium,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-ledger-premium {
+  gap: 0 !important;
+  padding: 6px 8px !important;
+  border: 1px solid rgba(45, 212, 191, 0.08) !important;
+  border-radius: 18px !important;
+  background:
+    linear-gradient(165deg, rgba(10, 16, 26, 0.52) 0%, rgba(6, 10, 18, 0.38) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  overflow: visible !important;
+}
+
+/* —— T1: Mini metrics — subitems inside one slab, not loose stickers —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric.ma-valuation-kpi,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric.ma-valuation-kpi {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  min-height: 0 !important;
+  padding: 18px 20px 16px 22px !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metrics.ma-val-integrated-metrics .ma-equity-safe-metric:nth-child(odd) {
+  border-right: 1px solid rgba(148, 163, 184, 0.05) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metrics.ma-val-integrated-metrics .ma-equity-safe-metric:nth-child(-n+2) {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.05) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card .ma-premium-metrics-grid .ma-premium-metric:nth-child(odd) {
+  border-right: 1px solid rgba(148, 163, 184, 0.05) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card .ma-premium-metrics-grid .ma-premium-metric:nth-child(-n+2) {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.05) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric.ma-valuation-kpi::before,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric.ma-valuation-kpi::before {
+  opacity: 0.45 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric .kpi-label,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric span {
+  line-height: 1.45 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: 14ch;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-description,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric small {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+  overflow: visible !important;
+  line-height: 1.62 !important;
+  color: rgba(203, 213, 225, 0.76) !important;
+}
+
+/* —— T2: Value ledger rows — integrated readout, not boxed stickers —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.06) !important;
+  padding: 20px 18px !important;
+  gap: 16px 22px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-list.ma-bridge-list-premium .ma-bridge-row:last-child {
+  border-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-number {
+  box-shadow: none !important;
+  border-color: rgba(45, 212, 191, 0.14) !important;
+  background: rgba(45, 212, 191, 0.08) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-copy strong {
+  line-height: 1.35 !important;
+  overflow: visible !important;
+  white-space: normal !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-copy p {
+  line-height: 1.65 !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value span {
+  line-height: 1.5 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box {
+  border: 1px solid rgba(45, 212, 191, 0.08) !important;
+  border-radius: 20px !important;
+  background:
+    linear-gradient(165deg, rgba(10, 16, 26, 0.48) 0%, rgba(6, 10, 18, 0.34) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  padding: 22px 24px !important;
+}
+
+/* —— Risk signal band — softer, less boxed —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-secondary-band {
+  border-bottom: 0 !important;
+  padding-top: 4px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-signal {
+  padding: 16px 18px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(45, 212, 191, 0.06) !important;
+  background: rgba(8, 14, 22, 0.32) !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-signal-note,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-signal-title {
+  line-height: 1.62 !important;
+  overflow: visible !important;
+}
+
+/* —— T3: Evidence Control — executive ledger surface —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
+  padding: 26px 28px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-row-premium,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-row {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.06) !important;
+  padding: 18px 16px 16px !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-ledger-premium .ma-evidence-ledger-row-premium:last-child,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-ledger-premium .ma-evidence-ledger-row:last-child {
+  border-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-title {
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+  overflow: visible !important;
+  white-space: normal !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-label,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-value {
+  line-height: 1.55 !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-formula-chip {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: anywhere !important;
+  line-height: 1.5 !important;
+  padding: 10px 14px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-status-chip {
+  font-size: 10px !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1.35 !important;
+  padding: 6px 11px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-source span {
+  line-height: 1.6 !important;
+  overflow: visible !important;
+}
+
+/* —— T4: Market Comparables — integrated module —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-shell.ma-valuation-comparables-module {
+  padding: 26px 28px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal.ma-valuation-comparable-card {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.06) !important;
+  padding: 18px 14px 16px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger-premium .ma-comparable-card-horizontal:last-child {
+  border-bottom: 0 !important;
+}
+
+@media (min-width: 1180px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-ledger-premium {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger-premium .ma-comparable-card-horizontal:nth-child(odd) {
+    border-right: 1px solid rgba(148, 163, 184, 0.05) !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger-premium .ma-comparable-card-horizontal:nth-last-child(-n+2) {
+    border-bottom: 0 !important;
+  }
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal .ma-comparable-name {
+  line-height: 1.35 !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal .ma-comparable-note {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+  overflow: visible !important;
+  line-height: 1.62 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal .ma-comparable-multiple-block {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 4px 0 4px 12px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-chip {
+  line-height: 1.4 !important;
+  padding: 6px 11px !important;
+}
+
+/* —— T5: Sidebar — unified cockpit, fewer nested boxes —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-panel {
+  gap: 10px !important;
+  padding: 14px 16px 20px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-section.card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-input-card {
+  border: 1px solid rgba(45, 212, 191, 0.08) !important;
+  box-shadow: none !important;
+  background:
+    linear-gradient(165deg, rgba(10, 16, 26, 0.44) 0%, rgba(6, 10, 18, 0.32) 100%) !important;
+  padding: 20px 20px 22px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-header {
+  border-bottom-color: rgba(45, 212, 191, 0.06) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-header p.muted {
+  line-height: 1.65 !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-list {
+  border: 0 !important;
+  background: rgba(4, 8, 14, 0.28) !important;
+  border-radius: 14px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field {
+  padding: 18px 18px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note {
+  padding: 18px 20px !important;
+  border-color: rgba(45, 212, 191, 0.1) !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note p.muted {
+  line-height: 1.68 !important;
+}
+
+/* —— Parent shells: softer luxury shadow (less floating sticker) —— */
+.main-area .page .ma-valuation-premium-page .ma-valuation-surface {
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.main-area .page .ma-valuation-premium-page .ma-valuation-kpi {
+  box-shadow: none !important;
+}
+
+/* —— Financial figures: never split —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-financial-figure,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-multiple,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-value {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* —— Button safety reinforcement —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
+  .ma-equity-safe-metric,
+  .ma-premium-metric,
+  .ma-bridge-row,
+  .ma-evidence-ledger-row,
+  .ma-evidence-ledger-row-premium,
+  .ma-comparable-card-horizontal,
+  .ma-equity-safe-signal,
+  .ma-input-card
+) {
+  cursor: default !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
+  .ma-equity-safe-metric,
+  .ma-premium-metric,
+  .ma-bridge-row,
+  .ma-evidence-ledger-row,
+  .ma-evidence-ledger-row-premium,
+  .ma-comparable-card-horizontal
+):hover {
+  transform: none !important;
+  filter: none !important;
+  box-shadow: inherit !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   C.24.14D — FINAL VISUAL BUG SWEEP
+   Micro-fixes: nested surface stickers, cramped type, dense evidence.
+   Visual-only. Does NOT alter grid, sidebar position, hero, or logic.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* —— Kill nested ma-valuation-surface sticker boxes inside ledgers —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-ledger-premium .ma-evidence-ledger-row.ma-valuation-surface,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger-premium .ma-comparable-card-horizontal.ma-valuation-surface {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-ledger-premium .ma-evidence-ledger-row.ma-valuation-surface::before,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger-premium .ma-comparable-card-horizontal.ma-valuation-surface::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* —— T1: KPI / mini cards — room to breathe, no cramped labels —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metrics.ma-val-integrated-metrics,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card .ma-premium-metrics-grid {
+  padding: 10px 12px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric.ma-valuation-kpi,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric.ma-valuation-kpi {
+  padding: 20px 22px 18px 24px !important;
+  min-height: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric .kpi-label,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric span {
+  max-width: none !important;
+  font-size: 10px !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.5 !important;
+  margin-bottom: 2px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-head {
+  align-items: flex-start !important;
+  gap: 14px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-icon {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric {
+  gap: 6px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric strong {
+  font-size: clamp(16px, 1.12vw, 22px) !important;
+  margin-top: 4px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-description,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric small {
+  margin-top: 6px !important;
+  font-size: 12px !important;
+  line-height: 1.65 !important;
+}
+
+/* —— T2: Evidence Control — less dense, clearer hierarchy —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
+  padding: 28px 30px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-ledger-premium {
+  padding: 8px 10px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-row-premium,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-row {
+  padding: 22px 18px 20px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-row-head {
+  margin-bottom: 14px !important;
+  padding-bottom: 12px !important;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.07) !important;
+  gap: 12px !important;
+  align-items: flex-start !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-title {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #f8fafc !important;
+  line-height: 1.4 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-body {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 14px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-field {
+  gap: 6px !important;
+  padding: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-label {
+  font-size: 10px !important;
+  letter-spacing: 0.12em !important;
+  color: rgba(148, 163, 184, 0.9) !important;
+  line-height: 1.4 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-value {
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  color: rgba(226, 232, 240, 0.92) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-field-meta {
+  padding-top: 10px !important;
+  margin-top: 2px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-status-chip {
+  font-size: 10px !important;
+  padding: 7px 12px !important;
+  flex-shrink: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-docs span,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-docs-required {
+  font-size: 12px !important;
+  padding: 6px 12px !important;
+  line-height: 1.4 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-formula-chip {
+  font-size: 12px !important;
+  padding: 10px 14px !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-footer {
+  margin-top: 16px !important;
+  padding-top: 14px !important;
+  line-height: 1.6 !important;
+  font-size: 13px !important;
+}
+
+/* —— T3: Market Comparables — cleaner module —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger-premium {
+  padding: 8px 10px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal.ma-valuation-comparable-card {
+  padding: 22px 20px 20px !important;
+  gap: 14px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal .ma-comparable-name {
+  font-size: 17px !important;
+  line-height: 1.38 !important;
+  margin-bottom: 8px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal .ma-comparable-note {
+  font-size: 13px !important;
+  line-height: 1.65 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal .ma-comparable-multiple {
+  font-size: clamp(30px, 2.6vw, 40px) !important;
+  line-height: 1 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal .ma-comparable-multiple-label {
+  font-size: 11px !important;
+  letter-spacing: 0.1em !important;
+  margin-top: 4px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-chip {
+  font-size: 12px !important;
+  padding: 7px 12px !important;
+  line-height: 1.35 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal .ma-comparable-footer {
+  gap: 10px !important;
+  flex-wrap: wrap;
+}
+
+/* —— T4: Sidebar — softer glass, legible labels —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field label {
+  font-size: 11px !important;
+  letter-spacing: 0.1em !important;
+  line-height: 1.45 !important;
+  margin-bottom: 9px !important;
+  color: rgba(148, 163, 184, 0.94) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .input,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .select {
+  min-height: 46px !important;
+  padding: 12px 14px !important;
+  background: rgba(8, 14, 22, 0.55) !important;
+  border-color: rgba(45, 212, 191, 0.13) !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-stack {
+  gap: 16px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field {
+  padding: 20px 20px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-label {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note {
+  padding: 20px 22px !important;
+  margin-top: 4px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note strong {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  margin-bottom: 8px !important;
+}
+
+/* —— T5/T6: Value ledger + typography consistency —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
+  grid-template-columns: 48px minmax(0, 1fr) minmax(120px, max-content) !important;
+  padding: 22px 20px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value {
+  min-width: 120px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value strong {
+  font-size: clamp(17px, 1.2vw, 24px) !important;
+}
+
+/* —— Dashboard M&A parity: unified radius tokens —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal) {
+  border-radius: 22px !important;
+  border-color: rgba(45, 212, 191, 0.1) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-shell {
+  border-radius: 24px !important;
+}
+
+/* —— Financial figures sweep — never split —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-ring-core strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-score-copy strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-score span {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   C.24.14D — FINAL DENSITY + TYPOGRAPHY FIX
+   Compact evidence ledger, readable type, softer integrated surfaces.
+   Visual-only. No grid / hero / sidebar position / logic changes.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* —— Global typography lift (valuation page only) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .muted {
+  font-size: 13px !important;
+  line-height: 1.58 !important;
+  color: rgba(203, 213, 225, 0.78) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .kpi-label {
+  font-size: 10px !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.35 !important;
+  color: rgba(94, 234, 212, 0.72) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-panel-header h3,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-shell-header h3 {
+  line-height: 1.28 !important;
+}
+
+/* —— T1: Evidence Control — compact executive ledger —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
+  padding: 24px 26px 22px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel .ma-panel-header {
+  gap: 16px !important;
+  margin-bottom: 14px !important;
+  padding-bottom: 14px !important;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.07) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel .ma-panel-header p.muted {
+  margin-top: 6px !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  max-width: 52ch;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-score {
+  padding: 10px 14px !important;
+  min-width: 88px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-score span {
+  font-size: clamp(22px, 2vw, 28px) !important;
+  line-height: 1 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-score small {
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0.08em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-ledger-premium {
+  padding: 4px 6px !important;
+  gap: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-row-premium,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-row {
+  padding: 14px 14px 12px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-row-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-bottom: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-row-head .kpi-label {
+  margin-bottom: 2px !important;
+  font-size: 9px !important;
+  opacity: 0.9;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-title {
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+  font-weight: 800 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-body {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px 14px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-field {
+  gap: 4px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-field:nth-child(3),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-field.ma-evidence-ledger-field-meta {
+  grid-column: 1 / -1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-field-meta {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-top: 4px !important;
+  margin-top: 0 !important;
+  border-top: 1px solid rgba(148, 163, 184, 0.05) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-label {
+  font-size: 10px !important;
+  letter-spacing: 0.11em !important;
+  color: rgba(148, 163, 184, 0.94) !important;
+  line-height: 1.3 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-value {
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-status-chip {
+  font-size: 9px !important;
+  padding: 4px 9px !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1.25 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-docs {
+  gap: 6px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-docs span,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-docs-required {
+  font-size: 11px !important;
+  padding: 4px 9px !important;
+  line-height: 1.35 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-formula-chip {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  font-size: 11px !important;
+  padding: 6px 10px !important;
+  line-height: 1.4 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-footer {
+  margin-top: 10px !important;
+  padding-top: 10px !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+  border-top: 1px solid rgba(45, 212, 191, 0.06);
+}
+
+@media (max-width: 900px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-body {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* —— T4: Mini cards — premium readout, not widgets —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metrics.ma-val-integrated-metrics,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card .ma-premium-metrics-grid {
+  padding: 8px 10px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric.ma-valuation-kpi,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric.ma-valuation-kpi {
+  padding: 18px 20px 16px 22px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric .kpi-label,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric span {
+  font-size: 10px !important;
+  color: rgba(148, 163, 184, 0.94) !important;
+  line-height: 1.42 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-description,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric small {
+  font-size: 12px !important;
+  line-height: 1.58 !important;
+  margin-top: 4px !important;
+}
+
+/* —— T3: Softer sticker reduction on ledgers —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
+  padding: 18px 16px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-list.ma-bridge-list-premium,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-ledger-premium {
+  padding: 4px 6px !important;
+  border-color: rgba(45, 212, 191, 0.07) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-card-horizontal.ma-valuation-comparable-card {
+  padding: 18px 16px 16px !important;
+  gap: 12px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal) {
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+/* —— T5: Sidebar — softer glass, readable labels —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-section.card,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-input-card {
+  background:
+    linear-gradient(165deg, rgba(12, 20, 30, 0.5) 0%, rgba(8, 14, 22, 0.38) 100%) !important;
+  border-color: rgba(45, 212, 191, 0.07) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .input,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .select {
+  background: rgba(10, 18, 28, 0.5) !important;
+  border-color: rgba(45, 212, 191, 0.12) !important;
+  color: #f1f5f9 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-list {
+  background: rgba(6, 12, 20, 0.35) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note {
+  background:
+    linear-gradient(165deg, rgba(45, 212, 191, 0.07), rgba(10, 18, 28, 0.38)) !important;
+  border-color: rgba(45, 212, 191, 0.09) !important;
+}
+
+/* —— Financial values — complete, never split —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-financial-figure,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value strong,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-multiple {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  font-variant-numeric: tabular-nums;
+}

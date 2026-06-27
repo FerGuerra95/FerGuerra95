@@ -14,267 +14,6 @@ import { Input } from '../../../shared/components/ui/Input.jsx';
 import { Select } from '../../../shared/components/ui/Select.jsx';
 import { SECTOR_DATA } from '../engine/valuationFormulas.js';
 
-const financialInputCss = `
-  .ma-input-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-  }
-
-  .ma-input-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 30px;
-    padding: 26px;
-    background:
-      radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.12), transparent 34%),
-      linear-gradient(135deg, rgba(255,255,255,0.068), rgba(255,255,255,0.024)),
-      rgba(15, 23, 42, 0.72);
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    box-shadow:
-      0 22px 62px rgba(0, 0, 0, 0.20),
-      inset 0 1px 0 rgba(255,255,255,0.04);
-  }
-
-  .ma-input-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
-    background-size: 42px 42px;
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.62), transparent 85%);
-    pointer-events: none;
-  }
-
-  .ma-input-card-inner {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-  }
-
-  .ma-input-header {
-    display: flex;
-    justify-content: space-between;
-    gap: 18px;
-    align-items: flex-start;
-    padding-bottom: 18px;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-  }
-
-  .ma-input-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    font-size: 11px;
-    line-height: 1;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: rgba(148, 163, 184, 0.96);
-  }
-
-  .ma-input-header h3 {
-    margin: 0;
-    letter-spacing: -0.045em;
-  }
-
-  .ma-input-header p {
-    margin: 10px 0 0;
-    line-height: 1.6;
-  }
-
-  .ma-input-icon {
-    flex: 0 0 auto;
-    width: 46px;
-    height: 46px;
-    border-radius: 18px;
-    display: grid;
-    place-items: center;
-    background: rgba(37, 99, 235, 0.15);
-    border: 1px solid rgba(96, 165, 250, 0.22);
-  }
-
-  .ma-input-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .ma-input-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-
-  .ma-input-divider {
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(148, 163, 184, 0.18),
-      transparent
-    );
-    margin: 2px 0;
-  }
-
-  .ma-slider-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .ma-slider-field {
-    border-radius: 22px;
-    padding: 18px;
-    background: rgba(255, 255, 255, 0.042);
-    border: 1px solid rgba(255, 255, 255, 0.078);
-  }
-
-  .ma-slider-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    margin-bottom: 14px;
-  }
-
-  .ma-slider-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-    color: rgba(226, 232, 240, 0.94);
-    font-size: 13px;
-    font-weight: 760;
-  }
-
-  .ma-slider-label span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .ma-slider-dot {
-    width: 30px;
-    height: 30px;
-    flex: 0 0 auto;
-    border-radius: 12px;
-    display: grid;
-    place-items: center;
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.22);
-    color: #86efac;
-  }
-
-  .ma-slider-value {
-    flex: 0 0 auto;
-    min-width: 54px;
-    text-align: right;
-    color: #d1fae5;
-    font-size: 13px;
-    font-weight: 820;
-  }
-
-  .ma-slider-track-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .ma-slider-field input[type="range"] {
-    width: 100%;
-    accent-color: var(--accent);
-  }
-
-  .ma-slider-foot {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 8px;
-    color: rgba(148, 163, 184, 0.78);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-  }
-
-  .ma-config-note {
-    border-radius: 22px;
-    padding: 18px;
-    background: rgba(16, 185, 129, 0.075);
-    border: 1px solid rgba(16, 185, 129, 0.18);
-  }
-
-  .ma-config-note strong {
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  .ma-config-note p {
-    margin: 0;
-    line-height: 1.6;
-  }
-
-  .ma-input-panel.is-readonly {
-    opacity: 0.92;
-  }
-
-  .ma-input-panel.is-readonly .ma-input-card {
-    border-color: rgba(148, 163, 184, 0.12);
-  }
-
-  @media (max-width: 680px) {
-    .ma-input-card {
-      border-radius: 24px;
-      padding: 22px;
-    }
-
-    .ma-input-header {
-      flex-direction: column;
-    }
-
-    .ma-input-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .ma-input-card,
-  .ma-slider-field,
-  .ma-config-note {
-    background: rgba(15, 23, 42, 0.72) !important;
-    background-image: none !important;
-    border-color: rgba(148, 163, 184, 0.14) !important;
-    box-shadow: none !important;
-  }
-
-  .ma-input-card::before {
-    content: none !important;
-    display: none !important;
-  }
-
-  .ma-input-card-inner,
-  .ma-input-stack,
-  .ma-input-grid,
-  .ma-slider-list,
-  .ma-slider-head,
-  .ma-slider-track-row {
-    background: transparent !important;
-    background-image: none !important;
-    border-color: transparent !important;
-    box-shadow: none !important;
-  }
-
-  .ma-input-kicker,
-  .ma-input-header h3,
-  .ma-slider-value,
-  .ma-slider-foot {
-    letter-spacing: 0 !important;
-    text-shadow: none !important;
-  }
-`;
-
 function toPercent(value) {
   const parsed = Number(value);
 
@@ -368,10 +107,28 @@ export function FinancialInputPanel({
   const isDisabled = disabled || readOnly || isReadOnly;
 
   return (
-    <div className={`ma-input-panel ${isDisabled ? 'is-readonly' : ''}`}>
-      <style>{financialInputCss}</style>
+    <div className={`ma-input-cockpit-shell ma-valuation-sidebar-premium ma-valuation-surface ${isDisabled ? 'is-readonly' : ''}`}>
+      <header
+        className="ma-valuation-input-cockpit-band"
+        aria-label="Inputs and assumptions"
+      >
+        <div className="ma-valuation-input-cockpit-band-icon" aria-hidden="true">
+          <SlidersHorizontal size={18} />
+        </div>
+
+        <div className="ma-valuation-input-cockpit-band-copy">
+          <div className="ma-valuation-input-cockpit-band-kicker">Valuation cockpit</div>
+          <h2 className="ma-valuation-input-cockpit-band-title">Inputs & assumptions</h2>
+          <p className="muted ma-valuation-input-cockpit-band-lead">
+            Financial baseline, risk posture and valuation settings for this case.
+          </p>
+        </div>
+      </header>
+
+      <div className={`ma-input-panel ${isDisabled ? 'is-readonly' : ''}`}>
 
       <PanelSection
+        className="ma-valuation-input-section"
         kicker="Financial baseline"
         title="Finanzas base"
         description="Datos principales del activo para calcular EBITDA normalizado, valor empresa, deuda neta y equity value."
@@ -521,6 +278,7 @@ export function FinancialInputPanel({
       </PanelSection>
 
       <PanelSection
+        className="ma-valuation-input-section"
         kicker="Risk profile"
         title="Riesgos y operaciones"
         description="Variables cualitativas que ajustan la calidad del deal, transferibilidad, riesgo operativo y lectura ejecutiva."
@@ -572,6 +330,7 @@ export function FinancialInputPanel({
       </PanelSection>
 
       <PanelSection
+        className="ma-valuation-input-section"
         kicker="Valuation settings"
         title="Configuración"
         description="Ajustes de presentación, divisa y perfil de riesgo aplicado al análisis."
@@ -607,6 +366,7 @@ export function FinancialInputPanel({
           </div>
         </div>
       </PanelSection>
+    </div>
     </div>
   );
 }

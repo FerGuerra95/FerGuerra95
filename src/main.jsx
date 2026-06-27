@@ -8,6 +8,7 @@ import './styles.css';
 import './modules/ma/styles/maExecutiveTheme.css';
 import './styles/executivePolish.css';
 import './styles/workspaceAccent.css';
+import './modules/ma/styles/maValuationMaterial.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

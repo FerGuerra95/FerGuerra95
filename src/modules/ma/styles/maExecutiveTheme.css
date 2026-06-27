@@ -240,3 +240,26 @@
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
+
+/* C.24.14D — Premium valuation cockpit bypasses legacy M&A executive theme */
+.ma-executive-page.ma-valuation-premium,
+.ma-executive-page.ma-valuation-premium.ma-valuation-premium-page {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+  gap: 0 !important;
+}
+
+.ma-executive-page.ma-valuation-premium .ma-valuation-hero {
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+.ma-executive-page.ma-valuation-premium .ma-valuation-hero::before {
+  display: none !important;
+  content: none !important;
+}
