@@ -4,7 +4,6 @@ import {
   ArrowDownRight,
   BarChart3,
   Gauge,
-  ShieldCheck,
   TrendingUp
 } from 'lucide-react';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
@@ -29,12 +28,20 @@ function getRiskBadgeVariant(label) {
   return 'danger';
 }
 
+function formatRiskBadge(label) {
+  if (label === 'Bajo') return 'Low risk';
+  if (label === 'Medio') return 'Medium risk';
+  if (label === 'Alto') return 'High risk';
+
+  return label ? `${label} risk` : 'Risk n/a';
+}
+
 function getRiskSignal(label) {
   if (label === 'Bajo') {
     return {
       title: 'Low-risk equity profile',
       description:
-        'La lectura actual muestra un perfil más limpio para defender valoración y avanzar en análisis.'
+        'Current read supports a cleaner profile for defending valuation and advancing diligence.'
     };
   }
 
@@ -42,35 +49,35 @@ function getRiskSignal(label) {
     return {
       title: 'Balanced risk profile',
       description:
-        'El caso presenta base de análisis, aunque conviene revisar riesgos y supuestos antes de presentar conclusiones.'
+        'The case has analytical footing, but assumptions and risk drivers should be reviewed before committee use.'
     };
   }
 
   return {
     title: 'High-risk equity profile',
     description:
-      'El caso requiere validación adicional antes de usar la valoración como base de decisión ejecutiva.'
+      'Additional validation is required before using this valuation as an executive decision input.'
   };
 }
 
 function MetricCard({ label, value, description, icon: Icon, color = '' }) {
   return (
-    <article className="ma-equity-safe-metric ma-equity-safe-metric-premium ma-valuation-kpi">
-      <div className="ma-equity-safe-metric-head">
+    <article className="ma-equity-safe-stat ma-equity-safe-stat-premium">
+      <div className="ma-equity-safe-stat-head">
         <div>
           <div className="kpi-label">{label}</div>
 
-          <div className={`ma-equity-safe-metric-value ma-val-financial-figure ${color}`.trim()}>
+          <div className={`ma-equity-safe-stat-value ma-val-financial-figure ${color}`.trim()}>
             {value}
           </div>
         </div>
 
-        <div className="ma-equity-safe-metric-icon">
+        <div className="ma-equity-safe-stat-glyph" aria-hidden="true">
           <Icon size={17} />
         </div>
       </div>
 
-      <p className="ma-equity-safe-metric-description">{description}</p>
+      <p className="ma-equity-safe-stat-note">{description}</p>
     </article>
   );
 }
@@ -102,10 +109,10 @@ export function EquityHeroCard({ derived, settings }) {
             </div>
 
             <div className="ma-equity-safe-badges">
-              <Badge variant={riskBadgeVariant}>
-                {riskLabel} riesgo
-              </Badge>
+              <Badge variant={riskBadgeVariant}>{formatRiskBadge(riskLabel)}</Badge>
             </div>
+
+            <p className="ma-equity-safe-caption">Adjusted equity value</p>
 
             <h2 className="ma-equity-safe-value ma-val-financial-figure">
               {formatCurrencyTight(equityBase, reportCurrency)}
@@ -118,7 +125,7 @@ export function EquityHeroCard({ derived, settings }) {
             </p>
           </header>
 
-          <aside className="ma-equity-safe-quality-panel" aria-label="Quality score">
+          <aside className="ma-equity-safe-quality-readout" aria-label="Quality score">
             <div className="kpi-label">Quality score</div>
             <div
               className="ma-equity-safe-ring"
@@ -135,26 +142,17 @@ export function EquityHeroCard({ derived, settings }) {
           </aside>
         </div>
 
-        <div className="ma-equity-safe-secondary-band">
-          <aside className="ma-equity-safe-signal">
-            <div className="ma-equity-safe-signal-head">
-              <div>
-                <div className="kpi-label">Risk posture</div>
-                <div className="ma-equity-safe-signal-title">
-                  {riskSignal.title}
-                </div>
-              </div>
-
-              <div className="ma-equity-safe-icon">
-                <ShieldCheck size={20} />
-              </div>
+        <div className="ma-equity-safe-risk-row">
+          <div className="ma-equity-safe-risk-copy">
+            <div className="kpi-label">Risk posture</div>
+            <div className="ma-equity-safe-risk-title">
+              {riskSignal.title}
             </div>
-
-            <p className="ma-equity-safe-signal-note muted">{riskSignal.description}</p>
-          </aside>
+            <p className="ma-equity-safe-risk-note muted">{riskSignal.description}</p>
+          </div>
         </div>
 
-        <div className="ma-equity-safe-metrics ma-val-integrated-metrics">
+        <div className="ma-equity-safe-stats ma-val-integrated-stats">
           <MetricCard
             label="Adjusted DSS enterprise value"
             value={formatCurrencyTight(evBase, reportCurrency)}
@@ -163,24 +161,24 @@ export function EquityHeroCard({ derived, settings }) {
           />
 
           <MetricCard
-            label="Deuda neta"
+            label="Net debt"
             value={formatCurrencyTight(netDebt, reportCurrency)}
-            description="Impacto de deuda y caja sobre el equity."
+            description="Debt minus cash impact on the equity bridge."
             icon={ArrowDownRight}
             color="text-danger"
           />
 
           <MetricCard
-            label="Múltiplo"
+            label="Adjusted multiple"
             value={`x${adjustedMultiple.toFixed(2)}`}
-            description="Múltiplo ajustado aplicado al EBITDA normalizado."
+            description="Multiple applied to normalized EBITDA."
             icon={Gauge}
           />
 
           <MetricCard
-            label="Score"
+            label="Quality score"
             value={`${normalizedScore}/100`}
-            description="Calidad financiera, riesgo y transferibilidad."
+            description="Financial quality, risk and transferability read."
             icon={Activity}
             color={derived?.riskLevel?.color || ''}
           />

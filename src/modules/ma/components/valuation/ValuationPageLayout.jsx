@@ -16,6 +16,14 @@ export function ValuationPageShell({ children }) {
   );
 }
 
+export function ValuationUpperSuite({ children }) {
+  return (
+    <div className="ma-valuation-upper-suite">
+      {children}
+    </div>
+  );
+}
+
 export function ValuationHero({ children, titleId = 'ma-valuation-title' }) {
   return (
     <section

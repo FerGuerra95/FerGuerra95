@@ -39,7 +39,8 @@ import {
   ValuationHero,
   ValuationInputCockpit,
   ValuationMainWorkspace,
-  ValuationPageShell
+  ValuationPageShell,
+  ValuationUpperSuite
 } from '../components/valuation/ValuationPageLayout.jsx';
 import {
   ValuationDealStructurePanel,
@@ -102,20 +103,20 @@ export function ValuationPage() {
   const validationErrors = [];
 
   if (!requiredString(financials.name)) {
-    validationErrors.push('La razón social es obligatoria.');
+    validationErrors.push('Legal name is required.');
   }
 
   if (derived.normalizedEbitda <= 0) {
-    validationErrors.push('El EBITDA normalizado debe ser mayor que 0.');
+    validationErrors.push('Normalized EBITDA must be greater than 0.');
   }
 
   if (!financials.sector) {
-    validationErrors.push('Selecciona un sector válido.');
+    validationErrors.push('Select a valid sector.');
   }
 
   const canAnalyze = validationErrors.length === 0 && !analysis.isAnalyzing;
   const hasValidationErrors = validationErrors.length > 0;
-  const activeCompanyName = financials.name?.trim() || 'Sin target activo';
+  const activeCompanyName = financials.name?.trim() || 'No active target';
 
   useEffect(() => {
     return () => {
@@ -141,7 +142,7 @@ export function ValuationPage() {
 
   function updateField(key, value) {
     if (!canEditCase) {
-      pushToast('No tienes permisos para editar el caso M&A');
+      pushToast('You do not have permission to edit the M&A case');
       return;
     }
 
@@ -155,7 +156,7 @@ export function ValuationPage() {
 
   function updateSetting(key, value) {
     if (!canEditCase) {
-      pushToast('No tienes permisos para editar la configuración M&A');
+      pushToast('You do not have permission to edit M&A settings');
       return;
     }
 
@@ -167,7 +168,7 @@ export function ValuationPage() {
 
   function handleLoadDemoCase() {
     if (!canEditCase) {
-      pushToast('No tienes permisos para cargar el caso M&A');
+      pushToast('You do not have permission to load the M&A case');
       return;
     }
 
@@ -184,7 +185,7 @@ export function ValuationPage() {
       (item) => !demoCaseIds.has(item.id)
     );
 
-    resetAnalysisState('Caso M&A preparado');
+    resetAnalysisState('M&A case prepared');
 
     setFinancials({
       ...primaryCase.financials
@@ -197,12 +198,12 @@ export function ValuationPage() {
 
     updateSavedCases([...preparedCases, ...remainingCases].slice(0, 20));
 
-    pushToast('3 casos M&A enterprise preparados');
+    pushToast('3 enterprise M&A cases prepared');
   }
 
   function handleResetDemoCase() {
     if (!canEditCase) {
-      pushToast('No tienes permisos para resetear el caso M&A');
+      pushToast('You do not have permission to reset the M&A case');
       return;
     }
 
@@ -226,7 +227,7 @@ export function ValuationPage() {
       showResults: false
     });
 
-    pushToast('M&A limpiado');
+    pushToast('M&A workspace cleared');
   }
 
   function handleAnalyze() {
@@ -259,7 +260,7 @@ export function ValuationPage() {
           showResults: true
         });
 
-        pushToast('Análisis M&A completado');
+        pushToast('M&A analysis complete');
         return;
       }
 
@@ -276,7 +277,7 @@ export function ValuationPage() {
 
   function handleSaveCase() {
     if (!canCreateCase) {
-      pushToast('No tienes permisos para guardar deals');
+      pushToast('You do not have permission to save deals');
       return;
     }
 
@@ -305,7 +306,7 @@ export function ValuationPage() {
 
     updateSavedCases(next);
 
-    pushToast('Deal guardado y sincronizado');
+    pushToast('Deal saved and synced');
   }
 
   const showOperationalAlerts =
@@ -317,6 +318,13 @@ export function ValuationPage() {
   return (
     <div className="page">
       <ValuationPageShell>
+        <div className="ma-valuation-nav-crumb">
+          <Link to="/ma/dashboard" className="ma-val-ref-cta-ghost">
+            Back to dashboard
+          </Link>
+        </div>
+
+        <ValuationUpperSuite>
         <ValuationHero>
             <div className="ma-val-ref-scene-atmo" aria-hidden="true">
               <div className="ma-val-ref-scene-glow" />
@@ -329,12 +337,10 @@ export function ValuationPage() {
             <div className="ma-val-ref-scene-layout">
               <div className="ma-val-ref-scene-intro">
                 <div className="ma-valuation-badges">
-                  <Badge>M&A Valuation</Badge>
-                  <Badge>Private Workspace</Badge>
-                  {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                  {canEditCase ? <Badge>Edición permitida</Badge> : null}
-                  {canCreateCase ? <Badge>Guardado permitido</Badge> : null}
-                  {canExportReport ? <Badge>Exportación permitida</Badge> : null}
+                  {isViewer ? <Badge>Read-only mode</Badge> : null}
+                  {canEditCase ? <Badge>Editing enabled</Badge> : null}
+                  {canCreateCase ? <Badge>Saving enabled</Badge> : null}
+                  {canExportReport ? <Badge>Export enabled</Badge> : null}
                 </div>
 
                 <p className="ma-val-ref-kicker">
@@ -351,9 +357,9 @@ export function ValuationPage() {
                 </p>
 
                 <p className="ma-val-ref-lead muted">
-                  Ordena los datos financieros del target, normaliza EBITDA,
-                  ajusta múltiplos y convierte el análisis en lectura defendible
-                  para comité, inversores o decisión interna.
+                  Organize target financials, normalize EBITDA, adjust multiples and
+                  convert the analysis into a defensible read for committee, investors
+                  or internal decision-making.
                 </p>
 
                 <p className="ma-val-ref-dss muted">
@@ -363,7 +369,7 @@ export function ValuationPage() {
                 <div className="ma-valuation-actions">
                   <Button onClick={handleAnalyze} disabled={!canAnalyze}>
                     <Zap size={16} />
-                    {analysis.isAnalyzing ? 'Procesando...' : 'Actualizar valoración'}
+                    {analysis.isAnalyzing ? 'Processing...' : 'Update valuation'}
                   </Button>
 
                   {SHOW_DEMO_TOOLS && canEditCase ? (
@@ -383,7 +389,7 @@ export function ValuationPage() {
                   {canCreateCase ? (
                     <Button onClick={handleSaveCase} variant="secondary">
                       <Save size={16} />
-                      Guardar deal
+                      Save deal
                     </Button>
                   ) : null}
 
@@ -401,10 +407,6 @@ export function ValuationPage() {
                       onExportComplete={pushToast}
                     />
                   ) : null}
-
-                  <Link to="/ma/dashboard" className="ma-val-ref-cta-ghost">
-                    Volver al dashboard
-                  </Link>
                 </div>
               </div>
 
@@ -450,7 +452,7 @@ export function ValuationPage() {
                     label="Validation"
                     value={
                       hasValidationErrors
-                        ? `${validationErrors.length} pendiente(s)`
+                        ? `${validationErrors.length} pending`
                         : 'Ready'
                     }
                   />
@@ -462,7 +464,7 @@ export function ValuationPage() {
 
                   <StatusRow
                     label="Analysis"
-                    value={analysis.label || 'Valoración lista'}
+                    value={formatAnalysisDisplayLabel(analysis.label)}
                   />
 
                   <StatusRow
@@ -476,7 +478,7 @@ export function ValuationPage() {
           </ValuationHero>
 
           <ValuationContextStrip>
-            <div className="ma-valuation-command-bar ma-valuation-surface" aria-label="Active case strip">
+            <div className="ma-valuation-command-bar ma-valuation-command-strip ma-valuation-surface" aria-label="Active case strip">
               <CommandItem
                 label="Active target"
                 value={activeCompanyName}
@@ -497,22 +499,21 @@ export function ValuationPage() {
               <div className="ma-valuation-alerts" aria-label="Operational alerts">
                 {!canEditCase ? (
                   <StateCard>
-                    Tu rol actual permite consultar y ejecutar el análisis, pero no
-                    modificar inputs ni guardar cambios.
+                    Your role allows viewing and running analysis, but not editing
+                    inputs or saving changes.
                   </StateCard>
                 ) : null}
 
                 {backendStatus?.error ? (
                   <StateCard tone="danger">
-                    Backend no sincronizado. La app sigue funcionando con guardado
-                    local.
+                    Backend not synced. The app continues with local persistence.
                   </StateCard>
                 ) : null}
 
                 {backendStatus?.lastSyncAt ? (
                   <StateCard tone="success">
-                    Backend sincronizado:{' '}
-                    {new Date(backendStatus.lastSyncAt).toLocaleTimeString('es-ES')}
+                    Backend synced:{' '}
+                    {new Date(backendStatus.lastSyncAt).toLocaleTimeString('en-GB')}
                   </StateCard>
                 ) : null}
 
@@ -525,10 +526,10 @@ export function ValuationPage() {
             {analysis.showResults && analysis.isAnalyzing ? (
               <div className="ma-valuation-progress" aria-live="polite">
                 <StateCard tone="warning">
-                  <strong>{analysis.label}</strong>
+                  <strong>{formatAnalysisDisplayLabel(analysis.label)}</strong>
                   <div style={{ marginTop: 14 }}>
                     <ProgressBar
-                      label="Progreso del análisis"
+                      label="Analysis progress"
                       value={analysis.progress}
                     />
                   </div>
@@ -536,6 +537,7 @@ export function ValuationPage() {
               </div>
             ) : null}
         </ValuationContextStrip>
+        </ValuationUpperSuite>
 
         <ValuationBodyGrid>
           <ValuationInputCockpit>
@@ -563,19 +565,19 @@ export function ValuationPage() {
 
                   <h2>
                     {analysis.isAnalyzing
-                      ? 'Actualizando valoración...'
-                      : 'Valoración preparada'}
+                      ? 'Updating valuation...'
+                      : 'Valuation ready'}
                   </h2>
 
                   <p className="muted">
                     {analysis.isAnalyzing
-                      ? 'El motor está consolidando métricas, riesgo, múltiplo ajustado y estructura del deal.'
-                      : 'Carga información financiera suficiente para activar la lectura ejecutiva del activo.'}
+                      ? "The engine is consolidating metrics, risk, adjusted multiple and deal structure."
+                      : 'Load sufficient financial information to activate the executive asset read.'}
                   </p>
 
                   {analysis.isAnalyzing ? (
                     <ProgressBar
-                      label={analysis.label}
+                      label={formatAnalysisDisplayLabel(analysis.label)}
                       value={analysis.progress}
                     />
                   ) : null}
@@ -600,9 +602,9 @@ export function ValuationPage() {
                       <h3>Signals, risks and executive interpretation</h3>
 
                       <p className="muted">
-                        Lectura automática de señales relevantes del deal:
-                        calidad del EBITDA, riesgos operativos, concentración,
-                        dependencia del dueño y palancas de ajuste.
+                        Automatic read of relevant deal signals: EBITDA quality,
+                        operating risks, concentration, owner dependency and adjustment
+                        levers.
                       </p>
                     </div>
 
@@ -618,13 +620,13 @@ export function ValuationPage() {
                           <CheckCircle2 size={16} />
                         </div>
 
-                        <div>
-                          <strong>No se han detectado red flags relevantes</strong>
+                        <div className="ma-inference-body">
+                          <strong>No relevant red flags detected</strong>
 
                           <p className="muted">
-                            La lectura actual no muestra señales críticas,
-                            aunque conviene revisar documentación, calidad de
-                            beneficios y dependencia operativa antes de avanzar.
+                            The current read shows no critical signals, although
+                            documentation, earnings quality and operating dependency
+                            should be reviewed before advancing.
                           </p>
                         </div>
                       </div>
@@ -635,7 +637,7 @@ export function ValuationPage() {
                             <AlertTriangle size={16} />
                           </div>
 
-                          <div>
+                          <div className="ma-inference-body">
                             <strong>{item.type}</strong>
 
                             <p className="muted">{item.msg}</p>
@@ -648,7 +650,10 @@ export function ValuationPage() {
 
                 <ValuationEvidenceLedgerPanel derived={derived} />
 
-                <ComparablesGrid comparables={derived.comparables} />
+                <ComparablesGrid
+                  comparables={derived.comparables}
+                  selectedMultiple={derived.adjustedMultiple}
+                />
               </>
             )}
           </ValuationMainWorkspace>
@@ -660,7 +665,7 @@ export function ValuationPage() {
 
 function CommandItem({ label, value }) {
   return (
-    <div className="ma-valuation-command-item ma-valuation-kpi">
+    <div className="ma-valuation-strip-cell">
       <div className="kpi-label">{label}</div>
       <strong>{value}</strong>
     </div>
@@ -684,6 +689,25 @@ function StateCard({ children, tone = 'neutral' }) {
       <div className="muted ma-state-card-content">{children}</div>
     </div>
   );
+}
+
+function formatAnalysisDisplayLabel(label) {
+  const displayMap = {
+    'Valoración lista': 'Results ready',
+    'Listo para auditoría': 'Ready for audit',
+    'Análisis completado': 'Analysis complete',
+    'Caso M&A preparado': 'M&A case prepared',
+    'Ingestando metricas financieras y normalizando...': 'Ingesting financial metrics and normalizing...',
+    'Ajustando Deuda Neta y Working Capital...': 'Adjusting net debt and working capital...',
+    'Auditando riesgo operativo y resiliencia...': 'Auditing operating risk and resilience...',
+    'Proyectando Cap Table y Waterfall...': 'Projecting cap table and waterfall...',
+    'Construyendo salida ejecutiva del deal...': 'Building executive deal output...',
+    'Analisis completado': 'Analysis complete'
+  };
+
+  if (!label) return 'Results ready';
+
+  return displayMap[label] || label;
 }
 
 function getBackendStatusLabel(backendStatus) {
@@ -719,16 +743,16 @@ function getReadinessHeadline({ canAnalyze, isAnalyzing, hasValidationErrors }) 
 
 function getReadinessDescription({ canAnalyze, isAnalyzing, hasValidationErrors }) {
   if (isAnalyzing) {
-    return "CEO's OS está consolidando métricas, riesgo, múltiplo ajustado y estructura del deal.";
+    return "CEO's OS is consolidating metrics, risk, adjusted multiple and deal structure.";
   }
 
   if (hasValidationErrors) {
-    return 'El análisis necesita razón social, sector y EBITDA normalizado positivo para generar una lectura ejecutiva sólida.';
+    return 'Analysis requires legal name, sector and positive normalized EBITDA for a solid executive read.';
   }
 
   if (canAnalyze) {
-    return 'Puedes ejecutar el análisis para convertir los inputs financieros en valoración, señales de riesgo y lectura ejecutiva.';
+    return 'You can run analysis to convert financial inputs into valuation, risk signals and executive read.';
   }
 
-  return 'Carga los datos financieros del target para activar el motor de valoración.';
+  return 'Load target financial data to activate the valuation engine.';
 }

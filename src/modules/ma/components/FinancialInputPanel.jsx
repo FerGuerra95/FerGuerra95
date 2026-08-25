@@ -52,8 +52,8 @@ function SliderField({ label, value, onChange, disabled = false }) {
       </div>
 
       <div className="ma-slider-foot">
-        <span>Bajo</span>
-        <span>Alto</span>
+        <span>Low</span>
+        <span>High</span>
       </div>
     </div>
   );
@@ -65,10 +65,14 @@ function PanelSection({
   description,
   icon: Icon,
   children,
-  className = ''
+  className = '',
+  surfaceAtmo = false
 }) {
   return (
     <Card className={`ma-input-card ${className}`.trim()}>
+      {surfaceAtmo ? (
+        <div className="ma-fb-surface-atmo" aria-hidden="true" />
+      ) : null}
       <div className="ma-input-card-inner">
         <div className="ma-input-header">
           <div>
@@ -107,7 +111,7 @@ export function FinancialInputPanel({
   const isDisabled = disabled || readOnly || isReadOnly;
 
   return (
-    <div className={`ma-input-cockpit-shell ma-valuation-sidebar-premium ma-valuation-surface ${isDisabled ? 'is-readonly' : ''}`}>
+    <div className={`ma-input-cockpit-shell ma-valuation-sidebar-premium ma-valuation-surface ma-valuation-underwriting-rail ${isDisabled ? 'is-readonly' : ''}`}>
       <header
         className="ma-valuation-input-cockpit-band"
         aria-label="Inputs and assumptions"
@@ -128,15 +132,16 @@ export function FinancialInputPanel({
       <div className={`ma-input-panel ${isDisabled ? 'is-readonly' : ''}`}>
 
       <PanelSection
-        className="ma-valuation-input-section"
+        className="ma-valuation-input-section ma-financial-baseline-block"
         kicker="Financial baseline"
-        title="Finanzas base"
-        description="Datos principales del activo para calcular EBITDA normalizado, valor empresa, deuda neta y equity value."
+        title="Base financials"
+        description="Core asset data to calculate normalized EBITDA, enterprise value, net debt and equity value."
         icon={Calculator}
+        surfaceAtmo
       >
         <div className="ma-input-stack">
           <Input
-            label="Razón social"
+            label="Legal name"
             value={financials.name}
             disabled={isDisabled}
             readOnly={isDisabled}
@@ -155,6 +160,7 @@ export function FinancialInputPanel({
 
           <div className="ma-input-grid">
             <Input
+              className="ma-fb-numeric-capsule"
               label="EBITDA (€)"
               inputMode="decimal"
               value={financials.reportedEbitda}
@@ -164,6 +170,7 @@ export function FinancialInputPanel({
             />
 
             <Input
+              className="ma-fb-numeric-capsule"
               label="Add-backs (€)"
               inputMode="decimal"
               value={financials.addBacks}
@@ -175,7 +182,8 @@ export function FinancialInputPanel({
 
           <div className="ma-input-grid">
             <Input
-              label="Deuda (€)"
+              className="ma-fb-numeric-capsule"
+              label="Debt (€)"
               inputMode="decimal"
               value={financials.debt}
               disabled={isDisabled}
@@ -184,7 +192,8 @@ export function FinancialInputPanel({
             />
 
             <Input
-              label="Caja (€)"
+              className="ma-fb-numeric-capsule"
+              label="Cash (€)"
               inputMode="decimal"
               value={financials.cash}
               disabled={isDisabled}
@@ -195,6 +204,7 @@ export function FinancialInputPanel({
 
           <div className="ma-input-grid">
             <Input
+              className="ma-fb-numeric-capsule"
               label="Target WC (€)"
               inputMode="decimal"
               value={financials.targetWC}
@@ -204,6 +214,7 @@ export function FinancialInputPanel({
             />
 
             <Input
+              className="ma-fb-numeric-capsule"
               label="WC real (€)"
               inputMode="decimal"
               value={financials.actualWC}
@@ -217,6 +228,7 @@ export function FinancialInputPanel({
 
           <div className="ma-input-grid">
             <Input
+              className="ma-fb-numeric-capsule"
               label="Growth (%)"
               inputMode="decimal"
               value={financials.growth}
@@ -226,6 +238,7 @@ export function FinancialInputPanel({
             />
 
             <Input
+              className="ma-fb-numeric-capsule"
               label="Leverage ratio"
               inputMode="decimal"
               value={financials.leverageRatio}
@@ -237,6 +250,7 @@ export function FinancialInputPanel({
 
           <div className="ma-input-grid">
             <Input
+              className="ma-fb-numeric-capsule"
               label="Cost synergies (€)"
               inputMode="decimal"
               value={financials.synergiesCost}
@@ -246,6 +260,7 @@ export function FinancialInputPanel({
             />
 
             <Input
+              className="ma-fb-numeric-capsule"
               label="Rev synergies (€)"
               inputMode="decimal"
               value={financials.synergiesRev}
@@ -257,7 +272,8 @@ export function FinancialInputPanel({
 
           <div className="ma-input-grid">
             <Input
-              label="Impuestos (%)"
+              className="ma-fb-numeric-capsule"
+              label="Tax rate (%)"
               inputMode="decimal"
               value={financials.taxRate}
               disabled={isDisabled}
@@ -266,6 +282,7 @@ export function FinancialInputPanel({
             />
 
             <Input
+              className="ma-fb-numeric-capsule"
               label="Fees M&A (%)"
               inputMode="decimal"
               value={financials.transactionFees}
@@ -280,48 +297,48 @@ export function FinancialInputPanel({
       <PanelSection
         className="ma-valuation-input-section"
         kicker="Risk profile"
-        title="Riesgos y operaciones"
-        description="Variables cualitativas que ajustan la calidad del deal, transferibilidad, riesgo operativo y lectura ejecutiva."
+        title="Risk & operations"
+        description="Qualitative variables that adjust deal quality, transferability, operating risk and executive read."
         icon={ShieldAlert}
       >
         <div className="ma-slider-list">
           <SliderField
-            label="Dependencia del dueño"
+            label="Owner dependency"
             value={financials.ownerDependency}
             disabled={isDisabled}
             onChange={(value) => onFieldChange('ownerDependency', value)}
           />
 
           <SliderField
-            label="Concentración de clientes"
+            label="Client concentration"
             value={financials.clientConcentration}
             disabled={isDisabled}
             onChange={(value) => onFieldChange('clientConcentration', value)}
           />
 
           <SliderField
-            label="Ingresos recurrentes"
+            label="Recurring revenue"
             value={financials.recurringRevenue}
             disabled={isDisabled}
             onChange={(value) => onFieldChange('recurringRevenue', value)}
           />
 
           <SliderField
-            label="Capital circulante"
+            label="Working capital need"
             value={financials.workingCapitalNeed}
             disabled={isDisabled}
             onChange={(value) => onFieldChange('workingCapitalNeed', value)}
           />
 
           <SliderField
-            label="Riesgo geográfico CSDDD"
+            label="CSDDD geographic risk"
             value={financials.regionHighRisk}
             disabled={isDisabled}
             onChange={(value) => onFieldChange('regionHighRisk', value)}
           />
 
           <SliderField
-            label="Equity fundadores"
+            label="Founder equity"
             value={financials.foundersEquity}
             disabled={isDisabled}
             onChange={(value) => onFieldChange('foundersEquity', value)}
@@ -332,14 +349,14 @@ export function FinancialInputPanel({
       <PanelSection
         className="ma-valuation-input-section"
         kicker="Valuation settings"
-        title="Configuración"
-        description="Ajustes de presentación, divisa y perfil de riesgo aplicado al análisis."
+        title="Settings"
+        description="Presentation currency and risk profile applied to the analysis."
         icon={Settings2}
       >
         <div className="ma-input-stack">
           <div className="ma-input-grid">
             <Select
-              label="Divisa"
+              label="Currency"
               value={settings.reportCurrency}
               disabled={isDisabled}
               onChange={(e) => onSettingsChange('reportCurrency', e.target.value)}
@@ -347,7 +364,7 @@ export function FinancialInputPanel({
             />
 
             <Select
-              label="Modo riesgo"
+              label="Risk mode"
               value={settings.riskMode}
               disabled={isDisabled}
               onChange={(e) => onSettingsChange('riskMode', e.target.value)}
@@ -359,9 +376,8 @@ export function FinancialInputPanel({
             <strong>Executive valuation posture</strong>
 
             <p className="muted">
-              La configuración afecta a la divisa del reporte y al nivel de
-              prudencia aplicado sobre riesgos, múltiplos y lectura final del
-              deal.
+              Settings affect report currency and the prudence level applied to
+              risks, multiples and final deal read.
             </p>
           </div>
         </div>

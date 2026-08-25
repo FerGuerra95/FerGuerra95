@@ -1,0 +1,131 @@
+/*
+  C.24.79 — M&A global shell compact header
+  Scope: .main-area[data-workspace='ma'] only — build strip + topbar above page hero.
+  Does not touch Valuation hero, sidebar, body or page content.
+*/
+
+/* —— Build strip: single compact utility row —— */
+.main-area[data-workspace='ma'] .ceos-main-build-strip.ceos-build-strip-compact {
+  margin-top: 8px !important;
+  margin-bottom: 0 !important;
+  padding: 6px 12px !important;
+  gap: 8px !important;
+  min-height: 0 !important;
+  border-radius: 12px !important;
+  border-color: rgba(255, 255, 255, 0.04) !important;
+  box-shadow: none !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+}
+
+.main-area[data-workspace='ma'] .ceos-build-strip-compact .ceos-build-strip-copy {
+  display: none !important;
+}
+
+.main-area[data-workspace='ma'] .ceos-build-strip-compact .ceos-build-strip-actions {
+  width: 100% !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  flex-wrap: nowrap !important;
+}
+
+.main-area[data-workspace='ma'] .ceos-build-strip-compact .ceos-build-strip-badge {
+  padding: 4px 10px !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+}
+
+.main-area[data-workspace='ma'] .ceos-build-strip-compact .ceos-build-strip-user {
+  padding: 4px 10px !important;
+  gap: 6px !important;
+  font-size: 10.5px !important;
+  font-weight: 750 !important;
+}
+
+.main-area[data-workspace='ma'] .ceos-build-strip-compact .ceos-build-strip-user svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.main-area[data-workspace='ma'] .ceos-build-strip-compact .ceos-logout-btn {
+  min-height: 28px !important;
+  padding: 4px 9px !important;
+  font-size: 10px !important;
+}
+
+/* —— Topbar: compact breadcrumb + workspace rail only —— */
+.main-area[data-workspace='ma'] .topbar.ceos-topbar-premium.ceos-topbar-compact {
+  border-bottom-color: rgba(255, 255, 255, 0.035) !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.main-area[data-workspace='ma'] .topbar.ceos-topbar-compact .ceos-topbar-shell {
+  padding-block: 6px 8px !important;
+  gap: 8px !important;
+}
+
+.main-area[data-workspace='ma'] .topbar.ceos-topbar-compact .ceos-topbar-compact-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px 16px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+.main-area[data-workspace='ma'] .topbar.ceos-topbar-compact .ceos-topbar-breadcrumb {
+  margin: 0 !important;
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  font-size: 10px !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: rgba(148, 163, 184, 0.72) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.main-area[data-workspace='ma'] .topbar.ceos-topbar-compact .ceos-workspace-rail-row {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .topbar.ceos-topbar-compact .ceos-workspace-rail-shell {
+  padding: 3px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28) !important;
+}
+
+.main-area[data-workspace='ma'] .topbar.ceos-topbar-compact .ceos-workspace-rail-scroll-btn {
+  width: 26px !important;
+  height: 26px !important;
+}
+
+/* Page content starts higher */
+.main-area[data-workspace='ma'] .ceos-page-shell-host {
+  padding-bottom: clamp(12px, 1.5vw, 20px) !important;
+}
+
+.main-area[data-workspace='ma'] .ceos-page-shell-host > .page {
+  padding-top: 6px !important;
+}
+
+/* In-page nav crumb (Back to dashboard) tighter under compact shell */
+.main-area[data-workspace='ma'] .page .ma-valuation-nav-crumb {
+  margin: 0 0 6px !important;
+}
+
+@media (max-width: 920px) {
+  .main-area[data-workspace='ma'] .ceos-build-strip-compact .ceos-build-strip-actions {
+    flex-wrap: wrap !important;
+    justify-content: flex-end !important;
+  }
+
+  .main-area[data-workspace='ma'] .topbar.ceos-topbar-compact .ceos-topbar-compact-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+}

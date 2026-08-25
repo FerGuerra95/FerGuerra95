@@ -808,10 +808,10 @@ const executivePremiumCss = `
     overflow: visible !important;
   }
 
-  /* C.24.24 — Valuation ↔ Intelligence design system sync (runtime authority) */
+  /* C.24.24 — Valuation surfaces: Dashboard C.0.1 material (not navy petroleum) */
   .main-area .page .ma-valuation-premium-page {
-    --premium-surface: rgba(10, 16, 26, 0.94);
-    --premium-line: rgba(148, 163, 184, 0.14);
+    --premium-surface: rgba(8, 18, 18, 0.46);
+    --premium-line: rgba(90, 255, 220, 0.09);
   }
 
   .main-area .page .ma-valuation-premium-page :is(
@@ -821,23 +821,22 @@ const executivePremiumCss = `
     .ma-equity-safe-card,
     .ma-premium-deal-card
   ).ma-valuation-surface {
-    border: 1px solid rgba(148, 163, 184, 0.07) !important;
+    border: 1px solid var(--ma-ref-panel-border, rgba(90, 255, 220, 0.09)) !important;
     border-radius: 20px !important;
-    background: linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%) !important;
-    box-shadow:
-      0 24px 56px rgba(0, 0, 0, 0.28),
-      inset 0 1px 0 rgba(255, 255, 255, 0.045) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
+    box-shadow: var(--ma-ref-panel-shadow) !important;
     overflow: visible !important;
   }
 
   .main-area .page .ma-valuation-premium-page .ma-valuation-status-card.ma-valuation-surface {
-    border: 1px solid rgba(45, 212, 191, 0.14) !important;
+    border: 1px solid var(--ma-ref-panel-border, rgba(90, 255, 220, 0.09)) !important;
     border-radius: 22px !important;
-    background: linear-gradient(165deg, rgba(12, 22, 32, 0.78) 0%, rgba(8, 14, 22, 0.55) 100%) !important;
-    box-shadow:
-      0 24px 56px rgba(0, 0, 0, 0.28),
-      inset 0 1px 0 rgba(255, 255, 255, 0.045),
-      0 0 48px rgba(45, 212, 191, 0.06) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
+    box-shadow: var(--ma-ref-panel-shadow) !important;
   }
 
   .main-area .page .ma-valuation-premium-page .button.primary {
@@ -867,12 +866,16 @@ const executivePremiumCss = `
     .ma-equity-safe-card,
     .ma-premium-deal-card
   ).ma-valuation-surface {
-    background: linear-gradient(168deg, #081616 0%, #071111 54%, #061010 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     border: 1px solid rgba(90, 255, 220, 0.12) !important;
   }
 
   .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
-    background: linear-gradient(165deg, #081616 0%, #071111 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     border: 1px solid rgba(90, 255, 220, 0.12) !important;
   }
 
@@ -882,7 +885,9 @@ const executivePremiumCss = `
   }
 
   .main-area .page .ma-valuation-premium-page .ma-valuation-status-card.ma-valuation-surface {
-    background: linear-gradient(165deg, rgba(14, 26, 28, 0.88) 0%, rgba(8, 16, 18, 0.72) 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     border: 1px solid rgba(90, 255, 220, 0.14) !important;
   }
 
@@ -894,12 +899,16 @@ const executivePremiumCss = `
     .ma-equity-safe-card,
     .ma-premium-deal-card
   ).ma-valuation-surface {
-    background: linear-gradient(168deg, #081616 0%, #071111 52%, #061010 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     border: 1px solid rgba(90, 255, 220, 0.13) !important;
   }
 
   .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
-    background: linear-gradient(165deg, #081616 0%, #071111 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     border: 1px solid rgba(90, 255, 220, 0.13) !important;
     border-radius: 20px !important;
   }
@@ -948,7 +957,9 @@ const executivePremiumCss = `
   }
 
   .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
-    background: linear-gradient(165deg, #0a1818 0%, #081616 48%, #071111 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     border: 1px solid rgba(90, 255, 220, 0.12) !important;
   }
 
@@ -959,7 +970,9 @@ const executivePremiumCss = `
     .ma-equity-safe-card,
     .ma-premium-deal-card
   ).ma-valuation-surface {
-    background: linear-gradient(168deg, #081616 0%, #071111 50%, #061010 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     border: 1px solid rgba(90, 255, 220, 0.12) !important;
   }
 
@@ -970,7 +983,9 @@ const executivePremiumCss = `
   }
 
   .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
-    background: linear-gradient(165deg, #0b1a1a 0%, #091818 45%, #081616 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     border: 1px solid rgba(90, 255, 220, 0.12) !important;
   }
 
@@ -989,7 +1004,9 @@ const executivePremiumCss = `
     .ma-equity-safe-card,
     .ma-premium-deal-card
   ).ma-valuation-surface {
-    background: linear-gradient(168deg, #081616 0%, #071111 48%, #061110 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     box-shadow:
       0 22px 50px rgba(0, 0, 0, 0.18),
       inset 0 1px 0 rgba(255, 255, 255, 0.075) !important;
@@ -997,7 +1014,9 @@ const executivePremiumCss = `
 
   /* C.24.29 — 85→95% runtime sync */
   .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
-    background: linear-gradient(165deg, #0c1c1c 0%, #0a1919 42%, #081616 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     border: 1px solid rgba(90, 255, 220, 0.12) !important;
   }
 
@@ -1008,7 +1027,9 @@ const executivePremiumCss = `
     .ma-equity-safe-card,
     .ma-premium-deal-card
   ).ma-valuation-surface {
-    background: linear-gradient(168deg, #081616 0%, #071111 46%, #061110 100%) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
     box-shadow:
       0 24px 52px rgba(0, 0, 0, 0.16),
       inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
@@ -1047,8 +1068,8 @@ const executivePremiumCss = `
   }
 
   .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-status-card.ma-valuation-surface {
-    border: 1px solid rgba(45, 212, 191, 0.14) !important;
-    background: linear-gradient(165deg, rgba(12, 22, 32, 0.82) 0%, rgba(8, 14, 22, 0.62) 100%) !important;
+    border: 1px solid rgba(90, 255, 220, 0.09) !important;
+    background: var(--ma-ref-panel-bg) !important;
   }
 
   /* C.24.31 — Composition grid: unified width, sidebar/main balance */
@@ -1096,15 +1117,15 @@ const executivePremiumCss = `
     width: 100% !important;
   }
 
-  /* C.24.33 — Unified surface tokens (runtime authority over flatten rules) */
+  /* C.24.33 — Unified surface tokens: OUTER teal + INNER blue (not same hue) */
   .main-area .page .ma-valuation-premium-page {
-    --ma-val-page-bg: #020606;
-    --ma-val-surface-card: #081616;
-    --ma-val-surface-card-end: #071111;
-    --ma-val-surface-table: #071313;
-    --ma-val-surface-table-end: #091818;
-    --ma-val-border-subtle: rgba(90, 255, 220, 0.10);
-    --ma-val-border-visible: rgba(90, 255, 220, 0.14);
+    --ma-val-page-bg: #010306;
+    --ma-val-surface-card: rgba(10, 24, 24, 0.62);
+    --ma-val-surface-card-end: rgba(8, 18, 18, 0.46);
+    --ma-val-surface-table: rgba(4, 8, 14, 0.55);
+    --ma-val-surface-table-end: rgba(2, 4, 8, 0.35);
+    --ma-val-border-subtle: rgba(90, 255, 220, 0.09);
+    --ma-val-border-visible: rgba(90, 255, 220, 0.09);
     --ma-val-divider: rgba(255, 255, 255, 0.055);
     --ma-val-row-hover: rgba(56, 231, 194, 0.045);
     --ma-val-text-primary: #f4f7f6;
@@ -1296,14 +1317,14 @@ const executivePremiumCss = `
 
   /* C.24.38 — Teal/charcoal palette lock (fix blue slate regression) */
   .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
-    background-color: #020606 !important;
+    background-color: #010306 !important;
     background-image: none !important;
   }
 
   .main-area .page .ma-valuation-premium-page {
     --premium-surface-soft: rgba(8, 22, 22, 0.42);
     --premium-line: rgba(90, 255, 220, 0.12);
-    background-color: #020606 !important;
+    background-color: #010306 !important;
   }
 
   .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite {
@@ -1314,8 +1335,10 @@ const executivePremiumCss = `
   }
 
   .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-status-card.ma-valuation-surface {
-    background: linear-gradient(165deg, #0c1a1a 0%, #0a1717 48%, #081616 100%) !important;
-    border: 1px solid rgba(90, 255, 220, 0.14) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid var(--ma-ref-panel-border, rgba(90, 255, 220, 0.09)) !important;
   }
 
   .main-area .page .ma-valuation-premium-page :is(
@@ -1326,17 +1349,17 @@ const executivePremiumCss = `
     .ma-premium-deal-card,
     .ma-input-cockpit-shell.ma-valuation-sidebar-premium
   ).ma-valuation-surface {
-    background: linear-gradient(168deg, #081616 0%, #071111 54%, #061010 100%) !important;
-    border: 1px solid rgba(90, 255, 220, 0.12) !important;
-    box-shadow:
-      0 20px 48px rgba(0, 0, 0, 0.18),
-      inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid var(--ma-ref-panel-border, rgba(90, 255, 220, 0.09)) !important;
+    box-shadow: var(--ma-ref-panel-shadow) !important;
   }
 
   .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell :is(input, select, textarea) {
-    background: rgba(6, 16, 16, 0.88) !important;
+    background: var(--ma-ref-inset-bg, rgba(5, 9, 9, 0.38)) !important;
     background-image: none !important;
-    border-color: rgba(90, 255, 220, 0.12) !important;
+    border-color: var(--ma-ref-inset-border, rgba(90, 255, 220, 0.07)) !important;
     color: #f4f7f6 !important;
   }
 
@@ -1421,14 +1444,15 @@ const executivePremiumCss = `
     box-shadow: none !important;
   }
 
-  /* C.24.40 — Sidebar final anti-sticker runtime */
+  /* C.24.40 — OUTER rail shell: exact Dashboard --ma-ref-panel-* */
   .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface {
-    background: #081616 !important;
-    background-image: none !important;
-    border-color: rgba(90, 255, 220, 0.09) !important;
-    box-shadow:
-      0 10px 28px rgba(0, 0, 0, 0.14),
-      inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    background-image: var(--ma-ref-panel-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid var(--ma-ref-panel-border, rgba(90, 255, 220, 0.09)) !important;
+    box-shadow: var(--ma-ref-panel-shadow) !important;
+    backdrop-filter: var(--ma-ref-panel-blur, blur(18px)) !important;
+    -webkit-backdrop-filter: var(--ma-ref-panel-blur, blur(18px)) !important;
   }
 
   .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit [class*='card'],
@@ -1566,9 +1590,9 @@ const executivePremiumCss = `
   .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell :is(input, select, textarea) {
     min-height: 40px !important;
     padding: 10px 14px !important;
-    background: #091818 !important;
-    border-color: rgba(90, 255, 220, 0.1) !important;
-    box-shadow: none !important;
+    background: rgba(5, 9, 9, 0.38) !important;
+    border-color: rgba(90, 255, 220, 0.07) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025) !important;
   }
 
   .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note {
@@ -1681,10 +1705,10 @@ const executivePremiumCss = `
 
   .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-command-bar.ma-valuation-command-strip,
   .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-command-bar.ma-valuation-command-strip {
-    border: 1px solid rgba(148, 163, 184, 0.07) !important;
+    border: 1px solid rgba(90, 255, 220, 0.09) !important;
     border-radius: 20px !important;
-    background: rgba(10, 16, 26, 0.72) !important;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2) !important;
+    background: var(--ma-ref-panel-bg) !important;
+    box-shadow: var(--ma-ref-panel-shadow) !important;
   }
 
   .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-status-card.ma-valuation-surface {
@@ -2070,6 +2094,607 @@ const executivePremiumCss = `
     padding: 12px 14px !important;
     font-size: 14px !important;
     width: 100% !important;
+  }
+
+  /* ========================================================================
+     GREEN OUTER + BLUE INNER (chromatic hierarchy — do not unify hues)
+     OUTER oracle: .ma-reference-workbench-tile / .ma-reference-bottom-slab
+                   → --ma-ref-panel-* (teal/green)
+     INNER oracle: .ma-reference-bottom-slab .ma-reference-snapshot-readout
+                   → linear-gradient(135deg, rgba(4,8,14,.55), rgba(2,4,8,.35))
+                   → border rgba(45,212,191,.06)
+     L3 capsules: Dashboard .ma-reference-snapshot-metric dark nest
+     DEPTH BED: same teal radials as .ma-reference-page::before
+     No descendant green rules — outer selectors only on exact shells.
+     ======================================================================== */
+
+  /* Depth bed — DISABLED on valuation page shell.
+     Was navy wash rgba(12,32,42) that read as residual blue global.
+     Page uses flat Dashboard #010306 instead. */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page:not(#__ceos_no_match__) {
+    position: relative !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page:not(#__ceos_no_match__)::before {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    background-image: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page:not(#__ceos_no_match__) > * {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  /* LEVEL 1 OUTER — literal Dashboard green/teal (--ma-ref-panel-*) ONLY on shells
+     (status card excluded — restored as glass below) */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
+    .ma-premium-deal-card,
+    .ma-premium-equity-card,
+    .ma-premium-intelligence-card,
+    .ma-premium-committee-card,
+    .ma-premium-comparables-card,
+    .ma-equity-safe-card,
+    .ma-intelligence-panel,
+    .ma-traceability-panel,
+    .ma-comparables-shell,
+    .ma-input-cockpit-shell.ma-valuation-sidebar-premium,
+    .ma-valuation-command-bar.ma-valuation-command-strip
+  ).ma-valuation-surface:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page :is(
+    .ma-premium-deal-card,
+    .ma-equity-safe-card,
+    .ma-intelligence-panel,
+    .ma-traceability-panel,
+    .ma-comparables-shell,
+    .ma-input-cockpit-shell.ma-valuation-sidebar-premium
+  ).ma-valuation-surface:not(#__ceos_no_match__) {
+    background: linear-gradient(168deg, rgba(10, 24, 24, 0.62) 0%, rgba(8, 18, 18, 0.46) 100%) !important;
+    background-image: linear-gradient(168deg, rgba(10, 24, 24, 0.62) 0%, rgba(8, 18, 18, 0.46) 100%) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(90, 255, 220, 0.09) !important;
+    box-shadow:
+      0 18px 44px rgba(0, 0, 0, 0.13),
+      inset 0 1px 0 rgba(255, 255, 255, 0.038) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    filter: none !important;
+  }
+
+  /* LEVEL 2 INNER — RESTORED Dashboard blue (snapshot-readout). FREEZE. Not teal.
+     KPI tables excluded — soft inset polish at end of file. */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-closing-structure-box:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-footer-card:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-closing-footer-card:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-panel:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-panel:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-comparables-range:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-premium-comparables-range:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-range:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-comparables-range:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-score:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-traceability-score:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-list:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-list:not(#__ceos_no_match__) {
+    background: linear-gradient(135deg, rgba(4, 8, 14, 0.55), rgba(2, 4, 8, 0.35)) !important;
+    background-image: linear-gradient(135deg, rgba(4, 8, 14, 0.55), rgba(2, 4, 8, 0.35)) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(45, 212, 191, 0.06) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* LEVEL 3 — dark nests for non-capsule cockpit controls only.
+     Capsule surfaces/inputs owned by CanonicalParity --ma-ref-panel-*. */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-equity-stat:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-premium-equity-stat:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field:not(.ma-fb-numeric-capsule) .input:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field:not(.ma-fb-numeric-capsule) .select:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell .field:not(.ma-fb-numeric-capsule) :is(
+    input:not([type='range']),
+    select,
+    textarea
+  ):not(#__ceos_no_match__) {
+    background: rgba(5, 9, 9, 0.38) !important;
+    background-image: none !important;
+    background-color: rgba(5, 9, 9, 0.38) !important;
+    border-color: rgba(90, 255, 220, 0.07) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025) !important;
+  }
+
+  /* Kill shell ambient overlays that darken/recolor vs Dashboard */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell::before:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell::before:not(#__ceos_no_match__) {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Remove unwanted Financial Baseline reticule */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-fb-surface-atmo:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-fb-surface-atmo:not(#__ceos_no_match__) {
+    display: none !important;
+    visibility: hidden !important;
+    background: none !important;
+    background-image: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* MICRO FIX — left OUTER only: kill #213743 / teal-radial mismatch vs Deal Structure.
+     Exact same literals as LEVEL 1 OUTER above. Does not touch .ma-input-panel / capsules. */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-underwriting-rail.ma-valuation-surface:not(#__ceos_no_match__) {
+    background: linear-gradient(168deg, rgba(10, 24, 24, 0.62) 0%, rgba(8, 18, 18, 0.46) 100%) !important;
+    background-image: linear-gradient(168deg, rgba(10, 24, 24, 0.62) 0%, rgba(8, 18, 18, 0.46) 100%) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(90, 255, 220, 0.09) !important;
+    box-shadow:
+      0 18px 44px rgba(0, 0, 0, 0.13),
+      inset 0 1px 0 rgba(255, 255, 255, 0.038) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    filter: none !important;
+  }
+
+  /* ========================================================================
+     GLOBAL PAGE BASE — BLACK only on page root (not descendants).
+     Regression cause of prior pass: flat #010306 + killing atmosphere made
+     translucent L1/L2 panels read as black. Keep black base; restore hierarchy
+     AFTER this block with denser same-hue materials.
+     Oracle page: .ma-executive-page.ma-dashboard-premium → #010306
+     ======================================================================== */
+  .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page):not(#__ceos_no_match__) {
+    background-color: #010306 !important;
+    background-image: none !important;
+  }
+
+  /* Page root ONLY — no descendant selector, no inherit onto cards */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium.ma-valuation-premium-page:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium.ma-valuation-premium-page:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page:not(#__ceos_no_match__) {
+    --ma-val-bg: #010306;
+    --ma-val-page-bg: #010306;
+    --ma-val-page-bg-deep: #010306;
+    background-color: #010306 !important;
+    /* Dashboard executive atmosphere (teal + black ONLY — no rgba(12,32,42) blue) */
+    background-image:
+      radial-gradient(ellipse 110% 75% at 18% -12%, rgba(32, 201, 151, 0.08), transparent 56%),
+      radial-gradient(ellipse 85% 58% at 92% 8%, rgba(45, 212, 191, 0.045), transparent 50%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(1, 3, 6, 0.85), transparent 72%) !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    outline: none !important;
+  }
+
+  /* No blue global ::before plate — atmosphere lives in page background-image above */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page:not(#__ceos_no_match__)::before,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium.ma-valuation-premium-page:not(#__ceos_no_match__)::before {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    background-image: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Upper suite stays open (not a global plate) */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) {
+    background: transparent !important;
+    background-image: none !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* ── RESTORE after page-black: LEVEL 1 OUTER green/teal
+     (status card excluded — glass finish below) ── */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
+    .ma-premium-deal-card,
+    .ma-premium-equity-card,
+    .ma-premium-intelligence-card,
+    .ma-premium-committee-card,
+    .ma-premium-comparables-card,
+    .ma-equity-safe-card,
+    .ma-intelligence-panel,
+    .ma-traceability-panel,
+    .ma-comparables-shell,
+    .ma-input-cockpit-shell.ma-valuation-sidebar-premium,
+    .ma-valuation-command-bar.ma-valuation-command-strip
+  ).ma-valuation-surface:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page :is(
+    .ma-premium-deal-card,
+    .ma-equity-safe-card,
+    .ma-intelligence-panel,
+    .ma-traceability-panel,
+    .ma-comparables-shell,
+    .ma-input-cockpit-shell.ma-valuation-sidebar-premium
+  ).ma-valuation-surface:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-underwriting-rail.ma-valuation-surface:not(#__ceos_no_match__) {
+    background: linear-gradient(168deg, rgba(10, 24, 24, 0.88) 0%, rgba(8, 18, 18, 0.78) 100%) !important;
+    background-image: linear-gradient(168deg, rgba(10, 24, 24, 0.88) 0%, rgba(8, 18, 18, 0.78) 100%) !important;
+    background-color: rgba(10, 24, 24, 0.88) !important;
+    border: 1px solid rgba(90, 255, 220, 0.09) !important;
+    box-shadow:
+      0 18px 44px rgba(0, 0, 0, 0.13),
+      inset 0 1px 0 rgba(255, 255, 255, 0.038) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    filter: none !important;
+  }
+
+  /* ── RESTORE LEVEL 2 INNER blue (snapshot-readout hue; denser on black page)
+     KPI tables (quality-readout / equity-safe-stats / val-integrated-stats)
+     excluded — soft inset polish below. ── */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-closing-structure-box:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-footer-card:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-closing-footer-card:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-panel:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-panel:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-comparables-range:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-premium-comparables-range:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-range:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-comparables-range:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-score:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-traceability-score:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-list:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-list:not(#__ceos_no_match__) {
+    background: linear-gradient(135deg, rgba(4, 8, 14, 0.78), rgba(2, 4, 8, 0.62)) !important;
+    background-image: linear-gradient(135deg, rgba(4, 8, 14, 0.78), rgba(2, 4, 8, 0.62)) !important;
+    background-color: rgba(4, 8, 14, 0.78) !important;
+    border: 1px solid rgba(45, 212, 191, 0.06) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* LEVEL 3 dark nests — non-capsule cockpit controls only.
+     Capsule surfaces stay on CanonicalParity --ma-ref-panel-* (approved material). */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field:not(.ma-fb-numeric-capsule) .input:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field:not(.ma-fb-numeric-capsule) .select:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell .field:not(.ma-fb-numeric-capsule) :is(
+    input:not([type='range']),
+    select,
+    textarea
+  ):not(#__ceos_no_match__) {
+    background: rgba(5, 9, 9, 0.55) !important;
+    background-image: none !important;
+    background-color: rgba(5, 9, 9, 0.55) !important;
+    border-color: rgba(90, 255, 220, 0.07) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025) !important;
+  }
+
+  /* ========================================================================
+     TOP-RIGHT STATUS CARD ONLY — FINAL MICRO POLISH
+     Outer teal −~9%; inner opacity −~7%; more internal air (padding/gap).
+     ======================================================================== */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+    padding: 36px 36px 38px !important;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.032) 0%,
+        rgba(255, 255, 255, 0) 14%
+      ),
+      linear-gradient(
+        158deg,
+        rgba(255, 255, 255, 0.012) 0%,
+        rgba(2, 4, 7, 0.045) 44%,
+        rgba(1, 2, 4, 0.075) 100%
+      ) !important;
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.032) 0%,
+        rgba(255, 255, 255, 0) 14%
+      ),
+      linear-gradient(
+        158deg,
+        rgba(255, 255, 255, 0.012) 0%,
+        rgba(2, 4, 7, 0.045) 44%,
+        rgba(1, 2, 4, 0.075) 100%
+      ) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(148, 163, 184, 0.055) !important;
+    border-top-color: rgba(90, 255, 220, 0.074) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.065),
+      inset 1px 0 0 rgba(45, 212, 191, 0.016),
+      0 10px 28px rgba(0, 0, 0, 0.2),
+      0 -6px 18px rgba(45, 212, 191, 0.009) !important;
+    backdrop-filter: blur(20px) saturate(86%) brightness(0.94) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(86%) brightness(0.94) !important;
+    filter: none !important;
+    overflow: visible !important;
+  }
+
+  /* Internal breathing — more air between title / copy / status table */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-inner:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-inner:not(#__ceos_no_match__) {
+    gap: 24px !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-top:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-top:not(#__ceos_no_match__) {
+    gap: 20px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-title:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-title:not(#__ceos_no_match__) {
+    margin-top: 10px !important;
+  }
+
+  /* Kill legacy teal wash overlays on outer card */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-valuation-status-card:not(#__ceos_no_match__)::before,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-valuation-status-card:not(#__ceos_no_match__)::after,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card:not(#__ceos_no_match__)::before,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card:not(#__ceos_no_match__)::after,
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card:not(#__ceos_no_match__)::before,
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card:not(#__ceos_no_match__)::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    background-image: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Intro headline + description — text on glass only (kill independent rectangle) */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box:not(#__ceos_no_match__) {
+    background: transparent !important;
+    background-image: none !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    margin: 0 0 6px !important;
+    padding: 0 2px !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box:not(#__ceos_no_match__)::before,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box:not(#__ceos_no_match__)::after,
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box:not(#__ceos_no_match__)::before,
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box:not(#__ceos_no_match__)::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box strong:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box strong:not(#__ceos_no_match__) {
+    margin: 0 0 10px !important;
+  }
+
+  /* Validation / Backend / Analysis / Access — softer inset (−~7% opacity) */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-list:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-list:not(#__ceos_no_match__) {
+    background:
+      linear-gradient(
+        160deg,
+        rgba(6, 12, 18, 0.26) 0%,
+        rgba(3, 6, 11, 0.165) 100%
+      ) !important;
+    background-image:
+      linear-gradient(
+        160deg,
+        rgba(6, 12, 18, 0.26) 0%,
+        rgba(3, 6, 11, 0.165) 100%
+      ) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.03) !important;
+    border-radius: 12px !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    padding: 4px 14px !important;
+    margin-top: 2px !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-row:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-row:not(#__ceos_no_match__) {
+    background: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.032) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-list > .ma-valuation-status-row:first-child:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-list > .ma-valuation-status-row:first-child:not(#__ceos_no_match__) {
+    border-top: 0 !important;
+  }
+
+  /* ========================================================================
+     KPI TABLES — soft embedded inset (Quality Score + EV/EBITDA KPI rows)
+     Not solid black stickers. Material only — layout/copy/typography untouched.
+     ======================================================================== */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-readout:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-readout:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-panel:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-panel:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-integrated-stats:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-val-integrated-stats:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stats.ma-val-integrated-stats,
+  .main-area .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stats.ma-val-integrated-stats,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-premium-stats-grid:not(#__ceos_no_match__) {
+    background:
+      linear-gradient(
+        160deg,
+        rgba(6, 14, 20, 0.3) 0%,
+        rgba(3, 7, 12, 0.18) 100%
+      ) !important;
+    background-image:
+      linear-gradient(
+        160deg,
+        rgba(6, 14, 20, 0.3) 0%,
+        rgba(3, 7, 12, 0.18) 100%
+      ) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.032) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.032) !important;
+    border-radius: 14px !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.022) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  /* Soft inset breathing — material only (no column/structure change) */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-readout:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-readout:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-panel:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-panel:not(#__ceos_no_match__) {
+    padding: 14px 18px !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stats.ma-val-integrated-stats,
+  .main-area .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stats.ma-val-integrated-stats,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-premium-stats-grid:not(#__ceos_no_match__) {
+    padding: 10px 12px !important;
+  }
+
+  /* KPI cells — transparent within soft grid (no mini-stickers) */
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-integrated-stats .ma-equity-safe-stat:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-val-integrated-stats .ma-equity-safe-stat:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:not(#__ceos_no_match__) {
+    background: transparent !important;
+    background-image: none !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:last-child:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:last-child:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-integrated-stats .ma-equity-safe-stat:last-child:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-val-integrated-stats .ma-equity-safe-stat:last-child:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:last-child:not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:last-child:not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:nth-child(4n):not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:nth-child(4n):not(#__ceos_no_match__),
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:nth-child(4n):not(#__ceos_no_match__),
+  .main-area .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:nth-child(4n):not(#__ceos_no_match__) {
+    border-right: 0 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:not(#__ceos_no_match__)::before,
+  .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:not(#__ceos_no_match__)::before,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:not(#__ceos_no_match__)::before,
+  .main-area .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:not(#__ceos_no_match__)::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  /* ========================================================================
+     VALUE CAPSULES — ALIGNMENT ONLY
+     Restores pair baseline when labels wrap to different line counts.
+     Does NOT change capsule material (CanonicalParity --ma-ref-panel-*).
+     ======================================================================== */
+  .main-area[data-workspace='ma']
+    .page
+    .ma-valuation-premium-page
+    .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+    .ma-financial-baseline-block
+    .ma-input-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    column-gap: 14px !important;
+    row-gap: 12px !important;
+  }
+
+  .main-area[data-workspace='ma']
+    .page
+    .ma-valuation-premium-page
+    .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+    .ma-financial-baseline-block
+    .ma-input-grid
+    .field.ma-fb-numeric-capsule {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    margin: 0 !important;
+  }
+
+  .main-area[data-workspace='ma']
+    .page
+    .ma-valuation-premium-page
+    .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+    .ma-financial-baseline-block
+    .ma-input-grid
+    .field.ma-fb-numeric-capsule
+    > label {
+    display: flex !important;
+    align-items: flex-end !important;
+    min-height: 2.6em !important;
+    margin: 0 0 8px !important;
+    line-height: 1.3 !important;
+    box-sizing: border-box !important;
+  }
+
+  .main-area[data-workspace='ma']
+    .page
+    .ma-valuation-premium-page
+    .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+    .ma-financial-baseline-block
+    .ma-input-grid
+    .field.ma-fb-numeric-capsule
+    .ma-fb-numeric-capsule-surface {
+    width: 100% !important;
+    min-height: 42px !important;
+    height: 42px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    flex: 0 0 auto !important;
+  }
+
+  .main-area[data-workspace='ma']
+    .page
+    .ma-valuation-premium-page
+    .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+    .ma-financial-baseline-block
+    .ma-input-grid
+    .field.ma-fb-numeric-capsule
+    .ma-fb-numeric-capsule-surface
+    .input {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    box-sizing: border-box !important;
   }
 `;
 

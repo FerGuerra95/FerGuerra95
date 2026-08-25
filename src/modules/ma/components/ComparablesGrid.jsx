@@ -21,8 +21,16 @@ function getSafeMultiple(value) {
   return parsed;
 }
 
-export function ComparablesGrid({ comparables }) {
+export function ComparablesGrid({ comparables, selectedMultiple = null }) {
   const safeComparables = getSafeComparables(comparables);
+  const multiples = safeComparables.map((item) => getSafeMultiple(item.multiple));
+  const minMultiple = multiples.length ? Math.min(...multiples) : 0;
+  const maxMultiple = multiples.length ? Math.max(...multiples) : 0;
+  const selected = getSafeMultiple(selectedMultiple);
+  const hasRange = multiples.length > 0 && maxMultiple > minMultiple;
+  const selectedPct = hasRange
+    ? Math.max(0, Math.min(100, ((selected - minMultiple) / (maxMultiple - minMultiple)) * 100))
+    : 50;
 
   return (
     <section className="ma-comparables-shell ma-valuation-comparables-module ma-valuation-surface">
@@ -36,9 +44,8 @@ export function ComparablesGrid({ comparables }) {
           <h2>Market comparables</h2>
 
           <p className="muted">
-            Lectura comparativa de múltiplos para contextualizar la valoración,
-            reforzar el rango estimado y explicar la posición del activo frente
-            a referencias de mercado.
+            Comparable multiples to contextualize the valuation range and position the asset
+            against market references.
           </p>
         </div>
 
@@ -53,59 +60,83 @@ export function ComparablesGrid({ comparables }) {
             <BarChart3 size={24} />
           </div>
 
-          <h3>Sin comparables disponibles</h3>
-
+          <h3>No comparables available</h3>
           <p className="muted">
-            Selecciona sector y actualiza valoración para activar la lectura
-            comparativa de múltiplos.
+            Select a sector and run valuation to activate comparable multiple context.
           </p>
         </div>
       ) : (
-        <div className="ma-comparables-ledger ma-comparables-ledger-premium" role="list">
-          {safeComparables.map((item, index) => {
-            const multiple = getSafeMultiple(item.multiple);
-            const name = item.name || `Comparable ${index + 1}`;
-            const note =
-              item.note ||
-              'Referencia de mercado utilizada para contextualizar el rango de valoración.';
+        <>
+          {hasRange && selected > 0 ? (
+            <div className="ma-comparables-range" aria-label="Selected multiple within market range">
+              <div className="ma-comparables-range-label">Selected multiple vs market range</div>
+              <div className="ma-comparables-range-track">
+                <span
+                  className="ma-comparables-range-marker"
+                  style={{ left: `${selectedPct}%` }}
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="ma-comparables-range-scale">
+                <span>x{minMultiple.toFixed(2)}</span>
+                <span className="is-selected">x{selected.toFixed(2)} selected</span>
+                <span>x{maxMultiple.toFixed(2)}</span>
+              </div>
+            </div>
+          ) : null}
 
-            return (
-              <article
-                key={`${name}-${index}`}
-                className="ma-comparable-row ma-comparable-row-premium ma-comparable-card-horizontal ma-valuation-surface ma-valuation-comparable-card"
-                role="listitem"
-              >
-                <div className="ma-comparable-card-head">
-                  <div className="ma-comparable-card-copy">
-                    <h3 className="ma-comparable-name">{name}</h3>
-                    <p className="ma-comparable-note">{note}</p>
+          <div
+            className="ma-comparables-ledger ma-comparables-list-open"
+            role="list"
+          >
+            {safeComparables.map((item, index) => {
+              const multiple = getSafeMultiple(item.multiple);
+              const name = item.name || `Comparable ${index + 1}`;
+              const note =
+                item.note ||
+                'Market reference used to contextualize the valuation range.';
+
+              return (
+                <article
+                  key={`${name}-${index}`}
+                  className="ma-comparable-open-item"
+                  role="listitem"
+                >
+                  <div className="ma-comparable-open-head">
+                    <div className="ma-comparable-open-copy">
+                      <h3 className="ma-comparable-name">{name}</h3>
+                      <p className="ma-comparable-note">{note}</p>
+                    </div>
+
+                    <div
+                      className="ma-comparable-open-multiple"
+                      aria-label="Market multiple"
+                    >
+                      <div className="ma-comparable-multiple ma-val-financial-figure">
+                        x{multiple.toFixed(2)}
+                      </div>
+                      <div className="ma-comparable-multiple-label">
+                        Market multiple
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="ma-comparable-multiple-block">
-                    <div className="ma-comparable-multiple ma-val-financial-figure">
-                      x{multiple.toFixed(2)}
-                    </div>
-                    <div className="ma-comparable-multiple-label">
-                      Market multiple
-                    </div>
+                  <div className="ma-comparable-open-actions">
+                    <span className="ma-comparable-action">
+                      <TrendingUp size={13} />
+                      Valuation input
+                    </span>
+
+                    <span className="ma-comparable-action">
+                      <CheckCircle2 size={13} />
+                      Benchmark
+                    </span>
                   </div>
-                </div>
-
-                <div className="ma-comparable-footer">
-                  <span className="ma-comparable-chip">
-                    <TrendingUp size={13} />
-                    Valuation input
-                  </span>
-
-                  <span className="ma-comparable-chip">
-                    <CheckCircle2 size={13} />
-                    Benchmark
-                  </span>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+                </article>
+              );
+            })}
+          </div>
+        </>
       )}
     </section>
   );

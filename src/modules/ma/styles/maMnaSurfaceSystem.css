@@ -1,0 +1,611 @@
+/*
+  M&A shared inner surface system — extracted from Valuation winning CSS.
+  Source-of-truth (do not invent):
+  - C.24.73 — workspace panels (.ma-equity-safe-card, .ma-premium-deal-card, etc.)
+  - C.24.66 — "Ready for valuation" status card
+  - C.24.78 — floating command strip (ma-reference-strip parity)
+  Visual-only. Dashboard consumer in this phase.
+*/
+
+.main-area[data-workspace='ma'] {
+  --ma-mna-surface-bg:
+    radial-gradient(ellipse 120% 82% at 8% -12%, rgba(45, 212, 191, 0.055), transparent 56%),
+    linear-gradient(165deg, rgba(12, 20, 30, 0.76) 0%, rgba(8, 14, 22, 0.58) 100%);
+  --ma-mna-surface-border: rgba(90, 255, 220, 0.12);
+  --ma-mna-surface-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --ma-mna-surface-blur: blur(18px) saturate(135%);
+  --ma-mna-surface-radius: 22px;
+  --ma-mna-surface-ambient:
+    radial-gradient(ellipse 80% 100% at 12% 0%, rgba(45, 212, 191, 0.1), transparent 72%);
+  --ma-mna-strip-bg: linear-gradient(165deg, rgba(10, 22, 30, 0.58) 0%, rgba(8, 16, 24, 0.42) 100%);
+  --ma-mna-strip-border: rgba(148, 163, 184, 0.07);
+  --ma-mna-strip-shadow: 0 10px 32px rgba(0, 0, 0, 0.18);
+  --ma-mna-strip-blur: blur(14px) saturate(140%);
+  --ma-mna-strip-radius: 20px;
+  /* Valuation C.24.66 — Ready for valuation (verbatim) */
+  --ma-mna-status-bg:
+    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(45, 212, 191, 0.07), transparent 62%),
+    linear-gradient(168deg, rgba(15, 30, 33, 0.82) 0%, rgba(10, 21, 26, 0.66) 52%, rgba(8, 16, 22, 0.58) 100%);
+  --ma-mna-status-border: rgba(90, 255, 220, 0.12);
+  --ma-mna-status-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 18px 44px rgba(0, 0, 0, 0.2),
+    0 0 34px rgba(45, 212, 191, 0.05);
+  --ma-mna-status-blur: blur(18px) saturate(135%);
+  --ma-mna-divider: rgba(255, 255, 255, 0.045);
+  --ma-mna-divider-strip: rgba(255, 255, 255, 0.035);
+  --ma-mna-inset-bg: rgba(5, 9, 9, 0.38);
+  --ma-mna-inset-border: rgba(90, 255, 220, 0.07);
+}
+
+/* Reusable utility — same recipe as Valuation workspace panels */
+.main-area[data-workspace='ma'] .ma-mna-inner-surface {
+  isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--ma-mna-surface-radius);
+  border: 1px solid var(--ma-mna-surface-border);
+  background: var(--ma-mna-surface-bg);
+  box-shadow: var(--ma-mna-surface-shadow);
+  backdrop-filter: var(--ma-mna-surface-blur);
+  -webkit-backdrop-filter: var(--ma-mna-surface-blur);
+}
+
+/* ==========================================================================
+   C.24.84 — Dashboard Intelligence: exact Valuation inner-surface parity
+   Wins over C.24.80–C.24.83 and maExecutiveTheme backdrop flattening.
+   ========================================================================== */
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(.mna-valuation-glass-surface):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline:not(.mna-valuation-glass-surface):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating:not(.mna-valuation-glass-surface):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(.mna-valuation-glass-surface):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot:not(.mna-valuation-glass-surface):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next:not(.mna-valuation-glass-surface):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab:not(.mna-valuation-glass-surface):not(#__ceos_no_match__) {
+  isolation: isolate !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: var(--ma-mna-surface-radius) !important;
+  border: 1px solid var(--ma-mna-surface-border) !important;
+  background: var(--ma-mna-surface-bg) !important;
+  box-shadow: var(--ma-mna-surface-shadow) !important;
+  backdrop-filter: var(--ma-mna-surface-blur) !important;
+  -webkit-backdrop-filter: var(--ma-mna-surface-blur) !important;
+}
+
+/* Top ambient layer — Valuation panel ::before parity */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab:not(#__ceos_no_match__)::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 0 auto !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: auto !important;
+  height: 120px !important;
+  border-radius: 0 !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: var(--ma-mna-surface-ambient) !important;
+}
+
+/* Inset rim — Valuation panel ::after parity */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__)::after,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline:not(#__ceos_no_match__)::after,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating:not(#__ceos_no_match__)::after,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot:not(#__ceos_no_match__)::after,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next:not(#__ceos_no_match__)::after,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab:not(#__ceos_no_match__)::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) > *,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline:not(#__ceos_no_match__) > *,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating:not(#__ceos_no_match__) > *,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) > *,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot:not(#__ceos_no_match__) > *,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next:not(#__ceos_no_match__) > *,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab:not(#__ceos_no_match__) > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Active deal strip — Valuation C.24.78 floating command strip */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip:not(#__ceos_no_match__) {
+  isolation: isolate !important;
+  border-radius: var(--ma-mna-strip-radius) !important;
+  border: 1px solid var(--ma-mna-strip-border) !important;
+  background: var(--ma-mna-strip-bg) !important;
+  box-shadow: var(--ma-mna-strip-shadow) !important;
+  backdrop-filter: var(--ma-mna-strip-blur) !important;
+  -webkit-backdrop-filter: var(--ma-mna-strip-blur) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-divider:not(#__ceos_no_match__) {
+  background: linear-gradient(180deg, transparent, var(--ma-mna-divider-strip), transparent) !important;
+}
+
+/* Qualified Opportunity = Ready for valuation (C.24.66) */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(#__ceos_no_match__) {
+  isolation: isolate !important;
+  overflow: hidden !important;
+  border-radius: var(--ma-mna-surface-radius) !important;
+  border: 1px solid var(--ma-mna-status-border) !important;
+  background: var(--ma-mna-status-bg) !important;
+  box-shadow: var(--ma-mna-status-shadow) !important;
+  backdrop-filter: var(--ma-mna-status-blur) !important;
+  -webkit-backdrop-filter: var(--ma-mna-status-blur) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(#__ceos_no_match__)::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 0 auto !important;
+  height: 55% !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: radial-gradient(ellipse at 50% 0%, rgba(45, 212, 191, 0.12), transparent 68%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(#__ceos_no_match__)::after {
+  display: none !important;
+  content: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(#__ceos_no_match__) > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(#__ceos_no_match__) .ma-reference-signal-badge {
+  background: rgba(45, 212, 191, 0.12) !important;
+  border: 1px solid rgba(45, 212, 191, 0.2) !important;
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(#__ceos_no_match__) .ma-reference-signal-ring-core {
+  background:
+    radial-gradient(circle at 50% 32%, rgba(45, 212, 191, 0.1), transparent 58%),
+    rgba(4, 8, 12, 0.72) !important;
+  border: 1px solid rgba(45, 212, 191, 0.08) !important;
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.45),
+    inset 0 0 28px rgba(45, 212, 191, 0.05) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Inner rows / integrated zones — Valuation ledger hairlines */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-readout-row:not(#__ceos_no_match__) {
+  border-bottom-color: var(--ma-mna-divider) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-detail:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot-body:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next-callout:not(#__ceos_no_match__) {
+  border-radius: 0 !important;
+  border: 0 !important;
+  border-top: 1px solid var(--ma-mna-divider) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next-callout:not(#__ceos_no_match__) {
+  border-left: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating-step:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-track-step:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot-metric:not(#__ceos_no_match__) {
+  border-radius: 14px !important;
+  border: 1px solid var(--ma-mna-inset-border) !important;
+  background: var(--ma-mna-inset-bg) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Workbench tile top accent — subdued Valuation hairline (not full ambient cap) */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__)::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 16px !important;
+  right: 16px !important;
+  bottom: auto !important;
+  width: auto !important;
+  height: 1px !important;
+  border-radius: 2px !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  background: linear-gradient(90deg, transparent, rgba(90, 255, 220, 0.18), transparent) !important;
+  opacity: 0.45 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__):hover,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__):focus-visible {
+  border-color: rgba(90, 255, 220, 0.11) !important;
+  box-shadow: var(--ma-mna-surface-shadow) !important;
+  transform: none !important;
+}
+
+/* Icon chips — Valuation sidebar band icon parity */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-glyph:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating-glyph:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-glyph:not(#__ceos_no_match__) {
+  background: rgba(45, 212, 191, 0.08) !important;
+  border: 1px solid rgba(90, 255, 220, 0.1) !important;
+  box-shadow: none !important;
+}
+
+/* KPI spark / mini bars — remove neon */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-spark::after {
+  box-shadow: none !important;
+  background: linear-gradient(90deg, rgba(45, 212, 191, 0.2), rgba(45, 212, 191, 0.42)) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-mini-bars span {
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot-bar::after {
+  box-shadow: none !important;
+}
+
+/* ==========================================================================
+   C.24.85 — Hero signal + inner cards: pixel parity with Valuation
+   Fixes opaque ring-core and solid hex panels. Wins all prior dashboard layers.
+   ========================================================================== */
+
+/* Qualified Opportunity = Ready for valuation (C.24.66 verbatim + layout) */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene .ma-reference-signal:not(#__ceos_no_match__) {
+  padding: 30px 30px 32px !important;
+  max-width: 380px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(90, 255, 220, 0.12) !important;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(45, 212, 191, 0.07), transparent 62%),
+    linear-gradient(168deg, rgba(15, 30, 33, 0.82) 0%, rgba(10, 21, 26, 0.66) 52%, rgba(8, 16, 22, 0.58) 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 18px 44px rgba(0, 0, 0, 0.2),
+    0 0 34px rgba(45, 212, 191, 0.05) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene .ma-reference-signal:not(#__ceos_no_match__)::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 0 auto !important;
+  height: 55% !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: radial-gradient(ellipse at 50% 0%, rgba(45, 212, 191, 0.12), transparent 68%) !important;
+}
+
+/* Icon — ma-valuation-icon-box parity */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene .ma-reference-signal:not(#__ceos_no_match__) .ma-reference-signal-badge {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  background: rgba(45, 212, 191, 0.12) !important;
+  border: 1px solid rgba(45, 212, 191, 0.2) !important;
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.12) !important;
+}
+
+/* Gauge ring — keep chart, soften black core so glass reads through */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene .ma-reference-signal:not(#__ceos_no_match__) .ma-reference-signal-ring {
+  box-shadow:
+    0 0 32px rgba(45, 212, 191, 0.14),
+    0 0 56px rgba(32, 201, 151, 0.06),
+    inset 0 0 20px rgba(45, 212, 191, 0.04) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene .ma-reference-signal:not(#__ceos_no_match__) .ma-reference-signal-ring-core {
+  background:
+    radial-gradient(circle at 50% 32%, rgba(45, 212, 191, 0.12), transparent 58%),
+    rgba(8, 16, 22, 0.38) !important;
+  border: 1px solid rgba(90, 255, 220, 0.08) !important;
+  box-shadow:
+    inset 0 0 28px rgba(0, 0, 0, 0.22),
+    inset 0 0 16px rgba(45, 212, 191, 0.04) !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+}
+
+/* Inner dashboard cards — Valuation body luminosity (C.24.31) + ambient cap */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-stat-slab:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-pipeline:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-operating:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-workbench-tile:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-snapshot:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-next:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-bottom-slab:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-strip:not(#__ceos_no_match__) {
+  border: 1px solid rgba(90, 255, 220, 0.12) !important;
+  background:
+    radial-gradient(ellipse 120% 82% at 8% -12%, rgba(45, 212, 191, 0.055), transparent 56%),
+    linear-gradient(165deg, rgba(12, 20, 30, 0.76) 0%, rgba(8, 14, 22, 0.58) 100%) !important;
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+/* Strip uses slightly lighter glass like Valuation command strip */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-strip:not(#__ceos_no_match__) {
+  border: 1px solid rgba(148, 163, 184, 0.07) !important;
+  background: linear-gradient(165deg, rgba(10, 22, 30, 0.58) 0%, rgba(8, 16, 24, 0.42) 100%) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.18) !important;
+  backdrop-filter: blur(14px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+}
+
+/* ==========================================================================
+   C.24.87 — Final authority: dashboard .ma-valuation-surface wins all layers
+   Loads after maDashboardMaterial (chunk). Neutralizes residual solid overrides.
+   ========================================================================== */
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-strip.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page :is(
+  .ma-reference-stat-slab,
+  .ma-reference-pipeline,
+  .ma-reference-operating,
+  .ma-reference-workbench-tile,
+  .ma-reference-snapshot,
+  .ma-reference-next,
+  .ma-reference-bottom-slab
+).ma-valuation-surface:not(#__ceos_no_match__) {
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-strip.ma-valuation-surface:not(#__ceos_no_match__) {
+  backdrop-filter: blur(14px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene .ma-reference-signal.mna-valuation-glass-status:not(#__ceos_no_match__) {
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+/* ==========================================================================
+   C.24.88 — Dashboard glass authority (wins ExecutivePremiumStyle flatten)
+   Class names avoid [class*="card"] / [class*="status-card"] hooks.
+   Material copied from Valuation C.24.14D, C.24.66, C.24.78 — alpha < 0.75.
+   ========================================================================== */
+
+/* Shared body panels — Valuation .ma-valuation-surface (C.24.14D) */
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-page .mna-valuation-glass-surface:not(.mna-valuation-glass-status):not(.mna-valuation-glass-strip):not(#__ceos_no_match__) {
+  isolation: auto !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(90, 255, 220, 0.12) !important;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.76) 0%, rgba(8, 14, 22, 0.58) 100%) !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(165deg, rgba(12, 20, 30, 0.76) 0%, rgba(8, 14, 22, 0.58) 100%) !important;
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+  backdrop-filter: blur(18px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+}
+
+/* Kill opaque pseudo-plates on glass surfaces */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface:not(.mna-valuation-glass-status):not(#__ceos_no_match__)::after {
+  content: none !important;
+  display: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab.mna-valuation-glass-surface:not(#__ceos_no_match__)::before {
+  display: none !important;
+  content: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile.mna-valuation-glass-surface:not(#__ceos_no_match__)::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 16px !important;
+  right: 16px !important;
+  bottom: auto !important;
+  width: auto !important;
+  height: 1px !important;
+  border-radius: 2px !important;
+  background: linear-gradient(90deg, transparent, rgba(90, 255, 220, 0.14), transparent) !important;
+  opacity: 0.35 !important;
+  pointer-events: none !important;
+}
+
+/* Qualified Opportunity — Valuation upper-suite status card verbatim (9843) */
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-scene .ma-reference-signal.mna-valuation-glass-status.mna-valuation-glass-surface:not(#__ceos_no_match__) {
+  max-width: 380px !important;
+  margin-left: auto !important;
+  padding: 30px 30px 32px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(45, 212, 191, 0.14) !important;
+  background: linear-gradient(165deg, rgba(12, 22, 32, 0.82) 0%, rgba(8, 14, 22, 0.62) 100%) !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(165deg, rgba(12, 22, 32, 0.82) 0%, rgba(8, 14, 22, 0.62) 100%) !important;
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 48px rgba(45, 212, 191, 0.05) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  isolation: auto !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.mna-valuation-glass-status:not(#__ceos_no_match__)::before {
+  display: none !important;
+  content: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.mna-valuation-glass-status:not(#__ceos_no_match__)::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Active deal strip — C.24.78 command strip */
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-strip.mna-valuation-glass-strip.mna-valuation-glass-surface:not(#__ceos_no_match__) {
+  border: 1px solid rgba(148, 163, 184, 0.07) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(165deg, rgba(10, 22, 30, 0.52) 0%, rgba(8, 16, 24, 0.36) 100%) !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(165deg, rgba(10, 22, 30, 0.52) 0%, rgba(8, 16, 24, 0.36) 100%) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.18) !important;
+  backdrop-filter: blur(14px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+}
+
+/* Gauge ring core — translucent bed */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.mna-valuation-glass-status:not(#__ceos_no_match__) .ma-reference-signal-ring-core {
+  background:
+    radial-gradient(circle at 50% 32%, rgba(45, 212, 191, 0.12), transparent 58%),
+    rgba(8, 16, 22, 0.32) !important;
+  border: 1px solid rgba(90, 255, 220, 0.08) !important;
+  box-shadow:
+    inset 0 0 24px rgba(0, 0, 0, 0.18),
+    inset 0 0 14px rgba(45, 212, 191, 0.04) !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+}
+
+/* Icon chip */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-icon:not(#__ceos_no_match__) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  background: rgba(45, 212, 191, 0.12) !important;
+  border: 1px solid rgba(45, 212, 191, 0.2) !important;
+  color: #2dd4bf !important;
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.1) !important;
+}
+
+/* Inner integrated zones — hairlines only, no sub-boxes */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-pipeline-detail:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-snapshot-body:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-next-callout:not(#__ceos_no_match__) {
+  border-radius: 0 !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.045) !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-bottom-slab .ma-reference-snapshot-readout:not(#__ceos_no_match__) {
+  background: rgba(5, 9, 9, 0.28) !important;
+  border: 1px solid rgba(90, 255, 220, 0.06) !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-operating-step:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-pipeline-track-step:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-snapshot-metric:not(#__ceos_no_match__) {
+  border-radius: 14px !important;
+  border: 1px solid rgba(90, 255, 220, 0.07) !important;
+  background: rgba(5, 9, 9, 0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-readout-row:not(#__ceos_no_match__) {
+  border-bottom-color: rgba(255, 255, 255, 0.045) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-strip-divider:not(#__ceos_no_match__) {
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.035), transparent) !important;
+}
+
+/* Content above decorative layers */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface:not(#__ceos_no_match__) > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* ==========================================================================
+   C.24.90 — FINAL dashboard glass authority (loads last in chunk)
+   Beats C.24.83 hex opaque override. Material = Valuation verbatim.
+   ========================================================================== */
+
+/* Body panels — Valuation surface verbatim (9879) */
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-page .mna-valuation-glass-surface:not(.mna-valuation-glass-status):not(.mna-valuation-glass-strip):not(#__ceos_no_match__) {
+  border: 1px solid rgba(90, 255, 220, 0.12) !important;
+  border-radius: 22px !important;
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.76) 0%, rgba(8, 14, 22, 0.58) 100%) !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(165deg, rgba(12, 20, 30, 0.76) 0%, rgba(8, 14, 22, 0.58) 100%) !important;
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+  backdrop-filter: blur(18px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+  isolation: auto !important;
+}
+
+/* C.24.90 — signal card owned by C.24.88 block above */
+
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-signal.mna-valuation-glass-status:not(#__ceos_no_match__)::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Active deal strip — Valuation C.24.78 */
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-strip.mna-valuation-glass-strip:not(#__ceos_no_match__) {
+  border: 1px solid rgba(148, 163, 184, 0.07) !important;
+  border-radius: 20px !important;
+  background: linear-gradient(165deg, rgba(10, 22, 30, 0.58) 0%, rgba(8, 16, 24, 0.42) 100%) !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(165deg, rgba(10, 22, 30, 0.58) 0%, rgba(8, 16, 24, 0.42) 100%) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.18) !important;
+  backdrop-filter: blur(14px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+}
+
+/* Gauge core — glass bed (not solid black) */
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-signal.mna-valuation-glass-status:not(#__ceos_no_match__) .ma-reference-signal-ring {
+  box-shadow:
+    0 0 32px rgba(45, 212, 191, 0.14),
+    inset 0 0 16px rgba(45, 212, 191, 0.04) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-signal.mna-valuation-glass-status:not(#__ceos_no_match__) .ma-reference-signal-ring-core {
+  background:
+    radial-gradient(circle at 50% 32%, rgba(45, 212, 191, 0.1), transparent 58%),
+    rgba(8, 16, 22, 0.35) !important;
+  border: 1px solid rgba(90, 255, 220, 0.08) !important;
+  box-shadow:
+    inset 0 0 24px rgba(0, 0, 0, 0.18),
+    inset 0 0 14px rgba(45, 212, 191, 0.04) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}

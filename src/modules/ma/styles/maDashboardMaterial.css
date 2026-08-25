@@ -631,13 +631,16 @@
   gap: 16px;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(.ma-valuation-surface) {
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab {
   position: relative;
-  padding: 28px 24px 24px;
+  padding: 22px 24px 22px;
   border-radius: 22px;
-  background: linear-gradient(165deg, rgba(12, 20, 30, 0.68) 0%, rgba(8, 14, 22, 0.5) 100%);
-  cursor: default;
   overflow: hidden;
+  cursor: default;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(.ma-valuation-surface) {
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.68) 0%, rgba(8, 14, 22, 0.5) 100%);
   border: 1px solid rgba(148, 163, 184, 0.06);
 }
 
@@ -670,7 +673,7 @@
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-mini-bars {
   position: absolute;
   top: 22px;
-  right: 22px;
+  right: 24px;
   display: flex;
   align-items: flex-end;
   gap: 4px;
@@ -730,9 +733,13 @@
   gap: 18px;
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating {
+  padding: 28px;
+}
+
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline:not(.ma-valuation-surface),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating:not(.ma-valuation-surface) {
-  padding: 32px;
   border-radius: 24px;
   background: linear-gradient(165deg, rgba(12, 20, 30, 0.7) 0%, rgba(8, 14, 22, 0.52) 100%);
   border: 1px solid rgba(148, 163, 184, 0.06);
@@ -908,18 +915,21 @@
   gap: 14px;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(.ma-valuation-surface) {
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
   min-height: 176px;
-  padding: 24px 18px 48px;
+  padding: 22px 22px 48px;
   border-radius: 20px;
-  background: linear-gradient(165deg, rgba(12, 20, 30, 0.66) 0%, rgba(8, 14, 22, 0.48) 100%);
   color: inherit;
   text-decoration: none;
   transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(.ma-valuation-surface) {
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.66) 0%, rgba(8, 14, 22, 0.48) 100%);
   border: 1px solid rgba(148, 163, 184, 0.06);
 }
 
@@ -927,8 +937,8 @@
   content: '';
   position: absolute;
   top: 0;
-  left: 16px;
-  right: 16px;
+  left: 22px;
+  right: 22px;
   height: 2px;
   border-radius: 2px;
   background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.45), transparent);
@@ -947,6 +957,12 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile strong {
   font-size: 14px;
   font-weight: 780;
@@ -957,14 +973,14 @@
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile p {
   margin: 0;
   font-size: 11px;
-  line-height: 1.55;
+  line-height: 1.58;
   color: rgba(203, 213, 225, 0.72);
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-arrow {
   position: absolute;
-  right: 16px;
-  bottom: 16px;
+  right: 22px;
+  bottom: 22px;
   color: rgba(94, 234, 212, 0.45);
   transition: color 0.15s ease, transform 0.15s ease;
 }
@@ -988,9 +1004,13 @@
   gap: 18px;
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next {
+  padding: 28px;
+}
+
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot:not(.ma-valuation-surface),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next:not(.ma-valuation-surface) {
-  padding: 32px;
   border-radius: 24px;
   background: linear-gradient(165deg, rgba(12, 20, 30, 0.7) 0%, rgba(8, 14, 22, 0.52) 100%);
   border: 1px solid rgba(148, 163, 184, 0.06);
@@ -1103,26 +1123,39 @@
   padding-top: 4px;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab:not(.ma-valuation-surface) {
-  padding: 28px 26px;
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
   border-radius: 22px;
-  background: linear-gradient(165deg, rgba(12, 20, 30, 0.68) 0%, rgba(8, 14, 22, 0.5) 100%);
   cursor: default;
-  border: 1px solid rgba(148, 163, 184, 0.06);
   min-width: 0;
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab:not(.ma-valuation-surface) {
+  background: linear-gradient(165deg, rgba(12, 20, 30, 0.68) 0%, rgba(8, 14, 22, 0.5) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab > .ma-reference-kicker {
+  margin: 0 0 6px;
+}
+
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-title {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   font-size: 18px;
   font-weight: 820;
   color: var(--ma-ref-teal-bright);
   letter-spacing: -0.015em;
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab > p.muted {
+  margin: 0 0 16px;
+}
+
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-highlight {
   display: block;
-  margin: 16px 0 12px;
+  margin: 0 0 14px;
   font-size: 15px;
   font-weight: 720;
   color: var(--ma-ref-text);
@@ -1133,18 +1166,24 @@
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab .ma-reference-snapshot-readout {
-  margin: 14px 0 18px;
+  flex: 1 1 auto;
+  margin: 0 0 18px;
   padding: 14px 16px;
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(4, 8, 14, 0.55), rgba(2, 4, 8, 0.35));
   border: 1px solid rgba(45, 212, 191, 0.06);
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab > a,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab > .ma-reference-inline-link,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab > .ma-reference-inline-note {
+  margin-top: auto;
+}
+
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-inline-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 12px;
   color: var(--ma-ref-teal-bright);
   font-size: 13px;
   font-weight: 650;
@@ -1158,8 +1197,31 @@
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-inline-note {
-  margin: 12px 0 0;
+  margin: 0;
   font-size: 12px;
+}
+
+/* Latest saved case — Abrir repositorio only.
+   executivePolish .button.secondary uses background !important (rgba(8,7,6,0.72))
+   and .button uses box-shadow: none !important. This selector must match that
+   weight; it does not restyle other dashboard secondaries. */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab a[href='/ma/deals'] .button.secondary {
+  background: rgba(45, 212, 191, 0.08) !important;
+  border: 1px solid rgba(94, 234, 212, 0.32) !important;
+  color: #f8fafc !important;
+  box-shadow:
+    0 0 16px rgba(45, 212, 191, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab a[href='/ma/deals'] .button.secondary:hover,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab a[href='/ma/deals'] .button.secondary:focus-visible {
+  background: rgba(45, 212, 191, 0.12) !important;
+  border-color: rgba(94, 234, 212, 0.5) !important;
+  color: #f8fafc !important;
+  box-shadow:
+    0 0 18px rgba(45, 212, 191, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab .ma-reference-readout-row {
@@ -1706,4 +1768,121 @@
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot-bar::after {
   box-shadow: none !important;
+}
+
+/* ==========================================================================
+   C.24.86 - Qualified Opportunity = Valuation Executive Readiness glass (final)
+   Selector: .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface
+   Material copied from Valuation C.24.81 / EPS status-card glass.
+   Gauge ring / --ma-ref-score / conic geometry UNTOUCHED.
+   ========================================================================== */
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-scene .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area .page .ma-executive-page.ma-dashboard-premium .ma-reference-scene .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  padding: 34px 36px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(148, 163, 184, 0.055) !important;
+  border-top-color: rgba(90, 255, 220, 0.074) !important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.032) 0%,
+      rgba(255, 255, 255, 0) 14%
+    ),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.012) 0%,
+      rgba(2, 4, 7, 0.045) 44%,
+      rgba(1, 2, 4, 0.075) 100%
+    ) !important;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.032) 0%,
+      rgba(255, 255, 255, 0) 14%
+    ),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.012) 0%,
+      rgba(2, 4, 7, 0.045) 44%,
+      rgba(1, 2, 4, 0.075) 100%
+    ) !important;
+  background-color: transparent !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.065),
+    inset 1px 0 0 rgba(45, 212, 191, 0.016),
+    0 10px 28px rgba(0, 0, 0, 0.2),
+    0 -6px 18px rgba(45, 212, 191, 0.009) !important;
+  backdrop-filter: blur(20px) saturate(86%) brightness(0.94) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(86%) brightness(0.94) !important;
+  filter: none !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__)::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  background-image: none !important;
+  opacity: 0 !important;
+}
+
+/* Internal breathing - transparent text only (spacing refined in C.24.87) */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-kicker,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-status,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-note {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-note {
+  max-width: 300px !important;
+  padding: 0 4px !important;
+}
+
+/* ==========================================================================
+   C.24.87 - Qualified Opportunity VERTICAL BALANCE ONLY
+   Equal top/bottom padding + symmetric air around the gauge.
+   Does not change glass, colors, typography, or gauge geometry.
+   ========================================================================== */
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-scene .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area .page .ma-executive-page.ma-dashboard-premium .ma-reference-scene .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 34px 36px !important;
+  box-sizing: border-box !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-badge,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-valuation-icon-box {
+  margin: 0 auto 10px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-kicker {
+  margin: 0 0 8px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-headline {
+  margin: 0 0 22px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-ring {
+  margin: 0 auto 22px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-status {
+  margin: 0 0 10px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-note {
+  margin: 0 auto !important;
 }

@@ -1,0 +1,1232 @@
+/* ==========================================================================
+   C.0.2 — Valuation ↔ Dashboard visual parity (layout / type / spacing)
+   Oracle: /ma/dashboard master reference.
+   Scope: .ma-valuation-premium-page ONLY — never .ma-dashboard-premium.
+   Surfaces live in maReferenceSurfaces.css; this file is hierarchy & rhythm.
+   ========================================================================== */
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page {
+  --ma-val-ref-teal: #2dd4bf;
+  --ma-val-ref-teal-bright: #5eead4;
+  --ma-val-ref-text: #f8fafc;
+  --ma-val-ref-muted: rgba(203, 213, 225, 0.74);
+  --ma-val-ref-caption: rgba(148, 163, 184, 0.9);
+  --ma-val-ref-inset: 28px;
+  --ma-val-ref-inset-sm: 22px;
+  --ma-val-ref-radius: 22px;
+}
+
+/* —— 1. Hero typography / CTA rhythm (dashboard sister) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-ref-kicker {
+  margin: 0 0 8px;
+  color: rgba(94, 234, 212, 0.62);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-ref-title {
+  margin: 0 0 10px;
+  font-size: clamp(40px, 4.8vw, 64px);
+  font-weight: 850;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: var(--ma-val-ref-text);
+  text-shadow:
+    0 2px 28px rgba(0, 0, 0, 0.45),
+    0 0 48px rgba(45, 212, 191, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-ref-subtitle {
+  margin: 0 0 18px;
+  color: var(--ma-val-ref-teal-bright);
+  font-size: clamp(19px, 2.1vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-ref-lead {
+  max-width: 500px;
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ma-val-ref-muted);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-ref-dss {
+  margin: 0 0 22px;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: rgba(148, 163, 184, 0.72);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-actions .button.primary,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-actions .button:not(.secondary):not(.ghost) {
+  background: linear-gradient(135deg, var(--ma-val-ref-teal), #20c997) !important;
+  border-color: transparent !important;
+  color: #010306 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 20px rgba(45, 212, 191, 0.25) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-actions .button.secondary {
+  background: rgba(45, 212, 191, 0.08) !important;
+  border: 1px solid rgba(94, 234, 212, 0.32) !important;
+  color: #f8fafc !important;
+  box-shadow:
+    0 0 16px rgba(45, 212, 191, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-actions .button.secondary:hover,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-actions .button.secondary:focus-visible {
+  background: rgba(45, 212, 191, 0.12) !important;
+  border-color: rgba(94, 234, 212, 0.5) !important;
+  box-shadow: 0 0 18px rgba(45, 212, 191, 0.1) !important;
+}
+
+/* Ready for valuation — sister to Qualified Opportunity */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card.ma-valuation-surface {
+  padding: 30px 30px 32px;
+  max-width: 380px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-title {
+  margin: 6px 0 14px;
+  font-size: clamp(21px, 2vw, 27px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.16;
+  color: var(--ma-val-ref-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .kpi-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ma-val-ref-caption);
+}
+
+/* —— 2. Underwriting rail (input cockpit) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-surface {
+  padding: 0;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px 22px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+  background: linear-gradient(180deg, rgba(45, 212, 191, 0.04), transparent 80%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  color: var(--ma-val-ref-teal);
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.12);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band-kicker {
+  margin: 0 0 4px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ma-val-ref-caption);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band-title {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--ma-val-ref-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band-lead {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 16px 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-card.ma-valuation-input-section {
+  border: 1px solid rgba(90, 255, 220, 0.07);
+  border-radius: 18px;
+  background: linear-gradient(165deg, rgba(5, 10, 14, 0.42), rgba(3, 6, 10, 0.28));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  padding: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-card-inner {
+  padding: 18px 18px 20px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-kicker,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-kicker,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-kicker,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ma-val-ref-caption);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-header h3,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-header h3,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-panel-header h3,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-shell-header h2,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel h3 {
+  margin: 0 0 8px;
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ma-val-ref-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-header .muted,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-header .muted,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-panel-header .muted,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-shell-header .muted {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ma-val-ref-muted);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-slider-field {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(90, 255, 220, 0.06);
+  background: rgba(4, 8, 12, 0.35);
+}
+
+/* —— 3. Equity result — authority hierarchy —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-surface {
+  padding: var(--ma-val-ref-inset);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-caption {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ma-val-ref-teal-bright);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-value {
+  margin: 0 0 12px;
+  font-size: clamp(36px, 4.2vw, 52px);
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  color: var(--ma-val-ref-text);
+  text-shadow: 0 0 40px rgba(45, 212, 191, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-copy {
+  max-width: 42ch;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ma-val-ref-muted);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stat {
+  padding: 16px 16px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(90, 255, 220, 0.07);
+  background: linear-gradient(165deg, rgba(5, 10, 14, 0.48), rgba(3, 6, 10, 0.32));
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stat .kpi-label {
+  margin-bottom: 8px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ma-val-ref-caption);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stat-value {
+  font-size: clamp(16px, 1.4vw, 20px);
+  font-weight: 780;
+  letter-spacing: -0.02em;
+  color: var(--ma-val-ref-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stat-note {
+  margin: 10px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--ma-val-ref-muted);
+}
+
+/* —— 4. Deal structure — value construction sequence —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card.ma-valuation-surface {
+  padding: var(--ma-val-ref-inset);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box {
+  margin-top: 22px;
+  padding: 20px 20px 8px;
+  border-radius: 18px;
+  border: 1px solid rgba(90, 255, 220, 0.07);
+  background: linear-gradient(165deg, rgba(5, 10, 14, 0.4), rgba(3, 6, 10, 0.26));
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-bridge-step {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) minmax(120px, auto);
+  gap: 14px 16px;
+  align-items: start;
+  padding: 18px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-bridge-step:last-child {
+  border-bottom: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--ma-val-ref-teal-bright);
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-copy strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 750;
+  color: var(--ma-val-ref-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-copy .muted {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ma-val-ref-text);
+  text-align: right;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value span {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ma-val-ref-caption);
+  text-align: right;
+}
+
+/* —— 5. AI intelligence —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-intelligence-panel.ma-valuation-surface {
+  padding: var(--ma-val-ref-inset);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-inference-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-inference-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(90, 255, 220, 0.07);
+  background: linear-gradient(165deg, rgba(5, 10, 14, 0.42), rgba(3, 6, 10, 0.28));
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-inference-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: rgba(45, 212, 191, 0.1);
+  color: var(--ma-val-ref-teal-bright);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-inference-body strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: var(--ma-val-ref-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-inference-body .muted {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* —— 6. Committee readiness — labels/titles baseline (layout in C.0.2C) —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-surface {
+  padding: var(--ma-val-ref-inset);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-label {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ma-val-ref-caption);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-title {
+  font-size: 13px;
+  font-weight: 750;
+  color: var(--ma-val-ref-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-ledger-value {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ma-val-ref-muted);
+}
+
+/* —— 7. Market comparables + range rail —— */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-shell.ma-valuation-surface {
+  padding: var(--ma-val-ref-inset);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-range {
+  margin: 0 0 20px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(90, 255, 220, 0.08);
+  background: linear-gradient(165deg, rgba(5, 10, 14, 0.45), rgba(3, 6, 10, 0.3));
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-range-label {
+  margin: 0 0 10px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ma-val-ref-caption);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-range-track {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(45, 212, 191, 0.12), rgba(45, 212, 191, 0.28), rgba(45, 212, 191, 0.12));
+  margin: 18px 0 10px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-range-marker {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background: radial-gradient(circle at 35% 30%, #5eead4, #2dd4bf 60%, #14b8a6);
+  box-shadow: 0 0 16px rgba(45, 212, 191, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-range-scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ma-val-ref-muted);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-range-scale .is-selected {
+  color: var(--ma-val-ref-teal-bright);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-open-item {
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(90, 255, 220, 0.07);
+  background: linear-gradient(165deg, rgba(5, 10, 14, 0.4), rgba(3, 6, 10, 0.26));
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-name {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 750;
+  color: var(--ma-val-ref-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-multiple {
+  font-size: 20px;
+  font-weight: 820;
+  letter-spacing: -0.02em;
+  color: var(--ma-val-ref-teal-bright);
+}
+
+@media (max-width: 1100px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-bridge-step {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value {
+    grid-column: 2;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value strong,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value span {
+    text-align: left;
+  }
+}
+
+/* ==========================================================================
+   C.0.2B — density / hierarchy / committee compact
+   Loaded last. Scoped to .ma-valuation-premium-page. Dashboard untouched.
+   !important only where C.24 already locked layout with !important.
+   ========================================================================== */
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-body-grid {
+  grid-template-columns: minmax(360px, 400px) minmax(0, 1fr) !important;
+  gap: 28px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell {
+  padding: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-panel {
+  gap: 18px !important;
+  padding: 18px 18px 24px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-card-inner {
+  padding: 20px 20px 22px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-stack {
+  gap: 14px !important;
+  margin-top: 16px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell .field label,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell .ma-slider-label {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  color: rgba(203, 213, 225, 0.82) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell input,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell select {
+  min-height: 42px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-slider-field {
+  margin-top: 4px;
+  padding: 14px 16px !important;
+}
+
+/* Main result hierarchy */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-caption {
+  margin: 4px 0 6px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--ma-val-ref-teal-bright) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-value {
+  margin: 0 0 10px !important;
+  font-size: clamp(40px, 4.4vw, 56px) !important;
+  font-weight: 850 !important;
+  line-height: 1.02 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-readout {
+  opacity: 0.88;
+  transform: scale(0.92);
+  transform-origin: top center;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-ring {
+  width: 112px !important;
+  height: 112px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-risk-row {
+  margin-top: 14px;
+  padding-top: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats {
+  margin-top: 18px !important;
+}
+
+/* Deal structure — subtle construction spine */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-list-open {
+  position: relative;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-list-open::before {
+  content: '';
+  position: absolute;
+  left: 17px;
+  top: 22px;
+  bottom: 22px;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(45, 212, 191, 0.08),
+    rgba(45, 212, 191, 0.32),
+    rgba(45, 212, 191, 0.08)
+  );
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-bridge-step {
+  padding: 16px 4px 16px 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-number {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   C.0.2C — Committee readiness ONLY
+   Horizontal check units: left narrative (~60%) / right metadata rail (~40%).
+   No accordion. No text truncation of business fields. Rest of Valuation frozen.
+   ========================================================================== */
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-surface {
+  padding: 20px 22px 18px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin-top: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-unit,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-checklist-row.ma-committee-check-unit {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.55fr) minmax(200px, 1fr) !important;
+  align-items: start !important;
+  gap: 12px 18px !important;
+  padding: 12px 14px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(90, 255, 220, 0.08) !important;
+  border-radius: 14px !important;
+  background: linear-gradient(165deg, rgba(5, 10, 14, 0.44), rgba(3, 6, 10, 0.3)) !important;
+  border-bottom: 1px solid rgba(90, 255, 220, 0.08) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-unit .ma-evidence-ledger-title {
+  margin: 0 !important;
+  font-size: 13.5px !important;
+  font-weight: 750 !important;
+  line-height: 1.3 !important;
+  color: var(--ma-val-ref-text) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-explain {
+  margin: 0 !important;
+  font-size: 12.5px !important;
+  line-height: 1.4 !important;
+  color: var(--ma-val-ref-muted) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  margin: 2px 0 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-source .ma-evidence-ledger-label {
+  display: inline !important;
+  margin: 0 !important;
+  font-size: 9px !important;
+  letter-spacing: 0.1em;
+  color: var(--ma-val-ref-caption) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-source .ma-evidence-ledger-value {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  color: rgba(226, 232, 240, 0.88) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-rail {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 14px;
+  border-left: 1px solid rgba(90, 255, 220, 0.1);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-rail-item {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-rail-item .ma-evidence-ledger-label {
+  display: block !important;
+  margin: 0 !important;
+  padding-top: 2px;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ma-val-ref-teal-bright) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-rail-item .ma-traceability-formula-ref,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-rail-item .ma-evidence-ledger-value,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-rail-item .ma-traceability-status-label {
+  margin: 0 !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  word-break: break-word;
+  color: var(--ma-val-ref-text) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-rail-item .ma-traceability-formula-ref {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px !important;
+  color: rgba(203, 213, 225, 0.92) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-status .ma-traceability-status-label {
+  font-weight: 750 !important;
+  color: var(--ma-val-ref-teal-bright) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-footer {
+  margin-top: 12px !important;
+  padding-top: 10px !important;
+}
+
+@media (max-width: 900px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-unit,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-checklist-row.ma-committee-check-unit {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-committee-check-rail {
+    padding-left: 0;
+    padding-top: 8px;
+    border-left: none;
+    border-top: 1px solid rgba(90, 255, 220, 0.1);
+  }
+}
+
+/* ==========================================================================
+   C.0.2D — Value ledger / closing structure ONLY
+   Executive sequential build. Same four stages, same figures, same copy.
+   Scoped to .ma-closing-structure-box .ma-value-ledger-build.
+   ========================================================================== */
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build {
+  position: relative;
+  margin-top: 6px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build::before {
+  content: '';
+  position: absolute;
+  left: 21px;
+  top: 28px;
+  bottom: 28px;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgba(45, 212, 191, 0.18),
+    rgba(45, 212, 191, 0.62) 22%,
+    rgba(94, 234, 212, 0.78) 50%,
+    rgba(45, 212, 191, 0.62) 78%,
+    rgba(45, 212, 191, 0.18)
+  );
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.22);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-row.ma-valuation-bridge-step {
+  display: grid !important;
+  grid-template-columns: 52px minmax(0, 1.7fr) minmax(128px, 0.78fr) !important;
+  align-items: center !important;
+  gap: 12px 18px !important;
+  padding: 18px 4px 18px 0 !important;
+  border-bottom: 1px solid rgba(90, 255, 220, 0.12) !important;
+  background: transparent !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-row.ma-valuation-bridge-step:last-child {
+  border-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-number {
+  position: relative;
+  z-index: 1;
+  display: grid !important;
+  place-items: center !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
+  font-size: 12.5px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.04em !important;
+  color: #ecfdf8 !important;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(167, 243, 208, 0.28), transparent 46%),
+    linear-gradient(160deg, rgba(45, 212, 191, 0.34), rgba(6, 18, 16, 0.92)) !important;
+  border: 1.5px solid rgba(94, 234, 212, 0.55) !important;
+  box-shadow:
+    0 0 0 3px rgba(8, 16, 18, 0.92),
+    0 0 18px rgba(45, 212, 191, 0.28) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-row:last-child .ma-bridge-number {
+  border-color: rgba(94, 234, 212, 0.78) !important;
+  box-shadow:
+    0 0 0 3px rgba(8, 16, 18, 0.92),
+    0 0 22px rgba(45, 212, 191, 0.4) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-copy {
+  min-width: 0;
+  padding-right: 8px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-copy strong {
+  display: block !important;
+  margin: 0 0 5px !important;
+  font-size: 15px !important;
+  font-weight: 750 !important;
+  line-height: 1.28 !important;
+  letter-spacing: -0.01em !important;
+  color: #f8fafc !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-copy p,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-copy .muted {
+  margin: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  color: rgba(226, 232, 240, 0.78) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-value {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+  padding-left: 8px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-value strong {
+  display: block !important;
+  font-size: 16px !important;
+  font-weight: 780 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.15 !important;
+  color: #f1f5f9 !important;
+  text-align: right !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-value span {
+  display: block !important;
+  max-width: 220px;
+  margin: 0 !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
+  color: rgba(148, 163, 184, 0.92) !important;
+  text-align: right !important;
+}
+
+@media (max-width: 900px) {
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-row.ma-valuation-bridge-step {
+    grid-template-columns: 44px minmax(0, 1fr) !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-value {
+    grid-column: 2;
+    align-items: flex-start;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-value strong,
+  .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-closing-structure-box .ma-value-ledger-build .ma-bridge-value span {
+    text-align: left !important;
+  }
+}
+
+/* ==========================================================================
+   C.0.2E / FORENSIC FIX — Financial baseline surface detail
+   WHY PRIOR EFFECTS WERE INVISIBLE:
+   1) ExecutivePremiumStyle kills card ::before/::after:
+      .ma-executive-page :is([class*="card"]:not(.ma-valuation-surface))::before/::after
+      { content: none !important; display: none !important; }
+      Financial Baseline is a .card without .ma-valuation-surface → pseudos never paint.
+   2) EPS forces .ma-input-card / [class*="card"] / .ma-input-card-inner to
+      background: transparent !important (and often background-image: none).
+   3) Visible black is the shell (#081616), not the card itself.
+   FIX: dedicated child .ma-fb-surface-atmo (NOT matched by EPS card wipes)
+   carries the mesh + glow. No reliance on card ::before/::after.
+   ========================================================================== */
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit
+  .ma-input-card.ma-financial-baseline-block {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit
+  .ma-financial-baseline-block
+  > .ma-fb-surface-atmo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-color: transparent;
+  /* Surface: technical grid only. Upper-right radial teal glow REMOVED (not approved). */
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(45, 212, 191, 0.22) 0,
+      rgba(45, 212, 191, 0.22) 2px,
+      transparent 2px
+    ),
+    linear-gradient(
+      rgba(45, 212, 191, 0.06) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(94, 234, 212, 0.045) 1px,
+      transparent 1px
+    );
+  background-size:
+    100% 100%,
+    40px 40px,
+    40px 40px;
+  background-repeat: no-repeat, repeat, repeat;
+  background-position: 0 0, 0 0, 0 0;
+  /* Line alphas unchanged. Soft spatial fade only — empty/upper stays, dense lower eases off. */
+  -webkit-mask-image: linear-gradient(
+    185deg,
+    rgba(0, 0, 0, 0.98) 0%,
+    #000 12%,
+    rgba(0, 0, 0, 0.94) 26%,
+    rgba(0, 0, 0, 0.62) 46%,
+    rgba(0, 0, 0, 0.32) 68%,
+    rgba(0, 0, 0, 0.12) 86%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    185deg,
+    rgba(0, 0, 0, 0.98) 0%,
+    #000 12%,
+    rgba(0, 0, 0, 0.94) 26%,
+    rgba(0, 0, 0, 0.62) 46%,
+    rgba(0, 0, 0, 0.32) 68%,
+    rgba(0, 0, 0, 0.12) 86%,
+    transparent 100%
+  );
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit
+  .ma-financial-baseline-block
+  > .ma-input-card-inner {
+  position: relative;
+  z-index: 1;
+  padding: 18px 18px 20px 20px !important;
+  /* Soft ambient depth under content — does not change grid intensity */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    inset 0 -18px 36px rgba(0, 0, 0, 0.12) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-financial-baseline-block .ma-input-header {
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid rgba(90, 255, 220, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-financial-baseline-block .ma-input-kicker {
+  margin: 0 0 7px !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  color: var(--ma-val-ref-teal-bright) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-financial-baseline-block .ma-input-header h3 {
+  margin: 0 0 6px !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  color: #f8fafc !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-financial-baseline-block .ma-input-header .muted {
+  margin: 0 !important;
+  font-size: 12.5px !important;
+  line-height: 1.5 !important;
+  color: rgba(226, 232, 240, 0.76) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-financial-baseline-block .ma-input-icon {
+  display: grid !important;
+  place-items: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  flex-shrink: 0;
+  border-radius: 12px !important;
+  border: 1px solid rgba(90, 255, 220, 0.18) !important;
+  background: linear-gradient(160deg, rgba(45, 212, 191, 0.16), rgba(6, 14, 16, 0.55)) !important;
+  color: var(--ma-val-ref-teal-bright) !important;
+  box-shadow: 0 0 14px rgba(45, 212, 191, 0.12);
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-financial-baseline-block .ma-input-stack {
+  gap: 15px !important;
+  margin-top: 16px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-financial-baseline-block .ma-input-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px 14px !important;
+  padding: 2px 0 4px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-financial-baseline-block .ma-input-divider {
+  margin: 6px 0 2px !important;
+  border: 0 !important;
+  height: 1px !important;
+  background: linear-gradient(
+    90deg,
+    rgba(45, 212, 191, 0.34),
+    rgba(90, 255, 220, 0.1) 42%,
+    transparent 88%
+  ) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-financial-baseline-block .field label {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  color: rgba(226, 232, 240, 0.86) !important;
+}
+
+/*
+  Confirmed target (P0 diagnostic): .ma-fb-numeric-capsule-surface
+  Material = Decision Workbench tiles via C.0.1 tokens (--ma-ref-panel-*).
+  Same computed family as .ma-reference-workbench-tile.ma-valuation-surface.
+  Do not add .ma-valuation-surface (Valuation Material kills its ::before).
+  Geometry: Valuation input (radius 10). Input fill transparent.
+  !important only on this confirmed selector — beats EPS/Material glass shield.
+*/
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+  .ma-financial-baseline-block
+  .field.ma-fb-numeric-capsule
+  .ma-fb-numeric-capsule-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 10px !important;
+  border: 1px solid var(--ma-ref-panel-border) !important;
+  background: var(--ma-ref-panel-bg) !important;
+  background-image: var(--ma-ref-panel-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-ref-panel-shadow) !important;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+/* Workbench tile top accent — same recipe as maDashboardMaterial
+   .ma-reference-workbench-tile::before (inset scaled to input padding). */
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+  .ma-financial-baseline-block
+  .field.ma-fb-numeric-capsule
+  .ma-fb-numeric-capsule-surface::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 14px !important;
+  bottom: auto !important;
+  left: 14px !important;
+  width: auto !important;
+  height: 2px !important;
+  border-radius: 2px !important;
+  background: var(--ma-ref-workbench-top-accent) !important;
+  background-image: var(--ma-ref-workbench-top-accent) !important;
+  opacity: var(--ma-ref-workbench-top-accent-opacity) !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+  .ma-financial-baseline-block
+  .field.ma-fb-numeric-capsule:hover
+  .ma-fb-numeric-capsule-surface {
+  border-color: var(--ma-ref-panel-border-hover) !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+  .ma-financial-baseline-block
+  .field.ma-fb-numeric-capsule
+  .ma-fb-numeric-capsule-surface:focus-within {
+  border-color: var(--ma-ref-panel-border-focus) !important;
+  box-shadow:
+    var(--ma-ref-panel-shadow),
+    var(--ma-ref-panel-focus-ring) !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+  .ma-financial-baseline-block
+  .field.ma-fb-numeric-capsule
+  .ma-fb-numeric-capsule-surface
+  .input {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}

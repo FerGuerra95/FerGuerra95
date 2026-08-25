@@ -48,7 +48,7 @@ function formatScoreValue(value) {
 
 function MetricBox({ label, value, hint }) {
   return (
-    <div className="ma-premium-metric ma-valuation-kpi">
+    <div className="ma-premium-stat">
       <div>
         <span>{label}</span>
         <strong className="ma-val-financial-figure">{value}</strong>
@@ -60,7 +60,7 @@ function MetricBox({ label, value, hint }) {
 
 function BridgeRow({ number, title, description, value, meta }) {
   return (
-    <div className="ma-bridge-row ma-valuation-ledger">
+    <div className="ma-bridge-row ma-valuation-ledger ma-valuation-bridge-step">
       <div className="ma-bridge-number">{number}</div>
       <div className="ma-bridge-copy">
         <strong>{title}</strong>
@@ -95,7 +95,7 @@ export function ValuationDealStructurePanel({ derived, settings }) {
               <BarChart3 size={14} />
               Deal Structure
             </div>
-            <h3>Estructura de cierre clara, amplia y defendible.</h3>
+            <h3>Clear, defensible closing structure.</h3>
             <p className="muted">
               Live engine bridge: normalized EBITDA → adjusted DSS enterprise value →
               net debt and working capital → adjusted equity → estimated net proceeds
@@ -107,45 +107,45 @@ export function ValuationDealStructurePanel({ derived, settings }) {
           </div>
         </div>
 
-        <div className="ma-premium-metrics-grid">
+        <div className="ma-premium-stats-grid">
           <MetricBox
-            label="EBITDA normalizado"
+            label="Normalized EBITDA"
             value={formatCurrencyValue(normalizedEbitda, reportCurrency)}
-            hint="Base operativa ajustada"
+            hint="Adjusted operating base"
           />
           <MetricBox
-            label="Múltiplo ajustado"
+            label="Adjusted multiple"
             value={formatMultipleValue(adjustedMultiple)}
-            hint="Riesgo, calidad y sector"
+            hint="Risk, quality and sector"
           />
           <MetricBox
             label="Quality score"
             value={formatScoreValue(qualityScore)}
-            hint="Lectura de calidad del activo"
+            hint="Asset quality read"
           />
           <MetricBox
             label="Risk level"
             value={String(riskLabel)}
-            hint="Señal ejecutiva de riesgo"
+            hint="Executive risk signal"
           />
         </div>
 
         <div className="ma-closing-structure-box">
           <div className="ma-closing-structure-title">
             <div>
-              <h4>Value ledger — estructura de cierre</h4>
+              <h4>Value ledger — closing structure</h4>
               <p className="muted">
-                Recorrido económico del deal en formato comité: valoración de empresa,
-                ajustes de deuda/caja, valor para accionistas y proceeds estimados.
+                Committee-format economic bridge: enterprise value, debt/cash
+                adjustments, shareholder value and estimated proceeds.
               </p>
             </div>
-            <div className="ma-closing-badge">
+            <div className="ma-closing-label">
               <CheckCircle2 size={14} />
               Executive view
             </div>
           </div>
 
-          <div className="ma-bridge-list ma-bridge-list-premium">
+          <div className="ma-bridge-list ma-bridge-list-open ma-value-ledger-build">
             <BridgeRow
               number="01"
               title="Adjusted DSS enterprise value"
@@ -158,7 +158,7 @@ export function ValuationDealStructurePanel({ derived, settings }) {
               title="Net debt"
               description="Bridge from enterprise value toward equity (debt minus cash)."
               value={formatCurrencyValue(netDebt, reportCurrency)}
-              meta="Deuda financiera neta / caja"
+              meta="Net financial debt / cash"
             />
             <BridgeRow
               number="03"
@@ -178,7 +178,7 @@ export function ValuationDealStructurePanel({ derived, settings }) {
 
           <div className="ma-closing-footer">
             <div className="ma-closing-footer-card">
-              <strong>Uso recomendado</strong>
+              <strong>Recommended use</strong>
               <p className="muted">
                 Internal decision-support summary only. Not a fairness opinion. Validate
                 assumptions before committee, buyer or seller discussions.
@@ -188,10 +188,10 @@ export function ValuationDealStructurePanel({ derived, settings }) {
               <ArrowRight size={22} />
             </div>
             <div className="ma-closing-footer-card">
-              <strong>Próximo paso</strong>
+              <strong>Next step</strong>
               <p className="muted">
-                Validar deuda, caja, ajustes normalizados, concentración de clientes y
-                documentación soporte antes de emitir conclusión.
+                Validate debt, cash, normalized adjustments, client concentration and
+                supporting documentation before issuing conclusions.
               </p>
             </div>
           </div>
@@ -216,12 +216,12 @@ export function ValuationEvidenceLedgerPanel({ derived }) {
         <div>
           <div className="ma-kicker">
             <ShieldCheck size={14} />
-            Evidence Control
+            Committee readiness
           </div>
-          <h3>Control documental de comite.</h3>
+          <h3>Committee readiness checklist</h3>
           <p className="muted">
-            Fuentes criticas vinculadas a documentos del caso, con cobertura visible
-            antes de exportar o elevar conclusiones.
+            Critical controls linked to case documents. Review coverage before export or
+            committee circulation.
           </p>
         </div>
         <div className="ma-traceability-score">
@@ -230,58 +230,47 @@ export function ValuationEvidenceLedgerPanel({ derived }) {
         </div>
       </div>
 
-      <div className="ma-traceability-ledger ma-traceability-ledger-premium">
+      <div className="ma-traceability-ledger ma-traceability-ledger-premium ma-evidence-checklist-table ma-committee-check-list">
         {sources.map((source) => {
           const docCount = source.documentCount || 0;
           const hasDocs =
             Array.isArray(source.documents) && source.documents.length > 0;
+          const evidenceLine = hasDocs
+            ? source.documents
+                .map((document) => document.title)
+                .filter(Boolean)
+                .join(' · ')
+            : `Required: ${(source.requiredDocuments || []).join(', ') || 'source evidence'}`;
 
           return (
-            <article key={source.sourceId} className="ma-evidence-ledger-row ma-evidence-ledger-row-premium ma-valuation-ledger ma-valuation-surface">
-              <div className="ma-evidence-ledger-row-head">
-                <div>
-                  <div className="kpi-label">Control</div>
-                  <strong className="ma-evidence-ledger-title">{source.label}</strong>
-                </div>
-                <span className="ma-traceability-status-chip">
-                  {hasDocs ? 'Linked' : 'Pending'}
-                </span>
+            <article
+              key={source.sourceId}
+              className="ma-evidence-checklist-row ma-evidence-ledger-row ma-evidence-ledger-row-premium ma-valuation-ledger ma-committee-check-unit"
+            >
+              <div className="ma-committee-check-main">
+                <strong className="ma-evidence-ledger-title">{source.label}</strong>
+                <p className="ma-committee-check-explain">{source.sourceType}</p>
+                <p className="ma-committee-check-source">
+                  <span className="ma-evidence-ledger-label">Source / evidence</span>
+                  <span className="ma-evidence-ledger-value">{evidenceLine}</span>
+                </p>
               </div>
 
-              <div className="ma-evidence-ledger-body">
-                <div className="ma-evidence-ledger-field">
-                  <span className="ma-evidence-ledger-label">What we check</span>
-                  <span className="ma-evidence-ledger-value">{source.sourceType}</span>
-                </div>
-
-                <div className="ma-evidence-ledger-field">
-                  <span className="ma-evidence-ledger-label">Source / evidence</span>
-                  <div className="ma-traceability-docs">
-                    {hasDocs ? (
-                      source.documents.map((document) => (
-                        <span key={document.id || document.title}>
-                          {document.title}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="ma-traceability-docs-required">
-                        Required:{' '}
-                        {(source.requiredDocuments || []).join(', ') ||
-                          'source evidence'}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="ma-evidence-ledger-field">
+              <div className="ma-committee-check-rail" aria-label="Control metadata">
+                <div className="ma-committee-check-rail-item">
                   <span className="ma-evidence-ledger-label">Formula / reference</span>
-                  <code className="ma-traceability-formula-chip">{source.sourceId}</code>
+                  <code className="ma-traceability-formula-ref">{source.sourceId}</code>
                 </div>
-
-                <div className="ma-evidence-ledger-field ma-evidence-ledger-field-meta">
+                <div className="ma-committee-check-rail-item">
                   <span className="ma-evidence-ledger-label">Coverage</span>
                   <span className="ma-evidence-ledger-value">
                     {docCount} doc(s) linked
+                  </span>
+                </div>
+                <div className="ma-committee-check-rail-item ma-committee-check-status">
+                  <span className="ma-evidence-ledger-label">Status</span>
+                  <span className="ma-traceability-status-label">
+                    {hasDocs ? 'Linked' : 'Pending'}
                   </span>
                 </div>
               </div>
@@ -293,8 +282,8 @@ export function ValuationEvidenceLedgerPanel({ derived }) {
       <div className="ma-traceability-footer">
         <CheckCircle2 size={16} />
         <span>
-          {summary.linked || 0}/{summary.total || sources.length} controles con documento
-          vinculado. Validacion humana requerida para circulacion externa.
+          {summary.linked || 0}/{summary.total || sources.length} controls linked to
+          documentation. Human review required before external circulation.
         </span>
       </div>
     </section>

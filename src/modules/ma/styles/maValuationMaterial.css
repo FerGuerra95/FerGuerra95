@@ -1,11 +1,11 @@
 /*
-  C.24.14D/E-MA-VALUATION — Premium valuation cockpit aligned with M&A dashboard.
+  C.24.14D/E-MA-VALUATION ? Premium valuation cockpit aligned with M&A dashboard.
   Branch token: .ma-branch-premium-page (valuation is first consumer).
-  Scoped: .ma-valuation-premium · namespace ma-val-ref-*
+  Scoped: .ma-valuation-premium ? namespace ma-val-ref-*
 */
 
 .main-area[data-workspace='ma'] .page .ma-branch-premium-page.ma-valuation-premium {
-  /* Branch-wide premium shell — valuation instance */
+  /* Branch-wide premium shell ? valuation instance */
 }
 
 /* Match dashboard cockpit width */
@@ -13,7 +13,7 @@
   --ceos-content-max: 1540px;
 }
 
-/* —— Page shell: hero → strip → body grid (flat, no nested layout wrapper) —— */
+/* ?? Page shell: hero ? strip ? body grid (flat, no nested layout wrapper) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page {
   width: 100%;
   max-width: 1480px;
@@ -29,7 +29,7 @@
 }
 
 .main-area[data-workspace='ma'] .page .ma-valuation-premium {
-  /* C.24.54 — unified blue-teal petroleum palette (color grading) */
+  /* C.24.54 ? unified blue-teal petroleum palette (color grading) */
   --ma-val-bg: #050c14;
   --ma-val-surface: rgba(12, 24, 34, 0.62);
   --ma-val-surface-solid: rgba(12, 24, 34, 0.82);
@@ -61,7 +61,7 @@
   color: var(--ma-val-text);
 }
 
-/* Override maExecutiveTheme 1540px cap — valuation uses full content shell width */
+/* Override maExecutiveTheme 1540px cap ? valuation uses full content shell width */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium.ma-executive-page {
   width: 100% !important;
   max-width: 1480px !important;
@@ -96,7 +96,7 @@
   display: none;
 }
 
-/* —— Body grid: sidebar | main (two direct children, static alignment) —— */
+/* ?? Body grid: sidebar | main (two direct children, static alignment) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid {
   display: grid;
   grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
@@ -158,7 +158,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* —— Typography —— */
+/* ?? Typography ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-kicker,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-kicker,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-kicker,
@@ -215,7 +215,7 @@
   opacity: 0.85;
 }
 
-/* —— Hero scene —— */
+/* ?? Hero scene ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene {
   position: relative;
   isolation: isolate;
@@ -405,7 +405,7 @@
   color: var(--ma-val-teal-bright);
 }
 
-/* —— Executive signal panel —— */
+/* ?? Executive signal panel ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-signal,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-status-card {
   padding: 28px 28px 30px;
@@ -515,7 +515,7 @@
   overflow-wrap: anywhere;
 }
 
-/* —— Command strip (between hero and workspace) —— */
+/* ?? Command strip (between hero and workspace) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-bar {
   display: flex;
   flex-wrap: wrap;
@@ -551,7 +551,7 @@
   line-height: 1.25;
 }
 
-/* —— Body grid (sidebar | main) —— */
+/* ?? Body grid (sidebar | main) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-workspace {
   display: contents;
 }
@@ -583,7 +583,7 @@
   box-sizing: border-box;
 }
 
-/* —— Executive shell surfaces — dashboard M&A parity (obsidian glass) —— */
+/* ?? Executive shell surfaces ? dashboard M&A parity (obsidian glass) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel,
@@ -636,7 +636,7 @@
   pointer-events: none;
 }
 
-/* Input cockpit only — flat integrated children */
+/* Input cockpit only ? flat integrated children */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-slider-field,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-config-note {
@@ -684,7 +684,7 @@
   border-radius: 18px;
 }
 
-/* —— Deal structure —— */
+/* ?? Deal structure ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card {
   padding: 30px;
   border-radius: 22px;
@@ -949,7 +949,7 @@
   border-right: 1px solid var(--ma-val-line-divider) !important;
 }
 
-/* —— Intelligence / evidence —— */
+/* ?? Intelligence / evidence ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel {
   padding: 28px 32px 30px;
   border-radius: 22px;
@@ -1281,7 +1281,7 @@
   color: var(--ma-val-teal);
 }
 
-/* —— Input cockpit — unified shell —— */
+/* ?? Input cockpit ? unified shell ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell {
   padding: 0;
   overflow: hidden;
@@ -1473,7 +1473,7 @@
   border-color: rgba(45, 212, 191, 0.12) !important;
 }
 
-/* —— Equity hero —— */
+/* ?? Equity hero ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card {
   padding: 30px;
   border-radius: 22px;
@@ -1690,7 +1690,7 @@
   font-size: 13px;
 }
 
-/* —— Comparables — unified ledger shell —— */
+/* ?? Comparables ? unified ledger shell ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell {
   padding: 28px;
   display: flex;
@@ -1881,7 +1881,7 @@
   color: var(--ma-val-teal);
 }
 
-/* —— Desktop cockpit width + grid —— */
+/* ?? Desktop cockpit width + grid ?? */
 @media (min-width: 1280px) {
   .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-body-grid {
     grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
@@ -1909,7 +1909,7 @@
   }
 }
 
-/* —— Integrated module surfaces (reduce sticker collage) —— */
+/* ?? Integrated module surfaces (reduce sticker collage) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel,
@@ -1926,7 +1926,7 @@
   min-width: 0;
 }
 
-/* —— Button safety: no false hover on static panels —— */
+/* ?? Button safety: no false hover on static panels ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium :is(
   .ma-valuation-command-item,
   .ma-state-card,
@@ -1946,7 +1946,7 @@
   cursor: default !important;
 }
 
-/* —— Responsive —— */
+/* ?? Responsive ?? */
 @media (max-width: 1399px) and (min-width: 1181px) {
   .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-body {
     grid-template-columns: 1fr;
@@ -2075,7 +2075,7 @@
   }
 }
 
-/* —— C.24.14D layout shield — preserve premium surfaces; only neutralize motion/filters on shells —— */
+/* ?? C.24.14D layout shield ? preserve premium surfaces; only neutralize motion/filters on shells ?? */
 .page .ma-valuation-premium-page :is(
   .ma-equity-safe-card,
   .ma-premium-deal-card,
@@ -2122,7 +2122,7 @@
   width: 100%;
 }
 
-/* —— Input-only theme shield: flatten status boxes only; cockpit sections styled below —— */
+/* ?? Input-only theme shield: flatten status boxes only; cockpit sections styled below ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-box {
   border-color: transparent !important;
   background: transparent !important;
@@ -2161,12 +2161,12 @@
 }
 
 /*
-  C.24.14D — FINAL VISUAL SURFACE POLISH
+  C.24.14D ? FINAL VISUAL SURFACE POLISH
   Dashboard M&A parity: integrated glass, teal identity, premium ledgers.
   Does NOT touch body grid / sidebar layout.
 */
 
-/* —— Shared premium glass (parent shells) —— */
+/* ?? Shared premium glass (parent shells) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium :is(
   .ma-equity-safe-card,
   .ma-premium-deal-card,
@@ -2188,7 +2188,7 @@
   line-height: 1.62;
 }
 
-/* —— Equity hero + KPI mini metrics (dashboard stat slabs) —— */
+/* ?? Equity hero + KPI mini metrics (dashboard stat slabs) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-hero-band {
   border-bottom-color: rgba(45, 212, 191, 0.08);
 }
@@ -2239,7 +2239,7 @@
   letter-spacing: 0.13em;
 }
 
-/* —— Deal structure: KPI strip + unified value ledger —— */
+/* ?? Deal structure: KPI strip + unified value ledger ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metrics-grid {
   gap: 12px;
   padding-bottom: 18px;
@@ -2295,7 +2295,7 @@
   padding: 22px 24px;
 }
 
-/* —— Evidence Control: premium ledger rows —— */
+/* ?? Evidence Control: premium ledger rows ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-ledger-premium {
   gap: 12px;
 }
@@ -2406,7 +2406,7 @@
   line-height: 1.6;
 }
 
-/* —— Market comparables: premium module cards —— */
+/* ?? Market comparables: premium module cards ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-ledger-premium {
   gap: 16px;
 }
@@ -2454,7 +2454,7 @@
   font-size: 13px;
 }
 
-/* —— Intelligence panel integration —— */
+/* ?? Intelligence panel integration ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-inference-list {
   border-radius: 18px;
   overflow: hidden;
@@ -2474,7 +2474,7 @@
   border-bottom: 0 !important;
 }
 
-/* —— Sidebar input cockpit: integrated glass shell —— */
+/* ?? Sidebar input cockpit: integrated glass shell ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell {
   overflow: hidden;
 }
@@ -2507,7 +2507,7 @@
   font-weight: 750;
 }
 
-/* —— Context strip micro polish (no layout change) —— */
+/* ?? Context strip micro polish (no layout change) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-bar {
   border-color: rgba(45, 212, 191, 0.12);
   background:
@@ -2518,7 +2518,7 @@
   color: #f8fafc;
 }
 
-/* —— Button safety reinforcement —— */
+/* ?? Button safety reinforcement ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium :is(
   .ma-comparable-row-premium,
   .ma-evidence-ledger-row-premium,
@@ -2540,11 +2540,11 @@
 }
 
 /*
-  C.24.14D — INTERNAL COMPONENT POLISH
-  Mini metrics, comparables, evidence — no body grid / sidebar / hero changes.
+  C.24.14D ? INTERNAL COMPONENT POLISH
+  Mini metrics, comparables, evidence ? no body grid / sidebar / hero changes.
 */
 
-/* —— T1: Mini KPI metrics — 2x2 default, nowrap values —— */
+/* ?? T1: Mini KPI metrics ? 2x2 default, nowrap values ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-metrics,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-metrics-grid {
@@ -2552,7 +2552,7 @@
   gap: 16px !important;
 }
 
-/* 2x2 retained at all breakpoints — main column shares width with sidebar */
+/* 2x2 retained at all breakpoints ? main column shares width with sidebar */
 
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-integrated-metrics .ma-equity-safe-metric-premium,
@@ -2607,7 +2607,7 @@
   overflow: hidden;
 }
 
-/* —— T2: Market comparables — horizontal premium cards —— */
+/* ?? T2: Market comparables ? horizontal premium cards ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-ledger-premium {
   grid-template-columns: 1fr !important;
   gap: 12px !important;
@@ -2692,7 +2692,7 @@
   display: none;
 }
 
-/* —— T3: Evidence Control — compact elegant ledger —— */
+/* ?? T3: Evidence Control ? compact elegant ledger ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-ledger-premium {
   gap: 10px !important;
 }
@@ -2797,7 +2797,7 @@
   }
 }
 
-/* —— T4: Dashboard M&A surface finish on internal rows —— */
+/* ?? T4: Dashboard M&A surface finish on internal rows ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparable-card-horizontal,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-evidence-ledger-row-premium {
   border-color: rgba(45, 212, 191, 0.09) !important;
@@ -2815,17 +2815,17 @@
   white-space: nowrap !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.14D — DASHBOARD VISUAL PARITY
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.14D ? DASHBOARD VISUAL PARITY
    Maps /ma/dashboard premium surface system onto /ma/valuation (visual only).
-   Reference: maDashboardMaterial.css — ma-reference-signal, -strip, -stat-slab,
+   Reference: maDashboardMaterial.css ? ma-reference-signal, -strip, -stat-slab,
    -snapshot, -readout-row, -workbench-tile, -bottom-slab.
    Does NOT alter grid, sidebar position, DOM order, or business logic.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium {
-  /* C.24.54 — unified blue-teal petroleum palette (color grading) */
+  /* C.24.54 ? unified blue-teal petroleum palette (color grading) */
   --ma-val-bg: #050c14;
   --ma-val-surface: rgba(12, 24, 34, 0.58);
   --ma-val-surface-solid: rgba(12, 24, 34, 0.78);
@@ -2842,7 +2842,7 @@
   --ma-val-muted: rgba(203, 213, 225, 0.74);
 }
 
-/* Shared premium surface recipe (dashboard lines 109–121) */
+/* Shared premium surface recipe (dashboard lines 109?121) */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger,
@@ -2854,7 +2854,7 @@
   background: linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%);
 }
 
-/* —— T1/T2: Valuation Summary as Executive Signal Panel —— */
+/* ?? T1/T2: Valuation Summary as Executive Signal Panel ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary {
   position: relative;
   padding: 32px 32px 28px;
@@ -2943,7 +2943,7 @@
   box-shadow: 0 0 20px rgba(45, 212, 191, 0.15);
 }
 
-/* —— T3: Mini metrics as KPI stat slabs —— */
+/* ?? T3: Mini metrics as KPI stat slabs ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3015,7 +3015,7 @@
   white-space: nowrap;
 }
 
-/* —— Command strip as Active Deal strip —— */
+/* ?? Command strip as Active Deal strip ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-valuation-command-bar {
   position: relative;
   z-index: 4;
@@ -3041,7 +3041,7 @@
   color: rgba(148, 163, 184, 0.88);
 }
 
-/* —— T4: Deal Structure as Value Ledger (snapshot readout) —— */
+/* ?? T4: Deal Structure as Value Ledger (snapshot readout) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger {
   padding: 32px;
   border-radius: 24px;
@@ -3095,7 +3095,7 @@
   color: var(--ma-val-text);
 }
 
-/* —— T5: Evidence Control as Executive Ledger —— */
+/* ?? T5: Evidence Control as Executive Ledger ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 32px;
   border-radius: 24px;
@@ -3158,7 +3158,7 @@
   color: rgba(203, 213, 225, 0.82);
 }
 
-/* —— T6: Market Comparables as dashboard workbench module —— */
+/* ?? T6: Market Comparables as dashboard workbench module ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-comparables-shell.ma-valuation-comparables-module {
   position: relative;
   padding: 32px;
@@ -3223,7 +3223,7 @@
   font-size: 10px;
 }
 
-/* —— T7: Sidebar premium surfaces (no layout change) —— */
+/* ?? T7: Sidebar premium surfaces (no layout change) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   border-radius: 24px;
   background: linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%);
@@ -3274,7 +3274,7 @@
   box-shadow: 0 0 12px rgba(45, 212, 191, 0.35);
 }
 
-/* —— T8: Hero micro-adjust (no globe, no layout) —— */
+/* ?? T8: Hero micro-adjust (no globe, no layout) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-ref-scene-glow {
   opacity: 0.98;
   filter: blur(10px);
@@ -3309,11 +3309,11 @@
   background: var(--ma-val-bg);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.14D — CASCADE FIX (executivePolish + ExecutivePremiumStyle override)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.14D ? CASCADE FIX (executivePolish + ExecutivePremiumStyle override)
    Scoped surface tokens beat global [class*="card"] / [class*="metric"] flatten.
    Selectors intentionally avoid *card* / *metric* class hooks on surfaces.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface {
   border: 1px solid rgba(45, 212, 191, 0.12) !important;
@@ -3395,11 +3395,11 @@
   color: #5eead4 !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.14D — LEFT INPUT COCKPIT PREMIUM POLISH
-   Visual-only: sidebar internals (Finanzas base, sliders, Configuración).
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.14D ? LEFT INPUT COCKPIT PREMIUM POLISH
+   Visual-only: sidebar internals (Finanzas base, sliders, Configuraci?n).
    Does NOT alter .ma-valuation-body-grid, sidebar position, hero, or logic.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell {
   position: relative;
@@ -3712,12 +3712,12 @@
   line-height: 1.65;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.14D — FINAL METRIC CLIPPING + LEFT INPUT COCKPIT SURFACE FIX
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.14D ? FINAL METRIC CLIPPING + LEFT INPUT COCKPIT SURFACE FIX
    Visual-only. Does NOT alter body grid, sidebar position, hero, or logic.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— T1/T2: Mini metrics + Deal Structure KPI row — stable 2x2 —— */
+/* ?? T1/T2: Mini metrics + Deal Structure KPI row ? stable 2x2 ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metrics,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-integrated-metrics,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metrics-grid,
@@ -3755,7 +3755,7 @@
   color: #f8fafc;
 }
 
-/* —— T3: Quality score ring — no clip —— */
+/* ?? T3: Quality score ring ? no clip ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary {
   overflow: visible !important;
 }
@@ -3795,7 +3795,7 @@
   overflow: visible !important;
 }
 
-/* —— T4–T8: Left cockpit — beat executivePolish gold/flat flatten —— */
+/* ?? T4?T8: Left cockpit ? beat executivePolish gold/flat flatten ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-section.card,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-input-card,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card {
@@ -3853,13 +3853,13 @@
   border-color: rgba(148, 163, 184, 0.06) !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.14D — FINAL COHESION: NO STICKERS + TEXT BREATHING ROOM
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.14D ? FINAL COHESION: NO STICKERS + TEXT BREATHING ROOM
    Integrated surfaces (dashboard M&A parity). Visual-only.
    Does NOT alter body grid, sidebar position, hero, DOM, or logic.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— Shared: integrated panel recipe (one surface, soft inner dividers) —— */
+/* ?? Shared: integrated panel recipe (one surface, soft inner dividers) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metrics.ma-val-integrated-metrics,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card .ma-premium-metrics-grid,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-list.ma-bridge-list-premium,
@@ -3875,7 +3875,7 @@
   overflow: visible !important;
 }
 
-/* —— T1: Mini metrics — subitems inside one slab, not loose stickers —— */
+/* ?? T1: Mini metrics ? subitems inside one slab, not loose stickers ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric.ma-valuation-kpi,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric.ma-valuation-kpi {
   border: 0 !important;
@@ -3927,7 +3927,7 @@
   color: rgba(203, 213, 225, 0.76) !important;
 }
 
-/* —— T2: Value ledger rows — integrated readout, not boxed stickers —— */
+/* ?? T2: Value ledger rows ? integrated readout, not boxed stickers ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   border: 0 !important;
   border-radius: 0 !important;
@@ -3974,7 +3974,7 @@
   padding: 22px 24px !important;
 }
 
-/* —— Risk signal band — softer, less boxed —— */
+/* ?? Risk signal band ? softer, less boxed ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-secondary-band {
   border-bottom: 0 !important;
   padding-top: 4px !important;
@@ -3994,7 +3994,7 @@
   overflow: visible !important;
 }
 
-/* —— T3: Evidence Control — executive ledger surface —— */
+/* ?? T3: Evidence Control ? executive ledger surface ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 26px 28px !important;
 }
@@ -4049,7 +4049,7 @@
   overflow: visible !important;
 }
 
-/* —— T4: Market Comparables — integrated module —— */
+/* ?? T4: Market Comparables ? integrated module ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-shell.ma-valuation-comparables-module {
   padding: 26px 28px !important;
 }
@@ -4107,7 +4107,7 @@
   padding: 6px 11px !important;
 }
 
-/* —— T5: Sidebar — unified cockpit, fewer nested boxes —— */
+/* ?? T5: Sidebar ? unified cockpit, fewer nested boxes ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-panel {
   gap: 10px !important;
   padding: 14px 16px 20px !important;
@@ -4152,7 +4152,7 @@
   line-height: 1.68 !important;
 }
 
-/* —— Parent shells: softer luxury shadow (less floating sticker) —— */
+/* ?? Parent shells: softer luxury shadow (less floating sticker) ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface {
   box-shadow:
     0 12px 32px rgba(0, 0, 0, 0.2),
@@ -4163,7 +4163,7 @@
   box-shadow: none !important;
 }
 
-/* —— Financial figures: never split —— */
+/* ?? Financial figures: never split ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-financial-figure,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-value strong,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-multiple,
@@ -4174,7 +4174,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* —— Button safety reinforcement —— */
+/* ?? Button safety reinforcement ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
   .ma-equity-safe-metric,
   .ma-premium-metric,
@@ -4201,13 +4201,13 @@
   box-shadow: inherit !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.14D — FINAL VISUAL BUG SWEEP
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.14D ? FINAL VISUAL BUG SWEEP
    Micro-fixes: nested surface stickers, cramped type, dense evidence.
    Visual-only. Does NOT alter grid, sidebar position, hero, or logic.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— Kill nested ma-valuation-surface sticker boxes inside ledgers —— */
+/* ?? Kill nested ma-valuation-surface sticker boxes inside ledgers ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-ledger-premium .ma-evidence-ledger-row.ma-valuation-surface,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger-premium .ma-comparable-card-horizontal.ma-valuation-surface {
   border: 0 !important;
@@ -4224,7 +4224,7 @@
   content: none !important;
 }
 
-/* —— T1: KPI / mini cards — room to breathe, no cramped labels —— */
+/* ?? T1: KPI / mini cards ? room to breathe, no cramped labels ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metrics.ma-val-integrated-metrics,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card .ma-premium-metrics-grid {
   padding: 10px 12px !important;
@@ -4272,7 +4272,7 @@
   line-height: 1.65 !important;
 }
 
-/* —— T2: Evidence Control — less dense, clearer hierarchy —— */
+/* ?? T2: Evidence Control ? less dense, clearer hierarchy ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 28px 30px !important;
 }
@@ -4358,7 +4358,7 @@
   font-size: 13px !important;
 }
 
-/* —— T3: Market Comparables — cleaner module —— */
+/* ?? T3: Market Comparables ? cleaner module ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger-premium {
   padding: 8px 10px !important;
 }
@@ -4401,7 +4401,7 @@
   flex-wrap: wrap;
 }
 
-/* —— T4: Sidebar — softer glass, legible labels —— */
+/* ?? T4: Sidebar ? softer glass, legible labels ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field label {
   font-size: 11px !important;
   letter-spacing: 0.1em !important;
@@ -4444,7 +4444,7 @@
   margin-bottom: 8px !important;
 }
 
-/* —— T5/T6: Value ledger + typography consistency —— */
+/* ?? T5/T6: Value ledger + typography consistency ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   grid-template-columns: 48px minmax(0, 1fr) minmax(120px, max-content) !important;
   padding: 22px 20px !important;
@@ -4458,7 +4458,7 @@
   font-size: clamp(17px, 1.2vw, 24px) !important;
 }
 
-/* —— Dashboard M&A parity: unified radius tokens —— */
+/* ?? Dashboard M&A parity: unified radius tokens ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal) {
   border-radius: 22px !important;
   border-color: rgba(45, 212, 191, 0.1) !important;
@@ -4471,7 +4471,7 @@
   border-radius: 24px !important;
 }
 
-/* —— Financial figures sweep — never split —— */
+/* ?? Financial figures sweep ? never split ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric strong,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-value,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-ring-core strong,
@@ -4482,13 +4482,13 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.14D — FINAL DENSITY + TYPOGRAPHY FIX
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.14D ? FINAL DENSITY + TYPOGRAPHY FIX
    Compact evidence ledger, readable type, softer integrated surfaces.
    Visual-only. No grid / hero / sidebar position / logic changes.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— Global typography lift (valuation page only) —— */
+/* ?? Global typography lift (valuation page only) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .muted {
   font-size: 13px !important;
   line-height: 1.58 !important;
@@ -4507,7 +4507,7 @@
   line-height: 1.28 !important;
 }
 
-/* —— T1: Evidence Control — compact executive ledger —— */
+/* ?? T1: Evidence Control ? compact executive ledger ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 24px 26px 22px !important;
 }
@@ -4651,7 +4651,7 @@
   }
 }
 
-/* —— T4: Mini cards — premium readout, not widgets —— */
+/* ?? T4: Mini cards ? premium readout, not widgets ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metrics.ma-val-integrated-metrics,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card .ma-premium-metrics-grid {
   padding: 8px 10px !important;
@@ -4676,7 +4676,7 @@
   margin-top: 4px !important;
 }
 
-/* —— T3: Softer sticker reduction on ledgers —— */
+/* ?? T3: Softer sticker reduction on ledgers ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   padding: 18px 16px !important;
 }
@@ -4699,7 +4699,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
 }
 
-/* —— T5: Sidebar — softer glass, readable labels —— */
+/* ?? T5: Sidebar ? softer glass, readable labels ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-section.card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-input-card {
   background:
@@ -4724,7 +4724,7 @@
   border-color: rgba(45, 212, 191, 0.09) !important;
 }
 
-/* —— Financial values — complete, never split —— */
+/* ?? Financial values ? complete, never split ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-financial-figure,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-metric-value,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric strong,
@@ -4735,11 +4735,11 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.15 — PREMIUM VISUAL SYSTEM (structural fidelity + M&A aesthetic)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.15 ? PREMIUM VISUAL SYSTEM (structural fidelity + M&A aesthetic)
    Visual-only. DOM / logic unchanged. Overrides de-nested ledger rows.
    Palette: deep charcoal + controlled teal. Dashboard-inspired hero atmosphere.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .page .ma-valuation-premium-page.ma-valuation-premium {
   --ma-val-bg: #060d16;
@@ -4774,7 +4774,7 @@
   font-family: Inter, 'Segoe UI', system-ui, sans-serif;
 }
 
-/* —— Hero: integrated M&A atmosphere (aesthetic reference only) —— */
+/* ?? Hero: integrated M&A atmosphere (aesthetic reference only) ?? */
 .page .ma-valuation-premium-page .ma-val-ref-scene.ma-valuation-hero {
   position: relative;
   isolation: isolate;
@@ -4879,7 +4879,7 @@
   letter-spacing: 0.06em;
 }
 
-/* —— Unified premium surfaces —— */
+/* ?? Unified premium surfaces ?? */
 .page .ma-valuation-premium-page .ma-valuation-surface {
   border: 1px solid var(--ma-val-line) !important;
   border-radius: var(--ma-val-radius-primary) !important;
@@ -4906,7 +4906,7 @@
   background: rgba(5, 9, 9, 0.45) !important;
 }
 
-/* —— Sidebar cockpit —— */
+/* ?? Sidebar cockpit ?? */
 .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   border-radius: var(--ma-val-radius-primary) !important;
   background:
@@ -4985,7 +4985,7 @@
   letter-spacing: 0.04em;
 }
 
-/* —— Main workspace cards —— */
+/* ?? Main workspace cards ?? */
 .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary,
 .page .ma-valuation-premium-page .ma-premium-deal-card,
 .page .ma-valuation-premium-page .ma-intelligence-panel,
@@ -5007,7 +5007,7 @@
   border: 1px solid rgba(90, 255, 220, 0.08) !important;
 }
 
-/* —— Ledger / bridge rows: integrated, not sticker-stacked —— */
+/* ?? Ledger / bridge rows: integrated, not sticker-stacked ?? */
 .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   border-radius: var(--ma-val-radius-secondary) !important;
   background: rgba(5, 9, 9, 0.38) !important;
@@ -5053,7 +5053,7 @@
   gap: 8px !important;
 }
 
-/* —— Dark premium tables / lists — no blue contamination —— */
+/* ?? Dark premium tables / lists ? no blue contamination ?? */
 .page .ma-valuation-premium-page :is(
   .ma-traceability-panel,
   .ma-comparables-shell,
@@ -5083,7 +5083,7 @@
   background: rgba(5, 9, 9, 0.4) !important;
 }
 
-/* —— Typography & anti-clip —— */
+/* ?? Typography & anti-clip ?? */
 .page .ma-valuation-premium-page .muted {
   color: var(--ma-val-muted) !important;
   font-size: 13px !important;
@@ -5124,7 +5124,7 @@
   color: var(--ma-val-teal-bright) !important;
 }
 
-/* —— Desktop layout lock —— */
+/* ?? Desktop layout lock ?? */
 @media (min-width: 1181px) {
   .page .ma-valuation-premium-page .ma-valuation-body-grid {
     display: grid !important;
@@ -5177,11 +5177,11 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.15B — RUNTIME STYLE SHIELD (ExecutivePremiumStyle override)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.15B ? RUNTIME STYLE SHIELD (ExecutivePremiumStyle override)
    AppShell injects overflow:hidden on [class*="hero"|"card"|"panel"].
    Valuation premium page must stay visible and unclipped.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area .page .ma-valuation-premium-page.ma-executive-page :is(
   .ma-valuation-hero,
@@ -5240,11 +5240,11 @@
   z-index: 3 !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.16 — LEGIBILITY LOCK + COMPARABLES FIX (final authority)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.16 ? LEGIBILITY LOCK + COMPARABLES FIX (final authority)
    Eliminates text clipping, capsule overlap, line-clamp traps.
    Visual-only. Functional DOM preserved.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area .page .ma-valuation-premium-page :is(
   .ma-comparable-name,
@@ -5297,7 +5297,7 @@
   white-space: nowrap !important;
 }
 
-/* —— Market comparables: single-column legible rows —— */
+/* ?? Market comparables: single-column legible rows ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-ledger-premium {
   display: flex !important;
   flex-direction: column !important;
@@ -5428,7 +5428,7 @@
   }
 }
 
-/* —— Committee / ledger rows: no clipped copy —— */
+/* ?? Committee / ledger rows: no clipped copy ?? */
 .main-area .page .ma-valuation-premium-page .ma-evidence-ledger-row,
 .main-area .page .ma-valuation-premium-page .ma-bridge-row {
   height: auto !important;
@@ -5446,7 +5446,7 @@
   background: linear-gradient(168deg, #081119 0%, #070f18 100%) !important;
 }
 
-/* —— Hero wave accent (decoration behind content only) —— */
+/* ?? Hero wave accent (decoration behind content only) ?? */
 .main-area .page .ma-valuation-premium-page .ma-val-ref-scene.ma-valuation-hero::before {
   z-index: 0 !important;
   pointer-events: none !important;
@@ -5465,12 +5465,12 @@
   pointer-events: none !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.17 — POLISH PASS (spacing, sidebar, checklist, comparables grid)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.17 ? POLISH PASS (spacing, sidebar, checklist, comparables grid)
    Visual-only. Builds on C.24.15/16. Final layout authority.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— 1. Sidebar width + main gap —— */
+/* ?? 1. Sidebar width + main gap ?? */
 @media (min-width: 1181px) {
   .main-area .page .ma-valuation-premium-page .ma-valuation-body-grid,
   .main-area .page .ma-valuation-premium-page.ma-executive-page .ma-valuation-body-grid {
@@ -5515,7 +5515,7 @@
   font-size: 14px !important;
 }
 
-/* —— 2. Hero breathing room —— */
+/* ?? 2. Hero breathing room ?? */
 .main-area .page .ma-valuation-premium-page .ma-val-ref-title {
   margin: 0 0 14px !important;
   line-height: 1.04 !important;
@@ -5564,7 +5564,7 @@
   padding: 26px 26px 28px !important;
 }
 
-/* —— 3. Top metrics strip —— */
+/* ?? 3. Top metrics strip ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -5623,7 +5623,7 @@
   }
 }
 
-/* —— 4. Main valuation card —— */
+/* ?? 4. Main valuation card ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary {
   padding: 28px 30px 26px !important;
 }
@@ -5675,7 +5675,7 @@
   line-height: 1.5 !important;
 }
 
-/* —— 5. Deal structure + value ledger —— */
+/* ?? 5. Deal structure + value ledger ?? */
 .main-area .page .ma-valuation-premium-page .ma-premium-deal-card {
   padding: 26px 28px !important;
 }
@@ -5733,7 +5733,7 @@
   align-items: stretch !important;
 }
 
-/* —— 6. Committee readiness — institutional checklist table —— */
+/* ?? 6. Committee readiness ? institutional checklist table ?? */
 .main-area .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-evidence-ledger {
   padding: 26px 28px 22px !important;
 }
@@ -5837,7 +5837,7 @@
   }
 }
 
-/* —— 7. Market comparables — responsive 3/2/1 column grid —— */
+/* ?? 7. Market comparables ? responsive 3/2/1 column grid ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-ledger-premium {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(220px, 1fr)) !important;
@@ -5882,7 +5882,7 @@
   max-width: 120px !important;
 }
 
-/* —— 8–9. Typography + vertical rhythm —— */
+/* ?? 8?9. Typography + vertical rhythm ?? */
 .main-area .page .ma-valuation-premium-page {
   gap: 22px !important;
 }
@@ -5906,13 +5906,13 @@
   line-height: 1.3 !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.19 — NO CAPSULE LOCK (design norm: open surfaces, dividers, grids only)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.19 ? NO CAPSULE LOCK (design norm: open surfaces, dividers, grids only)
    Prohibits decorative internal capsules, micro-cards and sticker boxes.
    Visual-only. Final authority on /ma/valuation.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— No nested surfaces inside primary cards —— */
+/* ?? No nested surfaces inside primary cards ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-comparable-row,
   .ma-evidence-checklist-row,
@@ -5932,7 +5932,7 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* —— Flatten chip / capsule patterns (legacy + new class names) —— */
+/* ?? Flatten chip / capsule patterns (legacy + new class names) ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-traceability-status-chip,
   .ma-traceability-status-label,
@@ -6000,7 +6000,7 @@
   color: #8fa39f !important;
 }
 
-/* —— Metric rail: typographic only, no capsule box —— */
+/* ?? Metric rail: typographic only, no capsule box ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-metric-rail,
 .main-area .page .ma-valuation-premium-page .ma-comparable-multiple-block {
   padding: 0 !important;
@@ -6011,7 +6011,7 @@
   box-shadow: none !important;
 }
 
-/* —— Nested KPI tiles → open grid with dividers —— */
+/* ?? Nested KPI tiles ? open grid with dividers ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-metrics.ma-val-integrated-metrics,
 .main-area .page .ma-valuation-premium-page .ma-premium-metrics-grid {
   display: grid !important;
@@ -6052,7 +6052,7 @@
   content: none !important;
 }
 
-/* —— Quality score: divider integration, not sticker panel —— */
+/* ?? Quality score: divider integration, not sticker panel ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-panel {
   padding: 0 0 0 24px !important;
   margin: 0 !important;
@@ -6064,7 +6064,7 @@
   min-width: 0 !important;
 }
 
-/* —— Command strip: flat cells —— */
+/* ?? Command strip: flat cells ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-item {
   border: 0 !important;
   border-radius: 0 !important;
@@ -6072,7 +6072,7 @@
   box-shadow: none !important;
 }
 
-/* —— Comparables: one shell, open rows —— */
+/* ?? Comparables: one shell, open rows ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-card-legible {
   border: 0 !important;
   border-radius: 0 !important;
@@ -6100,7 +6100,7 @@
   gap: 18px !important;
 }
 
-/* —— Evidence score header: typographic, not boxed —— */
+/* ?? Evidence score header: typographic, not boxed ?? */
 .main-area .page .ma-valuation-premium-page .ma-traceability-score {
   padding: 0 !important;
   border: 0 !important;
@@ -6110,7 +6110,7 @@
   text-align: right !important;
 }
 
-/* —— Value ledger rows + inference list: dividers only —— */
+/* ?? Value ledger rows + inference list: dividers only ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   border: 0 !important;
   border-radius: 0 !important;
@@ -6187,13 +6187,13 @@
   text-align: left !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.20 — OPEN SURFACE LOCK (eliminate remaining internal capsules)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.20 ? OPEN SURFACE LOCK (eliminate remaining internal capsules)
    Renamed hooks: strip-cell, equity-safe-stat, premium-stat, comparable-open.
    Palette unchanged. Visual-only. Final authority.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— 1. Top metrics strip: one bar, three open cells —— */
+/* ?? 1. Top metrics strip: one bar, three open cells ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
   display: grid !important;
@@ -6266,7 +6266,7 @@
   }
 }
 
-/* —— 2. Equity mini stats: open grid, no sticker cells —— */
+/* ?? 2. Equity mini stats: open grid, no sticker cells ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats,
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-metrics.ma-val-integrated-metrics {
   display: grid !important;
@@ -6337,7 +6337,7 @@
   overflow: visible !important;
 }
 
-/* —— 3. Deal structure stats grid —— */
+/* ?? 3. Deal structure stats grid ?? */
 .main-area .page .ma-valuation-premium-page .ma-premium-stats-grid,
 .main-area .page .ma-valuation-premium-page .ma-premium-metrics-grid {
   display: grid !important;
@@ -6400,7 +6400,7 @@
   overflow: visible !important;
 }
 
-/* —— 4. Value ledger: open rows, no inner box —— */
+/* ?? 4. Value ledger: open rows, no inner box ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-list-open,
 .main-area .page .ma-valuation-premium-page .ma-bridge-list-premium {
   margin-top: 16px !important;
@@ -6430,7 +6430,7 @@
   text-align: right !important;
 }
 
-/* —— 5. Committee checklist: rows only —— */
+/* ?? 5. Committee checklist: rows only ?? */
 .main-area .page .ma-valuation-premium-page .ma-evidence-checklist-table {
   border: 0 !important;
   border-top: 1px solid rgba(90, 255, 220, 0.08) !important;
@@ -6455,7 +6455,7 @@
   border-bottom: 0 !important;
 }
 
-/* —— 6. Market comparables: open columns, zero inner capsules —— */
+/* ?? 6. Market comparables: open columns, zero inner capsules ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger-open,
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-ledger-premium {
   display: grid !important;
@@ -6628,7 +6628,7 @@
   }
 }
 
-/* —— Global anti-clip on valuation page —— */
+/* ?? Global anti-clip on valuation page ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-comparable-name,
   .ma-comparable-note,
@@ -6650,12 +6650,12 @@
   white-space: normal !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.21 — Anti-capsule final pass: open list comparables + flat readouts
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.21 ? Anti-capsule final pass: open list comparables + flat readouts
    Wins over C.24.17 / C.24.20 mid-grid comparables and executive-summary boxes
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— Market comparables: single-column premium list —— */
+/* ?? Market comparables: single-column premium list ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparables-list-open,
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-list-open,
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger-open,
@@ -6705,7 +6705,7 @@
   overflow: visible !important;
 }
 
-/* —— Equity hero: quality readout without ring capsule —— */
+/* ?? Equity hero: quality readout without ring capsule ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-readout,
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-panel {
   display: flex !important;
@@ -6746,7 +6746,7 @@
   text-shadow: none !important;
 }
 
-/* —— Risk posture: open row, no inner aside box —— */
+/* ?? Risk posture: open row, no inner aside box ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-risk-row {
   margin-top: 28px !important;
   padding-top: 24px !important;
@@ -6773,13 +6773,13 @@
   overflow: visible !important;
 }
 
-/* —— Top metrics strip: one continuous bar —— */
+/* ?? Top metrics strip: one continuous bar ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar {
   padding: 0 !important;
   overflow: visible !important;
 }
 
-/* —— Hide decorative icon glyphs (EPS [class*="icon"] boxes) —— */
+/* ?? Hide decorative icon glyphs (EPS [class*="icon"] boxes) ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-equity-safe-icon,
   .ma-comparables-header-icon,
@@ -6791,7 +6791,7 @@
   display: none !important;
 }
 
-/* —— Flatten risk badge pill inside equity card —— */
+/* ?? Flatten risk badge pill inside equity card ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-badges .badge {
   background: transparent !important;
   border: 0 !important;
@@ -6804,7 +6804,7 @@
   text-transform: uppercase !important;
 }
 
-/* —— Deal structure footer: open columns, not inner cards —— */
+/* ?? Deal structure footer: open columns, not inner cards ?? */
 .main-area .page .ma-valuation-premium-page .ma-closing-footer {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
@@ -6840,10 +6840,10 @@
   box-shadow: none !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.22 — P0 Signals legibility fix + polish (final authority in module CSS)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.22 ? P0 Signals legibility fix + polish (final authority in module CSS)
    Root cause: display:none on .ma-inference-icon left text in 40px grid column.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area .page .ma-valuation-premium-page .ma-intelligence-panel {
   width: 100% !important;
@@ -6945,7 +6945,7 @@
   writing-mode: horizontal-tb !important;
 }
 
-/* —— Top metrics strip: equal-height open bar —— */
+/* ?? Top metrics strip: equal-height open bar ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
   align-items: stretch !important;
@@ -6960,7 +6960,7 @@
   word-break: normal !important;
 }
 
-/* —— Committee readiness: wider titles, more row air —— */
+/* ?? Committee readiness: wider titles, more row air ?? */
 .main-area .page .ma-valuation-premium-page .ma-evidence-checklist-table {
   border: 0 !important;
   border-top: 1px solid rgba(90, 255, 220, 0.08) !important;
@@ -6990,7 +6990,7 @@
   white-space: nowrap !important;
 }
 
-/* —— Market comparables: keep open list, minor spacing —— */
+/* ?? Market comparables: keep open list, minor spacing ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-item {
   padding: 28px 0 !important;
   gap: 20px !important;
@@ -7007,14 +7007,14 @@
   gap: 22px !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.23 — Luminosity, alignment, anti-capsule fine pass (final authority)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.23 ? Luminosity, alignment, anti-capsule fine pass (final authority)
    Dark premium + teal preserved; surfaces lifted for legibility and depth.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area .page .ma-valuation-premium-page.ma-valuation-premium,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page.ma-valuation-premium {
-  /* C.24.55 — blue-teal petroleum base (was green-black #040a0a family) */
+  /* C.24.55 ? blue-teal petroleum base (was green-black #040a0a family) */
   --ma-val-bg: #050c14;
   --ma-val-bg-deep: #071018;
   --ma-val-surface: #0a141d;
@@ -7040,7 +7040,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Primary surfaces: distinguish cards from page background —— */
+/* ?? Primary surfaces: distinguish cards from page background ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal),
 .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal) {
   background: linear-gradient(168deg, #0c1822 0%, #0a141d 54%, #081119 100%) !important;
@@ -7056,7 +7056,7 @@
   border: 1px solid rgba(90, 255, 220, 0.12) !important;
 }
 
-/* —— Kill decorative capsule hooks (bars, pills, nested boxes) —— */
+/* ?? Kill decorative capsule hooks (bars, pills, nested boxes) ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-kpi::before,
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface::before,
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-metric::before,
@@ -7106,7 +7106,7 @@
   border-top: 1px solid rgba(90, 255, 220, 0.1) !important;
 }
 
-/* —— 1. Top metrics strip: one continuous luminous bar —— */
+/* ?? 1. Top metrics strip: one continuous luminous bar ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip,
 .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-surface {
@@ -7164,7 +7164,7 @@
   word-break: normal !important;
 }
 
-/* —— 2. Main valuation card —— */
+/* ?? 2. Main valuation card ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary {
   padding: 30px 32px 28px !important;
 }
@@ -7223,7 +7223,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— 3. Deal structure metrics —— */
+/* ?? 3. Deal structure metrics ?? */
 .main-area .page .ma-valuation-premium-page .ma-premium-stat,
 .main-area .page .ma-valuation-premium-page .ma-premium-metric {
   display: flex !important;
@@ -7277,7 +7277,7 @@
   line-height: 1.58 !important;
 }
 
-/* —— 4. Value ledger alignment —— */
+/* ?? 4. Value ledger alignment ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   grid-template-columns: 36px minmax(0, 1fr) minmax(148px, max-content) !important;
   gap: 16px 28px !important;
@@ -7360,7 +7360,7 @@
   line-height: 1.58 !important;
 }
 
-/* —— 5. Signals / intelligence —— */
+/* ?? 5. Signals / intelligence ?? */
 .main-area .page .ma-valuation-premium-page .ma-intelligence-panel .ma-panel-header p.muted {
   color: var(--ma-val-muted) !important;
   line-height: 1.58 !important;
@@ -7375,7 +7375,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— 6. Committee readiness —— */
+/* ?? 6. Committee readiness ?? */
 .main-area .page .ma-valuation-premium-page .ma-evidence-checklist-row {
   grid-template-columns: minmax(0, 1.55fr) minmax(0, 1.25fr) minmax(96px, auto) !important;
   gap: 18px 32px !important;
@@ -7409,7 +7409,7 @@
   letter-spacing: 0.14em !important;
 }
 
-/* —— 7. Market comparables: open list, aligned multiples —— */
+/* ?? 7. Market comparables: open list, aligned multiples ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-item {
   padding: 32px 0 !important;
   gap: 18px !important;
@@ -7475,7 +7475,7 @@
   line-height: 1.35 !important;
 }
 
-/* —— Global anti-clip / anti-misalignment —— */
+/* ?? Global anti-clip / anti-misalignment ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-equity-safe-stat,
   .ma-premium-stat,
@@ -7523,11 +7523,11 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.24 — Intelligence design system sync (final authority)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.24 ? Intelligence design system sync (final authority)
    Aligns /ma/valuation visual language with /ma/dashboard ma-reference-*.
    Functional DOM unchanged. No capsules. Open layouts preserved.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area .page .ma-valuation-premium-page.ma-valuation-premium,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page.ma-valuation-premium {
@@ -7563,7 +7563,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Intelligence premium surface family —— */
+/* ?? Intelligence premium surface family ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal),
 .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal) {
   border: 1px solid var(--ma-val-line-soft) !important;
@@ -7584,7 +7584,7 @@
   box-shadow: var(--ma-val-shadow-luxury) !important;
 }
 
-/* —— Hero: Intelligence scene parity —— */
+/* ?? Hero: Intelligence scene parity ?? */
 .main-area .page .ma-valuation-premium-page .ma-val-ref-scene.ma-valuation-hero {
   min-height: clamp(500px, 48vw, 580px) !important;
   padding: 8px 0 40px !important;
@@ -7649,7 +7649,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Status card: reference-signal glass —— */
+/* ?? Status card: reference-signal glass ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-status-card.ma-valuation-surface {
   padding: 30px 30px 34px !important;
   border-radius: 22px !important;
@@ -7716,7 +7716,7 @@
   border-top-color: var(--ma-val-line-soft) !important;
 }
 
-/* —— CTAs: Intelligence button system —— */
+/* ?? CTAs: Intelligence button system ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-actions {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -7766,7 +7766,7 @@
   color: var(--ma-val-teal-bright) !important;
 }
 
-/* —— Context strip: reference-strip band —— */
+/* ?? Context strip: reference-strip band ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-surface {
   display: grid !important;
@@ -7811,7 +7811,7 @@
   font-variant-numeric: tabular-nums !important;
 }
 
-/* —— Workspace rhythm —— */
+/* ?? Workspace rhythm ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-body-grid {
   gap: 24px !important;
 }
@@ -7826,7 +7826,7 @@
   gap: 12px !important;
 }
 
-/* —— Module cards: Intelligence padding + section hierarchy —— */
+/* ?? Module cards: Intelligence padding + section hierarchy ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary,
 .main-area .page .ma-valuation-premium-page .ma-premium-deal-card,
 .main-area .page .ma-valuation-premium-page .ma-intelligence-panel,
@@ -7872,7 +7872,7 @@
   color: var(--ma-val-muted-soft) !important;
 }
 
-/* —— Executive summary card —— */
+/* ?? Executive summary card ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-value {
   color: #ffffff !important;
   text-shadow: 0 0 30px rgba(45, 212, 191, 0.2) !important;
@@ -7884,7 +7884,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Signals module —— */
+/* ?? Signals module ?? */
 .main-area .page .ma-valuation-premium-page .ma-intelligence-panel .ma-panel-header {
   margin-bottom: 8px !important;
   padding-bottom: 16px !important;
@@ -7899,7 +7899,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Committee readiness —— */
+/* ?? Committee readiness ?? */
 .main-area .page .ma-valuation-premium-page .ma-evidence-checklist-row {
   padding: 28px 0 !important;
   border-bottom-color: var(--ma-val-line-soft) !important;
@@ -7911,7 +7911,7 @@
   color: rgba(203, 213, 225, 0.82) !important;
 }
 
-/* —— Comparables refinement —— */
+/* ?? Comparables refinement ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-item {
   padding: 32px 0 !important;
   border-bottom-color: var(--ma-val-line-soft) !important;
@@ -7958,10 +7958,10 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.25 — Final polish: luminosity, hero balance, width, module refinement
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.25 ? Final polish: luminosity, hero balance, width, module refinement
    Wins over C.24.24. Functional DOM unchanged. No capsules.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
   --ceos-content-max: 1680px;
@@ -7981,7 +7981,7 @@
   --ma-val-muted-soft: #9eb0ad;
 }
 
-/* —— Luminous card surfaces —— */
+/* ?? Luminous card surfaces ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal),
 .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal) {
   background: linear-gradient(168deg, #0c1822 0%, #081119 54%, #081119 100%) !important;
@@ -8012,7 +8012,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Hero: less dead space, better left/right balance —— */
+/* ?? Hero: less dead space, better left/right balance ?? */
 .main-area .page .ma-valuation-premium-page .ma-val-ref-scene.ma-valuation-hero {
   min-height: clamp(420px, 36vw, 500px) !important;
   padding: 6px 0 16px !important;
@@ -8063,7 +8063,7 @@
   gap: 10px !important;
 }
 
-/* —— Top metrics strip: premium band —— */
+/* ?? Top metrics strip: premium band ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-surface {
   background: linear-gradient(165deg, #0c1822 0%, #081119 100%) !important;
@@ -8090,7 +8090,7 @@
   color: #f4f7f6 !important;
 }
 
-/* —— Layout width + rhythm —— */
+/* ?? Layout width + rhythm ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-body-grid {
   grid-template-columns: minmax(300px, 340px) minmax(0, 1fr) !important;
   gap: 28px !important;
@@ -8101,7 +8101,7 @@
   gap: 22px !important;
 }
 
-/* —— Executive valuation card —— */
+/* ?? Executive valuation card ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-hero-band {
   gap: 24px 36px !important;
   padding-bottom: 4px !important;
@@ -8145,7 +8145,7 @@
   padding: 22px 24px !important;
 }
 
-/* —— Deal structure + value ledger —— */
+/* ?? Deal structure + value ledger ?? */
 .main-area .page .ma-valuation-premium-page .ma-premium-deal-header p.muted,
 .main-area .page .ma-valuation-premium-page .ma-closing-structure-title p.muted {
   font-size: 14px !important;
@@ -8173,7 +8173,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Signals —— */
+/* ?? Signals ?? */
 .main-area .page .ma-valuation-premium-page .ma-inference-item {
   padding: 24px 0 !important;
   border-bottom-color: rgba(90, 255, 220, 0.08) !important;
@@ -8191,7 +8191,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Committee readiness —— */
+/* ?? Committee readiness ?? */
 .main-area .page .ma-valuation-premium-page .ma-evidence-checklist-row {
   grid-template-columns: minmax(0, 1.65fr) minmax(0, 1.2fr) minmax(104px, auto) !important;
   gap: 20px 36px !important;
@@ -8217,7 +8217,7 @@
   min-width: 104px !important;
 }
 
-/* —— Market comparables open list —— */
+/* ?? Market comparables open list ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-item {
   padding: 36px 0 !important;
   border-bottom-color: rgba(90, 255, 220, 0.08) !important;
@@ -8264,10 +8264,10 @@
   align-self: center !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.26 — Suite polish: luminosity, alignment, anti-capsule, Intelligence parity
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.26 ? Suite polish: luminosity, alignment, anti-capsule, Intelligence parity
    Visual-only. Wins over C.24.25. No logic/data/DOM structure changes.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area .page .ma-valuation-premium-page.ma-valuation-premium,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page,
@@ -8284,7 +8284,7 @@
   --ma-val-text-secondary: #e2ecea;
 }
 
-/* —— 1. Luminosity: lift surfaces without lightening palette —— */
+/* ?? 1. Luminosity: lift surfaces without lightening palette ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal),
 .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal) {
   background: linear-gradient(168deg, #0c1822 0%, #081119 52%, #081119 100%) !important;
@@ -8302,7 +8302,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— 2. Hero: compact, balanced, premium glow —— */
+/* ?? 2. Hero: compact, balanced, premium glow ?? */
 .main-area .page .ma-valuation-premium-page .ma-val-ref-scene.ma-valuation-hero {
   min-height: clamp(400px, 34vw, 480px) !important;
   padding: 4px 0 12px !important;
@@ -8354,7 +8354,7 @@
     0 0 40px rgba(45, 212, 191, 0.05) !important;
 }
 
-/* —— 3. Top metrics strip: one continuous executive band —— */
+/* ?? 3. Top metrics strip: one continuous executive band ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-surface {
@@ -8414,7 +8414,7 @@
   letter-spacing: -0.01em !important;
 }
 
-/* —— 4. Sidebar: premium form, no inner capsule cards —— */
+/* ?? 4. Sidebar: premium form, no inner capsule cards ?? */
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-surface,
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   background: linear-gradient(168deg, #0e1c26 0%, #0a141d 100%) !important;
@@ -8482,7 +8482,7 @@
   box-shadow: 0 0 10px rgba(45, 212, 191, 0.35) !important;
 }
 
-/* —— 5. Executive valuation card —— */
+/* ?? 5. Executive valuation card ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-card.ma-valuation-executive-summary {
   padding: 32px 34px 34px !important;
 }
@@ -8530,7 +8530,7 @@
   color: #f4f8f7 !important;
 }
 
-/* —— 6. Deal structure —— */
+/* ?? 6. Deal structure ?? */
 .main-area .page .ma-valuation-premium-page .ma-premium-deal-card {
   padding: 30px 32px 32px !important;
 }
@@ -8551,7 +8551,7 @@
   max-width: 72ch !important;
 }
 
-/* —— 7. Value ledger —— */
+/* ?? 7. Value ledger ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   grid-template-columns: 32px minmax(0, 1fr) minmax(128px, max-content) !important;
   gap: 18px 28px !important;
@@ -8614,7 +8614,7 @@
   color: #b8cac6 !important;
 }
 
-/* —— 8. Signals —— */
+/* ?? 8. Signals ?? */
 .main-area .page .ma-valuation-premium-page .ma-inference-item {
   display: flex !important;
   align-items: flex-start !important;
@@ -8639,7 +8639,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— 9. Committee readiness —— */
+/* ?? 9. Committee readiness ?? */
 .main-area .page .ma-valuation-premium-page .ma-evidence-checklist-row {
   grid-template-columns: minmax(0, 1.75fr) minmax(0, 1.25fr) minmax(108px, auto) !important;
   gap: 22px 40px !important;
@@ -8677,7 +8677,7 @@
   color: var(--ma-val-teal-dim) !important;
 }
 
-/* —— 10. Market comparables open list —— */
+/* ?? 10. Market comparables open list ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparables-shell {
   padding: 30px 32px 32px !important;
 }
@@ -8723,7 +8723,7 @@
   border-top: 1px solid rgba(90, 255, 220, 0.09) !important;
 }
 
-/* —— 11–12. Alignment + anti-capsule sweep —— */
+/* ?? 11?12. Alignment + anti-capsule sweep ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-comparable-name,
   .ma-comparable-note,
@@ -8778,10 +8778,10 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.27 — Final premium polish (Committee priority, KPI legibility, luminosity)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.27 ? Final premium polish (Committee priority, KPI legibility, luminosity)
    Visual-only. Wins over C.24.26. No logic/data/DOM changes. No capsules.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area .page .ma-valuation-premium-page.ma-valuation-premium,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page,
@@ -8796,7 +8796,7 @@
   --ma-val-muted-soft: #aebfbb;
 }
 
-/* —— 2. Luminosity lift —— */
+/* ?? 2. Luminosity lift ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal),
 .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal) {
   background: linear-gradient(168deg, #0c1822 0%, #081119 50%, #081119 100%) !important;
@@ -8814,7 +8814,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— 3. Committee readiness — PRIORITY —— */
+/* ?? 3. Committee readiness ? PRIORITY ?? */
 .main-area .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 32px 34px 34px !important;
 }
@@ -8942,7 +8942,7 @@
   white-space: nowrap !important;
 }
 
-/* —— 4. Mini KPIs — executive integrated grid —— */
+/* ?? 4. Mini KPIs ? executive integrated grid ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats {
   margin-top: 28px !important;
   padding-top: 26px !important;
@@ -8982,7 +8982,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— 5. Value ledger + footer notes —— */
+/* ?? 5. Value ledger + footer notes ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   padding: 28px 0 !important;
   border-bottom: 1px solid var(--ma-val-divider-neutral) !important;
@@ -9027,7 +9027,7 @@
   max-width: 42ch !important;
 }
 
-/* —— 6. Top metrics strip — premium continuous band —— */
+/* ?? 6. Top metrics strip ? premium continuous band ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
   min-height: 86px !important;
@@ -9061,7 +9061,7 @@
   color: #f8fafa !important;
 }
 
-/* —— 7. Hero micro-balance —— */
+/* ?? 7. Hero micro-balance ?? */
 .main-area .page .ma-valuation-premium-page .ma-val-ref-scene.ma-valuation-hero {
   min-height: clamp(388px, 33vw, 468px) !important;
   padding: 4px 0 10px !important;
@@ -9072,7 +9072,7 @@
   color: #b8cac6 !important;
 }
 
-/* —— 8. Market comparables — open list lock —— */
+/* ?? 8. Market comparables ? open list lock ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-list-open,
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger-open {
   display: flex !important;
@@ -9102,7 +9102,7 @@
   color: var(--ma-val-muted-soft) !important;
 }
 
-/* —— 9. Sidebar polish —— */
+/* ?? 9. Sidebar polish ?? */
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   background: linear-gradient(168deg, #0e1c26 0%, #0c1822 100%) !important;
   border: 1px solid rgba(90, 255, 220, 0.12) !important;
@@ -9163,10 +9163,10 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.28 — Premium final refinement (Committee + KPI + luminosity pass)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.28 ? Premium final refinement (Committee + KPI + luminosity pass)
    Visual-only. Wins over C.24.27. Signals untouched. No capsules. No logic.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area .page .ma-valuation-premium-page.ma-valuation-premium,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page,
@@ -9177,7 +9177,7 @@
   --ma-val-divider-teal: rgba(90, 255, 220, 0.09);
 }
 
-/* —— Luminosity: cards lift without palette shift —— */
+/* ?? Luminosity: cards lift without palette shift ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal),
 .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal) {
   background: linear-gradient(168deg, #0c1822 0%, #081119 48%, #081119 100%) !important;
@@ -9187,7 +9187,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.075) !important;
 }
 
-/* —— Committee readiness — maximum legibility —— */
+/* ?? Committee readiness ? maximum legibility ?? */
 .main-area .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger .ma-panel-header {
   gap: 20px 28px !important;
   padding-bottom: 20px !important;
@@ -9258,7 +9258,7 @@
   justify-content: flex-end !important;
 }
 
-/* —— Mini KPIs — executive scale —— */
+/* ?? Mini KPIs ? executive scale ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stat {
   padding: 28px 30px !important;
 }
@@ -9281,7 +9281,7 @@
   line-height: 1.6 !important;
 }
 
-/* —— Value ledger polish (structure preserved) —— */
+/* ?? Value ledger polish (structure preserved) ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   padding: 30px 0 !important;
   border-bottom: 1px solid var(--ma-val-divider-neutral) !important;
@@ -9303,7 +9303,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Top metrics strip — Intelligence band —— */
+/* ?? Top metrics strip ? Intelligence band ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
   min-height: 88px !important;
@@ -9328,7 +9328,7 @@
   letter-spacing: -0.015em !important;
 }
 
-/* —— Hero micro-tune —— */
+/* ?? Hero micro-tune ?? */
 .main-area .page .ma-valuation-premium-page .ma-val-ref-scene.ma-valuation-hero {
   min-height: clamp(380px, 32vw, 456px) !important;
   padding: 2px 0 8px !important;
@@ -9341,7 +9341,7 @@
   line-height: 1.65 !important;
 }
 
-/* —— Market comparables — right column, label centered under multiple —— */
+/* ?? Market comparables ? right column, label centered under multiple ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-head {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(124px, max-content) !important;
@@ -9387,7 +9387,7 @@
   color: #8fd9c8 !important;
 }
 
-/* —— Sidebar readability —— */
+/* ?? Sidebar readability ?? */
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   background: linear-gradient(168deg, #0e1c26 0%, #0c1822 100%) !important;
 }
@@ -9442,10 +9442,10 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.29 — 85→95% polish: luminosity, Committee air, KPI presence, strip
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.29 ? 85?95% polish: luminosity, Committee air, KPI presence, strip
    Visual-only. Wins over C.24.28. Signals/hero structure untouched.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area .page .ma-valuation-premium-page.ma-valuation-premium,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page,
@@ -9455,7 +9455,7 @@
   --ma-val-divider-neutral: rgba(255, 255, 255, 0.07);
 }
 
-/* —— Luminosity + depth —— */
+/* ?? Luminosity + depth ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal),
 .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal) {
   background: linear-gradient(168deg, #0c1822 0%, #081119 46%, #081119 100%) !important;
@@ -9473,7 +9473,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Committee readiness — institutional checklist —— */
+/* ?? Committee readiness ? institutional checklist ?? */
 .main-area .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 34px 36px 36px !important;
 }
@@ -9533,7 +9533,7 @@
   padding-top: 3px !important;
 }
 
-/* —— Mini KPIs — stronger executive presence —— */
+/* ?? Mini KPIs ? stronger executive presence ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats {
   border-top-color: var(--ma-val-divider-neutral) !important;
 }
@@ -9560,7 +9560,7 @@
   line-height: 1.62 !important;
 }
 
-/* —— Value ledger — light touch —— */
+/* ?? Value ledger ? light touch ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   padding: 32px 0 !important;
   border-bottom-color: var(--ma-val-divider-neutral) !important;
@@ -9591,7 +9591,7 @@
   border-right-color: var(--ma-val-divider-neutral) !important;
 }
 
-/* —— Top metrics strip — premium band —— */
+/* ?? Top metrics strip ? premium band ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
   min-height: 92px !important;
@@ -9622,7 +9622,7 @@
   color: #fafcfc !important;
 }
 
-/* —— Sidebar — slightly more visible —— */
+/* ?? Sidebar ? slightly more visible ?? */
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   background: linear-gradient(168deg, #0e1c26 0%, #0c1822 55%, #0a1620 100%) !important;
   border: 1px solid rgba(90, 255, 220, 0.12) !important;
@@ -9647,7 +9647,7 @@
   border-bottom-color: var(--ma-val-divider-neutral) !important;
 }
 
-/* —— Market comparables — open list refinement —— */
+/* ?? Market comparables ? open list refinement ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-list-open,
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger-open {
   display: flex !important;
@@ -9669,7 +9669,7 @@
   margin-top: 8px !important;
 }
 
-/* —— Hero — secondary text only —— */
+/* ?? Hero ? secondary text only ?? */
 .main-area .page .ma-valuation-premium-page .ma-val-ref-dss,
 .main-area .page .ma-valuation-premium-page .ma-val-ref-scene-intro .muted {
   color: #c8d8d5 !important;
@@ -9681,7 +9681,7 @@
   }
 }
 
-/* —— Design system rhythm (preserved) —— */
+/* ?? Design system rhythm (preserved) ?? */
 .main-area .page .ma-valuation-premium-page .ma-panel-header h3,
 .main-area .page .ma-valuation-premium-page .ma-module-section-title,
 .main-area .page .ma-valuation-premium-page .ma-comparables-shell h3 {
@@ -9733,10 +9733,10 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.30 — Intelligence upper-suite parity: hero shell, tone, width, presence
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.30 ? Intelligence upper-suite parity: hero shell, tone, width, presence
    Visual-only. Wins over C.24.29. Signals/content untouched.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
   --ceos-content-max: 1720px;
@@ -9951,10 +9951,10 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.31 — Composition grid: width alignment, main column, sidebar gap
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.31 ? Composition grid: width alignment, main column, sidebar gap
    Visual-only. Wins over C.24.30. Hero upper-suite preserved. No logic/DOM.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
   --ceos-content-max: 1440px;
@@ -10100,10 +10100,10 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.32 — Grid unity, body luminosity, sidebar legibility, committee air
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.32 ? Grid unity, body luminosity, sidebar legibility, committee air
    Visual-only. Wins over C.24.31. Hero preserved. No logic/DOM structure.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
   --ceos-content-max: 1440px;
@@ -10140,7 +10140,7 @@
   min-width: 0 !important;
 }
 
-/* —— Body luminosity —— */
+/* ?? Body luminosity ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal):not(.ma-valuation-upper-suite),
 .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal):not(.ma-valuation-upper-suite) {
   background: linear-gradient(168deg, #0c1822 0%, #081119 52%, #081119 100%) !important;
@@ -10158,7 +10158,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* —— Top metrics strip: premium continuous band —— */
+/* ?? Top metrics strip: premium continuous band ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-command-bar.ma-valuation-command-strip {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -10199,7 +10199,7 @@
   color: #fafcfc !important;
 }
 
-/* —— Sidebar: wider feel, clearer inputs —— */
+/* ?? Sidebar: wider feel, clearer inputs ?? */
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   background: linear-gradient(168deg, #0e1c26 0%, #0c1822 54%, #0a1620 100%) !important;
   border: 1px solid rgba(90, 255, 220, 0.12) !important;
@@ -10245,7 +10245,7 @@
   font-weight: 750 !important;
 }
 
-/* —— Mini KPIs — executive scale —— */
+/* ?? Mini KPIs ? executive scale ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats {
   border-top: 1px solid var(--ma-val-divider-neutral) !important;
   margin-top: 28px !important;
@@ -10288,7 +10288,7 @@
   color: #fafcfc !important;
 }
 
-/* —— Committee readiness — priority —— */
+/* ?? Committee readiness ? priority ?? */
 .main-area .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 34px 36px 36px !important;
 }
@@ -10325,7 +10325,7 @@
   align-items: flex-start !important;
 }
 
-/* —— Value ledger —— */
+/* ?? Value ledger ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   display: grid !important;
   grid-template-columns: auto minmax(0, 1fr) minmax(120px, auto) !important;
@@ -10367,7 +10367,7 @@
   padding: 0 !important;
 }
 
-/* —— Market comparables — open list width —— */
+/* ?? Market comparables ? open list width ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-item {
   padding: 44px 0 !important;
   border-bottom: 1px solid var(--ma-val-divider-neutral) !important;
@@ -10397,7 +10397,7 @@
   gap: 20px !important;
 }
 
-/* —— Permission badges only — discreet —— */
+/* ?? Permission badges only ? discreet ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-badges {
   opacity: 0.55 !important;
   margin-bottom: 12px !important;
@@ -10417,10 +10417,10 @@
   background: rgba(8, 16, 18, 0.4) !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.33 — Unified surface system: tables, lists, cards, sidebar
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.33 ? Unified surface system: tables, lists, cards, sidebar
    Visual-only. Wins over all prior color blocks. Hero preserved.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
   background-color: #050c14 !important;
@@ -10428,7 +10428,7 @@
 
 .main-area .page .ma-valuation-premium-page,
 .page .ma-valuation-premium-page.ma-valuation-premium {
-  /* C.24.55 — master token authority: navy-teal petroleum + clean teal accent */
+  /* C.24.55 ? master token authority: navy-teal petroleum + clean teal accent */
   --ma-val-page-bg: #050c14;
   --ma-val-page-bg-deep: #071018;
   --ma-val-surface-card: #0c1822;
@@ -10462,7 +10462,7 @@
   color: var(--ma-val-text-primary) !important;
 }
 
-/* —— Main module cards —— */
+/* ?? Main module cards ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-equity-safe-card,
   .ma-premium-deal-card,
@@ -10479,7 +10479,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
 }
 
-/* —— List / table containers —— */
+/* ?? List / table containers ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-evidence-checklist-table,
   .ma-traceability-ledger.ma-evidence-checklist-table,
@@ -10497,7 +10497,7 @@
   border-radius: 0 !important;
 }
 
-/* —— Unified row treatment —— */
+/* ?? Unified row treatment ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-bridge-row,
   .ma-bridge-row.ma-valuation-ledger,
@@ -10532,7 +10532,7 @@
   border-bottom: 0 !important;
 }
 
-/* —— KPI / metric columns —— */
+/* ?? KPI / metric columns ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-equity-safe-stat,
   .ma-premium-stat,
@@ -10568,7 +10568,7 @@
   content: none !important;
 }
 
-/* —— Top metrics strip —— */
+/* ?? Top metrics strip ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-command-bar.ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
   background: linear-gradient(168deg, var(--ma-val-surface-table) 0%, var(--ma-val-surface-table-end) 100%) !important;
@@ -10591,14 +10591,14 @@
   border-right: 0 !important;
 }
 
-/* —— Deal structure inner block —— */
+/* ?? Deal structure inner block ?? */
 .main-area .page .ma-valuation-premium-page .ma-closing-structure-box {
   background: linear-gradient(168deg, var(--ma-val-surface-table) 0%, var(--ma-val-surface-table-end) 100%) !important;
   border: 1px solid var(--ma-val-border-subtle) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
 }
 
-/* —— Value ledger accents —— */
+/* ?? Value ledger accents ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-number {
   background: rgba(45, 212, 191, 0.08) !important;
   border: 1px solid var(--ma-val-border-subtle) !important;
@@ -10611,7 +10611,7 @@
   color: var(--ma-val-text-primary) !important;
 }
 
-/* —— Committee status labels —— */
+/* ?? Committee status labels ?? */
 .main-area .page .ma-valuation-premium-page .ma-traceability-status-label {
   display: inline-block !important;
   padding: 5px 11px !important;
@@ -10626,7 +10626,7 @@
   box-shadow: none !important;
 }
 
-/* —— Typography scale —— */
+/* ?? Typography scale ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-panel-header h3,
   .ma-premium-deal-header h3,
@@ -10673,7 +10673,7 @@
   color: var(--ma-val-accent) !important;
 }
 
-/* —— Sidebar inputs —— */
+/* ?? Sidebar inputs ?? */
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   background: linear-gradient(168deg, var(--ma-val-surface-card) 0%, var(--ma-val-surface-card-end) 100%) !important;
   border: 1px solid var(--ma-val-border-subtle) !important;
@@ -10714,14 +10714,14 @@
   background: var(--ma-val-accent) !important;
 }
 
-/* —— Signals list —— */
+/* ?? Signals list ?? */
 .main-area .page .ma-valuation-premium-page .ma-inference-icon {
   background: rgba(45, 212, 191, 0.08) !important;
   border: 1px solid var(--ma-val-border-subtle) !important;
   box-shadow: none !important;
 }
 
-/* —— Kill residual gold / blue-black row gradients —— */
+/* ?? Kill residual gold / blue-black row gradients ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-bridge-list-premium .ma-bridge-row,
   .ma-premium-deal-card .ma-bridge-row,
@@ -10751,10 +10751,10 @@
   border: 0 !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.34 — Final width grid, sidebar premium, committee/KPI presence
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.34 ? Final width grid, sidebar premium, committee/KPI presence
    Visual-only. Wins over C.24.33. Color tokens preserved. Hero untouched.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
   --ceos-content-max: 1480px;
@@ -10795,7 +10795,7 @@
   min-width: 0 !important;
 }
 
-/* —— Slight legibility lift (same palette family) —— */
+/* ?? Slight legibility lift (same palette family) ?? */
 .main-area .page .ma-valuation-premium-page {
   --ma-val-text-secondary: #b0c2bf;
   --ma-val-text-muted: #7d918d;
@@ -10806,7 +10806,7 @@
   --ma-val-divider-neutral: rgba(255, 255, 255, 0.06);
 }
 
-/* —— Main module cards: enterprise padding —— */
+/* ?? Main module cards: enterprise padding ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-equity-safe-card,
   .ma-premium-deal-card,
@@ -10817,7 +10817,7 @@
   padding: 36px 38px 38px !important;
 }
 
-/* —— Sidebar: less compressed cockpit —— */
+/* ?? Sidebar: less compressed cockpit ?? */
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   padding: 28px 26px 32px !important;
 }
@@ -10852,7 +10852,7 @@
   font-size: 14px !important;
 }
 
-/* —— Top metrics strip: full-width band —— */
+/* ?? Top metrics strip: full-width band ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-context-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-active-strip {
   padding: 0 32px 28px !important;
@@ -10876,7 +10876,7 @@
   line-height: 1.25 !important;
 }
 
-/* —— Mini KPIs — executive presence —— */
+/* ?? Mini KPIs ? executive presence ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats {
   margin-top: 30px !important;
   padding-top: 28px !important;
@@ -10918,7 +10918,7 @@
   line-height: 1.15 !important;
 }
 
-/* —— Committee readiness — institutional checklist —— */
+/* ?? Committee readiness ? institutional checklist ?? */
 .main-area .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 36px 40px 40px !important;
 }
@@ -10960,7 +10960,7 @@
   align-items: flex-start !important;
 }
 
-/* —— Value ledger + signals —— */
+/* ?? Value ledger + signals ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   gap: 22px 40px !important;
   padding: 34px 6px !important;
@@ -10981,7 +10981,7 @@
   line-height: 1.64 !important;
 }
 
-/* —— Market comparables — open list width —— */
+/* ?? Market comparables ? open list width ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-item {
   padding: 48px 0 !important;
 }
@@ -11003,7 +11003,7 @@
   gap: 24px !important;
 }
 
-/* —— Permission badges — ultra discreet —— */
+/* ?? Permission badges ? ultra discreet ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-badges {
   opacity: 0.42 !important;
   margin-bottom: 10px !important;
@@ -11015,10 +11015,10 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.35 — Body width finale: sidebar 350px, committee air, KPI scale, strip
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.35 ? Body width finale: sidebar 350px, committee air, KPI scale, strip
    Visual-only. Wins over C.24.34. Palette/hero/comparables structure preserved.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
   --ceos-content-max: 1480px;
@@ -11039,7 +11039,7 @@
   }
 }
 
-/* —— Sidebar: wider usable column —— */
+/* ?? Sidebar: wider usable column ?? */
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   padding: 30px 28px 34px !important;
   background: linear-gradient(
@@ -11072,7 +11072,7 @@
   padding: 11px 16px !important;
 }
 
-/* —— Main cards —— */
+/* ?? Main cards ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-equity-safe-card,
   .ma-premium-deal-card,
@@ -11083,7 +11083,7 @@
   padding: 38px 40px 40px !important;
 }
 
-/* —— Top metrics strip — premium band —— */
+/* ?? Top metrics strip ? premium band ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-command-bar.ma-valuation-command-strip {
   min-height: 100px !important;
   background: linear-gradient(
@@ -11115,7 +11115,7 @@
   letter-spacing: -0.01em !important;
 }
 
-/* —— Mini KPIs —— */
+/* ?? Mini KPIs ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats {
   margin-top: 32px !important;
   padding-top: 30px !important;
@@ -11155,7 +11155,7 @@
   font-size: clamp(24px, 1.9vw, 28px) !important;
 }
 
-/* —— Committee readiness — priority —— */
+/* ?? Committee readiness ? priority ?? */
 .main-area .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 38px 42px 42px !important;
 }
@@ -11195,7 +11195,7 @@
   padding-top: 6px !important;
 }
 
-/* —— Value ledger —— */
+/* ?? Value ledger ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger {
   gap: 24px 48px !important;
   padding: 36px 8px !important;
@@ -11250,7 +11250,7 @@
   color: var(--ma-val-accent) !important;
 }
 
-/* —— Market comparables —— */
+/* ?? Market comparables ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-item {
   padding: 52px 0 !important;
 }
@@ -11274,14 +11274,14 @@
   min-width: 136px !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.36 — Anti-capsule final lock
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.36 ? Anti-capsule final lock
    Typography + spacing + dividers only. Wins over legacy .ma-valuation-premium
-   hooks (~2890–2970, ~3330, ~5001, C.24.35 closing-footer boxes).
+   hooks (~2890?2970, ~3330, ~5001, C.24.35 closing-footer boxes).
    Visual-only. No data, logic, hero structure, or palette token changes.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— 1. Main valuation figure: integrated typography, never encapsulated —— */
+/* ?? 1. Main valuation figure: integrated typography, never encapsulated ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-value,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-value,
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-value.ma-val-financial-figure,
@@ -11314,7 +11314,7 @@
   content: none !important;
 }
 
-/* —— 2. Hero band wrappers: open layout, no inner shells —— */
+/* ?? 2. Hero band wrappers: open layout, no inner shells ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-primary,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-hero-band,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-inner,
@@ -11330,7 +11330,7 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* —— 3. Quality score: flat right column, no ring/panel sticker —— */
+/* ?? 3. Quality score: flat right column, no ring/panel sticker ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-readout,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-quality-panel,
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-readout,
@@ -11396,7 +11396,7 @@
   color: var(--ma-val-text-secondary, #aeb9c4) !important;
 }
 
-/* —— 4. Functional risk badge: small, discreet —— */
+/* ?? 4. Functional risk badge: small, discreet ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-badges .badge {
   display: inline-flex !important;
   align-items: center !important;
@@ -11412,7 +11412,7 @@
   text-transform: uppercase !important;
 }
 
-/* —— 5. Labels: typography only (beat executivePolish [class*="kpi"] boxes) —— */
+/* ?? 5. Labels: typography only (beat executivePolish [class*="kpi"] boxes) ?? */
 .main-area .page .ma-valuation-premium-page .kpi-label,
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-kicker {
   display: block !important;
@@ -11425,7 +11425,7 @@
   box-shadow: none !important;
 }
 
-/* —— 6. Mini KPIs: open grid cells, no micro-cards —— */
+/* ?? 6. Mini KPIs: open grid cells, no micro-cards ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-equity-safe-card.ma-valuation-executive-summary .ma-equity-safe-metrics,
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats,
@@ -11497,7 +11497,7 @@
   box-shadow: none !important;
 }
 
-/* —— 7. Deal structure / value ledger rows —— */
+/* ?? 7. Deal structure / value ledger rows ?? */
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger,
 .main-area .page .ma-valuation-premium-page .ma-bridge-list-premium .ma-bridge-row {
   padding: 28px 0 !important;
@@ -11519,7 +11519,7 @@
   padding: 0 !important;
 }
 
-/* —— 8. Recommended use / next step: integrated notes, not cajitas —— */
+/* ?? 8. Recommended use / next step: integrated notes, not cajitas ?? */
 .main-area .page .ma-valuation-premium-page .ma-closing-footer {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
@@ -11579,7 +11579,7 @@
   box-shadow: none !important;
 }
 
-/* —— 9. Committee readiness: rows, not cards —— */
+/* ?? 9. Committee readiness: rows, not cards ?? */
 .main-area .page .ma-valuation-premium-page .ma-evidence-checklist-row {
   background: transparent !important;
   border: 0 !important;
@@ -11601,7 +11601,7 @@
   text-transform: uppercase !important;
 }
 
-/* —— 10. Market comparables: open list only —— */
+/* ?? 10. Market comparables: open list only ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-item,
 .main-area .page .ma-valuation-premium-page .ma-comparable-card-legible,
 .main-area .page .ma-valuation-premium-page .ma-comparable-card-horizontal {
@@ -11628,7 +11628,7 @@
   padding: 0 !important;
 }
 
-/* —— 11. Top metrics strip: continuous band, flat cells —— */
+/* ?? 11. Top metrics strip: continuous band, flat cells ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-strip-cell,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-item {
   background: transparent !important;
@@ -11654,7 +11654,7 @@
   content: none !important;
 }
 
-/* —— 12. Sidebar section headers: no inner capsules —— */
+/* ?? 12. Sidebar section headers: no inner capsules ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit-band,
 .main-area .page .ma-valuation-premium-page .ma-panel-header,
 .main-area .page .ma-valuation-premium-page .ma-intelligence-panel-header {
@@ -11666,7 +11666,7 @@
   padding-right: 0 !important;
 }
 
-/* —— 13. Risk posture row —— */
+/* ?? 13. Risk posture row ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-risk-row,
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-risk-copy {
   background: transparent !important;
@@ -11679,12 +11679,12 @@
   border-top: 1px solid var(--ma-val-divider, rgba(255, 255, 255, 0.055)) !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.37 — Sidebar breath, grid alignment, committee air, ledger flatten
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.37 ? Sidebar breath, grid alignment, committee air, ledger flatten
    Visual-only. Preserves C.24.33 palette, C.24.36 anti-capsule, open comparables.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— Minor contrast refinement (palette unchanged) —— */
+/* ?? Minor contrast refinement (palette unchanged) ?? */
 .main-area .page .ma-valuation-premium-page {
   --ma-val-divider: rgba(255, 255, 255, 0.065);
   --ma-val-border-subtle: rgba(90, 255, 220, 0.11);
@@ -11693,7 +11693,7 @@
   --ma-val-muted: #b0c2bf;
 }
 
-/* —— 1. Unified desktop grid: 1480 shell, 340px sidebar, full main —— */
+/* ?? 1. Unified desktop grid: 1480 shell, 340px sidebar, full main ?? */
 .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
   --ceos-content-max: 1480px;
   --ceos-content-pad: clamp(24px, 2.5vw, 32px);
@@ -11741,7 +11741,7 @@
   margin-inline: 0 !important;
 }
 
-/* —— 2. Sidebar: no clipping, premium panel —— */
+/* ?? 2. Sidebar: no clipping, premium panel ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-input-cockpit-shell,
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium,
@@ -11888,7 +11888,7 @@
   gap: 20px !important;
 }
 
-/* —— 3. Value ledger: kill legacy inner black slab —— */
+/* ?? 3. Value ledger: kill legacy inner black slab ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-premium-deal-card.ma-valuation-value-ledger .ma-bridge-list-premium,
 .main-area .page .ma-valuation-premium-page .ma-premium-deal-card.ma-valuation-value-ledger .ma-bridge-list-premium,
 .main-area .page .ma-valuation-premium-page .ma-bridge-list.ma-bridge-list-premium,
@@ -11949,7 +11949,7 @@
   color: var(--ma-val-text-secondary) !important;
 }
 
-/* —— 4. Committee readiness: institutional checklist —— */
+/* ?? 4. Committee readiness: institutional checklist ?? */
 .main-area .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 36px 38px 40px !important;
 }
@@ -12011,7 +12011,7 @@
   margin-left: auto !important;
 }
 
-/* —— 5. Mini KPIs: larger, clearer —— */
+/* ?? 5. Mini KPIs: larger, clearer ?? */
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats {
   margin-top: 28px !important;
   padding-top: 24px !important;
@@ -12057,7 +12057,7 @@
   line-height: 1.12 !important;
 }
 
-/* —— 6. Market comparables: open list refinement —— */
+/* ?? 6. Market comparables: open list refinement ?? */
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-item {
   padding: 44px 0 !important;
   border-bottom: 1px solid var(--ma-val-divider) !important;
@@ -12093,7 +12093,7 @@
   font-size: clamp(24px, 1.9vw, 28px) !important;
 }
 
-/* —— 7. Hero / upper suite grid alignment —— */
+/* ?? 7. Hero / upper suite grid alignment ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite {
   width: 100% !important;
   max-width: none !important;
@@ -12124,11 +12124,11 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.38 — Teal/charcoal palette lock (fix blue slate regression)
-   Wins over C.24.24–C.24.30 blue gradients, EPS generic inputs, workspace bleed.
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.38 ? Teal/charcoal palette lock (fix blue slate regression)
+   Wins over C.24.24?C.24.30 blue gradients, EPS generic inputs, workspace bleed.
    Preserves C.24.37 layout/sidebar. Visual-only.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma']:has(.page .ma-valuation-premium-page) {
   background-color: #050c14 !important;
@@ -12157,7 +12157,7 @@
   color: #f4f7f6 !important;
 }
 
-/* —— Upper suite + hero: charcoal/teal, not blue slate —— */
+/* ?? Upper suite + hero: charcoal/teal, not blue slate ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite,
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite.ma-valuation-surface {
   background: transparent !important;
@@ -12180,7 +12180,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
 }
 
-/* —— Module cards: unified charcoal/teal surfaces —— */
+/* ?? Module cards: unified charcoal/teal surfaces ?? */
 .main-area .page .ma-valuation-premium-page :is(
   .ma-equity-safe-card,
   .ma-premium-deal-card,
@@ -12198,7 +12198,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
 }
 
-/* —— Sidebar shell + inputs: teal charcoal, not navy blue —— */
+/* ?? Sidebar shell + inputs: teal charcoal, not navy blue ?? */
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium {
   background: linear-gradient(168deg, #0e1c26 0%, #0c1822 54%, #0a1620 100%) !important;
   border: 1px solid rgba(90, 255, 220, 0.12) !important;
@@ -12232,14 +12232,14 @@
   background: linear-gradient(90deg, rgba(45, 212, 191, 0.55), #2dd4bf) !important;
 }
 
-/* —— Metrics strip —— */
+/* ?? Metrics strip ?? */
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-command-bar.ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip {
   background: linear-gradient(165deg, #0e1c26 0%, #0c1822 48%, #081119 100%) !important;
   border: 1px solid rgba(90, 255, 220, 0.12) !important;
 }
 
-/* —— Shield workspace hero tint on premium valuation —— */
+/* ?? Shield workspace hero tint on premium valuation ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
   .ma-valuation-hero,
   .ma-val-ref-scene
@@ -12248,11 +12248,11 @@
   border-color: transparent !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.39 — SIDEBAR PREMIUM UNIFICATION (anti-sticker)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.39 ? SIDEBAR PREMIUM UNIFICATION (anti-sticker)
    Scope: LEFT sidebar only (.ma-valuation-input-cockpit). Visual-only.
-   One continuous executive panel — flat sections, dividers, premium fields.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   One continuous executive panel ? flat sections, dividers, premium fields.
+   ??????????????????????????????????????????????????????????????????????????? */
 
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit {
   background: transparent !important;
@@ -12679,12 +12679,12 @@
   line-height: 1.62 !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.40 — SIDEBAR FINAL ANTI-STICKER PASS
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.40 ? SIDEBAR FINAL ANTI-STICKER PASS
    Scope: LEFT sidebar only. Visual-only. Kills residual nested boxes/borders.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— Single calm outer surface (less “card holding cards”) —— */
+/* ?? Single calm outer surface (less ?card holding cards?) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface {
   padding: 26px 22px 30px !important;
   border-radius: 18px !important;
@@ -12696,7 +12696,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
 }
 
-/* —— Kill executivePolish nested “card inside card” on ma-input-card-inner —— */
+/* ?? Kill executivePolish nested ?card inside card? on ma-input-card-inner ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit [class*='card'],
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit [class*='box'],
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card-inner,
@@ -12710,7 +12710,7 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* —— Sections: spacing rhythm, no stacked-card borders (legacy + EPS) —— */
+/* ?? Sections: spacing rhythm, no stacked-card borders (legacy + EPS) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-valuation-input-section,
@@ -12740,7 +12740,7 @@
   box-shadow: none !important;
 }
 
-/* —— Band: editorial intro, no capsule / no heavy rule —— */
+/* ?? Band: editorial intro, no capsule / no heavy rule ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-cockpit-band {
   margin: 0 0 6px !important;
   padding: 0 0 22px !important;
@@ -12757,7 +12757,7 @@
   padding-left: 0 !important;
 }
 
-/* —— Section headers: typographic only —— */
+/* ?? Section headers: typographic only ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-header,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-premium .ma-valuation-input-cockpit .ma-input-header {
   padding: 0 0 14px !important;
@@ -12796,7 +12796,7 @@
   color: rgba(203, 213, 225, 0.62) !important;
 }
 
-/* —— Fields: softer unified system —— */
+/* ?? Fields: softer unified system ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field {
   gap: 7px !important;
 }
@@ -12844,7 +12844,7 @@
   background: rgba(90, 255, 220, 0.06) !important;
 }
 
-/* —— Risk rows: open list, no microcards —— */
+/* ?? Risk rows: open list, no microcards ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-list {
   gap: 0 !important;
   padding: 2px 0 0 !important;
@@ -12936,7 +12936,7 @@
   letter-spacing: 0.06em !important;
 }
 
-/* —— Executive valuation posture: contextual note, not subcard —— */
+/* ?? Executive valuation posture: contextual note, not subcard ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-premium .ma-valuation-input-cockpit .ma-config-note {
   margin: 18px 0 0 !important;
@@ -12965,13 +12965,13 @@
   line-height: 1.6 !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.41 — SIDEBAR WIDTH + BREATH + ANTI-CLIP + PREMIUM SLIDERS
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.41 ? SIDEBAR WIDTH + BREATH + ANTI-CLIP + PREMIUM SLIDERS
    Scope: LEFT sidebar column only (+ grid column width). Visual-only.
    Fixes: narrow column, clipped text, compressed inputs, slider capsules.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— Sidebar column width (desktop) —— */
+/* ?? Sidebar column width (desktop) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-body-grid,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page.ma-executive-page .ma-valuation-body-grid,
 .main-area .page .ma-valuation-premium-page .ma-valuation-body-grid,
@@ -13000,7 +13000,7 @@
   overflow: visible !important;
 }
 
-/* —— Anti-clip: legibility over decoration —— */
+/* ?? Anti-clip: legibility over decoration ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-panel,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card,
@@ -13035,7 +13035,7 @@
   hyphens: none !important;
 }
 
-/* —— Unified panel shell —— */
+/* ?? Unified panel shell ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface {
   padding: 30px 26px 34px !important;
   border-radius: 18px !important;
@@ -13054,7 +13054,7 @@
   overflow: visible !important;
 }
 
-/* —— Band header: premium intro, icon visible, no mini-card —— */
+/* ?? Band header: premium intro, icon visible, no mini-card ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-cockpit-band {
   display: flex !important;
   align-items: flex-start !important;
@@ -13095,7 +13095,7 @@
   color: rgba(203, 213, 225, 0.7) !important;
 }
 
-/* —— Sections: continuous panel rhythm —— */
+/* ?? Sections: continuous panel rhythm ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-valuation-input-section {
@@ -13137,7 +13137,7 @@
   color: rgba(203, 213, 225, 0.66) !important;
 }
 
-/* —— Inputs / selects: premium, consistent, not crushed —— */
+/* ?? Inputs / selects: premium, consistent, not crushed ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field {
   gap: 9px !important;
   min-width: 0 !important;
@@ -13185,7 +13185,7 @@
   gap: 18px 16px !important;
 }
 
-/* —— Risk rows: open list, kill legacy slider capsule box —— */
+/* ?? Risk rows: open list, kill legacy slider capsule box ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-list {
   display: flex !important;
   flex-direction: column !important;
@@ -13315,7 +13315,7 @@
   letter-spacing: 0.05em !important;
 }
 
-/* —— Executive valuation posture: contextual note, not sticker —— */
+/* ?? Executive valuation posture: contextual note, not sticker ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note {
   margin: 22px 0 0 !important;
   padding: 16px 0 0 !important;
@@ -13340,13 +13340,13 @@
   color: rgba(176, 194, 191, 0.72) !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.42 — SIDEBAR WIDTH + RANGE DECAPSULE + PREMIUM BREATH
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.42 ? SIDEBAR WIDTH + RANGE DECAPSULE + PREMIUM BREATH
    Scope: LEFT sidebar only (+ grid column). Visual-only.
-   Root fix: range inputs were inheriting text-field box styles → black capsules.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   Root fix: range inputs were inheriting text-field box styles ? black capsules.
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— Column width: 330–360px desktop —— */
+/* ?? Column width: 330?360px desktop ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-body-grid,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page.ma-executive-page .ma-valuation-body-grid,
 .main-area .page .ma-valuation-premium-page .ma-valuation-body-grid,
@@ -13373,7 +13373,7 @@
   overflow: visible !important;
 }
 
-/* —— Panel shell: full width, modest lateral padding —— */
+/* ?? Panel shell: full width, modest lateral padding ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface {
   width: 100% !important;
   min-width: 0 !important;
@@ -13395,7 +13395,7 @@
   overflow: visible !important;
 }
 
-/* —— Anti-clip typography —— */
+/* ?? Anti-clip typography ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit :is(
   .ma-valuation-input-cockpit-band-title,
   .ma-valuation-input-cockpit-band-lead,
@@ -13429,7 +13429,7 @@
   color: rgba(203, 213, 225, 0.72) !important;
 }
 
-/* —— Sections: continuous panel —— */
+/* ?? Sections: continuous panel ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-valuation-input-section,
 .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card,
@@ -13467,7 +13467,7 @@
   color: rgba(203, 213, 225, 0.7) !important;
 }
 
-/* —— Text inputs / selects ONLY (exclude range) —— */
+/* ?? Text inputs / selects ONLY (exclude range) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .input,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .select,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell :is(
@@ -13508,7 +13508,7 @@
   gap: 20px 16px !important;
 }
 
-/* —— Kill ALL slider capsule containers (legacy page-level + C.14D) —— */
+/* ?? Kill ALL slider capsule containers (legacy page-level + C.14D) ?? */
 .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-list,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-list,
 .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field,
@@ -13575,7 +13575,7 @@
   height: auto !important;
 }
 
-/* —— Range: thin line control, NOT a boxed input —— */
+/* ?? Range: thin line control, NOT a boxed input ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit input[type='range'],
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-track-row input[type='range'],
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field input[type='range'] {
@@ -13649,7 +13649,7 @@
   letter-spacing: 0.04em !important;
 }
 
-/* —— Executive valuation posture: soft integrated note —— */
+/* ?? Executive valuation posture: soft integrated note ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note {
   margin: 24px 0 0 !important;
   padding: 18px 0 0 !important;
@@ -13673,12 +13673,12 @@
   color: rgba(176, 194, 191, 0.75) !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.43 — PREMIUM FINISH PASS (soft lines, integrated upper suite)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.43 ? PREMIUM FINISH PASS (soft lines, integrated upper suite)
    Scope: /ma-valuation-premium-page visual polish only. No structure/logic.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— Softer design tokens —— */
+/* ?? Softer design tokens ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page,
 .main-area .page .ma-valuation-premium-page {
   --ma-val-divider: rgba(255, 255, 255, 0.045);
@@ -13690,7 +13690,7 @@
   --ma-val-shadow-luxury: 0 22px 52px rgba(0, 0, 0, 0.15);
 }
 
-/* —— Upper suite: Private M&A Intelligence finish —— */
+/* ?? Upper suite: Private M&A Intelligence finish ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite,
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite {
   border: 0 !important;
@@ -13724,7 +13724,7 @@
     linear-gradient(90deg, rgba(45, 212, 191, 0.025) 1px, transparent 1px) !important;
 }
 
-/* Right status panel — softer remate */
+/* Right status panel ? softer remate */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-status-card.ma-valuation-surface,
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-status-card.ma-valuation-surface {
   border: 1px solid rgba(90, 255, 220, 0.1) !important;
@@ -13736,7 +13736,7 @@
   -webkit-backdrop-filter: blur(18px) !important;
 }
 
-/* Top metrics strip — fused with hero, not a separate hard band */
+/* Top metrics strip ? fused with hero, not a separate hard band */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-command-bar.ma-valuation-command-strip,
 .main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-command-bar.ma-valuation-command-strip,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip,
@@ -13755,7 +13755,7 @@
   border-left: 1px solid rgba(255, 255, 255, 0.045) !important;
 }
 
-/* —— Main surfaces: softer card contours —— */
+/* ?? Main surfaces: softer card contours ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal):not(.ma-valuation-upper-suite):not(.ma-valuation-status-card),
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal):not(.ma-valuation-upper-suite):not(.ma-valuation-status-card),
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
@@ -13771,14 +13771,14 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.038) !important;
 }
 
-/* —— Value ledger rows —— */
+/* ?? Value ledger rows ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger,
 .main-area .page .ma-valuation-premium-page .ma-bridge-row.ma-valuation-ledger,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-list-premium .ma-bridge-row {
   border-bottom: 1px solid rgba(255, 255, 255, 0.045) !important;
 }
 
-/* —— Committee readiness — editorial rows, no table box —— */
+/* ?? Committee readiness ? editorial rows, no table box ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-evidence-checklist-table,
 .main-area .page .ma-valuation-premium-page .ma-evidence-checklist-table {
   border: 0 !important;
@@ -13792,13 +13792,13 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.045) !important;
 }
 
-/* —— Market comparables open list —— */
+/* ?? Market comparables open list ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparable-open-item,
 .main-area .page .ma-valuation-premium-page .ma-comparable-open-item {
   border-bottom: 1px solid rgba(255, 255, 255, 0.045) !important;
 }
 
-/* —— Sidebar soft contours (preserve C.24.42 width/decapsule) —— */
+/* ?? Sidebar soft contours (preserve C.24.42 width/decapsule) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface {
   border: 1px solid rgba(90, 255, 220, 0.08) !important;
   box-shadow:
@@ -13829,7 +13829,7 @@
   border-top-color: rgba(90, 255, 220, 0.05) !important;
 }
 
-/* —— Controls & hero buttons —— */
+/* ?? Controls & hero buttons ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .button.primary,
 .main-area .page .ma-valuation-premium-page .button.primary {
   border: 1px solid rgba(45, 212, 191, 0.22) !important;
@@ -13854,7 +13854,7 @@
   opacity: 0.72 !important;
 }
 
-/* —— Mini KPI / metric dividers inside cards —— */
+/* ?? Mini KPI / metric dividers inside cards ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stat,
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stat,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-metric,
@@ -13868,7 +13868,7 @@
 }
 
 /* ==========================================================================
-   C.24.44 — Committee readiness shell: borderless integrated surface (ONE card only)
+   C.24.44 ? Committee readiness shell: borderless integrated surface (ONE card only)
    ========================================================================== */
 
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-evidence-ledger.ma-valuation-executive-ledger.ma-valuation-surface,
@@ -13887,13 +13887,13 @@
   content: none !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   C.24.45 — PAGE-WIDE PREMIUM INTEGRATION (soft surfaces, no hard frames)
+/* ???????????????????????????????????????????????????????????????????????????
+   C.24.45 ? PAGE-WIDE PREMIUM INTEGRATION (soft surfaces, no hard frames)
    Scope: /ma-valuation-premium-page CSS polish only. No structure/logic/data.
    Keeps upper-suite + C.24.44 committee shell. Unifies rest to same finish.
-   ═══════════════════════════════════════════════════════════════════════════ */
+   ??????????????????????????????????????????????????????????????????????????? */
 
-/* —— Softer global tokens —— */
+/* ?? Softer global tokens ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page,
 .main-area .page .ma-valuation-premium-page {
   --ma-val-divider: rgba(255, 255, 255, 0.04);
@@ -13904,7 +13904,7 @@
   --ma-val-shadow-integrated: 0 18px 44px rgba(0, 0, 0, 0.1);
 }
 
-/* —— Main cards: borderless integrated surfaces (NOT upper-suite / NOT committee) —— */
+/* ?? Main cards: borderless integrated surfaces (NOT upper-suite / NOT committee) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
   .ma-equity-safe-card,
   .ma-premium-deal-card,
@@ -13951,7 +13951,7 @@
   content: none !important;
 }
 
-/* —— Sidebar shell: integrated, no hard frame —— */
+/* ?? Sidebar shell: integrated, no hard frame ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface {
   border: 0 !important;
@@ -13982,7 +13982,7 @@
   box-shadow: none !important;
 }
 
-/* —— Sidebar: kill slider capsules (override executivePolish global .ma-slider-field) —— */
+/* ?? Sidebar: kill slider capsules (override executivePolish global .ma-slider-field) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-list,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-track-row,
@@ -14025,7 +14025,7 @@
   box-shadow: none !important;
 }
 
-/* —— Value ledger: open rows, no embedded black box —— */
+/* ?? Value ledger: open rows, no embedded black box ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card.ma-valuation-value-ledger .ma-bridge-list,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-deal-card.ma-valuation-value-ledger .ma-bridge-list-premium,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-bridge-list.ma-bridge-list-premium,
@@ -14101,7 +14101,7 @@
   padding: 0 !important;
 }
 
-/* —— Committee readiness: editorial air, discreet status —— */
+/* ?? Committee readiness: editorial air, discreet status ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger,
 .main-area .page .ma-valuation-premium-page .ma-traceability-panel.ma-valuation-executive-ledger {
   padding: 36px 36px 38px !important;
@@ -14153,7 +14153,7 @@
   padding: 0 !important;
 }
 
-/* —— Signals / inference list —— */
+/* ?? Signals / inference list ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-inference-list,
 .main-area .page .ma-valuation-premium-page .ma-inference-list {
   margin-top: 8px !important;
@@ -14189,7 +14189,7 @@
   color: rgba(45, 212, 191, 0.55) !important;
 }
 
-/* —— Market comparables open list —— */
+/* ?? Market comparables open list ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-list-open,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-comparables-ledger-open,
 .main-area .page .ma-valuation-premium-page .ma-comparables-ledger.ma-comparables-list-open {
@@ -14222,7 +14222,7 @@
   box-shadow: none !important;
 }
 
-/* —— Adjusted equity: integrated stats, no mini-capsules —— */
+/* ?? Adjusted equity: integrated stats, no mini-capsules ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats,
 .main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats {
   border-top: 1px solid var(--ma-val-divider) !important;
@@ -14243,7 +14243,7 @@
   border-top: 1px solid var(--ma-val-divider) !important;
 }
 
-/* —— Global row/list dividers unify —— */
+/* ?? Global row/list dividers unify ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
   .ma-bridge-row.ma-valuation-ledger,
   .ma-evidence-checklist-row,
@@ -14260,7 +14260,7 @@
 }
 
 /* ==========================================================================
-   C.24.47 — SIDEBAR ONLY (revert C.24.46 regressions)
+   C.24.47 ? SIDEBAR ONLY (revert C.24.46 regressions)
    Scope: LEFT sidebar + grid column width ONLY.
    Does NOT touch hero, main cards, ledger, committee, comparables, page shell.
    ========================================================================== */
@@ -14396,7 +14396,7 @@
 }
 
 /* ==========================================================================
-   C.24.48 — SIDEBAR PREMIUM PANEL (final authority, cockpit scope ONLY)
+   C.24.48 ? SIDEBAR PREMIUM PANEL (final authority, cockpit scope ONLY)
    Scope: .ma-valuation-input-cockpit + sidebar column width. Nothing else.
    ========================================================================== */
 
@@ -14428,7 +14428,7 @@
   overflow: visible !important;
 }
 
-/* —— Single premium panel shell —— */
+/* ?? Single premium panel shell ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface {
   width: 100% !important;
@@ -14450,7 +14450,7 @@
   content: none !important;
 }
 
-/* —— Inputs & assumptions header: integrated, not a sticker —— */
+/* ?? Inputs & assumptions header: integrated, not a sticker ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-cockpit-band,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-cockpit-band {
   display: flex !important;
@@ -14509,7 +14509,7 @@
   color: rgba(176, 194, 191, 0.78) !important;
 }
 
-/* —— Sections: continuous panel, hairline dividers only —— */
+/* ?? Sections: continuous panel, hairline dividers only ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-panel,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-panel {
   display: flex !important;
@@ -14581,7 +14581,7 @@
   background: rgba(255, 255, 255, 0.04) !important;
 }
 
-/* —— Base financials / settings fields —— */
+/* ?? Base financials / settings fields ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-stack,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-stack {
   gap: 22px !important;
@@ -14647,7 +14647,7 @@
   outline: none !important;
 }
 
-/* —— Sliders: zero capsule (override executivePolish global .ma-slider-field) —— */
+/* ?? Sliders: zero capsule (override executivePolish global .ma-slider-field) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-list,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-track-row,
@@ -14808,7 +14808,7 @@
   color: rgba(148, 163, 184, 0.5) !important;
 }
 
-/* —— Settings + executive posture: integrated note —— */
+/* ?? Settings + executive posture: integrated note ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-config-note {
   margin-top: 22px !important;
@@ -14837,11 +14837,11 @@
 }
 
 /* ==========================================================================
-   C.24.49 — SIDEBAR WIDTH + LEGIBILITY (cockpit + grid column ONLY)
+   C.24.49 ? SIDEBAR WIDTH + LEGIBILITY (cockpit + grid column ONLY)
    Fixes: narrow column, micro type, compressed inputs, tight sliders.
    ========================================================================== */
 
-/* —— Grid: real sidebar column width (parent only) —— */
+/* ?? Grid: real sidebar column width (parent only) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-body-grid,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page.ma-executive-page .ma-valuation-body-grid,
 .main-area .page .ma-valuation-premium-page .ma-valuation-body-grid,
@@ -14880,7 +14880,7 @@
   }
 }
 
-/* —— Panel shell: full usable width inside column —— */
+/* ?? Panel shell: full usable width inside column ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface {
   width: 100% !important;
@@ -14901,7 +14901,7 @@
   max-width: none !important;
 }
 
-/* —— Typography minimums —— */
+/* ?? Typography minimums ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-cockpit-band-title,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-valuation-input-cockpit-band-title {
   font-size: 20px !important;
@@ -14936,7 +14936,7 @@
   letter-spacing: 0.05em !important;
 }
 
-/* —— Inputs / selects: comfortable height —— */
+/* ?? Inputs / selects: comfortable height ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .input,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .field .select,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell :is(
@@ -14956,7 +14956,7 @@
   line-height: 1.4 !important;
 }
 
-/* —— Base financials: 2-col when sidebar >= 340px —— */
+/* ?? Base financials: 2-col when sidebar >= 340px ?? */
 @media (min-width: 1181px) {
   .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-grid,
   .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-grid {
@@ -14973,7 +14973,7 @@
   }
 }
 
-/* —— Sliders: airy rows, no capsule —— */
+/* ?? Sliders: airy rows, no capsule ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field {
   padding: 30px 0 !important;
@@ -15035,7 +15035,7 @@
   height: 12px !important;
 }
 
-/* —— Settings: more air, integrated note —— */
+/* ?? Settings: more air, integrated note ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card:last-child,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-valuation-input-section:last-child,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card:last-child {
@@ -15105,12 +15105,12 @@
 }
 
 /* ==========================================================================
-   C.24.50 — SIDEBAR REAL WIDTH (layout authority, beats max-width caps)
+   C.24.50 ? SIDEBAR REAL WIDTH (layout authority, beats max-width caps)
    Root cause: max-width:340px + min-width:0 on sidebar/shell; EPS specificity wars.
    Scope: body grid + sidebar column + cockpit internals ONLY.
    ========================================================================== */
 
-/* —— 1. Parent grid: fixed premium sidebar track —— */
+/* ?? 1. Parent grid: fixed premium sidebar track ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium.ma-valuation-premium-page.ma-executive-page .ma-valuation-body-grid,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium.ma-valuation-premium-page .ma-valuation-body-grid,
 .main-area .page .ma-valuation-premium.ma-valuation-premium-page.ma-executive-page .ma-valuation-body-grid,
@@ -15133,7 +15133,7 @@
   }
 }
 
-/* —— 2. Sidebar column: fill track, never shrink below floor —— */
+/* ?? 2. Sidebar column: fill track, never shrink below floor ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium.ma-valuation-premium-page .ma-valuation-body-grid > .ma-valuation-sidebar.ma-valuation-input-cockpit,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium.ma-valuation-premium-page .ma-valuation-body-grid > .ma-valuation-input-cockpit,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium.ma-valuation-premium-page .ma-valuation-body-grid > .ma-valuation-sidebar,
@@ -15160,7 +15160,7 @@
   }
 }
 
-/* —— 3. Inner shell: use full column (kill min-width:0 compressors) —— */
+/* ?? 3. Inner shell: use full column (kill min-width:0 compressors) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-sidebar-premium.ma-valuation-surface,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell,
@@ -15185,7 +15185,7 @@
   overflow: visible !important;
 }
 
-/* —— 4. Typography floor (no micro-type to fit) —— */
+/* ?? 4. Typography floor (no micro-type to fit) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-header h3,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-header h3 {
   font-size: 15px !important;
@@ -15208,7 +15208,7 @@
   line-height: 1.45 !important;
 }
 
-/* —— 5. Inputs / selects: comfortable —— */
+/* ?? 5. Inputs / selects: comfortable ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell :is(
   input:not([type='range']),
   select,
@@ -15229,7 +15229,7 @@
   background: rgba(0, 0, 0, 0.22) !important;
 }
 
-/* —— 6. Base financials: 1 col default; 2 col only when track is wide —— */
+/* ?? 6. Base financials: 1 col default; 2 col only when track is wide ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-grid,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-grid {
   grid-template-columns: 1fr !important;
@@ -15244,7 +15244,7 @@
   }
 }
 
-/* —— 7. Sliders: airy flat rows —— */
+/* ?? 7. Sliders: airy flat rows ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-track-row,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-slider-field,
@@ -15301,7 +15301,7 @@
   height: 12px !important;
 }
 
-/* —— 8. Settings + executive posture —— */
+/* ?? 8. Settings + executive posture ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card:last-child,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .card.ma-valuation-input-section:last-child,
 .main-area .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-card:last-child {
@@ -15332,7 +15332,7 @@
 }
 
 /* ==========================================================================
-   C.24.51 — RESIDUAL CAPSULE SWEEP (decorative-only, page-wide, last word)
+   C.24.51 ? RESIDUAL CAPSULE SWEEP (decorative-only, page-wide, last word)
    Goal: guarantee no residual decorative capsule wraps text/icons from ANY
    source (file cascade or runtime EPS). Touches ONLY background/border-radius/
    box-shadow (+ border:0 for pure chips). Does NOT touch padding/margin/grid/
@@ -15342,7 +15342,7 @@
    as small flat labels. Divider borders on rows/cells are preserved.
    ========================================================================== */
 
-/* —— Group A: pure chips / kickers / icon-boxes → fully flat (no divider role) —— */
+/* ?? Group A: pure chips / kickers / icon-boxes ? fully flat (no divider role) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
   .ma-kicker,
   .ma-input-kicker,
@@ -15408,7 +15408,7 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* —— Group B: divider rows/cells → drop capsule fill, KEEP divider borders —— */
+/* ?? Group B: divider rows/cells ? drop capsule fill, KEEP divider borders ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
   .ma-equity-safe-stat,
   .ma-equity-safe-metric,
@@ -15442,7 +15442,7 @@
 }
 
 /* ==========================================================================
-   C.24.52 — KILL executivePolish.css DARK PILLS on valuation labels/band
+   C.24.52 ? KILL executivePolish.css DARK PILLS on valuation labels/band
    Root cause: src/styles/executivePolish.css applies
      border + dark surface + border-radius to any [class*="kpi"] /
      [class*="command-item"] not in its long :not() allowlist.
@@ -15454,7 +15454,7 @@
    Global executivePolish.css (protected) is intentionally NOT modified.
    ========================================================================== */
 
-/* —— Top metrics strip labels + Quality score + all card kpi labels —— */
+/* ?? Top metrics strip labels + Quality score + all card kpi labels ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .kpi-label:not(#__ceos_no_match__),
 .main-area .page .ma-valuation-premium-page .kpi-label:not(#__ceos_no_match__) {
   padding: 0 !important;
@@ -15467,7 +15467,7 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* —— Top strip cells: no inner pill/bar, keep column divider (border-right) —— */
+/* ?? Top strip cells: no inner pill/bar, keep column divider (border-right) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
   .ma-valuation-strip-cell,
   .ma-valuation-command-item
@@ -15504,7 +15504,7 @@
   content: none !important;
 }
 
-/* —— Sidebar band header: title + description integrated, no dark pill —— */
+/* ?? Sidebar band header: title + description integrated, no dark pill ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit :is(
   .ma-valuation-input-cockpit-band,
   .ma-valuation-input-cockpit-band-copy,
@@ -15533,9 +15533,9 @@
 }
 
 /* ==========================================================================
-   C.24.53 — "Ready for valuation" card: remove inner dark capsule
+   C.24.53 ? "Ready for valuation" card: remove inner dark capsule
    The .ma-valuation-status-box wraps the readiness headline + description.
-   It contains "box" → executivePolish.css [class*="box"] surface rules (both
+   It contains "box" ? executivePolish.css [class*="box"] surface rules (both
    the direct and the nested-inside-card variant, specificity ~0,46,0) paint a
    dark rounded sub-box over it. We beat A=0 with one #id in :not() (A=1) and
    flatten it into the card surface. Decorative-only; text/structure untouched.
@@ -15593,21 +15593,21 @@
 }
 
 /* ==========================================================================
-   C.24.55 — PAGE-WIDE COLOR GRADING: unify surfaces to blue-teal petroleum
+   C.24.55 ? PAGE-WIDE COLOR GRADING: unify surfaces to blue-teal petroleum
    PROBLEM: the authoritative surface recipes (C.24.45, ~line 7043) hardcode
    GREEN-black gradients (#0c1822 / #0a141d / #0e1c26) on .ma-valuation-surface,
    the sidebar cockpit shell and the top strip, while the main body cards
-   (equity summary, value ledger, comparables — C.24.14D, ~line 2852) already
+   (equity summary, value ledger, comparables ? C.24.14D, ~line 2852) already
    use a NAVY gradient (rgba(12,22,32)/rgba(8,14,22)). Result: some blocks read
-   greenish, others navy → inconsistent tonality.
+   greenish, others navy ? inconsistent tonality.
    FIX (color-only): shift the green surfaces into the SAME navy-teal petroleum
    family (~rgb(12,24,34)) the navy cards already use. Only background / border /
-   box-shadow are touched — no layout, no structure, no data, no logic.
-   Specificity: one #id in :not() → a=1, beats the a=0 !important green rules
+   box-shadow are touched ? no layout, no structure, no data, no logic.
+   Specificity: one #id in :not() ? a=1, beats the a=0 !important green rules
    regardless of their long class chains. Appended last for cascade authority.
    ========================================================================== */
 
-/* Primary card surfaces → navy-teal petroleum (was green #0c1822) */
+/* Primary card surfaces ? navy-teal petroleum (was green #0c1822) */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal):not(#__ceos_no_match__),
 .main-area .page .ma-valuation-premium-page .ma-valuation-surface:not(.ma-evidence-ledger-row):not(.ma-comparable-card-horizontal):not(#__ceos_no_match__) {
   background: linear-gradient(168deg, #0c1822 0%, #0a141d 54%, #081119 100%) !important;
@@ -15618,7 +15618,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
 }
 
-/* Sidebar cockpit shell → same navy-teal base + subtle teal ambient (was green #0e1c26) */
+/* Sidebar cockpit shell ? same navy-teal base + subtle teal ambient (was green #0e1c26) */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-surface:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium:not(#__ceos_no_match__),
 .main-area .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-surface:not(#__ceos_no_match__),
@@ -15629,7 +15629,7 @@
   border: 1px solid rgba(90, 255, 220, 0.09) !important;
 }
 
-/* Top metrics strip → same navy-teal base (was green #0e1c26) */
+/* Top metrics strip ? same navy-teal base (was green #0e1c26) */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-strip:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip:not(#__ceos_no_match__),
 .main-area .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-surface:not(#__ceos_no_match__) {
@@ -15647,7 +15647,7 @@
 }
 
 /* ==========================================================================
-   C.24.56 — LEFT SIDEBAR: premium continuous input panel (sidebar-only)
+   C.24.56 ? LEFT SIDEBAR: premium continuous input panel (sidebar-only)
    SCOPE: everything inside .ma-input-cockpit-shell (header band, sections,
    inputs/selects, sliders, settings note). Nothing else on the page.
    GOAL: stop the "black table with stacked cards / sticker capsules" look.
@@ -15657,12 +15657,12 @@
    (.ma-slider-list bg, ~line 4956). We flatten those into one continuous
    surface: sections separated by whitespace + a hairline divider, inputs on a
    lighter navy surface, sliders with a thin teal track and no capsule.
-   Specificity: one #id in :not() on the shell → a=1, beats all a=0 !important
+   Specificity: one #id in :not() on the shell ? a=1, beats all a=0 !important
    cockpit rules; appended last for source-order authority.
    COLOR/SPACING/BORDER/RADIUS/SIZE ONLY. No DOM, no fields, no behaviour.
    ========================================================================== */
 
-/* —— Header band: editorial, no tinted sub-card —— */
+/* ?? Header band: editorial, no tinted sub-card ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .ma-valuation-input-cockpit-band {
   padding: 26px 22px 20px !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
@@ -15679,13 +15679,13 @@
   box-shadow: none !important;
 }
 
-/* —— Panel wrapper: continuous rhythm, spacing drives separation —— */
+/* ?? Panel wrapper: continuous rhythm, spacing drives separation ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .ma-input-panel {
   gap: 0 !important;
   padding: 20px 22px 26px !important;
 }
 
-/* —— Sections: no card frame, integrate into the panel surface —— */
+/* ?? Sections: no card frame, integrate into the panel surface ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .ma-input-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .card.ma-input-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .card.ma-valuation-input-section {
@@ -15713,7 +15713,7 @@
   gap: 18px !important;
 }
 
-/* —— Section header: editorial hierarchy, no boxes —— */
+/* ?? Section header: editorial hierarchy, no boxes ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .ma-input-header {
   display: flex !important;
   align-items: flex-start !important;
@@ -15762,7 +15762,7 @@
   color: rgba(94, 234, 212, 0.45) !important;
 }
 
-/* —— Field groups: comfortable vertical air —— */
+/* ?? Field groups: comfortable vertical air ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .ma-input-stack {
   display: flex !important;
   flex-direction: column !important;
@@ -15781,7 +15781,7 @@
   background: rgba(255, 255, 255, 0.05) !important;
 }
 
-/* —— Labels —— */
+/* ?? Labels ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .field label {
   font-size: 11px !important;
   letter-spacing: 0.08em !important;
@@ -15792,7 +15792,7 @@
   overflow: visible !important;
 }
 
-/* —— Inputs & selects: consistent, lighter navy surface, soft border —— */
+/* ?? Inputs & selects: consistent, lighter navy surface, soft border ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .field .input,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .field .select,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .field input:not([type='range']),
@@ -15819,7 +15819,7 @@
   outline: none !important;
 }
 
-/* —— Risk profile: sliders integrated, no capsule —— */
+/* ?? Risk profile: sliders integrated, no capsule ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .ma-slider-list {
   display: flex !important;
   flex-direction: column !important;
@@ -15958,7 +15958,7 @@
   color: var(--ma-val-muted-soft) !important;
 }
 
-/* —— Valuation settings note: soft, integrated, near-invisible border —— */
+/* ?? Valuation settings note: soft, integrated, near-invisible border ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell:not(#__ceos_no_match__) .ma-config-note {
   margin: 4px 0 0 !important;
   padding: 14px 16px !important;
@@ -15989,17 +15989,17 @@
 }
 
 /* ==========================================================================
-   C.24.57 — TOP METRICS STRIP: integrated executive band (strip-only)
+   C.24.57 ? TOP METRICS STRIP: integrated executive band (strip-only)
    SCOPE: the Active target / Cases saved / Engine status band
    (.ma-valuation-command-strip) + its wrapper bottom padding. Nothing else.
    GOAL: stop the "framed table" look and the dark void beneath it.
-   - Outer frame almost removed (hairline border) → separation via subtle
+   - Outer frame almost removed (hairline border) ? separation via subtle
      background + a soft shadow, not a hard border.
    - Vertical dividers softened to rgba(255,255,255,0.035).
    - Comfortable height (64px), and the wrapper's 28px bottom padding
      (~line 10867) trimmed so there is no empty dark strip below the band.
    Keeps the 3-column layout, labels, values, data and alignment.
-   Specificity: one #id in :not() → a=1, beats prior a=0 !important rules.
+   Specificity: one #id in :not() ? a=1, beats prior a=0 !important rules.
    COLOR/SPACING/BORDER/SHADOW/SIZE ONLY. No DOM, no data, no logic.
    ========================================================================== */
 
@@ -16040,18 +16040,18 @@
 }
 
 /* ==========================================================================
-   C.24.58 — COMMITTEE READINESS CHECKLIST: premium compact checklist
+   C.24.58 ? COMMITTEE READINESS CHECKLIST: premium compact checklist
    SCOPE: only the .ma-valuation-executive-ledger panel (unique to this
    section). The Value ledger (.ma-valuation-value-ledger) is NOT matched.
    PROBLEMS: the inner .ma-evidence-checklist-table still carries a framed
    look (border + dark rgba(5,8,8,0.35) fill + radius, ~line 5755) and later
-   .ma-evidence-ledger-row-premium authorities re-inflate rows → rows read as
+   .ma-evidence-ledger-row-premium authorities re-inflate rows ? rows read as
    giant cards with lots of empty space; PENDING badge feels detached.
    FIX (visual only): flatten the table into the card surface, turn each row
    into a compact premium row separated by a hairline divider, balance the
    3-column grid, and make the PENDING badge small + top-right + discrete.
    Keeps rows, data, texts, alignment. Specificity: one #id in :not() on the
-   panel → a=1, beats prior a=0 !important rules; appended last.
+   panel ? a=1, beats prior a=0 !important rules; appended last.
    COLOR/SPACING/BORDER/RADIUS/SIZE/TYPOGRAPHY ONLY. No DOM, data, logic.
    ========================================================================== */
 
@@ -16276,10 +16276,10 @@
 }
 
 /* ==========================================================================
-   C.24.59 — SIGNALS / DEAL INTELLIGENCE: de-capsule the header (section-only)
+   C.24.59 ? SIGNALS / DEAL INTELLIGENCE: de-capsule the header (section-only)
    SCOPE: only the .ma-intelligence-panel ("Signals, risks and executive
    interpretation"). PROBLEM: the header (Deal Intelligence kicker + title +
-   description) reads as a large black rounded capsule — executivePolish.css
+   description) reads as a large black rounded capsule ? executivePolish.css
    paints a dark surface on generic .ma-panel-header (matches "panel"/"header")
    with specificity that beats the a=0 flatten at ~line 11668, so it survives.
    FIX (visual only): beat it with one #id in :not() (a=1) and integrate the
@@ -16348,7 +16348,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* C.24.60 — MINI KPIs (Adjusted equity value — DSS view): compact horizontal premium row */
+/* C.24.60 ? MINI KPIs (Adjusted equity value ? DSS view): compact horizontal premium row */
 /* Grid: 4 columns is the desktop norm; drop to 2 only when a column would be too narrow */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stats.ma-val-integrated-stats {
   display: grid !important;
@@ -16437,7 +16437,7 @@
   overflow-wrap: break-word !important;
 }
 
-/* C.24.61 — Hero executive signal graphic: premium depth + implicit motion (decor only) */
+/* C.24.61 ? Hero executive signal graphic: premium depth + implicit motion (decor only) */
 @media (prefers-reduced-motion: no-preference) {
   .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-signal-trail {
     animation: ma-val-signal-travel 4.6s linear infinite;
@@ -16511,7 +16511,7 @@
   50% { transform: translateY(-6px); opacity: 0.72; }
 }
 
-/* C.24.62 — Final consistency polish: unified neutral hairlines + coherent section headers + hero fusion */
+/* C.24.62 ? Final consistency polish: unified neutral hairlines + coherent section headers + hero fusion */
 
 /* Hero graphic: fuse better with the background (softer vignette + lighter panel shadow) */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium .ma-val-scenario-field-vignette {
@@ -16582,7 +16582,7 @@
   border-top-color: rgba(255, 255, 255, 0.045) !important;
 }
 
-/* C.24.63 — Hero signal graphic: larger scale + presence on desktop (still masked/faded, no card bleed) */
+/* C.24.63 ? Hero signal graphic: larger scale + presence on desktop (still masked/faded, no card bleed) */
 @media (min-width: 1181px) {
   .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-val-ref-scene-stage {
     width: min(840px, 62vw) !important;
@@ -16608,7 +16608,7 @@
   }
 }
 
-/* C.24.64 — Hero signal graphic: clear size jump + deeper background fusion (hero decor only) */
+/* C.24.64 ? Hero signal graphic: clear size jump + deeper background fusion (hero decor only) */
 @media (min-width: 1181px) {
   .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-val-ref-scene.ma-valuation-hero .ma-val-ref-scene-atmo {
     left: 5% !important;
@@ -16693,7 +16693,7 @@
   }
 }
 
-/* C.24.65 — "Ready for valuation" status list: neutral hairline + editorial first row (card polish only) */
+/* C.24.65 ? "Ready for valuation" status list: neutral hairline + editorial first row (card polish only) */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card:not(#__ceos_no_match__) .ma-valuation-status-row {
   border-top-color: rgba(255, 255, 255, 0.05) !important;
 }
@@ -16703,7 +16703,7 @@
 }
 
 /* ==========================================================================
-   C.24.66 — HERO premium elevation: cinematic depth + graphic light bed
+   C.24.66 ? HERO premium elevation: cinematic depth + graphic light bed
    Enriches only the hero container background/light, the right card surface
    and the hero CTAs. Does NOT touch graphic dimensions (owned by C.24.63/64),
    structure, text or logic. Additive, hero-scoped.
@@ -16722,18 +16722,31 @@
   content: none !important;
 }
 
-/* Right card: richer surface, finer top highlight, subtle teal halo, less flat */
-.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-valuation-status-card.ma-valuation-surface {
-  border: 1px solid rgba(90, 255, 220, 0.12) !important;
+/* Right card: dark transparent glass - teal −~9% micro polish */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  border: 1px solid rgba(148, 163, 184, 0.055) !important;
+  border-top-color: rgba(90, 255, 220, 0.074) !important;
+  padding: 36px 36px 38px !important;
   background:
-    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(45, 212, 191, 0.07), transparent 62%),
-    linear-gradient(168deg, rgba(15, 30, 33, 0.82) 0%, rgba(10, 21, 26, 0.66) 52%, rgba(8, 16, 22, 0.58) 100%) !important;
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.032) 0%,
+      rgba(255, 255, 255, 0) 14%
+    ),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.012) 0%,
+      rgba(2, 4, 7, 0.045) 44%,
+      rgba(1, 2, 4, 0.075) 100%
+    ) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.055),
-    0 18px 44px rgba(0, 0, 0, 0.2),
-    0 0 34px rgba(45, 212, 191, 0.05) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
+    inset 0 1px 0 rgba(255, 255, 255, 0.065),
+    inset 1px 0 0 rgba(45, 212, 191, 0.016),
+    0 10px 28px rgba(0, 0, 0, 0.2),
+    0 -6px 18px rgba(45, 212, 191, 0.009) !important;
+  backdrop-filter: blur(20px) saturate(86%) brightness(0.94) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(86%) brightness(0.94) !important;
+  overflow: visible !important;
 }
 
 /* Primary CTA: more solid, premium, controlled glow + inner highlight */
@@ -16755,7 +16768,7 @@
     0 0 0 1px rgba(45, 212, 191, 0.2) !important;
 }
 
-/* Secondary CTAs: sober, dark, refined — less utilitarian */
+/* Secondary CTAs: sober, dark, refined ? less utilitarian */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-actions:not(#__ceos_no_match__) .button.secondary {
   background: linear-gradient(168deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
   border-color: rgba(90, 255, 220, 0.16) !important;
@@ -16769,12 +16782,12 @@
 }
 
 /* ==========================================================================
-   C.24.67 — SIDEBAR final premium finish: continuous panel, cool hairlines,
+   C.24.67 ? SIDEBAR final premium finish: continuous panel, cool hairlines,
    lighter inputs, refined sliders. Sidebar-scoped, additive, decorative-only.
    No structure, fields, sliders behaviour, data or logic changed.
    ========================================================================== */
 
-/* Sections: fully integrated into the panel — no card-in-card, no warm remate */
+/* Sections: fully integrated into the panel ? no card-in-card, no warm remate */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit:not(#__ceos_no_match__) .ma-input-card,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit:not(#__ceos_no_match__) .ma-input-card-inner,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit:not(#__ceos_no_match__) .card.ma-valuation-input-section {
@@ -16823,7 +16836,7 @@
   outline: none !important;
 }
 
-/* Risk sliders: thin, elegant, integrated — soft cool track, clean teal thumb */
+/* Risk sliders: thin, elegant, integrated ? soft cool track, clean teal thumb */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit:not(#__ceos_no_match__) .ma-slider-field {
   margin: 0 !important;
   padding: 16px 0 !important;
@@ -16883,8 +16896,8 @@
 }
 
 /* ==========================================================================
-   C.24.68 — SIDEBAR interior: lift off near-black, reduce inner/outer contrast
-   The winning shell base was #0c1822 → #081119 (near-black at the bottom),
+   C.24.68 ? SIDEBAR interior: lift off near-black, reduce inner/outer contrast
+   The winning shell base was #0c1822 ? #081119 (near-black at the bottom),
    reading as a dark box inside the panel. Lift it to a continuous deep
    navy-teal and slightly raise the input surface so controls feel integrated,
    not utilitarian. Shell-scoped, decorative-only. No structure/fields/logic.
@@ -16919,9 +16932,9 @@
 }
 
 /* ==========================================================================
-   C.24.69 — "Ready for valuation" card: status rows as clean text, no pills
+   C.24.69 ? "Ready for valuation" card: status rows as clean text, no pills
    Scoped to the right readiness card only. Forces the status value (<strong>)
-   and label (.muted) to render as plain text — no capsule, badge, background,
+   and label (.muted) to render as plain text ? no capsule, badge, background,
    border, radius, badge padding, shadow or outline. Rows keep only a soft
    hairline divider. No structure, text, data or logic changed.
    ========================================================================== */
@@ -16967,7 +16980,7 @@
   color: var(--ma-val-muted) !important;
 }
 
-/* Row: no inner container look — soft hairline divider only */
+/* Row: no inner container look ? soft hairline divider only */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card:not(#__ceos_no_match__) .ma-valuation-status-row {
   background: transparent !important;
   background-image: none !important;
@@ -16982,7 +16995,7 @@
 }
 
 /* ==========================================================================
-   C.24.70 — SIDEBAR: more air between sections + posture note fully integrated
+   C.24.70 ? SIDEBAR: more air between sections + posture note fully integrated
    Appended last, cockpit-scoped, decorative-only. No fields/values/behaviour.
    ========================================================================== */
 
@@ -17011,10 +17024,10 @@
 }
 
 /* ==========================================================================
-   C.24.71 — Operational alerts under the hero: discreet premium notes
+   C.24.71 ? Operational alerts under the hero: discreet premium notes
    Restyle only (per user decision "keep + restyle"). Scoped to
    .ma-valuation-alerts. Every alert stays VISIBLE (viewer notice, backend
-   error, sync status, validation errors) — nothing removed. The boxy
+   error, sync status, validation errors) ? nothing removed. The boxy
    radius-24 luxury card becomes a slim note with a thin tone-colored accent.
    Errors keep a clearly readable red accent (product truthfulness). CSS only.
    ========================================================================== */
@@ -17048,7 +17061,7 @@
 }
 
 /* ==========================================================================
-   C.24.72 — Secondary text legibility floor (point 10)
+   C.24.72 ? Secondary text legibility floor (point 10)
    Lift the two weakest text tokens a step so metadata / microtext (sidebar
    descriptions, committee metadata, comparables footnotes, secondary labels)
    read comfortably without becoming glaring. Set on the page root so it
@@ -17061,7 +17074,7 @@
 }
 
 /* ==========================================================================
-   C.24.73 — Layer separation (point 4) + hero presence on narrow viewports
+   C.24.73 ? Layer separation (point 4) + hero presence on narrow viewports
    Lift the main content cards off the near-black background so they read as
    layers (not flat black), with a whisper of teal depth. And give the hero
    graphic real size when the layout stacks (<=1180px). Appended last, scoped,
@@ -17097,8 +17110,8 @@
 }
 
 /* ==========================================================================
-   C.24.74 — Cleanup + legibility (points 3 & 4)
-   (a) Hide only the transient "Backend synced: <time>" success card — a
+   C.24.74 ? Cleanup + legibility (points 3 & 4)
+   (a) Hide only the transient "Backend synced: <time>" success card ? a
        timestamp/status note. Backend ERROR, viewer-role notice and validation
        errors stay visible (functional/observability preserved). CSS only,
        no JSX/logic change, fully reversible.
@@ -17130,14 +17143,14 @@
 }
 
 /* ==========================================================================
-   C.24.75 — FINAL pass: sidebar as continuous premium panel + committee air
+   C.24.75 ? FINAL pass: sidebar as continuous premium panel + committee air
    Decisive, visible, safe. Fields become integrated recessed wells (not
    button-boxes), more vertical air between groups/sliders, and committee rows
    breathe a touch more. Appended last, scoped, decorative-only.
    No fields, values, order, behaviour, data or logic changed.
    ========================================================================== */
 
-/* Fields: integrated recessed well look — barely-there border + soft inset,
+/* Fields: integrated recessed well look ? barely-there border + soft inset,
    not an outlined black button */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit:not(#__ceos_no_match__) .field .input,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit:not(#__ceos_no_match__) .field .select,
@@ -17171,7 +17184,7 @@
 }
 
 /* ==========================================================================
-   C.24.76 — Open hero termination (no hard rectangular frame)
+   C.24.76 ? Open hero termination (no hard rectangular frame)
    Goal: remove the "closed card/table" look at the top by neutralizing:
    - upper-suite border/frame and hard shadow,
    - bottom seam/rectangular termination,
@@ -17216,7 +17229,7 @@
 }
 
 /* ==========================================================================
-   C.24.77 — Intelligence-open hero parity (wrapper + strip separation)
+   C.24.77 ? Intelligence-open hero parity (wrapper + strip separation)
    Mirrors Private M&A Intelligence (.ma-reference-page / .ma-reference-scene /
    .ma-reference-strip): upper-suite is a transparent shell; hero is open
    atmosphere; command strip is a detached floating slab. Wins over C.24.30,
@@ -17224,7 +17237,7 @@
    Visual-only. No data, text, buttons, graphic, sidebar or body changes.
    ========================================================================== */
 
-/* —— 1. Upper suite = open page shell (not a card) —— */
+/* ?? 1. Upper suite = open page shell (not a card) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) {
   display: flex !important;
   flex-direction: column !important;
@@ -17247,7 +17260,7 @@
   content: none !important;
 }
 
-/* —— 2. Hero = open scene (atmosphere lives here, not on the wrapper) —— */
+/* ?? 2. Hero = open scene (atmosphere lives here, not on the wrapper) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero {
   position: relative !important;
   isolation: isolate !important;
@@ -17280,7 +17293,7 @@
   content: none !important;
 }
 
-/* —— 3. Context strip wrapper: detached from hero frame —— */
+/* ?? 3. Context strip wrapper: detached from hero frame ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-valuation-context-strip,
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-valuation-active-strip {
   margin: 0 !important;
@@ -17292,7 +17305,7 @@
   box-shadow: none !important;
 }
 
-/* —— 4. Command strip = floating slab (ma-reference-strip parity) —— */
+/* ?? 4. Command strip = floating slab (ma-reference-strip parity) ?? */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-strip:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-surface.ma-valuation-command-strip:not(#__ceos_no_match__) {
@@ -17332,7 +17345,7 @@
 }
 
 /* ==========================================================================
-   C.24.78 — Hero composition parity with Intelligence (height, air, strip float)
+   C.24.78 ? Hero composition parity with Intelligence (height, air, strip float)
    Taller open hero, more vertical rhythm, detached floating strip, stronger
    graphic mask on the reading zone, discreet badges/nav. Visual-only.
    ========================================================================== */
@@ -17427,7 +17440,7 @@
   padding: 0 !important;
 }
 
-/* Floating command strip — reinforce slab separation */
+/* Floating command strip ? reinforce slab separation */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-strip:not(#__ceos_no_match__) {
   margin-top: 0 !important;
@@ -17511,12 +17524,12 @@
 }
 
 /* ==========================================================================
-   C.24.80 — M&A visual final pass: kill exterior hero plate + discreet badges
+   C.24.80 ? M&A visual final pass: kill exterior hero plate + discreet badges
    Wins over C.24.30/38/43/66 and ExecutivePremiumStyle residual upper-suite rules.
    Visual-only. No data, logic, hero graphic, sidebar or body changes.
    ========================================================================== */
 
-/* Upper suite: zero exterior plate — open like ma-reference-page */
+/* Upper suite: zero exterior plate ? open like ma-reference-page */
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite.ma-valuation-surface:not(#__ceos_no_match__) {
   display: flex !important;
@@ -17617,4 +17630,294 @@
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-strip .ma-valuation-strip-cell:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-command-strip .ma-valuation-command-item:not(#__ceos_no_match__) {
   border-right-color: rgba(255, 255, 255, 0.035) !important;
+}
+
+/* C.24.81 - Executive Readiness OUTER glass + INNER inset + air (final authority) */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-valuation-upper-suite .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  padding: 36px 36px 38px !important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.032) 0%,
+      rgba(255, 255, 255, 0) 14%
+    ),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.012) 0%,
+      rgba(2, 4, 7, 0.045) 44%,
+      rgba(1, 2, 4, 0.075) 100%
+    ) !important;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.032) 0%,
+      rgba(255, 255, 255, 0) 14%
+    ),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.012) 0%,
+      rgba(2, 4, 7, 0.045) 44%,
+      rgba(1, 2, 4, 0.075) 100%
+    ) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(148, 163, 184, 0.055) !important;
+  border-top-color: rgba(90, 255, 220, 0.074) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.065),
+    inset 1px 0 0 rgba(45, 212, 191, 0.016),
+    0 10px 28px rgba(0, 0, 0, 0.2),
+    0 -6px 18px rgba(45, 212, 191, 0.009) !important;
+  backdrop-filter: blur(20px) saturate(86%) brightness(0.94) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(86%) brightness(0.94) !important;
+  filter: none !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card:not(#__ceos_no_match__)::after,
+.main-area .page .ma-valuation-premium-page .ma-valuation-status-card:not(#__ceos_no_match__)::before,
+.main-area .page .ma-valuation-premium-page .ma-valuation-status-card:not(#__ceos_no_match__)::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  background-image: none !important;
+  opacity: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-inner:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-inner:not(#__ceos_no_match__) {
+  gap: 24px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-top:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-top:not(#__ceos_no_match__) {
+  gap: 20px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-title:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-title:not(#__ceos_no_match__) {
+  margin-top: 10px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box:not(#__ceos_no_match__) {
+  margin: 0 0 6px !important;
+  padding: 0 2px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box strong:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-box strong:not(#__ceos_no_match__) {
+  margin: 0 0 10px !important;
+}
+
+/* C.24.82 - Inner status table: embedded inset (not sticker), −~7% opacity */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-list:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-list:not(#__ceos_no_match__) {
+  background:
+    linear-gradient(
+      160deg,
+      rgba(6, 12, 18, 0.26) 0%,
+      rgba(3, 6, 11, 0.165) 100%
+    ) !important;
+  background-image:
+    linear-gradient(
+      160deg,
+      rgba(6, 12, 18, 0.26) 0%,
+      rgba(3, 6, 11, 0.165) 100%
+    ) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.03) !important;
+  border-radius: 12px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  padding: 4px 14px !important;
+  margin-top: 2px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-row:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-row:not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.032) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-list > .ma-valuation-status-row:first-child:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-valuation-status-card .ma-valuation-status-list > .ma-valuation-status-row:first-child:not(#__ceos_no_match__) {
+  border-top: 0 !important;
+}
+
+/* C.24.83 — KPI tables soft embedded inset (Quality Score + EV/EBITDA KPI rows)
+   Material only. Not solid black stickers. Layout/copy/typography untouched. */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-readout:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-readout:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-panel:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-panel:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-stats:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-integrated-stats:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-val-integrated-stats:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stats.ma-val-integrated-stats,
+.main-area .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stats.ma-val-integrated-stats,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-premium-stats-grid:not(#__ceos_no_match__) {
+  background:
+    linear-gradient(
+      160deg,
+      rgba(6, 14, 20, 0.3) 0%,
+      rgba(3, 7, 12, 0.18) 100%
+    ) !important;
+  background-image:
+    linear-gradient(
+      160deg,
+      rgba(6, 14, 20, 0.3) 0%,
+      rgba(3, 7, 12, 0.18) 100%
+    ) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.032) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.032) !important;
+  border-radius: 14px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.022) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-readout:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-readout:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-quality-panel:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-quality-panel:not(#__ceos_no_match__) {
+  padding: 14px 18px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-stats.ma-val-integrated-stats:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stats.ma-val-integrated-stats,
+.main-area .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stats.ma-val-integrated-stats,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-premium-stats-grid:not(#__ceos_no_match__) {
+  padding: 10px 12px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-integrated-stats .ma-equity-safe-stat:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-val-integrated-stats .ma-equity-safe-stat:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stat,
+.main-area .page .ma-valuation-premium-page .ma-valuation-executive-summary:not(#__ceos_no_match__) .ma-equity-safe-stat,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:last-child:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:last-child:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-integrated-stats .ma-equity-safe-stat:last-child:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-val-integrated-stats .ma-equity-safe-stat:last-child:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:last-child:not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:last-child:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:nth-child(4n):not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:nth-child(4n):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:nth-child(4n):not(#__ceos_no_match__),
+.main-area .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:nth-child(4n):not(#__ceos_no_match__) {
+  border-right: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:not(#__ceos_no_match__)::before,
+.main-area .page .ma-valuation-premium-page .ma-equity-safe-stats .ma-equity-safe-stat:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:not(#__ceos_no_match__)::before,
+.main-area .page .ma-valuation-premium-page .ma-premium-stats-grid .ma-premium-stat:not(#__ceos_no_match__)::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* C.24.85 - Value capsules ALIGNMENT ONLY (restore prior material via CanonicalParity)
+   Equal label slot + equal capsule height so pairs share one baseline.
+   Does not change capsule background/border/glow. */
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+  .ma-financial-baseline-block
+  .ma-input-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  column-gap: 14px !important;
+  row-gap: 12px !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+  .ma-financial-baseline-block
+  .ma-input-grid
+  .field.ma-fb-numeric-capsule {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  margin: 0 !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+  .ma-financial-baseline-block
+  .ma-input-grid
+  .field.ma-fb-numeric-capsule
+  > label {
+  display: flex !important;
+  align-items: flex-end !important;
+  min-height: 2.6em !important;
+  margin: 0 0 8px !important;
+  line-height: 1.3 !important;
+  box-sizing: border-box !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+  .ma-financial-baseline-block
+  .ma-input-grid
+  .field.ma-fb-numeric-capsule
+  .ma-fb-numeric-capsule-surface {
+  width: 100% !important;
+  min-height: 42px !important;
+  height: 42px !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page
+  .ma-valuation-input-cockpit:not(#__ceos_no_match__)
+  .ma-financial-baseline-block
+  .ma-input-grid
+  .field.ma-fb-numeric-capsule
+  .ma-fb-numeric-capsule-surface
+  .input {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  box-sizing: border-box !important;
 }

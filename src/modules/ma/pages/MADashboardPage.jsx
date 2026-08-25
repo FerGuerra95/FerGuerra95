@@ -168,8 +168,11 @@ export function MADashboardPage() {
                 </div>
               </div>
 
-              <aside className="ma-reference-signal" aria-label="Executive signal">
-                <div className="ma-reference-signal-badge" aria-hidden="true">
+              <aside
+                className="ma-reference-signal ma-valuation-status-card ma-valuation-surface"
+                aria-label="Executive signal"
+              >
+                <div className="ma-reference-signal-badge ma-valuation-icon-box" aria-hidden="true">
                   <Activity size={18} strokeWidth={1.6} />
                 </div>
                 <p className="ma-reference-kicker">Executive Signal</p>
@@ -196,7 +199,7 @@ export function MADashboardPage() {
             </div>
           </section>
 
-          <section className="ma-reference-strip" aria-label="Active deal">
+          <section className="ma-reference-strip ma-valuation-surface ma-valuation-command-strip" aria-label="Active deal">
             <div className="ma-reference-strip-focus">
               <div className="ma-reference-strip-glyph" aria-hidden="true">
                 <BriefcaseBusiness size={20} strokeWidth={1.5} />
@@ -254,7 +257,7 @@ export function MADashboardPage() {
           </section>
 
           <section className="ma-reference-duo">
-            <div className="ma-reference-pipeline">
+            <div className="ma-reference-pipeline ma-valuation-surface">
               <p className="ma-reference-kicker">M&A Deal Pipeline</p>
               <h2 className="ma-reference-section-title">Portfolio flow</h2>
 
@@ -287,7 +290,7 @@ export function MADashboardPage() {
               </Link>
             </div>
 
-            <div className="ma-reference-operating">
+            <div className="ma-reference-operating ma-valuation-surface">
               <p className="ma-reference-kicker">Operating Model</p>
               <h2 className="ma-reference-section-title">Executive framework</h2>
 
@@ -317,7 +320,7 @@ export function MADashboardPage() {
           </section>
 
           <section className="ma-reference-duo-snap">
-            <div className="ma-reference-snapshot">
+            <div className="ma-reference-snapshot ma-valuation-surface">
               <p className="ma-reference-kicker">Active case summary</p>
               <h2 className="ma-reference-section-title">Current Deal Snapshot</h2>
               <p className="muted">Executive readout — decision support only.</p>
@@ -344,7 +347,7 @@ export function MADashboardPage() {
               </div>
             </div>
 
-            <div className="ma-reference-next">
+            <div className="ma-reference-next ma-valuation-surface">
               <p className="ma-reference-kicker">Decision discipline</p>
               <h2 className="ma-reference-section-title">Recommended Next Step</h2>
               <p className="muted">Suggested path based on current case quality — not a directive.</p>
@@ -449,7 +452,7 @@ function StripFact({ caption, data }) {
 
 function StatSlab({ figure, caption, note, icon: Icon, spark }) {
   return (
-    <article className="ma-reference-stat-slab">
+    <article className="ma-reference-stat-slab ma-valuation-surface">
       <div className="ma-reference-stat-spark" style={{ '--ma-ref-spark': `${spark}%` }} aria-hidden="true" />
       <Icon className="ma-reference-stat-glyph" size={36} strokeWidth={1.2} aria-hidden="true" />
       <div className="ma-reference-stat-mini-bars" aria-hidden="true">
@@ -477,7 +480,7 @@ function PipelineNode({ name, active, done }) {
 
 function WorkbenchTile({ title, description, to, icon: Icon }) {
   return (
-    <Link to={to} className="ma-reference-workbench-tile">
+    <Link to={to} className="ma-reference-workbench-tile ma-valuation-surface">
       <div className="ma-reference-workbench-glyph" aria-hidden="true">
         <Icon size={22} strokeWidth={1.5} />
       </div>
@@ -502,7 +505,7 @@ function ReadoutRow({ caption, data }) {
 
 function BottomSlab({ kicker, title, note, children }) {
   return (
-    <article className="ma-reference-bottom-slab">
+    <article className="ma-reference-bottom-slab ma-valuation-surface">
       <p className="ma-reference-kicker">{kicker}</p>
       <h3 className="ma-reference-bottom-title">{title}</h3>
       <p className="muted">{note}</p>
