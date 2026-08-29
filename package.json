@@ -30,7 +30,7 @@
     "ci": "npm run quality && npm run test:e2e && npm run test:a11y && npm run test:lighthouse && npm run test:lighthouse:perf"
   },
   "dependencies": {
-    "better-sqlite3": "^12.9.0",
+    "better-sqlite3": "^12.10.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
