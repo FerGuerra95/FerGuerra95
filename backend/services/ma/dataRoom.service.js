@@ -4,8 +4,8 @@ import path from 'node:path';
 
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
 import { getDatabaseFilePath, getSql } from '../../storage/sqliteStorage.js';
-import { getMaCaseById } from './cases.service.js';
-import { getMaReportById } from './reports.service.js';
+import { getMaCaseById, isMaE2eFixture } from './cases.service.js';
+import { getMaReportById, isMaE2eReport, listHiddenMaE2eCaseIds } from './reports.service.js';
 import { getMaSecureShareLinkById } from './secureShare.service.js';
 
 const dataRoomStore = createSqliteEntityStore(
@@ -497,9 +497,21 @@ async function getDataRoomDocumentByShareId(shareId, organizationId) {
 export async function listMaDataRoomDocuments(scope = {}) {
   assertOrganizationScope(scope.organizationId);
 
-  const items = await dataRoomStore.listByOrganization(scope.organizationId);
+  const items = (await dataRoomStore.listByOrganization(scope.organizationId)).map(
+    expandDocument
+  );
 
-  return items.map(expandDocument);
+  if (scope.includeTestFixtures) return items;
+
+  const hiddenCaseIds = await listHiddenMaE2eCaseIds(scope.organizationId);
+
+  return items.filter((item) => {
+    if (isMaE2eFixture(item)) return false;
+    if (item.payload?.origin === 'e2e' || item.origin === 'e2e') return false;
+    if (item.caseId && hiddenCaseIds.has(item.caseId)) return false;
+
+    return !isMaE2eReport(item, hiddenCaseIds);
+  });
 }
 
 export async function getMaDataRoomDocumentById(id, scope = {}) {
@@ -813,6 +825,24 @@ export async function updateMaDataRoomDocumentGovernance(
     existing.payload && typeof existing.payload === 'object'
       ? existing.payload
       : {};
+  const existingGovernance =
+    existingPayload.governance && typeof existingPayload.governance === 'object'
+      ? existingPayload.governance
+      : {};
+  const nextLegalHold = Object.prototype.hasOwnProperty.call(patch, 'legalHold')
+    ? normalizeBoolean(patch.legalHold, false)
+    : existingGovernance.legalHold === true;
+  const nextStatus = Object.prototype.hasOwnProperty.call(patch, 'status')
+    ? normalizeEnum(patch.status, VALID_DOCUMENT_STATUSES, existing.status || 'ready')
+    : existing.status;
+
+  if (nextLegalHold && nextStatus === 'archived') {
+    throw createError(
+      'Legal hold is active. Archive is blocked until the hold is released.',
+      409,
+      'MA_VDR_LEGAL_HOLD_ACTIVE'
+    );
+  }
   const nextPatch = {};
 
   if (Object.prototype.hasOwnProperty.call(patch, 'title')) {
@@ -889,7 +919,13 @@ export async function registerSecureShareDataRoomDocument({
       shareId: safeShareId,
       expiresAt: share?.expiresAt || '',
       reportTitle: report?.title || '',
-      caseId: report?.caseId || null
+      caseId: report?.caseId || null,
+      origin:
+        report?.origin === 'e2e' ||
+        report?.payload?.origin === 'e2e' ||
+        report?.settings?.origin === 'e2e'
+          ? 'e2e'
+          : undefined
     }
   };
 

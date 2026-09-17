@@ -1,5 +1,5 @@
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
-import { getMaCaseById } from './cases.service.js';
+import { getMaCaseById, isMaE2eFixture, listMaCases } from './cases.service.js';
 
 const reportsStore = createSqliteEntityStore('ma_reports', 'ma_report', {
   status: 'generated',
@@ -106,12 +106,40 @@ function expandReport(entity) {
   };
 }
 
+export function isMaE2eReport(item, hiddenCaseIds = new Set()) {
+  if (isMaE2eFixture(item)) return true;
+
+  const payload =
+    item?.payload && typeof item.payload === 'object' ? item.payload : {};
+
+  if (payload.origin === 'e2e') return true;
+
+  return Boolean(item?.caseId && hiddenCaseIds.has(item.caseId));
+}
+
+export async function listHiddenMaE2eCaseIds(organizationId) {
+  const cases = await listMaCases({
+    organizationId,
+    includeTestFixtures: true,
+    includeArchived: true
+  });
+
+  return new Set(
+    cases.filter((item) => isMaE2eFixture(item)).map((item) => item.id)
+  );
+}
+
 export const listMaReports = async (scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
   const items = await reportsStore.listByOrganization(scope.organizationId);
+  const expanded = items.map(expandReport);
 
-  return items.map(expandReport);
+  if (scope.includeTestFixtures) return expanded;
+
+  const hiddenCaseIds = await listHiddenMaE2eCaseIds(scope.organizationId);
+
+  return expanded.filter((item) => !isMaE2eReport(item, hiddenCaseIds));
 };
 
 export const getMaReportById = async (id, scope = {}) => {

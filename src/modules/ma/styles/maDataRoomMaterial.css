@@ -1,0 +1,4565 @@
+/*
+  M&A Data Room — canonical material pass (visual-only).
+  Route: /ma/data-room
+  Oracle: maMnaSurfaceSystem, maReferenceSurfaces, maDashboardMaterial, maRepositoryMaterial archive.
+  Scoped: .ma-data-room-premium.ma-data-room-page — no global workspace bleed.
+*/
+
+/* Page width / gutters → ceosPageGeometry.css (canonical owner). */
+
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-data-room-premium,
+.main-area .page .ma-executive-page.ma-data-room-premium {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page {
+  --ma-vdr-text: rgba(248, 250, 252, 0.96);
+  --ma-vdr-text-muted: rgba(148, 163, 184, 0.82);
+  --ma-vdr-text-soft: rgba(203, 213, 225, 0.72);
+  --ma-vdr-teal: #2dd4bf;
+  --ma-vdr-teal-bright: #5eead4;
+  --ma-vdr-teal-dim: var(--ma-ref-teal-dim, rgba(94, 234, 212, 0.62));
+
+  --ma-vdr-select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%2394eae4' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round' opacity='0.88'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  --ma-vdr-select-chevron-hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%235eead4' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round' opacity='0.96'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  --ma-vdr-select-chevron-focus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%2399f6e4' stroke-width='2.35' stroke-linecap='round' stroke-linejoin='round' opacity='1'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  --ma-vdr-select-chevron-pos: right 13px center;
+  --ma-vdr-select-chevron-size: 15px;
+  --ma-vdr-select-padding-right: 42px;
+  /* Single-layer select bed — never compose multi-layer inset behind chevron
+     (multi-layer --ma-ref-inset-panel-bg cycles bg-position and parks chevron LEFT). */
+  --ma-vdr-select-surface: linear-gradient(
+    168deg,
+    rgba(10, 24, 24, 0.52) 0%,
+    rgba(5, 12, 12, 0.38) 100%
+  );
+
+  --ma-vdr-outer-bg: var(--ma-mna-surface-bg);
+  --ma-vdr-outer-border: var(--ma-mna-surface-border);
+  --ma-vdr-outer-shadow: var(--ma-mna-surface-shadow);
+  --ma-vdr-outer-blur: var(--ma-mna-surface-blur);
+  --ma-vdr-outer-ambient: var(--ma-mna-surface-ambient);
+  --ma-vdr-outer-ambient-height: min(10%, 52px);
+
+  --ma-vdr-table-outer-bg:
+    radial-gradient(ellipse 100% 68% at 6% -14%, rgba(45, 212, 191, 0.038), transparent 54%),
+    linear-gradient(168deg, rgba(8, 14, 20, 0.84) 0%, rgba(4, 8, 12, 0.74) 100%);
+  --ma-vdr-table-outer-border: rgba(90, 255, 220, 0.1);
+  --ma-vdr-table-outer-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --ma-vdr-table-outer-ambient: radial-gradient(
+    ellipse 72% 100% at 8% 0%,
+    rgba(45, 212, 191, 0.07),
+    transparent 68%
+  );
+  --ma-vdr-table-outer-ambient-height: min(9%, 48px);
+
+  --ma-vdr-inset-bg: var(--ma-ref-inset-panel-bg, linear-gradient(168deg, rgba(10, 24, 24, 0.5) 0%, rgba(5, 12, 12, 0.36) 100%));
+  --ma-vdr-inset-border: var(--ma-ref-inset-border, rgba(90, 255, 220, 0.07));
+  --ma-vdr-inset-shadow: var(--ma-ref-inset-shadow, inset 0 1px 0 rgba(255, 255, 255, 0.025));
+  --ma-vdr-inset-blur: var(--ma-mna-inset-blur, blur(10px) saturate(130%));
+  /*
+    Security trust cards — small VDR delta on canonical inset-panel family
+    (--ma-ref-inset-panel-bg / --ma-mna-inset-panel-bg structure).
+    Navy-black + restrained teal wash so cards read as glass on #010306, not flat black.
+  */
+  --ma-vdr-security-card-bg:
+    radial-gradient(ellipse 110% 80% at 10% -18%, rgba(45, 212, 191, 0.1), transparent 58%),
+    linear-gradient(
+      168deg,
+      rgba(16, 28, 44, 0.88) 0%,
+      rgba(10, 18, 30, 0.7) 100%
+    );
+  --ma-vdr-security-card-border: rgba(90, 255, 220, 0.16);
+  --ma-vdr-security-card-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 14px 32px rgba(0, 0, 0, 0.26);
+
+  --ma-vdr-row-bg: rgba(5, 9, 9, 0.28);
+  --ma-vdr-row-border: rgba(255, 255, 255, 0.035);
+  --ma-vdr-row-hover: rgba(45, 212, 191, 0.06);
+
+  --ma-vdr-strip-bg: var(--ma-mna-strip-bg);
+  --ma-vdr-strip-border: var(--ma-mna-strip-border);
+  --ma-vdr-strip-shadow: var(--ma-mna-strip-shadow);
+  --ma-vdr-strip-blur: var(--ma-mna-strip-blur);
+  --ma-vdr-strip-radius: var(--ma-mna-strip-radius, 16px);
+
+  /* Hero KPI — VDR navy glass delta on --ma-mna-surface family (telemetry) */
+  --ma-vdr-kpi-bg:
+    radial-gradient(ellipse 120% 82% at 8% -12%, rgba(45, 212, 191, 0.08), transparent 56%),
+    linear-gradient(165deg, rgba(14, 24, 38, 0.82) 0%, rgba(8, 14, 24, 0.62) 100%);
+  --ma-vdr-kpi-border: rgba(90, 255, 220, 0.14);
+  --ma-vdr-kpi-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --ma-vdr-kpi-blur: var(--ma-mna-surface-blur, blur(18px) saturate(135%));
+  --ma-vdr-kpi-ambient:
+    radial-gradient(ellipse 80% 100% at 12% 0%, rgba(45, 212, 191, 0.12), transparent 72%);
+  --ma-vdr-hero-panel-border: rgba(148, 163, 184, 0.07);
+  --ma-vdr-hero-panel-bg:
+    radial-gradient(ellipse 120% 90% at 12% -8%, rgba(45, 212, 191, 0.05), transparent 52%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 16%),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.014) 0%,
+      rgba(2, 4, 7, 0.055) 44%,
+      rgba(1, 2, 4, 0.09) 100%
+    );
+  --ma-vdr-hero-panel-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 1px 0 0 rgba(45, 212, 191, 0.035),
+    0 12px 32px rgba(0, 0, 0, 0.24);
+
+  /*
+    Scene position authority (single owner) — vault-stage + ambient glow.
+    Desktop optical middle field (text → KPI), not full viewport.
+    Core stays in the lower-middle field; glow/stage bias right so the
+    headline (especially “work.”) stays clear and the KPI glass still
+    shows the outbound network.
+  */
+  --ma-vdr-vault-stage-left: 21%;
+  --ma-vdr-vault-stage-right: -6%;
+  --ma-vdr-vault-stage-top: 8%;
+  --ma-vdr-scene-glow-left: 56%;
+  --ma-vdr-scene-glow-top: 57%;
+
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  box-sizing: border-box !important;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ma-mna-page-section-gap, 20px);
+  --ma-vdr-hero-trust-gap: var(--ma-mna-hero-scene-margin-bottom, 12px);
+  color: var(--ma-vdr-text);
+  background: #010306 !important;
+  background-color: #010306 !important;
+  background-image:
+    radial-gradient(ellipse 78% 48% at 12% -8%, rgba(45, 212, 191, 0.052), transparent 50%),
+    radial-gradient(ellipse 72% 46% at 92% 6%, rgba(45, 212, 191, 0.028), transparent 46%) !important;
+  overflow-x: visible;
+}
+
+/* —— Hero — open scene (Repository geometry parity; no boxed plate) —— */
+/* C.VDR.TOP.RHYTHM.B2 — upper section spacing pass (layout only) */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: max(
+    var(--ma-mna-hero-min-height, clamp(500px, 48vw, 580px)),
+    var(--ma-mna-hero-oracle-height, 628px)
+  );
+  margin: 6px 0 var(--ma-vdr-hero-trust-gap);
+  padding: var(--ma-mna-hero-padding-top, 8px) 0 var(--ma-mna-hero-padding-bottom, 40px);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  filter: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero::before,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero::after {
+  content: none;
+  display: none;
+}
+
+/* Localized upper-left ambient only — black canvas stays dominant */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-scene-atmo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 55% at 18% 18%, rgba(12, 20, 30, 0.42), transparent 72%),
+    linear-gradient(180deg, rgba(45, 212, 191, 0.04) 0%, transparent 42%),
+    radial-gradient(ellipse 88% 58% at 72% 52%, rgba(45, 212, 191, 0.1), transparent 66%),
+    radial-gradient(ellipse 52% 42% at 12% 8%, rgba(45, 212, 191, 0.06), transparent 72%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-scene-atmo::before {
+  content: '';
+  position: absolute;
+  inset: 0 5% 12% 3%;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(45, 212, 191, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 212, 191, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 74% at 50% 36%, black 6%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 74% at 50% 36%, black 6%, transparent 78%);
+  opacity: 0.48;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-scene-glow {
+  position: absolute;
+  top: var(--ma-vdr-scene-glow-top, 57%);
+  left: var(--ma-vdr-scene-glow-left, 56%);
+  width: min(980px, 98%);
+  height: min(460px, 54vh);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 52% 62% at 50% 52%, rgba(94, 234, 212, 0.22), transparent 64%),
+    radial-gradient(ellipse 58% 68% at 50% 54%, rgba(45, 212, 191, 0.16), transparent 70%),
+    radial-gradient(ellipse 42% 48% at 48% 50%, rgba(94, 234, 212, 0.1), transparent 70%),
+    radial-gradient(ellipse 82% 52% at 58% 62%, rgba(45, 212, 191, 0.06), transparent 82%);
+  filter: blur(10px);
+  opacity: 0.92;
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.18) 22%, black 40%, black 86%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.18) 22%, black 40%, black 86%, transparent 100%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-scene-atmo::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 64px;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(1, 3, 6, 0.12) 42%,
+    rgba(1, 3, 6, 0.58) 100%
+  );
+}
+
+/*
+  C.VDR.HERO.NET — Secure Document Distribution Matrix (visual-only).
+  C.VDR.HERO.NET.WOW — High-wow signature pass FINAL / FROZEN (effect only).
+*/
+
+/* Decorative stage — absolute canvas clipped by hero overflow (does not expand layout) */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-vault-stage {
+  position: absolute;
+  top: var(--ma-vdr-vault-stage-top, 8%);
+  right: var(--ma-vdr-vault-stage-right, -6%);
+  bottom: 0;
+  left: var(--ma-vdr-vault-stage-left, 21%);
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: paint;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  filter: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-control-field,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-vault-field,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-network-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-control-svg,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-vault-svg,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-network-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  opacity: 1;
+  overflow: visible;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.12) 6%, #000 16%, #000 90%, rgba(0, 0, 0, 0.28) 96%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.12) 12%, #000 22%, #000 84%, rgba(0, 0, 0, 0.22) 92%, transparent 100%);
+  mask-image:
+    linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.12) 6%, #000 16%, #000 90%, rgba(0, 0, 0, 0.28) 96%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.12) 12%, #000 22%, #000 84%, rgba(0, 0, 0, 0.22) 92%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* Depth tiers — background / mid / foreground separation */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-layer-back {
+  opacity: 0.48;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-layer-mid {
+  opacity: 0.82;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-layer-front {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-primary-a {
+  opacity: 0.94;
+  filter: drop-shadow(0 0 4px rgba(45, 212, 191, 0.1));
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-primary-b,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-primary-c {
+  opacity: 0.88;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-signature {
+  opacity: 0.92;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-secondary-route {
+  opacity: 0.62;
+  animation: ma-vdr-net-secondary-dash 28s linear infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-branch-classification {
+  animation: ma-vdr-net-gate-branch-classify 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-branch-encryption {
+  animation: ma-vdr-net-gate-branch-encrypt 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-branch-verification {
+  animation: ma-vdr-net-gate-branch-verify 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-lock-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-lock 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-dest-primary .ma-vdr-net-dest-pulse {
+  animation: ma-vdr-net-dest-pulse-primary 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-dest-primary .ma-vdr-net-dest-validation {
+  animation: ma-vdr-net-dest-validation 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-mini-tracer-upper {
+  filter: drop-shadow(0 0 2px rgba(94, 234, 212, 0.45));
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-mini-tracer-lower {
+  filter: drop-shadow(0 0 2px rgba(45, 212, 191, 0.35));
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-metric-link-route {
+  opacity: 0.55;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-static-packet.ma-vdr-net-packet-idle,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-static-packet.ma-vdr-net-packet-active {
+  opacity: 0.36;
+  animation: ma-vdr-net-packet-active-pulse 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-static-packet.ma-vdr-net-packet-ghost {
+  opacity: 0.14;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-static-packet.ma-vdr-net-packet-secondary {
+  opacity: 0.26;
+  animation: ma-vdr-net-packet-idle-pulse 11s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-metric-halo {
+  animation: ma-vdr-net-metric-halo 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-upper-arc {
+  animation: ma-vdr-net-upper-arc-drift 26s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lower-arc {
+  animation: ma-vdr-net-lower-arc-drift 32s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-verify-arc-a {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-rotate-cw 26s linear infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-verify-arc-b {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-rotate-ccw 34s linear infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-proc-node {
+  animation: ma-vdr-net-node-blink 8.5s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-proc-pn-a {
+  animation-delay: 0s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-proc-pn-b {
+  animation-delay: -2.8s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-proc-pn-c {
+  animation-delay: -5.2s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-traveler-ambient .ma-vdr-net-traveler-glow {
+  animation: ma-vdr-net-traveler-ambient-glow 10.2s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-tick-540,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-tick-620,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-tick-700 {
+  animation: ma-vdr-net-floor-tick-flash 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-tick-620 {
+  animation-delay: 0.06s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-tick-700 {
+  animation-delay: 0.12s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-doc-drift {
+  animation: ma-vdr-net-doc-drift 16s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-ambient .ma-vdr-net-gate-frame {
+  animation: ma-vdr-net-gate-breathe 6.5s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-signature .ma-vdr-net-gate-frame {
+  animation: ma-vdr-net-gate-signature-frame 8s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-signature .ma-vdr-net-gate-lock {
+  animation: ma-vdr-net-gate-signature-lock 8s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-signature .ma-vdr-net-gate-verify-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-gate-verify-sweep 8s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-revoke .ma-vdr-net-gate-frame {
+  animation: ma-vdr-net-gate-revoke-frame 14s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-revoke .ma-vdr-net-gate-revoke-mark {
+  animation: ma-vdr-net-gate-revoke-mark 14s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-signature.ma-vdr-net-lane-carrier {
+  animation: ma-vdr-net-lane-sig-carrier 9.1s linear infinite !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-signature-tracer {
+  animation: ma-vdr-net-signature-tracer 9.1s linear infinite;
+  filter: drop-shadow(0 0 3px rgba(94, 234, 212, 0.4));
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-layer-back {
+  animation: ma-vdr-net-layer-back-drift 22s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-layer-mid {
+  animation: ma-vdr-net-layer-mid-drift 18s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-revoke.ma-vdr-net-lane-carrier {
+  animation: ma-vdr-net-lane-revoke-carrier 14s linear infinite !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-vault-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-vault-pulse 8s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-vault-status {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-vault-status 8s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-path {
+  animation: ma-vdr-net-audit-path 8s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-tick-a {
+  animation: ma-vdr-net-audit-tick 8s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-tick-b {
+  animation: ma-vdr-net-audit-tick 8s ease-in-out infinite;
+  animation-delay: 0.08s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-tick-c {
+  animation: ma-vdr-net-audit-tick 8s ease-in-out infinite;
+  animation-delay: 0.14s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-classify {
+  animation: ma-vdr-net-classify 8s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-link-a {
+  animation: ma-vdr-net-link-flash 8s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-link-b {
+  animation: ma-vdr-net-link-flash 8s ease-in-out infinite;
+  animation-delay: 0.12s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-link-c {
+  animation: ma-vdr-net-link-flash 8s ease-in-out infinite;
+  animation-delay: 0.22s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node {
+  animation: ma-vdr-net-node-blink 7s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-n-doc {
+  animation-delay: 0s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-n-policy {
+  animation-delay: -1.8s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-n-server {
+  animation-delay: -3.2s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-n-recipient {
+  animation-delay: -4.6s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-n-audit {
+  animation-delay: -2.4s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-traveler-signature .ma-vdr-net-traveler-glow {
+  animation: ma-vdr-net-traveler-glow 8s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-focal-energy {
+  animation: ma-vdr-net-focal-breathe 12s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-hub-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-hub-pulse 8s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-hub-primary .ma-vdr-net-hub-verify {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-hub-verify 8s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-hub-focal .ma-vdr-net-hub-ring-mid {
+  animation: ma-vdr-net-hub-ring 10s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-metric-arc {
+  animation: ma-vdr-net-metric-arc 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-metric-node {
+  animation: ma-vdr-net-node-blink 7s ease-in-out infinite;
+  animation-delay: -2.8s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-curved.ma-vdr-net-lane-signature {
+  filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.14));
+}
+
+/*
+  C.VDR.HERO.CORE — Secure Document Core signature sequence (9.1s loop).
+  document → classify → encrypt → core → verify → distribute → audit.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-shield-outer {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-rotate-cw 28s linear infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-ring-outer {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-rotate-cw 24s linear infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-ring-mid {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-rotate-ccw 31s linear infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-nucleus-halo {
+  animation: ma-vdr-net-core-nucleus-halo 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-nucleus {
+  animation: ma-vdr-net-core-nucleus 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-process {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-process 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-process-ccw {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-process-ccw 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-pulse 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-flash {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-flash 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-classification .ma-vdr-net-gate-frame {
+  animation: ma-vdr-net-gate-classify-frame 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-classification .ma-vdr-net-gate-segments {
+  animation: ma-vdr-net-gate-classify-segments 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-classification .ma-vdr-net-gate-scan {
+  animation: ma-vdr-net-gate-classify-scan 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-classification .ma-vdr-net-gate-activation {
+  animation: ma-vdr-net-gate-classify-activation 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-encryption .ma-vdr-net-gate-frame {
+  animation: ma-vdr-net-gate-encrypt-frame 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-encryption .ma-vdr-net-gate-lock {
+  animation: ma-vdr-net-gate-encrypt-lock 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-encryption .ma-vdr-net-gate-hash-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-gate-encrypt-hash 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-encryption .ma-vdr-net-gate-activation {
+  animation: ma-vdr-net-gate-encrypt-activation 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-verification .ma-vdr-net-gate-frame {
+  animation: ma-vdr-net-gate-verify-frame 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-verification .ma-vdr-net-gate-check {
+  animation: ma-vdr-net-gate-verify-check 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-verification .ma-vdr-net-gate-verify-sweep {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-gate-verify-sweep 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-verification .ma-vdr-net-gate-activation {
+  animation: ma-vdr-net-gate-verify-activation 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-output.ma-vdr-net-lane-carrier {
+  animation: ma-vdr-net-lane-output-carrier 9.1s linear infinite !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-signature.ma-vdr-net-lane-carrier {
+  animation: ma-vdr-net-lane-sig-carrier 9.1s linear infinite !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-traveler-signature .ma-vdr-net-traveler-glow {
+  animation: ma-vdr-net-traveler-glow 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-traveler-signature .ma-vdr-net-traveler-trail {
+  animation: ma-vdr-net-traveler-trail 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-traveler-output .ma-vdr-net-traveler-glow {
+  animation: ma-vdr-net-traveler-output-glow 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-traveler-revoke {
+  animation: ma-vdr-net-traveler-revoke-dim 14s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-dest-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-dest-pulse 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-endpoint {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-audit-endpoint 9.1s ease-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-path {
+  animation: ma-vdr-net-audit-path 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-tick-a {
+  animation: ma-vdr-net-audit-tick 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-tick-b {
+  animation: ma-vdr-net-audit-tick 9.1s ease-in-out infinite;
+  animation-delay: 0.06s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-tick-c {
+  animation: ma-vdr-net-audit-tick 9.1s ease-in-out infinite;
+  animation-delay: 0.1s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-tick-d {
+  animation: ma-vdr-net-audit-tick 9.1s ease-in-out infinite;
+  animation-delay: 0.14s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-tick-e {
+  animation: ma-vdr-net-audit-tick 9.1s ease-in-out infinite;
+  animation-delay: 0.18s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-trace {
+  animation: ma-vdr-net-floor-trace 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-node {
+  animation: ma-vdr-net-node-blink 8s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-endpoint {
+  animation: ma-vdr-net-floor-endpoint-pulse 9.1s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-ledger {
+  animation: ma-vdr-net-floor-trace 9.1s ease-in-out infinite;
+  animation-delay: 0.08s;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-nucleus-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ma-vdr-net-core-rotate-cw 18s linear infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node {
+  animation: ma-vdr-net-node-blink 7s ease-in-out infinite;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-mn-1 { animation-delay: 0s; }
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-mn-2 { animation-delay: -1.2s; }
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-mn-3 { animation-delay: -2.4s; }
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-mn-4 { animation-delay: -3.6s; }
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-mn-5 { animation-delay: -4.8s; }
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-mn-6 { animation-delay: -2s; }
+
+@keyframes ma-vdr-net-secondary-dash {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -64; }
+}
+
+@keyframes ma-vdr-net-gate-branch-classify {
+  0%, 100% { opacity: 0; }
+  6%, 7% { opacity: 0; }
+  6.5% { opacity: 0.72; }
+  11% { opacity: 0.38; }
+  14% { opacity: 0; }
+}
+
+@keyframes ma-vdr-net-gate-branch-encrypt {
+  0%, 100% { opacity: 0; }
+  21%, 22% { opacity: 0; }
+  21.5% { opacity: 0.78; }
+  26% { opacity: 0.42; }
+  29% { opacity: 0; }
+}
+
+@keyframes ma-vdr-net-gate-branch-verify {
+  0%, 100% { opacity: 0; }
+  46%, 47% { opacity: 0; }
+  46.5% { opacity: 0.82; }
+  51% { opacity: 0.48; }
+  54% { opacity: 0; }
+}
+
+@keyframes ma-vdr-net-core-lock {
+  0%, 100% { opacity: 0; transform: rotate(0deg) scale(0.92); }
+  35%, 36% { opacity: 0; }
+  36.5% { opacity: 0.78; transform: rotate(0deg) scale(1); }
+  38% { opacity: 0.62; transform: rotate(18deg) scale(1.02); }
+  40% { opacity: 0.45; transform: rotate(36deg) scale(1.03); }
+  42% { opacity: 0; transform: rotate(54deg) scale(1.04); }
+}
+
+@keyframes ma-vdr-net-dest-pulse-primary {
+  0%, 100% { opacity: 0; transform: scale(0.88); }
+  62%, 63% { opacity: 0; }
+  63.5% { opacity: 0.68; transform: scale(1); }
+  65% { opacity: 0.52; transform: scale(1.08); }
+  68% { opacity: 0; transform: scale(1.12); }
+}
+
+@keyframes ma-vdr-net-dest-validation {
+  0%, 100% { opacity: 0; transform: scale(0.7); }
+  63%, 64% { opacity: 0; }
+  64.5% { opacity: 0.92; transform: scale(1); }
+  67% { opacity: 0.55; transform: scale(1.1); }
+  70% { opacity: 0; transform: scale(1.15); }
+}
+
+@keyframes ma-vdr-net-packet-idle-pulse {
+  0%, 100% { opacity: 0.26; filter: none; }
+  58%, 66% { opacity: 0.42; filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.22)); }
+  74% { opacity: 0.28; filter: none; }
+}
+
+@keyframes ma-vdr-net-packet-active-pulse {
+  0%, 100% { opacity: 0.36; filter: none; }
+  54%, 62% { opacity: 0.58; filter: drop-shadow(0 0 7px rgba(45, 212, 191, 0.28)); }
+  70% { opacity: 0.38; filter: none; }
+}
+
+@keyframes ma-vdr-net-metric-halo {
+  0%, 100% { opacity: 0; transform: scale(0.96); }
+  52%, 58% { opacity: 0.22; transform: scale(1.02); }
+  64% { opacity: 0.08; transform: scale(1); }
+}
+
+@keyframes ma-vdr-net-upper-arc-drift {
+  0%, 100% { stroke-dashoffset: 0; opacity: 0.62; }
+  50% { stroke-dashoffset: -48; opacity: 0.78; }
+}
+
+@keyframes ma-vdr-net-lower-arc-drift {
+  0%, 100% { stroke-dashoffset: 0; opacity: 0.55; }
+  50% { stroke-dashoffset: 36; opacity: 0.72; }
+}
+
+@keyframes ma-vdr-net-traveler-ambient-glow {
+  0%, 100% { opacity: 0.18; }
+  35%, 55% { opacity: 0.42; }
+}
+
+@keyframes ma-vdr-net-floor-tick-flash {
+  0%, 100% { opacity: 0.04; stroke: rgba(45, 212, 191, 0.04); }
+  60%, 62% { opacity: 0.04; }
+  63%, 72% { opacity: 0.38; stroke: rgba(94, 234, 212, 0.42); }
+  82% { opacity: 0.06; stroke: rgba(45, 212, 191, 0.06); }
+}
+
+@media (max-width: 1120px) {
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-tablet-hide {
+    display: none;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-mn-7,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node-mn-8 {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-mobile-hide,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-primary-b,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-primary-c,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-output,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-revoke,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-static-packet.ma-vdr-net-packet-idle,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit {
+    display: none;
+  }
+}
+
+@keyframes ma-vdr-net-signature-tracer {
+  0% {
+    stroke-dashoffset: 720;
+    opacity: 0.32;
+  }
+  2% {
+    opacity: 0.55;
+  }
+  5%, 6% {
+    opacity: 0.62;
+  }
+  7% {
+    opacity: 0.82;
+  }
+  24% {
+    stroke-dashoffset: 420;
+    opacity: 0.88;
+  }
+  44% {
+    stroke-dashoffset: 120;
+    opacity: 0.76;
+  }
+  52% {
+    stroke-dashoffset: 0;
+    opacity: 0.62;
+  }
+  58%, 100% {
+    stroke-dashoffset: -720;
+    opacity: 0;
+  }
+}
+
+@keyframes ma-vdr-net-layer-back-drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(2px, -1px); }
+}
+
+@keyframes ma-vdr-net-layer-mid-drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-1px, 1px); }
+}
+
+@keyframes ma-vdr-net-floor-endpoint-pulse {
+  0%, 100% { opacity: 0.09; }
+  62%, 72% { opacity: 0.42; }
+}
+
+@keyframes ma-vdr-net-core-rotate-cw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ma-vdr-net-core-rotate-ccw {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes ma-vdr-net-core-nucleus-halo {
+  0%, 100% { opacity: 0.4; transform: scale(0.96); }
+  34%, 42% {
+    opacity: 0.85;
+    transform: scale(1.06);
+  }
+  48% { opacity: 0.45; transform: scale(1); }
+}
+
+@keyframes ma-vdr-net-core-nucleus {
+  0%, 100% { opacity: 1; filter: none; }
+  36%, 37% { opacity: 1; filter: none; }
+  38%, 41% {
+    opacity: 1;
+    filter: drop-shadow(0 0 18px rgba(94, 234, 212, 0.72)) drop-shadow(0 0 32px rgba(45, 212, 191, 0.28));
+  }
+  44% { filter: none; }
+}
+
+@keyframes ma-vdr-net-core-process {
+  0%, 100% { opacity: 0; transform: rotate(0deg) scale(0.88); }
+  33%, 34% { opacity: 0; }
+  35% { opacity: 0.82; transform: rotate(0deg) scale(1); }
+  40% { opacity: 0.62; transform: rotate(120deg) scale(1.03); }
+  46% { opacity: 0; transform: rotate(240deg) scale(1.05); }
+}
+
+@keyframes ma-vdr-net-core-process-ccw {
+  0%, 100% { opacity: 0; transform: rotate(0deg) scale(0.9); }
+  34%, 35% { opacity: 0; }
+  36% { opacity: 0.68; transform: rotate(0deg) scale(1); }
+  42% { opacity: 0.42; transform: rotate(-100deg) scale(1.02); }
+  47% { opacity: 0; transform: rotate(-200deg) scale(1.04); }
+}
+
+@keyframes ma-vdr-net-core-pulse {
+  0%, 100% { opacity: 0; transform: scale(0.82); }
+  36%, 37% { opacity: 0; }
+  38% { opacity: 0.72; transform: scale(1); }
+  44% { opacity: 0; transform: scale(1.14); }
+}
+
+@keyframes ma-vdr-net-core-flash {
+  0%, 100% { opacity: 0; transform: scale(0.75); }
+  37%, 38% { opacity: 0; }
+  39% { opacity: 0.88; transform: scale(1); }
+  40.5% { opacity: 0.65; transform: scale(1.1); }
+  42% { opacity: 0.35; transform: scale(1.14); }
+  44% { opacity: 0; transform: scale(1.18); }
+}
+
+@keyframes ma-vdr-net-gate-classify-frame {
+  0%, 100% { stroke-opacity: 0.28; filter: none; }
+  5.5%, 11% { stroke: #5eead4; stroke-opacity: 0.68; filter: drop-shadow(0 0 6px rgba(45, 212, 191, 0.35)); }
+  15% { stroke-opacity: 0.32; filter: none; }
+}
+
+@keyframes ma-vdr-net-gate-classify-scan {
+  0%, 100% { opacity: 0; }
+  6%, 7% { opacity: 0; }
+  6.5% { opacity: 0.72; }
+  10% { opacity: 0; }
+}
+
+@keyframes ma-vdr-net-gate-classify-segments {
+  0%, 100% { opacity: 0; }
+  5.5%, 13% { opacity: 0.78; }
+}
+
+@keyframes ma-vdr-net-gate-classify-activation {
+  0%, 100% { opacity: 0; transform: scale(0.9); }
+  6%, 8% { opacity: 0; }
+  7% { opacity: 0.55; transform: scale(1); }
+  12% { opacity: 0; transform: scale(1.06); }
+}
+
+@keyframes ma-vdr-net-gate-encrypt-frame {
+  0%, 100% { stroke-opacity: 0.28; filter: none; }
+  20%, 27% { stroke: #5eead4; stroke-opacity: 0.7; filter: drop-shadow(0 0 7px rgba(45, 212, 191, 0.38)); }
+  31% { stroke-opacity: 0.3; filter: none; }
+}
+
+@keyframes ma-vdr-net-gate-encrypt-lock {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  18%, 26% { opacity: 1; transform: scale(1.08); }
+  30% { opacity: 0.55; transform: scale(1); }
+}
+
+@keyframes ma-vdr-net-gate-encrypt-hash {
+  0%, 100% { opacity: 0; transform: rotate(0deg); }
+  19%, 21% { opacity: 0; }
+  20% { opacity: 0.65; transform: rotate(0deg); }
+  25% { opacity: 0.42; transform: rotate(60deg); }
+  28% { opacity: 0; transform: rotate(120deg); }
+}
+
+@keyframes ma-vdr-net-gate-encrypt-activation {
+  0%, 100% { opacity: 0; }
+  19%, 27% { opacity: 0.5; }
+}
+
+@keyframes ma-vdr-net-gate-verify-frame {
+  0%, 100% { stroke-opacity: 0.28; filter: none; }
+  44%, 51% { stroke: #5eead4; stroke-opacity: 0.72; filter: drop-shadow(0 0 8px rgba(45, 212, 191, 0.4)); }
+  55% { stroke-opacity: 0.32; filter: none; }
+}
+
+@keyframes ma-vdr-net-gate-verify-check {
+  0%, 100% { opacity: 0.42; }
+  44%, 51% { opacity: 1; }
+  55% { opacity: 0.48; }
+}
+
+@keyframes ma-vdr-net-gate-verify-sweep {
+  0%, 100% { opacity: 0; transform: rotate(0deg); }
+  41%, 43% { opacity: 0; }
+  42% { opacity: 0.72; transform: rotate(0deg); }
+  47% { opacity: 0.45; transform: rotate(120deg); }
+  50% { opacity: 0; transform: rotate(240deg); }
+}
+
+@keyframes ma-vdr-net-gate-verify-activation {
+  0%, 100% { opacity: 0; }
+  44%, 51% { opacity: 0.62; }
+}
+
+@keyframes ma-vdr-net-lane-output-carrier {
+  0%, 100% { stroke-dashoffset: 640; opacity: 0; }
+  48%, 49% { opacity: 0; }
+  50% { opacity: 0.65; stroke-dashoffset: 480; }
+  58% { stroke-dashoffset: 0; opacity: 0.8; }
+  66% { opacity: 0.28; }
+  72% { stroke-dashoffset: -640; opacity: 0; }
+}
+
+@keyframes ma-vdr-net-traveler-trail {
+  0%, 100% { opacity: 0; stroke-width: 0.45; }
+  8%, 78% { opacity: 0.58; stroke-width: 0.58; }
+  90% { opacity: 0; }
+}
+
+@keyframes ma-vdr-net-traveler-output-glow {
+  0%, 100% { opacity: 0; }
+  50%, 68% { opacity: 0.72; }
+}
+
+@keyframes ma-vdr-net-traveler-revoke-dim {
+  0%, 100% { opacity: 1; }
+  42%, 55% { opacity: 0.35; }
+}
+
+@keyframes ma-vdr-net-dest-pulse {
+  0%, 100% { opacity: 0; transform: scale(0.86); }
+  62%, 63% { opacity: 0; }
+  64% { opacity: 0.65; transform: scale(1); }
+  72% { opacity: 0; transform: scale(1.1); }
+}
+
+@keyframes ma-vdr-net-audit-endpoint {
+  0%, 100% { opacity: 0; }
+  66%, 80% { opacity: 0.55; }
+}
+
+@keyframes ma-vdr-net-floor-trace {
+  0%, 100% { opacity: 0; stroke-dashoffset: 480; }
+  66%, 68% { opacity: 0; }
+  69% { opacity: 0.4; }
+  76% { opacity: 0.5; stroke-dashoffset: 0; }
+  84% { opacity: 0.22; }
+  92% { opacity: 0; }
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-curved.ma-vdr-net-lane-highlight {
+  filter: drop-shadow(0 0 4px rgba(45, 212, 191, 0.12));
+}
+
+@keyframes ma-vdr-net-focal-breathe {
+  0%,
+  100% {
+    opacity: 0.32;
+  }
+  50% {
+    opacity: 0.48;
+  }
+}
+
+@keyframes ma-vdr-net-hub-pulse {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  18%,
+  22% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  28% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes ma-vdr-net-hub-verify {
+  0%,
+  100% {
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  14%,
+  16% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.65;
+    transform: rotate(0deg);
+  }
+  22% {
+    opacity: 0.42;
+    transform: rotate(90deg);
+  }
+  28% {
+    opacity: 0;
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes ma-vdr-net-hub-ring {
+  0%,
+  100% {
+    stroke-opacity: 0.08;
+  }
+  50% {
+    stroke-opacity: 0.18;
+  }
+}
+
+@keyframes ma-vdr-net-metric-arc {
+  0%,
+  100% {
+    stroke-dashoffset: 720;
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.42;
+  }
+  38% {
+    stroke-dashoffset: 0;
+    opacity: 0.58;
+  }
+  62% {
+    opacity: 0.32;
+  }
+  88% {
+    opacity: 0;
+  }
+}
+
+@keyframes ma-vdr-net-doc-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0, -4px);
+  }
+}
+
+@keyframes ma-vdr-net-gate-breathe {
+  0%,
+  100% {
+    stroke-opacity: 0.22;
+  }
+  50% {
+    stroke-opacity: 0.38;
+  }
+}
+
+@keyframes ma-vdr-net-gate-signature-frame {
+  0%,
+  100% {
+    stroke: #2dd4bf;
+    stroke-opacity: 0.22;
+    filter: none;
+  }
+  10%,
+  22% {
+    stroke: #5eead4;
+    stroke-opacity: 0.62;
+    filter: drop-shadow(0 0 6px rgba(45, 212, 191, 0.35));
+  }
+  28%,
+  100% {
+    stroke: #2dd4bf;
+    stroke-opacity: 0.28;
+    filter: none;
+  }
+}
+
+@keyframes ma-vdr-net-gate-signature-lock {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  10%,
+  22% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  28%,
+  100% {
+    opacity: 0.52;
+    transform: scale(1);
+  }
+}
+
+@keyframes ma-vdr-net-gate-verify-sweep {
+  0%,
+  100% {
+    opacity: 0;
+    transform: rotate(0deg) scale(0.85);
+  }
+  14%,
+  16% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.72;
+    transform: rotate(0deg) scale(1);
+  }
+  20% {
+    opacity: 0.55;
+    transform: rotate(120deg) scale(1.05);
+  }
+  24% {
+    opacity: 0;
+    transform: rotate(240deg) scale(1.1);
+  }
+}
+
+@keyframes ma-vdr-net-lane-sig-carrier {
+  0% {
+    stroke-dashoffset: 720;
+    opacity: 0.28;
+  }
+  2% {
+    opacity: 0.48;
+    filter: drop-shadow(0 0 3px rgba(94, 234, 212, 0.28));
+  }
+  6% {
+    opacity: 0.55;
+  }
+  8% {
+    opacity: 0.62;
+    filter: drop-shadow(0 0 4px rgba(94, 234, 212, 0.35));
+  }
+  22% {
+    stroke-dashoffset: 360;
+    opacity: 0.78;
+  }
+  42% {
+    stroke-dashoffset: 0;
+    opacity: 0.82;
+  }
+  48% {
+    opacity: 0.42;
+    filter: none;
+  }
+  55%,
+  100% {
+    stroke-dashoffset: -720;
+    opacity: 0;
+  }
+}
+
+@keyframes ma-vdr-net-lane-carrier-drift {
+  0% {
+    stroke-dashoffset: 680;
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.32;
+  }
+  45% {
+    stroke-dashoffset: 0;
+    opacity: 0.48;
+  }
+  92% {
+    opacity: 0.18;
+  }
+  100% {
+    stroke-dashoffset: -680;
+    opacity: 0;
+  }
+}
+
+@keyframes ma-vdr-net-lane-revoke-carrier {
+  0%,
+  100% {
+    stroke-dashoffset: 520;
+    opacity: 0;
+  }
+  28% {
+    opacity: 0.38;
+  }
+  42% {
+    stroke-dashoffset: 180;
+    opacity: 0.52;
+  }
+  52% {
+    opacity: 0.15;
+  }
+  58% {
+    stroke-dashoffset: 520;
+    opacity: 0;
+  }
+}
+
+@keyframes ma-vdr-net-gate-revoke-frame {
+  0%,
+  100% {
+    stroke-opacity: 0.2;
+  }
+  42%,
+  48% {
+    stroke-opacity: 0.12;
+    opacity: 0.55;
+  }
+  50%,
+  56% {
+    stroke-opacity: 0.08;
+    opacity: 0.35;
+  }
+}
+
+@keyframes ma-vdr-net-gate-revoke-mark {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  44%,
+  54% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes ma-vdr-net-vault-pulse {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  34%,
+  38% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+  42% {
+    opacity: 0;
+    transform: scale(1.65);
+  }
+}
+
+@keyframes ma-vdr-net-vault-status {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  36%,
+  48% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  52% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes ma-vdr-net-audit-path {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  38%,
+  52% {
+    opacity: 0.48;
+  }
+  58% {
+    opacity: 0.22;
+  }
+}
+
+@keyframes ma-vdr-net-audit-tick {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  40%,
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes ma-vdr-net-classify {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  5%,
+  12% {
+    opacity: 0.62;
+  }
+}
+
+@keyframes ma-vdr-net-link-flash {
+  0%,
+  100% {
+    opacity: 0;
+    stroke-dashoffset: 680;
+  }
+  20%,
+  24% {
+    opacity: 0;
+  }
+  22% {
+    opacity: 0.52;
+    stroke-dashoffset: 520;
+  }
+  28% {
+    opacity: 0.38;
+    stroke-dashoffset: 280;
+  }
+  34% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ma-vdr-net-node-blink {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+  50% {
+    opacity: 0.42;
+  }
+}
+
+@keyframes ma-vdr-net-traveler-glow {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  12%,
+  32% {
+    opacity: 0.45;
+  }
+  48% {
+    opacity: 0.22;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-doc-drift,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-frame,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-lock,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-verify-ring,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-revoke-mark,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lane-carrier,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-vault-pulse,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-vault-status,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-path,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-tick,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-classify,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-link,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-node,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-traveler-glow,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-focal-energy,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-shield-outer,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-ring-outer,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-ring-mid,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-nucleus-halo,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-nucleus,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-process,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-process-ccw,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-pulse,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-flash,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-activation,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-segments,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-hash-ring,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-verify-sweep,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-scan,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-dest-pulse,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-audit-endpoint,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-traveler-trail,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-traveler-revoke,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-trace {
+    animation: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-signature-tracer,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-layer-back,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-layer-mid,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-nucleus-ring {
+    animation: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-static-packet.ma-vdr-net-packet-idle,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-static-packet.ma-vdr-net-packet-active,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-static-packet.ma-vdr-net-packet-secondary,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-metric-halo,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-metric-arc,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-upper-arc,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-lower-arc,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-verify-arc-a,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-verify-arc-b,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-proc-node,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-branch,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-mini-tracer,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-core-lock-ring,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-dest-validation,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-secondary-route,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-tick-540,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-tick-620,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-floor-tick-700 {
+    animation: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-travelers {
+    display: none;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-mini-tracers {
+    display: none;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-branches {
+    display: none;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-net-gate-frame {
+    stroke-opacity: 0.28;
+  }
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero-grid {
+  position: relative;
+  z-index: 2;
+  isolation: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(300px, 380px);
+  gap: 20px 36px;
+  align-items: start;
+  min-height: clamp(360px, 40vh, 440px);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero-grid > div:first-child {
+  position: relative;
+  z-index: 3;
+  min-width: 0;
+  max-width: var(--ma-mna-hero-intro-max-width, 620px);
+  padding-top: calc(var(--ma-mna-hero-inner-to-kicker, 28px) - var(--ma-mna-hero-padding-top, 8px));
+  padding-bottom: 0;
+  padding-left: 0;
+}
+
+/* Soft exclusion veil so vault flow never washes out title/body */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero-grid > div:first-child::before {
+  content: '';
+  position: absolute;
+  inset: -12% -8% -18% -12%;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 78% 72% at 62% 52%, rgba(1, 3, 6, 0.84), transparent 74%),
+    radial-gradient(ellipse 90% 80% at 18% 18%, rgba(1, 4, 8, 0.45), transparent 78%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero-grid > .ma-data-room-metrics-panel {
+  position: relative;
+  z-index: 4;
+  justify-self: end;
+  width: 100%;
+  max-width: var(--ma-mna-hero-panel-max-width, 380px);
+  margin-left: auto;
+  margin-top: calc(
+    var(--ma-mna-right-panel-oracle-y, 157px) - var(--ma-mna-hero-oracle-root-y, 117px) -
+      var(--ma-mna-hero-padding-top, 8px)
+  );
+  align-self: start;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero-grid > .ma-data-room-metrics-panel::before {
+  background:
+    radial-gradient(ellipse 130% 90% at -18% 78%, rgba(45, 212, 191, 0.1), transparent 64%),
+    radial-gradient(ellipse 80% 100% at 6% 88%, rgba(45, 212, 191, 0.062), transparent 68%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 var(--ceos-hero-kicker-margin-bottom);
+  color: var(--ws-accent-text);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  text-shadow: 0 0 18px rgba(45, 212, 191, 0.12);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-kicker svg {
+  color: var(--ma-vdr-teal);
+  filter: drop-shadow(0 0 4px rgba(45, 212, 191, 0.35));
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-title {
+  margin: 0 0 var(--ceos-hero-title-margin-bottom);
+  max-width: 620px;
+  color: var(--ceos-hero-title-color);
+  text-shadow:
+    0 2px 32px rgba(0, 0, 0, 0.55),
+    0 0 1px rgba(0, 0, 0, 0.8),
+    0 0 42px rgba(45, 212, 191, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-title-line {
+  display: block;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-copy {
+  max-width: 500px;
+  margin: 0 0 14px;
+  color: rgba(203, 213, 225, 0.88);
+  font-size: 15px;
+  line-height: 1.7;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.42);
+}
+
+/* Hero metrics panel — VDR navy glass shell (--ma-vdr-hero-panel-*) */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 26px;
+  border-radius: 22px;
+  border: 1px solid var(--ma-vdr-hero-panel-border, rgba(148, 163, 184, 0.07));
+  border-top-color: rgba(90, 255, 220, 0.12);
+  background: var(--ma-vdr-hero-panel-bg);
+  background-image: var(--ma-vdr-hero-panel-bg);
+  background-color: transparent;
+  box-shadow: var(--ma-vdr-hero-panel-shadow);
+  backdrop-filter: blur(20px) saturate(92%) brightness(0.96);
+  -webkit-backdrop-filter: blur(20px) saturate(92%) brightness(0.96);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: min(14%, 52px);
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse 72% 100% at 12% 0%, rgba(45, 212, 191, 0.055), transparent 68%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 24%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 24%, transparent 100%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  box-shadow: inset 0 1px 0 rgba(90, 255, 220, 0.035);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* KPI cards — VDR telemetry glass (--ma-vdr-kpi-* delta on M&A surface family) */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-kpi {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 104px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--ma-vdr-kpi-border, var(--ma-mna-surface-border, rgba(90, 255, 220, 0.12)));
+  background: var(--ma-vdr-kpi-bg, var(--ma-mna-surface-bg));
+  background-image: var(--ma-vdr-kpi-bg, var(--ma-mna-surface-bg));
+  background-color: transparent;
+  box-shadow: var(--ma-vdr-kpi-shadow, var(--ma-mna-surface-shadow));
+  backdrop-filter: var(--ma-vdr-kpi-blur, var(--ma-mna-surface-blur, blur(18px) saturate(135%)));
+  -webkit-backdrop-filter: var(--ma-vdr-kpi-blur, var(--ma-mna-surface-blur, blur(18px) saturate(135%)));
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-kpi::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: var(--ma-vdr-kpi-ambient, var(--ma-mna-surface-ambient));
+  -webkit-mask-image: radial-gradient(ellipse 62% 52% at 0% 0%, #000 0%, #000 26%, transparent 68%);
+  mask-image: radial-gradient(ellipse 62% 52% at 0% 0%, #000 0%, #000 26%, transparent 68%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-kpi::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-kpi > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metric-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ma-vdr-text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metric-value {
+  margin-top: 14px;
+  font-size: clamp(26px, 2.8vw, 32px);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: var(--ma-vdr-text);
+  text-shadow: 0 0 18px rgba(45, 212, 191, 0.1);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metric-label svg {
+  color: var(--ma-vdr-teal);
+  filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.28));
+}
+
+/* —— Top control strip —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-controls {
+  position: relative;
+  z-index: 3;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: var(--ma-mna-section-gap, clamp(16px, 1.5vw, 22px));
+  margin-top: 0;
+  margin-bottom: 0;
+  border: 0;
+  background: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metric-label svg {
+  color: var(--ma-vdr-teal);
+}
+
+/*
+  C.VDR.SECURITY.CARDS — approved navy/teal-black inner glass (visual freeze).
+  Oracle: --ma-ref-inset-panel-bg / Dashboard snapshot-metric / VDR table inset.
+  Owner: maDataRoomMaterial.css (page variant); physics tokens from maMnaSurfaceSystem + maReferenceSurfaces.
+  Material polish: tokens --ma-vdr-security-card-* only — no layout change.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-control {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+  min-height: 98px;
+  height: 100%;
+  padding: 20px 22px;
+  border-radius: var(--ma-mna-inset-radius, 14px);
+  border: 1px solid var(--ma-vdr-security-card-border, var(--ma-vdr-inset-border));
+  background-color: transparent;
+  background-image: var(--ma-vdr-security-card-bg, var(--ma-vdr-inset-bg));
+  box-shadow: var(--ma-vdr-security-card-shadow, var(--ma-vdr-inset-shadow));
+  backdrop-filter: var(--ma-vdr-inset-blur);
+  -webkit-backdrop-filter: var(--ma-vdr-inset-blur);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-control::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse 92% 72% at 8% 0%, rgba(45, 212, 191, 0.08), transparent 64%);
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-control::after {
+  content: none;
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-control > * {
+  position: relative;
+  z-index: 2;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-control svg {
+  flex: 0 0 auto;
+  color: var(--ma-mna-text-accent, var(--ma-vdr-teal));
+  filter: drop-shadow(0 0 6px rgba(45, 212, 191, 0.28));
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-control strong {
+  display: block;
+  color: var(--ma-vdr-text);
+  font-size: 13px;
+  font-weight: 780;
+  line-height: 1.3;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-control span {
+  display: block;
+  margin-top: 8px;
+  color: var(--ma-mna-text-secondary, var(--ma-vdr-text-muted));
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* —— Main grid — rail content-height; table column independent —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-rail-slot,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card {
+  align-self: flex-start;
+  margin-top: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-rail-slot {
+  flex: 0 0 clamp(300px, 28vw, 410px);
+  width: clamp(300px, 28vw, 410px);
+  max-width: 410px;
+  min-width: 0;
+  align-self: flex-start;
+  height: auto;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* —— Control rail — content-sized surface —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel {
+  align-self: flex-start;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+}
+
+/* —— Control rail + table outers —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  padding: 22px;
+  border-radius: var(--ma-mna-surface-radius, 22px);
+  border: 1px solid var(--ma-vdr-outer-border);
+  background-color: transparent;
+  background-image: var(--ma-vdr-outer-bg);
+  box-shadow: var(--ma-vdr-outer-shadow);
+  backdrop-filter: var(--ma-vdr-outer-blur);
+  -webkit-backdrop-filter: var(--ma-vdr-outer-blur);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card {
+  padding: 28px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel::before,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--ma-vdr-outer-ambient-height);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background: var(--ma-vdr-outer-ambient);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 18%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 18%, transparent 100%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-card::before {
+  height: var(--ma-vdr-table-outer-ambient-height);
+  background: var(--ma-vdr-table-outer-ambient);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel::after,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel > *,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel h2,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-card h2 {
+  margin: 0;
+  color: var(--ma-vdr-text);
+  font-size: 18px;
+  font-weight: 820;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+/* Body copy only — do not flatten technical section eyebrows (.ma-vdr-rail-section-label). */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel p:not(.ma-vdr-rail-section-label),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-card p:not(.ma-vdr-rail-section-label) {
+  margin: 12px 0 0;
+  color: var(--ma-vdr-text-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* —— Form controls —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-policy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel .field label,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-file-input label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel .input,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel select,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-file-input input[type='file'] {
+  min-height: 42px;
+  border: 1px solid rgba(90, 255, 220, 0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--ma-vdr-text);
+  background: rgba(5, 9, 9, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  font-size: 13px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel .input:focus,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel select:focus,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-file-input input[type='file']:focus {
+  outline: none;
+  border-color: rgba(45, 212, 191, 0.32);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  color: var(--ma-vdr-text-soft);
+  font-size: 13px;
+  font-weight: 720;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--ma-vdr-teal);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-file-input {
+  display: grid;
+  gap: 8px;
+}
+
+/* —— Tables — unified inner glass + dark rows —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-scroll {
+  margin-top: 18px;
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid var(--ma-vdr-inset-border);
+  background-color: transparent;
+  background-image: var(--ma-vdr-inset-bg);
+  box-shadow:
+    var(--ma-vdr-inset-shadow),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.012);
+  backdrop-filter: var(--ma-vdr-inset-blur);
+  -webkit-backdrop-filter: var(--ma-vdr-inset-blur);
+  -webkit-overflow-scrolling: touch;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-scroll.ceos-enterprise-table-wrap {
+  background:
+    radial-gradient(ellipse 110% 80% at 10% -18%, rgba(45, 212, 191, 0.035), transparent 58%),
+    linear-gradient(168deg, rgba(10, 24, 24, 0.52) 0%, rgba(5, 12, 12, 0.38) 100%) !important;
+  border-color: var(--ma-vdr-inset-border) !important;
+  box-shadow:
+    var(--ma-vdr-inset-shadow),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.012) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table {
+  width: 100%;
+  min-width: 1180px;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: transparent;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table th,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table td {
+  padding: 13px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+  text-align: left;
+  vertical-align: top;
+  color: var(--ma-vdr-text-soft);
+  background: transparent;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 15px 12px 14px;
+  color: rgba(186, 198, 214, 0.88);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  background:
+    linear-gradient(180deg, rgba(16, 28, 34, 0.97) 0%, rgba(11, 20, 26, 0.9) 100%) !important;
+  border-bottom: 1px solid rgba(90, 255, 220, 0.1) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table tbody tr:first-child td {
+  padding-top: 15px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table tbody tr {
+  background: transparent;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table tbody td {
+  background: var(--ma-vdr-row-bg);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table tbody tr:hover td {
+  background: var(--ma-vdr-row-hover) !important;
+  border-bottom-color: rgba(45, 212, 191, 0.1);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table strong {
+  display: block;
+  color: var(--ma-vdr-text);
+  font-weight: 760;
+  line-height: 1.3;
+  /* Long IDs may wrap at soft points; never mid-glyph via anywhere */
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table span {
+  color: var(--ma-vdr-text-muted);
+  font-size: 12px;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-audit-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Status badges — restrained branch accents */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table .badge {
+  border-radius: 999px;
+  border: 1px solid rgba(90, 255, 220, 0.14);
+  background: rgba(45, 212, 191, 0.08);
+  color: var(--ma-vdr-teal-bright);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+}
+
+/* Empty / error states */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-empty {
+  margin-top: 18px;
+  border: 1px dashed rgba(90, 255, 220, 0.14);
+  border-radius: 12px;
+  padding: 18px;
+  color: var(--ma-vdr-text-muted);
+  background:
+    radial-gradient(ellipse 80% 100% at 12% 0%, rgba(45, 212, 191, 0.06), transparent 72%),
+    rgba(5, 9, 9, 0.38);
+  font-size: 13px;
+}
+
+/* Neutralize ma-valuation-surface teal wash on outers */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-panel.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-table-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  background-color: transparent !important;
+  background-image: var(--ma-vdr-outer-bg) !important;
+  border-color: var(--ma-vdr-outer-border) !important;
+  box-shadow: var(--ma-vdr-outer-shadow) !important;
+  backdrop-filter: var(--ma-vdr-outer-blur) !important;
+  -webkit-backdrop-filter: var(--ma-vdr-outer-blur) !important;
+}
+
+/*
+  C.VDR.POLISH — differential pass (rail geometry + table depth + KPI light)
+  Oracle: maReferenceSurfaces --ma-ref-inset-panel-bg, Repository archive outer.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-panel.ma-valuation-surface:not(.ma-vdr-command-rail):not(#__ceos_no_match__) {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  align-self: flex-start !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-table-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  background-image: var(--ma-vdr-table-outer-bg) !important;
+  border-color: var(--ma-vdr-table-outer-border) !important;
+  box-shadow: var(--ma-vdr-table-outer-shadow) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-card + .ma-data-room-table-card,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid + .ma-data-room-table-card {
+  margin-top: 0;
+}
+
+@media (max-width: 1024px) {
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page {
+    --ma-vdr-title-line-wrap: normal;
+    --ma-vdr-title-size: clamp(28px, 7.2vw, 40px);
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-title-line,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-title-line:not(#__ceos_no_match__) {
+    white-space: normal !important;
+  }
+}
+
+@media (max-width: 1120px) {
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page {
+    --ma-vdr-hero-grid-columns: 1fr;
+    --ma-vdr-metrics-margin-top: 12px;
+    --ma-vdr-metrics-max-width: none;
+    --ma-vdr-metrics-margin-left: 0;
+    --ma-vdr-metrics-justify: stretch;
+    /* Stacked hero: recenter scene in full content width (do not keep desktop middle-zone bias) */
+    --ma-vdr-vault-stage-left: 4%;
+    --ma-vdr-vault-stage-top: 13%;
+    --ma-vdr-scene-glow-left: 50%;
+    --ma-vdr-scene-glow-top: 59%;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero-grid > .ma-data-room-metrics-panel {
+    margin-left: 0;
+    max-width: none;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid {
+    flex-direction: column;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-rail-slot {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-card {
+    padding: 20px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card {
+    padding: 22px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-policy-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*
+  C.VDR.WORKSPACE.FINAL — Control Center + main document table polish (visual-only).
+  Scope: .ma-data-room-grid panel + first table card ONLY.
+  Frozen: hero, trust strip, lower registry tables, layout/logic.
+  Oracle: --ma-mna-surface-*, --ma-ref-inset-panel-bg, maPipeline scrollbar pattern.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page {
+  --ma-vdr-workspace-outer-bg:
+    radial-gradient(ellipse 96% 62% at 8% -12%, rgba(45, 212, 191, 0.032), transparent 54%),
+    linear-gradient(168deg, rgba(7, 12, 18, 0.9) 0%, rgba(3, 6, 10, 0.82) 100%);
+  --ma-vdr-workspace-outer-border: rgba(90, 255, 220, 0.088);
+  --ma-vdr-workspace-outer-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.032);
+  --ma-vdr-workspace-ambient: radial-gradient(
+    ellipse 68% 100% at 10% 0%,
+    rgba(45, 212, 191, 0.052),
+    transparent 70%
+  );
+  --ma-vdr-workspace-ambient-height: min(13%, 56px);
+
+  --ma-vdr-main-inset-bg:
+    radial-gradient(ellipse 100% 38% at 10% -10%, rgba(45, 212, 191, 0.028), transparent 58%),
+    linear-gradient(168deg, rgba(8, 16, 22, 0.64) 0%, rgba(4, 8, 12, 0.5) 100%);
+  --ma-vdr-main-inset-border: rgba(90, 255, 220, 0.065);
+  --ma-vdr-main-inset-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.022),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.01);
+
+  --ma-vdr-main-row-bg: rgba(3, 6, 9, 0.36);
+  --ma-vdr-main-row-border: rgba(255, 255, 255, 0.028);
+  --ma-vdr-main-row-hover: rgba(45, 212, 191, 0.042);
+}
+
+/* —— Control Center + main table outers — aligned workspace pair —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  padding: 22px !important;
+  border-radius: var(--ma-mna-surface-radius, 22px) !important;
+  border: 1px solid var(--ma-vdr-workspace-outer-border) !important;
+  background-color: transparent !important;
+  background-image: var(--ma-vdr-workspace-outer-bg) !important;
+  box-shadow: var(--ma-vdr-workspace-outer-shadow) !important;
+  backdrop-filter: var(--ma-vdr-outer-blur) !important;
+  -webkit-backdrop-filter: var(--ma-vdr-outer-blur) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel.ma-valuation-surface:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card.ma-valuation-surface:not(#__ceos_no_match__)::before {
+  height: var(--ma-vdr-workspace-ambient-height) !important;
+  background: var(--ma-vdr-workspace-ambient) !important;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 22%, transparent 100%) !important;
+  mask-image: linear-gradient(180deg, #000 0%, #000 22%, transparent 100%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel.ma-valuation-surface:not(#__ceos_no_match__)::after,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card.ma-valuation-surface:not(#__ceos_no_match__)::after {
+  box-shadow: inset 0 1px 0 rgba(90, 255, 220, 0.028) !important;
+}
+
+/* —— Control Center fields — dark blue-black, no nested glow cards —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel .field {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel .input,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel select,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel .ma-data-room-file-input input[type='file'] {
+  border: 1px solid rgba(90, 255, 220, 0.078) !important;
+  background: rgba(3, 7, 11, 0.54) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.018) !important;
+  color: var(--ma-vdr-text) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel .input:focus,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel select:focus,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel .ma-data-room-file-input input[type='file']:focus {
+  border-color: rgba(45, 212, 191, 0.26) !important;
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.024) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel .ma-data-room-checkbox {
+  color: rgba(203, 213, 225, 0.68);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel .button.primary:not(#__ceos_no_match__) {
+  background: linear-gradient(165deg, rgba(14, 28, 32, 0.92) 0%, rgba(8, 18, 22, 0.88) 100%) !important;
+  background-image: linear-gradient(165deg, rgba(14, 28, 32, 0.92) 0%, rgba(8, 18, 22, 0.88) 100%) !important;
+  border: 1px solid rgba(90, 255, 220, 0.22) !important;
+  color: var(--ma-vdr-text) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 4px 18px rgba(0, 0, 0, 0.22) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid .ma-data-room-panel .button.primary:not(#__ceos_no_match__):hover:not(:disabled) {
+  border-color: rgba(94, 234, 212, 0.34) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 6px 22px rgba(0, 0, 0, 0.26) !important;
+}
+
+/* —— Main table inner glass —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table-scroll.ceos-enterprise-table-wrap:not(#__ceos_no_match__) {
+  margin-top: 26px;
+  border-radius: 14px;
+  border: 1px solid var(--ma-vdr-main-inset-border) !important;
+  background-color: transparent !important;
+  background-image: var(--ma-vdr-main-inset-bg) !important;
+  box-shadow: var(--ma-vdr-main-inset-shadow) !important;
+  backdrop-filter: var(--ma-vdr-inset-blur) !important;
+  -webkit-backdrop-filter: var(--ma-vdr-inset-blur) !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(45, 212, 191, 0.22) rgba(3, 6, 10, 0.78);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table-scroll.ceos-enterprise-table-wrap:not(#__ceos_no_match__)::-webkit-scrollbar {
+  height: 8px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table-scroll.ceos-enterprise-table-wrap:not(#__ceos_no_match__)::-webkit-scrollbar-track {
+  background: rgba(3, 6, 10, 0.82);
+  border-radius: 999px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table-scroll.ceos-enterprise-table-wrap:not(#__ceos_no_match__)::-webkit-scrollbar-thumb {
+  background: rgba(45, 212, 191, 0.22);
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.32);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table-scroll.ceos-enterprise-table-wrap:not(#__ceos_no_match__)::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 212, 191, 0.3);
+}
+
+/* —— Main table header + rows — continuous data system —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table thead th:not(#__ceos_no_match__) {
+  padding: 15px 12px 14px !important;
+  color: rgba(186, 198, 214, 0.84) !important;
+  font-size: 10px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.11em !important;
+  background:
+    linear-gradient(180deg, rgba(13, 22, 28, 0.98) 0%, rgba(9, 16, 22, 0.93) 100%) !important;
+  border-bottom: 1px solid rgba(90, 255, 220, 0.078) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.026),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table tbody td:not(#__ceos_no_match__) {
+  background: var(--ma-vdr-main-row-bg) !important;
+  border-bottom-color: var(--ma-vdr-main-row-border) !important;
+  color: rgba(203, 213, 225, 0.68) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table tbody tr:hover td:not(#__ceos_no_match__) {
+  background: var(--ma-vdr-main-row-hover) !important;
+  border-bottom-color: rgba(45, 212, 191, 0.07) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table strong:not(#__ceos_no_match__) {
+  color: rgba(248, 250, 252, 0.94);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table span:not(#__ceos_no_match__) {
+  color: rgba(148, 163, 184, 0.72);
+}
+
+/* Status badges — ~25% calmer on main table only */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-table .badge:not(#__ceos_no_match__) {
+  border: 1px solid rgba(90, 255, 220, 0.1) !important;
+  background: rgba(45, 212, 191, 0.055) !important;
+  color: rgba(94, 234, 212, 0.78) !important;
+  box-shadow: none !important;
+}
+
+/* Row actions — normalized intensity */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-actions {
+  gap: 6px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-actions .button.secondary:not(#__ceos_no_match__) {
+  font-size: 12px !important;
+  font-weight: 620 !important;
+  background: rgba(5, 10, 12, 0.52) !important;
+  background-image: none !important;
+  border: 1px solid rgba(90, 255, 220, 0.1) !important;
+  color: rgba(203, 213, 225, 0.78) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-actions .button.secondary:not(#__ceos_no_match__):hover:not(:disabled) {
+  background: rgba(8, 14, 16, 0.68) !important;
+  border-color: rgba(90, 255, 220, 0.16) !important;
+  color: rgba(226, 232, 240, 0.88) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.028) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-actions .button.secondary:first-child:not(:disabled):not(#__ceos_no_match__) {
+  background: linear-gradient(165deg, rgba(10, 22, 26, 0.88) 0%, rgba(6, 14, 18, 0.82) 100%) !important;
+  border-color: rgba(90, 255, 220, 0.2) !important;
+  color: rgba(248, 250, 252, 0.94) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-actions .button.secondary:nth-child(3):not(:disabled):not(#__ceos_no_match__) {
+  background: rgba(42, 14, 14, 0.28) !important;
+  border-color: rgba(248, 113, 113, 0.14) !important;
+  color: rgba(252, 165, 165, 0.72) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-actions .button.secondary:nth-child(3):not(:disabled):not(#__ceos_no_match__):hover {
+  background: rgba(58, 18, 18, 0.42) !important;
+  border-color: rgba(248, 113, 113, 0.26) !important;
+  color: rgba(254, 202, 202, 0.88) !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-actions .button.secondary:not(#__ceos_no_match__) :is(svg, .lucide) {
+  opacity: 0.82;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-grid > .ma-data-room-table-card .ma-data-room-actions .button.secondary:first-child:not(:disabled):not(#__ceos_no_match__) :is(svg, .lucide) {
+  opacity: 0.92;
+}
+
+/*
+  C.VDR.HERO.COMPOSITION — open-scene authority (Repository / Pipeline parity).
+  Kills workspaceAccent `[class*='-hero']` plate + ExecutivePremiumStyle `--premium-surface`.
+  Oracle: maRepositoryMaterial C.REPO.TOP.CANVAS.FIX, maPipelineMaterial hero-inner kill.
+  HERO ONLY — do not modify Control Center / tables from this block.
+*/
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-data-room-premium.ma-data-room-page:not(#__ceos_no_match__) {
+  --premium-surface: transparent !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-hero:not(#__ceos_no_match__) {
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  overflow: clip !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  min-height: max(
+    var(--ma-mna-hero-min-height, clamp(500px, 48vw, 580px)),
+    var(--ma-mna-hero-oracle-height, 628px)
+  ) !important;
+  padding: var(--ma-mna-hero-padding-top, 8px) 0 var(--ma-mna-hero-padding-bottom, 40px) !important;
+  margin: 6px 0 var(--ma-vdr-hero-trust-gap) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-hero:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-hero:not(#__ceos_no_match__)::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-hero-grid:not(#__ceos_no_match__) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  overflow: visible !important;
+  isolation: auto !important;
+  align-items: start !important;
+  grid-template-columns: var(
+    --ma-vdr-hero-grid-columns,
+    var(--ma-mna-hero-grid-columns, minmax(0, 1.18fr) minmax(300px, 380px))
+  ) !important;
+  gap: var(--ma-mna-hero-grid-gap, 20px 36px) !important;
+  min-height: clamp(360px, 40vh, 440px) !important;
+  padding: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-kicker:not(#__ceos_no_match__) {
+  color: var(--ceos-hero-kicker-color, var(--ma-vdr-teal-dim)) !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 0 var(--ceos-hero-kicker-margin-bottom) !important;
+  font-size: var(--ceos-hero-kicker-size) !important;
+  font-weight: var(--ceos-hero-kicker-weight) !important;
+  letter-spacing: var(--ceos-hero-kicker-letter-spacing) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-title:not(#__ceos_no_match__) {
+  margin: 0 0 12px !important;
+  max-width: 620px !important;
+  font-size: var(--ma-vdr-title-size, clamp(40px, 4.8vw, 64px)) !important;
+  line-height: 0.98 !important;
+  letter-spacing: -0.03em !important;
+  font-weight: 850 !important;
+  color: #f8fafc !important;
+  text-shadow:
+    0 2px 32px rgba(0, 0, 0, 0.55),
+    0 0 1px rgba(0, 0, 0, 0.8),
+    0 0 42px rgba(45, 212, 191, 0.08) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-title-line:not(#__ceos_no_match__) {
+  display: block !important;
+  white-space: var(--ma-vdr-title-line-wrap, nowrap) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-copy:not(#__ceos_no_match__) {
+  max-width: 500px !important;
+  margin: 0 0 14px !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  color: rgba(203, 213, 225, 0.88) !important;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.42) !important;
+}
+
+/*
+  C.VDR.HERO.AIR — premium spacing + dashboard-parity atmosphere (hero-only).
+  Spacing + effect layers; no copy/layout redesign.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-hero-grid > div:first-child:not(#__ceos_no_match__) {
+  max-width: var(--ma-mna-hero-intro-max-width, 620px) !important;
+  padding-top: calc(var(--ma-mna-hero-inner-to-kicker, 28px) - var(--ma-mna-hero-padding-top, 8px)) !important;
+  padding-bottom: 0 !important;
+  padding-left: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-metrics-panel:not(#__ceos_no_match__) {
+  margin-top: var(
+    --ma-vdr-metrics-margin-top,
+    calc(
+      var(--ma-mna-right-panel-oracle-y, 157px) - var(--ma-mna-hero-oracle-root-y, 117px) -
+        var(--ma-mna-hero-padding-top, 8px)
+    )
+  ) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-scene-glow:not(#__ceos_no_match__) {
+  display: block !important;
+  pointer-events: none !important;
+}
+
+/*
+  C.VDR.HERO.FX-CLIP — decorative layer sizing (visual-only).
+  Stage stays inside hero bounds so orbital lines do not cross security cards below.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-vault-stage:not(#__ceos_no_match__) {
+  position: absolute !important;
+  top: var(--ma-vdr-vault-stage-top, 8%) !important;
+  right: var(--ma-vdr-vault-stage-right, -6%) !important;
+  bottom: 0 !important;
+  left: var(--ma-vdr-vault-stage-left, 21%) !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  height: auto !important;
+  min-height: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-vault-stage .ma-data-room-control-field:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-vault-stage .ma-data-room-vault-field:not(#__ceos_no_match__) {
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-vault-stage .ma-data-room-vault-svg:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-vault-stage .ma-data-room-control-svg:not(#__ceos_no_match__) {
+  overflow: hidden !important;
+  min-height: 0 !important;
+  height: 100% !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-hero:not(#__ceos_no_match__) {
+  overflow: hidden !important;
+  contain: paint !important;
+}
+
+/*
+  C.VDR.HERO.FROZEN — metrics material + executivePolish gold kill
+  Oracle: maRepositoryMaterial .ma-repository-signal, --ma-mna-surface-* KPIs.
+  Left intro padding: clamp(24px, 2vw, 32px) — FROZEN.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics-panel.ma-valuation-surface:not(#__ceos_no_match__) {
+  position: relative !important;
+  z-index: 4 !important;
+  isolation: isolate !important;
+  width: 100% !important;
+  max-width: var(--ma-vdr-metrics-max-width, 380px) !important;
+  justify-self: var(--ma-vdr-metrics-justify, end) !important;
+  margin-left: var(--ma-vdr-metrics-margin-left, auto) !important;
+  padding: 26px !important;
+  border-radius: 22px !important;
+  border: 1px solid var(--ma-vdr-hero-panel-border, rgba(148, 163, 184, 0.07)) !important;
+  border-top-color: rgba(90, 255, 220, 0.12) !important;
+  background: var(--ma-vdr-hero-panel-bg) !important;
+  background-image: var(--ma-vdr-hero-panel-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-vdr-hero-panel-shadow) !important;
+  backdrop-filter: blur(20px) saturate(92%) brightness(0.96) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(92%) brightness(0.96) !important;
+  text-align: left !important;
+  filter: none !important;
+  overflow: hidden !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-kpi.ma-valuation-surface:not(#__ceos_no_match__) {
+  border: 1px solid var(--ma-vdr-kpi-border, rgba(90, 255, 220, 0.14)) !important;
+  background: var(--ma-vdr-kpi-bg) !important;
+  background-image: var(--ma-vdr-kpi-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-vdr-kpi-shadow) !important;
+  backdrop-filter: var(--ma-vdr-kpi-blur, blur(18px) saturate(135%)) !important;
+  -webkit-backdrop-filter: var(--ma-vdr-kpi-blur, blur(18px) saturate(135%)) !important;
+  border-radius: 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 104px !important;
+  padding: 16px 18px !important;
+  outline: none !important;
+  filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics-panel :is(
+  .ma-data-room-metric-label,
+  .ma-data-room-metric-value
+):not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics-panel :is(
+  [class*='metric']
+):not(.ma-data-room-kpi):not(.ma-valuation-surface):not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/*
+  C.VDR.SIGNATURE — page-wide control-field echoes (visual-only).
+  Subtle grid texture + scan whispers on metrics, trust cards, tables.
+  Scope: .ma-data-room-page only. No layout/copy changes.
+  Inner security/status cards use inset glass only — no scan overlay.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-scene-atmo {
+  background:
+    radial-gradient(ellipse 70% 55% at 18% 18%, rgba(12, 20, 30, 0.42), transparent 72%),
+    linear-gradient(180deg, rgba(45, 212, 191, 0.04) 0%, transparent 42%),
+    radial-gradient(ellipse 88% 58% at 72% 52%, rgba(45, 212, 191, 0.1), transparent 66%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(45, 212, 191, 0.018) 0 1px,
+      transparent 1px 56px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(45, 212, 191, 0.014) 0 1px,
+      transparent 1px 56px
+    ),
+    radial-gradient(ellipse 52% 42% at 12% 8%, rgba(45, 212, 191, 0.06), transparent 72%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics-panel::after {
+  box-shadow: inset 0 1px 0 rgba(90, 255, 220, 0.035);
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(45, 212, 191, 0.045) 48%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, rgba(1, 3, 6, 0) 100%);
+  background-size: 220% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  animation: ma-vdr-surface-scan 26s ease-in-out infinite;
+  animation-delay: -4s;
+  opacity: 0.55;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-card::after {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    inset 0 0 0 1px rgba(45, 212, 191, 0.018);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-scroll {
+  position: relative;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-scroll::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(45, 212, 191, 0.028) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: ma-vdr-surface-scan 28s ease-in-out infinite;
+  animation-delay: -10s;
+  opacity: 0.38;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-scroll > table {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-control-node,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-control-node-bright {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes ma-vdr-surface-scan {
+  0% {
+    background-position: -120% 0, 0 0;
+  }
+  100% {
+    background-position: 220% 0, 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-metrics-panel::after,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-control::after,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table-scroll::before {
+    animation: none !important;
+    opacity: 0.2;
+  }
+}
+
+/* —— C.VDR.COMMAND.CENTER — Data Room Command Center IA —— */
+/* C.VDR.RAIL.FULL — left rail natural height; right workspace matched + table scroll */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-center {
+  --ma-vdr-scroll-thumb: rgba(38, 72, 68, 0.72);
+  --ma-vdr-scroll-thumb-hover: rgba(52, 92, 86, 0.88);
+  --ma-vdr-scroll-track: transparent;
+
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: var(--ma-mna-workspace-header-padding-top, 28px)
+    var(--ma-mna-workspace-header-padding-x, 28px) 24px;
+  margin-top: 0;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  border: 1px solid var(--ma-vdr-outer-border);
+  border-radius: var(--ma-mna-surface-radius, 22px);
+  background-color: transparent;
+  background-image: var(--ma-vdr-outer-bg);
+  box-shadow: var(--ma-vdr-outer-shadow);
+  backdrop-filter: var(--ma-vdr-outer-blur);
+  -webkit-backdrop-filter: var(--ma-vdr-outer-blur);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-center::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: min(13%, 56px);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse 72% 100% at 8% 0%, rgba(45, 212, 191, 0.07), transparent 68%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-head {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  margin-bottom: 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-kicker {
+  margin: 0 0 6px;
+  color: var(--ma-vdr-teal);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-title {
+  margin: 0;
+  color: var(--ma-vdr-text);
+  font-size: clamp(20px, 2vw, 24px);
+  font-weight: 780;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel.ma-vdr-command-rail {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 24.5%;
+  width: 24.5%;
+  min-width: 232px;
+  max-width: none;
+  height: auto;
+  min-height: 0;
+  align-self: flex-start;
+  padding: 0;
+  overflow: visible;
+  border-radius: 14px;
+  border: 1px solid rgba(90, 255, 220, 0.065);
+  background-image:
+    linear-gradient(168deg, rgba(6, 12, 16, 0.72) 0%, rgba(3, 7, 10, 0.58) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-rail-header {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  padding: 20px 16px 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-rail-header h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 780;
+  color: var(--ma-vdr-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-rail-header p {
+  margin: 0;
+  color: var(--ma-vdr-text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-rail-body {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  overflow: visible;
+  padding: 4px 16px 28px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail h2,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail > p {
+  margin: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-rail-form {
+  margin-top: 0 !important;
+  gap: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-rail-section {
+  margin-bottom: 22px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-rail-section-label {
+  margin: 0 0 14px;
+  color: var(--ma-vdr-text-soft);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-rail-grid {
+  margin-top: 0;
+  gap: 10px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-main {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: calc(24.5% + 20px);
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  padding: 2px 0 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  margin-bottom: 18px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ma-vdr-text-muted);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-tab:hover {
+  color: var(--ma-vdr-text);
+  background: rgba(45, 212, 191, 0.04);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-tab.is-active {
+  color: var(--ma-vdr-text);
+  border-color: rgba(90, 255, 220, 0.14);
+  background: rgba(45, 212, 191, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ma-vdr-text-soft);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-view-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  flex: 0 0 auto;
+  margin-bottom: 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-view-summary-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(90, 255, 220, 0.06);
+  background: rgba(3, 7, 10, 0.42);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-view-summary-label {
+  display: block;
+  color: var(--ma-vdr-text-soft);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-view-summary-value {
+  display: block;
+  margin-top: 6px;
+  color: var(--ma-vdr-text);
+  font-size: 18px;
+  font-weight: 780;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar {
+  --ma-vdr-toolbar-control-h: 48px;
+  --ma-vdr-toolbar-select-radius: 10px;
+  --ma-vdr-toolbar-select-pad-left: 15px;
+
+  box-sizing: border-box;
+  display: grid;
+  /* Canonical 4-col filter row — fr tracks shrink inside parent (no hard mins). */
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 12px 16px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
+  margin-bottom: 18px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar .field {
+  flex: none;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  gap: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar .field label {
+  display: block;
+  margin: 0 0 10px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ma-vdr-text-soft);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar .field .select {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--ma-vdr-toolbar-control-h);
+  height: var(--ma-vdr-toolbar-control-h);
+  max-height: var(--ma-vdr-toolbar-control-h);
+  padding: 0 var(--ma-vdr-select-padding-right) 0 var(--ma-vdr-toolbar-select-pad-left);
+  border-radius: var(--ma-vdr-toolbar-select-radius);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  background-color: rgba(5, 10, 12, 0.42);
+  /* Chevron FIRST so right position cannot be stolen by multi-layer beds */
+  background-image: var(--ma-vdr-select-chevron), var(--ma-vdr-select-surface);
+  background-repeat: no-repeat, no-repeat;
+  background-position: var(--ma-vdr-select-chevron-pos), 0 0;
+  background-size: var(--ma-vdr-select-chevron-size), auto;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  color: var(--ma-vdr-text);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-transform: none;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+  appearance: none;
+  -webkit-appearance: none;
+  transform: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar .field .select:hover {
+  border-color: rgba(90, 255, 220, 0.12);
+  background-image: var(--ma-vdr-select-chevron-hover), var(--ma-vdr-select-surface);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar .field .select:focus {
+  outline: none;
+  border-color: rgba(45, 212, 191, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  background-image: var(--ma-vdr-select-chevron-focus), var(--ma-vdr-select-surface);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex: none;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  min-height: var(--ma-vdr-toolbar-control-h);
+  height: var(--ma-vdr-toolbar-control-h);
+  padding: 0 15px;
+  margin: 0;
+  border-radius: var(--ma-vdr-toolbar-select-radius);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  background-color: rgba(5, 10, 12, 0.42);
+  background-image: var(--ma-vdr-select-surface);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  align-self: end;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search:hover {
+  border-color: rgba(90, 255, 220, 0.12);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search:focus-within {
+  border-color: rgba(45, 212, 191, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search svg {
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  color: var(--ma-vdr-text-soft);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  color: var(--ma-vdr-text);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search input::-webkit-search-decoration,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search input::-webkit-search-cancel-button,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search input::-webkit-search-results-button,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search input::-webkit-search-results-decoration {
+  display: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-count {
+  box-sizing: border-box;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Second row — keep 4-col filter grid free of a 5th overflowing track */
+  grid-column: 1 / -1;
+  align-self: end;
+  justify-self: end;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  min-height: var(--ma-vdr-toolbar-control-h);
+  height: var(--ma-vdr-toolbar-control-h);
+  padding: 0 12px;
+  margin: 0;
+  overflow: visible;
+  border-radius: 8px;
+  border: 1px solid rgba(90, 255, 220, 0.08);
+  background: rgba(3, 10, 12, 0.52);
+  color: rgba(148, 196, 186, 0.88);
+  font-size: 11px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  text-overflow: clip;
+  letter-spacing: 0.01em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-viewport {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow: auto;
+  margin-top: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(90, 255, 220, 0.08);
+  background-image:
+    linear-gradient(168deg, rgba(3, 7, 10, 0.78) 0%, rgba(2, 5, 8, 0.66) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  scrollbar-width: thin;
+  scrollbar-color: var(--ma-vdr-scroll-thumb) var(--ma-vdr-scroll-track);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-main .ma-data-room-table-scroll.ma-vdr-table-viewport {
+  margin-top: 0;
+  overflow: auto;
+  min-height: 0;
+}
+
+/* WebKit scrollbars — right table viewport only */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-viewport::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-viewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-viewport::-webkit-scrollbar-thumb {
+  background: var(--ma-vdr-scroll-thumb);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-viewport::-webkit-scrollbar-thumb:hover {
+  background: var(--ma-vdr-scroll-thumb-hover);
+  background-clip: padding-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-viewport::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-viewport.ma-data-room-table-scroll::before {
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact {
+  width: 100%;
+  /* Keep scroll floor wide enough for text-heavy columns + action rail */
+  min-width: 1180px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: auto;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: var(--ma-mna-table-header-pad, 12px 16px);
+  background: rgba(3, 8, 11, 0.98);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(90, 255, 220, 0.1);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+  color: var(--ma-vdr-text-soft);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+/*
+  Column proportions via existing semantic td owners.
+  Text-heavy columns get min width; date-only shrinks (width:1% + nowrap).
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact .ma-vdr-col-primary {
+  min-width: 12.5rem;
+  width: 22%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact .ma-vdr-col-security {
+  min-width: 7.5rem;
+  width: 12%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact .ma-vdr-col-meta {
+  min-width: 9.75rem;
+  width: 15%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact .ma-vdr-col-access {
+  min-width: 8.75rem;
+  width: 13%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact .ma-vdr-col-shares {
+  min-width: 6.75rem;
+  width: 10%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact .ma-vdr-col-updated {
+  width: 1%;
+  min-width: 5.75rem;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact tbody td {
+  padding: var(--ma-mna-table-cell-pad-dense, 9px 12px);
+  vertical-align: top;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+/* Same vertical center for date + action group (shared row alignment owner). */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact tbody td.ma-vdr-col-updated,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact tbody td.ma-vdr-col-action {
+  vertical-align: middle;
+}
+
+/* Neutralize first-row top padding so every row shares the same cell rhythm. */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact tbody tr:first-child td {
+  padding: var(--ma-mna-table-cell-pad-dense, 9px 12px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact tbody tr:hover td {
+  background: var(--ma-vdr-row-hover);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-primary strong {
+  display: block;
+  color: var(--ma-vdr-text);
+  font-size: 13px;
+  font-weight: 720;
+  line-height: 1.3;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-primary span,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-meta span,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-access span,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-shares span {
+  display: block;
+  margin-top: 3px;
+  color: var(--ma-vdr-text-muted);
+  font-size: 11px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-meta-strong {
+  display: block;
+  color: var(--ma-vdr-text);
+  font-size: 12px;
+  font-weight: 680;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-security .ma-vdr-meta-strong {
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-security .badge,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-action .badge {
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-shares > span:not(.ma-vdr-meta-strong) {
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-access .ma-vdr-meta-strong {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-action {
+  min-width: 276px;
+  width: 276px;
+  vertical-align: middle;
+}
+
+/* ONE action control height owner — Open + square icons share height; width may differ. */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 9px;
+  width: max-content;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:not(#__ceos_no_match__) {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: 43px;
+  min-height: 43px;
+  max-height: 43px;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 620;
+  line-height: 1;
+  background: rgba(5, 10, 12, 0.52);
+  background-image: none;
+  border: 1px solid rgba(90, 255, 220, 0.1);
+  color: rgba(203, 213, 225, 0.78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:not(#__ceos_no_match__):hover:not(:disabled) {
+  background: rgba(8, 14, 16, 0.68);
+  border-color: rgba(90, 255, 220, 0.16);
+  color: rgba(226, 232, 240, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.028);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:first-child:not(#__ceos_no_match__) {
+  gap: 8px;
+  width: 112px;
+  min-width: 112px;
+  max-width: 112px;
+  padding: 0 12px;
+  background: linear-gradient(165deg, rgba(10, 22, 26, 0.88) 0%, rgba(6, 14, 18, 0.82) 100%);
+  border-color: rgba(90, 255, 220, 0.2);
+  color: rgba(248, 250, 252, 0.94);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:not(:first-child):not(#__ceos_no_match__) {
+  width: 43px;
+  min-width: 43px;
+  max-width: 43px;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:last-child:not(:first-child):not(#__ceos_no_match__) {
+  margin-left: 4px;
+  background: rgba(5, 10, 12, 0.52);
+  border-color: rgba(90, 255, 220, 0.1);
+  color: rgba(203, 213, 225, 0.78);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:last-child:not(:first-child):not(#__ceos_no_match__):hover:not(:disabled) {
+  background: rgba(58, 18, 18, 0.42);
+  border-color: rgba(248, 113, 113, 0.26);
+  color: rgba(254, 202, 202, 0.88);
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:not(#__ceos_no_match__) .button-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:not(:first-child):not(#__ceos_no_match__) .button-content {
+  gap: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:not(#__ceos_no_match__) :is(svg, .lucide) {
+  width: 17px;
+  height: 17px;
+  min-width: 17px;
+  min-height: 17px;
+  flex-shrink: 0;
+  opacity: 0.82;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:first-child:not(#__ceos_no_match__) :is(svg, .lucide) {
+  opacity: 0.92;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:disabled:not(#__ceos_no_match__) {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-audit-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex: 0 0 auto;
+  margin-bottom: 18px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-audit-view .ma-vdr-table-viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-error {
+  flex: 0 0 auto;
+  margin-top: 4px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-rail-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-view-lead {
+  margin: 0;
+  max-width: 56ch;
+  color: var(--ma-vdr-text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-audit-table thead th {
+  letter-spacing: 0.08em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-audit-event strong {
+  font-size: 12px;
+  font-weight: 720;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-audit-resource span:last-child {
+  color: var(--ma-vdr-text-soft);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-audit-time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-error {
+  margin-top: 4px;
+}
+
+@media (max-width: 1180px) {
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-body {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-panel.ma-vdr-command-rail {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-rail-body {
+    overflow: visible;
+    max-height: none;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-main {
+    position: static;
+    inset: auto;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    flex: 1 1 auto;
+    min-height: clamp(420px, 52vh, 560px);
+    height: auto;
+    overflow: visible;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 14px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search {
+    grid-column: 1 / -1;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar .field {
+    min-width: 0;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-count {
+    grid-column: 1 / -1;
+    justify-self: end;
+    width: auto;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-view-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-viewport {
+    min-height: clamp(280px, 48vh, 52vh);
+  }
+}
+
+@media (max-width: 720px) {
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-center {
+    padding: 20px 16px 18px;
+    min-height: 0;
+    height: auto;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search,
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-count {
+    grid-column: auto;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar .field {
+    min-width: 0;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-count {
+    justify-self: stretch;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-viewport {
+    min-height: min(48vh, 420px);
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-view-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/*
+  C.VDR.RAIL.FULL — desktop full-form left rail; no internal left scroll.
+  Overrides C.VDR.RAIL.CONTAIN bounded-scroll rules from P0 fix.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-panel.ma-valuation-surface.ma-vdr-command-rail:not(#__ceos_no_match__) {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 0 0 24.5% !important;
+  width: 24.5% !important;
+  min-width: 232px !important;
+  max-width: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  align-self: flex-start !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-vdr-rail-header {
+  flex: 0 0 auto !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-vdr-rail-body {
+  flex: 0 0 auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  overflow-y: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-vdr-rail-form {
+  margin-top: 0 !important;
+}
+
+/*
+  C.VDR.RIGHT.CONTAIN — body height from left rail; right panel absolutely fills matched band.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-vdr-command-body:not(#__ceos_no_match__) {
+  position: relative !important;
+  display: flex !important;
+  align-items: flex-start !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-vdr-command-main:not(#__ceos_no_match__) {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: calc(24.5% + 20px) !important;
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: hidden !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-vdr-command-view:not(#__ceos_no_match__) {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-vdr-command-main .ma-vdr-table-viewport:not(#__ceos_no_match__) {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  margin-top: 0 !important;
+  overflow: auto !important;
+}
+
+@media (max-width: 1180px) {
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-data-room-panel.ma-valuation-surface.ma-vdr-command-rail:not(#__ceos_no_match__) {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-data-room-premium.ma-data-room-page .ma-vdr-command-main:not(#__ceos_no_match__) {
+    position: static !important;
+    inset: auto !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    min-height: clamp(420px, 52vh, 560px) !important;
+    height: auto !important;
+  }
+}
+
+/*
+  C.VDR.ROW.ACTIONS.TOOLBAR — single-line enterprise row action group (Command Center table).
+  Geometry overrides maButtonSystem !important defaults without changing materials globally.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions:not(#__ceos_no_match__) {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 9px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:not(#__ceos_no_match__) {
+  height: 43px !important;
+  min-height: 43px !important;
+  max-height: 43px !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:first-child:not(#__ceos_no_match__) {
+  width: 112px !important;
+  min-width: 112px !important;
+  max-width: 112px !important;
+  padding: 0 12px !important;
+  gap: 8px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:not(:first-child):not(#__ceos_no_match__) {
+  width: 43px !important;
+  min-width: 43px !important;
+  max-width: 43px !important;
+  aspect-ratio: 1 / 1 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-row-actions .button.secondary:not(#__ceos_no_match__) :is(svg, .lucide) {
+  width: 17px !important;
+  height: 17px !important;
+  min-width: 17px !important;
+  min-height: 17px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-col-action:not(#__ceos_no_match__) {
+  min-width: 276px !important;
+  width: 276px !important;
+  vertical-align: middle !important;
+}
+
+/*
+  C.VDR.TOOLBAR.FILTERS — reinforce single-surface select + right chevron.
+  Wins over global .select padding/min-height without reintroducing multi-layer beds.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar .field .select:not(#__ceos_no_match__) {
+  box-sizing: border-box !important;
+  min-height: var(--ma-vdr-toolbar-control-h, 48px) !important;
+  height: var(--ma-vdr-toolbar-control-h, 48px) !important;
+  max-height: var(--ma-vdr-toolbar-control-h, 48px) !important;
+  padding: 0 var(--ma-vdr-select-padding-right) 0 var(--ma-vdr-toolbar-select-pad-left, 15px) !important;
+  border-radius: var(--ma-vdr-toolbar-select-radius, 10px) !important;
+  line-height: 1.25 !important;
+  transform: none !important;
+  border: 1px solid rgba(148, 163, 184, 0.08) !important;
+  background-color: rgba(5, 10, 12, 0.42) !important;
+  background-image: var(--ma-vdr-select-chevron), var(--ma-vdr-select-surface) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: var(--ma-vdr-select-chevron-pos), 0 0 !important;
+  background-size: var(--ma-vdr-select-chevron-size), auto !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar .field .select:not(#__ceos_no_match__):hover {
+  border-color: rgba(90, 255, 220, 0.12) !important;
+  background-image: var(--ma-vdr-select-chevron-hover), var(--ma-vdr-select-surface) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar .field .select:not(#__ceos_no_match__):focus {
+  border-color: rgba(45, 212, 191, 0.28) !important;
+  background-image: var(--ma-vdr-select-chevron-focus), var(--ma-vdr-select-surface) !important;
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-count:not(#__ceos_no_match__) {
+  grid-column: 1 / -1 !important;
+  justify-self: end !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: var(--ma-vdr-toolbar-control-h, 48px) !important;
+  height: var(--ma-vdr-toolbar-control-h, 48px) !important;
+}
+
+/*
+  C.VDR.TOOLBAR.MICRO — single-surface search + reserved result count width.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search:not(#__ceos_no_match__) {
+  min-height: var(--ma-vdr-toolbar-control-h, 48px) !important;
+  height: var(--ma-vdr-toolbar-control-h, 48px) !important;
+  padding: 0 var(--ma-vdr-toolbar-select-pad-left, 15px) !important;
+  gap: 11px !important;
+  border-radius: var(--ma-vdr-toolbar-select-radius, 10px) !important;
+  border: 1px solid rgba(148, 163, 184, 0.08) !important;
+  background-color: rgba(5, 10, 12, 0.42) !important;
+  background-image: var(--ma-vdr-select-surface) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar-search input:not(#__ceos_no_match__) {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  transform: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-toolbar:not(#__ceos_no_match__) {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 12px 16px !important;
+}
+
+/*
+  C.VDR.RAIL.CONTROLS — Document Control sidebar: toggle chips, watermark field, custom upload.
+  Scoped to .ma-vdr-command-rail only; no logic or layout architecture changes.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Technical section eyebrow — reaffirm after panel `p` exclusion; margin sets title→fields rhythm. */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-section-label {
+  margin: 0 0 2px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ma-vdr-text-soft);
+  line-height: 1.3;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-grid {
+  gap: 10px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field label,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-field-label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(203, 213, 225, 0.82);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-watermark-field {
+  margin-top: 2px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .input,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .select {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  height: 42px;
+  max-height: 42px;
+  padding: 0 15px;
+  border-radius: 10px;
+  border: 1px solid var(--ma-vdr-inset-border);
+  background-color: transparent;
+  background-image: var(--ma-vdr-inset-bg);
+  box-shadow: var(--ma-vdr-inset-shadow);
+  color: var(--ma-vdr-text);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .select {
+  padding-right: var(--ma-vdr-select-padding-right);
+  background-image: var(--ma-vdr-select-chevron), var(--ma-vdr-select-surface);
+  background-repeat: no-repeat, no-repeat;
+  background-position: var(--ma-vdr-select-chevron-pos), 0 0;
+  background-size: var(--ma-vdr-select-chevron-size), auto;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .input:hover,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .select:hover {
+  border-color: rgba(90, 255, 220, 0.14);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .select:hover {
+  background-image: var(--ma-vdr-select-chevron-hover), var(--ma-vdr-select-surface);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .input:focus,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .select:focus {
+  border-color: rgba(45, 212, 191, 0.32);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.14),
+    var(--ma-vdr-inset-shadow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .select:focus {
+  background-image: var(--ma-vdr-select-chevron-focus), var(--ma-vdr-select-surface);
+}
+
+/*
+  C.VDR.RAIL.TOGGLES — Download enabled / Legal hold check-indicator chips.
+  Canonical M&A teal palette only; overrides workspace gold accent bleed.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-data-room-checkbox.ma-vdr-toggle-chip {
+  gap: 11px;
+  min-height: 44px;
+  font-weight: 650;
+  color: inherit;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 11px;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  height: 44px;
+  padding: 0 12px;
+  margin: 0;
+  border-radius: 10px;
+  border: 1px solid rgba(90, 255, 220, 0.16);
+  background-color: rgba(3, 8, 12, 0.9);
+  background-image: linear-gradient(168deg, rgba(5, 12, 16, 0.96) 0%, rgba(2, 6, 10, 0.9) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  color: rgba(186, 198, 214, 0.76);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease,
+    background 0.18s ease;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-indicator {
+  flex: 0 0 19px;
+  width: 19px;
+  height: 19px;
+  border-radius: 5px;
+  border: 1px solid rgba(90, 255, 220, 0.3);
+  background-color: rgba(2, 8, 12, 0.96);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  color: #99f6e4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-indicator svg {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip input[type='checkbox'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+  opacity: 0;
+  pointer-events: auto;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip:hover {
+  border-color: rgba(90, 255, 220, 0.28);
+  background-image: linear-gradient(168deg, rgba(7, 16, 20, 0.98) 0%, rgba(3, 8, 12, 0.92) 100%);
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip:hover .ma-vdr-toggle-indicator {
+  border-color: rgba(90, 255, 220, 0.38);
+  background-color: rgba(4, 10, 14, 0.98);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip.is-checked,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip:has(input:checked) {
+  border-color: rgba(45, 212, 191, 0.44);
+  background-color: rgba(4, 14, 16, 0.94);
+  background-image: linear-gradient(168deg, rgba(7, 20, 24, 0.98) 0%, rgba(3, 10, 12, 0.92) 100%);
+  color: rgba(236, 254, 255, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px rgba(45, 212, 191, 0.12),
+    0 0 16px rgba(45, 212, 191, 0.1);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip.is-checked .ma-vdr-toggle-indicator,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip:has(input:checked) .ma-vdr-toggle-indicator {
+  border-color: rgba(45, 212, 191, 0.68);
+  background-color: rgba(45, 212, 191, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 8px rgba(45, 212, 191, 0.28);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip:has(input:focus-visible) {
+  outline: none;
+  border-color: rgba(45, 212, 191, 0.42);
+  box-shadow:
+    0 0 0 2px rgba(45, 212, 191, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip:has(input:disabled) {
+  opacity: 0.52;
+  cursor: not-allowed;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-surface {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 42px;
+  height: 42px;
+  padding: 0 15px;
+  margin: 0;
+  border-radius: 10px;
+  border: 1px solid var(--ma-vdr-inset-border);
+  background-color: transparent;
+  background-image: var(--ma-vdr-inset-bg);
+  box-shadow: var(--ma-vdr-inset-shadow);
+  color: var(--ma-vdr-text-soft);
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    color 0.16s ease;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-native {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-surface svg,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-surface .ma-vdr-file-upload-name,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-surface .ma-vdr-file-upload-action {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-surface svg {
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  color: rgba(148, 196, 186, 0.82);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ma-vdr-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-action {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(148, 196, 186, 0.78);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-surface:hover {
+  border-color: rgba(90, 255, 220, 0.14);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-surface:has(.ma-vdr-file-native:focus-visible) {
+  border-color: rgba(45, 212, 191, 0.32);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.14),
+    var(--ma-vdr-inset-shadow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-surface:has(.ma-vdr-file-native:disabled) {
+  opacity: 0.52;
+  cursor: not-allowed;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-section:last-child .button.primary {
+  margin-top: 16px;
+  width: 100%;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .input:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .select:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-surface:not(#__ceos_no_match__) {
+  min-height: 42px !important;
+  height: 42px !important;
+  max-height: 42px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-section-label + .field {
+  margin-top: -2px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-toggle-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-section-label + .field .select {
+  margin-top: 0;
+}
+
+/*
+  Rail Access/Policy date controls — native date / datetime-local.
+  Chromium keeps ::-webkit-calendar-picker-indicator in-flow after the edit
+  (flex/absolute/margin-auto do not move it). Owner model:
+  - edit = left content
+  - indicator box = flexible trailing region with glyph painted at its RIGHT edge
+  Keep muted SVG glyph; do not restyle as a green button.
+  2-col dates remain disabled: ~111px/col is too narrow for date+icon.
+*/
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-data-room-policy-grid.ma-vdr-rail-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='date'],
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='datetime-local'] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  display: block;
+  padding-left: 12px;
+  padding-right: 10px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='date']::-webkit-datetime-edit,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='datetime-local']::-webkit-datetime-edit {
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='date']::-webkit-datetime-edit-fields-wrapper,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='datetime-local']::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+/* Trailing control region: fills leftover width; glyph anchored to its right edge. */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='date']::-webkit-calendar-picker-indicator,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  width: max(2.75rem, calc(100% - 9.25rem));
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.85;
+  color: transparent;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' fill='none' viewBox='0 0 15 15'%3E%3Crect x='1.75' y='3.25' width='11.5' height='10' rx='1.5' stroke='%235eead4' stroke-opacity='0.72' stroke-width='1.35'/%3E%3Cpath d='M1.75 6.25h11.5M5 1.75v3M10 1.75v3' stroke='%235eead4' stroke-opacity='0.72' stroke-width='1.35' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 15px 15px;
+  filter: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='date']::-webkit-calendar-picker-indicator:hover,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='datetime-local']::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip:not(#__ceos_no_match__) {
+  min-height: 44px !important;
+  height: 44px !important;
+  max-height: 44px !important;
+  border-radius: 10px !important;
+  white-space: nowrap !important;
+  min-width: 0 !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  gap: 11px !important;
+  border: 1px solid rgba(90, 255, 220, 0.16) !important;
+  background-color: rgba(3, 8, 12, 0.9) !important;
+  background-image: linear-gradient(168deg, rgba(5, 12, 16, 0.96) 0%, rgba(2, 6, 10, 0.9) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  cursor: pointer !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip.is-checked:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip:has(input:checked):not(#__ceos_no_match__) {
+  border-color: rgba(45, 212, 191, 0.42) !important;
+  background-color: rgba(4, 14, 16, 0.94) !important;
+  background-image: linear-gradient(168deg, rgba(7, 20, 24, 0.98) 0%, rgba(3, 10, 12, 0.92) 100%) !important;
+  color: rgba(236, 254, 255, 0.96) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip.is-checked:not(#__ceos_no_match__) .ma-vdr-toggle-indicator,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip:has(input:checked):not(#__ceos_no_match__) .ma-vdr-toggle-indicator {
+  border-color: rgba(45, 212, 191, 0.68) !important;
+  background-color: rgba(45, 212, 191, 0.28) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 8px rgba(45, 212, 191, 0.28) !important;
+}
+
+/* Specificity lock — same padding owner; no second recipe / no new !important */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='date']:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-rail-date-field .input[type='datetime-local']:not(#__ceos_no_match__) {
+  padding-left: 12px !important;
+  padding-right: 10px !important;
+  min-width: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-toggle-chip input[type='checkbox']:not(#__ceos_no_match__) {
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  accent-color: transparent !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .input:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .ma-vdr-file-upload-surface:not(#__ceos_no_match__) {
+  border: 1px solid var(--ma-vdr-inset-border) !important;
+  background-color: transparent !important;
+  background-image: var(--ma-vdr-inset-bg) !important;
+  box-shadow: var(--ma-vdr-inset-shadow) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .select:not(#__ceos_no_match__) {
+  border: 1px solid rgba(148, 163, 184, 0.08) !important;
+  background-color: rgba(5, 10, 12, 0.42) !important;
+  background-image: var(--ma-vdr-select-chevron), var(--ma-vdr-select-surface) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: var(--ma-vdr-select-chevron-pos), 0 0 !important;
+  background-size: var(--ma-vdr-select-chevron-size), auto !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-right: var(--ma-vdr-select-padding-right) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .select:not(#__ceos_no_match__):hover {
+  background-image: var(--ma-vdr-select-chevron-hover), var(--ma-vdr-select-surface) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-rail .field .select:not(#__ceos_no_match__):focus {
+  background-image: var(--ma-vdr-select-chevron-focus), var(--ma-vdr-select-surface) !important;
+}

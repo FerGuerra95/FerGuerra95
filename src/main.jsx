@@ -12,6 +12,8 @@ import './modules/ma/styles/maValuationMaterial.css';
 import './modules/ma/styles/maDashboardMaterial.css';
 import './modules/ma/styles/maReferenceSurfaces.css';
 import './modules/ma/styles/maValuationCanonicalParity.css';
+import './modules/ma/styles/maDataRoomMaterial.css';
+import './modules/ma/styles/maDataRoomCorridorEffect.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

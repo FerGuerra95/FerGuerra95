@@ -3,7 +3,11 @@ import crypto from 'node:crypto';
 import { recordAuditLog } from '../audit/auditLog.service.js';
 import { sanitizeAuditMetadata } from '../../utils/auditMetadata.js';
 import { createSqliteEntityStore } from '../../storage/sqliteEntityStore.service.js';
-import { getMaReportById } from './reports.service.js';
+import {
+  getMaReportById,
+  isMaE2eReport,
+  listHiddenMaE2eCaseIds
+} from './reports.service.js';
 
 const secureShareStore = createSqliteEntityStore(
   'secure_share_links',
@@ -68,7 +72,22 @@ function safeTokenCompare(left, right) {
 }
 
 function isExpired(item) {
-  return item?.expiresAt && new Date(item.expiresAt).getTime() <= Date.now();
+  return Boolean(item?.expiresAt && new Date(item.expiresAt).getTime() <= Date.now());
+}
+
+export function isMaSecureShareActive(item) {
+  if (!item) return false;
+  if (item.status === 'revoked' || item.revokedAt) return false;
+  if (item.status === 'expired' || isExpired(item)) return false;
+
+  return item.status === 'active';
+}
+
+function resolveShareStatus(item) {
+  if (item?.status === 'revoked' || item?.revokedAt) return 'revoked';
+  if (item?.status === 'expired' || isExpired(item)) return 'expired';
+
+  return item?.status || 'active';
 }
 
 /** Public bearer route — uniform denial (no token/oracle leakage). */
@@ -116,11 +135,13 @@ function sanitizeShare(item, token = '') {
   if (!item) return null;
 
   const shareUrls = token ? buildShareUrls(item.id, token) : {};
+  const status = resolveShareStatus(item);
 
   return {
     id: item.id,
     reportId: item.reportId,
-    status: item.status,
+    status,
+    isActive: status === 'active',
     expiresAt: item.expiresAt,
     revokedAt: item.revokedAt || null,
     createdAt: item.createdAt,
@@ -183,13 +204,34 @@ export async function createMaSecureShareLink({
 }
 
 export async function listMaSecureShares({
-  organizationId
+  organizationId,
+  includeTestFixtures = false
 } = {}) {
   assertOrganizationScope(organizationId);
 
   const items = await secureShareStore.listByOrganization(organizationId);
 
-  return items.map((item) => sanitizeShare(item));
+  if (includeTestFixtures) {
+    return items.map((item) => sanitizeShare(item));
+  }
+
+  const hiddenCaseIds = await listHiddenMaE2eCaseIds(organizationId);
+  const visible = [];
+
+  for (const item of items) {
+    if (!item.reportId) {
+      visible.push(sanitizeShare(item));
+      continue;
+    }
+
+    const report = await getMaReportById(item.reportId, { organizationId });
+
+    if (report && isMaE2eReport(report, hiddenCaseIds)) continue;
+
+    visible.push(sanitizeShare(item));
+  }
+
+  return visible;
 }
 
 export async function getMaSecureShareLinkById({

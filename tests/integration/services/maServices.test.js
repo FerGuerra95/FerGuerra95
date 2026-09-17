@@ -6,7 +6,8 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { initializeDatabaseSchema } from '../../../backend/storage/databaseSchema.js';
 import {
   closeDatabase,
-  getSql
+  getSql,
+  runSql
 } from '../../../backend/storage/sqliteStorage.js';
 import {
   createMaCase,
@@ -23,6 +24,8 @@ import {
   createMaSecureShareLink,
   getMaSecureShare,
   getMaSecureSharePublic,
+  isMaSecureShareActive,
+  listMaSecureShares,
   revokeMaSecureShare
 } from '../../../backend/services/ma/secureShare.service.js';
 import {
@@ -644,5 +647,112 @@ describe('ma services multi-tenancy', () => {
     });
 
     expect(deleteResult.deleted).toBe(false);
+  });
+
+  it('does not treat expired secure shares as active and blocks legal-hold archive', async () => {
+    const organizationId = 'org_vdr_active_predicate';
+    const userId = 'u_vdr_active_predicate';
+    const item = await createMaCase(
+      buildCasePayload('Active Predicate Target', organizationId, userId)
+    );
+    const report = await createMaReport({
+      organizationId,
+      userId,
+      caseId: item.id,
+      title: 'Active predicate report',
+      payload: { html: '<p>predicate</p>' }
+    });
+    const share = await createMaSecureShareLink({
+      organizationId,
+      userId,
+      reportId: report.id,
+      expiresInHours: 24
+    });
+
+    expect(isMaSecureShareActive(share)).toBe(true);
+
+    runSql(
+      `UPDATE secure_share_links
+       SET expires_at = @expiresAt
+       WHERE id = @id`,
+      {
+        id: share.id,
+        expiresAt: '2020-01-01T00:00:00.000Z'
+      }
+    );
+
+    const listed = await listMaSecureShares({ organizationId });
+    const expired = listed.find((entry) => entry.id === share.id);
+
+    expect(expired?.status).toBe('expired');
+    expect(expired?.isActive).toBe(false);
+    expect(isMaSecureShareActive(expired)).toBe(false);
+
+    await expect(
+      getMaSecureSharePublic({
+        id: share.id,
+        token: share.token
+      })
+    ).rejects.toMatchObject({
+      code: 'SECURE_SHARE_NOT_FOUND'
+    });
+
+    const held = await createMaDataRoomDocument({
+      organizationId,
+      userId,
+      title: 'Held CIM',
+      legalHold: true,
+      retentionUntil: '2099-12-31'
+    });
+
+    expect(held.governance.legalHold).toBe(true);
+
+    await expect(
+      updateMaDataRoomDocumentGovernance(
+        held.id,
+        { status: 'archived' },
+        { organizationId }
+      )
+    ).rejects.toMatchObject({
+      code: 'MA_VDR_LEGAL_HOLD_ACTIVE'
+    });
+
+    const released = await updateMaDataRoomDocumentGovernance(
+      held.id,
+      { legalHold: false, status: 'archived' },
+      { organizationId }
+    );
+
+    expect(released.status).toBe('archived');
+    expect(released.governance.legalHold).toBe(false);
+
+    await recordAuditLog({
+      organizationId: 'org_audit_scope_a',
+      userId: 'u_audit_a',
+      action: 'ma.data_room.document.created',
+      entityType: 'ma',
+      entityId: 'doc-a'
+    });
+    await recordAuditLog({
+      organizationId: 'org_audit_scope_b',
+      userId: 'u_audit_b',
+      action: 'ma.data_room.document.created',
+      entityType: 'ma',
+      entityId: 'doc-b'
+    });
+
+    const orgALogs = await listAuditLogs({
+      organizationId: 'org_audit_scope_a',
+      entityType: 'ma',
+      limit: 120
+    });
+
+    expect(orgALogs.length).toBeGreaterThan(0);
+    expect(orgALogs.every((entry) => entry.organizationId === 'org_audit_scope_a')).toBe(
+      true
+    );
+    expect(orgALogs.some((entry) => entry.organizationId === 'org_audit_scope_b')).toBe(
+      false
+    );
   });
 });
