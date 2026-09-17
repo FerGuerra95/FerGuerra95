@@ -1,0 +1,167 @@
+/*
+  C.MNA.HERO.ALIGN — canonical M&A hero vertical rhythm.
+  Geometry / spacing tokens only. No materials, shell, or business logic.
+  Oracle: /ma/dashboard @ 1440 — kicker 94, title 118, right panel 106.
+  Loads after page materials + branch geometry.
+ */
+
+/* —— Hero roots: unified top offset from main content —— */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-page .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-hero:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-hero:not(#__ceos_no_match__) {
+  margin-top: var(--page-hero-top-gap, 6px) !important;
+  padding-top: var(--ma-mna-hero-padding-top, 8px) !important;
+}
+
+/* —— Intro column: kicker anchor (inner-to-kicker 28px) —— */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-reference-scene-intro,
+    .ma-val-ref-scene-intro,
+    .ma-pipeline-scene-intro,
+    .ma-data-room-hero-grid > div:first-child
+  ):not(#__ceos_no_match__) {
+  padding-top: calc(var(--ma-mna-hero-inner-to-kicker, 28px) - var(--ma-mna-hero-padding-top, 8px)) !important;
+  margin-top: 0 !important;
+}
+
+/* —— Kickers: shared baseline —— */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-reference-scene-intro .ma-reference-kicker,
+    .ma-val-ref-scene-intro .ma-val-ref-kicker,
+    .ma-pipeline-kicker-hero,
+    .ma-data-room-hero-grid > div:first-child .ma-data-room-kicker
+  ):not(#__ceos_no_match__) {
+  margin: 0 0 var(--ma-mna-kicker-margin-bottom, 8px) !important;
+  padding: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-hero-grid > div:first-child .ma-data-room-kicker:not(#__ceos_no_match__) {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+}
+
+/* —— Title block: shared start + reserved headline height —— */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-reference-title,
+    .ma-val-ref-title,
+    .ma-pipeline-title,
+    .ma-data-room-title
+  ):not(#__ceos_no_match__) {
+  min-height: var(--ma-mna-hero-headline-min-height, clamp(100px, 9vw, 132px));
+  margin: 0 0 var(--ma-mna-title-margin-bottom, 10px) !important;
+}
+
+/* —— Support copy slot: stable height before primary in-flow surface —— */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-reference-lead,
+    .ma-val-ref-lead,
+    .ma-pipeline-copy,
+    .ma-data-room-copy
+  ):not(#__ceos_no_match__) {
+  min-height: var(--ma-mna-hero-copy-slot-min-height, clamp(72px, 5.2vw, 88px));
+  margin: 0 0 var(--ma-mna-body-margin-bottom, 14px) !important;
+  max-width: clamp(700px, 72vw, 820px);
+}
+
+/* Valuation-style pages: external subtitle + DSS band before primary surface */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-val-ref-subtitle,
+    .ma-reference-subtitle,
+    .ma-pipeline-title-sub
+  ):not(#__ceos_no_match__) {
+  min-height: 24px;
+  margin: 0 0 6px !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(
+    .ma-val-ref-dss,
+    .ma-reference-dss,
+    .ma-reference-caption
+  ):not(#__ceos_no_match__) {
+  min-height: var(--ma-mna-hero-post-copy-reserve, 35px);
+  margin: 0 0 8px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-hero-post-band:not(#__ceos_no_match__) {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* —— Primary in-flow hero surfaces (below copy slot) —— */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-pipeline-execution-map,
+    .ma-pipeline-execution-corridor,
+    .ma-reference-cta-stack,
+    .ma-valuation-actions,
+    .ma-repository-page .ma-valuation-actions
+  ):not(#__ceos_no_match__) {
+  margin-top: var(--ma-mna-hero-copy-to-primary-gap, 36px) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-map:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-corridor:not(#__ceos_no_match__) {
+  margin-bottom: var(--ma-mna-hero-copy-to-primary-gap, 36px) !important;
+}
+
+/* —— Right hero panels: oracle-aligned top —— */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-val-ref-scene-layout .ma-valuation-status-card.ma-valuation-surface,
+    .ma-val-ref-scene-layout .ma-repository-signal.ma-valuation-status-card,
+    .ma-pipeline-hero-inner .ma-pipeline-signal-card.ma-valuation-status-card.ma-valuation-surface,
+    .ma-data-room-hero-grid > .ma-data-room-metrics-panel
+  ):not(#__ceos_no_match__) {
+  margin-top: var(--ma-mna-hero-right-panel-offset) !important;
+  align-self: start !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-layout .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-scene .ma-reference-scene-layout > .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  margin-top: calc(
+    var(--ma-mna-right-panel-oracle-y, 157px) - var(--ma-mna-hero-oracle-root-y, 117px) -
+      var(--ma-mna-hero-padding-top, 8px)
+  ) !important;
+  align-self: start !important;
+}
+
+/* —— Hero grids: shared column proportions —— */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-reference-scene-layout,
+    .ma-val-ref-scene-layout,
+    .ma-pipeline-hero-inner,
+    .ma-data-room-hero-grid
+  ):not(#__ceos_no_match__) {
+  align-items: start !important;
+}
+
+/* —— Tablet/mobile: separate contract, preserve order —— */
+@media (max-width: 1180px) {
+  .main-area[data-workspace='ma'] .page :is(
+      .ma-reference-title,
+      .ma-val-ref-title,
+      .ma-pipeline-title,
+      .ma-data-room-title
+    ):not(#__ceos_no_match__) {
+    min-height: 0;
+  }
+
+  .main-area[data-workspace='ma'] .page :is(
+      .ma-reference-lead,
+      .ma-val-ref-lead,
+      .ma-pipeline-copy,
+      .ma-data-room-copy
+    ):not(#__ceos_no_match__) {
+    min-height: clamp(56px, 12vw, 72px);
+  }
+
+  .main-area[data-workspace='ma'] .page :is(
+      .ma-reference-scene-layout .ma-reference-signal.ma-valuation-status-card,
+      .ma-val-ref-scene-layout .ma-valuation-status-card.ma-valuation-surface,
+      .ma-pipeline-signal-card.ma-valuation-status-card,
+      .ma-data-room-metrics-panel
+    ):not(#__ceos_no_match__) {
+    margin-top: 0 !important;
+  }
+}

@@ -1,0 +1,130 @@
+/*
+  C.MNA.INTERNAL — master internal alignment system (geometry only). FINAL / FROZEN.
+  Level 1 page gutter: --ma-page-gutter-x / --ceos-content-pad
+  Level 2 surface inset: --ma-surface-padding-x / --ma-surface-padding-y
+  Level 3 table inset: --ma-table-padding-x / --ma-table-padding-x-dense
+  Loads last. No materials, effects, or business logic.
+ */
+
+/* —— Level 2: major workspace surfaces (single inset layer) —— */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-pipeline-premium,
+    .ma-repository-premium,
+    .ma-data-room-premium
+  )
+  :is(
+    .ma-pipeline-board-shell,
+    .ma-repository-archive.ma-valuation-surface,
+    .ma-vdr-command-center
+  ):not(#__ceos_no_match__) {
+  padding-top: var(--ma-surface-padding-y, 28px);
+  padding-right: var(--ma-surface-padding-x, 28px);
+  padding-left: var(--ma-surface-padding-x, 28px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-shell:not(#__ceos_no_match__) {
+  padding-bottom: 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive.ma-valuation-surface:not(#__ceos_no_match__) {
+  padding-bottom: 18px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-center:not(#__ceos_no_match__) {
+  padding-bottom: 24px;
+}
+
+/* Inner headers/tabs/toolbars: surface already inset — no second horizontal pad */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-header:not(#__ceos_no_match__) {
+  padding-top: 0;
+  padding-inline: 0;
+  margin-bottom: 20px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-header .ma-val-ref-cta-ghost:not(#__ceos_no_match__) {
+  margin-top: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive-header:not(#__ceos_no_match__) {
+  padding-top: 0;
+  padding-inline: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-command-head:not(#__ceos_no_match__) {
+  padding-top: 0;
+  padding-inline: 0;
+}
+
+/* Pipeline toolbar (sibling of board) — align controls to surface inner axis */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-toolbar:not(#__ceos_no_match__) {
+  padding: 0 var(--ma-surface-padding-x, 28px);
+  gap: var(--ma-toolbar-gap, 14px);
+}
+
+/* Dashboard KPI slabs — match surface inset */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) {
+  padding: 30px var(--ma-surface-padding-x, 28px) !important;
+}
+
+/* KPI cards — shared internal padding family */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-summary-card.ma-valuation-surface:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-item:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-kpi:not(#__ceos_no_match__) {
+  padding-inline: var(--ma-surface-padding-x, 28px);
+}
+
+/* —— Level 3: table / data surfaces —— */
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table th,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table td {
+  padding-inline: var(--ma-table-padding-x, 20px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-data-room-table thead th {
+  padding-top: 15px;
+  padding-bottom: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact thead th,
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact tbody td {
+  padding-inline: var(--ma-table-padding-x-dense, 16px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-data-room-premium .ma-vdr-table-compact thead th {
+  padding-top: var(--ma-table-header-padding-y, 12px);
+  padding-bottom: var(--ma-table-header-padding-y, 12px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-list:not(#__ceos_no_match__) {
+  padding-inline: var(--ma-table-padding-x-dense, 16px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record:not(#__ceos_no_match__) {
+  padding-inline: var(--ma-table-padding-x, 20px);
+}
+
+/* Pipeline column cards — canonical dense inset inside board */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-column:not(#__ceos_no_match__) {
+  padding-inline: var(--ma-table-padding-x-dense, 16px);
+}
+
+/* Valuation workspace panels — one inset family (branch route only) */
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page.ma-valuation-premium.ma-branch-premium-page
+  :is(
+    .ma-intelligence-panel,
+    .ma-input-cockpit-shell,
+    .ma-traceability-panel,
+    .ma-comparables-shell,
+    .ma-premium-deal-card,
+    .ma-equity-safe-card
+  ):not(#__ceos_no_match__) {
+  padding: var(--ma-surface-padding-y, 28px) var(--ma-surface-padding-x, 28px);
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page.ma-valuation-premium.ma-branch-premium-page
+  .ma-panel-header:not(#__ceos_no_match__) {
+  padding-inline: 0;
+}

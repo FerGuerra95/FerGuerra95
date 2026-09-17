@@ -1,5 +1,7 @@
 /*
   M&A shared inner surface system — extracted from Valuation winning CSS.
+  CANONICAL OWNER (M&A): --ma-mna-surface-*, --ma-mna-inset-*, status glass recipe.
+  See docs/architecture/MA_UI_FOUNDATION_CONTRACT.md
   Source-of-truth (do not invent):
   - C.24.73 — workspace panels (.ma-equity-safe-card, .ma-premium-deal-card, etc.)
   - C.24.66 — "Ready for valuation" status card
@@ -8,22 +10,42 @@
 */
 
 .main-area[data-workspace='ma'] {
+  /* KPI / panel depth — black first, teal second (subtle contamination, not neon). */
   --ma-mna-surface-bg:
-    radial-gradient(ellipse 120% 82% at 8% -12%, rgba(45, 212, 191, 0.055), transparent 56%),
-    linear-gradient(165deg, rgba(12, 20, 30, 0.76) 0%, rgba(8, 14, 22, 0.58) 100%);
-  --ma-mna-surface-border: rgba(90, 255, 220, 0.12);
+    radial-gradient(ellipse 120% 82% at 8% -12%, rgba(45, 212, 191, 0.07), transparent 58%),
+    linear-gradient(165deg, rgba(8, 14, 20, 0.9) 0%, rgba(5, 10, 16, 0.76) 100%);
+  --ma-mna-surface-border: rgba(90, 255, 220, 0.1);
   --ma-mna-surface-shadow:
-    0 24px 56px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    0 28px 64px rgba(0, 0, 0, 0.34),
+    0 0 42px rgba(45, 212, 191, 0.035),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
   --ma-mna-surface-blur: blur(18px) saturate(135%);
   --ma-mna-surface-radius: 22px;
   --ma-mna-surface-ambient:
     radial-gradient(ellipse 80% 100% at 12% 0%, rgba(45, 212, 191, 0.1), transparent 72%);
-  --ma-mna-strip-bg: linear-gradient(165deg, rgba(10, 22, 30, 0.58) 0%, rgba(8, 16, 24, 0.42) 100%);
-  --ma-mna-strip-border: rgba(148, 163, 184, 0.07);
-  --ma-mna-strip-shadow: 0 10px 32px rgba(0, 0, 0, 0.18);
-  --ma-mna-strip-blur: blur(14px) saturate(140%);
-  --ma-mna-strip-radius: 20px;
+  /*
+   * Command-strip oracle — Valuation ENGINE STATUS / ACTIVE TARGET / CASES SAVED
+   * (maValuationMaterial C.24.78 strengthen pass). Single recipe for all M&A strips.
+   */
+  --ma-mna-command-strip-border: rgba(90, 255, 220, 0.16);
+  --ma-mna-command-strip-bg:
+    radial-gradient(ellipse 115% 95% at 6% -20%, rgba(45, 212, 191, 0.11), transparent 56%),
+    radial-gradient(ellipse 70% 60% at 92% 120%, rgba(45, 212, 191, 0.035), transparent 55%),
+    linear-gradient(165deg, rgba(12, 20, 30, 0.88) 0%, rgba(7, 12, 20, 0.72) 100%);
+  --ma-mna-command-strip-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.26),
+    0 0 40px rgba(45, 212, 191, 0.065),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -1px 0 rgba(45, 212, 191, 0.04);
+  --ma-mna-command-strip-blur: blur(18px) saturate(145%);
+  --ma-mna-command-strip-radius: 20px;
+  --ma-mna-command-strip-divider: rgba(90, 255, 220, 0.08);
+  /* Active Deal / dashboard strip — inherit command-strip oracle exactly */
+  --ma-mna-strip-bg: var(--ma-mna-command-strip-bg);
+  --ma-mna-strip-border: var(--ma-mna-command-strip-border);
+  --ma-mna-strip-shadow: var(--ma-mna-command-strip-shadow);
+  --ma-mna-strip-blur: var(--ma-mna-command-strip-blur);
+  --ma-mna-strip-radius: var(--ma-mna-command-strip-radius);
   /* Valuation C.24.66 — Ready for valuation (verbatim) */
   --ma-mna-status-bg:
     radial-gradient(ellipse 90% 60% at 50% -10%, rgba(45, 212, 191, 0.07), transparent 62%),
@@ -35,9 +57,92 @@
     0 0 34px rgba(45, 212, 191, 0.05);
   --ma-mna-status-blur: blur(18px) saturate(135%);
   --ma-mna-divider: rgba(255, 255, 255, 0.045);
-  --ma-mna-divider-strip: rgba(255, 255, 255, 0.035);
+  --ma-mna-divider-strip: var(--ma-mna-command-strip-divider);
+  /* Flat inset (simple nests) — oracle: maReferenceSurfaces --ma-ref-inset-bg */
   --ma-mna-inset-bg: rgba(5, 9, 9, 0.38);
   --ma-mna-inset-border: rgba(90, 255, 220, 0.07);
+  /* Panel inset (navy/teal-black glass) — oracle: --ma-ref-inset-panel-bg */
+  --ma-mna-inset-panel-bg:
+    radial-gradient(ellipse 110% 80% at 10% -18%, rgba(45, 212, 191, 0.045), transparent 58%),
+    linear-gradient(168deg, rgba(10, 24, 24, 0.5) 0%, rgba(5, 12, 12, 0.36) 100%);
+  --ma-mna-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  --ma-mna-inset-blur: blur(10px) saturate(130%);
+  --ma-mna-inset-radius: 14px;
+  --ma-mna-text-primary: rgba(248, 250, 252, 0.96);
+  --ma-mna-text-secondary: rgba(148, 163, 184, 0.78);
+  --ma-mna-text-soft: rgba(203, 213, 225, 0.68);
+  --ma-mna-text-accent: var(--ws-accent, rgba(45, 212, 191, 0.88));
+
+  /*
+   * C.MNA.GEOMETRY — branch coordinate system (Dashboard / Valuation oracle).
+   * Page shell width/gutter: styles.css :root --ceos-page-* + ceosPageGeometry.css.
+   */
+  --ma-mna-page-section-gap: 20px;
+  --ma-mna-hero-padding-top: 8px;
+  --ma-mna-hero-padding-bottom: 40px;
+  --ma-mna-hero-min-height: clamp(500px, 48vw, 580px);
+  --ma-mna-hero-scene-margin-bottom: 12px;
+  --ma-mna-hero-intro-max-width: 620px;
+  --ma-mna-hero-intro-padding-top: 4px;
+  --ma-mna-hero-grid-gap: 20px 36px;
+  --ma-mna-hero-grid-columns: minmax(0, 1.18fr) minmax(300px, 380px);
+  --ma-mna-hero-panel-max-width: 380px;
+  --ma-mna-kicker-margin-bottom: var(--ceos-hero-kicker-margin-bottom);
+  --ma-mna-title-margin-bottom: var(--ceos-hero-title-margin-bottom);
+  --ma-mna-title-size: var(--ceos-hero-title-size);
+  --ma-mna-title-line-height: var(--ceos-hero-title-line-height);
+  --ma-mna-title-letter-spacing: var(--ceos-hero-title-letter-spacing);
+  --ma-mna-title-weight: var(--ceos-hero-title-weight);
+  --ma-mna-body-max-width: 500px;
+  --ma-mna-body-size: var(--ceos-hero-copy-size);
+  --ma-mna-body-line-height: var(--ceos-hero-copy-line-height);
+  --ma-mna-body-margin-bottom: var(--ceos-hero-body-margin-bottom);
+  --ma-mna-section-gap: clamp(16px, 1.5vw, 22px);
+  /*
+   * C.MNA.INTERNAL — three-level alignment (page → surface → table).
+   * Level 1: --ma-page-gutter-x (shell). Level 2: --ma-surface-padding-x. Level 3: --ma-table-padding-x*.
+   */
+  --ma-surface-padding-x: var(--ma-mna-workspace-header-padding-x, 28px);
+  --ma-surface-padding-y: var(--ma-mna-workspace-padding-y, 28px);
+  --ma-table-padding-x: 20px;
+  --ma-table-padding-x-dense: 16px;
+  --ma-table-header-padding-y: 12px;
+  --ma-toolbar-gap: 14px;
+  --ma-mna-table-header-pad: var(--ma-table-header-padding-y) var(--ma-table-padding-x);
+  --ma-mna-table-cell-pad-dense: 9px var(--ma-table-padding-x-dense);
+  --ma-mna-table-cell-pad-standard: 14px var(--ma-table-padding-x);
+  --ma-mna-control-height: 36px;
+
+  /*
+   * C.MNA.HERO.ORACLE — measured @ 1920x1080 from /ma/dashboard (reference only).
+   * Divergent pages use offsets derived from these, not duplicated literals.
+   */
+  --ma-mna-hero-oracle-root-y: 117px;
+  --ma-mna-kicker-oracle-y: 145px;
+  --ma-mna-title-oracle-y: 171px;
+  --ma-mna-content-gutter-x: 386px;
+  --ma-mna-hero-inner-to-kicker: 28px;
+  --ma-mna-right-panel-oracle-y: 157px;
+  --ma-mna-first-section-oracle-y: 777px;
+  --ma-mna-hero-oracle-height: 628px;
+  --ma-mna-workspace-header-padding-top: 28px;
+  --ma-mna-workspace-header-padding-x: 28px;
+  --ma-page-gutter-x: clamp(26px, 2.6vw, 36px);
+  --ma-page-gutter-top: 24px;
+  --ma-mna-hero-section-gap: 20px;
+  --ma-mna-workspace-padding-y: 28px;
+
+  /*
+   * C.MNA.HERO.ALIGN — aliases global geometry tokens (styles.css).
+   */
+  --page-hero-top-gap: var(--ceos-hero-top-gap);
+  --ma-mna-hero-copy-slot-min-height: var(--ceos-hero-copy-slot-min-height);
+  --ma-mna-hero-headline-min-height: var(--ceos-hero-headline-min-height);
+  --ma-mna-hero-copy-to-primary-gap: var(--ceos-hero-copy-to-primary-gap);
+  --ma-mna-hero-pre-copy-gap: var(--ceos-hero-pre-copy-gap);
+  --ma-mna-hero-post-copy-reserve: var(--ceos-hero-post-copy-reserve);
+  --ma-mna-hero-right-panel-offset: var(--ceos-hero-right-panel-offset);
+  --ma-page-gutter-x: var(--ceos-page-gutter-x);
 }
 
 /* Reusable utility — same recipe as Valuation workspace panels */
@@ -91,7 +196,7 @@
   top: 0 !important;
   width: auto !important;
   height: 120px !important;
-  border-radius: 0 !important;
+  border-radius: inherit !important;
   opacity: 1 !important;
   pointer-events: none !important;
   z-index: 0 !important;
@@ -115,13 +220,13 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) > *,
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline:not(#__ceos_no_match__) > *,
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating:not(#__ceos_no_match__) > *,
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) > *,
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot:not(#__ceos_no_match__) > *,
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next:not(#__ceos_no_match__) > *,
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab:not(#__ceos_no_match__) > * {
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) > *:not(.ma-ma-panel-ambient):not(.ma-reference-stat-spark),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline:not(#__ceos_no_match__) > *:not(.ma-ma-panel-ambient),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating:not(#__ceos_no_match__) > *:not(.ma-ma-panel-ambient),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) > *:not(.ma-ma-panel-ambient),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot:not(#__ceos_no_match__) > *:not(.ma-ma-panel-ambient),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next:not(#__ceos_no_match__) > *:not(.ma-ma-panel-ambient),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab:not(#__ceos_no_match__) > *:not(.ma-ma-panel-ambient) {
   position: relative !important;
   z-index: 1 !important;
 }
@@ -344,24 +449,20 @@
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-next:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-bottom-slab:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-strip:not(#__ceos_no_match__) {
-  border: 1px solid rgba(90, 255, 220, 0.12) !important;
-  background:
-    radial-gradient(ellipse 120% 82% at 8% -12%, rgba(45, 212, 191, 0.055), transparent 56%),
-    linear-gradient(165deg, rgba(12, 20, 30, 0.76) 0%, rgba(8, 14, 22, 0.58) 100%) !important;
-  box-shadow:
-    0 24px 56px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
-  backdrop-filter: blur(18px) saturate(135%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  border: 1px solid var(--ma-mna-surface-border) !important;
+  background: var(--ma-mna-surface-bg) !important;
+  box-shadow: var(--ma-mna-surface-shadow) !important;
+  backdrop-filter: var(--ma-mna-surface-blur) !important;
+  -webkit-backdrop-filter: var(--ma-mna-surface-blur) !important;
 }
 
-/* Strip uses slightly lighter glass like Valuation command strip */
+/* Strip — same border/shadow/bg family as approved M&A table surfaces */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-strip:not(#__ceos_no_match__) {
-  border: 1px solid rgba(148, 163, 184, 0.07) !important;
-  background: linear-gradient(165deg, rgba(10, 22, 30, 0.58) 0%, rgba(8, 16, 24, 0.42) 100%) !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.18) !important;
-  backdrop-filter: blur(14px) saturate(140%) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  border: 1px solid var(--ma-mna-strip-border) !important;
+  background: var(--ma-mna-strip-bg) !important;
+  box-shadow: var(--ma-mna-strip-shadow) !important;
+  backdrop-filter: var(--ma-mna-strip-blur) !important;
+  -webkit-backdrop-filter: var(--ma-mna-strip-blur) !important;
 }
 
 /* ==========================================================================
@@ -384,8 +485,8 @@
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .ma-reference-strip.ma-valuation-surface:not(#__ceos_no_match__) {
-  backdrop-filter: blur(14px) saturate(140%) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  backdrop-filter: var(--ma-mna-strip-blur) !important;
+  -webkit-backdrop-filter: var(--ma-mna-strip-blur) !important;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene .ma-reference-signal.mna-valuation-glass-status:not(#__ceos_no_match__) {
@@ -474,14 +575,14 @@
 
 /* Active deal strip — C.24.78 command strip */
 .main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-strip.mna-valuation-glass-strip.mna-valuation-glass-surface:not(#__ceos_no_match__) {
-  border: 1px solid rgba(148, 163, 184, 0.07) !important;
-  border-radius: 20px !important;
-  background: linear-gradient(165deg, rgba(10, 22, 30, 0.52) 0%, rgba(8, 16, 24, 0.36) 100%) !important;
+  border: 1px solid var(--ma-mna-strip-border) !important;
+  border-radius: var(--ma-mna-strip-radius) !important;
+  background: var(--ma-mna-strip-bg) !important;
   background-color: transparent !important;
-  background-image: linear-gradient(165deg, rgba(10, 22, 30, 0.52) 0%, rgba(8, 16, 24, 0.36) 100%) !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.18) !important;
-  backdrop-filter: blur(14px) saturate(140%) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  background-image: var(--ma-mna-strip-bg) !important;
+  box-shadow: var(--ma-mna-strip-shadow) !important;
+  backdrop-filter: var(--ma-mna-strip-blur) !important;
+  -webkit-backdrop-filter: var(--ma-mna-strip-blur) !important;
 }
 
 /* Gauge ring core — translucent bed */
@@ -524,9 +625,12 @@
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-bottom-slab .ma-reference-snapshot-readout:not(#__ceos_no_match__) {
-  background: rgba(5, 9, 9, 0.28) !important;
-  border: 1px solid rgba(90, 255, 220, 0.06) !important;
-  box-shadow: none !important;
+  background: var(--ma-ref-inset-panel-bg, rgba(5, 9, 9, 0.32)) !important;
+  background-image: var(--ma-ref-inset-panel-bg, none) !important;
+  border: 1px solid var(--ma-ref-inset-border, rgba(90, 255, 220, 0.07)) !important;
+  box-shadow: var(--ma-ref-inset-shadow, inset 0 1px 0 rgba(255, 255, 255, 0.025)) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .mna-valuation-glass-surface .ma-reference-operating-step:not(#__ceos_no_match__),
@@ -581,14 +685,14 @@
 
 /* Active deal strip — Valuation C.24.78 */
 .main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-strip.mna-valuation-glass-strip:not(#__ceos_no_match__) {
-  border: 1px solid rgba(148, 163, 184, 0.07) !important;
-  border-radius: 20px !important;
-  background: linear-gradient(165deg, rgba(10, 22, 30, 0.58) 0%, rgba(8, 16, 24, 0.42) 100%) !important;
+  border: 1px solid var(--ma-mna-strip-border) !important;
+  border-radius: var(--ma-mna-strip-radius) !important;
+  background: var(--ma-mna-strip-bg) !important;
   background-color: transparent !important;
-  background-image: linear-gradient(165deg, rgba(10, 22, 30, 0.58) 0%, rgba(8, 16, 24, 0.42) 100%) !important;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.18) !important;
-  backdrop-filter: blur(14px) saturate(140%) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  background-image: var(--ma-mna-strip-bg) !important;
+  box-shadow: var(--ma-mna-strip-shadow) !important;
+  backdrop-filter: var(--ma-mna-strip-blur) !important;
+  -webkit-backdrop-filter: var(--ma-mna-strip-blur) !important;
 }
 
 /* Gauge core — glass bed (not solid black) */
@@ -608,4 +712,137 @@
     inset 0 0 14px rgba(45, 212, 191, 0.04) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* ==========================================================================
+   Lower-table color alignment — Dashboard C.24.84 is source of truth
+   Visual color/material ONLY. No layout/padding/radius/structure changes.
+   Applies Dashboard --ma-mna-surface-* to Valuation workspace lower shells.
+   Does NOT touch hero, status glass, or upper-suite.
+   ========================================================================== */
+
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
+  .ma-input-cockpit-shell,
+  .ma-equity-safe-card,
+  .ma-premium-deal-card,
+  .ma-intelligence-panel,
+  .ma-traceability-panel,
+  .ma-comparables-shell
+).ma-valuation-surface:not(.ma-valuation-status-card):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-input-cockpit-shell.ma-valuation-sidebar-premium:not(#__ceos_no_match__) {
+  border-color: var(--ma-mna-surface-border) !important;
+  background: var(--ma-mna-surface-bg) !important;
+  background-image: var(--ma-mna-surface-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-mna-surface-shadow) !important;
+  backdrop-filter: var(--ma-mna-surface-blur) !important;
+  -webkit-backdrop-filter: var(--ma-mna-surface-blur) !important;
+}
+
+/* ==========================================================================
+   Panel ambient wash — Dashboard table left/upper-left light (not top hairline).
+   Child layer wins where Valuation CSS kills ::before on panels/cards.
+   Includes left underwriting rail (.ma-input-cockpit-shell).
+   ========================================================================== */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page :is(
+  .ma-input-cockpit-shell,
+  .ma-equity-safe-card,
+  .ma-premium-deal-card,
+  .ma-intelligence-panel,
+  .ma-traceability-panel,
+  .ma-comparables-shell
+):not(#__ceos_no_match__) > .ma-ma-panel-ambient:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board .ma-deal-card:not(#__ceos_no_match__) > .ma-ma-panel-ambient:not(#__ceos_no_match__) {
+  position: absolute !important;
+  inset: 0 0 auto !important;
+  left: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+  height: 120px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: inherit !important;
+  background: var(--ma-mna-surface-ambient) !important;
+  background-image: var(--ma-mna-surface-ambient) !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Left cockpit — lock Dashboard table material (wins flat sidebar overrides) */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-valuation-input-cockpit .ma-input-cockpit-shell.ma-valuation-surface:not(#__ceos_no_match__) {
+  isolation: isolate !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border: 1px solid var(--ma-mna-surface-border) !important;
+  border-radius: var(--ma-mna-surface-radius, 22px) !important;
+  background: var(--ma-mna-surface-bg) !important;
+  background-image: var(--ma-mna-surface-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-mna-surface-shadow) !important;
+  backdrop-filter: var(--ma-mna-surface-blur) !important;
+  -webkit-backdrop-filter: var(--ma-mna-surface-blur) !important;
+}
+
+/* Nested mini-table / inference rows — same left wash as Dashboard inset nests */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page .ma-intelligence-panel .ma-inference-item:not(#__ceos_no_match__) {
+  border: 1px solid var(--ma-ref-inset-border, var(--ma-mna-inset-border)) !important;
+  background: var(--ma-ref-inset-panel-bg, var(--ma-mna-inset-bg)) !important;
+  background-image: var(--ma-ref-inset-panel-bg, none) !important;
+  box-shadow: var(--ma-ref-inset-shadow, inset 0 1px 0 rgba(255, 255, 255, 0.025)) !important;
+}
+
+/* ==========================================================================
+   C.MNA.MATERIAL.FOUNDATION — canonical surface families (FINAL / FROZEN)
+   A PAGE: maExecutiveTheme canvas (rgb(1,3,6) + branch teal wash)
+   B PRIMARY: --ma-mna-surface-* (.ma-mna-inner-surface, ma-valuation-surface outer)
+   C INNER GLASS: --ma-mna-inset-* / --ma-ref-inset-*
+   D KPI: --ma-mna-surface-* (same primary family; hero status uses --ma-mna-status-*)
+   E TABLE: --ma-vdr-inset-* / --ma-pipe-inner-* / record-list nests
+   F CONTROL: --ma-mna-inset-* on inputs/search/select
+   G ACTIVE: existing button/control focus tokens (unchanged)
+   H INNER TRUST: Data Room security/status cards — page variant in maDataRoomMaterial.css (--ma-vdr-inset-*)
+   ========================================================================== */
+
+/* C.MA-VISUAL-PRESERVATION-03 — neutral secondary copy on premium M&A surfaces */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-dashboard-premium,
+    .ma-valuation-premium-page,
+    .ma-pipeline-premium,
+    .ma-repository-premium,
+    .ma-data-room-premium
+  )
+  :is(
+    .ma-data-room-control span,
+    .ma-valuation-input-cockpit-band-lead,
+    .ma-equity-safe-copy,
+    .ma-equity-safe-risk-note,
+    .ma-equity-safe-stat-note,
+    .ma-equity-safe-metric-description
+  ):not(#__ceos_no_match__) {
+  color: var(--ma-mna-text-secondary);
+}
+
+.main-area[data-workspace='ma'] .page :is(
+    .ma-pipeline-premium,
+    .ma-repository-premium,
+    .ma-data-room-premium
+  )
+  :is(
+    .ma-pipeline-board-shell,
+    .ma-pipeline-summary-card.ma-valuation-surface,
+    .ma-repository-archive.ma-valuation-surface,
+    .ma-repository-command-item,
+    .ma-repository-kpi,
+    .ma-vdr-command-center
+  ):not(#__ceos_no_match__) {
+  border-color: var(--ma-mna-surface-border);
+  border-radius: var(--ma-mna-surface-radius);
+  background-color: transparent;
+  background-image: var(--ma-mna-surface-bg);
+  box-shadow: var(--ma-mna-surface-shadow);
+  backdrop-filter: var(--ma-mna-surface-blur);
+  -webkit-backdrop-filter: var(--ma-mna-surface-blur);
 }

@@ -1,0 +1,320 @@
+/*
+  C.GEOMETRY.HERO — global hero vertical rhythm for CEO's OS.
+  Rules A + C: hero top, kicker/title zone, copy slot, primary surface start.
+  M&A fine-tuning remains in maMnaHeroAlignment.css (loads before this file).
+  This layer extends the contract to ceos-ws-hero workspaces + CEO Overview.
+ */
+
+/* Resolve kicker color on the accent root so it is not frozen invalid at :root. */
+.ceos-ws-accent-root {
+  --ceos-hero-kicker-color: var(--ws-accent-text);
+}
+
+/* —— Rule A: hero top anchor (all ceos-ws-hero + CEO overview) —— */
+.main-area[data-workspace] .page :is(
+    .ceos-ws-hero,
+    .ceo-hero,
+    .ceo-command-hero
+  ):not(#__ceos_no_match__) {
+  margin-top: var(--ceos-hero-top-gap) !important;
+  box-sizing: border-box;
+}
+
+/* M&A reference heroes — same top contract (branch geometry may add margin) */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-reference-scene,
+    .ma-val-ref-scene.ma-valuation-hero,
+    .ma-pipeline-hero,
+    .ma-data-room-hero
+  ):not(#__ceos_no_match__) {
+  margin-top: var(--ceos-hero-top-gap) !important;
+  padding-top: var(--ceos-hero-padding-top) !important;
+}
+
+/* —— Split hero grids: canonical column proportions —— */
+.main-area[data-workspace] .page :is(
+    .compliance-hero-layout,
+    .funding-hero-layout,
+    .ceo-hero-layout,
+    .investor-hero-layout,
+    .fundraising-hero-layout,
+    .capital-hero-layout,
+    .dataroom-hero-layout,
+    .pmi-hero-layout,
+    .reporting-hero-layout,
+    .risk-enterprise-hero-layout,
+    .strategy-hero-layout,
+    .bridge-enterprise-hero-layout,
+    .heritage-enterprise-hero-layout,
+    .governance-enterprise-hero-layout
+  ):not(#__ceos_no_match__) {
+  display: grid;
+  grid-template-columns: var(--ceos-hero-grid-columns);
+  gap: var(--ceos-hero-grid-gap);
+  align-items: start;
+}
+
+/* —— Intro column: kicker anchor inside hero —— */
+.main-area[data-workspace] .page :is(
+    .compliance-hero-main,
+    .funding-hero-layout > div:first-child,
+    .ceo-hero-layout > div:first-child,
+    .investor-hero-main,
+    .fundraising-hero-main,
+    .capital-hero-main,
+    .dataroom-hero-main,
+    .pmi-hero-main,
+    .pmi-hero-layout > div:first-child,
+    .reporting-hero-main,
+    .risk-enterprise-hero-main,
+    .strategy-hero-main,
+    .bridge-enterprise-hero-main,
+    .heritage-enterprise-hero-main
+  ):not(#__ceos_no_match__) {
+  padding-top: calc(var(--ceos-hero-inner-to-kicker) - var(--ceos-hero-padding-top, 0px));
+}
+
+/* Single-column enterprise heroes (governance, etc.) */
+.main-area[data-workspace] .page .governance-enterprise-hero.ceos-ws-hero:not(#__ceos_no_match__) {
+  padding-top: calc(
+    var(--ceos-hero-padding-top) + var(--ceos-hero-inner-to-kicker) - var(--ceos-hero-padding-top)
+  ) !important;
+}
+
+/* —— Shared kicker band + typography (STANDARD) —— */
+.main-area[data-workspace] .page :is(
+    .ceos-ws-hero .compliance-kicker,
+    .ceos-ws-hero .funding-kicker,
+    .ceos-ws-hero .ceo-kicker,
+    .ceos-ws-hero .reporting-kicker,
+    .ceos-ws-hero .risk-kicker,
+    .ceos-ws-hero .strategy-kicker,
+    .ceos-ws-hero .pmi-kicker,
+    .ceos-ws-hero .bridge-kicker,
+    .ceos-ws-hero .heritage-kicker,
+    .ceos-ws-hero .governance-kicker,
+    .ma-reference-scene-intro .ma-reference-kicker,
+    .ma-val-ref-scene-intro .ma-val-ref-kicker,
+    .ma-pipeline-kicker-hero,
+    .ma-data-room-hero-grid > div:first-child .ma-data-room-kicker,
+    .ma-repository-page .ma-val-ref-scene-intro .ma-repository-kicker,
+    .ma-repository-page .ma-val-ref-scene-intro .ma-val-ref-kicker
+  ):not(#__ceos_no_match__) {
+  display: block;
+  margin: 0 0 var(--ceos-hero-kicker-margin-bottom) !important;
+  font-family: inherit;
+  font-size: var(--ceos-hero-kicker-size);
+  font-weight: var(--ceos-hero-kicker-weight);
+  line-height: var(--ceos-hero-kicker-line-height);
+  letter-spacing: var(--ceos-hero-kicker-letter-spacing);
+  text-transform: var(--ceos-hero-kicker-transform);
+  color: var(--ceos-hero-kicker-color);
+}
+
+/* Command-center kicker band — variant geometry, STANDARD type */
+.main-area[data-workspace] .page .ceo-command-badge-row:not(#__ceos_no_match__) {
+  min-height: 18px;
+  margin: 0 0 var(--ceos-hero-kicker-margin-bottom) !important;
+}
+
+.main-area[data-workspace] .page :is(
+    .ceos-ws-hero > .badge,
+    .ceo-command-badge
+  ):not(#__ceos_no_match__) {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  min-height: 18px;
+  margin: 0 0 var(--ceos-hero-kicker-margin-bottom);
+  font-family: inherit;
+  font-size: var(--ceos-hero-kicker-size);
+  font-weight: var(--ceos-hero-kicker-weight);
+  line-height: var(--ceos-hero-kicker-line-height);
+  letter-spacing: var(--ceos-hero-kicker-letter-spacing);
+  text-transform: var(--ceos-hero-kicker-transform);
+  color: var(--ceos-hero-kicker-color);
+}
+
+/* —— Title block: reserved headline height + STANDARD type —— */
+.main-area[data-workspace] .page :is(
+    .compliance-title,
+    .funding-title,
+    .ceo-title,
+    .investor-title,
+    .fundraising-title,
+    .capital-title,
+    .dataroom-title,
+    .pmi-title,
+    .pmi-enterprise-title,
+    .reporting-title,
+    .risk-enterprise-title,
+    .strategy-title,
+    .bridge-enterprise-title,
+    .heritage-enterprise-title,
+    .governance-enterprise-title,
+    .ceo-command-hero-title,
+    .ma-reference-title,
+    .ma-val-ref-title,
+    .ma-pipeline-title,
+    .ma-data-room-title,
+    .ma-repository-title
+  ):not(#__ceos_no_match__) {
+  min-height: var(--ceos-hero-headline-min-height);
+  margin: 0 0 var(--ceos-hero-title-margin-bottom) !important;
+  font-family: inherit;
+  font-size: var(--ceos-hero-title-size);
+  font-weight: var(--ceos-hero-title-weight);
+  line-height: var(--ceos-hero-title-line-height);
+  letter-spacing: var(--ceos-hero-title-letter-spacing);
+  color: var(--ceos-hero-title-color);
+}
+
+.main-area[data-workspace] .page :is(
+    .compliance-title span,
+    .funding-title span,
+    .ceo-title span,
+    .pmi-title span,
+    .investor-title span,
+    .fundraising-title span,
+    .capital-title span,
+    .dataroom-title span,
+    .ceo-command-hero-title span
+  ):not(#__ceos_no_match__) {
+  display: block;
+  font-size: var(--ceos-hero-copy-size);
+  font-weight: 450;
+  line-height: var(--ceos-hero-copy-line-height);
+  letter-spacing: -0.015em;
+  color: var(--ceos-hero-copy-color);
+}
+
+/* —— Copy slot —— */
+.main-area[data-workspace] .page :is(
+    .compliance-copy,
+    .funding-copy,
+    .ceo-copy,
+    .investor-copy,
+    .fundraising-copy,
+    .capital-copy,
+    .dataroom-copy,
+    .pmi-copy,
+    .pmi-enterprise-copy,
+    .reporting-copy,
+    .risk-enterprise-copy,
+    .strategy-copy,
+    .bridge-enterprise-copy,
+    .heritage-enterprise-copy,
+    .governance-enterprise-copy,
+    .ma-reference-lead,
+    .ma-val-ref-lead,
+    .ma-pipeline-copy,
+    .ma-data-room-copy,
+    .ma-repository-copy
+  ):not(#__ceos_no_match__) {
+  min-height: var(--ceos-hero-copy-slot-min-height);
+  margin: 0 0 var(--ceos-hero-body-margin-bottom) !important;
+  max-width: clamp(700px, 72vw, 820px);
+  font-size: var(--ceos-hero-copy-size);
+  line-height: var(--ceos-hero-copy-line-height);
+  color: var(--ceos-hero-copy-color);
+}
+
+/* —— Primary in-flow hero surfaces —— */
+.main-area[data-workspace] .page :is(
+    .compliance-command-bar,
+    .funding-command-bar,
+    .funding-actions,
+    .ceo-hero-actions,
+    .investor-command-bar,
+    .fundraising-command-bar,
+    .capital-command-bar,
+    .dataroom-command-bar,
+    .pmi-command-bar,
+    .reporting-command-bar,
+    .risk-enterprise-command-bar,
+    .strategy-command-bar,
+    .bridge-enterprise-command-bar,
+    .heritage-enterprise-command-bar,
+    .governance-enterprise-grid
+  ):not(#__ceos_no_match__) {
+  margin-top: var(--ceos-hero-copy-to-primary-gap) !important;
+}
+
+/* —— Right hero panels: oracle-aligned top —— */
+.main-area[data-workspace] .page :is(
+    .compliance-signal-card,
+    .funding-signal-card,
+    .funding-hero .ceos-executive-inner-surface,
+    .ceo-deal-readiness-card,
+    .investor-signal-card,
+    .fundraising-signal-card,
+    .capital-signal-card,
+    .dataroom-signal-card,
+    .pmi-signal-card,
+    .reporting-signal-panel,
+    .risk-enterprise-signal-panel,
+    .strategy-signal-panel,
+    .bridge-enterprise-signal-panel,
+    .heritage-enterprise-signal-panel
+  ):not(#__ceos_no_match__) {
+  margin-top: var(--ceos-hero-right-panel-offset) !important;
+  align-self: start !important;
+  max-width: var(--ceos-hero-panel-max-width);
+}
+
+/* —— Tablet/mobile: separate contract —— */
+@media (max-width: 1180px) {
+  .main-area[data-workspace] .page :is(
+      .compliance-title,
+      .funding-title,
+      .ceo-title,
+      .investor-title,
+      .fundraising-title,
+      .capital-title,
+      .dataroom-title,
+      .pmi-title,
+      .pmi-enterprise-title,
+      .reporting-title,
+      .risk-enterprise-title,
+      .strategy-title,
+      .bridge-enterprise-title,
+      .heritage-enterprise-title,
+      .governance-enterprise-title,
+      .ceo-command-hero-title,
+      .ma-reference-title,
+      .ma-val-ref-title,
+      .ma-pipeline-title,
+      .ma-data-room-title,
+      .ma-repository-title
+    ):not(#__ceos_no_match__) {
+    min-height: 0;
+  }
+
+  .main-area[data-workspace] .page :is(
+      .compliance-copy,
+      .funding-copy,
+      .ceo-copy,
+      .governance-enterprise-copy
+    ):not(#__ceos_no_match__) {
+    min-height: clamp(56px, 12vw, 72px);
+  }
+
+  .main-area[data-workspace] .page :is(
+      .compliance-signal-card,
+      .funding-signal-card,
+      .funding-hero .ceos-executive-inner-surface
+    ):not(#__ceos_no_match__) {
+    margin-top: 0 !important;
+  }
+
+  .main-area[data-workspace] .page :is(
+      .compliance-hero-layout,
+      .funding-hero-layout,
+      .ceo-hero-layout
+    ):not(#__ceos_no_match__) {
+    grid-template-columns: 1fr;
+  }
+}

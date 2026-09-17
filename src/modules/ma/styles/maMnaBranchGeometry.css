@@ -1,0 +1,114 @@
+/*
+  C.MNA.BRANCH.GEOMETRY — M&A branch-specific hero grid (Valuation upper suite).
+  Page container / width / gutters → ceosPageGeometry.css (global).
+  Hero vertical rhythm → ceosHeroGeometry.css + maMnaHeroAlignment.css.
+ */
+
+/*
+  /ma/valuation — hero grid parity with Dashboard / Pipeline / Repository.
+  Scoped to Valuation route shell only (.ma-branch-premium-page), not Repository reuse of valuation classes.
+ */
+.main-area[data-workspace='ma'] .page .ma-valuation-premium-page.ma-valuation-premium.ma-branch-premium-page:not(#__ceos_no_match__) {
+  gap: var(--ma-mna-page-section-gap, 20px) !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page.ma-valuation-premium.ma-branch-premium-page
+  .ma-valuation-upper-suite:not(#__ceos_no_match__) {
+  margin: var(--ceos-hero-top-gap) 0 0 !important;
+  gap: 0 !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page.ma-valuation-premium.ma-branch-premium-page
+  .ma-valuation-upper-suite:not(#__ceos_no_match__)
+  .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__) {
+  min-height: max(
+    var(--ma-mna-hero-min-height, clamp(500px, 48vw, 580px)),
+    var(--ma-mna-hero-oracle-height, 628px)
+  ) !important;
+  padding-top: var(--ma-mna-hero-padding-top, 8px) !important;
+  padding-right: 0 !important;
+  padding-bottom: var(--ma-mna-hero-padding-bottom, 40px) !important;
+  padding-left: 0 !important;
+  margin: 0 0 var(--ma-mna-hero-scene-margin-bottom, 12px) !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page.ma-valuation-premium.ma-branch-premium-page
+  .ma-valuation-upper-suite:not(#__ceos_no_match__)
+  .ma-val-ref-scene-layout:not(#__ceos_no_match__) {
+  position: relative !important;
+  z-index: 2 !important;
+  display: grid !important;
+  grid-template-columns: var(--ma-mna-hero-grid-columns, minmax(0, 1.18fr) minmax(300px, 380px)) !important;
+  grid-template-rows: auto auto !important;
+  gap: var(--ma-mna-hero-grid-gap, 20px 36px) !important;
+  align-items: start !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page.ma-valuation-premium.ma-branch-premium-page
+  .ma-valuation-upper-suite:not(#__ceos_no_match__)
+  .ma-val-ref-scene-intro:not(#__ceos_no_match__) {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  max-width: var(--ma-mna-hero-intro-max-width, 620px) !important;
+  min-width: 0 !important;
+  margin-top: 0 !important;
+  padding-top: calc(var(--ma-mna-hero-inner-to-kicker, 28px) - var(--ma-mna-hero-padding-top, 8px)) !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 0 !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page.ma-valuation-premium.ma-branch-premium-page
+  .ma-valuation-upper-suite:not(#__ceos_no_match__)
+  .ma-val-ref-scene-intro:not(#__ceos_no_match__)
+  .ma-val-ref-kicker:not(#__ceos_no_match__) {
+  display: block !important;
+  margin-top: 0 !important;
+  margin-block-start: 0 !important;
+  padding-top: 0 !important;
+  padding-block-start: 0 !important;
+}
+
+/*
+  Hero kickers — kill inline-flex line-box strut (+2–6px Y drift on Valuation / Data Room).
+  Geometry only; typography unchanged.
+ */
+.main-area[data-workspace='ma'] .page :is(
+    .ma-reference-scene-intro .ma-reference-kicker,
+    .ma-data-room-hero-grid > div:first-child .ma-data-room-kicker
+  ):not(#__ceos_no_match__) {
+  display: block !important;
+  margin-block-start: 0 !important;
+  padding-block-start: 0 !important;
+}
+
+.main-area[data-workspace='ma']
+  .page
+  .ma-valuation-premium-page.ma-valuation-premium.ma-branch-premium-page
+  .ma-valuation-upper-suite:not(#__ceos_no_match__)
+  .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  grid-column: var(--ma-mna-hero-status-column, 2) !important;
+  grid-row: 1 !important;
+  justify-self: var(--ma-mna-hero-status-justify, end) !important;
+  width: 100% !important;
+  max-width: var(--ma-mna-hero-panel-max-width, 380px) !important;
+  margin-top: var(--ceos-hero-right-panel-offset) !important;
+  align-self: start !important;
+}
+
+/* Workspace/surface inset → maMnaInternalAlignment.css (C.MNA.INTERNAL) */

@@ -14,6 +14,12 @@ import './modules/ma/styles/maReferenceSurfaces.css';
 import './modules/ma/styles/maValuationCanonicalParity.css';
 import './modules/ma/styles/maDataRoomMaterial.css';
 import './modules/ma/styles/maDataRoomCorridorEffect.css';
+import './modules/ma/styles/maMnaSurfaceSystem.css';
+import './modules/ma/styles/maMnaBranchGeometry.css';
+import './modules/ma/styles/maMnaInternalAlignment.css';
+import './modules/ma/styles/maMnaHeroAlignment.css';
+import './styles/ceosPageGeometry.css';
+import './styles/ceosHeroGeometry.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

@@ -28,6 +28,62 @@
   --radius-card: 26px;
   --radius-inner: 20px;
   --radius-control: 16px;
+
+  /*
+   * C.GEOMETRY — global page geometry contract (CEO's OS).
+   * Oracle: M&A Dashboard @ 1440, 220px sidebar, 60px topbar.
+   */
+  --ceos-page-max-width: 1480px;
+  --ceos-page-max-width-wide: min(1680px, calc(100vw - var(--shell-sidebar-width) - 2 * var(--ceos-page-gutter-x)));
+  --ceos-page-gutter-x: clamp(26px, 2.6vw, 36px);
+  --ceos-page-gutter-x-tablet: clamp(20px, 3vw, 28px);
+  --ceos-page-gutter-x-mobile: clamp(16px, 4vw, 20px);
+  --ceos-page-top-gap: clamp(14px, 1.8vw, 24px);
+  --ceos-page-top-gap-compact: 6px;
+  --ceos-section-gap: clamp(16px, 1.5vw, 22px);
+
+  --ceos-hero-oracle-root-y: 117px;
+  --ceos-hero-oracle-kicker-y: 145px;
+  --ceos-hero-oracle-title-y: 171px;
+  --ceos-hero-oracle-panel-y: 157px;
+  --ceos-hero-top-gap: 6px;
+  --ceos-hero-padding-top: 8px;
+  --ceos-hero-inner-to-kicker: 28px;
+  --ceos-hero-headline-min-height: clamp(100px, 9vw, 132px);
+  --ceos-hero-copy-slot-min-height: clamp(72px, 5.2vw, 88px);
+  --ceos-hero-pre-copy-gap: 69px;
+  --ceos-hero-post-copy-reserve: 43px;
+  --ceos-hero-copy-to-primary-gap: 36px;
+  --ceos-hero-right-panel-offset: calc(
+    var(--ceos-hero-oracle-panel-y) - var(--ceos-hero-oracle-root-y) - var(--ceos-hero-padding-top)
+  );
+  --ceos-hero-grid-columns: minmax(0, 1.18fr) minmax(300px, 380px);
+  --ceos-hero-grid-gap: 20px 36px;
+  --ceos-hero-panel-max-width: 380px;
+  --ceos-hero-kicker-margin-bottom: 8px;
+  --ceos-hero-title-margin-bottom: 10px;
+  --ceos-hero-body-margin-bottom: 14px;
+
+  /* C.GEOMETRY.HERO.TYPE — oracle: /ma/dashboard @ 1440 */
+  --ceos-hero-kicker-size: 11px;
+  --ceos-hero-kicker-weight: 800;
+  --ceos-hero-kicker-line-height: 1.64;
+  --ceos-hero-kicker-letter-spacing: 0.16em;
+  --ceos-hero-kicker-transform: uppercase;
+  --ceos-hero-kicker-color: var(--ws-accent-text);
+  --ceos-hero-title-size: clamp(40px, 4.8vw, 64px);
+  --ceos-hero-title-weight: 850;
+  --ceos-hero-title-line-height: 0.98;
+  --ceos-hero-title-letter-spacing: -0.03em;
+  --ceos-hero-title-color: #f8fafc;
+  --ceos-hero-copy-size: 15px;
+  --ceos-hero-copy-line-height: 1.7;
+  --ceos-hero-copy-color: rgba(203, 213, 225, 0.74);
+
+  /* Legacy aliases consumed by M&A branch materials */
+  --ceos-content-max: var(--ceos-page-max-width);
+  --ceos-content-pad: var(--ceos-page-gutter-x);
+  --page-hero-top-gap: var(--ceos-hero-top-gap);
 }
 
 * {

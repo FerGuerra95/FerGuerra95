@@ -1,0 +1,119 @@
+/*
+  C.GEOMETRY.PAGE — global page container contract for CEO's OS.
+  CANONICAL OWNER: page max-width, gutters, M&A premium padding-top: 0, full-bleed inner pages.
+  See docs/architecture/MA_UI_FOUNDATION_CONTRACT.md
+  Loads after workspace accents; geometry wins over page-local width debt.
+ */
+
+/* —— Level 0: shell → main content tokens —— */
+.main-area.ceos-main-area[data-workspace] {
+  --ceos-content-max: var(--ceos-page-max-width);
+  --ceos-content-pad: var(--ceos-page-gutter-x);
+}
+
+/* —— Page container (AppShell ceos-content-shell) —— */
+.main-area[data-workspace] .ceos-content-shell {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--ceos-page-max-width);
+  margin-inline: auto;
+  padding-inline: var(--ceos-page-gutter-x);
+}
+
+/* Explicit wide-data variant — opt-in only */
+.main-area[data-workspace] .ceos-content-shell.ceos-page-container--wide {
+  max-width: var(--ceos-page-max-width-wide);
+}
+
+/* —— Page body host —— */
+.main-area[data-workspace] .ceos-page-shell-host {
+  min-width: 0;
+  padding-bottom: clamp(18px, 2vw, 28px);
+}
+
+.main-area[data-workspace] .ceos-page-shell-host > .page {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+  padding-top: var(--ceos-page-top-gap);
+  padding-bottom: var(--space-page);
+  box-sizing: border-box;
+}
+
+/* Compact top gap — executive / premium heroes that own vertical rhythm */
+.main-area[data-workspace] .ceos-page-shell-host > .page.ceos-page-shell,
+.main-area[data-workspace] .ceos-page-shell-host > .page:has(.ceos-ws-hero),
+.main-area[data-workspace] .ceos-page-shell-host > .page:has(.ceo-hero),
+.main-area[data-workspace] .ceos-page-shell-host > .page:has(.ceo-command-hero) {
+  padding-top: var(--ceos-page-top-gap-compact);
+}
+
+/* M&A premium full-bleed pages — hero owns top offset (branch geometry) */
+.main-area[data-workspace='ma'] .ceos-page-shell-host:has(
+    .page :is(
+      .ma-dashboard-premium,
+      .ma-valuation-premium.ma-branch-premium-page,
+      .ma-pipeline-premium,
+      .ma-repository-premium,
+      .ma-data-room-premium
+    )
+  )
+  > .page,
+.main-area[data-workspace='ma'] .page:has(
+  :is(
+    .ma-dashboard-premium,
+    .ma-valuation-premium.ma-branch-premium-page,
+    .ma-pipeline-premium,
+    .ma-repository-premium,
+    .ma-data-room-premium
+  )
+) {
+  padding-top: 0 !important;
+}
+
+/* Inner premium pages fill container width — no second horizontal inset */
+.main-area[data-workspace='ma'] .page :is(
+  .ma-executive-page.ma-dashboard-premium,
+  .ma-valuation-premium-page.ma-valuation-premium.ma-branch-premium-page,
+  .ma-executive-page.ma-pipeline-premium,
+  .ma-executive-page.ma-repository-premium,
+  .ma-executive-page.ma-data-room-premium
+) {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+  box-sizing: border-box;
+}
+
+/* Lower sections inherit page container — kill accidental viewport bleed */
+.main-area[data-workspace] .ceos-page-shell-host > .page > * {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* —— Responsive gutters —— */
+@media (max-width: 1180px) {
+  .main-area.ceos-main-area[data-workspace] {
+    --ceos-content-pad: var(--ceos-page-gutter-x-tablet);
+  }
+
+  .main-area[data-workspace] .ceos-content-shell {
+    padding-inline: var(--ceos-page-gutter-x-tablet);
+  }
+}
+
+@media (max-width: 640px) {
+  .main-area.ceos-main-area[data-workspace] {
+    --ceos-content-pad: var(--ceos-page-gutter-x-mobile);
+  }
+
+  .main-area[data-workspace] .ceos-content-shell {
+    padding-inline: var(--ceos-page-gutter-x-mobile);
+  }
+
+  .main-area[data-workspace] .ceos-page-shell-host > .page {
+    padding-top: clamp(10px, 2.5vw, 16px);
+  }
+}
