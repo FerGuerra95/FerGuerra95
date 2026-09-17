@@ -150,8 +150,20 @@ function normalizeFinancials(financials = {}, caseName = '') {
   return next;
 }
 
-function normalizeSettings(settings = {}, scope = {}) {
-  return {
+function normalizeOrigin(value) {
+  return normalizeText(value) === 'e2e' ? 'e2e' : '';
+}
+
+export function isMaE2eFixture(item) {
+  return (
+    item?.settings?.origin === 'e2e' ||
+    item?.origin === 'e2e' ||
+    item?.payload?.origin === 'e2e'
+  );
+}
+
+function normalizeSettings(settings = {}, scope = {}, payload = {}) {
+  const next = {
     ...(settings || {}),
     reportCurrency: normalizeText(settings?.reportCurrency) || 'EUR',
     scenarioMode: normalizeText(settings?.scenarioMode) || 'balanced',
@@ -160,6 +172,16 @@ function normalizeSettings(settings = {}, scope = {}) {
       scope
     )
   };
+
+  const origin = normalizeOrigin(settings?.origin || payload.origin);
+
+  if (origin) {
+    next.origin = origin;
+  } else {
+    delete next.origin;
+  }
+
+  return next;
 }
 
 function getEbitdaValue(financials = {}) {
@@ -244,8 +266,10 @@ function validateCasePayload(payload = {}, options = {}) {
   }
 
   if (!isPatch || Object.prototype.hasOwnProperty.call(next, 'settings')) {
-    next.settings = normalizeSettings(next.settings || {}, scope);
+    next.settings = normalizeSettings(next.settings || {}, scope, next);
   }
+
+  delete next.origin;
 
   if (!isPatch || Object.prototype.hasOwnProperty.call(next, 'status')) {
     next.status = normalizeStatus(next.status);
@@ -312,7 +336,15 @@ function normalizeSnapshot(snapshot = {}, scope = {}) {
 export const listMaCases = async (scope = {}) => {
   assertOrganizationScope(scope.organizationId);
 
-  return casesStore.listByOrganization(scope.organizationId);
+  const items = await casesStore.listByOrganization(scope.organizationId);
+
+  return items.filter((item) => {
+    if (!scope.includeTestFixtures && isMaE2eFixture(item)) {
+      return false;
+    }
+
+    return true;
+  });
 };
 
 export const getMaCaseById = async (id, scope = {}) => {
