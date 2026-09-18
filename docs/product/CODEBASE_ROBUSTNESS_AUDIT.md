@@ -1,3 +1,430 @@
+# CEO's OS — Canonical Technical-Debt Register
+
+**Current baseline:** 17 September 2026, Astra forensic audit; HEAD `43e470f630b8b2b79cc5241aeac6279492108081` plus audited dirty/untracked source. This register and the [master execution tracker](CEO_OS_MASTER_CONTROL_BASELINE.md) use the same immutable IDs A01–A44.
+
+## Status and evidence rules
+
+**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Both current registers retain identical A01–A44 IDs/priorities/statuses. A31 remains IN PROGRESS under the explicit 33-document review exception; no P0/P1 is closed.
+
+- **OPEN:** no accepted remediation.
+- **IN PROGRESS:** scoped work underway; not closed.
+- **FIXED / NOT YET VERIFIED:** implementation changed but acceptance evidence pending.
+- **VERIFIED CLOSED:** agreed isolated regression/runtime/operational evidence reviewed.
+- **DEFERRED:** explicit decision with rationale; not equivalent to closure.
+- **NOT A DEFECT:** disproven by recorded evidence.
+
+VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a conclusion requiring further validation; UNVERIFIED describes missing execution/operational proof. Static findings do not claim a successful exploit.
+
+**Current totals:** one P0 OPEN (A01); 30 P1 not closed (A02–A30 OPEN, A31 IN PROGRESS); 12 P2 OPEN (A32–A43); one P3 OPEN (A44). No P0/P1 has been fixed or closed in this documentation pass.
+
+## Current A01–A44 register
+
+### A01 — VDR file ownership binding
+
+**Priority:** P0 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- **Problem:** client-controlled storage reference is persisted; download containment is checked against the global VDR root but the physical file reference is not bound to the requesting organization/document.
+- **Impact:** conditional cross-tenant file access path if another storage key is known.
+- **Owner:** VDR / Security.
+- **Required closure:** server-owned storage reference + tenant/document binding + negative cross-tenant tests.
+
+**Evidence anchors:** backend/api/validators/ma.validator.js; backend/services/ma/dataRoom.service.js — nested payload.storage; resolveStoragePath; create/download.
+
+### A02 — Governance approval transition bypass
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Generic create/update can accept `status: approved` even though explicit approval requires a stronger permission.
+- Closure: permission-aware state machine; generic CRUD cannot perform privileged transitions.
+
+**Evidence anchors:** backend/api/routes/governance.routes.js; backend/api/validators/governance.validator.js; backend/services/governance/governance.service.js — generic status vs approve.
+
+### A03 — Security config captured before dotenv
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- ESM module evaluation can capture auth/signing configuration before `dotenv.config()`.
+- Closure: deterministic environment bootstrap before dependent config capture; startup tests.
+
+**Evidence anchors:** backend/server.js; backend/httpApp.js; backend/services/auth/auth.service.js — static imports and module-level env capture.
+
+### A04 — Audit persistence failures swallowed
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Mutations may succeed without durable audit event.
+- Closure: explicit failure policy; transactional/outbox or documented durable alternative.
+
+**Evidence anchors:** backend/services/audit/auditLog.service.js — recordAuditLog catch/return; domain mutation-before-audit callers.
+
+### A05 — Secure-share query token can enter URL/error logs
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: remove/limit legacy query-token path and redact sensitive URL/token data.
+
+**Evidence anchors:** backend/api/controllers/ma.controller.js; backend/api/middlewares/error.middleware.js — query token and originalUrl.
+
+### A06 — Compliance delete actor can become original creator
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: authenticated actor propagated correctly into delete audit.
+
+**Evidence anchors:** backend/api/controllers/suppliers.controller.js; backend/services/compliance — delete actor fallback; related evidence/review/report paths.
+
+### A07 — Password reset route missing
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Backend generates `/reset-password?token=...`; component exists; route not mounted.
+- Closure: route + guarded reset flow tests.
+
+**Evidence anchors:** src/app/router/routes.jsx; backend/services/auth/auth.service.js — reset URL; audit browser redirect.
+
+### A08 — Compliance mount can auto-persist defaults/cache
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Empty reads can seed/synchronize values during hydration.
+- Closure: explicit user/demo action required for persistence; empty read remains empty.
+
+**Evidence anchors:** src/modules/compliance/store — mount hydration, empty/default fallback and remote synchronization.
+
+### A09 — M&A reports successful sync before remote persistence resolves
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: success acknowledgement only after confirmed backend result; failure visible and recoverable.
+
+**Evidence anchors:** src/modules/ma/pages/ValuationPage.jsx; src/modules/ma/store/maStore.jsx; src/modules/ma/services/maCasesApi.js — early success and fire-and-forget remote save.
+
+### A10 — M&A identity inferred from metrics/global active alias
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Equal-valued unrelated records may merge.
+- Closure: identity must use stable IDs only.
+
+**Evidence anchors:** src/modules/ma/store/maStore.jsx; src/modules/ma/engine/maPipelineDataset.js — missing active case identity, active-deal alias, metric match.
+
+### A11 — Persisted backend stage can be overwritten by saved overlay
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: explicit source precedence with persisted lifecycle authority.
+
+**Evidence anchors:** src/modules/ma/engine/maPipelineDataset.js; src/modules/ma/pages/MADashboardPage.jsx — backend/live/saved merge precedence.
+
+### A12 — Pipeline can aggregate/sync demo rows after empty/error response
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: demo fallback must be provenance-tagged and non-persistable/non-operational.
+
+**Evidence anchors:** src/modules/ma/engine/maPipelineDataset.js; src/modules/ma/pages/DealPipelinePage.jsx — empty/error demo fallback and sync payload.
+
+### A13 — Dashboard and Pipeline use different portfolios
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: shared operational portfolio selector and documented KPI semantics.
+
+**Evidence anchors:** src/modules/ma/pages/MADashboardPage.jsx; src/modules/ma/engine/maPipelineDataset.js — different portfolio construction/counts.
+
+### A14 — Case/deal/detail/report/document relationships incomplete
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: preserve identifiers through save/load/detail/report/share/VDR/archive.
+
+**Evidence anchors:** src/modules/ma/pages/DealPipelinePage.jsx; DealDetailPage.jsx; MADataRoomPage.jsx; backend/services/ma/deals.service.js; maReportsApi.js — caseId/link propagation.
+
+### A15 — Spanish M&A risk labels can serialize to `medium`
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: stable machine enum independent from localized display labels.
+
+**Evidence anchors:** src/modules/ma/engine/riskScoring.js; src/modules/ma/pages/DealPipelinePage.jsx — Spanish risk labels vs English normalization.
+
+### A16 — Invalid DCF `null` becomes numerical zero downstream
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: explicit null/unavailable semantics; blending only when valid.
+
+**Evidence anchors:** src/modules/ma/engine/valuationFormulas.js; useValuationEngine.js; reportBuilder.js — Number(null) finite check.
+
+### A17 — “Low” EV can exceed base EV
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: range invariant / approved business oracle; low ≤ base ≤ high when the contract requires it.
+
+**Evidence anchors:** src/modules/ma/engine/useValuationEngine.js — base adjusted multiple and low-band floor; audited counterexample.
+
+### A18 — Documentary readiness inferred from quality/stage
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: document readiness driven by linked evidence, not heuristic stage/quality proxy.
+
+**Evidence anchors:** src/modules/ma/pages/DealDetailPage.jsx — quality/stage financial/commercial/legal readiness vs actual evidence.
+
+### A19 — Snapshot/re-export version policy incomplete
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: immutable source snapshot, method/version/input bridge preserved.
+
+**Evidence anchors:** src/modules/ma/pages/ValuationPage.jsx; src/modules/ma/utils/formatMAReportData.js; maStore.jsx — incomplete saved method/version/WC and reload reconstruction.
+
+### A20 — Mixed-currency portfolio values summed without conversion
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: explicit currency contract and conversion/prohibition policy.
+
+**Evidence anchors:** src/modules/ma/pages/MADashboardPage.jsx; DealPipelinePage.jsx — portfolio sums vs per-case/report currencies.
+
+### A21 — Funding nullable dilution reaches `.toFixed()`
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: null-safe narrative/calculation path and tests.
+
+**Evidence anchors:** src/modules/funding/engine/fundingFormulas.js; fundingNarrative.js; useFundingEngine.js — nullable dilution formatted unconditionally.
+
+### A22 — PMI numerator/denominator can come from different sources
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: coherent metric source pair and counterexample tests.
+
+**Evidence anchors:** backend/services/pmi/pmi.service.js — independent target/captured fallback; test-only operational mirror.
+
+### A23 — Heritage empty organization emits numeric health/readiness
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: null/insufficient-data result rather than fabricated score.
+
+**Evidence anchors:** backend/services/heritage/heritage.service.js — empty control defaults and numeric continuity/protection/readiness.
+
+### A24 — Executive fallback changes metric authority/formula
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: source-labelled failure/fallback semantics; do not silently substitute another formula.
+
+**Evidence anchors:** src/modules/ceo-overview/pages/CEOOverviewPage.jsx; backend/services/executive/readinessIndex.service.js — local fallback vs weighted backend aggregation.
+
+### A25 — Human-review flag overwritten by absent summary flag
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: contract/object-key fix + regression test.
+
+**Evidence anchors:** src/modules/ceo-overview/pages/CEOOverviewPage.jsx — duplicate humanReviewRequired assignment in Funding summary bridge.
+
+### A26 — Eight JSX suites excluded; three integration placeholders
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: test discovery corrected; placeholders replaced with meaningful assertions.
+
+**Evidence anchors:** vite.config.js; eight tests/unit/**/*.test.jsx; three placeholder integration files enumerated in TEST_STRATEGY.md.
+
+### A27 — E2E DB isolation not enforced
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: unique isolated DB and file roots; tests cannot target canonical data accidentally.
+
+**Evidence anchors:** playwright.config.js; scripts/run-e2e.mjs; tests/e2e — external app reuse and no enforced unique DB/VDR roots.
+
+### A28 — Existing DB constraints differ from fresh schema
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: migration/schema reconciliation for existing databases; verify fresh + upgraded parity.
+
+**Evidence anchors:** backend/storage/databaseSchema.js; migrationRunner.js; migrations; immutable checkpoint schema observation.
+
+### A29 — Full product formulas lack approved end-to-end oracles
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: business-approved expected outputs for composed production paths.
+
+**Evidence anchors:** docs/testing/FORMULA_REGISTRY.md; golden_inputs.json; production engines vs simple Golden helpers and mirror tests.
+
+### A30 — HEAD does not reproduce current product
+
+**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: accepted dirty/untracked manifest, validated commits, reproducible build provenance.
+
+**Evidence anchors:** Git audit: 58 tracked changed, 83 untracked, three local commits ahead; active untracked imports; no clean rebuild proof.
+
+**Required acceptance:** Accept/classify the source manifest, then validate scoped commits and a clean known-source build. Documentation alone cannot close reproducibility.
+
+### A31 — Readiness/deployment/commercial claims are stale
+
+**Priority:** P1 · **Status:** IN PROGRESS · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Closure: documentation baseline reflects current blockers and evidence.
+
+**Evidence anchors:** Historical readiness/deploy/claims documents; reconciled current sections in this documentation pass; other historical assets remain outside scope.
+
+**Required acceptance:** Phase 0/0.5 acceptance is recorded. Review and reconcile the 33 remaining UNKNOWN — HUMAN REVIEW files, especially commercial claims/offers and infrastructure scaffolds. A31 remains IN PROGRESS until that residual review is accepted.
+
+### A32 — Retention/legal hold/watermark only partial
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- VDR-specific metadata exists; no unified enforcement; watermark is header-level, not embedded-file watermarking.
+
+**Evidence anchors:** backend/services/ma/dataRoom.service.js; backend/api/controllers/ma.controller.js — retention/hold metadata, archive checks, watermark response header.
+
+**Required acceptance:** Approve and test hold/release/archive/retention semantics and watermark claims; demonstrate the promised enforcement.
+
+### A33 — Upload inspection/document ACL incomplete
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- No content-signature/malware inspection found; document ACL model requires consolidation.
+
+**Evidence anchors:** backend/services/ma/dataRoom.service.js — extension/size/checksum controls, role list and download policy; no content scanner found.
+
+**Required acceptance:** Approve and validate upload content/ACL contract, including board_member and list/download policy.
+
+### A34 — Mounted rate limits are single-process memory
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+
+
+**Evidence anchors:** backend/httpApp.js and mounted rate-limit middleware — process-local Maps; unused Redis-capable alternative is not runtime evidence.
+
+**Required acceptance:** Prove bounded/distributed enforcement appropriate to the deployment and approved load.
+
+### A35 — Generic validators/links can allow inconsistent domain records
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Notably Risk/Reporting/Strategy relationship/domain validation.
+
+**Evidence anchors:** Risk/Reporting/Strategy validators and domain services — broad payloads/linked-ID semantics; no SQL-injection claim.
+
+**Required acceptance:** Validate linked IDs, tenant ownership and domain invariants with isolated negative tests.
+
+### A36 — Report schedules / Risk notifications have no executor found
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+
+
+**Evidence anchors:** backend/services/reporting and risk — persisted schedules/notifications; executor not found in inspected consumers.
+
+**Required acceptance:** Implement and validate promised executors or explicitly scope product claims to metadata-only records.
+
+### A37 — CSS/material ownership competes
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Do not fix by redesign. Resolve only after functional closure with computed-style evidence.
+
+**Evidence anchors:** src/main.jsx; src/styles.css; src/styles/executivePolish.css; M&A page/shared CSS and runtime style blocks.
+
+**Required acceptance:** Establish computed-style ownership and equivalent frozen visuals before retiring overlapping rules.
+
+### A38 — Error-to-empty / error-to-success handling hides failures
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+
+
+**Evidence anchors:** maCasesApi.js; maStore.jsx; Repository sync labels; enterprise page catch-to-empty paths.
+
+**Required acceptance:** Preserve visible failure/provenance; success only after actual confirmed operation.
+
+### A39 — Buyer categories/top-selection inconsistent
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+
+
+**Evidence anchors:** src/modules/ma/engine/reportBuilder.js; src/modules/ma/pages/ValuationPage.jsx — category labels/filter and first-item top selection.
+
+**Required acceptance:** Use agreed category keys and correct ranked top-selection with production-path tests.
+
+### A40 — Secure-share “active” display can outlive expiry until refresh
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+
+
+**Evidence anchors:** src/modules/ma/engine/maRepositoryCoherence.js; MADataRoomPage.jsx — early isActive return and no expiry-driven refresh.
+
+**Required acceptance:** Derive active UI state from expiry/revocation and validate time/refresh behavior; backend enforcement already exists.
+
+### A41 — AI/integration presentation exceeds connected-runtime evidence
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Keep product claims aligned with disabled/mock/stub reality until activated and verified.
+
+**Evidence anchors:** backend/services/ai; backend/integrations; landing/dashboard presentation — disabled/mock/stub vs connected runtime claims.
+
+**Required acceptance:** Align claims with disabled/mock capability; any provider activation needs a separate governance phase.
+
+### A42 — OIDC identity binding needs provider-specific validation
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** INFERENCE / provider-specific validation UNVERIFIED.
+
+- Requires targeted tests; audit did not establish an exploit.
+
+**Evidence anchors:** backend/services/auth/oidcAuth.service.js; auth.service.js — email account linking, userinfo/subject and flow binding review.
+
+**Required acceptance:** Provider-specific identity/subject/email/flow-binding tests; record exploitability or disproof without assuming either.
+
+### A43 — Docker/Postgres scaffold differs from operational Node/SQLite setup
+
+**Priority:** P2 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+
+
+**Evidence anchors:** infra Docker/compose files; render.yaml; backend/server.js; backend/storage/sqliteStorage.js — development/Postgres scaffold vs Node/SQLite.
+
+**Required acceptance:** Reconcile deploy artifacts only in a later authorized infrastructure task and validate the actual persistent runtime.
+
+### A44 — Empty/orphan/scaffold files increase ambiguity
+
+**Priority:** P3 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+
+- Cleanup only after higher-priority correctness work.
+
+**Evidence anchors:** Static import/route consumer audit: empty/orphan/scaffold candidates; dynamic use still requires quarantine review.
+
+**Required acceptance:** Verify imports/routes/dynamic consumers/tests, document candidates, quarantine before any later authorized deletion.
+
+## Interpretation and closure limits
+
+A01 is a conditional cross-tenant physical-file path if another storage key is known; no exploit was attempted. A03 impact depends on bootstrap/environment; actual running configuration was not exposed. A05 describes possible URL/token leakage, not an observed leaked token. A10 collision consequences are inferred from inspected identity matching. A42 is an inference requiring provider-specific tests.
+
+Missing FKs alone do not prove tenant leakage. Basic Golden helpers do not validate the full productive formula. Intentional Risk/Bridge benchmark separation and removed PMI demo merge are not reopened as defects by this register.
+
+Every closure must record exact files, source/tree/build/schema, isolated tests, manual business oracle where needed, runtime/operational evidence, reviewer and residual risk. Use [test strategy](../testing/TEST_STRATEGY.md) and dependency-ordered [roadmap](../roadmap.md). This register authorizes no product fix.
+
+## Historical findings — retained, not reclassified as current
+
+The original 7 May 2026 audit and its later closure annotations are preserved verbatim below. Old numbered findings are a separate historical namespace; “Cerrado Fase 4” and earlier recommendations are not A01–A44 closures or current instructions. Current implementation includes scrypt, sessions, validators, audit tables, real migrations and Reporting persistence; historical absence statements must not be presented as current facts.
+
+<details>
+<summary>7 May 2026 audit and historical closure notes</summary>
+
 # Codebase Robustness & Coherence Audit
 
 Fecha: 07/05/2026
@@ -451,3 +878,5 @@ Empezaria por este orden:
 6. Extraer CSS del Sidebar y reducir capas globales `!important`.
 
 Ese orden ataca primero los riesgos que una multinacional miraria antes: seguridad, datos, trazabilidad, demo/produccion y coherencia de mantenibilidad.
+
+</details>

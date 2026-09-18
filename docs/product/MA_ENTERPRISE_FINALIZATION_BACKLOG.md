@@ -1,5 +1,7 @@
 # M&A Enterprise Finalization Backlog
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 Fecha: 07/05/2026
 
 Objetivo: documentar el estado real de M&A despues del cierre enterprise privado y de la primera capa SaaS enterprise foundation.

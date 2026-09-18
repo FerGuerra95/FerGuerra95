@@ -1,3 +1,49 @@
+# CEO's OS — Pilot Readiness Pack
+
+**Current gate, 17 September 2026: REOPENED — NOT YET CLEARED.** Multinational-production release remains BLOCKED. This section supersedes earlier YES/READY/RESOLVED pilot conclusions, which remain preserved as historical records below.
+
+## Current decision and evidence
+
+The Astra audit established A01 P0 and A02–A31 P1. It verified substantial implementation, not safe operation of the complete current product. No exploit was attempted. Current authenticated business flows, suite results, restore and exact source/build/schema provenance remain UNVERIFIED.
+
+This documentation baseline does not approve a sensitive external-data pilot, deploy, load customer data or contact prospects. Human-reviewed DSS positioning remains mandatory. A synthetic demonstration is not a security or pilot-readiness validation.
+
+## Blockers to reopening
+
+| Gate family | Current blockers |
+|---|---|
+| Security/access | A01 VDR file binding; A02 approvals; A03 environment capture; A05 query token/error path; A07 reset route; A33/A42 targeted review |
+| Data and audit | A04 audit durability; A06 actor; A08 implicit Compliance writes; A28 schema drift; relationship/archive/retention limitations |
+| Business continuity | A09–A20 M&A persistence, identity, lifecycle, formulas, readiness, snapshots and currency |
+| Cross-module correctness | A21 Funding; A22 PMI; A23 Heritage; A24/A25 Executive authority and human-review flag |
+| Validation/reproducibility | A26 excluded/placeholders; A27 isolation; A29 composed oracles; A30 dirty-source/build provenance |
+| Claims/operations | A31 stale claims; backup plus VDR restore, environment, support and monitoring evidence still required |
+
+## Future gate evidence — all pending current validation
+
+- [ ] Reviewed source manifest and known commit/tree/build/schema.
+- [ ] Release-blocking P0/P1 remediated and independently validated for the proposed scope; no automatic downgrade through scope wording.
+- [ ] Isolated security/tenant/role/file tests and business-oracle regressions.
+- [ ] Authenticated end-to-end workflow, report/export/share/archive evidence.
+- [ ] Restore drill covering both SQLite and VDR objects; access/retention/offboarding operations.
+- [ ] Approved minimal data scope, named sponsor/operator/human-review owner and professional legal/privacy review.
+- [ ] Claims reconciled with [current claims policy](../commercial/WHAT_WE_CAN_AND_CANNOT_SAY.md).
+- [ ] Explicit human go/no-go recorded with remaining risks and scope.
+
+Existing legal/privacy templates, intake guides and commercial materials remain useful drafts. Their availability does not constitute current approval, external certification, legal advice, SLA or a verified release.
+
+## Current execution state
+
+Phase 0 documentation is READY FOR HUMAN REVIEW; human acceptance and source-manifest review remain. A31 is IN PROGRESS; no P0/P1 is closed by this pass. Next execution phase: **Isolated Validation Foundation**. Use the [master tracker](../product/CEO_OS_MASTER_CONTROL_BASELINE.md) and [roadmap](../roadmap.md); preserve M&A's visual freeze.
+
+
+## Historical record — superseded for current status
+
+Preserved verbatim (C.14.5–C.24 records, preserved on 17 September 2026; no new historical dates inferred). Every PASS, CLOSED, READY, RESOLVED and “current” statement below belongs to its historical phase, not the 17 September 2026 baseline. Current sections above take precedence; historical test output is not current validation.
+
+<details>
+<summary>Historical content — not current release evidence</summary>
+
 # CEO's OS / The Sovereign OS — Pilot Readiness Pack
 
 **Status:** Draft · Internal pilot readiness · Subject to legal review  
@@ -395,3 +441,5 @@ Operating rule: video production may proceed outside the repository only after r
 ---
 
 **This document is an internal pilot readiness draft. It is not a contract, SLA, or legal advice.**
+
+</details>

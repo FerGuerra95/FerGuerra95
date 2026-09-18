@@ -1,5 +1,7 @@
 # C.15.3 - Internal Demo Dry Run / Commercial QA
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 **Status:** Internal demo QA complete  
 **Mode:** Docs / demo QA only  
 **Runtime impact:** None  

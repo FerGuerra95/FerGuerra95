@@ -1,5 +1,7 @@
 # CEO’s OS — Estado del Proyecto tras Fase 6
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 Fecha de cierre: 29/04/2026  
 Estado general: Producto privado desplegado, dominio conectado, landing pública activa y QA post-dominio validado.
 

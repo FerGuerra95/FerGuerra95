@@ -1,5 +1,7 @@
 # C.14.9 - Architecture / Monolith / Duplication Audit
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 ## Scope
 
 READ ONLY architecture audit. No product code, backend code, frontend code, tests, migrations, package/config, Golden Dataset, Formula Registry, secrets, cleanup, deletion, refactor, route/auth/router changes, or AI implementation.

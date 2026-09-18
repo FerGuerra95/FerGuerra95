@@ -1,5 +1,7 @@
 # M&A Enterprise Closure Status
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 Fecha: 07/05/2026
 
 ## Resumen ejecutivo

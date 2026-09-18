@@ -1,5 +1,7 @@
 # C.16.0 — AI Readiness Audit
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 **Status:** COMPLETED · **READY FOR DESIGN** · **NOT RUNTIME AI YET**  
 **Baseline:** `2e0a3cc` (post C.15.1b / AGENTS drift resolution)  
 **Phase type:** DOCS / SECURITY / ARCHITECTURE — no product runtime changes

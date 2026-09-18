@@ -1,3 +1,57 @@
+# CEO's OS — Current Security Review Checklist
+
+**Current baseline:** 17 September 2026 · **A01 P0 OPEN** · **release BLOCKED**. Current statements supersede the historical control inventory below. Evidence class describes inspection, not certification or exploit execution.
+
+## Current control posture
+
+| Category | Implemented controls — VERIFIED FACT from source | Partial / missing / UNVERIFIED |
+|---|---|---|
+| Auth/session | Scrypt, signed tokens, persisted sessions, expiry/revocation, server user reload | A03 bootstrap ordering; A07 reset route; operational config UNVERIFIED |
+| Tenant scope | Server-derived organization context, scoped parameterized entity access | A01 physical VDR binding; no complete organization/membership master; missing FKs alone do not prove leakage |
+| RBAC | Server permissions; admin/user/viewer/board_member roles; UI gating mirror | A02 generic Governance transitions bypass stronger approve permission |
+| VDR/share | Real file storage; root containment; size/extension checks; checksum; share hashing, expiry/revocation | A01 ownership, A33 inspection/ACL, A32 retention/hold/watermark |
+| Audit | Persisted shared and workflow audit tables; many events implemented | A04 swallowed failure/non-atomic writes; A06 actor propagation |
+| HTTP | Request IDs, headers, CORS, JSON limits, mounted memory rate limiters | A05 raw URL logging; A34 single-process limits; operational tuning UNVERIFIED |
+| OIDC | PKCE/state and id-token verification foundation present | A42 identity binding is INFERENCE and provider-specific behavior UNVERIFIED |
+| Operations | Backup/restore scripts and procedures exist | Current restore incl. VDR, monitoring, secret rotation/deployment controls UNVERIFIED; no certification established |
+
+## Required forensic finding checks
+
+| Finding | Current evidence / limitation | Future acceptance evidence — unchecked |
+|---|---|---|
+| **A01 P0 OPEN** | `ma.validator.js` accepts nested payload; `dataRoom.service.js` persists storage reference; download resolves under global VDR root without tenant/document binding. Conditional cross-tenant access if another key is known; no exploit attempted. | Server-owned references; bind object to tenant/document; isolated two-tenant negative tests including a known foreign key, versions, archive and share paths |
+| **A02 P1 OPEN** | Generic Governance create/update accepts approved status, while dedicated approve requires stronger permission. | Every entry point enforces permission-aware transitions; user/viewer negative tests; privileged actor audit |
+| **A03 P1 OPEN** | ESM dependencies can capture signing/config values before `dotenv.config()` in server bootstrap. Process-injected env can avoid that ordering; actual running impact UNVERIFIED. | Deterministic bootstrap before config capture; isolated startup tests for injected and file-loaded env; no secret output |
+| **A05 P1 OPEN** | Legacy secure-share query token path plus logging/returning `req.originalUrl` can expose a token conditionally. No actual token leakage was observed. | No sensitive query tokens in logs/errors; redaction tests across success/error/access paths |
+| **A07 P1 OPEN** | Backend generates `/reset-password`; component exists but route missing; audit browser redirected to root. | Routed reset flow; invalid/expired/used token tests; revocation; safe error states |
+| **A33 P2 OPEN** | Upload size/extension/sanitized filename/checksum controls exist. No content-signature/malware inspection found. Document role policy excludes board_member; list/download ACL behavior differs. | Approved content/ACL contract; MIME/signature policy, quarantining/scanning decision and negative role/content tests |
+| **A42 P2 OPEN — INFERENCE** | Email-based account linking and userinfo/token identity binding require provider-specific review; exploit not established. | Validate issuer/audience/signature and flow binding; same subject across token/userinfo; verified-email/account-linking policy and provider-specific negative tests |
+
+Evidence entry points: `backend/api/validators/ma.validator.js`, `backend/services/ma/dataRoom.service.js`, `backend/api/controllers/ma.controller.js`, `backend/api/middlewares/error.middleware.js`, `backend/services/governance/governance.service.js`, `backend/services/auth/auth.service.js`, `backend/services/auth/oidcAuth.service.js`, `backend/server.js`, `src/app/router/routes.jsx`. See [debt register](../product/CODEBASE_ROBUSTNESS_AUDIT.md) for all findings.
+
+## Review gate for future changes
+
+- [ ] Exact route, method, public/auth boundary and permitted roles documented.
+- [ ] Organization and actor derived from authenticated server context.
+- [ ] Generic writes cannot bypass privileged domain transitions.
+- [ ] Tenant-scoped row access also validates linked record/file ownership.
+- [ ] Audit success/failure behavior is durable, attributable and tested.
+- [ ] Tokens, raw sensitive URLs, secrets and customer payloads excluded from logs/errors.
+- [ ] Input, file limits/content and null/error paths covered.
+- [ ] Isolated DB/VDR fixtures and exact source/build/schema provenance recorded.
+- [ ] No broad closure inferred from one passing service test or frontend guard.
+- [ ] Production/operator controls evidenced separately from source implementation.
+
+These checkboxes are requirements, not completed results. A04/A06/A28 and related P1 findings remain open even where controls exist. Do not enable provider AI or external sensitive-data pilots through documentation alone. Human review and [pilot gate](../pilot/PILOT_READINESS_PACK.md) remain mandatory.
+
+
+## Historical record — superseded for current status
+
+Preserved verbatim (C.14–C.17 phase records; individual dates/evidence retained as written). Every PASS, CLOSED, READY, RESOLVED and “current” statement below belongs to its historical phase, not the 17 September 2026 baseline. Current sections above take precedence; historical test output is not current validation.
+
+<details>
+<summary>Historical content — not current release evidence</summary>
+
 # CEO's OS / The Sovereign OS — Security Review Checklist
 
 ## Purpose
@@ -268,3 +322,5 @@ Before provider AI runtime is enabled, verify:
 | Source-of-truth | AI cannot mutate SoT or workflow status |
 | Advice/certification | Legal/investment/certified outputs blocked |
 | Error handling | No silent fake-AI fallback |
+
+</details>

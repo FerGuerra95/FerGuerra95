@@ -1,87 +1,154 @@
-# CEO's OS / The Sovereign OS — Agent Operating Manual
+# CEO's OS / The Sovereign OS — Agent Operating Contract
 
-## Product Identity
+## Product identity
 
-CEO's OS is an Enterprise Decision Support System (DSS) for corporate intelligence across M&A, Compliance, Funding, Governance, PMI, Bridge, Risk, Reporting, Strategy, Heritage, and Executive Overview.
+CEO's OS is a private enterprise Decision Support System for corporate intelligence, decision preparation and execution tracking across Executive Overview, M&A, Compliance, Funding, Governance, PMI, Bridge, Risk, Reporting, Strategy and Heritage.
 
-CEO's OS is:
+All decision-influencing output is indicative and requires human review. The product does not make autonomous decisions or provide legal, financial or investment advice, a fairness opinion, a certified compliance audit, or guaranteed business outcomes. `/bridge/marketplace` is an internal/unlisted demo surface, not a public marketplace.
 
-- A decision-support and execution-tracking workspace
-- Human-reviewed by design
-- Intended for executive, board, and operating-team preparation
-- Private enterprise software, not a public marketplace
+## Technical baseline
 
-CEO's OS is not:
+- Frontend: React + Vite under `src/`.
+- Backend: Node.js + Express under `backend/`.
+- Database: SQLite / better-sqlite3; tenant scope comes from the authenticated backend context.
+- Tests: Vitest and Playwright; approved Golden Datasets are business oracles where defined.
+- Canonical local QA runtime: `http://127.0.0.1:4000`.
+- Forensic baseline: `43e470f630b8b2b79cc5241aeac6279492108081` plus the dirty/untracked manifest recorded in the Master Control. Verify the live HEAD and worktree every session; do not assume they still match.
+- Governance checkpoint: Phase 0 and Phase 0.5 are CLOSED by human acceptance. Active phase: 1 — Isolated Validation Foundation. A01 is OPEN; A02–A30 are OPEN; A31 remains IN PROGRESS because 33 documents still require human review. This checkpoint does not authorize product implementation.
 
-- Autonomous decision-making software
-- Legal advice or legal certification
-- Financial advice or investment advice
-- A fairness opinion engine
-- A certified compliance audit system
-- A guarantee of synergies, funding outcomes, risk elimination, or deal matching
-- A public deal marketplace (`/bridge/marketplace` is internal/unlisted demo only)
+## Permanent operating contract
 
-All outputs that influence decisions must be treated as indicative DSS material requiring human review.
+### A. Mandatory resume protocol
 
-## Technical Stack
+Before modifying files:
 
-| Layer | Technology | Notes |
-|---|---|---|
-| Frontend | React + Vite | Module-based under `src/modules/` |
-| Backend | Node.js + Express | API under `backend/api/` |
-| Database | SQLite / better-sqlite3 | Tenant-scoped tables with `organization_id` |
-| Auth | Token/session backend | Permissions enforced server-side |
-| Multi-tenant | organizationId from backend/session | Frontend must not decide tenant ownership |
-| Deploy | Render + GitHub `main` | Production smoke documented in phase B.1 |
-| Tests | Vitest unit/integration, Playwright e2e | Business oracles via Golden Datasets where defined |
+1. Read `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`, including `CURRENT_HANDOFF_STATE`.
+2. Read `docs/product/CODEBASE_HARDENING_STATUS.md`.
+3. Read `docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md`.
+4. Read `docs/roadmap.md`.
+5. Read `docs/testing/TEST_STRATEGY.md`.
+6. Read `.cursorrules`, applicable `.cursor/rules/*.mdc`, and task-specific authorities.
+7. Run `git rev-parse HEAD` and `git status --short`.
+8. State a PRE-FLIGHT CHECKLIST with:
+   - CURRENT PHASE
+   - LAST COMPLETED WORK PACKAGE
+   - OPEN P0
+   - RELEVANT OPEN P1
+   - CANONICAL SOURCE OF TRUTH FOR THIS TASK
+   - FROZEN AREAS
+   - CURRENT DIRTY/UNTRACKED DEPENDENCIES
+   - AUTHORIZED FILES
+   - FORBIDDEN FILES
+   - EXIT GATE
+9. Search for existing and legacy implementations before creating anything.
+10. If the verified HEAD or worktree differs materially from the Master handoff, stop and report the mismatch before implementing.
 
-Status: Stack description Confirmed at architecture level. Per-endpoint behavior Pending C.13 validation.
+### B. Canonical documentation hierarchy
 
-## Current Baseline
+**Level 1 — active control**
 
-| Item | Value |
-|---|---|
-| HEAD | `997d79f` |
-| origin/main | `997d79f` (expected after IA-2 doc phase; verify before commit) |
-| IA guardrails v1 | `.cursorrules`, enterprise guardrails, golden datasets (6 files) — Confirmed created |
-| IA-2 | Cursor Enterprise Operating Model (12 files) — this manual and related docs |
-| Next recommended phase | C.13.0 global read-only Logic Integrity audit |
+1. `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md` — current execution state, A01–A44, phase, frozen areas and handoff.
 
-## Core Modules
+**Level 2 — canonical domain authorities**
 
-| Module | Primary function | Source-of-truth note |
-|---|---|---|
-| Executive Overview | DSS command center, aggregator of module signals | Aggregator only; not master operational store — Pending C.13 validation |
-| M&A | Valuation, waterfall, buyer matching, CIM, reports, data room | Pending C.13 source-of-truth audit |
-| Compliance | Suppliers, risk, evidence, reviews, reports | Known duplicate risk: client score vs persisted riskScore |
-| Funding | Rounds, runway, dilution, scenarios, readiness | Known duplicate risk: localStorage vs backend |
-| Governance | Decisions, board packs, committees, audit trail | Backend-strong; full workflow Pending C.13 validation |
-| PMI | Synergies, milestones, integration, Day 1/100 | Known demo merge risk: mergeWithDemo |
-| Bridge | Cross-module signals, dependencies, conflicts | Marketplace unlisted; signals heuristic — human review required |
-| Risk | Register, heatmap, controls, likelihood/impact | Golden Dataset exists for basic score |
-| Reporting | KPIs, board packs, library | Pending C.13 validation |
-| Strategy | Initiatives, scenarios, priorities | Pending C.13 validation |
-| Heritage | Continuity, assets, succession | Pending C.13 validation |
+2. `docs/product/CODEBASE_HARDENING_STATUS.md` — current technical state.
+3. `docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md` — concept ownership.
+4. `docs/architecture.md` — current and target architecture.
+5. `docs/product/PLATFORM_PRODUCT_MATRIX.md` — workspace maturity.
+6. `docs/roadmap.md` — dependency-ordered execution.
+7. `docs/testing/TEST_STRATEGY.md` — validation and acceptance.
 
-## Mandatory Rules
+`docs/product/CODEBASE_ROBUSTNESS_AUDIT.md` is the canonical A01–A44 evidence and closure-criteria register, synchronized with the Master.
 
-1. Never use `git add .` — stage only explicitly allowed files.
-2. Never commit `backend-server.err`.
-3. No code changes outside explicit task scope.
-4. No test weakening to pass failing logic.
-5. No Golden Dataset expected output changes without separate authorized task with manual calculation.
-6. No silent fallback that hides API failures or contaminates executive metrics.
-7. No legacy function as source-of-truth without verification search.
-8. No duplicate source-of-truth between frontend and backend without documentation.
-9. No cross-module changes without explicit authorization.
-10. No auth/router/migration/shell changes without explicit authorization.
-11. Apply 3-attempt Infinite Loop Circuit Breaker — stop on 4th attempt.
-12. Output PRE-FLIGHT CHECKLIST before modifications.
-13. Generate HANDOFF_STATE after phase closure or long sessions.
-14. Documentation Truthfulness: do not mark Pending systems as Confirmed.
-15. Use host-native terminal commands (PowerShell on Windows, Bash/Zsh on macOS/Linux).
+**Level 3 — specialized authorities**
 
-## Protected Files (Blindaje v1 — do not modify in IA-2)
+Security, data model, deployment, M&A visual contract, AI, privacy, legal, reporting, claims and pilot documents own only their named domains and cannot override Levels 1–2.
+
+**Level 4 — historical records**
+
+Dated audits, closure reports, old readiness/PASS documents, phase status files and past roadmaps preserve provenance only. They never supersede current verified source/runtime evidence or Levels 1–2.
+
+### C. Search before create
+
+Before creating a document, component, hook, engine, helper, selector, service, endpoint, CSS system, token, formatter, status mapper or calculation, search the repository for the same or similar responsibility, the canonical owner, current Source of Truth and legacy implementations.
+
+If equivalent ownership exists, update, extend or consolidate it. A new owner requires a documented architectural reason.
+
+A new Markdown, status or architecture document is allowed only when no canonical document owns the responsibility, its purpose is materially distinct, it is added to the documentation index, and it does not silently supersede another document. If it supersedes one, mark the old file historical and link to the replacement.
+
+### D. No parallel Source of Truth
+
+Every business value and responsibility has one official owner. Frontend display state, local storage, demo fixtures, Golden Datasets and persisted records are not interchangeable. Do not introduce or build on a parallel owner without an explicit documented decision.
+
+### E. Atomic scoped changes
+
+Inspect before editing. Keep changes small, traceable and within the explicit task. Do not refactor, rename, reorganize or perform broad cleanup as part of a focused fix. Apply the three-attempt circuit breaker and stop before a fourth unsuccessful attempt.
+
+### F. Allowed and forbidden files
+
+Declare an exact file whitelist and forbidden areas before modification. Do not touch files outside the whitelist. Cross-module, auth, router, migration, shell, database, environment, dependency or Golden Dataset changes require explicit authorization.
+
+Never manually edit `dist/**`. Never weaken tests or alter expected Golden outputs to make a failure pass. Golden changes require a separate authorized task with manual calculation evidence.
+
+### G. Frozen-area protection
+
+Preserve approved visual and functional work unless the active task explicitly targets it or a proven P0/P1 requires reopening it. Executive Overview, M&A, Compliance, Funding, Governance, PMI and Bridge remain frozen by default outside authorized scope. Preserve the M&A visual contract and the global shell/navigation decisions recorded in the Master.
+
+### H. Git and worktree safety
+
+- Inspect HEAD and `git status --short` before and after work.
+- Never use `git add .`.
+- Stage only explicitly authorized files when staging is authorized.
+- Never commit `backend-server.err`.
+- Do not reset, clean, delete, overwrite or absorb pre-existing dirty/untracked work.
+- Do not commit or push unless explicitly authorized.
+- Treat HEAD alone as insufficient when the Master records dirty/untracked dependencies.
+
+### I. Test, build and runtime QA
+
+Validation must be proportional to the change and use the documented test hierarchy. Source changes require relevant unit/business-oracle checks, integration checks where applicable, build provenance and runtime QA. Runtime QA uses port 4000. Mutating tests must use isolated DB/VDR roots and must never target canonical data. Passing build/render/smoke checks alone does not prove business logic.
+
+### J. Documentation update check
+
+After a material verified change, update only the affected canonical state, Source of Truth, roadmap/test gate and Master finding/handoff records. Do not mark Pending systems Confirmed or historical PASS output current. Documentation work does not close a finding without its agreed evidence.
+
+### K. End-of-session handoff
+
+At the end of every material work package, update the single `CURRENT_HANDOFF_STATE` section inside `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`. Do not create a new handoff, latest, final, v2, current or status document.
+
+The in-place handoff must record:
+
+- DATE/TIME
+- CURRENT HEAD
+- ACTIVE PHASE
+- WORK PACKAGE COMPLETED
+- FINDINGS ADDRESSED
+- FILES MODIFIED
+- FILES CREATED
+- FILES DELETED
+- TESTS RUN
+- BUILD
+- RUNTIME 4000
+- DATABASE USED: CANONICAL / ISOLATED / NONE
+- VISUAL QA
+- COMMIT
+- FINDINGS VERIFIED CLOSED
+- FINDINGS STILL OPEN
+- NEW FINDINGS
+- FROZEN AREAS
+- EXACT NEXT ACTION
+- AUTHORIZED NEXT SCOPE
+- KNOWN RISKS / UNVERIFIED
+
+Update this section in place. Never create `HANDOFF_2.md`, `LATEST_STATUS.md`, `NEW_MASTER.md`, `ROADMAP_V2.md`, `FINAL_STATUS_NEW.md` or an equivalent parallel authority.
+
+### L. Evidence over history
+
+Verified current source, schema, isolated test and runtime evidence wins when it conflicts with historical documentation. Report the conflict and update documentation only within authorized scope. Preserve the superseded record as dated history unless it meets the documented safe-delete criteria.
+
+## Protected reference files
+
+These remain read-only unless a separate task explicitly authorizes them:
 
 - `.cursorrules`
 - `.cursor/rules/ceos-os-enterprise-guardrails.mdc`
@@ -90,54 +157,11 @@ Status: Stack description Confirmed at architecture level. Per-endpoint behavior
 - `docs/testing/GOLDEN_DATASETS.md`
 - `docs/testing/LOGIC_INTEGRITY_PROTOCOL.md`
 
-Reference only. Changes require separate explicit authorization.
+## Non-negotiable product safeguards
 
-## How To Work
-
-1. Read `.cursorrules`, `.cursor/rules/*.mdc`, and this manual.
-2. Read task-specific docs (`AI_OPERATING_MODEL.md`, `PROMPT_LIBRARY.md` if applicable).
-3. Output PRE-FLIGHT CHECKLIST.
-4. Verify git baseline (`HEAD`, `origin/main`, clean scope).
-5. Define files allowed and forbidden.
-6. Identify source-of-truth (registry, API, table, golden file).
-7. Search duplicates and legacy implementations.
-8. Propose minimal plan.
-9. Execute only if authorized (IA-2 doc phases are create-only).
-10. Validate with phase-appropriate matrix (see RELEASE_CHECKLIST.md).
-11. Report final summary and HANDOFF_STATE if phase closes.
-
-## Handoff Protocol
-
-When closing a phase or when context is saturated, generate:
-
-# HANDOFF_STATE
-
-| Field | Required content |
-|---|---|
-| Current Phase/Subphase | e.g. IA-2 complete, next C.13.0 |
-| Last File Audited | Path or "N/A — doc-only phase" |
-| Verified Baseline Commit/HEAD | e.g. 997d79f |
-| Working Tree Status | e.g. only ?? backend-server.err |
-| Summary of Discoveries/Bugs | Max 3 bullets |
-| Decisions Made | What was decided and why |
-| Exact Next Step | One clear next action |
-| Files Allowed To Touch Next | Explicit list |
-| Files Forbidden To Touch Next | Explicit list |
-| Active Stop Conditions or Blocks | None or describe |
-| Pending Commit / Push Status | e.g. IA-2 docs unstaged |
-| Recommended Prompt To Run Next | e.g. C.13.0 global read-only |
-
-## Reference Documents (IA-2)
-
-- `docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md`
-- `docs/testing/FORMULA_REGISTRY.md`
-- `docs/release/RELEASE_CHECKLIST.md`
-- `docs/ai/PROMPT_LIBRARY.md`
-- `docs/ai/AI_OPERATING_MODEL.md`
-- `docs/security/SECURITY_REVIEW_CHECKLIST.md`
-
-## Audited Branches — Frozen by Default
-
-Unless explicitly targeted: Executive Overview, M&A, Compliance, Funding, Governance, PMI, Bridge.
-
-Functional audits C.1–C.7 are closed. Logic Integrity reaudit is C.13.x. Do not reopen functional UI/routes without P0/P1 cause.
+1. Server-side authentication, authorization and tenant scope are the security boundary; frontend visibility is never authorization.
+2. Do not hide API or persistence failures with silent fallback, optimistic success or demo data in executive metrics.
+3. Trace material calculations from input through calculation, persistence/output, UI and test oracle.
+4. Preserve audit actor, organization, action, time and sanitized metadata for enterprise state changes.
+5. Do not use a legacy function as Source of Truth without verifying all callers, routes, tests and dynamic references.
+6. Report files changed, validation run, residual risk, Git state and untouched protected areas at completion.

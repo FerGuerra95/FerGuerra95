@@ -1,3 +1,77 @@
+# CEO's OS — Current Source of Truth Registry
+
+**Current baseline: 17 September 2026.** Source/schema inspection is VERIFIED FACT unless qualified; desired architecture is TARGET, not implemented. Current runtime/business correctness and current test pass status remain UNVERIFIED. The [master tracker](../product/CEO_OS_MASTER_CONTROL_BASELINE.md) governs execution; [A01–A44](../product/CODEBASE_ROBUSTNESS_AUDIT.md) remain the defect authority.
+
+This is the single Level 2 Source of Truth registry. Specialized documents may refine a named domain but cannot establish a parallel owner.
+
+There is no universal implemented “backend owns everything” rule. Persisted records, drafts, calculations, rendered reports and workflow states have different owners. Golden datasets are engineering oracles; they are not customer data or automatically the productive formula.
+
+## Current ownership matrix
+
+All TARGET OWNER entries below are proposed contracts requiring separately authorized remediation. “Persisted owner” describes storage, not proof that stored values are correct or that frontend save succeeded.
+
+| Domain | CURRENT OWNER | PERSISTED OWNER | DERIVATIONS | DUPLICATION | CONTRADICTION RISK | TARGET OWNER |
+|---|---|---|---|---|---|---|
+| Organization | Authenticated users carry organization identity; no general organization master | users.organization_id and organization-scoped rows | Session/user context propagates org | No canonical organization/membership table | Lifecycle/membership policy incomplete; not itself proof of leakage | Explicit backend organization/membership contract |
+| Tenant | auth.middleware derives req.organizationId from server user/session | users, auth_sessions; 91 organization-scoped tables | Scoped entity-store operations and tenant payload sanitization | Frontend org metadata/cache keys are not authority | Row scoping does not bind physical VDR object (A01) | Server-injected scope plus tested related-row/file ownership |
+| User | services/auth/auth.service.js | users | Session reload and public user projection | Legacy auth scaffolds are not active authority | OIDC account-linking identity needs validation (A42) | Backend user/identity contract with explicit verified links |
+| Role | Backend user role and auth middleware | users role field; no roles table | Frontend normalized role for visibility | Backend/frontend maps; legacy role helper vocabulary | Governance transition bypass A02; VDR role mismatch A33 | Backend role policy consumed consistently by UI/services |
+| Permission | auth.middleware permission/role maps | Code policy, not a permissions table | Route/action guards and frontend mirror | Legacy permissions helpers and mirrored vocabulary | Generic approved-status write bypasses dedicated permission (A02) | One permission-aware domain transition policy |
+| Session | auth.service token/session validation | auth_sessions | Expiry/revocation; last_seen_at on authenticated requests | Token/browser state vs server session record | A03 config capture; authenticated reads can write | Server session contract with deterministic bootstrap |
+| Executive signal | Backend Executive aggregation plus CEO local helpers/fallbacks | executive_signals/views/reports/snapshots and source module tables | Weighted backend readiness vs local derived/averaged values | Competing FE/BE aggregations | A24 formula/authority substitution; A25 review flag | Module-owned source/freshness contracts; one approved aggregation policy |
+| M&A case | cases.service persisted case; maStore active financial draft | ma_cases payload/snapshots | Hydration, local edits, saved list | Active draft lacks retained case ID; optimistic saved state | A09 acknowledgement, A10 identity, A14 links | Explicit case/version identity and acknowledged persistence |
+| M&A deal | deals.service for persisted deals; mixed pipeline selector | ma_deals | Live/saved/demo overlays | Case and deal identities are distinct; detail may resolve other source | A10/A14 incomplete caseId propagation/detail resolution | Persisted deal ID plus explicit case/version links |
+| Lifecycle | Persisted deal stage plus saved/live/frontend representations | ma_deals.stage; case/snapshot payload metadata | maDealLifecycle and dataset precedence | Multiple stage sources | Saved overlay can replace backend stage (A11) | Persisted lifecycle authority with one read-only selector |
+| Valuation | FE useValuationEngine and valuationFormulas | Submitted case/report snapshots; backend valuation path stores/echoes | Adjusted multiple, DCF, blended EV, bridges/waterfall | Report reconstruction; backend legacy numeric field assumptions | A16/A17/A19/A29; no server recalculation authority established | One versioned normalized method/output contract; execution location separately approved |
+| EV | FE engine adjusted EV and DCF/blend | Snapshot/output payloads | EBITDA/multiple/quality/compliance and DCF | Golden simple EV is an intentional separate benchmark | A16 null→zero; A17 low can exceed base | Approved method-specific EV/null/range invariants |
+| Equity | FE engine EV-minus-net-debt-plus-working-capital bridge | Snapshots/reports; saved inputs | Equity bands, proceeds, report format aliases | Report working-capital fallback and saved inputs | A19 reconstruction/version drift; proceeds is not equity | Versioned immutable bridge with distinct proceeds fields |
+| Risk | Domain-specific engines/enums: M&A, Compliance, Risk and others | ma_deals risk plus module risk fields/tables | M&A Spanish labels; Pipeline English enum; separate thresholds | Same word covers different scales/contracts | A15 serialization to medium; A29 oracle scope | Stable machine enum plus explicitly named domain scales |
+| Quality | M&A FE quality scoring on financial/settings inputs | Case/snapshot fields where captured | Multiple adjustment, buyer/readiness heuristics | Same quality values also used as identity/readiness proxies | A10 metric-based merge; A18 false documentary readiness | Named versioned quality metric; never identity/evidence authority |
+| Readiness | Each module metric pipeline plus Executive/Reporting aggregations | Module payloads, snapshots and review workflow records | Heuristic/completion/evidence/financial concepts | Readiness does not mean legal approval or document existence | A18/A23/A24/A25; insufficient-data semantics differ | Separate evidenced, financial and workflow readiness contracts |
+| Pipeline | DealPipelinePage plus maPipelineDataset; backend deals | ma_deals; separately saved ma_cases | Merged backend/live/saved/demo portfolio | Different composition from Dashboard | A11/A12/A13 provenance, stage and totals | One portfolio selector; explicit provenance/persistability |
+| Repository | DealsRepositoryPage, maStore and maRepositoryCoherence | ma_cases through cases API; local recovery when permitted | Saved metrics, load, archive and sync labels | Local/optimistic state vs remote acknowledgement | A09/A10/A19/A38; load recomputes without stable identity | Backend-acknowledged case versions; truthful load/sync/archive state |
+| Report | Module-specific builders/services; Reporting workflow service | ma_reports; module report tables; enterprise_reports; board_review_snapshots | HTML/print/render from live or stored inputs | Multiple export paths; no universal report authority | A14/A19 source-version loss; upstream A24; metadata is not a file | Immutable source snapshot, explicit report type and workflow owner |
+| Document | VDR dataRoom.service metadata plus filesystem bytes | ma_data_room_documents plus configured VDR root; other module metadata separate | File keys, versions, access and checksum | Nested payload storage reference can be client-controlled | A01 physical ownership; A33 content/ACL | Server-owned tenant/document/version object references |
+| Secure Share | secureShare.service hash/expiry/revocation | secure_share_links; linked reports and VDR metadata | Frontend active-status display and public access path | UI isActive may precede expiry check | A05 token URL/error risk; A14 linkage; A40 stale active display | Server share policy and time-aware UI derived from expiry/revocation |
+| Audit Event | auditLog.service plus domain/workflow audit paths | audit_logs, board_review_audit_events and module histories | Actor/action/org/time/sanitized metadata | Separate event paths and best-effort post-mutation writes | A04 swallowed failures; A06 creator used as delete actor | Durable transactional/outbox or explicitly approved failure policy |
+| Archive | Per-domain services and frontend actions | M&A case status; VDR and Board Review lifecycle fields | Lists exclude archived cases; direct/linked records may remain | Case archive, deal hard delete, share revoke differ | A14 continuity; A32 retention/hold; fixture cleanup confusion | Explicit domain archive/delete/revoke graph and retention contract |
+| Compliance | Compliance services for records; FE engine for displayed operational scoring | Nine compliance_* tables | Weighted-risk benchmark/report helper; FE operational/resilience recalculation | Persisted riskScore differs from recalculated field | A06/A08; hydration can persist defaults/cache | Backend-owned records; separately approved metric/provenance contract; explicit writes |
+| Funding | FE draft engine/store plus backend round/summary services | funding_rounds/snapshots/board_memos; org-keyed localStorage draft separately | Runway/dilution/readiness/scenarios and persisted summary | Draft and enterprise values are separate layers | A21 nullable dilution; incomplete draft→persisted workflow | Explicit draft/commit/snapshot contract; null-safe approved metrics |
+| Governance | governance.service decision/workflow metrics | Ten governance_* tables | Readiness and board preparation; UI approve guard | Dedicated approval and generic status writes differ | A02 permission bypass; audit still A04 | Backend permission-aware state machine; module decision packs remain distinct |
+| PMI | pmi.service plus FE case store/engine | pmi_cases JSON and eleven other PMI tables | Case/ledger/enterprise capture and readiness | Independent case vs enterprise source selection | A22 numerator/denominator mismatch; demo merge is already removed | Select coherent numerator/denominator from one explicit source pair |
+| Bridge | bridge.service persisted/recalculated operational signals | Twelve bridge_* tables; ecosystem records separate | Operational severity/confidence/stale priority | Golden impact/urgency/confidence benchmark intentionally separate | A38 error masking; evidence completeness/freshness needs validation | Module-owned facts; labelled heuristic/provenance and linked evidence |
+| Risk workspace | risk.service operational score/metrics | Ten Risk tables listed in data model | Operational severity/likelihood/impact; Golden likelihood×impact separate | Intentional dual-layer benchmark vs product | A35 domain links; A36 persisted notifications without found executor | Keep explicit operational metric contract; validate links/execution claims |
+| Reporting | Reporting/Board Review services for metadata/workflow; frontend renderer for display | Nine reporting tables including snapshots/audit | Board pack aggregation from module outputs; stored rendererInput | Generic Golden variance is not productive cross-module metric | A26 excluded JSX; A35 links; A36 schedules; upstream authority | Persisted immutable review snapshots; module facts stay upstream |
+| Strategy | strategy.service | strategic_* and strategy_report_exports (six tables) | Objectives/scenarios/readiness; empty state null/insufficient | No competing master established; export metadata is not generated artifact | A35 relationships; broader oracles/workflow incomplete | Backend domain ownership with validated links and truthful export types |
+| Heritage | heritage.service | Five heritage_* tables | Continuity/protection/readiness from assets and protections | Empty state status and numeric scores disagree | A23 empty organization gets synthetic scores; narrow tests | Null/insufficient-data contract and approved continuity metrics |
+
+## Evidence anchors and preserved decisions
+
+- Auth/tenant: `backend/api/middlewares/auth.middleware.js`, `backend/services/auth/auth.service.js`, `backend/storage/sqliteEntityStore.service.js`.
+- M&A: `src/modules/ma/store/maStore.jsx`, `engine/useValuationEngine.js`, `engine/valuationFormulas.js`, `engine/maPipelineDataset.js`, `engine/maDealLifecycle.js`, `engine/maRepositoryCoherence.js`, plus `backend/services/ma/`.
+- Other domains: `src/modules/<workspace>/` and `backend/services/<domain>/`; specific finding anchors are recorded in the technical-debt register.
+- PMI persisted hydration no longer silently merges demo data. This positive finding does not close A22.
+- Strategy empty organizations retain null/insufficient-data behavior. Heritage still has A23.
+- Reporting Board Review persistence and frontend consumption exist. Earlier “frontend only” or “planned backend” sections below are historical.
+- Risk and Bridge intentional Golden/product separation is not itself a defect.
+- AI is disabled/mock foundation and is never an authority for official facts, metrics, tenant ownership or human workflow approval.
+
+## Cross-module target rules
+
+Executive and Reporting aggregate module-owned facts; they must preserve source, freshness, null/insufficient-data, version and human-review metadata. They must not replace failed upstream values with another unlabelled formula.
+
+UI success must follow persistence acknowledgement. Stable IDs, not equal metrics, must join records. LocalStorage is draft/recovery state, never tenant authority. Demo fallback must be explicitly labelled and non-operational unless a separately authorized workflow persists it safely.
+
+No consolidation, backend migration, formula change, new shared helper or status closure was implemented by this documentation pass.
+
+
+## Historical record — superseded for current status
+
+The original registry is preserved verbatim below as the pre-17 September 2026 phase ledger. Earlier CLOSED/PASS/RESOLVED claims, ownership statements and planned-only states are historical, not current validation. In particular, PMI demo-merge closure remains a positive source finding, while A22 is a separate open defect; Reporting backend persistence now exists; Executive/Governance/M&A blanket closure claims are superseded by A01–A31.
+
+<details>
+<summary>Historical ownership and phase decisions — not current release evidence</summary>
+
 # CEO's OS / The Sovereign OS — Source of Truth Registry
 
 ## Purpose
@@ -773,3 +847,5 @@ Boundary rules:
 - AI cannot provide legal advice, investment advice, fairness opinions, or certified compliance.
 - AI cannot approve board material.
 - Human review remains required.
+
+</details>

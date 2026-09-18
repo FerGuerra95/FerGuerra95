@@ -1,5 +1,7 @@
 # Visual Regression QA Report — C.24.4D
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 **Status:** COMPLETED (docs + automated authenticated QA)  
 **Baseline:** `HEAD = origin/main = 56ceb09`  
 **Prior phases:** C.24.4A (`5f4e93f`) · C.24.4B (`eca41cb`) · C.24.4C (`56ceb09`)  

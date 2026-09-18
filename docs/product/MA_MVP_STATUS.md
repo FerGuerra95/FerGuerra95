@@ -1,5 +1,7 @@
 # M&A MVP Status - CEO's OS
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 Fecha de actualizacion: 07/05/2026
 
 ## Estado general

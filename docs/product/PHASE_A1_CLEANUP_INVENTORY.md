@@ -1,5 +1,7 @@
 # CEO's OS / The Sovereign OS — Phase A.1 Cleanup Inventory
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 **Fecha:** 17 mayo 2026  
 **Baseline:** `77965e5` — feat: add clear filters actions to Risk and Reporting enterprise views  
 **Estado:** Producción validada. Fase A cerrada. Fase A.1 iniciada.

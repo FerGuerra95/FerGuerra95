@@ -1,5 +1,7 @@
 # M&A Enterprise Final Validation Audit
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 Fecha: 07/05/2026
 
 Objetivo: validar el modulo M&A Intelligence como SaaS enterprise vendible y dejar el punto exacto para cierre, venta controlada y siguiente fase.

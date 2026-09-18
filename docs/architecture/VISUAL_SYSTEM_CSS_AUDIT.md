@@ -1,5 +1,7 @@
 # Visual System CSS Architecture Audit — C.24.4A / C.24.4B
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins.
+
 **Status:** C.24.4A READ-ONLY COMPLETE · C.24.4B CASCADE CONTROL COMPLETE · C.24.4C DEAD CSS COMPLETE · C.24.4D VISUAL QA COMPLETE  
 **Baseline:** `HEAD = origin/main = 56ceb09`  
 **Mode (C.24.4A):** READ ONLY — no `src/**`, tests, backend, or runtime changes  

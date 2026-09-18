@@ -1,5 +1,7 @@
 # CEO’s OS — Roadmap Público / Privado
 
+> **HISTORICAL RECORD — NOT CURRENT AUTHORITY.** This dated status/audit/closure is retained for provenance. Current execution truth is `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`; verified current source/runtime evidence wins. The current dependency order is `docs/roadmap.md`.
+
 Estado: Beta ejecutiva privada  
 Uso: planificación interna, presentación comercial controlada y priorización de producto.
 
