@@ -4,7 +4,7 @@ CEO's OS is a private enterprise Decision Support System (DSS) for corporate int
 
 ## Current baseline and release posture
 
-**Documentation governance baseline: 18 September 2026. Phase 0 and Phase 0.5 are CLOSED by human acceptance. Active phase: 1 — Isolated Validation Foundation. Release posture: BLOCKED for multinational production. Sensitive external-data pilot: NOT YET CLEARED; gate reopened.**
+**Documentation governance baseline: 18 September 2026. Phase 0 and Phase 0.5 are CLOSED by human acceptance. Temporary governance phase: 0.6 — AI Context & Code Quality Lock. The next technical phase remains 1 — Isolated Validation Foundation; its preserved uncommitted work is outside this governance package. Release posture: BLOCKED for multinational production. Sensitive external-data pilot: NOT YET CLEARED; gate reopened.**
 
 The Astra forensic audit identified **A01 (P0)** and **A02–A31 (P1)**. Documentation work does not fix or close them. A31 remains IN PROGRESS because 33 documentation files still require human review, especially commercial claims/offers and infrastructure scaffolds; no P0/P1 was closed.
 
@@ -38,17 +38,15 @@ The additional `ecosystem` source module supports internal surfaces; it is not a
 
 ## START HERE
 
-Read these authorities in order before modifying the repository:
+Use the minimum sufficient context protocol:
 
-1. [Master Control](docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md) — execution state, A01–A44, current phase, frozen decisions and `CURRENT_HANDOFF_STATE`.
-2. [Current Technical State](docs/product/CODEBASE_HARDENING_STATUS.md) — what is implemented, verified, blocked or unverified.
-3. [Source of Truth Registry](docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md) — current, persisted and target owners.
-4. [Architecture](docs/architecture.md) — current and target boundaries.
-5. [Platform Product Matrix](docs/product/PLATFORM_PRODUCT_MATRIX.md) — per-workspace maturity.
-6. [Roadmap](docs/roadmap.md) — dependency-ordered phases and exit gates.
-7. [Test Strategy](docs/testing/TEST_STRATEGY.md) — isolation, discovery, oracles and acceptance evidence.
+1. Read [AGENTS.md](AGENTS.md), the primary operating contract.
+2. Read only `CURRENT_HANDOFF_STATE` in the [Master Control](docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md).
+3. Inspect live HEAD and working-tree status.
+4. Load only the relevant finding, Source of Truth row, roadmap phase, target implementation, direct dependencies and tests.
+5. Establish the Task Capsule before material implementation.
 
-The [technical-debt register](docs/product/CODEBASE_ROBUSTNESS_AUDIT.md) is the canonical A01–A44 evidence and closure-criteria register synchronized with the Master. [AGENTS.md](AGENTS.md) is the concise operating contract for every AI/developer session.
+Do not preload every authority for an ordinary local task. Use the [technical-debt register](docs/product/CODEBASE_ROBUSTNESS_AUDIT.md), [Current Technical State](docs/product/CODEBASE_HARDENING_STATUS.md), [Source of Truth Registry](docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md), [Architecture](docs/architecture.md), [Platform Product Matrix](docs/product/PLATFORM_PRODUCT_MATRIX.md), [Roadmap](docs/roadmap.md) and [Test Strategy](docs/testing/TEST_STRATEGY.md) only when the Task Capsule establishes their relevance.
 
 ## SPECIALIZED DOCUMENTATION
 
@@ -70,4 +68,4 @@ Dated audits, closure reports, old MVP/enterprise-ready files, visual PASS repor
 
 **Evidence labels:** VERIFIED FACT describes inspected evidence; INFERENCE describes a conclusion drawn from it; UNVERIFIED requires execution or operational proof. None means external certification.
 
-Active execution phase: **1 — Isolated Validation Foundation**. Product implementation still requires a separate explicit file whitelist. Do not run mutating suites against canonical data or bulk-stage the existing working tree.
+Temporary governance phase: **0.6 — AI Context & Code Quality Lock**. Next technical phase: **1 — Isolated Validation Foundation**. Preserved Phase-1 work remains uncommitted and outside the Phase-0.6 scope. Do not run mutating suites against canonical data or bulk-stage the existing working tree.

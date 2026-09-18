@@ -1,136 +1,23 @@
 ---
-description: Quality gates, mandatory verification commands, and completion metrics before closing execution phases
+description: Applies repository release and phase-close evidence when staging, committing or release work is requested
 globs:
   - "**/*"
 alwaysApply: false
 ---
+# CEO's OS — Release Gate Adapter
 
-# CEO's OS — Release Gates
+Use `AGENTS.md` for scope/Git safety and `docs/release/RELEASE_CHECKLIST.md` plus `docs/testing/TEST_STRATEGY.md` for release evidence.
 
-## Purpose
+When closing a phase or preparing a checkpoint:
 
-Define minimum conditions to close a phase, stage files for commit, or recommend push to `origin/main`.
+- verify the exact HEAD and dirty/untracked state;
+- run focused validation before broader gates;
+- prove source, build, runtime and isolated-data provenance where required;
+- inspect the final scoped diff and staged path list;
+- stage only explicitly authorized paths;
+- never use `git add .` or `git add -A`;
+- do not claim a finding closed without its stated evidence;
+- keep unrelated work present and unstaged;
+- require explicit authorization for commit and push.
 
-Release gates protect CEO's OS from mixed commits, silent regressions, test weakening, and undocumented cross-module changes.
-
-## AI Operating Modes and Release Gates
-
-| Mode | Build/tests required | Commit allowed | Stop on findings |
-|---|---|---|---|
-| READ-ONLY AUDIT | No | No | No — report P0–P3 |
-| WRITE/FIX | Yes when code touched | Yes (selective) | Yes on validation failure |
-| PROPOSE ONLY | No | No | No |
-| QUARANTINE BEFORE DELETE | Build/tests when marking candidates | No in quarantine phase | No |
-
-Document-only phases (e.g. C.14.0) may run `npm run test:unit` and `npm run build` as regression smoke without implying product changes.
-
-## Mandatory Git Checks
-
-Before closing any execution phase, run:
-
-```text
-git status --short
-git diff --stat
-git diff --name-only
-git ls-files --others --exclude-standard
-git log --oneline -5
-git log --oneline origin/main..HEAD
-```
-
-Adapt commands to PowerShell on Windows or Bash/Zsh on macOS/Linux. The analytical result matters, not the shell syntax.
-
-## Forbidden Git Practices
-
-- `git add .`
-- Including `backend-server.err` in any commit
-- Committing unreviewed generated artifacts (dist, logs, local DB)
-- Mixed commits without justification (docs + unrelated code + tests)
-- Pushing with dirty working tree beyond approved noise (`backend-server.err` only when policy allows)
-- Amending pushed commits unless explicitly authorized and safe per project rules
-- Force push to `main` unless explicitly authorized
-
-## Validation by Change Type
-
-### Document-only phases
-
-- Only allowed documentation/rule files changed
-- No `src/`, `backend/`, `tests/`, CSS, `package.json`, or workflows touched
-- No extra untracked files outside whitelist
-- Markdown coherent; no duplicate sections from idempotent re-run
-- Atomic commit message matches scope
-- No commit/push in phase unless explicitly authorized
-
-### JSON files
-
-- `node -e "JSON.parse(...)"` or equivalent validation passes
-- No duplicate keys introduced on idempotent re-run
-- Golden Dataset expected outputs not changed without separate authorized task
-
-### Frontend code changes
-
-- `npm run build` passes when frontend touched
-- Relevant unit tests pass
-- E2E when critical route or auth flow affected
-- Visual smoke when UI layout affected
-- No NaN/Infinity/undefined in user-visible financial outputs
-- Demo/fallback labelled where user-facing
-
-### Backend/API changes
-
-- Relevant integration tests pass
-- Permission and organizationId review completed
-- Audit event behavior reviewed for mutations
-- No secret in logs or error responses
-- Migrations follow migration safety rule (new versioned file; no silent edit of applied migration)
-
-### Critical calculation changes
-
-- Compared against `docs/testing/golden_inputs.json`
-- Checked against `docs/testing/FORMULA_REGISTRY.md`
-- No tolerance widening to pass tests
-- No test weakening
-- Source-of-truth documented if changed
-- Human review required for financial/compliance positioning
-
-## Phase Closure Requirements
-
-Every closed phase must report:
-
-- operating mode used
-- files changed (full list)
-- files explicitly not touched
-- docs/registries changed vs intentionally unchanged (reconciliation pass)
-- tests run (commands and result)
-- risks identified (P0/P1/P2/P3)
-- whether HANDOFF_STATE was generated
-- recommended next step and prompt
-- pending commit/push status
-
-## Multiplatform Validation
-
-Validation commands must be adapted to the host operating system when necessary.
-
-Do not treat shell syntax incompatibility as a project failure.
-
-Treat the analytical validation result as the source of truth.
-
-## Metrics for Phase Success
-
-| Metric | Pass condition |
-|---|---|
-| Scope adherence | Only allowed files modified |
-| Git hygiene | Atomic commits; no `git add .` |
-| Test integrity | No weakened assertions or golden outputs |
-| Security | organizationId and permissions reviewed if applicable |
-| Truthfulness | Demo/fallback not sold as real |
-| Idempotency | Re-run does not duplicate rules or sections |
-
-## Stop Conditions
-
-Stop before declaring phase complete if:
-
-- validation matrix not run for change type
-- unexpected files in diff
-- golden mismatch unresolved
-- cross-tenant or permission ambiguity open
-- high-risk diff without explicit approval
+A documentation checkpoint does not prove product readiness.

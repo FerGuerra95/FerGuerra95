@@ -2,166 +2,268 @@
 
 ## Product identity
 
-CEO's OS is a private enterprise Decision Support System for corporate intelligence, decision preparation and execution tracking across Executive Overview, M&A, Compliance, Funding, Governance, PMI, Bridge, Risk, Reporting, Strategy and Heritage.
+CEO's OS is a private enterprise Decision Support System for executive preparation and execution tracking across Executive Overview, M&A, Compliance, Funding, Governance, PMI, Bridge, Risk, Reporting, Strategy and Heritage.
 
-All decision-influencing output is indicative and requires human review. The product does not make autonomous decisions or provide legal, financial or investment advice, a fairness opinion, a certified compliance audit, or guaranteed business outcomes. `/bridge/marketplace` is an internal/unlisted demo surface, not a public marketplace.
+All decision-influencing output is indicative and requires human review. The product does not make autonomous decisions or provide legal, financial or investment advice, a fairness opinion, a certified compliance audit, or guaranteed business outcomes. `/bridge/marketplace` is an internal, unlisted demo surface.
 
-## Technical baseline
+## Instruction authority and precedence
 
-- Frontend: React + Vite under `src/`.
-- Backend: Node.js + Express under `backend/`.
-- Database: SQLite / better-sqlite3; tenant scope comes from the authenticated backend context.
-- Tests: Vitest and Playwright; approved Golden Datasets are business oracles where defined.
-- Canonical local QA runtime: `http://127.0.0.1:4000`.
-- Forensic baseline: `43e470f630b8b2b79cc5241aeac6279492108081` plus the dirty/untracked manifest recorded in the Master Control. Verify the live HEAD and worktree every session; do not assume they still match.
-- Governance checkpoint: Phase 0 and Phase 0.5 are CLOSED by human acceptance. Active phase: 1 — Isolated Validation Foundation. A01 is OPEN; A02–A30 are OPEN; A31 remains IN PROGRESS because 33 documents still require human review. This checkpoint does not authorize product implementation.
+1. The active user task and explicit authorization define the permitted work.
+2. This `AGENTS.md` is the primary repository-wide operating contract.
+3. Canonical project documents own state and domain truth; they are not parallel instruction manuals.
+4. `.cursorrules` is a compatibility adapter for Cursor.
+5. Applicable `.cursor/rules/*.mdc` files implement tool-specific behavior and must not override this contract.
+6. The closest nested `AGENTS.md`, if one is added later, may narrow rules for its subtree but must not weaken repository safeguards.
 
-## Permanent operating contract
+Resolve contradictions in that order. Report material conflicts instead of silently selecting a convenient rule.
 
-### A. Mandatory resume protocol
+## Canonical project authorities
 
-Before modifying files:
+- `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`: current execution state, A01–A44, frozen areas and `CURRENT_HANDOFF_STATE`.
+- `docs/product/CODEBASE_ROBUSTNESS_AUDIT.md`: finding evidence and closure criteria.
+- `docs/product/CODEBASE_HARDENING_STATUS.md`: current technical posture.
+- `docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md`: canonical ownership of concepts and data.
+- `docs/architecture.md`: architecture.
+- `docs/product/PLATFORM_PRODUCT_MATRIX.md`: workspace maturity.
+- `docs/roadmap.md`: dependency-ordered phases.
+- `docs/testing/TEST_STRATEGY.md`: validation and acceptance strategy.
+- Specialized security, data, deployment, claims, AI, privacy, legal and visual documents own only their named domains.
+- Dated audits and old PASS/readiness reports are historical evidence. They do not override verified current source, runtime evidence or the authorities above.
 
-1. Read `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`, including `CURRENT_HANDOFF_STATE`.
-2. Read `docs/product/CODEBASE_HARDENING_STATUS.md`.
-3. Read `docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md`.
-4. Read `docs/roadmap.md`.
-5. Read `docs/testing/TEST_STRATEGY.md`.
-6. Read `.cursorrules`, applicable `.cursor/rules/*.mdc`, and task-specific authorities.
-7. Run `git rev-parse HEAD` and `git status --short`.
-8. State a PRE-FLIGHT CHECKLIST with:
-   - CURRENT PHASE
-   - LAST COMPLETED WORK PACKAGE
-   - OPEN P0
-   - RELEVANT OPEN P1
-   - CANONICAL SOURCE OF TRUTH FOR THIS TASK
-   - FROZEN AREAS
-   - CURRENT DIRTY/UNTRACKED DEPENDENCIES
-   - AUTHORIZED FILES
-   - FORBIDDEN FILES
-   - EXIT GATE
-9. Search for existing and legacy implementations before creating anything.
-10. If the verified HEAD or worktree differs materially from the Master handoff, stop and report the mismatch before implementing.
+## Minimum sufficient context protocol
 
-### B. Canonical documentation hierarchy
+Every task begins at Context Level 0 and expands only when evidence establishes a dependency.
 
-**Level 1 — active control**
+### Context Level 0 — operating state
 
-1. `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md` — current execution state, A01–A44, phase, frozen areas and handoff.
+Read:
 
-**Level 2 — canonical domain authorities**
+1. This `AGENTS.md`.
+2. Only `CURRENT_HANDOFF_STATE` from the Master Control.
+3. Live `git rev-parse HEAD` and `git status --short`.
 
-2. `docs/product/CODEBASE_HARDENING_STATUS.md` — current technical state.
-3. `docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md` — concept ownership.
-4. `docs/architecture.md` — current and target architecture.
-5. `docs/product/PLATFORM_PRODUCT_MATRIX.md` — workspace maturity.
-6. `docs/roadmap.md` — dependency-ordered execution.
-7. `docs/testing/TEST_STRATEGY.md` — validation and acceptance.
+Establish current HEAD, phase, task/finding, frozen areas, dirty/untracked risk and exact next action. Do not read the complete Master by default.
 
-`docs/product/CODEBASE_ROBUSTNESS_AUDIT.md` is the canonical A01–A44 evidence and closure-criteria register, synchronized with the Master.
+Compare the live HEAD and working-tree state with `CURRENT_HANDOFF_STATE`. If a material mismatch affects task scope, authorized files, frozen areas, dirty/untracked ownership, current phase or expected baseline, **stop and report it before modifying files**. Do not guess which state is authoritative or normalize the repository; do not reset, restore, clean, stash or absorb unrelated work.
 
-**Level 3 — specialized authorities**
+### Context Level 1 — task context
 
-Security, data model, deployment, M&A visual contract, AI, privacy, legal, reporting, claims and pilot documents own only their named domains and cannot override Levels 1–2.
+Read only the relevant:
 
-**Level 4 — historical records**
+- Axx finding and closure criteria;
+- Source of Truth row;
+- roadmap phase;
+- target files;
+- directly relevant tests.
 
-Dated audits, closure reports, old readiness/PASS documents, phase status files and past roadmaps preserve provenance only. They never supersede current verified source/runtime evidence or Levels 1–2.
+Do not load unrelated workspace documentation.
 
-### C. Search before create
+### Context Level 2 — direct dependencies
 
-Before creating a document, component, hook, engine, helper, selector, service, endpoint, CSS system, token, formatter, status mapper or calculation, search the repository for the same or similar responsibility, the canonical owner, current Source of Truth and legacy implementations.
+Expand only to proven imports, called services, selectors/engines, schemas/tables and tests covering the same contract.
 
-If equivalent ownership exists, update, extend or consolidate it. A new owner requires a documented architectural reason.
+### Context Level 3 — domain context
 
-A new Markdown, status or architecture document is allowed only when no canonical document owns the responsibility, its purpose is materially distinct, it is added to the documentation index, and it does not silently supersede another document. If it supersedes one, mark the old file historical and link to the replacement.
+Use when work crosses several files in one domain, such as M&A lifecycle, VDR security, Funding calculations or Governance workflow. Load only that domain's canonical documentation.
 
-### D. No parallel Source of Truth
+### Context Level 4 — platform context
 
-Every business value and responsibility has one official owner. Frontend display state, local storage, demo fixtures, Golden Datasets and persisted records are not interchangeable. Do not introduce or build on a parallel owner without an explicit documented decision.
+Reserve for architecture, security, multi-tenancy, global Source of Truth, shared shell, cross-workspace primitives, instruction governance and release readiness.
 
-### E. Atomic scoped changes
+### Evidence-driven expansion
 
-Inspect before editing. Keep changes small, traceable and within the explicit task. Do not refactor, rename, reorganize or perform broad cleanup as part of a focused fix. Apply the three-attempt circuit breaker and stop before a fourth unsuccessful attempt.
+Before reading another area, state why it is needed. Valid reasons are a direct import, API/service dependency, persisted relationship, shared canonical owner, test contract, security boundary or verified Source of Truth relationship.
 
-### F. Allowed and forbidden files
+“Might be useful,” “for completeness,” visual similarity and matching names are not dependencies. Once the canonical owner is found, do not continue a broad repository scan for a local task.
 
-Declare an exact file whitelist and forbidden areas before modification. Do not touch files outside the whitelist. Cross-module, auth, router, migration, shell, database, environment, dependency or Golden Dataset changes require explicit authorization.
+For ordinary local work, target 3–8 implementation files plus directly relevant tests/config. This is a guideline. If work reaches another workspace, several Source of Truth domains or more than 12 meaningful product files, stop and reassess scope, the missing platform primitive or an atomic split.
 
-Never manually edit `dist/**`. Never weaken tests or alter expected Golden outputs to make a failure pass. Golden changes require a separate authorized task with manual calculation evidence.
+## Task Capsule
 
-### G. Frozen-area protection
+Before material implementation, output this concise preflight in the task conversation; do not create a new document:
 
-Preserve approved visual and functional work unless the active task explicitly targets it or a proven P0/P1 requires reopening it. Executive Overview, M&A, Compliance, Funding, Governance, PMI and Bridge remain frozen by default outside authorized scope. Preserve the M&A visual contract and the global shell/navigation decisions recorded in the Master.
+```text
+TASK:
+PHASE:
+FINDING(S):
+OBJECTIVE:
+CANONICAL OWNER:
+SOURCE OF TRUTH:
+TARGET FILES:
+DIRECT DEPENDENCIES:
+AUTHORIZED FILES:
+FORBIDDEN FILES:
+FROZEN AREAS:
+TESTS REQUIRED:
+EXIT GATE:
+CONTEXT LEVEL: 0 / 1 / 2 / 3 / 4
+EXISTING OWNER FOUND: YES / NO
+```
 
-### H. Git and worktree safety
+Do not implement until these fields are clear. If no existing owner exists, justify why a new owner is necessary.
 
-- Inspect HEAD and `git status --short` before and after work.
-- Never use `git add .`.
-- Stage only explicitly authorized files when staging is authorized.
-- Never commit `backend-server.err`.
-- Do not reset, clean, delete, overwrite or absorb pre-existing dirty/untracked work.
-- Do not commit or push unless explicitly authorized.
-- Treat HEAD alone as insufficient when the Master records dirty/untracked dependencies.
+## Search before create
 
-### I. Test, build and runtime QA
+Before creating a component, hook, helper, selector, engine, mapper, formatter, API client, service, endpoint, schema concept, CSS recipe, token, document or calculation:
 
-Validation must be proportional to the change and use the documented test hierarchy. Source changes require relevant unit/business-oracle checks, integration checks where applicable, build provenance and runtime QA. Runtime QA uses port 4000. Mutating tests must use isolated DB/VDR roots and must never target canonical data. Passing build/render/smoke checks alone does not prove business logic.
+1. Search for the current owner and legacy implementations.
+2. Decide `EXISTING OWNER FOUND: YES / NO`.
+3. If yes, extend, fix or consolidate that owner.
+4. If no, record the architectural reason for a new owner.
 
-### J. Documentation update check
+Do not create parallel owners for convenience. A new governance, status or architecture document is allowed only when no canonical document owns the responsibility and the task explicitly authorizes it.
 
-After a material verified change, update only the affected canonical state, Source of Truth, roadmap/test gate and Master finding/handoff records. Do not mark Pending systems Confirmed or historical PASS output current. Documentation work does not close a finding without its agreed evidence.
+## Two-pass execution
 
-### K. End-of-session handoff
+Material code work uses two distinct passes.
 
-At the end of every material work package, update the single `CURRENT_HANDOFF_STATE` section inside `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`. Do not create a new handoff, latest, final, v2, current or status document.
+**Pass A — inspect and plan**
 
-The in-place handoff must record:
+- establish the Task Capsule;
+- identify the canonical owner;
+- trace direct dependencies and expected behavior;
+- define the regression strategy and exact file scope.
 
-- DATE/TIME
+**Pass B — implement and verify**
+
+- modify only the authorized scope;
+- run proportional validation in dependency order;
+- inspect the final diff and answer the quality gate.
+
+Do not mix open-ended discovery with continuous implementation. Record newly discovered unrelated defects; do not fix them automatically.
+
+## Code quality contract
+
+1. Business rules live in the canonical domain owner, not pages or display components.
+2. Inputs, outputs, null states, errors and provenance must be explicit.
+3. Use stable IDs for identity; never infer identity from names, labels or amounts when an ID exists.
+4. Treat null, unavailable, zero and empty as distinct states.
+5. Keep persisted, draft, demo and fallback provenance visible.
+6. Frontend gating never replaces backend authorization.
+7. Tenant ownership comes from authenticated server context, never a client-provided organization.
+8. Persistence succeeds only after confirmed completion.
+9. Do not hide failures through catch-to-empty, optimistic success or silent fallback.
+10. Each business calculation has one named, versioned, testable owner.
+11. Keep domain calculations and mappings pure where practical.
+12. Validate boundaries at APIs, persistence and domain transitions.
+13. Add a shared abstraction only after a real repeated responsibility is proven.
+14. Fix the canonical owner before generalizing.
+15. Do not perform broad refactors during focused defect work.
+16. Never weaken tests, tolerances, fixtures or expected outputs to obtain green.
+17. Add a regression that fails before the fix when practical.
+18. Product behavior, tests and documentation must describe the same contract.
+19. Prefer readable, explicit implementation over cleverness.
+20. Preserve public contracts unless a change is explicitly authorized.
+
+Golden Dataset expected outputs require a separate authorized task and manual calculation evidence. Passing build, render or smoke checks alone does not establish business correctness.
+
+## Anti-divergence rules
+
+Do not:
+
+- rewrite unrelated code;
+- rename files for aesthetics;
+- reformat broad files;
+- introduce another state layer or Source of Truth;
+- add fallback behavior without an explicit requirement and visible provenance;
+- invent business semantics;
+- treat demo data as operational data;
+- change formulas without an approved oracle;
+- change tests because implementation disagrees;
+- redesign visual surfaces during backend/domain work;
+- perform “while I am here” cleanup;
+- alter auth, routers, migrations, shell, dependencies, database or Golden files without explicit authorization;
+- manually edit `dist/**`;
+- use placeholders such as “existing code,” “unchanged” or omitted blocks in an applied edit.
+
+Apply the three-attempt circuit breaker. Stop before a fourth unsuccessful attempt on the same blocking condition.
+
+## Human decision boundary
+
+Resolve uncertainty about implementation by inspecting evidence and direct dependencies. When material ambiguity instead concerns product, business or security authority, stop and request a human decision rather than inventing semantics. This includes legal claims; financial or investment meaning; valuation, fairness-opinion or certification language; permissions; tenant ownership or security boundaries; Source of Truth ownership; destructive migrations; production exposure; release or security exceptions; formulas without an approved oracle; irreversible destructive actions; and conflicting canonical authorities.
+
+Do not turn routine implementation questions into stop conditions. Escalate only when evidence cannot resolve who has authority to decide the material meaning or risk.
+
+## Scope, frozen areas and Git safety
+
+- Declare authorized and forbidden files in the Task Capsule.
+- Do not modify a file outside the whitelist. Request scope expansion when necessary.
+- Executive Overview, M&A, Compliance, Funding, Governance, PMI and Bridge are frozen outside explicit scope. Preserve the approved M&A visual contract and shell/navigation decisions.
+- Inspect HEAD and status before and after work.
+- Never use `git add .` or `git add -A`.
+- Never stage `backend-server.err`.
+- Never reset, clean, delete, overwrite or absorb pre-existing dirty/untracked work.
+- Stage, commit or push only when explicitly authorized.
+- Selective staging must name each permitted path.
+- HEAD is insufficient provenance when the Master records dirty/untracked dependencies.
+- Runtime QA uses the canonical port 4000 only when the task authorizes that environment.
+- Mutating tests require isolated DB and VDR roots and must never target canonical data.
+
+## Security and enterprise safeguards
+
+- Enforce authentication, authorization and tenant scope on the server.
+- Preserve organization, actor, action, time and sanitized metadata for material state changes.
+- Never expose secrets, tokens, passwords, private customer data or production database contents.
+- Treat demo, fallback, seed, mock and localStorage recovery as explicit provenance.
+- Do not use a legacy function as Source of Truth without checking callers, routes, tests and dynamic references.
+- Keep the Bridge marketplace unlisted and AI providers disabled unless an explicit phase opens them.
+
+## Post-implementation quality gate
+
+Before declaring completion, answer:
+
+- DID I CREATE A SECOND OWNER? YES / NO
+- DID I ADD A FALLBACK? YES / NO — if yes, why and how is provenance exposed?
+- DID I CHANGE BUSINESS SEMANTICS? YES / NO
+- DID I CHANGE A PUBLIC CONTRACT? YES / NO
+- DID I MODIFY FILES OUTSIDE THE TASK CAPSULE? YES / NO
+- DID I WEAKEN TESTS? YES / NO
+- DID I PRESERVE FROZEN AREAS? YES / NO
+- IS FAILURE VISIBLE? YES / NO
+- ARE NULL/EMPTY/ZERO STATES EXPLICIT? YES / NO
+- IS IDENTITY STABLE? YES / NO
+- IS TENANT/AUTHORITY SERVER-ENFORCED WHERE REQUIRED? YES / NO
+- DID I UPDATE THE EXISTING OWNER RATHER THAN ADD A PARALLEL OWNER? YES / NO
+
+If an answer reveals drift, do not declare completion.
+
+Validation must be proportional to the change. Run focused checks first, then broaden only when a failure, dependency or release gate requires it. Report changed files, commands, results, residual risk, Git state and protected areas.
+
+## Prompt design
+
+Implementation prompts should define one closed objective, one phase/work package, finding IDs, canonical owner, allowed files, forbidden areas, exit gate and validation order. Keep audits separate from implementation. Do not ask an implementation agent to “improve everything.”
+
+## Current handoff discipline
+
+At the end of a validated material package, update the one `CURRENT_HANDOFF_STATE` section in the Master Control. It is current state, not a history log. Keep only:
+
 - CURRENT HEAD
 - ACTIVE PHASE
-- WORK PACKAGE COMPLETED
-- FINDINGS ADDRESSED
-- FILES MODIFIED
-- FILES CREATED
-- FILES DELETED
-- TESTS RUN
-- BUILD
-- RUNTIME 4000
-- DATABASE USED: CANONICAL / ISOLATED / NONE
-- VISUAL QA
-- COMMIT
-- FINDINGS VERIFIED CLOSED
-- FINDINGS STILL OPEN
-- NEW FINDINGS
+- LAST COMPLETED PACKAGE
+- OPEN BLOCKERS RELEVANT TO NEXT WORK
 - FROZEN AREAS
+- CURRENT DIRTY/UNTRACKED RISK
 - EXACT NEXT ACTION
-- AUTHORIZED NEXT SCOPE
-- KNOWN RISKS / UNVERIFIED
+- NEXT AUTHORIZED SCOPE
+- KNOWN UNVERIFIED ITEMS
 
-Update this section in place. Never create `HANDOFF_2.md`, `LATEST_STATUS.md`, `NEW_MASTER.md`, `ROADMAP_V2.md`, `FINAL_STATUS_NEW.md` or an equivalent parallel authority.
+Historical handoffs belong in Git history or the existing changelog. Do not create `HANDOFF_2.md`, `LATEST_STATUS.md`, `NEW_MASTER.md`, `ROADMAP_V2.md` or another competing authority.
 
-### L. Evidence over history
+## New chat or tool bootstrap
 
-Verified current source, schema, isolated test and runtime evidence wins when it conflicts with historical documentation. Report the conflict and update documentation only within authorized scope. Preserve the superseded record as dated history unless it meets the documented safe-delete criteria.
+1. Read `AGENTS.md`.
+2. Read only `CURRENT_HANDOFF_STATE`.
+3. Inspect HEAD/status.
+4. Identify the requested task/finding.
+5. Read only the relevant Master section.
+6. Read only relevant Source of Truth rows.
+7. Inspect target implementation and direct dependencies.
+8. Build the Task Capsule.
+9. Implement and validate.
+10. Update the current handoff after validated completion.
 
-## Protected reference files
+Do not preload the full repository documentation unless the task is a genuine platform-wide audit.
 
-These remain read-only unless a separate task explicitly authorizes them:
+## Documentation truthfulness
 
-- `.cursorrules`
-- `.cursor/rules/ceos-os-enterprise-guardrails.mdc`
-- `.cursor/rules/ceos-os-golden-datasets.mdc`
-- `docs/testing/golden_inputs.json`
-- `docs/testing/GOLDEN_DATASETS.md`
-- `docs/testing/LOGIC_INTEGRITY_PROTOCOL.md`
-
-## Non-negotiable product safeguards
-
-1. Server-side authentication, authorization and tenant scope are the security boundary; frontend visibility is never authorization.
-2. Do not hide API or persistence failures with silent fallback, optimistic success or demo data in executive metrics.
-3. Trace material calculations from input through calculation, persistence/output, UI and test oracle.
-4. Preserve audit actor, organization, action, time and sanitized metadata for enterprise state changes.
-5. Do not use a legacy function as Source of Truth without verifying all callers, routes, tests and dynamic references.
-6. Report files changed, validation run, residual risk, Git state and untouched protected areas at completion.
+Update only affected canonical documents after verified change. Do not mark Pending systems Confirmed, historical PASS output current, or a finding closed without its agreed evidence. Current verified source, schema, isolated tests and runtime evidence take precedence over historical prose; report the conflict and preserve history where required.

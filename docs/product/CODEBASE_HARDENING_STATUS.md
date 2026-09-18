@@ -4,7 +4,7 @@
 
 This is the canonical technical-state document. [Master control](CEO_OS_MASTER_CONTROL_BASELINE.md) owns execution tracking; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) owns finding details. Historical May closures below are not current validation.
 
-**Documentation governance:** Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. A31 remains IN PROGRESS because 33 documentation files still require human review; no product finding is closed.
+**Documentation governance:** Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Temporary Phase 0.6 consolidates AI context and code-quality rules and is ready for human review. Phase 1 remains the next technical phase; its preserved uncommitted isolation work is outside this governance package and is not validated here. A31 remains IN PROGRESS because 33 documentation files still require human review; no product finding is closed.
 
 ## Implemented — VERIFIED FACT from source inspection
 
@@ -72,4 +72,4 @@ The approved M&A visual foundation remains frozen. Functional remediation must p
 
 The Phase 0 handoff previously duplicated here is no longer an active continuity record. Its substantive baseline, decisions, file scope and validation are preserved in sections 17–20 of the [Master Control](CEO_OS_MASTER_CONTROL_BASELINE.md).
 
-Use only `CURRENT_HANDOFF_STATE` in the Master for session resume and end-of-work-package updates. Phase 0 and Phase 0.5 are CLOSED; Phase 1 is active; A31 remains IN PROGRESS and no P0/P1 is closed.
+Use only `CURRENT_HANDOFF_STATE` in the Master for session resume and end-of-work-package updates. Phase 0 and Phase 0.5 are CLOSED; temporary Phase 0.6 is ready for human review; Phase 1 remains the next technical phase with preserved uncommitted work outside this package; A31 remains IN PROGRESS and no P0/P1 is closed.
