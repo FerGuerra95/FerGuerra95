@@ -8,6 +8,8 @@ alwaysApply: true
 
 Use the protocol in `AGENTS.md`; do not restate it as a separate policy.
 
+Complete **MANDATORY BOOTSTRAP — STOP BEFORE WORK** before inspecting or modifying implementation.
+
 For material work:
 
 - Output the concise Task Capsule before implementation.
@@ -19,5 +21,6 @@ For material work:
 - Use exact paths and complete patches; do not use “unchanged,” “existing code” or omitted placeholders.
 - Keep progress reports focused on findings, uncertainty and the next resolving step.
 - End with the quality-gate answers, validation evidence, residual risk and Git state.
+- Material packages follow IMPLEMENTATION → INDEPENDENT SENIOR REVIEW → VALIDATION → COMMIT. Review is read-only and uses the actual Git diff.
 
-The current handoff is updated in place only after a validated material package. It contains current state, not accumulated history.
+The current handoff is updated in place only after a validated material package. It contains current state, not accumulated history. Use `/ceos-rotate` before a fresh session and `/ceos-resume` to start one. Independent Senior Review should not reuse the implementation chat.

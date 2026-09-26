@@ -6,7 +6,7 @@ alwaysApply: true
 ---
 # CEO's OS — Enterprise Guardrail Adapter
 
-`AGENTS.md` is the operating authority. Follow its precedence, minimum-context protocol, Task Capsule, two-pass workflow, scope lock and quality gate.
+`AGENTS.md` is the operating authority. Follow its precedence, mandatory bootstrap, minimum-context protocol, Task Capsule, two-pass workflow, independent senior review gate, scope lock and quality gate.
 
 For every task:
 

@@ -12,7 +12,7 @@ This file is the **MASTER CONTROL CANÓNICO / canonical execution tracker** for 
 
 **Canonical path:** `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`. Creation was explicitly authorized to finalize Phase 0. The [dated source](CEO_OS_MASTER_CONTROL_BASELINE_2026-09-17.md) remains byte-for-byte unchanged and is a historical input, not the current tracker.
 
-**Active technical phase:** 1 — Isolated Validation Foundation. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. Phase-1 isolation work remains explicitly preserved, uncommitted work in progress. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. A01–A30 and A32–A44 remain OPEN; no P0/P1 finding has been fixed, closed or downgraded.
+**Active technical phase:** 1 — Isolated Validation Foundation. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. Phase-1 isolation work remains explicitly preserved, uncommitted work in progress. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. A01–A30 and A32–A44 remain OPEN; no P0/P1 finding has been fixed, closed or downgraded.
 
 Current document roles: this master owns execution/status; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) supplies evidence and closure criteria; [Source of Truth](../architecture/SOURCE_OF_TRUTH_REGISTRY.md) supplies detailed current/persisted/target owners; [workspace matrix](PLATFORM_PRODUCT_MATRIX.md) supplies dimension ratings; [test strategy](../testing/TEST_STRATEGY.md) supplies validation/isolation requirements; [roadmap](../roadmap.md) supplies dependency gates. When evidence changes, update the affected records together. These documents do not claim that proposed consolidation or product remediation has occurred.
 
@@ -1098,6 +1098,8 @@ At the end of every material work package, update `CURRENT_HANDOFF_STATE` in pla
 
 **Phase 0.6 — AI Context & Code Quality Lock:** CLOSED by human approval
 
+**Phase 0.7 — AI Delivery Safety Harness:** CLOSED by human approval; governance FROZEN; does not add a fifteenth roadmap phase
+
 **Current active technical phase:** 1 — Isolated Validation Foundation; uncommitted work is preserved
 
 **Next phase after Phase 1:** 2 — Security / access
@@ -1190,7 +1192,7 @@ Historical PASS output is not current validation. Current unit/integration/E2E a
 
 ## Roadmap alignment
 
-Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5 and Phase 0.6 are closed governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Phase 1 is the active technical phase; its uncommitted work remains outside the governance checkpoint.
+Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Phase 1 is the active technical phase; its uncommitted work remains outside the governance checkpoint.
 
 # 17. PHASE 0 FINALIZATION CHANGELOG
 
@@ -1467,12 +1469,17 @@ The grouped inventory records all 140 files present at audit start. Deleted cand
 
 # 20. CURRENT_HANDOFF_STATE
 
-- **CURRENT HEAD:** `9c16a22766bc15342c874b8e961f6581d7749e47` until the approved Phase-0.6 checkpoint commit is created.
+- **CURRENT HEAD:** `938ac7c29b728c187a934a9f917d9fd4d07c88e0`
 - **ACTIVE PHASE:** 1 — Isolated Validation Foundation.
-- **LAST COMPLETED PACKAGE:** Phase 0.6 — AI Context & Code Quality Governance, approved and closed; this selective checkpoint records it.
-- **OPEN BLOCKERS RELEVANT TO NEXT WORK:** A01 OPEN; A31 IN PROGRESS pending review of 33 documentation files.
-- **FROZEN AREAS:** approved visual areas and governance rules; unrelated product work remains outside the checkpoint.
-- **CURRENT DIRTY/UNTRACKED RISK:** Phase-1 isolated-validation configuration, orchestration and five protected isolation files remain uncommitted alongside unrelated pre-existing product work.
-- **EXACT NEXT ACTION:** resume Phase 1 from the preserved test-isolation implementation.
-- **NEXT AUTHORIZED SCOPE:** the explicit Phase-1 isolated-validation whitelist only; preserve canonical DB/VDR data and unrelated work.
-- **KNOWN UNVERIFIED ITEMS:** Phase-1 suites and the isolation architecture still require validation; authenticated behavior, build provenance, canonical DB/WAL parity, live remote and production operations remain UNVERIFIED.
+- **LAST COMPLETED PACKAGE:** Phase 0.7 — AI Delivery Safety Harness.
+- **A26:** VERIFIED CLOSED.
+- **A27:** FIXED NOT YET VERIFIED.
+- **A01:** OPEN.
+- **A31:** IN PROGRESS.
+- **OPEN BLOCKERS RELEVANT TO NEXT WORK:** A01 OPEN; A31 IN PROGRESS; A27 verification evidence remains incomplete.
+- **GOVERNANCE:** FROZEN — change only on evidence of a missing or broken guardrail.
+- **FROZEN AREAS:** governance, approved visual areas and unrelated product work outside Phase 1.
+- **CURRENT DIRTY/UNTRACKED RISK:** Phase-1 isolation work and unrelated pre-existing product work remain uncommitted.
+- **EXACT NEXT ACTION:** Resume Phase 1 / A27 from preserved uncommitted isolation work.
+- **NEXT AUTHORIZED SCOPE:** A27 verification and follow-up only with an explicit whitelist; preserve canonical DB/VDR data and unrelated work.
+- **KNOWN UNVERIFIED ITEMS:** canonical DB/WAL/VDR hash (file locked by port 4000); A27 Test Strategy items 5/7; build provenance; live remote and production operations.

@@ -2,7 +2,7 @@
 
 **Baseline:** 17 September 2026 · forensic HEAD `43e470f630b8b2b79cc5241aeac6279492108081`. This is the dependency order from Astra. It authorizes no implementation, infrastructure change, AI activation or release.
 
-**Temporary active governance phase:** 0.6 — AI Context & Code Quality Lock, ready for human review. **Next technical phase:** 1 — Isolated Validation Foundation. Its explicitly preserved uncommitted work is not validated or checkpointed by Phase 0.6. Phase 0 and its 0.5 Documentation Governance Lock are CLOSED by human acceptance; neither 0.5 nor 0.6 adds a fifteenth roadmap phase. A01 remains OPEN; A02–A30 remain OPEN; A31 remains IN PROGRESS under the explicit 33-document review exception.
+**Governance checkpoint:** Phase 0.7 — AI Delivery Safety Harness is CLOSED by human approval and FROZEN. **Active technical phase:** 1 — Isolated Validation Foundation. Its explicitly preserved uncommitted work is not validated or checkpointed by Phase 0.7. Phase 0, Phase 0.5, Phase 0.6 and Phase 0.7 are CLOSED by human acceptance; 0.5, 0.6 and 0.7 do not add a fifteenth roadmap phase. A01 remains OPEN; A02–A30 remain OPEN; A31 remains IN PROGRESS under the explicit 33-document review exception.
 
 Each phase needs an explicit file whitelist and its own evidence. Exit gates describe future requirements. Preserve the M&A black canvas, workspace accent, page/hero geometry and approved surfaces throughout functional remediation.
 
@@ -177,6 +177,10 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 ## Tracking rule
 
 The [master control baseline](product/CEO_OS_MASTER_CONTROL_BASELINE.md) owns execution state. [A01–A44](product/CODEBASE_ROBUSTNESS_AUDIT.md) owns defect status and evidence. Update both after a separately scoped work package; no defect becomes VERIFIED CLOSED without its acceptance evidence. Dependencies may be refined only with recorded reasoning; documentation approval does not imply implementation approval.
+
+## Future — CEO’S OS Agent Benchmark
+
+Not required for Phase 1. A later authorized package may evaluate candidate coding models against real repository tasks using correctness, test success, diff quality, security, architecture, maintainability and human/senior-review acceptance. Do not create a separate benchmark document now.
 
 ## Historical roadmap — superseded
 

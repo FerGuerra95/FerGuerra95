@@ -4,7 +4,7 @@ CEO's OS is a private enterprise Decision Support System (DSS) for corporate int
 
 ## Current baseline and release posture
 
-**Documentation governance baseline: 18 September 2026. Phase 0 and Phase 0.5 are CLOSED by human acceptance. Temporary governance phase: 0.6 — AI Context & Code Quality Lock. The next technical phase remains 1 — Isolated Validation Foundation; its preserved uncommitted work is outside this governance package. Release posture: BLOCKED for multinational production. Sensitive external-data pilot: NOT YET CLEARED; gate reopened.**
+**Documentation governance baseline: 18 September 2026. Phase 0, Phase 0.5, Phase 0.6 and Phase 0.7 are CLOSED by human acceptance. The Phase 0.7 AI Delivery Safety Harness is FROZEN. The active technical phase remains 1 — Isolated Validation Foundation; its preserved uncommitted work is outside this governance package. Release posture: BLOCKED for multinational production. Sensitive external-data pilot: NOT YET CLEARED; gate reopened.**
 
 The Astra forensic audit identified **A01 (P0)** and **A02–A31 (P1)**. Documentation work does not fix or close them. A31 remains IN PROGRESS because 33 documentation files still require human review, especially commercial claims/offers and infrastructure scaffolds; no P0/P1 was closed.
 
@@ -36,17 +36,27 @@ The additional `ecosystem` source module supports internal surfaces; it is not a
 - Auth/RBAC: [authentication service](backend/services/auth/auth.service.js), [server permission middleware](backend/api/middlewares/auth.middleware.js). Frontend visibility is not an authorization boundary.
 - VDR: [data room service](backend/services/ma/dataRoom.service.js) combines database metadata and filesystem objects.
 
-## START HERE
+## BEFORE WORKING ON CEO’S OS
 
-Use the minimum sufficient context protocol:
+If this session has repository access:
 
-1. Read [AGENTS.md](AGENTS.md), the primary operating contract.
+1. Read [AGENTS.md](AGENTS.md).
 2. Read only `CURRENT_HANDOFF_STATE` in the [Master Control](docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md).
-3. Inspect live HEAD and working-tree status.
-4. Load only the relevant finding, Source of Truth row, roadmap phase, target implementation, direct dependencies and tests.
-5. Establish the Task Capsule before material implementation.
+3. Verify live `git rev-parse HEAD` and `git status --short` against that handoff. Optional: `node scripts/governance/ai-preflight.mjs`.
+4. Do not preload all documentation.
+5. Create the Task Capsule from `AGENTS.md`.
+6. Expand context only through demonstrated dependencies.
 
-Do not preload every authority for an ordinary local task. Use the [technical-debt register](docs/product/CODEBASE_ROBUSTNESS_AUDIT.md), [Current Technical State](docs/product/CODEBASE_HARDENING_STATUS.md), [Source of Truth Registry](docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md), [Architecture](docs/architecture.md), [Platform Product Matrix](docs/product/PLATFORM_PRODUCT_MATRIX.md), [Roadmap](docs/roadmap.md) and [Test Strategy](docs/testing/TEST_STRATEGY.md) only when the Task Capsule establishes their relevance.
+If this chat or tool has **no repository access**, request from the human before proposing implementation:
+
+1. current `AGENTS.md`
+2. `CURRENT_HANDOFF_STATE`
+3. the relevant finding/task
+4. the relevant diff when reviewing implementation
+
+A standalone chat cannot automatically read Git state, the working tree or the Master. Do not assume conversational memory represents current Git state. After a long pause, never continue from remembered chat context: `AGENTS.md` → handoff → HEAD/status → Task Capsule → work. STOP if HEAD or the worktree materially differs from the handoff; do not normalize the repository.
+
+Specialized authorities such as the [technical-debt register](docs/product/CODEBASE_ROBUSTNESS_AUDIT.md), [Current Technical State](docs/product/CODEBASE_HARDENING_STATUS.md), [Source of Truth Registry](docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md), [Architecture](docs/architecture.md), [Platform Product Matrix](docs/product/PLATFORM_PRODUCT_MATRIX.md), [Roadmap](docs/roadmap.md) and [Test Strategy](docs/testing/TEST_STRATEGY.md) are loaded only when the Task Capsule establishes their relevance.
 
 ## SPECIALIZED DOCUMENTATION
 
@@ -68,4 +78,4 @@ Dated audits, closure reports, old MVP/enterprise-ready files, visual PASS repor
 
 **Evidence labels:** VERIFIED FACT describes inspected evidence; INFERENCE describes a conclusion drawn from it; UNVERIFIED requires execution or operational proof. None means external certification.
 
-Temporary governance phase: **0.6 — AI Context & Code Quality Lock**. Next technical phase: **1 — Isolated Validation Foundation**. Preserved Phase-1 work remains uncommitted and outside the Phase-0.6 scope. Do not run mutating suites against canonical data or bulk-stage the existing working tree.
+Governance checkpoint: **Phase 0.7 — AI Delivery Safety Harness: CLOSED and FROZEN**. Active technical phase: **1 — Isolated Validation Foundation**. Preserved Phase-1 work remains uncommitted and outside the Phase-0.7 scope. Do not run mutating suites against canonical data or bulk-stage the existing working tree.

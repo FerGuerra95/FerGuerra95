@@ -4,13 +4,15 @@
 
 ## Cursor startup
 
-1. Read `AGENTS.md`.
+1. Complete **MANDATORY BOOTSTRAP — STOP BEFORE WORK** in `AGENTS.md` before inspecting or modifying implementation.
 2. Read only `CURRENT_HANDOFF_STATE` in `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`.
-3. Inspect live HEAD and status.
+3. Inspect live HEAD and status. Optional: `node scripts/governance/ai-preflight.mjs`.
 4. Load only the finding, Source of Truth row, roadmap phase, target files and direct dependencies required by the task.
 5. For material work, output the concise Task Capsule defined in `AGENTS.md`.
 
-Do not preload the complete Master or all project documentation. Do not scan the entire repository after finding the canonical owner unless the task is an explicitly authorized platform-wide audit.
+If HEAD or the worktree materially differs from the handoff, stop. Do not normalize the repository. Do not preload the complete Master or all project documentation. Do not scan the entire repository after finding the canonical owner unless the task is an explicitly authorized platform-wide audit.
+
+Cursor Project memory is supplementary only. Resume with `/ceos-resume`. Rotate with `/ceos-rotate`. Do not treat chat or Project memory as Git state.
 
 ## Cursor editing behavior
 
@@ -21,6 +23,7 @@ Do not preload the complete Master or all project documentation. Do not scan the
 - Preserve line endings and avoid unrelated formatting.
 - Record unrelated findings without fixing them.
 - Run the post-implementation quality gate from `AGENTS.md`.
+- Material packages require IMPLEMENTATION → INDEPENDENT SENIOR REVIEW → VALIDATION → COMMIT. Review uses the actual Git diff, not the author summary.
 - Never stage, commit, push, reset, clean or delete work unless the active task explicitly authorizes it.
 - Never use `git add .` or `git add -A`.
 

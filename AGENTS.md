@@ -1,5 +1,22 @@
 # CEO's OS / The Sovereign OS — Agent Operating Contract
 
+## MANDATORY BOOTSTRAP — STOP BEFORE WORK
+
+Any material task must begin with this sequence. Do not inspect or modify implementation first.
+
+1. Read this `AGENTS.md`.
+2. Read ONLY `CURRENT_HANDOFF_STATE` from `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`.
+3. Run `git rev-parse HEAD` and `git status --short`.
+4. Compare actual Git state with the handoff.
+5. Identify the requested task/finding.
+6. Read only the relevant Source-of-Truth material.
+7. Build the Task Capsule.
+8. Only then inspect or modify implementation.
+
+If HEAD or the working tree materially differs from the handoff: **STOP**. Do not normalize the repository. Do not reset, restore, clean, stash or absorb unrelated work.
+
+Optional read-only helper: `node scripts/governance/ai-preflight.mjs`. A chat or tool without repository access cannot run this; it must request `AGENTS.md`, `CURRENT_HANDOFF_STATE` and the relevant task/finding from the human before proposing implementation.
+
 ## Product identity
 
 CEO's OS is a private enterprise Decision Support System for executive preparation and execution tracking across Executive Overview, M&A, Compliance, Funding, Governance, PMI, Bridge, Risk, Reporting, Strategy and Heritage.
@@ -16,6 +33,17 @@ All decision-influencing output is indicative and requires human review. The pro
 6. The closest nested `AGENTS.md`, if one is added later, may narrow rules for its subtree but must not weaken repository safeguards.
 
 Resolve contradictions in that order. Report material conflicts instead of silently selecting a convenient rule.
+
+Current work is resumed from the repository, not from chat memory. State authority order:
+
+1. actual code / Git
+2. this `AGENTS.md`
+3. `CURRENT_HANDOFF_STATE`
+4. canonical Source-of-Truth documents
+5. task evidence (Task Capsule, diffs, tests)
+6. Cursor Project / chat memory (supplementary only)
+
+Cursor Project memory is not a Source of Truth. Stale conversational memory never overrides repository evidence.
 
 ## Canonical project authorities
 
@@ -78,6 +106,10 @@ Before reading another area, state why it is needed. Valid reasons are a direct 
 
 For ordinary local work, target 3–8 implementation files plus directly relevant tests/config. This is a guideline. If work reaches another workspace, several Source of Truth domains or more than 12 meaningful product files, stop and reassess scope, the missing platform primitive or an atomic split.
 
+A local task starts small. A platform-wide audit may expand intentionally. A repository-wide audit is never the default coding workflow.
+
+Prefer symbol/reference navigation (LSP / code-navigation) before broad text search when resolving definitions or references. Text search remains valid when navigation cannot answer the question.
+
 ## Task Capsule
 
 Before material implementation, output this concise preflight in the task conversation; do not create a new document:
@@ -101,6 +133,14 @@ EXISTING OWNER FOUND: YES / NO
 ```
 
 Do not implement until these fields are clear. If no existing owner exists, justify why a new owner is necessary.
+
+## Proportional spec
+
+- Small, local, deterministic change: the Task Capsule is sufficient.
+- Material multi-file or multi-domain change: Task Capsule plus an implementation plan.
+- Security, tenant, persistence, financial formulas, Source of Truth, migration or cross-workspace architecture: explicit spec/contract, plan, and human-reviewed authority where this contract already requires it.
+
+Do not write a giant spec for a trivial change. Do not code a complex cross-domain feature from a vague prompt.
 
 ## Search before create
 
@@ -130,7 +170,9 @@ Material code work uses two distinct passes.
 - run proportional validation in dependency order;
 - inspect the final diff and answer the quality gate.
 
-Do not mix open-ended discovery with continuous implementation. Record newly discovered unrelated defects; do not fix them automatically.
+Do not mix open-ended discovery with continuous implementation.
+
+When implementation discovers another problem, do not silently absorb it. Classify it as a same-task necessary dependency, an existing known finding, a new defect candidate, or an unrelated issue. Only same-task necessary dependencies may expand current scope. Record the others and handle them separately.
 
 ## Code quality contract
 
@@ -156,6 +198,8 @@ Do not mix open-ended discovery with continuous implementation. Record newly dis
 20. Preserve public contracts unless a change is explicitly authorized.
 
 Golden Dataset expected outputs require a separate authorized task and manual calculation evidence. Passing build, render or smoke checks alone does not establish business correctness.
+
+Material AI-written code must be suitable for long-term ownership, not merely appear to work. Prefer canonical ownership, explicit contracts, stable identity, visible provenance, deterministic calculations, testability and the simplest structure that meets the contract. Avoid speculative abstraction, duplicate responsibility and cleverness where simple code is sufficient.
 
 ## Anti-divergence rules
 
@@ -199,6 +243,12 @@ Do not turn routine implementation questions into stop conditions. Escalate only
 - Runtime QA uses the canonical port 4000 only when the task authorizes that environment.
 - Mutating tests require isolated DB and VDR roots and must never target canonical data.
 
+## Parallel agents and worktrees
+
+Parallel material agents are allowed only when work can be safely partitioned. Default: one agent, one branch or worktree, own temp DB, own VDR/file root, own ports, own Task Capsule.
+
+Parallelize independent tasks. Do not parallelize competing modifications to the same Source of Truth, lifecycle, formula owner, schema authority, shared security primitive or shared API contract unless that interface has first been explicitly frozen. A worktree does not replace DB, port or file isolation.
+
 ## Security and enterprise safeguards
 
 - Enforce authentication, authorization and tenant scope on the server.
@@ -229,9 +279,33 @@ If an answer reveals drift, do not declare completion.
 
 Validation must be proportional to the change. Run focused checks first, then broaden only when a failure, dependency or release gate requires it. Report changed files, commands, results, residual risk, Git state and protected areas.
 
+## Independent senior review gate
+
+Material changes follow this sequence:
+
+IMPLEMENTATION → INDEPENDENT SENIOR REVIEW → VALIDATION → COMMIT
+
+The reviewer should preferably operate from fresh context, remain read-only, inspect the actual Git diff, read the Task Capsule and current contract, inspect relevant tests, and attempt to REJECT the implementation. Do not trust the authoring agent's summary.
+
+For material code changes, the implementation chat is not the review chat. Independent Senior Review should preferably start from `/ceos-resume`, then read the Task Capsule, the actual Git diff, the current contract and the relevant tests. Do not preload implementation-agent reasoning.
+
+Allowed verdicts: `ACCEPT`, `ACCEPT WITH FOLLOW-UP`, `REJECT`. `REJECT` blocks commit. Review and remediation are separate passes.
+
+Primary review evidence is the Task Capsule, the current contract / Source of Truth, the actual Git diff, and test results. The implementation summary is supporting information only. Never approve a change solely from its summary.
+
+## Machine-enforceable rules
+
+If an important invariant can be checked deterministically, prefer a script, test or CI guard over prompt memory. Examples: canonical DB/VDR rejection, protected-port rejection, forbidden fallback, test discovery, tenant boundary, formula oracle, detectable duplicate authority, and staged-file scope where practical. Do not attempt to automate subjective architecture judgment.
+
+## End-of-work requirement
+
+Before considering a material package complete: execute the required tests/validation; complete independent review where required; inspect the exact diff; confirm unauthorized changes are absent; stage selectively when commit is authorized; update `CURRENT_HANDOFF_STATE` only after a validated checkpoint. Do not create a second handoff file.
+
 ## Prompt design
 
 Implementation prompts should define one closed objective, one phase/work package, finding IDs, canonical owner, allowed files, forbidden areas, exit gate and validation order. Keep audits separate from implementation. Do not ask an implementation agent to “improve everything.”
+
+Do not run unconstrained autonomous loops such as “keep working until CEO's OS is finished” or equivalent open-ended work across domains. Autonomous execution requires a closed objective, file/scope boundaries, an exit gate, validation and stop conditions. Split long work into atomic packages.
 
 ## Current handoff discipline
 
@@ -251,18 +325,37 @@ Historical handoffs belong in Git history or the existing changelog. Do not crea
 
 ## New chat or tool bootstrap
 
-1. Read `AGENTS.md`.
-2. Read only `CURRENT_HANDOFF_STATE`.
-3. Inspect HEAD/status.
-4. Identify the requested task/finding.
-5. Read only the relevant Master section.
-6. Read only relevant Source of Truth rows.
-7. Inspect target implementation and direct dependencies.
-8. Build the Task Capsule.
-9. Implement and validate.
-10. Update the current handoff after validated completion.
+Follow **MANDATORY BOOTSTRAP — STOP BEFORE WORK**. In Cursor, `/ceos-resume` runs that sequence. Do not preload the full repository documentation unless the task is a genuine platform-wide audit.
 
-Do not preload the full repository documentation unless the task is a genuine platform-wide audit.
+A chat or tool without repository access must request from the human, before proposing implementation: `AGENTS.md`, `CURRENT_HANDOFF_STATE`, and the relevant task/finding. For an implementation review it must also request the relevant diff. It must not claim that it can automatically read Git state, the working tree or the Master, and must not assume conversational memory represents current Git state.
+
+After days, weeks or months away, never continue from remembered conversation context. Always: `AGENTS.md` → `CURRENT_HANDOFF_STATE` → HEAD/status → Task Capsule → work.
+
+## Session rotation
+
+Use a fresh AI chat/session when:
+
+- the task/finding materially changes;
+- the active phase changes;
+- implementation moves to Independent Senior Review;
+- a previous session was interrupted or ran out of context;
+- conversation summarization/compression occurred and important implementation details may have been compressed;
+- scope expands into another Source-of-Truth domain;
+- unrelated tasks have accumulated in the same session.
+
+Do not rotate unnecessarily during one small coherent task. Cursor manages model context internally; do not invent a token counter.
+
+If the agent becomes aware that conversation context has been summarized, compressed, interrupted or materially degraded: **STOP** broad implementation. Preserve state through `CURRENT_HANDOFF_STATE`. Recommend session rotation. Do not reconstruct missing details from guesses.
+
+Before rotation (`/ceos-rotate` in Cursor):
+
+1. Verify Git HEAD/status.
+2. Update `CURRENT_HANDOFF_STATE` in place if materially needed.
+3. Record the exact next action.
+4. Record uncommitted/dirty risk.
+5. Do not copy full chat history. Do not create a second handoff document.
+
+After rotation, resume from repository authority (`/ceos-resume`), not conversation memory.
 
 ## Documentation truthfulness
 
