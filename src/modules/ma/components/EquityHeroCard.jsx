@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
+import { PRIMARY_VALUATION_METHOD } from '../engine/valuationFormulas.js';
+import { MAScoreRing } from './MAScoreRing.jsx';
 
 function getSafeNumber(value, fallback = 0) {
   const parsed = Number(value);
@@ -93,19 +95,18 @@ export function EquityHeroCard({ derived, settings }) {
   const netDebt = getSafeNumber(derived?.netDebt);
   const adjustedMultiple = getSafeNumber(derived?.adjustedMultiple);
   const qualityScore = Math.round(getSafeNumber(derived?.qualityScore));
-
   const normalizedScore = Math.max(0, Math.min(100, qualityScore));
-  const scoreAngle = `${normalizedScore * 3.6}deg`;
 
   return (
     <section className="ma-equity-safe-card ma-valuation-executive-summary ma-valuation-surface">
+      <div className="ma-ma-panel-ambient" aria-hidden="true" />
 
       <div className="ma-equity-safe-inner">
         <div className="ma-equity-safe-hero-band">
           <header className="ma-equity-safe-primary">
             <div className="ma-equity-safe-kicker">
               <TrendingUp size={14} />
-              Adjusted equity value — DSS view
+              {PRIMARY_VALUATION_METHOD.kicker}
             </div>
 
             <div className="ma-equity-safe-badges">
@@ -119,26 +120,29 @@ export function EquityHeroCard({ derived, settings }) {
             </h2>
 
             <p className="ma-equity-safe-copy">
-              Live engine estimate: adjusted multiple on normalized EBITDA, net
-              debt and working capital adjustment. Indicative DSS only — not a
-              fairness opinion or certified valuation.
+              Live engine headline is {PRIMARY_VALUATION_METHOD.label}:
+              normalized EBITDA × adjusted multiple, then net debt and working
+              capital. DCF is a control triangulation only — not this headline.
+              Indicative DSS only — not a fairness opinion or certified valuation.
             </p>
           </header>
 
           <aside className="ma-equity-safe-quality-readout" aria-label="Quality score">
             <div className="kpi-label">Quality score</div>
-            <div
-              className="ma-equity-safe-ring"
-              style={{ '--score-angle': scoreAngle }}
-            >
-              <div className="ma-equity-safe-ring-core">
-                <strong className="ma-val-financial-figure">{normalizedScore}</strong>
-              </div>
-            </div>
-            <div className="ma-equity-safe-score-copy">
-              <strong className="ma-val-financial-figure">{normalizedScore}/100</strong>
-              <p>{riskSignal.title}</p>
-            </div>
+            <MAScoreRing
+              value={normalizedScore}
+              size={160}
+              variant="executive"
+              showDenom
+              figureAs="strong"
+              aria-hidden={false}
+              ringClassName="ma-equity-safe-ring ma-score-ring"
+              svgClassName="ma-equity-safe-ring-svg ma-score-ring-svg"
+              coreClassName="ma-equity-safe-ring-core ma-score-ring-core"
+              figureClassName="ma-equity-safe-score-main ma-score-ring-figure ma-val-financial-figure"
+              denomClassName="ma-equity-safe-score-denom ma-score-ring-denom"
+            />
+            <p className="ma-equity-safe-score-note">{riskSignal.title}</p>
           </aside>
         </div>
 

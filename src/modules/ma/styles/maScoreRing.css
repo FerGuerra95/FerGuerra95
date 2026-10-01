@@ -1,0 +1,166 @@
+/* M&A score ring — shared arc material (Executive Signal family). FINAL / FROZEN */
+
+/* Executive variant — thin precise track (Valuation Quality Score + Dashboard family) */
+.main-area[data-workspace='ma'] .page .ma-score-ring--executive {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--ma-score-ring-size, 160px);
+  height: var(--ma-score-ring-size, 160px);
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--executive .ma-score-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--executive .ma-ref-ring-track-glass {
+  stroke: rgba(8, 26, 32, 0.55);
+  stroke-width: 9;
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--executive .ma-ref-ring-track {
+  stroke: url(#ma-ref-ring-track-grad);
+  stroke-width: 9;
+  opacity: 0.55;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--executive .ma-ref-ring-track-edge {
+  stroke: rgba(94, 234, 212, 0.08);
+  stroke-width: 9.5;
+  opacity: 0.5;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--executive .ma-ref-ring-active {
+  stroke: url(#ma-ref-ring-active-grad);
+  stroke-width: 9;
+  stroke-linecap: round;
+  shape-rendering: geometricPrecision;
+  filter: none;
+  opacity: 0.98;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--executive .ma-score-ring-core {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: var(--ma-score-ring-core-size, 134px);
+  height: var(--ma-score-ring-core-size, 134px);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--executive .ma-score-ring-figure,
+.main-area[data-workspace='ma'] .page .ma-score-ring--executive .ma-score-ring-core strong {
+  display: block;
+  margin: 0;
+  font-size: calc(42px * var(--ma-score-ring-scale, 0.714));
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ma-val-teal-bright, #5eead4);
+  text-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--executive .ma-score-ring-denom {
+  display: block;
+  margin: 0;
+  font-size: calc(14px * var(--ma-score-ring-scale, 0.714));
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ma-val-teal-dim, rgba(45, 212, 191, 0.72));
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--repository .ma-score-ring-svg,
+.main-area[data-workspace='ma'] .page .ma-repository-score-ring.ma-score-ring--repository .ma-score-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--repository .ma-ref-ring-track-glass,
+.main-area[data-workspace='ma'] .page .ma-repository-score-ring.ma-score-ring--repository .ma-ref-ring-track-glass {
+  stroke: rgba(8, 26, 32, 0.58);
+  stroke-width: calc(16px * var(--ma-score-ring-scale, 1));
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--repository .ma-ref-ring-track,
+.main-area[data-workspace='ma'] .page .ma-repository-score-ring.ma-score-ring--repository .ma-ref-ring-track {
+  stroke: url(#ma-repo-ring-track-grad);
+  stroke-width: calc(16px * var(--ma-score-ring-scale, 1));
+  opacity: 0.71;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--repository .ma-ref-ring-track-edge,
+.main-area[data-workspace='ma'] .page .ma-repository-score-ring.ma-score-ring--repository .ma-ref-ring-track-edge {
+  stroke: rgba(94, 234, 212, 0.1);
+  stroke-width: calc(16.5px * var(--ma-score-ring-scale, 1));
+  opacity: 0.6;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--repository .ma-ref-ring-active,
+.main-area[data-workspace='ma'] .page .ma-repository-score-ring.ma-score-ring--repository .ma-ref-ring-active {
+  stroke: url(#ma-repo-ring-active-grad);
+  stroke-width: calc(16px * var(--ma-score-ring-scale, 1));
+  stroke-linecap: butt;
+  shape-rendering: geometricPrecision;
+  filter: url(#ma-repo-ring-glow);
+  opacity: 0.98;
+}
+
+/* Repository score figure — Dashboard Executive Signal typography (scaled) FINAL / FROZEN */
+.main-area[data-workspace='ma'] .page .ma-score-ring--repository .ma-repository-score-core strong,
+.main-area[data-workspace='ma'] .page .ma-score-ring--repository .ma-repository-score-figure,
+.main-area[data-workspace='ma'] .page .ma-repository-score-ring.ma-score-ring--repository .ma-repository-score-core strong,
+.main-area[data-workspace='ma'] .page .ma-repository-score-ring.ma-score-ring--repository .ma-repository-score-figure {
+  font-size: calc(58px * var(--ma-score-ring-scale, 0.536));
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  color: #f8fafc;
+  text-shadow: 0 0 calc(30px * var(--ma-score-ring-scale, 0.536)) rgba(45, 212, 191, 0.25);
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--repository .ma-repository-score-core strong.is-empty-score,
+.main-area[data-workspace='ma'] .page .ma-score-ring--repository .ma-repository-score-figure.is-empty-score,
+.main-area[data-workspace='ma'] .page .ma-repository-score-ring.ma-score-ring--repository .ma-repository-score-core strong.is-empty-score,
+.main-area[data-workspace='ma'] .page .ma-repository-score-ring.ma-score-ring--repository .ma-repository-score-figure.is-empty-score {
+  color: rgba(226, 232, 240, 0.55);
+  text-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-score-ring--repository::after,
+.main-area[data-workspace='ma'] .page .ma-repository-score-ring.ma-score-ring--repository::after {
+  content: '';
+  position: absolute;
+  inset: calc(-6px * var(--ma-score-ring-scale, 1));
+  border-radius: 50%;
+  border: 1px solid rgba(94, 234, 212, 0.1);
+  opacity: 0.52;
+  pointer-events: none;
+}

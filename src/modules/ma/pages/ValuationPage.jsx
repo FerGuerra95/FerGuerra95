@@ -1,5 +1,4 @@
 ﻿import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Activity,
   AlertTriangle,
@@ -12,7 +11,6 @@ import {
   Zap
 } from 'lucide-react';
 import { Button } from '../../../shared/components/ui/Button.jsx';
-import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { ErrorState } from '../../../shared/components/feedback/ErrorState.jsx';
 import { ProgressBar } from '../../../shared/components/ui/ProgressBar.jsx';
 import {
@@ -34,6 +32,7 @@ import { ComparablesGrid } from '../components/ComparablesGrid.jsx';
 import { MAReportExportButton } from '../components/MAReportExportButton.jsx';
 import { ValuationScenarioFieldVisual } from '../components/ValuationScenarioFieldVisual.jsx';
 import {
+  ValuationAnalyticalBand,
   ValuationBodyGrid,
   ValuationContextStrip,
   ValuationHero,
@@ -318,12 +317,6 @@ export function ValuationPage() {
   return (
     <div className="page">
       <ValuationPageShell>
-        <div className="ma-valuation-nav-crumb">
-          <Link to="/ma/dashboard" className="ma-val-ref-cta-ghost">
-            Back to dashboard
-          </Link>
-        </div>
-
         <ValuationUpperSuite>
         <ValuationHero>
             <div className="ma-val-ref-scene-atmo" aria-hidden="true">
@@ -336,13 +329,6 @@ export function ValuationPage() {
 
             <div className="ma-val-ref-scene-layout">
               <div className="ma-val-ref-scene-intro">
-                <div className="ma-valuation-badges">
-                  {isViewer ? <Badge>Read-only mode</Badge> : null}
-                  {canEditCase ? <Badge>Editing enabled</Badge> : null}
-                  {canCreateCase ? <Badge>Saving enabled</Badge> : null}
-                  {canExportReport ? <Badge>Export enabled</Badge> : null}
-                </div>
-
                 <p className="ma-val-ref-kicker">
                   Private M&A Valuation Cockpit{isViewer ? ' · Read-only' : ''}
                 </p>
@@ -367,13 +353,30 @@ export function ValuationPage() {
                 </p>
 
                 <div className="ma-valuation-actions">
-                  <Button onClick={handleAnalyze} disabled={!canAnalyze}>
-                    <Zap size={16} />
-                    {analysis.isAnalyzing ? 'Processing...' : 'Update valuation'}
-                  </Button>
+                  <div
+                    className="ma-valuation-actions-core"
+                    role="group"
+                    aria-label="Primary valuation actions"
+                  >
+                    <Button onClick={handleAnalyze} disabled={!canAnalyze}>
+                      <Zap size={16} />
+                      {analysis.isAnalyzing ? 'Processing...' : 'Update valuation'}
+                    </Button>
+
+                    {canCreateCase ? (
+                      <Button onClick={handleSaveCase} variant="secondary">
+                        <Save size={16} />
+                        Save deal
+                      </Button>
+                    ) : null}
+                  </div>
 
                   {SHOW_DEMO_TOOLS && canEditCase ? (
-                    <>
+                    <div
+                      className="ma-valuation-actions-demo"
+                      role="group"
+                      aria-label="Demo tools"
+                    >
                       <Button onClick={handleLoadDemoCase} variant="secondary">
                         <Sparkles size={16} />
                         {DEMO_BUTTON_LABELS.ma}
@@ -383,14 +386,7 @@ export function ValuationPage() {
                         <RotateCcw size={16} />
                         {DEMO_RESET_LABELS.ma}
                       </Button>
-                    </>
-                  ) : null}
-
-                  {canCreateCase ? (
-                    <Button onClick={handleSaveCase} variant="secondary">
-                      <Save size={16} />
-                      Save deal
-                    </Button>
+                    </div>
                   ) : null}
 
                   {canExportReport ? (
@@ -480,6 +476,11 @@ export function ValuationPage() {
           <ValuationContextStrip>
             <div className="ma-valuation-command-bar ma-valuation-command-strip ma-valuation-surface" aria-label="Active case strip">
               <CommandItem
+                label="Engine status"
+                value={getEngineStatusLabel(analysis, hasValidationErrors)}
+              />
+
+              <CommandItem
                 label="Active target"
                 value={activeCompanyName}
               />
@@ -487,11 +488,6 @@ export function ValuationPage() {
               <CommandItem
                 label="Cases saved"
                 value={safeSavedCases.length}
-              />
-
-              <CommandItem
-                label="Engine status"
-                value={getEngineStatusLabel(analysis, hasValidationErrors)}
               />
             </div>
 
@@ -536,7 +532,7 @@ export function ValuationPage() {
                 </StateCard>
               </div>
             ) : null}
-        </ValuationContextStrip>
+          </ValuationContextStrip>
         </ValuationUpperSuite>
 
         <ValuationBodyGrid>
@@ -592,6 +588,7 @@ export function ValuationPage() {
                 </section>
 
                 <section className="ma-intelligence-panel ma-valuation-surface">
+                  <div className="ma-ma-panel-ambient" aria-hidden="true" />
                   <div className="ma-panel-header">
                     <div>
                       <div className="ma-kicker">
@@ -647,17 +644,21 @@ export function ValuationPage() {
                     )}
                   </div>
                 </section>
-
-                <ValuationEvidenceLedgerPanel derived={derived} />
-
-                <ComparablesGrid
-                  comparables={derived.comparables}
-                  selectedMultiple={derived.adjustedMultiple}
-                />
               </>
             )}
           </ValuationMainWorkspace>
         </ValuationBodyGrid>
+
+        {analysis.showResults ? (
+          <ValuationAnalyticalBand>
+            <ValuationEvidenceLedgerPanel derived={derived} />
+
+            <ComparablesGrid
+              comparables={derived.comparables}
+              selectedMultiple={derived.adjustedMultiple}
+            />
+          </ValuationAnalyticalBand>
+        ) : null}
       </ValuationPageShell>
     </div>
   );
@@ -694,7 +695,7 @@ function StateCard({ children, tone = 'neutral' }) {
 function formatAnalysisDisplayLabel(label) {
   const displayMap = {
     'Valoración lista': 'Results ready',
-    'Listo para auditoría': 'Ready for audit',
+    'Listo para auditoría': 'Calculation ready',
     'Análisis completado': 'Analysis complete',
     'Caso M&A preparado': 'M&A case prepared',
     'Ingestando metricas financieras y normalizando...': 'Ingesting financial metrics and normalizing...',
@@ -756,3 +757,9 @@ function getReadinessDescription({ canAnalyze, isAnalyzing, hasValidationErrors 
 
   return 'Load target financial data to activate the valuation engine.';
 }
+
+export {
+  formatAnalysisDisplayLabel,
+  getEngineStatusLabel,
+  getReadinessTitle
+};

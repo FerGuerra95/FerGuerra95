@@ -5,12 +5,10 @@ import {
   ArrowRight,
   BarChart3,
   BriefcaseBusiness,
-  CheckCircle2,
   Clock3,
   Filter,
   Globe2,
   Layers3,
-  LockKeyhole,
   RefreshCw,
   Search,
   ShieldCheck,
@@ -19,7 +17,6 @@ import {
   TrendingUp,
   Users
 } from 'lucide-react';
-import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import {
   PERMISSIONS,
@@ -28,8 +25,14 @@ import {
 import { useMAStore } from '../store/maStore.jsx';
 import { maDealsApi } from '../services/maDealsApi.js';
 import { useValuationEngine } from '../engine/useValuationEngine.js';
-import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
-import { ENTERPRISE_MA_PIPELINE_DEALS } from '../../../shared/config/demoData.js';
+import {
+  buildPipelineDeals,
+  getPipelineSummary,
+  pipelineDealExists
+} from '../engine/maPipelineDataset.js';
+import { PipelineOrchestrationNetworkVisual } from '../components/PipelineOrchestrationNetworkVisual.jsx';
+
+export { buildPipelineDeals, getPipelineSummary };
 
 const PIPELINE_STAGES = [
   {
@@ -72,133 +75,62 @@ const PRIORITY_FILTERS = [
   { value: 'build', label: 'Build' }
 ];
 
-const DEMO_PIPELINE_DEALS = ENTERPRISE_MA_PIPELINE_DEALS;
 const pipelineCss = `
+  /* Layout-only. Materials: maPipelineMaterial.css (injected after this block). */
   .ma-pipeline-page {
-    width: min(1540px, 100%);
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 26px;
   }
 
-  .ma-pipeline-hero {
-    position: relative;
-    overflow: hidden;
-    border-radius: 38px;
-    padding: 38px;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    background:
-      radial-gradient(circle at 8% 2%, rgba(37, 99, 235, 0.38), transparent 30%),
-      radial-gradient(circle at 88% 8%, rgba(16, 185, 129, 0.18), transparent 27%),
-      radial-gradient(circle at 60% 110%, rgba(234, 179, 8, 0.08), transparent 30%),
-      linear-gradient(135deg, rgba(2, 6, 23, 0.99), rgba(15, 23, 42, 0.97));
-    box-shadow:
-      0 38px 120px rgba(0, 0, 0, 0.42),
-      inset 0 1px 0 rgba(255, 255, 255, 0.055);
-  }
-
-  .ma-pipeline-hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-    background-size: 50px 50px;
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 82%);
-    pointer-events: none;
-  }
-
-  .ma-pipeline-hero::after {
-    content: "";
-    position: absolute;
-    inset: auto -190px -210px auto;
-    width: 520px;
-    height: 520px;
-    border-radius: 999px;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.13), transparent 70%);
-    pointer-events: none;
-  }
-
   .ma-pipeline-hero-inner {
-    position: relative;
-    z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.65fr);
-    gap: 34px;
-    align-items: stretch;
-  }
-
-  .ma-pipeline-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 24px;
-  }
-
-  .ma-pipeline-title {
-    margin: 0;
-    max-width: 930px;
-    font-size: clamp(42px, 5vw, 72px);
-    line-height: 0.92;
-    letter-spacing: -0.075em;
-  }
-
-  .ma-pipeline-title span {
-    display: block;
-    margin-top: 8px;
-    color: rgba(226, 232, 240, 0.7);
-  }
-
-  .ma-pipeline-copy {
-    max-width: 860px;
-    margin: 26px 0 0;
-    font-size: 17px;
-    line-height: 1.82;
-    color: rgba(203, 213, 225, 0.86);
+    grid-template-columns: minmax(0, 2.08fr) minmax(260px, 1fr);
+    gap: clamp(20px, 2.2vw, 28px) clamp(24px, 2.8vw, 34px);
+    align-items: start;
   }
 
   .ma-pipeline-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 12px 14px;
+    margin-top: 0;
+    align-items: stretch;
+    justify-items: stretch;
+    width: 100%;
+    max-width: none;
+  }
+
+  .ma-pipeline-actions > a,
+  .ma-pipeline-actions > .button {
     display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 34px;
-    padding: 0;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-  }
-
-  .ma-pipeline-actions a {
-    display: inline-flex;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
     text-decoration: none;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
   }
 
-  .ma-pipeline-actions .button {
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.045),
-      0 8px 18px rgba(0,0,0,0.18);
+  .ma-pipeline-actions > a > .button,
+  .ma-pipeline-actions > .button {
+    display: inline-flex;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 44px;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
   }
 
   .ma-pipeline-command-bar {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
-    margin-top: 34px;
-    padding-top: 28px;
-    border-top: 1px solid rgba(148, 163, 184, 0.16);
-  }
-
-  .ma-pipeline-command-item {
-    padding: 18px;
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.078);
+    gap: 12px;
+    margin-top: 36px;
+    padding-top: 0;
+    width: 100%;
+    max-width: none;
   }
 
   .ma-pipeline-command-item strong {
@@ -208,71 +140,11 @@ const pipelineCss = `
     overflow-wrap: anywhere;
   }
 
-  .ma-pipeline-signal-card {
-    position: relative;
-    min-height: 100%;
-    border-radius: 32px;
-    padding: 28px;
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.086), rgba(255,255,255,0.026)),
-      rgba(15, 23, 42, 0.76);
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    backdrop-filter: blur(22px);
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    box-shadow:
-      0 26px 70px rgba(0, 0, 0, 0.24),
-      inset 0 1px 0 rgba(255,255,255,0.05);
-  }
-
-  .ma-pipeline-signal-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 32px;
-    background: radial-gradient(circle at 18% 0%, rgba(96, 165, 250, 0.13), transparent 35%);
-    pointer-events: none;
-  }
-
-  .ma-pipeline-signal-inner {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-  }
-
   .ma-pipeline-signal-top {
     display: flex;
     justify-content: space-between;
     gap: 18px;
     align-items: flex-start;
-  }
-
-  .ma-pipeline-icon-box {
-    flex: 0 0 auto;
-    width: 50px;
-    height: 50px;
-    border-radius: 19px;
-    display: grid;
-    place-items: center;
-    background: rgba(37, 99, 235, 0.16);
-    border: 1px solid rgba(96, 165, 250, 0.24);
-  }
-
-  .ma-pipeline-signal-title {
-    margin-top: 10px;
-    font-size: 23px;
-    line-height: 1.16;
-    letter-spacing: -0.04em;
-  }
-
-  .ma-pipeline-signal-box {
-    border-radius: 25px;
-    padding: 20px;
-    background: rgba(255,255,255,0.047);
-    border: 1px solid rgba(255,255,255,0.085);
   }
 
   .ma-pipeline-signal-box strong {
@@ -291,780 +163,127 @@ const pipelineCss = `
     gap: 18px;
   }
 
-  .ma-pipeline-summary-card {
-    min-height: 154px;
-    border-radius: 30px;
-    padding: 24px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.064), rgba(255,255,255,0.022)),
-      rgba(15, 23, 42, 0.64);
-    box-shadow:
-      0 24px 70px rgba(0, 0, 0, 0.21),
-      inset 0 1px 0 rgba(255,255,255,0.035);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 18px;
-  }
-
   .ma-pipeline-summary-top {
     display: flex;
     justify-content: space-between;
-    gap: 16px;
+    gap: 14px;
     align-items: flex-start;
-  }
-
-  .ma-pipeline-summary-icon {
-    flex: 0 0 auto;
-    width: 44px;
-    height: 44px;
-    border-radius: 17px;
-    display: grid;
-    place-items: center;
-    background: rgba(37, 99, 235, 0.14);
-    border: 1px solid rgba(96, 165, 250, 0.22);
+    margin-bottom: 12px;
   }
 
   .ma-pipeline-summary-card strong {
     display: block;
-    margin-top: 10px;
-    font-size: 25px;
+    margin-top: 6px;
+    font-size: 28px;
     line-height: 1.1;
-    letter-spacing: -0.045em;
-    overflow-wrap: anywhere;
-  }
-
-  .ma-pipeline-summary-card p {
-    margin: 0;
-    line-height: 1.55;
+    letter-spacing: -0.03em;
   }
 
   .ma-pipeline-toolbar {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 220px 220px;
-    gap: 16px;
+    grid-template-columns: minmax(0, 1.4fr) minmax(160px, 0.45fr) minmax(160px, 0.45fr);
+    gap: var(--ma-toolbar-gap, 14px);
     align-items: center;
-    padding: 18px;
-    border-radius: 28px;
-    background:
-      linear-gradient(135deg, rgba(255,255,255,0.058), rgba(255,255,255,0.022)),
-      rgba(15, 23, 42, 0.62);
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    box-shadow:
-      0 20px 56px rgba(0, 0, 0, 0.18),
-      inset 0 1px 0 rgba(255,255,255,0.03);
-  }
-
-  .ma-pipeline-search,
-  .ma-pipeline-select {
-    width: 100%;
-    min-height: 46px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
+    padding: 0 var(--ma-surface-padding-x, 28px);
     border-radius: 18px;
-    background: rgba(2, 6, 23, 0.34);
-    color: rgba(248, 250, 252, 0.92);
-    outline: none;
   }
 
   .ma-pipeline-search {
-    display: grid;
-    grid-template-columns: 42px minmax(0, 1fr);
+    display: flex;
     align-items: center;
+    gap: 10px;
     padding: 0 14px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    min-height: 44px;
   }
 
   .ma-pipeline-search input {
     width: 100%;
     border: 0;
+    outline: none;
     background: transparent;
     color: inherit;
-    outline: none;
     font: inherit;
   }
 
-  .ma-pipeline-search input::placeholder {
-    color: rgba(148, 163, 184, 0.76);
-  }
-
   .ma-pipeline-select {
-    padding: 0 14px;
-  }
-
-  .ma-pipeline-board-shell {
-    position: relative;
-    overflow: hidden;
-    border-radius: 34px;
-    padding: 26px;
-    border: 1px solid rgba(148, 163, 184, 0.17);
-    background:
-      radial-gradient(circle at 4% 0%, rgba(37, 99, 235, 0.18), transparent 30%),
-      radial-gradient(circle at 92% 4%, rgba(16, 185, 129, 0.11), transparent 28%),
-      linear-gradient(135deg, rgba(255,255,255,0.062), rgba(255,255,255,0.024)),
-      rgba(15, 23, 42, 0.68);
-    box-shadow:
-      0 28px 80px rgba(0, 0, 0, 0.24),
-      inset 0 1px 0 rgba(255,255,255,0.04);
-  }
-
-  .ma-pipeline-board-shell::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 44px 44px;
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.82), transparent 90%);
-    pointer-events: none;
-  }
-
-  .ma-pipeline-board-shell > * {
-    position: relative;
-    z-index: 1;
+    width: 100%;
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    color: inherit;
+    font: inherit;
   }
 
   .ma-pipeline-board-header {
     display: flex;
     justify-content: space-between;
     gap: 24px;
-    align-items: flex-end;
+    align-items: flex-start;
     margin-bottom: 20px;
-  }
-
-  .ma-pipeline-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-    font-size: 11px;
-    line-height: 1;
-    text-transform: uppercase;
-    letter-spacing: 0.17em;
-    color: rgba(148, 163, 184, 0.96);
-  }
-
-  .ma-pipeline-board-header h2 {
-    margin: 0;
-    letter-spacing: -0.045em;
-  }
-
-  .ma-pipeline-board-header p {
-    max-width: 820px;
-    margin: 11px 0 0;
-    line-height: 1.68;
   }
 
   .ma-pipeline-board {
     display: grid;
-    grid-template-columns: repeat(6, minmax(240px, 1fr));
-    gap: 15px;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(328px, 348px);
+    gap: 16px;
     align-items: start;
     overflow-x: auto;
-    padding-bottom: 4px;
-  }
-
-  .ma-pipeline-column {
-    min-width: 240px;
-    min-height: 0;
-    height: auto;
-    align-self: start;
-    border-radius: 26px;
-    padding: 16px;
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.026)),
-      rgba(2, 6, 23, 0.25);
-    border: 1px solid rgba(255,255,255,0.082);
+    padding-bottom: 8px;
   }
 
   .ma-pipeline-column-header {
     display: flex;
     justify-content: space-between;
-    gap: 14px;
+    gap: 12px;
     align-items: flex-start;
-    padding-bottom: 14px;
-    margin-bottom: 14px;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
   }
 
-  .ma-pipeline-column-header strong {
-    display: block;
-    line-height: 1.2;
-  }
-
-  .ma-pipeline-column-header p {
-    margin: 7px 0 0;
-    font-size: 12px;
-    line-height: 1.45;
-  }
-
-  .ma-pipeline-count {
-    flex: 0 0 auto;
-    min-width: 34px;
-    height: 34px;
-    padding: 0 10px;
-    border-radius: 999px;
-    display: grid;
-    place-items: center;
-    color: #dbeafe;
-    background: rgba(37, 99, 235, 0.17);
-    border: 1px solid rgba(96, 165, 250, 0.24);
-    font-size: 12px;
-    font-weight: 850;
-  }
-
-  .ma-pipeline-card-list {
+  .ma-pipeline-deal-list {
     display: flex;
     flex-direction: column;
-    gap: 13px;
+    gap: 12px;
   }
 
-  .ma-deal-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 23px;
-    padding: 18px 18px 18px 22px;
-    background:
-      radial-gradient(circle at 100% 0%, rgba(37,99,235,0.11), transparent 34%),
-      linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.027)),
-      rgba(15, 23, 42, 0.64);
-    border: 1px solid rgba(255,255,255,0.092);
-    box-shadow:
-      0 16px 42px rgba(0, 0, 0, 0.18),
-      inset 0 1px 0 rgba(255,255,255,0.04);
-    transition:
-      transform .18s ease,
-      border-color .18s ease,
-      background .18s ease;
-  }
-
-  .ma-deal-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(96, 165, 250, 0.25);
-    background:
-      radial-gradient(circle at 100% 0%, rgba(37,99,235,0.16), transparent 34%),
-      linear-gradient(135deg, rgba(255,255,255,0.082), rgba(255,255,255,0.035)),
-      rgba(15, 23, 42, 0.78);
-  }
-
-  .ma-deal-card::before {
-    display: none !important;
-    content: none !important;
-  }
-
-  .ma-deal-card::after {
-    content: "";
-    position: absolute;
-    z-index: 0;
-    inset: auto;
-    right: -52px;
-    bottom: -60px;
-    left: auto;
-    top: auto;
-    width: 140px;
-    height: 140px;
-    border-radius: 999px;
-    background: rgba(37, 99, 235, 0.08);
-    pointer-events: none;
-    opacity: 1;
-  }
-
-  .ma-deal-card-top {
-    position: relative;
-    z-index: 1;
+  .ma-deal-record-head {
     display: flex;
     justify-content: space-between;
     gap: 12px;
     align-items: flex-start;
   }
 
-  .ma-deal-card h3 {
-    position: relative;
-    z-index: 2;
-    margin: 0;
-    padding-left: 1px;
-    font-size: 16px;
-    line-height: 1.22;
-    letter-spacing: -0.02em;
-    overflow-wrap: anywhere;
-  }
-
-  .ma-deal-priority {
-    flex: 0 0 auto;
-    padding: 7px 9px;
-    border-radius: 999px;
-    color: #dbeafe;
-    background: rgba(37, 99, 235, 0.16);
-    border: 1px solid rgba(96, 165, 250, 0.22);
-    font-size: 10px;
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .ma-deal-priority.high {
-    color: #bbf7d0;
-    background: rgba(16, 185, 129, 0.13);
-    border-color: rgba(16, 185, 129, 0.24);
-  }
-
-  .ma-deal-priority.review {
-    color: #dbeafe;
-    background: rgba(37, 99, 235, 0.16);
-    border-color: rgba(96, 165, 250, 0.22);
-  }
-
-  .ma-deal-priority.watch,
-  .ma-deal-priority.build {
-    color: #fde68a;
-    background: rgba(234, 179, 8, 0.12);
-    border-color: rgba(234, 179, 8, 0.22);
-  }
-
   .ma-deal-meta {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    gap: 9px;
     margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .ma-deal-meta-row {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
-    align-items: center;
-    color: rgba(203, 213, 225, 0.82);
-    font-size: 12px;
-  }
-
-  .ma-deal-meta-row span {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-  }
-
-  .ma-deal-meta-row strong {
-    color: rgba(248,250,252,0.94);
-    text-align: right;
+    gap: 10px;
+    align-items: baseline;
   }
 
   .ma-deal-footer {
-    position: relative;
-    z-index: 1;
+    margin-top: 14px;
+    padding-top: 12px;
     display: flex;
     justify-content: space-between;
-    gap: 12px;
     align-items: center;
-    margin-top: 15px;
-    padding-top: 14px;
-    border-top: 1px solid rgba(148, 163, 184, 0.13);
+    gap: 10px;
   }
 
   .ma-deal-owner {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    color: rgba(203, 213, 225, 0.82);
-    font-size: 12px;
-  }
-
-  .ma-deal-open {
-    width: 34px;
-    height: 34px;
-    border-radius: 14px;
-    display: grid;
-    place-items: center;
-    color: inherit;
-    text-decoration: none;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-
-  .ma-pipeline-empty {
-    min-height: 0;
-    border-radius: 18px;
-    padding: 14px 16px;
-    display: grid;
-    place-items: center;
-    text-align: center;
-    color: rgba(203, 213, 225, 0.7);
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(148, 163, 184, 0.12);
-  }
-
-  .ma-pipeline-empty strong {
-    display: block;
-    margin-bottom: 6px;
-    color: rgba(226, 232, 240, 0.9);
-  }
-
-  .ma-pipeline-empty p {
-    margin: 0;
-    font-size: 12px;
-    line-height: 1.45;
-  }
-
-
-  /* M&A PIPELINE · PREMIUM DEAL GLASS SYSTEM */
-  .ma-pipeline-page {
-    --ma-branch-a: 16, 185, 129;
-    --ma-branch-b: 37, 99, 235;
-    --ma-branch-c: 167, 243, 208;
-    --ma-branch-glow: 16, 185, 129;
-  }
-
-  .ma-pipeline-hero,
-  .ma-pipeline-signal-card,
-  .ma-pipeline-command-item,
-  .ma-pipeline-signal-box,
-  .ma-pipeline-summary-card,
-  .ma-pipeline-toolbar,
-  .ma-pipeline-search,
-  .ma-pipeline-board-shell,
-  .ma-pipeline-column,
-  .ma-deal-card,
-  .ma-pipeline-empty,
-  .ma-pipeline-count,
-  .ma-deal-open {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    border-color: rgba(255,255,255,0.026) !important;
-    background:
-      radial-gradient(circle at 0% 0%, rgba(var(--ma-branch-a), 0.148), transparent 36%),
-      radial-gradient(circle at 100% 8%, rgba(var(--ma-branch-b), 0.104), transparent 42%),
-      linear-gradient(
-        115deg,
-        rgba(var(--ma-branch-a), 0.088) 0%,
-        rgba(255,255,255,0.016) 44%,
-        rgba(var(--ma-branch-b), 0.064) 100%
-      ),
-      rgba(15, 23, 42, 0.58) !important;
-    box-shadow:
-      0 28px 82px rgba(0, 0, 0, 0.30),
-      0 0 42px rgba(var(--ma-branch-glow), 0.120),
-      inset 0 1px 0 rgba(255,255,255,0.065),
-      inset 1px 0 0 rgba(var(--ma-branch-a), 0.085),
-      inset -1px 0 0 rgba(var(--ma-branch-b), 0.070) !important;
-    backdrop-filter: blur(22px) saturate(138%);
-    -webkit-backdrop-filter: blur(22px) saturate(138%);
-  }
-
-  .ma-pipeline-select {
-    background:
-      linear-gradient(
-        135deg,
-        rgba(var(--ma-branch-a), 0.055),
-        rgba(var(--ma-branch-b), 0.032)
-      ),
-      rgba(2, 6, 23, 0.58) !important;
-    border-color: rgba(var(--ma-branch-a), 0.135) !important;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.045),
-      0 0 18px rgba(var(--ma-branch-glow), 0.050) !important;
-  }
-
-  .ma-pipeline-hero::before,
-  .ma-pipeline-signal-card::before,
-  .ma-pipeline-command-item::before,
-  .ma-pipeline-signal-box::before,
-  .ma-pipeline-summary-card::before,
-  .ma-pipeline-toolbar::before,
-  .ma-pipeline-search::before,
-  .ma-pipeline-board-shell::before,
-  .ma-pipeline-column::before,
-  .ma-pipeline-empty::before,
-  .ma-pipeline-count::before,
-  .ma-deal-open::before {
-    content: "";
-    position: absolute;
-    inset: -30%;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(circle at 0% 10%, rgba(var(--ma-branch-a), 0.145), transparent 34%),
-      radial-gradient(circle at 100% 8%, rgba(var(--ma-branch-b), 0.120), transparent 38%),
-      radial-gradient(circle at 54% 120%, rgba(255,255,255,0.040), transparent 42%);
-    filter: blur(28px);
-    opacity: 0.68;
-    mix-blend-mode: screen;
-  }
-
-  .ma-pipeline-hero::after,
-  .ma-pipeline-signal-card::after,
-  .ma-pipeline-command-item::after,
-  .ma-pipeline-signal-box::after,
-  .ma-pipeline-summary-card::after,
-  .ma-pipeline-toolbar::after,
-  .ma-pipeline-search::after,
-  .ma-pipeline-board-shell::after,
-  .ma-pipeline-column::after,
-  .ma-pipeline-empty::after,
-  .ma-pipeline-count::after,
-  .ma-deal-open::after {
-    content: "";
-    position: absolute;
-    inset: 1px;
-    z-index: 0;
-    pointer-events: none;
-    border-radius: inherit;
-    background:
-      linear-gradient(
-        135deg,
-        rgba(255,255,255,0.080),
-        rgba(255,255,255,0.014) 32%,
-        transparent 58%,
-        rgba(255,255,255,0.024) 100%
-      );
-    opacity: 0.36;
-  }
-
-  .ma-pipeline-hero > *,
-  .ma-pipeline-signal-card > *,
-  .ma-pipeline-command-item > *,
-  .ma-pipeline-signal-box > *,
-  .ma-pipeline-summary-card > *,
-  .ma-pipeline-toolbar > *,
-  .ma-pipeline-search > *,
-  .ma-pipeline-board-shell > *,
-  .ma-pipeline-column > *,
-  .ma-deal-card > *,
-  .ma-pipeline-empty > *,
-  .ma-pipeline-count > *,
-  .ma-deal-open > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  .ma-pipeline-command-item:hover,
-  .ma-pipeline-summary-card:hover,
-  .ma-pipeline-signal-box:hover,
-  .ma-pipeline-column:hover,
-  .ma-deal-card:hover,
-  .ma-pipeline-empty:hover,
-  .ma-deal-open:hover {
-    transform: translateY(-3px);
-    border-color: rgba(var(--ma-branch-c), 0.18) !important;
-    box-shadow:
-      0 34px 96px rgba(0, 0, 0, 0.36),
-      0 0 54px rgba(var(--ma-branch-glow), 0.165),
-      inset 0 1px 0 rgba(255,255,255,0.080),
-      inset 1px 0 0 rgba(var(--ma-branch-a), 0.105),
-      inset -1px 0 0 rgba(var(--ma-branch-b), 0.085) !important;
-  }
-
-  .ma-pipeline-summary-grid {
-    gap: clamp(22px, 1.7vw, 30px);
-  }
-
-  .ma-pipeline-board {
-    gap: 20px;
-  }
-
-  .ma-pipeline-card-list {
-    gap: 16px;
-  }
-
-  .ma-pipeline-column {
-    padding: 16px;
-    min-height: 0;
-    height: auto;
-  }
-
-  .ma-pipeline-column-header {
-    border-bottom-color: rgba(var(--ma-branch-a), 0.110) !important;
-  }
-
-  .ma-pipeline-summary-icon,
-  .ma-pipeline-icon-box,
-  .ma-pipeline-count,
-  .ma-deal-open {
-    background:
-      linear-gradient(
-        135deg,
-        rgba(var(--ma-branch-a), 0.16),
-        rgba(var(--ma-branch-b), 0.09)
-      ) !important;
-    border-color: rgba(var(--ma-branch-a), 0.22) !important;
-    box-shadow:
-      0 0 18px rgba(var(--ma-branch-glow), 0.14),
-      inset 0 1px 0 rgba(255,255,255,0.070) !important;
-  }
-
-  .ma-deal-priority {
-    border-color: rgba(var(--ma-branch-a), 0.24) !important;
-    background:
-      linear-gradient(
-        90deg,
-        rgba(var(--ma-branch-a), 0.145),
-        rgba(var(--ma-branch-b), 0.080)
-      ) !important;
-    box-shadow: 0 0 16px rgba(var(--ma-branch-glow), 0.10);
-  }
-
-  .ma-deal-priority.high {
-    color: #bbf7d0;
-    background:
-      linear-gradient(
-        90deg,
-        rgba(16, 185, 129, 0.18),
-        rgba(37, 99, 235, 0.075)
-      ) !important;
-    border-color: rgba(16, 185, 129, 0.26) !important;
-  }
-
-  .ma-deal-priority.review {
-    color: #dbeafe;
-    background:
-      linear-gradient(
-        90deg,
-        rgba(37, 99, 235, 0.17),
-        rgba(16, 185, 129, 0.070)
-      ) !important;
-    border-color: rgba(96, 165, 250, 0.24) !important;
-  }
-
-  .ma-deal-priority.watch,
-  .ma-deal-priority.build {
-    color: #fde68a;
-    background:
-      linear-gradient(
-        90deg,
-        rgba(234, 179, 8, 0.14),
-        rgba(16, 185, 129, 0.060)
-      ) !important;
-    border-color: rgba(234, 179, 8, 0.24) !important;
-  }
-
-  .ma-pipeline-search input,
-  .ma-pipeline-select {
-    color: rgba(248, 250, 252, 0.94) !important;
-  }
-
-  .ma-pipeline-search svg,
-  .ma-pipeline-kicker svg,
-  .ma-deal-meta-row svg,
-  .ma-deal-owner svg {
-    filter: drop-shadow(0 0 8px rgba(var(--ma-branch-glow), 0.14));
-  }
-
-  .ma-pipeline-title,
-  .ma-pipeline-signal-title,
-  .ma-pipeline-summary-card strong,
-  .ma-pipeline-board-header h2,
-  .ma-deal-card h3,
-  .ma-deal-meta-row strong {
-    text-shadow:
-      0 0 14px rgba(var(--ma-branch-glow), 0.115);
-  }
-
-  .ma-deal-footer {
-    border-top-color: rgba(var(--ma-branch-a), 0.110) !important;
-  }
-
-  .ma-pipeline-empty {
-    border-style: solid !important;
-    color: rgba(203, 213, 225, 0.78);
-  }
-
-  .ma-pipeline-board::-webkit-scrollbar {
-    height: 10px;
-  }
-
-  .ma-pipeline-board::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.035);
-    border-radius: 999px;
-  }
-
-  .ma-pipeline-board::-webkit-scrollbar-thumb {
-    background:
-      linear-gradient(
-        90deg,
-        rgba(var(--ma-branch-a), 0.55),
-        rgba(var(--ma-branch-b), 0.42)
-      );
-    border-radius: 999px;
-  }
-
-  .ma-pipeline-page :is(
-    .ma-pipeline-hero,
-    .ma-pipeline-summary-card,
-    .ma-pipeline-board-wrap,
-    .ma-pipeline-column,
-    .ma-deal-card,
-    .ma-pipeline-empty,
-    .ma-pipeline-panel,
-    .ma-pipeline-card,
-    .card,
-    .panel
-  ) {
-    background: rgba(15, 23, 42, 0.72) !important;
-    background-image: none !important;
-    border-color: rgba(148, 163, 184, 0.14) !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    filter: none !important;
-    transform: none !important;
-  }
-
-  .ma-pipeline-page :is(
-    .ma-pipeline-hero,
-    .ma-pipeline-summary-card,
-    .ma-pipeline-board-wrap,
-    .ma-pipeline-column,
-    .ma-deal-card,
-    .ma-pipeline-empty,
-    .ma-pipeline-panel,
-    .ma-pipeline-card
-  )::before,
-  .ma-pipeline-page :is(
-    .ma-pipeline-hero,
-    .ma-pipeline-summary-card,
-    .ma-pipeline-board-wrap,
-    .ma-pipeline-column,
-    .ma-deal-card,
-    .ma-pipeline-empty,
-    .ma-pipeline-panel,
-    .ma-pipeline-card
-  )::after {
-    content: none !important;
-    display: none !important;
-  }
-
-  .ma-pipeline-page :is(
-    .ma-pipeline-hero-inner,
-    .ma-pipeline-summary-grid,
-    .ma-pipeline-board,
-    .ma-pipeline-card-list,
-    .ma-deal-meta,
-    .ma-deal-footer,
-    .ma-pipeline-controls
-  ) {
-    background: transparent !important;
-    background-image: none !important;
-    box-shadow: none !important;
-  }
-
-  .ma-pipeline-page :is(
-    .ma-pipeline-title,
-    .ma-pipeline-signal-title,
-    .ma-pipeline-summary-card strong,
-    .ma-pipeline-board-header h2,
-    .ma-deal-card h3,
-    .ma-deal-meta-row strong,
-    .ma-pipeline-kicker,
-    .kpi-label
-  ) {
-    letter-spacing: 0 !important;
-    text-shadow: none !important;
-  }
-
-  @media (max-width: 1400px) {
-    .ma-pipeline-board {
-      grid-template-columns: repeat(6, 260px);
-    }
+    gap: 6px;
   }
 
   @media (max-width: 1180px) {
@@ -1082,23 +301,10 @@ const pipelineCss = `
   }
 
   @media (max-width: 680px) {
-    .ma-pipeline-page {
-      gap: 26px;
-    }
-
-    .ma-pipeline-hero,
-    .ma-pipeline-board-shell {
-      padding: 24px;
-      border-radius: 28px;
-    }
-
-    .ma-pipeline-summary-grid {
+    .ma-pipeline-summary-grid,
+    .ma-pipeline-command-bar,
+    .ma-pipeline-actions {
       grid-template-columns: 1fr;
-    }
-
-    .ma-pipeline-board-header {
-      align-items: flex-start;
-      flex-direction: column;
     }
   }
 `;
@@ -1134,7 +340,7 @@ export function DealPipelinePage() {
     try {
       setBackendDeals(await maDealsApi.list());
     } catch (error) {
-      setPipelineError(error.message || 'No se pudo cargar el pipeline backend.');
+      setPipelineError(error.message || 'No se pudo cargar el pipeline.');
       setBackendDeals([]);
     } finally {
       setIsBackendLoading(false);
@@ -1171,6 +377,12 @@ export function DealPipelinePage() {
   const pipelineSummary = getPipelineSummary(filteredDeals, reportCurrency);
   const totalSummary = getPipelineSummary(pipelineDeals, reportCurrency);
 
+  /* One board column only: stage holding highest priorityTone in current view. */
+  const executiveFocusStageId = useMemo(
+    () => resolveExecutiveFocusStageId(filteredDeals, pipelineDeals),
+    [filteredDeals, pipelineDeals]
+  );
+
   async function handleSyncPipeline() {
     if (!canCreateDeal || isSyncingPipeline) return;
 
@@ -1178,11 +390,8 @@ export function DealPipelinePage() {
     setPipelineError('');
 
     try {
-      const existingNames = new Set(
-        backendDeals.map((deal) => String(deal.name || '').toLowerCase())
-      );
       const candidates = pipelineDeals
-        .filter((deal) => !existingNames.has(String(deal.name || '').toLowerCase()))
+        .filter((deal) => !pipelineDealExists(backendDeals, deal))
         .slice(0, 6);
 
       for (const deal of candidates) {
@@ -1201,34 +410,43 @@ export function DealPipelinePage() {
     <div className="page">
       <style>{pipelineCss}</style>
 
-      <div className="ma-pipeline-page">
-        <section className="ma-pipeline-hero">
-          <div className="ma-pipeline-hero-inner">
-            <div>
-              <div className="ma-pipeline-badges">
-                <Badge>M&A Deal Pipeline</Badge>
-                <Badge>Enterprise Board</Badge>
-                {isViewer ? <Badge>Modo solo lectura</Badge> : null}
-                {canEditCases ? <Badge>Edición permitida</Badge> : null}
-                {canExportReports ? <Badge>Reporting permitido</Badge> : null}
-                {backendDeals.length > 0 ? <Badge>Backend pipeline</Badge> : null}
-              </div>
+      <div className="ma-executive-page ma-pipeline-page ma-pipeline-premium">
+        <section className="ma-pipeline-hero" aria-labelledby="ma-pipeline-title">
+          <div className="ma-pipeline-scene-atmo" aria-hidden="true">
+            <div className="ma-pipeline-scene-glow" />
+            <div className="ma-pipeline-scene-mesh" />
+          </div>
 
-              <h1 className="ma-pipeline-title">
-                M&A Deal Pipeline.
-                <span>From screening to closing discipline.</span>
+          <div className="ma-pipeline-hero-inner ma-valuation-surface">
+            <div className="ma-pipeline-scene-intro">
+              <p className="ma-pipeline-kicker-hero">M&A Execution Board</p>
+
+              <h1 id="ma-pipeline-title" className="ma-pipeline-title">
+                <span className="ma-pipeline-title-line">M&A Deal Pipeline</span>
               </h1>
+
+              <p className="ma-val-ref-subtitle ma-pipeline-title-sub">
+                From screening to closing discipline.
+              </p>
 
               <p className="ma-pipeline-copy">
                 Vista enterprise para seguir operaciones por fase, prioridad,
-                valor potencial, riesgo, responsable y siguiente paso. Esta
-                versión SaaS usa entidad backend `ma_deals`, audit trail,
-                permisos por rol y fallback visual desde casos guardados si el
-                pipeline real aun no tiene operaciones.
+                valor potencial, riesgo, responsable y siguiente paso. El
+                tablero sincroniza el pipeline operativo, conserva continuidad
+                de casos guardados y mantiene permisos, audit trail y revisión
+                humana.
               </p>
 
+              <p className="ma-val-ref-dss muted ma-pipeline-hero-post-band" aria-hidden="true">
+                {'\u200b'}
+              </p>
+
+              <div className="ma-pipeline-execution-map" aria-hidden="true">
+                <PipelineOrchestrationNetworkVisual />
+              </div>
+
               <div className="ma-pipeline-actions">
-                <Link to="/ma/valuation">
+                <Link to="/ma/valuation" className="ma-pipeline-cta-primary">
                   <Button>
                     <BarChart3 size={16} />
                     Abrir Valuation Engine
@@ -1275,10 +493,10 @@ export function DealPipelinePage() {
                   label="Data posture"
                   value={
                     backendDeals.length > 0
-                      ? 'ma_deals backend'
+                      ? 'Synchronized deal pipeline'
                       : isBackendLoading
-                        ? 'Loading backend'
-                        : 'Generated fallback'
+                        ? 'Loading pipeline'
+                        : 'Saved deal continuity'
                   }
                 />
               </div>
@@ -1286,14 +504,17 @@ export function DealPipelinePage() {
               {pipelineError ? (
                 <div className="ma-pipeline-empty" style={{ marginTop: 18 }}>
                   <div>
-                    <strong>Pipeline backend notice</strong>
+                    <strong>Pipeline notice</strong>
                     <p>{pipelineError}</p>
                   </div>
                 </div>
               ) : null}
             </div>
 
-            <aside className="ma-pipeline-signal-card">
+            <aside
+              className="ma-pipeline-signal-card ma-valuation-status-card ma-valuation-surface"
+              aria-label="Pipeline signal"
+            >
               <div className="ma-pipeline-signal-inner">
                 <div className="ma-pipeline-signal-top">
                   <div>
@@ -1303,8 +524,9 @@ export function DealPipelinePage() {
                     </div>
                   </div>
 
-                  <div className="ma-pipeline-icon-box">
-                    <Sparkles size={21} />
+                  <div className="ma-pipeline-icon-box ma-valuation-icon-box" aria-hidden="true">
+                    <span className="ma-pipeline-signal-live" />
+                    <Sparkles size={18} strokeWidth={1.6} />
                   </div>
                 </div>
 
@@ -1316,26 +538,28 @@ export function DealPipelinePage() {
                   </p>
                 </div>
 
-                <SignalRow
-                  label="Total pipeline value"
-                  value={totalSummary.totalEquityLabel}
-                />
+                <div className="ma-pipeline-signal-list">
+                  <SignalRow
+                    label="Total pipeline value"
+                    value={totalSummary.totalEquityLabel}
+                  />
 
-                <SignalRow
-                  label="Active stages"
-                  value={totalSummary.activeStages}
-                />
+                  <SignalRow
+                    label="Active stages"
+                    value={totalSummary.activeStages}
+                  />
 
-                <SignalRow
-                  label="Priority posture"
-                  value={totalSummary.priorityLabel}
-                />
+                  <SignalRow
+                    label="Priority posture"
+                    value={totalSummary.priorityLabel}
+                  />
+                </div>
               </div>
             </aside>
           </div>
         </section>
 
-        <section className="ma-pipeline-summary-grid">
+        <section className="ma-pipeline-summary-grid" aria-label="Pipeline summary">
           <SummaryCard
             label="Deals visibles"
             value={pipelineSummary.totalDeals}
@@ -1401,7 +625,7 @@ export function DealPipelinePage() {
           </select>
         </section>
 
-        <section className="ma-pipeline-board-shell">
+        <section className="ma-pipeline-board-shell ma-valuation-surface">
           <div className="ma-pipeline-board-header">
             <div>
               <div className="ma-pipeline-kicker">
@@ -1412,17 +636,14 @@ export function DealPipelinePage() {
               <h2>Pipeline por fases</h2>
 
               <p className="muted">
-                Board ejecutivo de operaciones sobre entidad `ma_deals`.
+                Board ejecutivo de operaciones del pipeline sincronizado.
                 Cada tarjeta puede evolucionar con owner, permisos, audit
                 trail, data room e IC memo.
               </p>
             </div>
 
-            <Link to="/ma/dashboard">
-              <Button variant="secondary">
-                <ArrowRight size={16} />
-                Volver al dashboard
-              </Button>
+            <Link to="/ma/dashboard" className="ma-val-ref-cta-ghost">
+              Volver al dashboard
             </Link>
           </div>
 
@@ -1437,6 +658,7 @@ export function DealPipelinePage() {
                   key={stage.id}
                   stage={stage}
                   deals={stageDeals}
+                  executiveFocus={stage.id === executiveFocusStageId}
                 />
               );
             })}
@@ -1449,7 +671,7 @@ export function DealPipelinePage() {
 
 function CommandItem({ label, value }) {
   return (
-    <div className="ma-pipeline-command-item">
+    <div className="ma-pipeline-command-item ma-valuation-surface">
       <div className="kpi-label">{label}</div>
       <strong>{value}</strong>
     </div>
@@ -1458,7 +680,7 @@ function CommandItem({ label, value }) {
 
 function SignalRow({ label, value }) {
   return (
-    <div className="ma-pipeline-command-item">
+    <div className="ma-pipeline-signal-row">
       <div className="kpi-label">{label}</div>
       <strong>{value}</strong>
     </div>
@@ -1467,15 +689,15 @@ function SignalRow({ label, value }) {
 
 function SummaryCard({ label, value, description, icon: Icon }) {
   return (
-    <article className="ma-pipeline-summary-card">
+    <article className="ma-pipeline-summary-card ma-valuation-surface">
       <div className="ma-pipeline-summary-top">
         <div>
           <div className="kpi-label">{label}</div>
           <strong>{value}</strong>
         </div>
 
-        <div className="ma-pipeline-summary-icon">
-          <Icon size={18} />
+        <div className="ma-pipeline-summary-icon ma-valuation-icon-box" aria-hidden="true">
+          <Icon size={18} strokeWidth={1.5} />
         </div>
       </div>
 
@@ -1484,9 +706,16 @@ function SummaryCard({ label, value, description, icon: Icon }) {
   );
 }
 
-function PipelineColumn({ stage, deals }) {
+function PipelineColumn({ stage, deals, executiveFocus = false }) {
   return (
-    <section className="ma-pipeline-column">
+    <section
+      className={
+        executiveFocus
+          ? 'ma-pipeline-column is-executive-focus'
+          : 'ma-pipeline-column'
+      }
+      data-executive-focus={executiveFocus ? 'true' : undefined}
+    >
       <div className="ma-pipeline-column-header">
         <div>
           <strong>{stage.label}</strong>
@@ -1496,7 +725,7 @@ function PipelineColumn({ stage, deals }) {
         <div className="ma-pipeline-count">{deals.length}</div>
       </div>
 
-      <div className="ma-pipeline-card-list">
+      <div className="ma-pipeline-deal-list">
         {deals.length > 0 ? (
           deals.map((deal) => (
             <PipelineDealCard key={deal.id} deal={deal} />
@@ -1517,10 +746,14 @@ function PipelineColumn({ stage, deals }) {
 function PipelineDealCard({ deal }) {
   return (
     <article className="ma-deal-card">
-      <div className="ma-deal-card-top">
-        <div>
+      {/* Dashboard left ambient + top hairline accent (board deal cards) */}
+      <div className="ma-ma-panel-ambient" aria-hidden="true" />
+      <div className="ma-deal-top-accent" aria-hidden="true" />
+
+      <div className="ma-deal-record-head">
+        <div className="ma-deal-record-title">
           <h3>{deal.name}</h3>
-          <p className="muted" style={{ marginTop: 8, marginBottom: 0 }}>
+          <p className="muted ma-deal-record-sector">
             {deal.sector}
           </p>
         </div>
@@ -1619,136 +852,6 @@ function filterPipelineDeals({
   });
 }
 
-function buildPipelineDeals({
-  financials,
-  derived,
-  savedCases,
-  backendDeals,
-  currency
-}) {
-  const serverDeals = normalizeBackendDeals(backendDeals, currency);
-  const deals = serverDeals.length > 0
-    ? [...serverDeals]
-    : DEMO_PIPELINE_DEALS.map((demoDeal) => ({
-        ...demoDeal,
-        equityLabel: formatCurrency(demoDeal.equityValue, currency),
-        href: `/ma/deal/${demoDeal.id}`
-      }));
-
-  if (hasSufficientDealData(financials, derived)) {
-    const activeScore = getSafeQualityScore(derived?.qualityScore);
-    const equityValue = Number(derived?.equityBase);
-
-    deals.push({
-      id: 'active-deal',
-      name: financials?.name?.trim() || 'Active Target',
-      sector: financials?.sector || 'Sector not specified',
-      market:
-        financials?.country ||
-        financials?.market ||
-        financials?.geography ||
-        'Primary market',
-      stageId: getStageFromScore(activeScore),
-      equityValue: Number.isFinite(equityValue) ? equityValue : 0,
-      equityLabel: Number.isFinite(equityValue)
-        ? formatCurrency(equityValue, currency)
-        : 'N/A',
-      riskLabel:
-        derived?.riskLevel?.label ||
-        derived?.riskLevel ||
-        getRiskLabelFromScore(activeScore),
-      priority: getPriorityLabel(activeScore),
-      priorityTone: getPriorityTone(activeScore),
-      owner: 'CEO workspace',
-      updatedLabel: 'Live case',
-      href: '/ma/deal/active-deal'
-    });
-  }
-
-  const savedDealItems = Array.isArray(savedCases) ? savedCases : [];
-
-  savedDealItems.slice(0, 12).forEach((item, index) => {
-    const name = item?.name || `Saved Deal ${index + 1}`;
-    const dealId = item?.id || `saved-deal-${index + 1}`;
-    const alreadyExists = deals.some((deal) => deal.name === name);
-
-    if (alreadyExists) return;
-
-    const snapshot = item?.snapshot || {};
-    const score = getSafeQualityScore(snapshot?.qualityScore);
-    const equityValue = Number(snapshot?.equityBase);
-    const createdAt = item?.updatedAt || item?.createdAt;
-
-    deals.push({
-      id: dealId,
-      name,
-      sector: item?.financials?.sector || 'Saved case',
-      market:
-        item?.financials?.country ||
-        item?.financials?.market ||
-        item?.financials?.geography ||
-        'Repository',
-      stageId: getSavedDealStage(index, score),
-      equityValue: Number.isFinite(equityValue) ? equityValue : 0,
-      equityLabel: Number.isFinite(equityValue)
-        ? formatCurrency(equityValue, currency)
-        : 'N/A',
-      riskLabel: snapshot?.riskLevel || getRiskLabelFromScore(score),
-      priority: getPriorityLabel(score),
-      priorityTone: getPriorityTone(score),
-      owner: 'Repository',
-      updatedLabel: formatShortDate(createdAt),
-      href: `/ma/deal/${dealId}`
-    });
-  });
-  if (serverDeals.length > 0) {
-    return deals;
-  }
-
-  DEMO_PIPELINE_DEALS.forEach((demoDeal) => {
-    const alreadyExists = deals.some(
-      (deal) => deal.id === demoDeal.id || deal.name === demoDeal.name
-    );
-
-    if (alreadyExists) return;
-
-    deals.push({
-      ...demoDeal,
-      equityLabel: formatCurrency(demoDeal.equityValue, currency),
-      href: `/ma/deal/${demoDeal.id}`
-    });
-  });
-
-  return deals;
-}
-
-function normalizeBackendDeals(backendDeals = [], currency = 'EUR') {
-  if (!Array.isArray(backendDeals)) return [];
-
-  return backendDeals.filter(Boolean).map((deal) => {
-    const equityValue = Number(deal.equityValue);
-    const priorityTone = normalizePriorityTone(deal.priority);
-
-    return {
-      id: deal.id,
-      name: deal.name || 'M&A Deal',
-      sector: deal.sector || deal.payload?.sector || 'Enterprise deal',
-      market: deal.market || deal.payload?.market || 'Private pipeline',
-      stageId: deal.stage || 'screening',
-      equityValue: Number.isFinite(equityValue) ? equityValue : 0,
-      equityLabel: Number.isFinite(equityValue)
-        ? formatCurrency(equityValue, currency)
-        : 'N/A',
-      riskLabel: normalizeRiskLabel(deal.riskLevel),
-      priority: getPriorityLabelFromTone(priorityTone),
-      priorityTone,
-      owner: deal.ownerName || 'Deal owner',
-      updatedLabel: formatShortDate(deal.updatedAt || deal.createdAt),
-      href: `/ma/deal/${deal.caseId || deal.id}`
-    };
-  });
-}
-
 function toBackendDealPayload(deal) {
   return {
     name: deal.name,
@@ -1764,31 +867,13 @@ function toBackendDealPayload(deal) {
     equityValue: deal.equityValue || 0,
     payload: {
       source: 'pipeline_sync',
-      originalId: deal.id,
+      originalId: deal.originalId || deal.id,
+      caseId: deal.caseId || '',
       equityValue: deal.equityValue || 0,
       sector: deal.sector,
       market: deal.market
     }
   };
-}
-
-function normalizePriorityTone(value) {
-  const normalized = String(value || '').toLowerCase();
-
-  if (['high', 'review', 'watch', 'build'].includes(normalized)) return normalized;
-  if (normalized === 'low') return 'watch';
-
-  return 'review';
-}
-
-function getPriorityLabelFromTone(value) {
-  const tone = normalizePriorityTone(value);
-
-  if (tone === 'high') return 'High';
-  if (tone === 'watch') return 'Watch';
-  if (tone === 'build') return 'Build';
-
-  return 'Review';
 }
 
 function normalizeRiskValue(value) {
@@ -1802,128 +887,80 @@ function normalizeRiskValue(value) {
   return 'medium';
 }
 
-function normalizeRiskLabel(value) {
-  const normalized = normalizeRiskValue(value);
-
-  if (normalized === 'controlled') return 'Controlled';
-  if (normalized === 'elevated') return 'Elevated';
-  if (normalized === 'moderate') return 'Moderate';
-  if (normalized === 'high') return 'High';
-  if (normalized === 'low') return 'Low';
-
-  return 'Medium';
-}
-
-function getPipelineSummary(deals, currency) {
-  const safeDeals = Array.isArray(deals) ? deals : [];
-  const totalEquity = safeDeals.reduce((sum, deal) => {
-    const value = Number(deal.equityValue);
-    return Number.isFinite(value) ? sum + value : sum;
-  }, 0);
-
-  const activeStages = new Set(safeDeals.map((deal) => deal.stageId)).size;
-  const hasHighPriority = safeDeals.some((deal) => deal.priorityTone === 'high');
-  const hasWatchPriority = safeDeals.some(
-    (deal) => deal.priorityTone === 'watch' || deal.priorityTone === 'build'
+/**
+ * Executive focus column: stage that holds the highest existing priorityTone
+ * among visible deals (high > review > watch > build). Tie-break: more deals
+ * at that tone, then later pipeline stage. Falls back to fullest stage when
+ * filters hide all deals. Does not invent a new business state.
+ */
+function resolveExecutiveFocusStageId(visibleDeals, allDeals) {
+  const toneRank = { high: 4, review: 3, watch: 2, build: 1 };
+  const stageIndex = Object.fromEntries(
+    PIPELINE_STAGES.map((stage, index) => [stage.id, index])
   );
 
-  return {
-    totalDeals: safeDeals.length,
-    totalEquityLabel:
-      safeDeals.length > 0 ? formatCurrency(totalEquity, currency) : 'N/A',
-    activeStages,
-    priorityLabel: hasHighPriority
-      ? 'High'
-      : hasWatchPriority
-        ? 'Watchlist'
-        : safeDeals.length > 0
-          ? 'Review'
-          : 'N/A'
-  };
-}
+  const visible = Array.isArray(visibleDeals) ? visibleDeals : [];
+  const all = Array.isArray(allDeals) ? allDeals : [];
+  const pool = visible.length > 0 ? visible : all;
 
-function getStageFromScore(score) {
-  if (score === null) return 'screening';
-  if (score >= 82) return 'ic-review';
-  if (score >= 68) return 'due-diligence';
-  if (score >= 52) return 'nda';
+  if (pool.length === 0) return null;
 
-  return 'screening';
-}
+  let bestTone = 0;
+  const byStage = new Map();
 
-function getSavedDealStage(index, score) {
-  if (score !== null && score >= 82) return 'ic-review';
-  if (score !== null && score >= 68) return 'due-diligence';
+  for (const deal of pool) {
+    const stageId = deal?.stageId;
+    if (!stageId || !(stageId in stageIndex)) continue;
 
-  const stages = [
-    'screening',
-    'nda',
-    'due-diligence',
-    'ic-review',
-    'negotiation',
-    'closing'
-  ];
+    const tone = toneRank[deal.priorityTone] || 0;
+    if (tone > bestTone) bestTone = tone;
 
-  return stages[index % stages.length];
-}
+    const prev = byStage.get(stageId) || {
+      maxTone: 0,
+      countAtBest: 0,
+      count: 0
+    };
+    prev.count += 1;
+    if (tone > prev.maxTone) {
+      prev.maxTone = tone;
+      prev.countAtBest = 1;
+    } else if (tone === prev.maxTone) {
+      prev.countAtBest += 1;
+    }
+    byStage.set(stageId, prev);
+  }
 
-function getPriorityLabel(score) {
-  if (score === null) return 'Build';
-  if (score >= 80) return 'High';
-  if (score >= 55) return 'Review';
+  if (byStage.size === 0) return null;
 
-  return 'Watch';
-}
+  if (bestTone <= 0) {
+    let focus = null;
+    for (const [stageId, meta] of byStage) {
+      const idx = stageIndex[stageId] ?? -1;
+      if (
+        !focus ||
+        meta.count > focus.count ||
+        (meta.count === focus.count && idx > focus.idx)
+      ) {
+        focus = { id: stageId, count: meta.count, idx };
+      }
+    }
+    return focus?.id ?? null;
+  }
 
-function getPriorityTone(score) {
-  if (score === null) return 'build';
-  if (score >= 80) return 'high';
-  if (score >= 55) return 'review';
+  let focus = null;
+  for (const [stageId, meta] of byStage) {
+    if (meta.maxTone !== bestTone) continue;
+    const idx = stageIndex[stageId] ?? -1;
+    if (
+      !focus ||
+      meta.countAtBest > focus.countAtBest ||
+      (meta.countAtBest === focus.countAtBest && idx > focus.idx)
+    ) {
+      focus = { id: stageId, countAtBest: meta.countAtBest, idx };
+    }
+  }
 
-  return 'watch';
-}
-
-function getRiskLabelFromScore(score) {
-  if (score === null) return 'To assess';
-  if (score >= 80) return 'Controlled';
-  if (score >= 60) return 'Moderate';
-  if (score >= 40) return 'Elevated';
-
-  return 'High';
-}
-
-function formatShortDate(value) {
-  if (!value) return 'N/A';
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) return 'N/A';
-
-  return new Intl.DateTimeFormat('es-ES', {
-    day: '2-digit',
-    month: 'short'
-  }).format(date);
-}
-
-function hasSufficientDealData(financials, derived) {
-  const hasName = Boolean(financials?.name?.trim());
-  const hasSector = Boolean(financials?.sector);
-  const normalizedEbitda = Number(derived?.normalizedEbitda);
-
-  return (
-    hasName &&
-    hasSector &&
-    Number.isFinite(normalizedEbitda) &&
-    normalizedEbitda > 0
-  );
-}
-
-function getSafeQualityScore(score) {
-  const parsed = Number(score);
-
-  if (!Number.isFinite(parsed)) return null;
-
-  return Math.max(0, Math.min(100, Math.round(parsed)));
+  return focus?.id ?? null;
 }
 
 function getPipelineSignal(summary) {

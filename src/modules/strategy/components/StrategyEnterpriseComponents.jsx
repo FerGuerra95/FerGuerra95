@@ -5,8 +5,7 @@ import { Card } from '../../../shared/components/ui/Card.jsx';
 export const strategyEnterpriseCss = `
   .strategy-page { width: min(1440px,100%); margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
   .strategy-hero { padding: 28px; border: 1px solid rgba(148,163,184,.18); border-radius: 18px; background: linear-gradient(135deg, rgba(15,23,42,.98), rgba(30,41,59,.94)); color: #f8fafc; }
-  .strategy-title { margin: 12px 0 8px; font-size: clamp(1.8rem,3vw,3rem); line-height: 1; letter-spacing: 0; }
-  .strategy-copy,.strategy-muted { color: rgba(226,232,240,.72); margin: 0; }
+  .strategy-copy,.strategy-muted { color: rgba(226,232,240,.72); }
   .strategy-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 16px; }
   .strategy-grid-two { display: grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap: 16px; }
   .strategy-panel { position: relative; isolation: isolate; overflow: hidden; background: radial-gradient(circle at 0% 0%, rgba(59,130,246,.105), transparent 36%), radial-gradient(circle at 100% 8%, rgba(16,185,129,.072), transparent 42%), linear-gradient(115deg, rgba(59,130,246,.052), rgba(255,255,255,.012) 46%, rgba(16,185,129,.040)), rgba(15,23,42,.58); border: 1px solid rgba(255,255,255,.034); border-radius: 18px; color: #e2e8f0; box-shadow: 0 24px 72px rgba(0,0,0,.24), 0 0 36px rgba(59,130,246,.078), inset 0 1px 0 rgba(255,255,255,.052); backdrop-filter: blur(18px) saturate(130%); -webkit-backdrop-filter: blur(18px) saturate(130%); }

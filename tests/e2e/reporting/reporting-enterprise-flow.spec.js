@@ -35,7 +35,7 @@ test('Reporting enterprise routes load and report library creates records', asyn
 
   const routes = [
     ['/reporting/templates', 'Template manager.'],
-    ['/reporting/board-pack', 'Board pack builder.'],
+    ['/reporting/board-pack', 'Board review draft assembly.'],
     ['/reporting/exports', 'Export ledger.'],
     ['/reporting/schedules', 'Scheduled reports.'],
     ['/reporting/evidence', 'Evidence-backed reports.']

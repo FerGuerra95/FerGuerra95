@@ -50,7 +50,7 @@ export const CEO_DECISION_QUEUE_STATUS_NOTE =
 export const CEO_EXECUTIVE_SIGNAL_STATUS_NOTE =
   'Executive signal view · read-only · not clickable';
 export const CEO_WORKFLOW_STATUS_NOTE =
-  'Workflow view · process status only · not clickable';
+  'Workflow view · process status only · not board-approved · not clickable';
 export const CEO_BRIEFING_PACKS_SECTION_NOTE =
   'Status only · not downloadable or certified pack · not clickable';
 
@@ -211,11 +211,8 @@ const commandCenterCss = `
     position: relative;
     overflow: hidden;
     border-radius: 20px;
-    border: 1px solid rgba(212, 175, 55, 0.28);
-    background:
-      radial-gradient(ellipse 55% 70% at 82% 38%, rgba(212, 175, 55, 0.16), transparent 58%),
-      radial-gradient(ellipse 40% 50% at 12% 20%, rgba(212, 175, 55, 0.08), transparent 52%),
-      linear-gradient(155deg, rgba(4, 4, 4, 0.99), rgba(8, 7, 6, 0.98) 48%, rgba(5, 5, 5, 0.99));
+    border: 1px solid rgba(212, 175, 55, 0.16);
+    background: var(--ceo-mat-hero, linear-gradient(165deg, #050504 0%, #080706 48%, #030302 100%));
     box-shadow:
       inset 0 1px 0 rgba(243, 218, 138, 0.05),
       0 18px 48px rgba(0, 0, 0, 0.48);
@@ -223,24 +220,14 @@ const commandCenterCss = `
   }
 
   .ceo-command-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      ellipse 48% 62% at 84% 36%,
-      rgba(212, 175, 55, 0.08) 0%,
-      rgba(7, 6, 5, 0.45) 38%,
-      transparent 68%
-    );
-    pointer-events: none;
-    z-index: 0;
+    content: none;
   }
 
   .ceo-command-hero::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 90% 85% at 50% 50%, transparent 42%, rgba(0, 0, 0, 0.42) 100%);
+    background: radial-gradient(ellipse 88% 82% at 48% 42%, transparent 64%, rgba(0, 0, 0, 0.12) 100%);
     pointer-events: none;
     z-index: 0;
   }
@@ -248,8 +235,8 @@ const commandCenterCss = `
   .ceo-command-hero-main {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(168px, 290px);
-    gap: 14px;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+    gap: 8px;
     align-items: center;
     min-width: 0;
     padding: 4px 2px 4px 0;
@@ -258,10 +245,13 @@ const commandCenterCss = `
   .ceo-command-hero-copy {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     min-width: 0;
     position: relative;
     z-index: 1;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
   }
 
   .ceo-lion-mark-wrap {
@@ -316,35 +306,30 @@ const commandCenterCss = `
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(210px, 0.72fr) minmax(210px, 0.72fr);
-    gap: 0;
-    align-items: stretch;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(212, 175, 55, 0.05);
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
+    gap: 14px;
+    align-items: start;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .ceo-command-hero-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    align-self: start;
+    justify-content: flex-start;
   }
 
   .ceo-command-hero .ceo-command-card {
-    border: none;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    padding: 0 18px;
+    border-radius: 18px;
   }
 
-  .ceo-command-hero .ceo-readiness-card {
-    border-left: none;
-    border-right: none;
-    box-shadow: inset 1px 0 0 rgba(212, 175, 55, 0.05), inset -1px 0 0 rgba(212, 175, 55, 0.05);
-  }
-
+  .ceo-command-hero .ceo-readiness-card,
   .ceo-command-hero .ceo-priorities-card {
-    padding-right: 2px;
-  }
-
-  .ceo-command-hero .ceo-command-card:hover {
-    border-color: transparent;
-    box-shadow: none;
+    min-height: 0;
   }
 
 
@@ -393,19 +378,12 @@ const commandCenterCss = `
 
   .ceo-command-hero-title {
     margin: 0;
-    font-size: clamp(28px, 3.2vw, 40px);
-    line-height: 1.04;
-    letter-spacing: -0.05em;
-    color: var(--ceo-text-primary);
+    background: transparent;
   }
 
   .ceo-command-hero-title span {
     display: block;
     margin-top: 10px;
-    font-size: clamp(15px, 1.6vw, 18px);
-    color: var(--ceo-text-secondary);
-    letter-spacing: -0.015em;
-    line-height: 1.5;
     font-weight: 450;
   }
 
@@ -414,6 +392,7 @@ const commandCenterCss = `
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
+    background: transparent;
   }
 
   .ceo-gold-primary-action.button {
@@ -659,32 +638,39 @@ const commandCenterCss = `
   .ceo-readiness-card {
     align-items: center;
     text-align: center;
-    gap: 10px;
+    gap: 12px;
   }
 
   .ceo-readiness-ring-wrap {
     position: relative;
-    width: 112px;
-    height: 112px;
-    margin: 2px auto 0;
+    width: 188px;
+    height: 188px;
+    margin: 4px auto 0;
+    overflow: visible;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
   }
 
   .ceo-readiness-ring {
     width: 100%;
     height: 100%;
     transform: rotate(-90deg);
+    overflow: visible;
+    background: transparent;
   }
 
   .ceo-readiness-ring-track {
     fill: none;
-    stroke: rgba(212, 175, 55, 0.14);
-    stroke-width: 7;
+    stroke: rgba(255, 255, 255, 0.08);
+    stroke-width: 6.2;
   }
 
   .ceo-readiness-ring-progress {
     fill: none;
-    stroke-width: 7;
+    stroke-width: 6.8;
     stroke-linecap: round;
+    filter: drop-shadow(0 0 2px rgba(246, 227, 164, 0.7));
     transition: stroke-dashoffset 420ms ease;
   }
 
@@ -695,22 +681,25 @@ const commandCenterCss = `
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
+    gap: 8px;
     pointer-events: none;
   }
 
   .ceo-readiness-ring-center strong {
-    font-size: 22px;
+    font-size: 32px;
     letter-spacing: -0.04em;
     color: var(--ceo-text-primary);
   }
 
   .ceo-readiness-ring-center span {
+    max-width: 7.4em;
     font-size: 10px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(243, 218, 138, 0.78);
+    color: rgba(243, 218, 138, 0.82);
     font-weight: 700;
+    line-height: 1.22;
+    text-align: center;
   }
 
   .ceo-readiness-meta {
@@ -719,7 +708,7 @@ const commandCenterCss = `
     color: var(--ceo-text-muted);
     line-height: 1.5;
     margin: 0;
-    padding-top: 6px;
+    padding-top: 2px;
     border-top: none;
   }
 
@@ -1612,7 +1601,7 @@ function buildModuleReadinessCards({
 function ReadinessRing({ score, label, sublabel = 'Executive readiness' }) {
   const hasScore = Number.isFinite(Number(score));
   const pct = hasScore ? progressWidth(score) : 0;
-  const radius = 42;
+  const radius = 39;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (pct / 100) * circumference;
   const ringGradientId = `ceoReadinessGold-${sublabel.replace(/\s+/g, '-').toLowerCase()}`;
@@ -1622,9 +1611,9 @@ function ReadinessRing({ score, label, sublabel = 'Executive readiness' }) {
       <svg className="ceo-readiness-ring" viewBox="0 0 96 96" aria-hidden="true">
         <defs>
           <linearGradient id={ringGradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#f3da8a" />
-            <stop offset="52%" stopColor="#d4af37" />
-            <stop offset="100%" stopColor="#9a7518" />
+            <stop offset="0%" stopColor="#f6e3a4" />
+            <stop offset="48%" stopColor="#e0c056" />
+            <stop offset="100%" stopColor="#b8922a" />
           </linearGradient>
         </defs>
         <circle className="ceo-readiness-ring-track" cx="48" cy="48" r={radius} />
@@ -1884,33 +1873,35 @@ export function ExecutiveCommandCenterView({
                 </div>
               </div>
 
-              <ExecutiveReadinessHeroCard readiness={commandReadiness} />
+              <div className="ceo-command-hero-rail">
+                <ExecutiveReadinessHeroCard readiness={commandReadiness} />
 
-              <article className="ceo-command-card ceo-priorities-card">
-                <div className="ceo-command-card-kicker">
-                  {prioritiesAreInformational ? 'Operating posture' : 'Executive attention'}
-                </div>
-                {prioritiesAreInformational ? (
-                  <p className="ceo-priority-informational-note">
-                    Operating posture · not a scored signal
-                  </p>
-                ) : null}
-                {topPriorities.length ? (
-                  <ul className="ceo-priority-list">
-                    {topPriorities.map((row) => (
-                      <li key={`${row.label}-${row.value}`} className="ceo-priority-item">
-                        <span className="ceo-priority-dot" aria-hidden="true" />
-                        <div className="ceo-priority-copy">
-                          <span className="ceo-priority-title">{row.label}</span>
-                          <span className="ceo-priority-value">{row.value}</span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="ceo-priority-empty">No priority rows available · Pending inputs.</p>
-                )}
-              </article>
+                <article className="ceo-command-card ceo-priorities-card">
+                  <div className="ceo-command-card-kicker">
+                    {prioritiesAreInformational ? 'Operating posture' : 'Executive attention'}
+                  </div>
+                  {prioritiesAreInformational ? (
+                    <p className="ceo-priority-informational-note">
+                      Operating posture · not a scored signal
+                    </p>
+                  ) : null}
+                  {topPriorities.length ? (
+                    <ul className="ceo-priority-list">
+                      {topPriorities.map((row) => (
+                        <li key={`${row.label}-${row.value}`} className="ceo-priority-item">
+                          <span className="ceo-priority-dot" aria-hidden="true" />
+                          <div className="ceo-priority-copy">
+                            <span className="ceo-priority-title">{row.label}</span>
+                            <span className="ceo-priority-value">{row.value}</span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="ceo-priority-empty">No priority rows available · Pending inputs.</p>
+                  )}
+                </article>
+              </div>
             </div>
           </div>
         </SectionBlock>

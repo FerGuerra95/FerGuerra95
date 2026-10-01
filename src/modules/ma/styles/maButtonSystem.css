@@ -1,0 +1,303 @@
+/*
+  C.24.95 — M&A canonical button system (sole visual source-of-truth)
+
+  Scope: .main-area[data-workspace='ma'] .page
+  Contract:
+    PRIMARY   → .button.primary | .ma-button--primary | default .button
+    SECONDARY → .button.secondary | .ma-button--secondary
+    TERTIARY  → .ma-button--tertiary | .ma-reference-cta-ghost |
+                .ma-val-ref-cta-ghost | .ma-reference-inline-link | .ma-arrow-link
+
+  Page-local button paints/geometry MUST defer here (do not re-declare).
+  Sole authority — EPS mirror removed in C.MA-F2.
+*/
+
+.main-area[data-workspace='ma'] {
+  --ma-btn-height: 44px;
+  --ma-btn-pad-x: 18px;
+  --ma-btn-pad-y: 10px;
+  --ma-btn-radius: 12px;
+  --ma-btn-gap: 9px;
+  --ma-btn-font-size: 14px;
+  --ma-btn-font-primary: 750;
+  --ma-btn-font-secondary: 650;
+  --ma-btn-icon: 16px;
+  --ma-btn-border-width: 1px;
+  --ma-btn-teal: #2dd4bf;
+  --ma-btn-teal-bright: #5eead4;
+  --ma-btn-teal-deep: #16b8a6;
+  --ma-btn-teal-mid: #20c997;
+  --ma-btn-ink: #01201c;
+  --ma-btn-text: #f8fafc;
+  --ma-btn-muted: rgba(203, 213, 225, 0.72);
+  --ma-btn-secondary-bg: rgba(45, 212, 191, 0.08);
+  --ma-btn-secondary-bg-hover: rgba(45, 212, 191, 0.12);
+  --ma-btn-secondary-border: rgba(94, 234, 212, 0.32);
+  --ma-btn-secondary-border-hover: rgba(94, 234, 212, 0.5);
+  --ma-btn-primary-shadow:
+    0 6px 26px rgba(45, 212, 191, 0.34),
+    0 1px 0 rgba(255, 255, 255, 0.28) inset,
+    0 0 0 1px rgba(45, 212, 191, 0.16);
+  --ma-btn-primary-shadow-hover:
+    0 8px 32px rgba(45, 212, 191, 0.42),
+    0 1px 0 rgba(255, 255, 255, 0.32) inset,
+    0 0 0 1px rgba(45, 212, 191, 0.2);
+  --ma-btn-secondary-shadow:
+    0 0 16px rgba(45, 212, 191, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --ma-btn-secondary-shadow-hover:
+    0 0 18px rgba(45, 212, 191, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* —— Shared geometry (PRIMARY + SECONDARY + DANGER metrics) —— */
+.main-area[data-workspace='ma'] .page :is(
+  .button,
+  .ma-button--primary,
+  .ma-button--secondary
+):not(.ceos-logout-btn):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page a :is(
+  .button,
+  .ma-button--primary,
+  .ma-button--secondary
+):not(.ceos-logout-btn):not(#__ceos_no_match__) {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: var(--ma-btn-height) !important;
+  min-height: var(--ma-btn-height) !important;
+  max-height: var(--ma-btn-height) !important;
+  padding: var(--ma-btn-pad-y) var(--ma-btn-pad-x) !important;
+  border-radius: var(--ma-btn-radius) !important;
+  border-width: var(--ma-btn-border-width) !important;
+  border-style: solid !important;
+  gap: var(--ma-btn-gap) !important;
+  font-size: var(--ma-btn-font-size) !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  transform: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    color 0.15s ease !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(.button, .ma-button--primary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__) .button-content,
+.main-area[data-workspace='ma'] .page a :is(.button, .ma-button--primary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__) .button-content {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--ma-btn-gap) !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(.button, .ma-button--primary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__) :is(svg, .lucide),
+.main-area[data-workspace='ma'] .page a :is(.button, .ma-button--primary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__) :is(svg, .lucide),
+.main-area[data-workspace='ma'] .page :is(.button, .ma-button--primary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__) .button-content :is(svg, .lucide) {
+  width: var(--ma-btn-icon) !important;
+  height: var(--ma-btn-icon) !important;
+  min-width: var(--ma-btn-icon) !important;
+  min-height: var(--ma-btn-icon) !important;
+  flex-shrink: 0 !important;
+  display: block !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(.button, .ma-button--primary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__):focus-visible,
+.main-area[data-workspace='ma'] .page a :is(.button, .ma-button--primary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__):focus-visible {
+  outline: 2px solid rgba(94, 234, 212, 0.55) !important;
+  outline-offset: 2px !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(.button, .ma-button--primary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__):disabled,
+.main-area[data-workspace='ma'] .page .button.is-loading:not(.ceos-logout-btn):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page a :is(.button, .ma-button--primary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__):disabled {
+  opacity: 0.48 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* —— PRIMARY —— */
+.main-area[data-workspace='ma'] .page :is(
+  .button.primary,
+  .ma-button--primary,
+  .button:not(.secondary):not(.ghost):not(.danger):not(.success):not(.warning):not(.ma-button--secondary):not(.ma-button--tertiary)
+):not(.ceos-logout-btn):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page a :is(
+  .button.primary,
+  .ma-button--primary,
+  .button:not(.secondary):not(.ghost):not(.danger):not(.success):not(.warning):not(.ma-button--secondary):not(.ma-button--tertiary)
+):not(.ceos-logout-btn):not(#__ceos_no_match__) {
+  background: linear-gradient(
+    135deg,
+    var(--ma-btn-teal-bright) 0%,
+    var(--ma-btn-teal) 46%,
+    var(--ma-btn-teal-deep) 100%
+  ) !important;
+  background-image: linear-gradient(
+    135deg,
+    var(--ma-btn-teal-bright) 0%,
+    var(--ma-btn-teal) 46%,
+    var(--ma-btn-teal-deep) 100%
+  ) !important;
+  border-color: transparent !important;
+  color: var(--ma-btn-ink) !important;
+  font-weight: var(--ma-btn-font-primary) !important;
+  box-shadow: var(--ma-btn-primary-shadow) !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(
+  .button.primary,
+  .ma-button--primary,
+  .button:not(.secondary):not(.ghost):not(.danger):not(.success):not(.warning):not(.ma-button--secondary):not(.ma-button--tertiary)
+):not(.ceos-logout-btn):not(#__ceos_no_match__):hover:not(:disabled),
+.main-area[data-workspace='ma'] .page a :is(
+  .button.primary,
+  .ma-button--primary,
+  .button:not(.secondary):not(.ghost):not(.danger):not(.success):not(.warning):not(.ma-button--secondary):not(.ma-button--tertiary)
+):not(.ceos-logout-btn):not(#__ceos_no_match__):hover:not(:disabled) {
+  background: linear-gradient(
+    135deg,
+    #7af0dc 0%,
+    var(--ma-btn-teal-bright) 42%,
+    var(--ma-btn-teal-mid) 100%
+  ) !important;
+  background-image: linear-gradient(
+    135deg,
+    #7af0dc 0%,
+    var(--ma-btn-teal-bright) 42%,
+    var(--ma-btn-teal-mid) 100%
+  ) !important;
+  box-shadow: var(--ma-btn-primary-shadow-hover) !important;
+  filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(
+  .button.primary,
+  .ma-button--primary,
+  .button:not(.secondary):not(.ghost):not(.danger):not(.success):not(.warning):not(.ma-button--secondary):not(.ma-button--tertiary)
+):not(.ceos-logout-btn):not(#__ceos_no_match__):active:not(:disabled) {
+  box-shadow:
+    0 3px 14px rgba(45, 212, 191, 0.28),
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 0 0 1px rgba(45, 212, 191, 0.14) !important;
+}
+
+/* —— SECONDARY —— */
+.main-area[data-workspace='ma'] .page :is(.button.secondary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page a :is(.button.secondary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__) {
+  background: var(--ma-btn-secondary-bg) !important;
+  background-image: none !important;
+  border-color: var(--ma-btn-secondary-border) !important;
+  color: var(--ma-btn-text) !important;
+  font-weight: var(--ma-btn-font-secondary) !important;
+  box-shadow: var(--ma-btn-secondary-shadow) !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(.button.secondary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__):hover:not(:disabled),
+.main-area[data-workspace='ma'] .page a :is(.button.secondary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__):hover:not(:disabled),
+.main-area[data-workspace='ma'] .page :is(.button.secondary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__):focus-visible {
+  background: var(--ma-btn-secondary-bg-hover) !important;
+  background-image: none !important;
+  border-color: var(--ma-btn-secondary-border-hover) !important;
+  color: var(--ma-btn-text) !important;
+  box-shadow: var(--ma-btn-secondary-shadow-hover) !important;
+  filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(.button.secondary, .ma-button--secondary):not(.ceos-logout-btn):not(#__ceos_no_match__):active:not(:disabled) {
+  background: rgba(45, 212, 191, 0.14) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+/* —— DANGER (same geometry, distinct paint; delete actions only) —— */
+.main-area[data-workspace='ma'] .page .button.danger:not(.ceos-logout-btn):not(#__ceos_no_match__) {
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.92), rgba(220, 38, 38, 0.92)) !important;
+  background-image: linear-gradient(135deg, rgba(248, 113, 113, 0.92), rgba(220, 38, 38, 0.92)) !important;
+  border-color: transparent !important;
+  color: #fff5f5 !important;
+  font-weight: var(--ma-btn-font-primary) !important;
+  box-shadow: 0 4px 18px rgba(220, 38, 38, 0.28) !important;
+}
+
+/* —— TERTIARY / text actions —— */
+.main-area[data-workspace='ma'] .page :is(
+  .ma-button--tertiary,
+  .ma-reference-cta-ghost,
+  .ma-val-ref-cta-ghost,
+  .ma-reference-inline-link,
+  .ma-arrow-link
+):not(#__ceos_no_match__) {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding: 4px 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: var(--ma-btn-muted) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  text-decoration: none !important;
+  line-height: 1.3 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transform: none !important;
+  filter: none !important;
+  transition: color 0.15s ease !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(
+  .ma-button--tertiary,
+  .ma-reference-cta-ghost,
+  .ma-val-ref-cta-ghost,
+  .ma-reference-inline-link,
+  .ma-arrow-link
+):not(#__ceos_no_match__) :is(svg, .lucide) {
+  width: 14px !important;
+  height: 14px !important;
+  flex-shrink: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page :is(
+  .ma-button--tertiary,
+  .ma-reference-cta-ghost,
+  .ma-val-ref-cta-ghost,
+  .ma-reference-inline-link,
+  .ma-arrow-link
+):not(#__ceos_no_match__):hover,
+.main-area[data-workspace='ma'] .page :is(
+  .ma-button--tertiary,
+  .ma-reference-cta-ghost,
+  .ma-val-ref-cta-ghost,
+  .ma-reference-inline-link,
+  .ma-arrow-link
+):not(#__ceos_no_match__):focus-visible {
+  color: var(--ma-btn-teal-bright) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Nav crumb tertiary stays quieter (Back to dashboard) */
+.main-area[data-workspace='ma'] .page .ma-valuation-nav-crumb :is(
+  .ma-button--tertiary,
+  .ma-val-ref-cta-ghost,
+  .ma-reference-cta-ghost
+):not(#__ceos_no_match__) {
+  font-size: 10px !important;
+  letter-spacing: 0.04em !important;
+  opacity: 0.72 !important;
+}

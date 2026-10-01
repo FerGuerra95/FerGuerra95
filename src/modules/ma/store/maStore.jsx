@@ -105,7 +105,7 @@ export function MAStoreProvider({ children }) {
   const [analysis, setAnalysis] = useState({
     isAnalyzing: false,
     progress: 100,
-    label: 'Listo para auditoría',
+    label: 'Valoración lista',
     showResults: true
   });
 

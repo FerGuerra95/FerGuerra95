@@ -82,11 +82,7 @@ const dataRoomCss = `
   }
 
   .dataroom-title {
-    margin: 0;
     max-width: 920px;
-    font-size: clamp(34px, 4.1vw, 58px);
-    line-height: 1.1;
-    letter-spacing: -0.052em;
     overflow: visible;
     overflow-wrap: anywhere;
     padding-bottom: 6px;
@@ -95,16 +91,10 @@ const dataRoomCss = `
   .dataroom-title span {
     display: block;
     margin-top: 8px;
-    color: rgba(226, 232, 240, 0.72);
-    line-height: 1.12;
   }
 
   .dataroom-copy {
     max-width: 820px;
-    margin: 24px 0 0;
-    font-size: 16px;
-    line-height: 1.78;
-    color: rgba(203, 213, 225, 0.86);
   }
 
   .dataroom-actions {

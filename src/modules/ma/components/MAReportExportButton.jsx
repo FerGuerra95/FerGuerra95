@@ -8,35 +8,10 @@ import { maReportsApi } from '../services/maReportsApi.js';
 const DEFAULT_BRAND_NAME = "CEO's OS";
 
 const exportButtonCss = `
+  /* Layout owned by .ma-valuation-actions grid (maValuationMaterial.css).
+     Keep this shell minimal so export actions remain portable. */
   .ma-report-export-actions {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .ma-report-export-actions button {
-    box-shadow:
-      0 12px 30px rgba(15, 23, 42, 0.16),
-      inset 0 1px 0 rgba(255,255,255,0.08);
-  }
-
-  .ma-report-export-hint {
-    flex-basis: 100%;
-    margin-top: -2px;
-    color: rgba(203, 213, 225, 0.72);
-    font-size: 11px;
-    line-height: 1.35;
-  }
-
-  @media (max-width: 680px) {
-    .ma-report-export-actions {
-      width: 100%;
-    }
-
-    .ma-report-export-actions button {
-      flex: 1 1 auto;
-    }
+    min-width: 0;
   }
 `;
 
@@ -363,7 +338,11 @@ export function MAReportExportButton({
   ]);
 
   return (
-    <div className="ma-report-export-actions">
+    <div
+      className="ma-report-export-actions"
+      role="group"
+      aria-label="Export and share"
+    >
       <style>{exportButtonCss}</style>
 
       <Button
@@ -414,10 +393,6 @@ export function MAReportExportButton({
           {isSharing ? 'Preparando...' : 'Secure share'}
         </Button>
       ) : null}
-
-      <div className="ma-report-export-hint">
-        HTML draft, browser print/save-as-PDF convenience copy, and authenticated secure share where enabled.
-      </div>
     </div>
   );
 }

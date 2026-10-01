@@ -257,6 +257,9 @@ export function buildHttpApp() {
     }
 
     if (fs.existsSync(INDEX_FILE)) {
+      if (!IS_PRODUCTION) {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+      }
       return res.sendFile(INDEX_FILE);
     }
 

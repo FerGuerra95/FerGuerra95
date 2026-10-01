@@ -13,11 +13,16 @@ test.describe('Smoke hubs autenticados', () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await loginAsDemoAdmin(page);
 
-    await expect(page.getByText('Executive Command Center.')).toBeVisible();
+    const commandCenter = page.getByTestId('ceo-command-center-enterprise');
+    await expect(commandCenter).toBeVisible();
+    await expect(commandCenter.getByText('Executive Command Center', { exact: true })).toBeVisible();
+    await expect(commandCenter.locator('h1.ceo-command-hero-title')).toBeVisible();
 
     await page.goto('/ma/dashboard');
     await expect(page).toHaveURL(/\/ma\/dashboard/);
-    await expect(page.getByText('Private M&A Intelligence.')).toBeVisible();
+    await expect(page.locator('h1.ma-reference-title')).toContainText(
+      /Private M&A\s*Intelligence\./
+    );
 
     await page.goto('/compliance/dashboard');
     await expect(page).toHaveURL(/\/compliance\/dashboard/);

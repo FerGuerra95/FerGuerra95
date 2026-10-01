@@ -23,6 +23,10 @@ import { Badge } from '../../../shared/components/ui/Badge.jsx';
 import { Button } from '../../../shared/components/ui/Button.jsx';
 import { useMAStore } from '../store/maStore.jsx';
 import { useValuationEngine } from '../engine/useValuationEngine.js';
+import {
+  getSavedCaseStage,
+  resolveDealStage
+} from '../engine/maDealLifecycle.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { ENTERPRISE_MA_DEAL_DETAILS } from '../../../shared/config/demoData.js';
 
@@ -2235,7 +2239,7 @@ function resolveDealDetail({
         financials?.geography ||
         'Primary market',
       owner: 'CEO workspace',
-      stageId: getStageFromScore(qualityScore),
+      stageId: resolveDealStage({ qualityScore }),
       equityValue,
       enterpriseValue,
       ebitda,
@@ -2275,7 +2279,7 @@ function resolveDealDetail({
       savedCase?.financials?.geography ||
       'Repository',
     owner: 'Repository',
-    stageId: getSavedDealStage(0, qualityScore),
+    stageId: getSavedCaseStage(savedCase),
     equityValue,
     enterpriseValue,
     ebitda,
@@ -2584,31 +2588,6 @@ function getNextActions(score) {
       status: 'Hold'
     }
   ];
-}
-
-function getStageFromScore(score) {
-  if (score === null) return 'screening';
-  if (score >= 82) return 'ic-review';
-  if (score >= 68) return 'due-diligence';
-  if (score >= 52) return 'nda';
-
-  return 'screening';
-}
-
-function getSavedDealStage(index, score) {
-  if (score !== null && score >= 82) return 'ic-review';
-  if (score !== null && score >= 68) return 'due-diligence';
-
-  const stages = [
-    'screening',
-    'nda',
-    'due-diligence',
-    'ic-review',
-    'negotiation',
-    'closing'
-  ];
-
-  return stages[index % stages.length];
 }
 
 function getStageLabel(stageId) {

@@ -77,11 +77,7 @@ const investorReadinessCss = `
   }
 
   .investor-title {
-    margin: 0;
     max-width: 900px;
-    font-size: clamp(34px, 4.1vw, 58px);
-    line-height: 1.08;
-    letter-spacing: -0.055em;
     overflow-wrap: anywhere;
     padding-bottom: 4px;
   }
@@ -89,15 +85,10 @@ const investorReadinessCss = `
   .investor-title span {
     display: block;
     margin-top: 8px;
-    color: rgba(226, 232, 240, 0.72);
   }
 
   .investor-copy {
     max-width: 820px;
-    margin: 24px 0 0;
-    font-size: 16px;
-    line-height: 1.78;
-    color: rgba(203, 213, 225, 0.86);
   }
 
   .investor-signal-card,

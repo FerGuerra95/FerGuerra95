@@ -257,6 +257,7 @@ describe('BoardPackModal display formatting', () => {
     expect(root.textContent).toContain(BRIEFING_PACK_STATUS_ONLY_NOTE);
     expect(root.textContent).not.toMatch(/export pdf|approved pack|certified pdf/i);
     expect(root.textContent).toMatch(/not board-approved/i);
+    expect(root.textContent).toMatch(/not legal or investment advice/i);
     expect(root.textContent).toMatch(/not downloadable or certified pack/i);
 
     expect(document.querySelectorAll('.ceo-decision-queue-grid .ceo-static-card').length).toBe(4);

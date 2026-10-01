@@ -116,6 +116,25 @@ export function calculateCoreMetrics(inputs) {
   return { normalizedEbitda, netDebt, wcAdjustment, leverageRatio };
 }
 
+export const PRIMARY_VALUATION_METHOD = {
+  id: 'adjusted_ebitda_multiple',
+  headlineMetric: 'equityBase',
+  enterpriseMetric: 'evBase',
+  label: 'Adjusted EBITDA multiple',
+  kicker: 'Adjusted equity value — multiple view',
+  dcfRole: 'control_only'
+};
+
+export function reconstructAdjustedEquityValue({
+  enterpriseValue,
+  netDebt,
+  workingCapitalAdjustment
+}) {
+  return (
+    Number(enterpriseValue) - Number(netDebt) + Number(workingCapitalAdjustment)
+  );
+}
+
 export function calculateDcfEnterpriseValue({
   normalizedEbitda = 0,
   growthPct = 0,

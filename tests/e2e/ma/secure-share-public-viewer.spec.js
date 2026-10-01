@@ -1,23 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-import { fetchDemoAdminApiToken } from '../helpers/auth.js';
-
-function resolveApiBaseUrl() {
-  if (process.env.CEOS_API_BASE_URL) {
-    return process.env.CEOS_API_BASE_URL.replace(/\/$/, '');
-  }
-
-  const appBaseUrl = new URL(process.env.CEOS_BASE_URL || 'http://127.0.0.1:5173');
-  const isLocalVite =
-    (appBaseUrl.hostname === 'localhost' || appBaseUrl.hostname === '127.0.0.1') &&
-    (appBaseUrl.port === '5173' || appBaseUrl.port === '5174');
-
-  if (isLocalVite) {
-    return `${appBaseUrl.protocol}//${appBaseUrl.hostname}:4000/api`;
-  }
-
-  return new URL('/api', appBaseUrl).toString().replace(/\/$/, '');
-}
+import { fetchDemoAdminApiToken, resolveApiBaseUrl } from '../helpers/auth.js';
 
 test.describe('M&A secure share (público)', () => {
   test('visor carga el informe sin sesión con hash sid+t', async ({
@@ -32,73 +15,107 @@ test.describe('M&A secure share (público)', () => {
     const auth = { Authorization: `Bearer ${token}` };
 
     const unique = `E2E Secure Share Case ${Date.now()}`;
-    const caseRes = await request.post(`${api}/ma/cases`, {
-      headers: auth,
-      data: {
-        name: unique,
-        financials: {
+    let caseId = '';
+    let shareId = '';
+
+    try {
+      const caseRes = await request.post(`${api}/ma/cases`, {
+        headers: auth,
+        data: {
           name: unique,
-          sector: 'Servicios',
-          normalizedEbitda: 120000
-        },
-        settings: {
-          reportCurrency: 'EUR',
-          evidenceDocuments: []
+          origin: 'e2e',
+          financials: {
+            name: unique,
+            sector: 'Servicios',
+            normalizedEbitda: 120000
+          },
+          settings: {
+            origin: 'e2e',
+            reportCurrency: 'EUR',
+            evidenceDocuments: []
+          }
         }
-      }
-    });
-    expect(caseRes.ok(), await caseRes.text()).toBeTruthy();
-    const caseBody = await caseRes.json();
-    const caseId = caseBody.data?.id;
-    expect(caseId).toBeTruthy();
+      });
+      expect(caseRes.ok(), await caseRes.text()).toBeTruthy();
+      const caseBody = await caseRes.json();
+      caseId = caseBody.data?.id;
+      expect(caseId).toBeTruthy();
 
-    const reportHtml =
-      '<!doctype html><html><body><p>E2E secure share contenido</p></body></html>';
+      const listRes = await request.get(`${api}/ma/cases`, { headers: auth });
+      expect(listRes.ok(), await listRes.text()).toBeTruthy();
+      const listBody = await listRes.json();
+      const listedItems = listBody.data?.items || listBody.items || [];
+      expect(listedItems.some((item) => item.id === caseId)).toBe(false);
+      expect(listedItems.some((item) => item.name === unique)).toBe(false);
 
-    const reportRes = await request.post(`${api}/ma/reports/export`, {
-      headers: auth,
-      data: {
-        caseId,
-        title: 'Informe E2E secure share',
-        status: 'exported',
-        payload: {
-          html: reportHtml
+      const reportHtml =
+        '<!doctype html><html><body><p>E2E secure share contenido</p></body></html>';
+
+      const reportRes = await request.post(`${api}/ma/reports/export`, {
+        headers: auth,
+        data: {
+          caseId,
+          title: 'Informe E2E secure share',
+          status: 'exported',
+          origin: 'e2e',
+          payload: {
+            html: reportHtml,
+            origin: 'e2e'
+          }
         }
+      });
+      expect(reportRes.ok(), await reportRes.text()).toBeTruthy();
+      const reportBody = await reportRes.json();
+      const reportId = reportBody.data?.id;
+      expect(reportId).toBeTruthy();
+
+      const reportsRes = await request.get(`${api}/ma/reports`, { headers: auth });
+      expect(reportsRes.ok(), await reportsRes.text()).toBeTruthy();
+      const reportsBody = await reportsRes.json();
+      const listedReports = reportsBody.data?.items || reportsBody.items || [];
+      expect(listedReports.some((item) => item.id === reportId)).toBe(false);
+
+      const shareRes = await request.post(`${api}/ma/reports/${reportId}/share`, {
+        headers: auth,
+        data: { expiresInHours: 24 }
+      });
+      expect(shareRes.ok(), await shareRes.text()).toBeTruthy();
+      const shareBody = await shareRes.json();
+      shareId = shareBody.data?.id;
+      const shareToken = shareBody.data?.token;
+      expect(shareId).toBeTruthy();
+      expect(shareToken).toBeTruthy();
+
+      await context.clearCookies();
+      await page.evaluate(() => {
+        try {
+          window.localStorage.clear();
+          window.sessionStorage.clear();
+        } catch {
+          //
+        }
+      });
+
+      const hash = `#sid=${encodeURIComponent(shareId)}&t=${encodeURIComponent(shareToken)}`;
+      await page.goto(`/ma/secure-share${hash}`);
+
+      await expect(
+        page.frameLocator('iframe').getByText('E2E secure share contenido')
+      ).toBeVisible({
+        timeout: 45_000
+      });
+    } finally {
+      if (shareId) {
+        await request.delete(`${api}/ma/secure-shares/${shareId}`, {
+          headers: auth
+        });
       }
-    });
-    expect(reportRes.ok(), await reportRes.text()).toBeTruthy();
-    const reportBody = await reportRes.json();
-    const reportId = reportBody.data?.id;
-    expect(reportId).toBeTruthy();
 
-    const shareRes = await request.post(`${api}/ma/reports/${reportId}/share`, {
-      headers: auth,
-      data: { expiresInHours: 24 }
-    });
-    expect(shareRes.ok(), await shareRes.text()).toBeTruthy();
-    const shareBody = await shareRes.json();
-    const shareId = shareBody.data?.id;
-    const shareToken = shareBody.data?.token;
-    expect(shareId).toBeTruthy();
-    expect(shareToken).toBeTruthy();
-
-    await context.clearCookies();
-    await page.evaluate(() => {
-      try {
-        window.localStorage.clear();
-        window.sessionStorage.clear();
-      } catch {
-        //
+      if (caseId) {
+        await request.delete(`${api}/ma/cases/${caseId}`, {
+          headers: auth
+        });
       }
-    });
-
-    const hash = `#sid=${encodeURIComponent(shareId)}&t=${encodeURIComponent(shareToken)}`;
-    await page.goto(`/ma/secure-share${hash}`);
-
-    await expect(
-      page.frameLocator('iframe').getByText('E2E secure share contenido')
-    ).toBeVisible({
-      timeout: 45_000
-    });
+    }
   });
 });

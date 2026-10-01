@@ -1,0 +1,1966 @@
+/*
+  M&A Deal Pipeline — visual material (Pipeline-scoped only).
+  Oracle: /ma/dashboard + /ma/valuation frozen surfaces.
+  Tokens: --ma-ref-panel-* (maReferenceSurfaces), --ma-mna-* (status glass),
+          --ma-ref-teal* (dashboard). No new button system. No logic.
+*/
+
+/* Page width / gutters → ceosPageGeometry.css (canonical owner). */
+
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-pipeline-premium,
+.main-area .page .ma-executive-page.ma-pipeline-premium {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page {
+  --ma-pipe-teal: #2dd4bf;
+  --ma-pipe-teal-bright: #5eead4;
+  --ma-pipe-teal-dim: rgba(94, 234, 212, 0.62);
+  --ma-pipe-text: #f8fafc;
+  --ma-pipe-muted: rgba(203, 213, 225, 0.74);
+  --ma-pipe-caption: rgba(148, 163, 184, 0.9);
+  --ma-pipe-line: rgba(90, 255, 220, 0.12);
+
+  /*
+    MATERIAL HIERARCHY (live CDP /ma/dashboard + /ma/valuation — no invented hues)
+    OUTER  = --ma-mna-surface-* (Dashboard lower tables / board / summary / toolbar)
+    STATUS = Valuation Ready / Dashboard Qualified Opportunity glass (158deg recipe)
+    INNER  = Valuation equity-safe blue translucent (NOT outer — hierarchy break was sameBg)
+    INSET  = --ma-mna-inset-* / --ma-ref-inset-* (embedded nests)
+    DEAL   = deeper blue-black + tiny teal undertone
+  */
+  /* OUTER — Dashboard dark green/teal */
+  --ma-pipe-outer-bg: var(--ma-mna-surface-bg);
+  --ma-pipe-outer-border: var(--ma-mna-surface-border, rgba(90, 255, 220, 0.12));
+  --ma-pipe-outer-shadow: var(
+    --ma-mna-surface-shadow,
+    0 24px 56px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07)
+  );
+  --ma-pipe-outer-blur: var(--ma-mna-surface-blur, blur(18px) saturate(135%));
+  --ma-pipe-outer-radius: var(--ma-mna-surface-radius, var(--ma-ref-panel-radius, 22px));
+
+  /* INNER — Dashboard inset family with soft left wash (stage columns) */
+  --ma-pipe-inner-bg:
+    radial-gradient(ellipse 110% 80% at 10% -18%, rgba(45, 212, 191, 0.04), transparent 58%),
+    linear-gradient(
+      165deg,
+      rgba(12, 20, 30, 0.62) 0%,
+      rgba(8, 14, 22, 0.48) 100%
+    );
+  --ma-pipe-inner-border: var(--ma-mna-inset-border, var(--ma-ref-inset-border, rgba(90, 255, 220, 0.07)));
+  --ma-pipe-inner-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --ma-pipe-inner-blur: blur(14px) saturate(120%);
+
+  /* DEAL — Dashboard table material: left/upper-left teal wash + dark glass */
+  --ma-pipe-card-bg:
+    radial-gradient(ellipse 120% 82% at 8% -12%, rgba(45, 212, 191, 0.055), transparent 56%),
+    linear-gradient(165deg, rgba(12, 20, 30, 0.76) 0%, rgba(8, 14, 22, 0.58) 100%);
+  --ma-pipe-card-border: rgba(90, 255, 220, 0.12);
+  --ma-pipe-card-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+
+  /* STATUS glass — live CDP /ma/valuation Ready for valuation + command depth */
+  --ma-pipe-status-bg:
+    radial-gradient(ellipse 120% 90% at 12% -8%, rgba(45, 212, 191, 0.055), transparent 52%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 16%),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.016) 0%,
+      rgba(2, 4, 7, 0.055) 44%,
+      rgba(1, 2, 4, 0.09) 100%
+    );
+  --ma-pipe-status-border: rgba(148, 163, 184, 0.07);
+  --ma-pipe-status-border-top: rgba(90, 255, 220, 0.12);
+  --ma-pipe-status-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.075),
+    inset 1px 0 0 rgba(45, 212, 191, 0.04),
+    0 14px 36px rgba(0, 0, 0, 0.26),
+    0 -8px 22px rgba(45, 212, 191, 0.02),
+    0 0 0 1px rgba(45, 212, 191, 0.025);
+  --ma-pipe-status-blur: blur(22px) saturate(92%) brightness(0.95);
+
+  /* INSET nests — Dashboard snapshot / generic embeds (NOT Signal Ready glass) */
+  --ma-pipe-inset-bg: var(--ma-mna-inset-bg, var(--ma-ref-inset-bg, rgba(5, 9, 9, 0.38)));
+  --ma-pipe-inset-border: var(--ma-mna-inset-border, var(--ma-ref-inset-border, rgba(90, 255, 220, 0.07)));
+  --ma-pipe-inset-shadow: var(--ma-ref-inset-shadow, inset 0 1px 0 rgba(255, 255, 255, 0.025));
+
+  /*
+    Signal inner nest — Valuation Ready hue; alpha eased for stack over outer Signal.
+    Valuation CDP .ma-valuation-status-list: 0.26 → 0.165.
+    Pipeline perceptual match: 0.165 → 0.10 + micro teal wash (not glow).
+    Border / shadow / blur / radius unchanged.
+  */
+  --ma-pipe-status-list-bg:
+    radial-gradient(ellipse 110% 80% at 10% -18%, rgba(45, 212, 191, 0.06), transparent 58%),
+    linear-gradient(
+      160deg,
+      rgba(6, 12, 18, 0.2) 0%,
+      rgba(3, 6, 11, 0.12) 100%
+    );
+  --ma-pipe-status-list-border: rgba(255, 255, 255, 0.04);
+  --ma-pipe-status-list-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --ma-pipe-status-list-blur: blur(7px);
+  --ma-pipe-status-list-radius: 12px;
+  --ma-pipe-status-row-divider: rgba(255, 255, 255, 0.04);
+  --ma-pipe-divider: var(--ma-mna-divider, rgba(255, 255, 255, 0.045));
+
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ma-mna-page-section-gap, 20px);
+  color: var(--ma-pipe-text);
+  background-color: #010306 !important;
+  background-image:
+    radial-gradient(110% 75% at 18% -12%, rgba(32, 201, 151, 0.08), transparent 56%),
+    radial-gradient(85% 58% at 92% 8%, rgba(45, 212, 191, 0.043), transparent 50%) !important;
+}
+
+/* —— 2. Hero scene — ONE cool blue/teal ambient (Valuation soft recipe + flow field) ——
+   Neutralized: competing ::before/::after beds, Dashboard-strong 0.28 glow stack.
+   Canonical hue: rgba(45, 212, 191) / #2dd4bf at Valuation upper-suite opacities.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  /* Content-driven height — oracle min-height removed for compact hero */
+  min-height: 0;
+  margin: var(--page-hero-top-gap, 6px) 0 var(--ma-mna-hero-scene-margin-bottom, 12px);
+  padding: var(--ma-mna-hero-padding-top, 8px) 0 32px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  filter: none;
+  transform: none;
+}
+
+/* Single ambient stack lives in .ma-pipeline-scene-atmo — kill hero pseudo beds */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-hero::before,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-hero::after {
+  content: none;
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-scene-atmo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+  /*
+    FORENSIC: prior navy radials at ~42%/72% Y painted a hard dark plate under CTAs
+    (rgba(12,20,30,0.42) over #010306 = black rectangular band through glass).
+    Keep atmo as a soft continuous bed only — teal lives on .scene-glow.
+    WOW: deeper black-first planes + localized map fog (still not page-tint).
+  */
+  background:
+    radial-gradient(ellipse 92% 72% at 54% 38%, rgba(8, 14, 22, 0.34), transparent 78%),
+    radial-gradient(ellipse 70% 50% at 48% 58%, rgba(45, 212, 191, 0.045), transparent 80%),
+    radial-gradient(ellipse 48% 36% at 18% 22%, rgba(12, 20, 30, 0.28), transparent 72%);
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-scene-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  transform: none;
+  z-index: 0;
+  /* Cool teal ambient — restrained, behind content; map-biased fog */
+  background:
+    radial-gradient(ellipse 70% 55% at 40% 28%, rgba(45, 212, 191, 0.13), transparent 72%),
+    radial-gradient(ellipse 78% 60% at 58% 46%, rgba(45, 212, 191, 0.1), transparent 74%),
+    radial-gradient(ellipse 80% 55% at 45% 68%, rgba(45, 212, 191, 0.1), transparent 76%),
+    radial-gradient(ellipse 65% 50% at 78% 58%, rgba(45, 212, 191, 0.09), transparent 72%),
+    radial-gradient(ellipse 90% 60% at 50% 82%, rgba(45, 212, 191, 0.07), transparent 78%);
+  filter: none;
+  opacity: 1;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  mask: none !important;
+  -webkit-mask: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-scene-mesh {
+  position: absolute;
+  inset: 0 2%;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(45, 212, 191, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 212, 191, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  /* Soft radial only — avoid hard truncate above command strip */
+  mask-image: radial-gradient(ellipse 78% 78% at 55% 42%, black 8%, transparent 82%);
+  -webkit-mask-image: radial-gradient(ellipse 78% 78% at 55% 42%, black 8%, transparent 82%);
+  opacity: 0.3;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-scene-stage {
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-scene-intro {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+
+/* Pipeline execution map — presence-forward hero occupancy */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-map,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-corridor {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 100%);
+  min-width: 0;
+  height: auto;
+  aspect-ratio: 955 / 372;
+  min-height: clamp(300px, 32vw, 370px);
+  max-height: none;
+  margin: 36px 0 36px;
+  padding: 0;
+  box-sizing: border-box;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-map::before {
+  content: '';
+  position: absolute;
+  inset: 6% 4% 10% 2%;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 40% / 48%;
+  background:
+    radial-gradient(ellipse 62% 55% at 52% 48%, rgba(45, 212, 191, 0.07), transparent 72%),
+    radial-gradient(ellipse 40% 36% at 22% 46%, rgba(45, 212, 191, 0.035), transparent 70%);
+  opacity: 0.9;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-map .ma-pipe-orch-flow,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-corridor .ma-pipe-orch-flow {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+}
+
+/* Signal + command stack above decorative atmo (glass must not composite dark plates) */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-flow {
+  position: relative;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  z-index: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-flow-svg {
+  width: 100%;
+  height: auto;
+  opacity: 1;
+  position: relative;
+  z-index: 0;
+  overflow: visible;
+  display: block;
+}
+
+/*
+  Legacy deal-flow filament field — superseded by PipelineOrchestrationNetworkVisual.
+  Kept for reference; no longer rendered on /ma/pipeline.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-flow {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* No radius/overflow cage — SVG mask owns soft filament edges */
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  z-index: 0;
+}
+
+/*
+  REMOVED as overlay: .ma-pipe-deal-flow-vignette painted opaque #010306 rectangles
+  that showed THROUGH Signal glass + command backdrop-filter and clipped metric rows.
+  Motion SVG alone is enough; no black plate behind content.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-flow-vignette {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-flow-svg {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  position: relative;
+  z-index: 0;
+  overflow: visible;
+}
+
+/*
+  Deal-flow filament field — Pipeline-only.
+  Depth planes (mask handles text/CTA/Signal attenuation):
+  bg ≈ 25% · mid ≈ 48% · primary hero ≈ 65% · under-Signal trails quieter.
+  Hue frozen: #2dd4bf / #5eead4.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-layer-bg {
+  filter: blur(0.75px);
+  opacity: 0.26;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-layer-mid {
+  filter: none;
+  opacity: 0.5;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-layer-fg {
+  filter: none;
+  opacity: 0.68;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-lane-hero {
+  filter: drop-shadow(0 0 3px rgba(45, 212, 191, 0.28));
+  opacity: 0.98;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-lane-bridge {
+  filter: drop-shadow(0 0 2px rgba(45, 212, 191, 0.16));
+  opacity: 0.62;
+}
+
+/* Center-right trails under Signal — keep present but clearly behind glass */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-lane-under {
+  opacity: 0.7;
+  filter: drop-shadow(0 0 1.5px rgba(45, 212, 191, 0.12));
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-a {
+  filter: drop-shadow(0 0 3.5px rgba(45, 212, 191, 0.32));
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-node-fg {
+  filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.58));
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-node:not(.ma-pipe-deal-node-fg):not(.ma-pipe-deal-node-soft) {
+  filter: drop-shadow(0 0 2.8px rgba(45, 212, 191, 0.38));
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-node-soft {
+  filter: drop-shadow(0 0 2px rgba(45, 212, 191, 0.28));
+  opacity: 0.85;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-pulse-soft {
+  opacity: 0.74;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-a {
+    animation: ma-pipe-deal-travel-a 15s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-b {
+    animation: ma-pipe-deal-travel-b 20s linear infinite;
+    animation-delay: -6s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-c {
+    animation: ma-pipe-deal-travel-c 17.5s linear infinite;
+    animation-delay: -9s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-m-a {
+    animation: ma-pipe-deal-travel-m 19s linear infinite;
+    animation-delay: -3.5s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-m-b {
+    animation: ma-pipe-deal-travel-m 21s linear infinite;
+    animation-delay: -11s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-m-c {
+    animation: ma-pipe-deal-travel-m 20s linear infinite;
+    animation-delay: -7.5s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-a {
+    animation: ma-pipe-deal-travel-s 23s linear infinite;
+    animation-delay: -8s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-b {
+    animation: ma-pipe-deal-travel-s 26s linear infinite;
+    animation-delay: -12s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-c {
+    animation: ma-pipe-deal-travel-s 24.5s linear infinite;
+    animation-delay: -5s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-d {
+    animation: ma-pipe-deal-travel-s 27s linear infinite;
+    animation-delay: -14s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-e {
+    animation: ma-pipe-deal-travel-s 25s linear infinite;
+    animation-delay: -3s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-f {
+    animation: ma-pipe-deal-travel-s 22.5s linear infinite;
+    animation-delay: -10s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-g {
+    animation: ma-pipe-deal-travel-s 28s linear infinite;
+    animation-delay: -18s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bridge {
+    animation: ma-pipe-deal-travel-bridge 20s linear infinite;
+    animation-delay: -10s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bridge-b {
+    animation: ma-pipe-deal-travel-bridge 24s linear infinite;
+    animation-delay: -16s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-a {
+    animation: ma-pipe-deal-travel-bg 30s linear infinite;
+    animation-delay: -4s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-b {
+    animation: ma-pipe-deal-travel-bg 35s linear infinite;
+    animation-delay: -15s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-c {
+    animation: ma-pipe-deal-travel-bg 38s linear infinite;
+    animation-delay: -9s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-d {
+    animation: ma-pipe-deal-travel-bg 33s linear infinite;
+    animation-delay: -20s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-e {
+    animation: ma-pipe-deal-travel-bg 40s linear infinite;
+    animation-delay: -22s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-f {
+    animation: ma-pipe-deal-travel-bg 36s linear infinite;
+    animation-delay: -12s;
+  }
+}
+
+@keyframes ma-pipe-deal-travel-a {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -944; }
+}
+
+@keyframes ma-pipe-deal-travel-b {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -997; }
+}
+
+@keyframes ma-pipe-deal-travel-c {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -1018; }
+}
+
+@keyframes ma-pipe-deal-travel-m {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -1075; }
+}
+
+@keyframes ma-pipe-deal-travel-s {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -1130; }
+}
+
+@keyframes ma-pipe-deal-travel-bridge {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -1054; }
+}
+
+@keyframes ma-pipe-deal-travel-bg {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -1205; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-a,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-b,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-c,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-m-a,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-m-b,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-m-c,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-a,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-b,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-c,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-d,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-e,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-f,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-s-g,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bridge,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bridge-b,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-a,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-b,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-c,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-d,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-e,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-bg-f,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-node,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-pulse-ring {
+    animation: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-scene-glow {
+    opacity: 0.85;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-scene-stage {
+    opacity: 0.84;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-layer-bg,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-lane-hero,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-lane-bridge,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-carrier-a,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-node-fg,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-node-soft,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-deal-node {
+    filter: none;
+  }
+}
+
+/*
+  FORENSIC: .ma-pipeline-hero-inner matches workspaceAccent
+  `.main-area[data-workspace] .page :is([class*="-hero"])` → --ws-hero-gradient
+  (emerald/black plate). Specificity beats EPS; without !important our transparent
+  rule never painted. Kill plate here — materials live on cards, not the grid.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-hero-inner {
+  position: relative;
+  z-index: 2;
+  /*
+    No isolation here — Signal glass backdrop-filter must sample scene-atmo
+    filaments so trails can read subtly under the right panel.
+    Signal card keeps its own isolation.
+  */
+  isolation: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 2.08fr) minmax(260px, 1fr);
+  gap: clamp(20px, 2.2vw, 28px) clamp(24px, 2.8vw, 34px);
+  align-items: start;
+  background: transparent;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-hero-inner:not(#__ceos_no_match__) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-card {
+  position: relative;
+  z-index: 4;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-command-bar {
+  position: relative;
+  z-index: 4;
+}
+
+/*
+  Top meta chips removed from hero (Enterprise Board / Edición / Reporting / Backend).
+  Hard-hide any residual markup so no gap, border, shadow, or strip remains.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-badges,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-meta-chip {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-kicker-hero {
+  position: relative;
+  margin: 0 0 var(--ceos-hero-kicker-margin-bottom);
+  padding-left: 14px;
+  color: var(--ws-accent-text);
+  /* Class contains "-hero" → workspaceAccent --ws-hero-gradient plate. Kill. */
+  background: transparent;
+  background-image: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-kicker-hero::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 8px;
+  height: 1.5px;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, var(--ma-pipe-teal), rgba(45, 212, 191, 0));
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.35);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-title {
+  margin: 0 0 var(--ma-mna-title-margin-bottom, 10px);
+  max-width: var(--ma-mna-hero-intro-max-width, 620px);
+  color: var(--ceos-hero-title-color);
+  text-shadow:
+    0 2px 28px rgba(0, 0, 0, 0.45),
+    0 0 56px rgba(45, 212, 191, 0.08);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-title-line {
+  display: block;
+  color: var(--ma-pipe-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-title-sub,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-title-sub:not(#__ceos_no_match__) {
+  display: block;
+  margin: 0 0 6px;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: clamp(19px, 2.1vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-copy {
+  max-width: clamp(700px, 72vw, 820px);
+  margin: 0 0 0;
+  font-size: var(--ma-mna-body-size, 15px);
+  line-height: var(--ma-mna-body-line-height, 1.7);
+  color: var(--ma-pipe-muted);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 12px 14px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+  background: transparent;
+  align-items: stretch;
+  justify-items: stretch;
+  border: 0;
+  box-shadow: none;
+  width: 100%;
+  max-width: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > a,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > .button,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-cta-primary {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > a > .button,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > .button {
+  display: inline-flex;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    background-color 180ms ease;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-cta-primary .button.primary {
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.18),
+    0 8px 24px rgba(45, 212, 191, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > a > .button:hover,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > .button:hover {
+  transform: translateY(-1px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-cta-primary .button.primary:hover {
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.32),
+    0 10px 28px rgba(45, 212, 191, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > a:not(.ma-pipeline-cta-primary) > .button.secondary:hover,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > .button.secondary:hover {
+  border-color: rgba(90, 255, 220, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-command-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 36px;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top: 0;
+  background: transparent;
+  align-items: stretch;
+  width: 100%;
+  max-width: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-command-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 100%;
+  height: 100%;
+  padding: 13px 16px;
+  border-radius: var(--ma-pipe-outer-radius, 22px);
+  border: 1px solid var(--ma-pipe-outer-border);
+  background: var(--ma-pipe-outer-bg);
+  box-shadow: var(--ma-pipe-outer-shadow);
+  backdrop-filter: var(--ma-pipe-outer-blur);
+  -webkit-backdrop-filter: var(--ma-pipe-outer-blur);
+  transform: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-command-item:hover {
+  transform: none;
+}
+
+/* —— 3. Pipeline Signal — Valuation Executive Readiness / Dashboard Qualified Opportunity —— */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-card.ma-valuation-status-card.ma-valuation-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  width: 100%;
+  max-width: var(--ma-mna-hero-panel-max-width, 380px);
+  margin-left: auto;
+  margin-top: 0;
+  align-self: start;
+  min-height: 0;
+  padding: 32px;
+  border-radius: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.055);
+  border-top-color: rgba(90, 255, 220, 0.074);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.032) 0%, rgba(255, 255, 255, 0) 14%),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.012) 0%,
+      rgba(2, 4, 7, 0.045) 44%,
+      rgba(1, 2, 4, 0.075) 100%
+    );
+  background-color: transparent;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.065),
+    inset 1px 0 0 rgba(45, 212, 191, 0.016),
+    0 10px 28px rgba(0, 0, 0, 0.2),
+    0 -6px 18px rgba(45, 212, 191, 0.009);
+  backdrop-filter: blur(20px) saturate(86%) brightness(0.94);
+  -webkit-backdrop-filter: blur(20px) saturate(86%) brightness(0.94);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transform: none;
+  filter: none;
+  text-align: left;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-card::before,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-card::after {
+  content: none;
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-title {
+  margin: 6px 0 0;
+  font-size: clamp(21px, 2vw, 27px);
+  font-weight: 800;
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  color: var(--ma-pipe-text);
+  text-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-icon-box.ma-valuation-icon-box {
+  position: relative;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ma-pipe-teal);
+  background: linear-gradient(
+    165deg,
+    rgba(12, 20, 30, 0.52) 0%,
+    rgba(8, 14, 22, 0.36) 100%
+  );
+  border: 1px solid rgba(90, 255, 220, 0.14);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.04),
+    0 0 16px rgba(45, 212, 191, 0.12);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-live {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--ma-pipe-teal-bright);
+  box-shadow: 0 0 8px rgba(94, 234, 212, 0.7);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-live {
+    animation: ma-pipe-signal-live-pulse 3.6s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-icon-box.ma-valuation-icon-box {
+    animation: ma-pipe-signal-icon-ring 4.8s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-live,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-icon-box.ma-valuation-icon-box {
+    animation: none;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > a > .button,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > .button {
+    transition: none;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > a > .button:hover,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions > .button:hover {
+    transform: none;
+  }
+}
+
+@keyframes ma-pipe-signal-live-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(0.92); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes ma-pipe-signal-icon-ring {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(45, 212, 191, 0.04), 0 0 14px rgba(45, 212, 191, 0.1); }
+  50% { box-shadow: 0 0 0 1px rgba(45, 212, 191, 0.1), 0 0 20px rgba(45, 212, 191, 0.22); }
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-row .kpi-label {
+  color: var(--ma-pipe-caption);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 650;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-row strong {
+  text-align: right;
+  overflow-wrap: anywhere;
+  color: var(--ma-pipe-text);
+  font-size: 15px;
+  font-weight: 760;
+  letter-spacing: -0.01em;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-row:first-child strong {
+  font-size: 18px;
+  font-weight: 820;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  text-shadow: 0 0 18px rgba(45, 212, 191, 0.12);
+}
+
+/*
+  Main signal nest — SAME material as metric list (Valuation C.24.83 inner glass).
+  Do not flatten to transparent: that reads as a darker void vs the list nest.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-box {
+  margin: 0 0 8px;
+  border-radius: var(--ma-pipe-status-list-radius);
+  padding: 14px 16px;
+  border: 1px solid var(--ma-pipe-status-list-border);
+  background: var(--ma-pipe-status-list-bg);
+  background-image: var(--ma-pipe-status-list-bg);
+  background-color: transparent;
+  box-shadow: var(--ma-pipe-status-list-shadow);
+  backdrop-filter: var(--ma-pipe-status-list-blur);
+  -webkit-backdrop-filter: var(--ma-pipe-status-list-blur);
+  transform: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-box::before,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-box::after {
+  display: none;
+  content: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-box strong {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--ma-pipe-text);
+  background: transparent;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-list {
+  display: grid;
+  gap: 0;
+  margin-top: 2px;
+  padding: 8px 14px;
+  border-radius: var(--ma-pipe-status-list-radius);
+  border: 1px solid var(--ma-pipe-status-list-border);
+  background: var(--ma-pipe-status-list-bg);
+  background-image: var(--ma-pipe-status-list-bg);
+  background-color: transparent;
+  box-shadow: var(--ma-pipe-status-list-shadow);
+  backdrop-filter: var(--ma-pipe-status-list-blur);
+  -webkit-backdrop-filter: var(--ma-pipe-status-list-blur);
+}
+
+/* Embedded status rows — Valuation Ready rhythm (integrated, not mini-cards) */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 14px;
+  align-items: center;
+  padding: 14px 4px;
+  border: 0;
+  border-top: 1px solid var(--ma-pipe-status-row-divider);
+  border-radius: 0;
+  background: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-row:first-child {
+  border-top: 0;
+  padding-top: 8px;
+}
+
+/* —— 4. Summary KPI row — OUTER green/teal + inner icon blue —— */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 1.5vw, 22px);
+  margin: 0 0 8px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-summary-card.ma-valuation-surface {
+  position: relative;
+  isolation: isolate;
+  min-height: 0;
+  padding: 22px var(--ma-surface-padding-x, 28px);
+  border-radius: var(--ma-pipe-outer-radius);
+  border: 1px solid var(--ma-pipe-outer-border);
+  background: var(--ma-pipe-outer-bg);
+  box-shadow: var(--ma-pipe-outer-shadow);
+  backdrop-filter: var(--ma-pipe-outer-blur);
+  -webkit-backdrop-filter: var(--ma-pipe-outer-blur);
+  transform: none;
+  filter: none;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-summary-card:hover {
+  transform: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-summary-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-summary-icon.ma-valuation-icon-box {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  margin: 0;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ma-pipe-teal);
+  background: linear-gradient(
+    165deg,
+    rgba(12, 20, 30, 0.72) 0%,
+    rgba(8, 14, 22, 0.58) 100%
+  );
+  border: 1px solid rgba(90, 255, 220, 0.1);
+  box-shadow: none;
+  overflow: hidden;
+}
+
+/*
+  Top-section authority — beat legacy maExecutiveTheme flat/black !important
+  without inventing new materials. Scoped to .ma-pipeline-premium only.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-hero:not(#__ceos_no_match__) {
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  min-height: 0 !important;
+  padding: var(--ma-mna-hero-padding-top, 8px) 0 32px !important;
+  margin: var(--page-hero-top-gap, 6px) 0 var(--ma-mna-hero-scene-margin-bottom, 12px) !important;
+}
+
+/* Title hierarchy — Dashboard/Valuation parity (title-line was muted gray) */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-title:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-title-line:not(#__ceos_no_match__) {
+  color: #f8fafc !important;
+  text-shadow:
+    0 2px 28px rgba(0, 0, 0, 0.45),
+    0 0 48px rgba(45, 212, 191, 0.06) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-title-sub:not(#__ceos_no_match__) {
+  color: rgba(203, 213, 225, 0.72) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-copy:not(#__ceos_no_match__) {
+  color: rgba(203, 213, 225, 0.74) !important;
+}
+
+/* kicker-hero matches [class*="-hero"] → emerald plate. Flatten. */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-kicker-hero:not(#__ceos_no_match__) {
+  color: var(--ceos-hero-kicker-color) !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 0 var(--ceos-hero-kicker-margin-bottom) !important;
+  font-size: var(--ceos-hero-kicker-size) !important;
+  font-weight: var(--ceos-hero-kicker-weight) !important;
+  letter-spacing: var(--ceos-hero-kicker-letter-spacing) !important;
+  text-transform: var(--ceos-hero-kicker-transform) !important;
+}
+
+/* Kill gold/brown kpi-label capsules (executivePolish + ws gold border) */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page :is(
+  .ma-pipeline-signal-card,
+  .ma-pipeline-command-item,
+  .ma-pipeline-summary-card
+) .kpi-label:not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  color: rgba(148, 163, 184, 0.9) !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-badges:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-meta-chip:not(#__ceos_no_match__) {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-hero:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-hero:not(#__ceos_no_match__)::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  opacity: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-signal-card.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  border: 1px solid var(--ma-pipe-status-border) !important;
+  border-top-color: var(--ma-pipe-status-border-top) !important;
+  background: var(--ma-pipe-status-bg) !important;
+  background-image: var(--ma-pipe-status-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-pipe-status-shadow) !important;
+  backdrop-filter: var(--ma-pipe-status-blur) !important;
+  -webkit-backdrop-filter: var(--ma-pipe-status-blur) !important;
+  padding: 32px !important;
+  border-radius: 22px !important;
+  max-width: 380px !important;
+  margin-left: auto !important;
+  margin-top: var(--ma-mna-hero-right-panel-offset) !important;
+  align-self: start !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-summary-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  isolation: isolate !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border: 1px solid var(--ma-pipe-outer-border) !important;
+  border-radius: var(--ma-pipe-outer-radius) !important;
+  background: var(--ma-pipe-outer-bg) !important;
+  background-image: var(--ma-pipe-outer-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-pipe-outer-shadow) !important;
+  backdrop-filter: var(--ma-pipe-outer-blur) !important;
+  -webkit-backdrop-filter: var(--ma-pipe-outer-blur) !important;
+  padding: 22px 24px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-command-item:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-command-item.ma-valuation-surface:not(#__ceos_no_match__) {
+  isolation: isolate !important;
+  position: relative !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 108px !important;
+  height: 100% !important;
+  padding: 16px 18px !important;
+  border: 1px solid var(--ma-pipe-outer-border) !important;
+  border-color: rgba(90, 255, 220, 0.12) !important;
+  border-radius: var(--ma-pipe-outer-radius, 22px) !important;
+  background: var(--ma-pipe-outer-bg) !important;
+  background-image: var(--ma-pipe-outer-bg) !important;
+  box-shadow: var(--ma-pipe-outer-shadow) !important;
+  backdrop-filter: var(--ma-pipe-outer-blur) !important;
+  -webkit-backdrop-filter: var(--ma-pipe-outer-blur) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-command-item > *:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-summary-card > *:not(#__ceos_no_match__) {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/*
+  Dashboard outer card ambient + rim — verbatim --ma-mna-surface-ambient.
+  FORENSIC: height:120px + border-radius:0 on ~108px cards created a sharp
+  rectangular ambient plate (taller than the card, square corners) clipped by
+  overflow:hidden — read as dark rectangular artifacts inside approved glass.
+  Keep same ambient token; fill card with inherit radius only.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-command-item:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-summary-card.ma-valuation-surface:not(#__ceos_no_match__)::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: inherit !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: var(--ma-mna-surface-ambient) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-command-item:not(#__ceos_no_match__)::after,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-summary-card.ma-valuation-surface:not(#__ceos_no_match__)::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-icon-box.ma-valuation-icon-box:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-summary-icon.ma-valuation-icon-box:not(#__ceos_no_match__) {
+  background: linear-gradient(
+    165deg,
+    rgba(12, 20, 30, 0.72) 0%,
+    rgba(8, 14, 22, 0.58) 100%
+  ) !important;
+  background-image: linear-gradient(
+    165deg,
+    rgba(12, 20, 30, 0.72) 0%,
+    rgba(8, 14, 22, 0.58) 100%
+  ) !important;
+  border: 1px solid rgba(90, 255, 220, 0.14) !important;
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.05),
+    0 0 16px rgba(45, 212, 191, 0.14) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-summary-icon.ma-valuation-icon-box:not(#__ceos_no_match__) {
+  background: linear-gradient(
+    165deg,
+    rgba(12, 20, 30, 0.72) 0%,
+    rgba(8, 14, 22, 0.58) 100%
+  ) !important;
+  border: 1px solid rgba(90, 255, 220, 0.1) !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-signal-row:not(#__ceos_no_match__) {
+  border: 0 !important;
+  border-top: 1px solid var(--ma-pipe-status-row-divider) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  padding: 14px 4px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-signal-row:first-child:not(#__ceos_no_match__) {
+  border-top: 0 !important;
+  padding-top: 8px !important;
+}
+
+/*
+  Forensic lock — ONE inner glass recipe for Signal box + list.
+  SoT: Valuation C.24.83 integrated-stats (+ Dashboard teal radial undertone).
+  Rows stay transparent inside the list nest. Outer card untouched.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-signal-box:not(#__ceos_no_match__) {
+  margin: 0 0 8px !important;
+  border: 1px solid var(--ma-pipe-status-list-border) !important;
+  border-radius: var(--ma-pipe-status-list-radius) !important;
+  background: var(--ma-pipe-status-list-bg) !important;
+  background-image: var(--ma-pipe-status-list-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-pipe-status-list-shadow) !important;
+  backdrop-filter: var(--ma-pipe-status-list-blur) !important;
+  -webkit-backdrop-filter: var(--ma-pipe-status-list-blur) !important;
+  padding: 14px 16px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-signal-box:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-signal-box:not(#__ceos_no_match__)::after {
+  display: none !important;
+  content: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium.ma-pipeline-page .ma-pipeline-signal-list:not(#__ceos_no_match__) {
+  background: var(--ma-pipe-status-list-bg) !important;
+  background-image: var(--ma-pipe-status-list-bg) !important;
+  background-color: transparent !important;
+  border: 1px solid var(--ma-pipe-status-list-border) !important;
+  border-radius: var(--ma-pipe-status-list-radius) !important;
+  box-shadow: var(--ma-pipe-status-list-shadow) !important;
+  backdrop-filter: var(--ma-pipe-status-list-blur) !important;
+  -webkit-backdrop-filter: var(--ma-pipe-status-list-blur) !important;
+  padding: 8px 14px !important;
+  margin-top: 2px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-toolbar:not(#__ceos_no_match__) {
+  border-radius: 20px !important;
+  border: 1px solid var(--ma-pipe-outer-border) !important;
+  background: var(--ma-pipe-outer-bg) !important;
+  background-image: var(--ma-pipe-outer-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-pipe-outer-shadow) !important;
+  backdrop-filter: var(--ma-pipe-outer-blur) !important;
+  -webkit-backdrop-filter: var(--ma-pipe-outer-blur) !important;
+  filter: none !important;
+}
+
+/* Fields = Valuation blue/dark inner (toolbar shell stays OUTER) */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-search:not(#__ceos_no_match__) {
+  border-radius: 14px !important;
+  border: 1px solid var(--ma-pipe-inner-border) !important;
+  background: var(--ma-pipe-inner-bg) !important;
+  background-image: var(--ma-pipe-inner-bg) !important;
+  background-color: transparent !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-search input:not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--ma-pipe-text) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-select {
+  border-radius: 14px !important;
+  background: var(--ma-pipe-inner-bg) !important;
+  background-image: var(--ma-pipe-inner-bg) !important;
+  background-color: transparent !important;
+  border: 1px solid var(--ma-pipe-inner-border) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  color: rgba(248, 250, 252, 0.94) !important;
+}
+
+/* —— 5. Board OUTER — Valuation green panel family —— */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-shell:not(#__ceos_no_match__) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: var(--ma-surface-padding-y, 28px) var(--ma-surface-padding-x, 28px) 22px !important;
+  border-radius: var(--ma-pipe-outer-radius) !important;
+  border: 1px solid var(--ma-pipe-outer-border) !important;
+  background: var(--ma-pipe-outer-bg) !important;
+  background-image: var(--ma-pipe-outer-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-pipe-outer-shadow) !important;
+  backdrop-filter: var(--ma-pipe-outer-blur) !important;
+  -webkit-backdrop-filter: var(--ma-pipe-outer-blur) !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-shell::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  height: auto !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: var(--ma-mna-surface-ambient, radial-gradient(ellipse 80% 100% at 12% 0%, rgba(45, 212, 191, 0.1), transparent 72%)) !important;
+  opacity: 0.85 !important;
+  mask-image: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-shell::after {
+  content: none !important;
+  display: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ma-pipe-teal-dim);
+  text-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-header p {
+  max-width: 720px;
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ma-pipe-muted);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-header {
+  padding-top: 0;
+  padding-inline: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-header .ma-val-ref-cta-ghost:not(#__ceos_no_match__) {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  /* Beat maButtonSystem margin:0/padding — optically align with board h2 after kicker */
+  margin: 28px 4px 0 0 !important;
+  padding: 8px 4px !important;
+  color: rgba(226, 232, 240, 0.84) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  line-height: 1.3 !important;
+  opacity: 1 !important;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-header .ma-val-ref-cta-ghost:not(#__ceos_no_match__):hover,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-header .ma-val-ref-cta-ghost:not(#__ceos_no_match__):focus-visible {
+  color: var(--ma-pipe-teal-bright) !important;
+  outline: none !important;
+}
+
+/* —— 6. Columns INNER — blue/dark —— */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board:not(#__ceos_no_match__) {
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: minmax(328px, 348px) !important;
+  grid-template-columns: none !important;
+  gap: 16px !important;
+  align-items: start !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(45, 212, 191, 0.35) rgba(0, 0, 0, 0.28);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board::-webkit-scrollbar {
+  height: 8px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.32);
+  border-radius: 999px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, rgba(45, 212, 191, 0.38), rgba(45, 212, 191, 0.22));
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-column:not(#__ceos_no_match__) {
+  min-width: 328px !important;
+  max-width: 348px;
+  width: 100%;
+  min-height: 0;
+  height: auto;
+  align-self: start;
+  padding: 14px var(--ma-table-padding-x-dense, 16px) 12px !important;
+  border-radius: 20px !important;
+  border: 1px solid var(--ma-pipe-inner-border) !important;
+  background: var(--ma-pipe-inner-bg) !important;
+  background-image: var(--ma-pipe-inner-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-pipe-inner-shadow) !important;
+  backdrop-filter: var(--ma-pipe-inner-blur) !important;
+  -webkit-backdrop-filter: var(--ma-pipe-inner-blur) !important;
+  transform: none !important;
+  filter: none !important;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-column:hover {
+  transform: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-column-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-column-header strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--ma-pipe-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-column-header p,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-column-header p.muted {
+  margin: 6px 0 0;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: rgba(186, 198, 214, 0.92) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-count:not(#__ceos_no_match__) {
+  flex: 0 0 auto;
+  justify-self: end;
+  min-width: 28px;
+  height: 26px;
+  padding: 0 9px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(203, 213, 225, 0.88) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(148, 163, 184, 0.16) !important;
+  box-shadow: none !important;
+}
+
+/* —— 7. Deal records — deeper dark premium —— */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-deal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  backdrop-filter: none !important;
+  filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-card:not(#__ceos_no_match__) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden !important;
+  padding: 18px 0 16px !important;
+  border-radius: 18px !important;
+  border: 1px solid var(--ma-pipe-card-border) !important;
+  background: var(--ma-pipe-card-bg) !important;
+  background-image: var(--ma-pipe-card-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-pipe-card-shadow) !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+  filter: none !important;
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.16s ease;
+  transform: none !important;
+}
+
+/* Kill EPS nested [class*="card"] paint leftovers on renamed internals */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-card :is(
+  .ma-deal-record-head,
+  .ma-deal-record-title,
+  .ma-deal-meta,
+  .ma-deal-meta-row,
+  .ma-deal-footer,
+  .ma-deal-owner
+):not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-card :is(
+  .ma-deal-record-head,
+  .ma-deal-record-title,
+  .ma-deal-meta,
+  .ma-deal-meta-row,
+  .ma-deal-footer,
+  .ma-deal-owner
+)::before,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-card :is(
+  .ma-deal-record-head,
+  .ma-deal-record-title,
+  .ma-deal-meta,
+  .ma-deal-meta-row,
+  .ma-deal-footer,
+  .ma-deal-owner
+)::after {
+  content: none !important;
+  display: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-card:hover {
+  transform: translateY(-1px) !important;
+  border-color: rgba(90, 255, 220, 0.16) !important;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055),
+    0 0 32px rgba(45, 212, 191, 0.045) !important;
+  background: var(--ma-pipe-card-bg) !important;
+  background-image: var(--ma-pipe-card-bg) !important;
+}
+
+/*
+  Deal-card top accent — Dashboard KPI spark recipe (subdued, full-width).
+  Restored for board interior cards. Ambient wash remains separate.
+*/
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board .ma-deal-card > .ma-deal-top-accent {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 2px !important;
+  margin: 0 !important;
+  border-radius: 18px 18px 0 0 !important;
+  background: rgba(45, 212, 191, 0.06) !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board .ma-deal-card > .ma-deal-top-accent::after {
+  content: '' !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(
+    90deg,
+    rgba(45, 212, 191, 0.14),
+    rgba(45, 212, 191, 0.42) 50%,
+    rgba(45, 212, 191, 0.14)
+  ) !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-record-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-record-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-card h3 {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 750;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  color: var(--ma-pipe-text);
+  text-shadow: none;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-record-sector {
+  margin: 8px 0 0 !important;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(148, 163, 184, 0.88);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-meta {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-meta-row {
+  display: grid;
+  grid-template-columns: minmax(78px, 34%) minmax(0, 1fr);
+  column-gap: 14px;
+  align-items: start;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-meta-row span {
+  color: rgba(148, 163, 184, 0.78);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-meta-row strong {
+  font-size: 12px;
+  font-weight: 650;
+  color: rgba(248, 250, 252, 0.92);
+  text-align: right;
+  text-shadow: none;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding-right: 2px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-footer {
+  margin-top: 16px;
+  padding-top: 13px;
+  border-top: 1px solid rgba(255, 255, 255, 0.045);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-owner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: rgba(203, 213, 225, 0.78);
+  overflow-wrap: anywhere;
+}
+
+/* Priority badges — semantic, desaturated, secondary to name */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-priority {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  max-width: 76px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  color: rgba(203, 213, 225, 0.82) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-priority.high {
+  color: rgba(167, 243, 208, 0.92) !important;
+  background: rgba(16, 185, 129, 0.1) !important;
+  border-color: rgba(16, 185, 129, 0.22) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-priority.review {
+  color: rgba(186, 230, 253, 0.88) !important;
+  background: rgba(56, 189, 248, 0.08) !important;
+  border-color: rgba(125, 211, 252, 0.18) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-priority.watch {
+  color: rgba(253, 230, 138, 0.78) !important;
+  background: rgba(234, 179, 8, 0.07) !important;
+  border-color: rgba(234, 179, 8, 0.16) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-priority.build {
+  color: rgba(203, 213, 225, 0.78) !important;
+  background: rgba(148, 163, 184, 0.08) !important;
+  border-color: rgba(148, 163, 184, 0.16) !important;
+}
+
+/* Open action — quiet teal control, sits on shared glass material */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-open:not(#__ceos_no_match__) {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: var(--ma-pipe-teal-bright);
+  background: rgba(45, 212, 191, 0.09) !important;
+  border: 1px solid rgba(90, 255, 220, 0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-open:hover {
+  background: rgba(45, 212, 191, 0.14) !important;
+  border-color: rgba(90, 255, 220, 0.28) !important;
+  transform: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-empty:not(#__ceos_no_match__) {
+  padding: 16px !important;
+  border-radius: 14px !important;
+  border: 1px dashed rgba(148, 163, 184, 0.18) !important;
+  background: rgba(5, 9, 14, 0.35) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-empty strong {
+  font-size: 12px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-empty p {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: rgba(148, 163, 184, 0.78);
+}
+
+/* Kill glow text / icon neon from legacy pipelineCss */
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-search svg,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-kicker svg,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-meta-row svg,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-deal-owner svg {
+  filter: none;
+}
+
+/* —— Responsive —— */
+@media (max-width: 1180px) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-signal-card {
+    max-width: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-command-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board {
+    grid-auto-columns: minmax(300px, 320px) !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-column:not(#__ceos_no_match__) {
+    min-width: 300px !important;
+    max-width: 320px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-board-shell {
+    padding: 18px 16px 16px !important;
+  }
+}

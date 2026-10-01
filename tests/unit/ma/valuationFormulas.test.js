@@ -3,7 +3,9 @@ import {
   DEFAULT_FINANCIALS,
   parseFinancialInputs,
   calculateCoreMetrics,
-  calculateDcfEnterpriseValue
+  calculateDcfEnterpriseValue,
+  PRIMARY_VALUATION_METHOD,
+  reconstructAdjustedEquityValue
 } from '../../../src/modules/ma/engine/valuationFormulas.js';
 
 describe('valuationFormulas', () => {
@@ -85,5 +87,19 @@ describe('valuationFormulas', () => {
 
     expect(dcf.enterpriseValue).toBeNull();
     expect(dcf.warnings).toContain('DCF requires WACC above terminal growth.');
+  });
+
+  it('reconstruye adjusted equity como EV − net debt + WC adjustment', () => {
+    const inputs = parseFinancialInputs(DEFAULT_FINANCIALS);
+    const core = calculateCoreMetrics(inputs);
+
+    expect(PRIMARY_VALUATION_METHOD.id).toBe('adjusted_ebitda_multiple');
+    expect(
+      reconstructAdjustedEquityValue({
+        enterpriseValue: 3264778.65,
+        netDebt: core.netDebt,
+        workingCapitalAdjustment: core.wcAdjustment
+      })
+    ).toBeCloseTo(3184778.65, 2);
   });
 });

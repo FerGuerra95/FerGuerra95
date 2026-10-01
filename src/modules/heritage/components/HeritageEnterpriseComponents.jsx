@@ -6,8 +6,7 @@ import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 export const heritageEnterpriseCss = `
   .heritage-enterprise-page { width: min(1500px, 100%); margin: 0 auto; display: grid; gap: 24px; }
   .heritage-enterprise-hero { display: grid; gap: 14px; padding: 28px; border: 1px solid rgba(212,175,55,0.16); border-radius: 24px; background: linear-gradient(135deg, rgba(15,23,42,0.94), rgba(10,10,12,0.98)); }
-  .heritage-enterprise-title { margin: 0; font-size: clamp(30px, 4vw, 52px); line-height: 1; letter-spacing: 0; }
-  .heritage-enterprise-copy { max-width: 860px; margin: 0; color: rgba(203,213,225,0.82); line-height: 1.7; }
+  .heritage-enterprise-copy { max-width: 860px; color: rgba(203,213,225,0.82); }
   .heritage-enterprise-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
   .heritage-enterprise-grid-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
   .heritage-enterprise-panel { padding: 18px; border: 1px solid rgba(212,175,55,0.14); border-radius: 18px; background: rgba(15,23,42,0.68); }

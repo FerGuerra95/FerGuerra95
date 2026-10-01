@@ -301,6 +301,7 @@ async function assertNoDuplicateCaseName({
 
   const duplicated = items.find((item) => {
     if (excludeId && item.id === excludeId) return false;
+    if (item.status === 'archived') return false;
 
     return (
       normalizeComparableText(item.name || item.financials?.name) ===
@@ -340,6 +341,10 @@ export const listMaCases = async (scope = {}) => {
 
   return items.filter((item) => {
     if (!scope.includeTestFixtures && isMaE2eFixture(item)) {
+      return false;
+    }
+
+    if (!scope.includeArchived && item.status === 'archived') {
       return false;
     }
 
@@ -441,12 +446,47 @@ export const deleteMaCase = async (id, scope = {}) => {
   if (!existing) {
     return {
       deleted: false,
+      archived: false,
       id,
       reason: 'not_found'
     };
   }
 
-  return casesStore.removeForOrganization(id, scope.organizationId);
+  if (existing.status === 'archived') {
+    return {
+      deleted: true,
+      archived: true,
+      id,
+      status: 'archived'
+    };
+  }
+
+  const item = await casesStore.updateForOrganization(
+    id,
+    {
+      status: 'archived',
+      updatedAt: new Date().toISOString(),
+      organizationId: scope.organizationId,
+      userId: existing.userId
+    },
+    scope.organizationId
+  );
+
+  if (!item) {
+    return {
+      deleted: false,
+      archived: false,
+      id,
+      reason: 'not_found'
+    };
+  }
+
+  return {
+    deleted: true,
+    archived: true,
+    id,
+    status: item.status
+  };
 };
 
 export async function addMaSnapshot(caseId, snapshot = {}, scope = {}) {

@@ -165,14 +165,15 @@
   align-items: flex-start;
 }
 
-.ma-executive-page *,
-.ma-valuation-page *,
-.ma-pipeline-page *,
-.waterfall-page *,
-.cim-page *,
-.buyer-page *,
-.deals-page *,
-.ma-deal-detail-page * {
+/* Preserve technical eyebrows / field labels that own their own tracking recipes. */
+.ma-executive-page *:not(.ma-reference-caption):not(.ma-vdr-rail-section-label):not(.ma-vdr-file-field-label):not(label),
+.ma-valuation-page *:not(.ma-reference-caption):not(.ma-vdr-rail-section-label):not(.ma-vdr-file-field-label):not(label),
+.ma-pipeline-page *:not(.ma-reference-caption):not(.ma-vdr-rail-section-label):not(.ma-vdr-file-field-label):not(label),
+.waterfall-page *:not(.ma-reference-caption):not(.ma-vdr-rail-section-label):not(.ma-vdr-file-field-label):not(label),
+.cim-page *:not(.ma-reference-caption):not(.ma-vdr-rail-section-label):not(.ma-vdr-file-field-label):not(label),
+.buyer-page *:not(.ma-reference-caption):not(.ma-vdr-rail-section-label):not(.ma-vdr-file-field-label):not(label),
+.deals-page *:not(.ma-reference-caption):not(.ma-vdr-rail-section-label):not(.ma-vdr-file-field-label):not(label),
+.ma-deal-detail-page *:not(.ma-reference-caption):not(.ma-vdr-rail-section-label):not(.ma-vdr-file-field-label):not(label) {
   box-sizing: border-box;
   min-width: 0;
   letter-spacing: 0 !important;

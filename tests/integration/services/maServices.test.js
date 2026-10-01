@@ -13,6 +13,7 @@ import {
   createMaCase,
   deleteMaCase,
   getMaCaseById,
+  isMaE2eFixture,
   listMaCases,
   updateMaCase
 } from '../../../backend/services/ma/cases.service.js';
@@ -647,6 +648,203 @@ describe('ma services multi-tenancy', () => {
     });
 
     expect(deleteResult.deleted).toBe(false);
+  });
+
+  it('archiva el caso sin orphanear reports, shares, deals ni data room', async () => {
+    const organizationId = 'org_archive_retention';
+    const userId = 'u_archive_retention';
+    const item = await createMaCase(
+      buildCasePayload('Archive Continuity Deal', organizationId, userId)
+    );
+
+    const report = await createMaReport({
+      organizationId,
+      userId,
+      caseId: item.id,
+      title: 'Archive continuity report',
+      payload: {
+        html: '<p>archive</p>'
+      }
+    });
+    const share = await createMaSecureShareLink({
+      organizationId,
+      userId,
+      reportId: report.id,
+      expiresInHours: 24
+    });
+    const document = await createMaDataRoomDocument({
+      organizationId,
+      userId,
+      caseId: item.id,
+      reportId: report.id,
+      title: 'Archive continuity VDR',
+      documentType: 'report',
+      status: 'ready'
+    });
+    const deal = await createMaDeal({
+      organizationId,
+      userId,
+      caseId: item.id,
+      name: 'Archive Continuity Pipeline Deal'
+    });
+
+    const archived = await deleteMaCase(item.id, { organizationId });
+
+    expect(archived.deleted).toBe(true);
+    expect(archived.archived).toBe(true);
+    expect(archived.status).toBe('archived');
+
+    const listed = await listMaCases({ organizationId });
+    expect(listed.map((entry) => entry.id)).not.toContain(item.id);
+
+    const listedWithArchived = await listMaCases({
+      organizationId,
+      includeArchived: true
+    });
+    expect(listedWithArchived.some((entry) => entry.id === item.id)).toBe(true);
+
+    const persisted = await getMaCaseById(item.id, { organizationId });
+    expect(persisted?.id).toBe(item.id);
+    expect(persisted?.status).toBe('archived');
+    expect(persisted?.updatedAt).toBeTruthy();
+
+    const reports = await listMaReports({ organizationId });
+    expect(reports.find((entry) => entry.id === report.id)?.caseId).toBe(item.id);
+
+    const resolvedShare = await getMaSecureShare({
+      organizationId,
+      id: share.id,
+      token: share.token
+    });
+    expect(resolvedShare.share?.id).toBe(share.id);
+    expect(resolvedShare.report?.id).toBe(report.id);
+
+    const documents = await listMaDataRoomDocuments({ organizationId });
+    expect(documents.find((entry) => entry.id === document.id)?.caseId).toBe(
+      item.id
+    );
+
+    const deals = await listMaDeals({ organizationId });
+    expect(deals.find((entry) => entry.id === deal.id)?.caseId).toBe(item.id);
+
+    const replacement = await createMaCase(
+      buildCasePayload('Archive Continuity Deal', organizationId, userId)
+    );
+    expect(replacement.id).not.toBe(item.id);
+    expect(replacement.status).not.toBe('archived');
+  });
+
+  it('excluye fixtures e2e de listados de casos y reportes de usuario', async () => {
+    const organizationId = 'org_e2e_isolation';
+    const userId = 'u_e2e_isolation';
+    const visible = await createMaCase(
+      buildCasePayload('Visible Isolation Deal', organizationId, userId)
+    );
+    const fixture = await createMaCase({
+      ...buildCasePayload('E2E Isolation Fixture', organizationId, userId),
+      origin: 'e2e',
+      settings: {
+        origin: 'e2e',
+        reportCurrency: 'EUR',
+        evidenceDocuments: []
+      }
+    });
+
+    expect(isMaE2eFixture(fixture)).toBe(true);
+    expect(fixture.settings.origin).toBe('e2e');
+
+    const listed = await listMaCases({ organizationId });
+    expect(listed.map((item) => item.id)).toEqual([visible.id]);
+
+    const listedWithFixtures = await listMaCases({
+      organizationId,
+      includeTestFixtures: true
+    });
+    expect(listedWithFixtures.map((item) => item.id).sort()).toEqual(
+      [visible.id, fixture.id].sort()
+    );
+
+    const fetchedFixture = await getMaCaseById(fixture.id, { organizationId });
+    expect(fetchedFixture?.id).toBe(fixture.id);
+
+    const fixtureReport = await createMaReport({
+      organizationId,
+      userId,
+      caseId: fixture.id,
+      title: 'Informe E2E isolation',
+      payload: {
+        html: '<p>fixture</p>',
+        origin: 'e2e'
+      }
+    });
+    const visibleReport = await createMaReport({
+      organizationId,
+      userId,
+      caseId: visible.id,
+      title: 'Informe visible isolation',
+      payload: {
+        html: '<p>visible</p>'
+      }
+    });
+
+    const reports = await listMaReports({ organizationId });
+    expect(reports.map((item) => item.id)).toEqual([visibleReport.id]);
+
+    const reportsWithFixtures = await listMaReports({
+      organizationId,
+      includeTestFixtures: true
+    });
+    expect(reportsWithFixtures.map((item) => item.id).sort()).toEqual(
+      [visibleReport.id, fixtureReport.id].sort()
+    );
+
+    const archivedFixture = await deleteMaCase(fixture.id, { organizationId });
+    expect(archivedFixture.archived).toBe(true);
+
+    const listedAfterArchive = await listMaCases({ organizationId });
+    expect(listedAfterArchive.map((item) => item.id)).toEqual([visible.id]);
+    expect(
+      listedAfterArchive.some(
+        (item) => item.settings?.origin === 'e2e' || item.origin === 'e2e'
+      )
+    ).toBe(false);
+
+    const reportsAfterArchive = await listMaReports({ organizationId });
+    expect(reportsAfterArchive.map((item) => item.id)).toEqual([
+      visibleReport.id
+    ]);
+
+    const fixtureShare = await createMaSecureShareLink({
+      organizationId,
+      userId,
+      reportId: fixtureReport.id,
+      expiresInHours: 24
+    });
+    const visibleShare = await createMaSecureShareLink({
+      organizationId,
+      userId,
+      reportId: visibleReport.id,
+      expiresInHours: 24
+    });
+    await registerSecureShareDataRoomDocument({
+      organizationId,
+      userId,
+      share: fixtureShare,
+      reportId: fixtureReport.id
+    });
+    const visibleDocument = await registerSecureShareDataRoomDocument({
+      organizationId,
+      userId,
+      share: visibleShare,
+      reportId: visibleReport.id
+    });
+
+    const dataRoomDocs = await listMaDataRoomDocuments({ organizationId });
+    const shares = await listMaSecureShares({ organizationId });
+
+    expect(dataRoomDocs.map((item) => item.id)).toEqual([visibleDocument.id]);
+    expect(shares.map((item) => item.id)).toEqual([visibleShare.id]);
+    expect(shares.every((item) => item.isActive)).toBe(true);
   });
 
   it('does not treat expired secure shares as active and blocks legal-hold archive', async () => {

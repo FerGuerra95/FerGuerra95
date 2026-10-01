@@ -63,8 +63,10 @@ test('PMI enterprise dashboard exposes case, M&A handoff, CRUD and audit control
   await assertNoSurfaceRegression(page);
 
   await page.goto('/dashboard');
-  await expect(page.getByRole('heading', { name: 'Post-Merger Execution' })).toBeVisible();
-  await expect(page.getByText('PMI Signal')).toBeVisible();
+  await expect(page).toHaveURL(/\/dashboard/);
+  const commandCenter = page.getByTestId('ceo-command-center-enterprise');
+  await expect(commandCenter).toBeVisible();
+  await expect(commandCenter.getByText('Executive Command Center', { exact: true })).toBeVisible();
 });
 
 test('PMI enterprise branch pages load without undefined financial state', async ({ page }) => {

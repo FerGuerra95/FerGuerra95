@@ -2,25 +2,38 @@ import { test, expect } from '@playwright/test';
 
 import { loginAsDemoAdmin } from '../helpers/auth.js';
 
-async function expectRailVisible(page) {
-  await expect(page.getByTestId('workspace-rail')).toBeVisible();
-  await expect(page.getByTestId('workspace-rail-track')).toBeVisible();
-  await expect(page.locator('[data-testid^="workspace-rail-item-"]')).toHaveCount(
+async function openWorkspaceMenu(page) {
+  await expect(
+    page.locator('.ceos-shell-desktop-sidebar [data-testid="workspace-switcher"]')
+  ).toBeVisible();
+  await page
+    .locator('.ceos-shell-desktop-sidebar [data-testid="workspace-switcher-trigger"]')
+    .click();
+  await expect(page.getByTestId('workspace-switcher-menu')).toBeVisible();
+}
+
+async function expectMenuVisible(page) {
+  await openWorkspaceMenu(page);
+  await expect(page.locator('[data-testid^="workspace-switcher-item-"]')).toHaveCount(
     11
   );
 }
 
 async function expectActiveWorkspace(page, key) {
+  await page.keyboard.press('Escape');
+  await openWorkspaceMenu(page);
   await expect(
-    page.getByTestId(`workspace-rail-item-${key}`)
-  ).toHaveAttribute('aria-current', 'page');
+    page.getByTestId(`workspace-switcher-item-${key}`)
+  ).toHaveAttribute('aria-selected', 'true');
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('workspace-switcher-menu')).toHaveCount(0);
 }
 
 async function selectWorkspace(page, key) {
-  const item = page.getByTestId(`workspace-rail-item-${key}`);
-
-  await item.scrollIntoViewIfNeeded();
-  await item.click();
+  await openWorkspaceMenu(page);
+  const item = page.getByTestId(`workspace-switcher-item-${key}`);
+  await item.focus();
+  await page.keyboard.press('Enter');
 }
 
 test.describe('Workspace switcher', () => {
@@ -32,7 +45,7 @@ test.describe('Workspace switcher', () => {
 
     await page.goto('/dashboard');
     await expect(page).toHaveURL(/\/dashboard/);
-    await expectRailVisible(page);
+    await expectMenuVisible(page);
     await expectActiveWorkspace(page, 'overview');
 
     await selectWorkspace(page, 'risk');

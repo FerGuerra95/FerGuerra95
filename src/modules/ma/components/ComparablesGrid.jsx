@@ -34,6 +34,7 @@ export function ComparablesGrid({ comparables, selectedMultiple = null }) {
 
   return (
     <section className="ma-comparables-shell ma-valuation-comparables-module ma-valuation-surface">
+      <div className="ma-ma-panel-ambient" aria-hidden="true" />
       <div className="ma-comparables-shell-header">
         <div>
           <div className="ma-comparables-kicker">
@@ -79,7 +80,12 @@ export function ComparablesGrid({ comparables, selectedMultiple = null }) {
               </div>
               <div className="ma-comparables-range-scale">
                 <span>x{minMultiple.toFixed(2)}</span>
-                <span className="is-selected">x{selected.toFixed(2)} selected</span>
+                <span
+                  className="is-selected"
+                  style={{ left: `${selectedPct}%` }}
+                >
+                  x{selected.toFixed(2)} selected
+                </span>
                 <span>x{maxMultiple.toFixed(2)}</span>
               </div>
             </div>

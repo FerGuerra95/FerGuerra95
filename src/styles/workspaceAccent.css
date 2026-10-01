@@ -110,67 +110,107 @@
     0 10px 28px rgba(0, 0, 0, 0.66);
 }
 
-.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link.is-active {
-  border-color: var(--ws-border-strong);
+/* —— Local navigation: DEFAULT / HOVER / ACTIVE (active workspace --ws-* tokens only) —— */
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link {
+  color: rgba(226, 232, 240, 0.64);
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+  filter: none;
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-rail {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--ws-accent);
+  opacity: 0;
+  box-shadow: none;
+  transition: opacity 150ms ease, box-shadow 150ms ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-icon {
+  color: rgba(226, 232, 240, 0.62);
+  filter: none;
+  transform: none;
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-label {
+  text-shadow: none;
+  font-weight: 850;
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link:hover:not(.is-active):not([aria-current='page']) {
+  color: rgba(248, 250, 252, 0.92);
+  background: rgba(var(--ws-accent-rgb), 0.05);
+  border-color: rgba(var(--ws-accent-rgb), 0.12);
+}
+
+.ceos-sidebar.ceos-ws-accent-root
+  .ceos-nav-link:hover:not(.is-active):not([aria-current='page'])
+  .ceos-nav-rail {
+  opacity: 0.42;
+  box-shadow: 0 0 10px var(--ws-accent-glow);
+}
+
+.ceos-sidebar.ceos-ws-accent-root
+  .ceos-nav-link:hover:not(.is-active):not([aria-current='page'])
+  .ceos-nav-icon {
+  color: var(--ws-accent);
+  filter: drop-shadow(0 0 6px var(--ws-accent-glow));
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link.is-active,
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link[aria-current='page'] {
+  color: #ffffff;
   background:
-    radial-gradient(circle at 0% 0%, var(--ws-accent-glow), transparent 42%),
-    linear-gradient(135deg, var(--ws-surface-strong), rgba(255, 255, 255, 0.02)),
-    rgba(0, 0, 0, 0.55);
+    radial-gradient(circle at 0% 0%, rgba(var(--ws-accent-rgb), 0.08), transparent 48%),
+    rgba(var(--ws-accent-rgb), 0.07);
+  border-color: rgba(var(--ws-accent-rgb), 0.26);
   box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.42),
-    0 0 18px var(--ws-accent-glow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 16px var(--ws-accent-glow);
 }
 
-.ceos-sidebar.ceos-ws-accent-root .ceos-active-rail {
-  background: linear-gradient(180deg, var(--ws-accent) 0%, var(--ws-accent-soft) 100%);
-  box-shadow: 0 0 18px var(--ws-accent-glow);
-  animation: none;
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link.is-active .ceos-nav-rail,
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link[aria-current='page'] .ceos-nav-rail {
+  opacity: 1;
+  box-shadow: 0 0 12px var(--ws-accent-glow);
 }
 
-.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link:hover .ceos-nav-link-shine,
-.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link.is-active .ceos-nav-link-shine {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.07),
-    var(--ws-accent-soft),
-    transparent
-  );
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link.is-active .ceos-nav-icon,
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link[aria-current='page'] .ceos-nav-icon {
+  color: var(--ws-accent);
+  filter: drop-shadow(0 0 8px var(--ws-accent-glow));
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link.is-active .ceos-nav-label,
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link[aria-current='page'] .ceos-nav-label {
+  font-weight: 900;
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link.is-active:hover,
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link[aria-current='page']:hover {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(var(--ws-accent-rgb), 0.10), transparent 48%),
+    rgba(var(--ws-accent-rgb), 0.09);
+  border-color: rgba(var(--ws-accent-rgb), 0.32);
+}
+
+.ceos-sidebar.ceos-ws-accent-root .ceos-nav-link:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ws-accent) 55%, transparent);
+  outline-offset: 2px;
 }
 
 /* —— Shared content shell: topbar, rail, page body —— */
 .main-area.ceos-main-area[data-workspace] {
-  --ceos-content-max: 1540px;
-  --ceos-content-pad: clamp(18px, 2.2vw, 32px);
   overflow-x: clip;
-}
-
-.main-area[data-workspace] .ceos-content-shell {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: var(--ceos-content-max);
-  margin-inline: auto;
-  padding-inline: var(--ceos-content-pad);
-}
-
-.main-area[data-workspace] .ceos-page-shell-host {
-  min-width: 0;
-  padding-bottom: clamp(18px, 2vw, 28px);
-}
-
-.main-area[data-workspace] .ceos-page-shell-host > .page {
-  width: 100%;
-  max-width: none;
-  margin-inline: 0;
-  padding-inline: 0;
-  padding-top: clamp(14px, 1.8vw, 24px);
-  padding-bottom: var(--space-page);
-  box-sizing: border-box;
-}
-
-.main-area[data-workspace] .ceos-page-shell-host > .page.ceos-page-shell {
-  box-sizing: border-box;
 }
 
 .main-area[data-workspace] .ceos-main-build-strip {
@@ -1057,7 +1097,6 @@
     .deals-case-card,
     .deals-signal-card,
     .deals-empty-wrap,
-    .ma-data-room-controls,
     .ma-data-room-panel
   ) {
   border-color: var(--ws-accent-border) !important;
@@ -1138,9 +1177,7 @@
     .suppliers-kpi-card,
     .suppliers-empty-wrap,
     .evidence-list-card,
-    .evidence-kpi-card,
-    .suppliers-section,
-    .evidence-section
+    .evidence-kpi-card
   ) {
   border-color: var(--ws-accent-border) !important;
   background:
@@ -1155,7 +1192,6 @@
     .report-command-item,
     .report-signal-card,
     .report-score-module,
-    .report-section,
     .report-kpi-card,
     .report-panel,
     .report-premium-panel,
@@ -1203,7 +1239,6 @@
     .funding-premium-panel,
     .funding-glass-block,
     .funding-panel,
-    .funding-section,
     .funding-premium-memo,
     .funding-premium-row
   ) {
@@ -1222,8 +1257,7 @@
     .dataroom-kpi-card,
     .dataroom-mini-card,
     .dataroom-checklist-panel,
-    .dataroom-signal-card,
-    .dataroom-section
+    .dataroom-signal-card
   ) {
   border-color: var(--ws-accent-border) !important;
   background:
@@ -1359,13 +1393,6 @@
   color: #f8f3e7 !important;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero {
-  background:
-    radial-gradient(ellipse 55% 68% at 82% 38%, rgba(212, 175, 55, 0.16), transparent 58%),
-    linear-gradient(155deg, #050505, #080808 52%, #050505) !important;
-  border-color: rgba(212, 175, 55, 0.28) !important;
-}
-
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-section-shell {
   background: linear-gradient(180deg, rgba(10, 9, 8, 0.96), rgba(5, 5, 5, 0.98)) !important;
   border-color: rgba(212, 175, 55, 0.2) !important;
@@ -1442,7 +1469,7 @@
   max-width: 100%;
   box-sizing: border-box;
   overflow-x: auto;
-  overflow-y: visible;
+  overflow-y: auto;
   border-radius: 12px;
   border: 1px solid rgba(148, 163, 184, 0.12);
   background:
@@ -1451,6 +1478,20 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.034);
   -webkit-overflow-scrolling: touch;
+}
+
+/* Nested wraps are scroll structure only — parent card/panel owns the visible plate.
+   Same foundation as hero fragments: wrappers must not paint a second rectangular underlay. */
+.main-area[data-workspace]
+  :is(.card, .ceos-executive-inner-surface, .ceos-ws-panel)
+  .ceos-enterprise-table-wrap:not(.ma-vdr-table-viewport),
+.main-area[data-workspace]
+  :is(.card, .ceos-executive-inner-surface, .ceos-ws-panel)
+  .table-wrap:not(.ceos-enterprise-table-wrap) {
+  background: transparent;
+  background-image: none;
+  border-color: transparent;
+  box-shadow: none;
 }
 
 .main-area[data-workspace] .ceos-enterprise-div-table {
@@ -1624,12 +1665,15 @@
   }
 }
 
-/* Module heroes + icon surfaces — workspace tint over executive polish */
-.main-area[data-workspace] .page :is(
-  [class*='-hero'],
-  .ceo-hero,
-  .suppliers-hero
-):not(.ceo-command-hero) {
+/* CEO'S OS SURFACE FOUNDATION
+   One visible rounded surface = one material owner (fill + border + radius).
+   Structural wrappers may layout/position, but must not paint an opaque
+   rectangular plate behind a rounded child.
+
+   Hero ROOT tokens (*-hero with no `-hero-` infix) may receive workspace tint.
+   Hero FRAGMENTS (*-hero-layout / -main / -inner / -rail / -copy / …) are
+   layout only. Opted-in heroes already own fill via .ceos-ws-hero. */
+.main-area[data-workspace] .page [class*='-hero']:not([class*='-hero-']):not(.ceo-command-hero):not(.ma-pipeline-kicker-hero) {
   background: var(--ws-hero-gradient) !important;
   border-color: var(--ws-accent-border) !important;
 }
@@ -1654,48 +1698,46 @@
     rgba(15, 23, 42, 0.72) !important;
 }
 
-/* C.24.5C-surface-recovery — final CEO-only cascade after workspace tint */
+/* C.24.5C-surface-recovery — left stack stays material-free (one content column) */
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-actions {
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-actions,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-copy,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-rail {
   background: transparent !important;
+  background-image: none !important;
   border-color: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero {
-  background:
-    radial-gradient(ellipse 68% 76% at 64% 42%, rgba(245, 197, 92, 0.18), transparent 62%),
-    radial-gradient(ellipse 42% 52% at 10% 18%, rgba(255, 214, 112, 0.08), transparent 56%),
-    linear-gradient(152deg, #050505 0%, #0b0a08 50%, #040404 100%) !important;
-  border: 1px solid rgba(245, 197, 92, 0.24) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(245, 197, 92, 0.12),
-    inset 0 -42px 90px rgba(0, 0, 0, 0.38),
-    0 0 64px rgba(245, 197, 92, 0.1),
-    0 24px 68px rgba(0, 0, 0, 0.58) !important;
+  /* Cascade shield — gradient lives in --ceo-mat-hero (ceoMaterialSystem) */
+  background: var(--ceo-mat-hero) !important;
+  border: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(245, 197, 92, 0.08) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-status-grid {
-  grid-template-columns: minmax(740px, 1fr) minmax(220px, 0.32fr) !important;
-  grid-template-areas:
-    "main readiness"
-    "main priorities" !important;
-  gap: 16px !important;
-  align-items: start !important;
+  grid-template-columns: minmax(0, 1fr) minmax(268px, 300px) !important;
+  grid-template-areas: none !important;
+  gap: 14px !important;
+  align-items: stretch !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main {
-  grid-area: main !important;
-  grid-template-columns: minmax(480px, 1fr) minmax(210px, 270px) !important;
-  gap: 22px !important;
-  min-height: 230px !important;
+  grid-area: auto !important;
+  grid-template-columns: minmax(400px, 1fr) minmax(300px, 360px) !important;
+  gap: 6px !important;
+  min-height: 0 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card {
-  grid-area: readiness !important;
+  grid-area: auto !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priorities-card {
-  grid-area: priorities !important;
+  grid-area: auto !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-copy {
@@ -1705,14 +1747,10 @@
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title {
   max-width: 20ch !important;
-  font-size: clamp(2rem, 2.65vw, 2.45rem) !important;
-  line-height: 1.03 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title span {
   max-width: 31rem !important;
-  font-size: clamp(1.02rem, 1.18vw, 1.14rem) !important;
-  line-height: 1.48 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-actions {
@@ -1729,8 +1767,8 @@
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-gold-secondary-action.button,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-gold-secondary-action.button.secondary {
-  background: linear-gradient(180deg, rgba(22, 19, 13, 0.9), rgba(8, 8, 7, 0.94)) !important;
-  border-color: rgba(212, 175, 55, 0.32) !important;
+  background: linear-gradient(180deg, rgba(20, 16, 10, 0.45), rgba(6, 5, 4, 0.58)) !important;
+  border-color: rgba(245, 197, 92, 0.38) !important;
   color: rgba(248, 243, 231, 0.88) !important;
   box-shadow: inset 0 1px 0 rgba(243, 218, 138, 0.08), 0 8px 20px rgba(0, 0, 0, 0.28) !important;
 }
@@ -1744,8 +1782,6 @@
     0 10px 24px rgba(0, 0, 0, 0.32) !important;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-readiness-card,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-priorities-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-corporate-radar-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-decision-queue-grid .ceo-command-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-grid .ceo-command-card,
@@ -1760,6 +1796,16 @@
     inset 0 -26px 54px rgba(0, 0, 0, 0.4),
     0 0 28px rgba(245, 197, 92, 0.06),
     0 14px 42px rgba(0, 0, 0, 0.48) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-readiness-card,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-priorities-card {
+  background: var(--ceo-mat-hero-rail) !important;
+  border: 1px solid rgba(245, 197, 92, 0.36) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 230, 0.12),
+    0 0 14px rgba(245, 197, 92, 0.08),
+    0 10px 26px rgba(0, 0, 0, 0.28) !important;
 }
 
 /* C.24.5I — final cascade: opaque black/gold module readiness shell; branch cards keep --branch-tone */

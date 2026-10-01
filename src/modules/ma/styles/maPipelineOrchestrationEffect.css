@@ -1,0 +1,856 @@
+/* Pipeline Orchestration Network — corridor layout separation pass */
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-flow {
+  position: relative;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-flow-svg {
+  width: 100%;
+  height: auto;
+  opacity: 1;
+  position: relative;
+  z-index: 0;
+  overflow: visible;
+  display: block;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-ring {
+  fill: rgba(2, 8, 12, 0.94);
+  stroke: rgba(45, 212, 191, 0.74);
+  filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.18));
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-outer {
+  opacity: 0.72;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-tech {
+  opacity: 0.8;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-orbit {
+  opacity: 0.7;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-core {
+  fill: rgba(1, 6, 10, 0.96);
+  stroke: rgba(94, 234, 212, 0.58);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-label {
+  fill: rgba(226, 232, 240, 0.92);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-num {
+  fill: rgba(94, 234, 212, 0.9);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-halo {
+  opacity: 0.42;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-ic-focus {
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-lumen {
+  opacity: 0.98;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-layer-bg {
+  opacity: 0.72;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-layer-mid {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-rear {
+  opacity: 0.9;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-mid {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-closing-pulse {
+  opacity: 0.4;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-layer-fg {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-glow-bed {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-foreground-route {
+  filter: drop-shadow(0 0 4px rgba(94, 234, 212, 0.26));
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-pulse-ring,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-pulse,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-branches,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-dd-branches,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-negotiation-dual,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-closing-pulse,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-priority-prelight,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-priority-wake,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-priority-tail,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-panel-echo {
+  opacity: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-breathe {
+  opacity: 0.34;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-packet-primary .ma-pipe-orch-packet-body {
+  filter: drop-shadow(0 0 12px rgba(94, 234, 212, 0.78));
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-packet-ghost {
+  opacity: 0.52;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-packet-mid {
+  opacity: 0.78;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-gate {
+  opacity: 0.4;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan {
+  opacity: 0.48;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-secondary {
+  opacity: 0.52;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-inter-upper,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-inter-lower,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-inter-mid {
+  opacity: 0.58;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-upper-flow,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-lower-flow {
+  opacity: 0.44;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-support {
+  opacity: 0.48;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-junction-node {
+  opacity: 0.55;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-node {
+  opacity: 0.5;
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-ic-entry,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-sweep,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-orch-pulse,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-closing-check,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-wake,
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-tail {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-input-pulse {
+    animation: ma-pipe-orch-input-pulse 14s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-pulse {
+    animation: ma-pipe-orch-rail-idle 16s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment {
+    animation: ma-pipe-orch-rail-segment 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-trace {
+    animation: ma-pipe-orch-engine-trace 20s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-micro {
+    animation: ma-pipe-orch-micro-pulse 17s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-foreground-route {
+    animation: ma-pipe-orch-foreground-pulse 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-0,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-1,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-2,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-3,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-4,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-5,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-6 {
+    animation: ma-pipe-orch-output-fan 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-screening .ma-pipe-orch-stage-ring {
+    animation: ma-pipe-orch-act-screening 14s ease-out infinite;
+    stroke: rgba(45, 212, 191, 0.58);
+    filter: drop-shadow(0 0 3px rgba(45, 212, 191, 0.12));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-screening .ma-pipe-orch-stage-label {
+    animation: ma-pipe-orch-label-screening 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-nda .ma-pipe-orch-stage-ring {
+    animation: ma-pipe-orch-act-nda 14s ease-out infinite;
+    stroke: rgba(45, 212, 191, 0.66);
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-nda .ma-pipe-orch-stage-label {
+    animation: ma-pipe-orch-label-nda 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-dd .ma-pipe-orch-stage-ring {
+    animation: ma-pipe-orch-act-dd 14s ease-out infinite;
+    stroke: rgba(45, 212, 191, 0.78);
+    filter: drop-shadow(0 0 7px rgba(45, 212, 191, 0.22));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-dd .ma-pipe-orch-stage-label {
+    animation: ma-pipe-orch-label-dd 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-ic .ma-pipe-orch-stage-ring {
+    animation: ma-pipe-orch-act-ic 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-ic .ma-pipe-orch-stage-label {
+    animation: ma-pipe-orch-label-ic 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-negotiation .ma-pipe-orch-stage-ring {
+    animation: ma-pipe-orch-act-negotiation 14s ease-out infinite;
+    stroke: rgba(45, 212, 191, 0.8);
+    filter: drop-shadow(0 0 8px rgba(45, 212, 191, 0.24));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-negotiation .ma-pipe-orch-stage-label {
+    animation: ma-pipe-orch-label-negotiation 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-closing .ma-pipe-orch-stage-ring {
+    animation: ma-pipe-orch-act-closing 14s ease-out infinite;
+    stroke: rgba(94, 234, 212, 0.82);
+    filter: drop-shadow(0 0 9px rgba(94, 234, 212, 0.28));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-closing .ma-pipe-orch-stage-label {
+    animation: ma-pipe-orch-label-closing 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-pulse-ring {
+    animation: ma-pipe-orch-stage-ring-pulse 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-guide {
+    animation: ma-pipe-orch-guide-pulse 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-gate-nda {
+    animation: ma-pipe-orch-gate-nda 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-gate-dd,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-dd-branches {
+    animation: ma-pipe-orch-gate-dd 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-gate-ic {
+    animation: ma-pipe-orch-gate-ic 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-gate-negotiation,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-negotiation-dual {
+    animation: ma-pipe-orch-gate-negotiation 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-r1,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-r2,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-r3 {
+    animation: ma-pipe-orch-engine-wake 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-r4,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-r5,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-r6 {
+    animation: ma-pipe-orch-engine-ring2 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-arc {
+    animation: ma-pipe-orch-engine-trace 20s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-closing-pulse {
+    animation: ma-pipe-orch-act-closing 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-pulse {
+    animation: ma-pipe-orch-engine-pulse 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-tick,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-node {
+    animation: ma-pipe-orch-engine-ticks 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-branches {
+    animation: ma-pipe-orch-branches-reveal 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-branch-selected {
+    animation: ma-pipe-orch-branch-select 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-input-upper,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-input-mid,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-input-lower {
+    animation: ma-pipe-orch-source-wake 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-priority-route {
+    animation: ma-pipe-orch-priority-route 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-priority-prelight {
+    animation: ma-pipe-orch-priority-prelight 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-priority-wake {
+    animation: ma-pipe-orch-priority-wake 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-priority-tail {
+    animation: ma-pipe-orch-priority-tail 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-panel-echo {
+    animation: ma-pipe-orch-panel-echo 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-endpoint {
+    animation: ma-pipe-orch-endpoint 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-wake {
+    animation: ma-pipe-orch-rail-segment-wake 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-tail {
+    animation: ma-pipe-orch-rail-segment-tail 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-node {
+    animation: ma-pipe-orch-rail-node 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-junction-node {
+    animation: ma-pipe-orch-junction-node 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-ic-entry {
+    animation: ma-pipe-orch-ic-entry 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-sweep {
+    animation: ma-pipe-orch-engine-sweep 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-orch-pulse {
+    animation: ma-pipe-orch-engine-orch-pulse 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-breathe {
+    animation: ma-pipe-orch-engine-breathe 9.5s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-closing-check {
+    animation: ma-pipe-orch-closing-check 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-inter-mid {
+    animation: ma-pipe-orch-inter-mid 14s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-upper-flow,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-lower-flow {
+    animation: ma-pipe-orch-depth-flow 17s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-support {
+    animation: ma-pipe-orch-support-idle 18s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-wake-0 { animation-delay: 0s; }
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-wake-1 { animation-delay: 0.4s; }
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-wake-2 { animation-delay: 0.8s; }
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-wake-3 { animation-delay: 1.2s; }
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-wake-4 { animation-delay: 1.6s; }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-junction-jn-0 { animation-delay: 0.2s; }
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-junction-jn-1 { animation-delay: 0.6s; }
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-junction-jn-2 { animation-delay: 1.0s; }
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-junction-jn-3 { animation-delay: 1.4s; }
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-junction-jn-4 { animation-delay: 1.8s; }
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-junction-jn-5 { animation-delay: 0.3s; }
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-junction-jn-6 { animation-delay: 2.2s; }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-1 {
+    opacity: 0.52;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-choreo .ma-pipe-orch-layer-bg {
+    animation: ma-pipe-orch-ambient-gate 14s ease-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-input-pulse,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-pulse,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-wake,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-rail-segment-tail,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-trace,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-sweep,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-orch-pulse,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-breathe,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-micro,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-packet,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-priority-tracer,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-panel-echo,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-stage-pulse-ring,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-pulse,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-foreground-route,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-ic-entry {
+    display: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-branches {
+    opacity: 0.52 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-branch-selected {
+    opacity: 0.88 !important;
+    stroke: rgba(94, 234, 212, 0.72) !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-dd-branches {
+    opacity: 0.62 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-negotiation-dual {
+    opacity: 0.55 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-closing-check {
+    opacity: 0.68 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan {
+    opacity: 0.48 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-priority-route {
+    opacity: 0.82 !important;
+  }
+}
+
+@keyframes ma-pipe-orch-input-pulse {
+  0% { stroke-dashoffset: 0; opacity: 0.22; }
+  45% { opacity: 0.58; }
+  100% { stroke-dashoffset: -820; opacity: 0.22; }
+}
+
+@keyframes ma-pipe-orch-rail-idle {
+  0% { stroke-dashoffset: 0; opacity: 0.28; }
+  50% { opacity: 0.52; }
+  100% { stroke-dashoffset: -860; opacity: 0.28; }
+}
+
+@keyframes ma-pipe-orch-rail-segment {
+  0%, 82% { opacity: 0; stroke-dashoffset: 0; }
+  6%, 76% { opacity: 0.68; stroke-dashoffset: -160; }
+  80%, 100% { opacity: 0; stroke-dashoffset: -320; }
+}
+
+@keyframes ma-pipe-orch-rail-segment-wake {
+  0%, 78% { opacity: 0; stroke-dashoffset: 0; }
+  6%, 72% { opacity: 0.68; stroke-dashoffset: -120; }
+  76%, 100% { opacity: 0; stroke-dashoffset: -240; }
+}
+
+@keyframes ma-pipe-orch-rail-segment-tail {
+  0%, 78% { opacity: 0; stroke-dashoffset: 0; }
+  8%, 70% { opacity: 0.38; stroke-dashoffset: -80; }
+  76%, 100% { opacity: 0; stroke-dashoffset: -160; }
+}
+
+@keyframes ma-pipe-orch-rail-node {
+  0%, 5% { opacity: 0.28; }
+  6%, 72% { opacity: 0.62; }
+  78%, 100% { opacity: 0.28; }
+}
+
+@keyframes ma-pipe-orch-junction-node {
+  0%, 5% { opacity: 0.22; r: 2.2; }
+  8%, 72% { opacity: 0.72; r: 3.2; }
+  78%, 100% { opacity: 0.22; r: 2.2; }
+}
+
+@keyframes ma-pipe-orch-ic-entry {
+  0%, 28% { opacity: 0; stroke-dashoffset: 0; }
+  30%, 36% { opacity: 0.82; stroke-dashoffset: -60; }
+  42%, 100% { opacity: 0; stroke-dashoffset: -120; }
+}
+
+@keyframes ma-pipe-orch-engine-sweep {
+  0%, 38% { opacity: 0; stroke-dashoffset: 0; transform: rotate(0deg); }
+  40%, 44% { opacity: 0.72; stroke-dashoffset: -160; transform: rotate(18deg); }
+  48%, 100% { opacity: 0; stroke-dashoffset: -320; transform: rotate(36deg); }
+}
+
+@keyframes ma-pipe-orch-engine-orch-pulse {
+  0%, 39% { opacity: 0; transform: scale(0.96); }
+  41%, 45% { opacity: 0.55; transform: scale(1.04); }
+  50%, 100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes ma-pipe-orch-engine-breathe {
+  0%, 100% { opacity: 0.18; transform: scale(0.985); }
+  50% { opacity: 0.34; transform: scale(1.025); }
+}
+
+@keyframes ma-pipe-orch-closing-check {
+  0%, 57% { opacity: 0; transform: scale(0.88); }
+  59%, 65% { opacity: 0.88; transform: scale(1.08); }
+  70%, 100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes ma-pipe-orch-inter-mid {
+  0%, 5% { opacity: 0.38; }
+  6%, 72% { opacity: 0.58; }
+  78%, 100% { opacity: 0.38; }
+}
+
+@keyframes ma-pipe-orch-depth-flow {
+  0% { opacity: 0.28; stroke-dashoffset: 0; }
+  50% { opacity: 0.48; stroke-dashoffset: -120; }
+  100% { opacity: 0.28; stroke-dashoffset: -240; }
+}
+
+@keyframes ma-pipe-orch-support-idle {
+  0% { opacity: 0.32; stroke-dashoffset: 0; }
+  50% { opacity: 0.52; stroke-dashoffset: -80; }
+  100% { opacity: 0.32; stroke-dashoffset: -160; }
+}
+
+@keyframes ma-pipe-orch-foreground-pulse {
+  0%, 78% { opacity: 0.32; stroke-dashoffset: 0; }
+  6%, 72% { opacity: 0.68; stroke-dashoffset: -120; }
+  76%, 100% { opacity: 0.32; stroke-dashoffset: -240; }
+}
+
+@keyframes ma-pipe-orch-engine-trace {
+  0% { stroke-dashoffset: 0; opacity: 0.22; }
+  50% { opacity: 0.42; }
+  100% { stroke-dashoffset: -520; opacity: 0.22; }
+}
+
+@keyframes ma-pipe-orch-micro-pulse {
+  0% { stroke-dashoffset: 0; opacity: 0.12; }
+  50% { opacity: 0.28; }
+  100% { stroke-dashoffset: -720; opacity: 0.12; }
+}
+
+@keyframes ma-pipe-orch-ambient-gate {
+  0%, 5%, 79%, 100% { opacity: 0.48; }
+  6%, 76% { opacity: 0.62; }
+}
+
+@keyframes ma-pipe-orch-source-wake {
+  0%, 2% { opacity: 0.82; }
+  4%, 12% { opacity: 1; }
+  16%, 100% { opacity: 0.88; }
+}
+
+@keyframes ma-pipe-orch-act-screening {
+  0%, 8% { stroke: rgba(45, 212, 191, 0.48); fill: rgba(2, 8, 12, 0.94); filter: none; }
+  10%, 16% { stroke: rgba(94, 234, 212, 0.88); fill: rgba(4, 14, 18, 0.96); filter: drop-shadow(0 0 10px rgba(94, 234, 212, 0.52)); }
+  20%, 100% { stroke: rgba(45, 212, 191, 0.52); fill: rgba(2, 8, 12, 0.94); filter: none; }
+}
+
+@keyframes ma-pipe-orch-act-nda {
+  0%, 13% { stroke: rgba(45, 212, 191, 0.48); fill: rgba(2, 8, 12, 0.94); filter: none; }
+  15%, 20% { stroke: rgba(94, 234, 212, 0.85); fill: rgba(4, 14, 18, 0.96); filter: drop-shadow(0 0 8px rgba(94, 234, 212, 0.48)); }
+  24%, 100% { stroke: rgba(45, 212, 191, 0.52); fill: rgba(2, 8, 12, 0.94); filter: none; }
+}
+
+@keyframes ma-pipe-orch-act-dd {
+  0%, 18% { stroke: rgba(45, 212, 191, 0.48); fill: rgba(2, 8, 12, 0.94); filter: none; }
+  20%, 26% { stroke: rgba(94, 234, 212, 0.88); fill: rgba(4, 14, 18, 0.96); filter: drop-shadow(0 0 10px rgba(94, 234, 212, 0.52)); }
+  30%, 100% { stroke: rgba(45, 212, 191, 0.52); fill: rgba(2, 8, 12, 0.94); filter: none; }
+}
+
+@keyframes ma-pipe-orch-act-ic {
+  0%, 26% { stroke: rgba(45, 212, 191, 0.48); fill: rgba(2, 8, 12, 0.94); filter: none; }
+  28%, 42% { stroke: rgba(94, 234, 212, 0.95); fill: rgba(4, 14, 18, 0.98); filter: drop-shadow(0 0 14px rgba(94, 234, 212, 0.62)); }
+  46%, 100% { stroke: rgba(45, 212, 191, 0.55); fill: rgba(2, 8, 12, 0.94); filter: none; }
+}
+
+@keyframes ma-pipe-orch-act-negotiation {
+  0%, 46% { stroke: rgba(45, 212, 191, 0.48); fill: rgba(2, 8, 12, 0.94); filter: none; }
+  48%, 54% { stroke: rgba(94, 234, 212, 0.85); fill: rgba(4, 14, 18, 0.96); filter: drop-shadow(0 0 8px rgba(94, 234, 212, 0.48)); }
+  58%, 100% { stroke: rgba(45, 212, 191, 0.52); fill: rgba(2, 8, 12, 0.94); filter: none; }
+}
+
+@keyframes ma-pipe-orch-act-closing {
+  0%, 56% { stroke: rgba(45, 212, 191, 0.48); fill: rgba(2, 8, 12, 0.94); filter: none; opacity: 0.35; }
+  58%, 65% { stroke: rgba(94, 234, 212, 0.92); fill: rgba(4, 14, 18, 0.98); filter: drop-shadow(0 0 12px rgba(94, 234, 212, 0.55)); opacity: 0.72; }
+  70%, 100% { stroke: rgba(45, 212, 191, 0.52); fill: rgba(2, 8, 12, 0.94); filter: none; opacity: 0.35; }
+}
+
+@keyframes ma-pipe-orch-label-screening {
+  0%, 8% { fill: rgba(226, 232, 240, 0.88); }
+  10%, 16% { fill: rgba(94, 234, 212, 0.95); }
+  20%, 100% { fill: rgba(226, 232, 240, 0.88); }
+}
+
+@keyframes ma-pipe-orch-label-nda {
+  0%, 13% { fill: rgba(226, 232, 240, 0.88); }
+  15%, 20% { fill: rgba(94, 234, 212, 0.92); }
+  24%, 100% { fill: rgba(226, 232, 240, 0.88); }
+}
+
+@keyframes ma-pipe-orch-label-dd {
+  0%, 18% { fill: rgba(226, 232, 240, 0.88); }
+  20%, 26% { fill: rgba(94, 234, 212, 0.95); }
+  30%, 100% { fill: rgba(226, 232, 240, 0.88); }
+}
+
+@keyframes ma-pipe-orch-label-ic {
+  0%, 26% { fill: rgba(226, 232, 240, 0.9); }
+  28%, 42% { fill: rgba(240, 253, 250, 0.98); }
+  46%, 100% { fill: rgba(226, 232, 240, 0.92); }
+}
+
+@keyframes ma-pipe-orch-label-negotiation {
+  0%, 46% { fill: rgba(226, 232, 240, 0.88); }
+  48%, 54% { fill: rgba(94, 234, 212, 0.92); }
+  58%, 100% { fill: rgba(226, 232, 240, 0.88); }
+}
+
+@keyframes ma-pipe-orch-label-closing {
+  0%, 56% { fill: rgba(226, 232, 240, 0.88); }
+  58%, 65% { fill: rgba(94, 234, 212, 0.96); }
+  70%, 100% { fill: rgba(226, 232, 240, 0.88); }
+}
+
+@keyframes ma-pipe-orch-stage-ring-pulse {
+  0%, 8% { opacity: 0; transform: scale(1); }
+  10%, 14% { opacity: 0.78; transform: scale(1.12); }
+  20%, 100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes ma-pipe-orch-guide-pulse {
+  0%, 8% { opacity: 0.28; }
+  10%, 16% { opacity: 0.68; }
+  20%, 100% { opacity: 0.28; }
+}
+
+@keyframes ma-pipe-orch-gate-nda {
+  0%, 13% { opacity: 0.18; }
+  15%, 20% { opacity: 0.72; }
+  24%, 100% { opacity: 0.18; }
+}
+
+@keyframes ma-pipe-orch-gate-dd {
+  0%, 18% { opacity: 0; }
+  20%, 26% { opacity: 0.78; }
+  30%, 100% { opacity: 0; }
+}
+
+@keyframes ma-pipe-orch-gate-ic {
+  0%, 26% { opacity: 0.18; }
+  28%, 42% { opacity: 0.85; }
+  46%, 100% { opacity: 0.18; }
+}
+
+@keyframes ma-pipe-orch-gate-negotiation {
+  0%, 46% { opacity: 0; }
+  48%, 54% { opacity: 0.72; }
+  58%, 100% { opacity: 0; }
+}
+
+@keyframes ma-pipe-orch-engine-wake {
+  0%, 26% { filter: drop-shadow(0 0 8px rgba(94, 234, 212, 0.24)); }
+  28%, 42% { filter: drop-shadow(0 0 22px rgba(94, 234, 212, 0.55)); }
+  46%, 100% { filter: drop-shadow(0 0 8px rgba(94, 234, 212, 0.24)); }
+}
+
+@keyframes ma-pipe-orch-engine-ring2 {
+  0%, 26% { stroke: rgba(94, 234, 212, 0.42); }
+  28%, 42% { stroke: rgba(94, 234, 212, 0.88); }
+  46%, 100% { stroke: rgba(94, 234, 212, 0.42); }
+}
+
+@keyframes ma-pipe-orch-engine-pulse {
+  0%, 39% { opacity: 0; transform: scale(0.92); }
+  41%, 45% { opacity: 0.85; transform: scale(1.12); }
+  50%, 100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes ma-pipe-orch-engine-ticks {
+  0%, 28% { opacity: 0.38; }
+  30%, 42% { opacity: 0.92; }
+  46%, 100% { opacity: 0.38; }
+}
+
+@keyframes ma-pipe-orch-branches-reveal {
+  0%, 32% { opacity: 0; }
+  35%, 42% { opacity: 0.78; }
+  46%, 100% { opacity: 0; }
+}
+
+@keyframes ma-pipe-orch-branch-select {
+  0%, 36% { opacity: 0.15; stroke: rgba(94, 234, 212, 0.28); }
+  38%, 44% { opacity: 0.95; stroke: rgba(94, 234, 212, 0.82); }
+  48%, 100% { opacity: 0.15; stroke: rgba(94, 234, 212, 0.28); }
+}
+
+@keyframes ma-pipe-orch-output-fan {
+  0%, 61% { opacity: 0.12; }
+  63%, 76% { opacity: 0.48; }
+  80%, 100% { opacity: 0.12; }
+}
+
+@keyframes ma-pipe-orch-priority-route {
+  0%, 65% { opacity: 0.48; stroke: rgba(94, 234, 212, 0.46); stroke-width: 2.5; }
+  67%, 78% { opacity: 1; stroke: rgba(94, 234, 212, 0.9); stroke-width: 3.05; }
+  82%, 100% { opacity: 0.48; stroke: rgba(94, 234, 212, 0.46); stroke-width: 2.5; }
+}
+
+@keyframes ma-pipe-orch-priority-prelight {
+  0%, 65% { opacity: 0; stroke-dashoffset: 0; }
+  67%, 72% { opacity: 0.78; stroke-dashoffset: -70; }
+  78%, 100% { opacity: 0; stroke-dashoffset: -140; }
+}
+
+@keyframes ma-pipe-orch-priority-wake {
+  0%, 67% { opacity: 0; }
+  69%, 78% { opacity: 0.95; }
+  82%, 100% { opacity: 0; }
+}
+
+@keyframes ma-pipe-orch-priority-tail {
+  0%, 67% { opacity: 0; stroke-dashoffset: 0; }
+  69%, 78% { opacity: 0.82; stroke-dashoffset: -90; }
+  82%, 100% { opacity: 0; stroke-dashoffset: -180; }
+}
+
+@keyframes ma-pipe-orch-panel-echo {
+  0%, 73% { opacity: 0; }
+  75%, 80% { opacity: 0.62; }
+  84%, 100% { opacity: 0; }
+}
+
+@keyframes ma-pipe-orch-endpoint {
+  0%, 73% { opacity: 0.42; transform: scale(0.92); }
+  75%, 80% { opacity: 1; transform: scale(1.12); }
+  84%, 100% { opacity: 0.55; transform: scale(1); }
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-signal-bridge {
+  position: absolute;
+  top: 22%;
+  right: -6px;
+  width: 28px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(94, 234, 212, 0.72), rgba(94, 234, 212, 0));
+  opacity: 0.62;
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.28);
+}
+
+.main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-signal-connector-end {
+  opacity: 0.78;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-signal-connector-end {
+    animation: ma-pipe-orch-endpoint 14s ease-out infinite;
+  }
+}
+
+@media (max-width: 1180px) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-map,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-corridor {
+    margin: 28px 0 28px;
+  }
+}
+
+@media (max-width: 960px) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-map,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-corridor {
+    margin: 28px 0 28px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-micro-6,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-micro-7 {
+    opacity: 0.12;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-map,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipeline-execution-corridor {
+    margin: 24px 0 24px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-micro-4,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-micro-5,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-micro-6,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-micro-7 {
+    display: none;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-r6,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-engine-r5 {
+    opacity: 0.35;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-4,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-5,
+  .main-area[data-workspace='ma'] .page .ma-pipeline-premium .ma-pipe-orch-output-fan-6 {
+    display: none;
+  }
+}

@@ -1,0 +1,2868 @@
+/*
+  M&A Deals Repository — visual material (Repository-scoped only).
+  Oracle: /ma/dashboard + /ma/valuation + /ma/pipeline frozen surfaces.
+  Tokens: --ma-ref-panel-*, --ma-mna-*, --ma-pipe-* (shared). No logic.
+*/
+
+/* Page width / gutters → ceosPageGeometry.css (canonical owner). */
+
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-repository-premium,
+.main-area .page .ma-executive-page.ma-repository-premium {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium {
+  --ma-repo-teal: #2dd4bf;
+  --ma-repo-teal-bright: #5eead4;
+  --ma-repo-teal-dim: rgba(94, 234, 212, 0.62);
+  --ma-repo-text: #f8fafc;
+  --ma-repo-muted: rgba(203, 213, 225, 0.74);
+  --ma-repo-caption: rgba(148, 163, 184, 0.9);
+  --ma-repo-line: rgba(90, 255, 220, 0.1);
+  --ma-repo-divider: rgba(255, 255, 255, 0.045);
+
+  --ma-repo-outer-bg: var(--ma-mna-surface-bg);
+  --ma-repo-outer-border: var(--ma-mna-surface-border, rgba(90, 255, 220, 0.12));
+  --ma-repo-outer-shadow: var(
+    --ma-mna-surface-shadow,
+    0 24px 56px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07)
+  );
+  --ma-repo-outer-blur: var(--ma-mna-surface-blur, blur(18px) saturate(135%));
+  --ma-repo-outer-radius: var(--ma-mna-surface-radius, var(--ma-ref-panel-radius, 22px));
+
+  /* Status glass — Pipeline / Valuation Ready; slightly more translucent */
+  --ma-repo-status-bg:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.036) 0%, rgba(255, 255, 255, 0) 16%),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.014) 0%,
+      rgba(2, 4, 7, 0.028) 44%,
+      rgba(1, 2, 4, 0.052) 100%
+    );
+  --ma-repo-status-border: rgba(148, 163, 184, 0.048);
+  --ma-repo-status-border-top: rgba(90, 255, 220, 0.082);
+  --ma-repo-status-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 1px 0 0 rgba(45, 212, 191, 0.02),
+    0 10px 28px rgba(0, 0, 0, 0.16),
+    0 -6px 22px rgba(45, 212, 191, 0.014);
+  --ma-repo-status-blur: blur(22px) saturate(88%) brightness(0.95);
+
+  --ma-repo-inset-bg: var(--ma-ref-inset-panel-bg, var(--ma-mna-inset-bg, rgba(5, 9, 9, 0.38)));
+  --ma-repo-inset-border: var(--ma-ref-inset-border, var(--ma-mna-inset-border, rgba(90, 255, 220, 0.07)));
+  --ma-repo-inset-shadow: var(--ma-ref-inset-shadow, inset 0 1px 0 rgba(255, 255, 255, 0.025));
+
+  /* Inner status nest — copy Valuation C.24.82 live recipe (CDP-proven)
+     Forensic root cause: prior CSS already won on .ma-repository-score-module,
+     but used OUTER-panel density (0.34–0.52). Nested over dark outer = optical black.
+     Valuation .ma-valuation-status-list computed (on open outer α~0.07):
+       linear(160deg, rgba(6,12,18,0.26) → rgba(3,6,11,0.165))
+       border rgba(255,255,255,0.03); inset hairline; blur(6px)
+     Repo OUTER is denser (α~0.50→0.24). Same Valuation alphas still read black.
+     Compensate ONLY on inner: lower fill alphas so outer teal glass shows through. */
+  --ma-repo-status-list-bg:
+    radial-gradient(ellipse 120% 85% at 8% -20%, rgba(45, 212, 191, 0.14), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 92% 110%, rgba(56, 189, 248, 0.06), transparent 55%),
+    linear-gradient(160deg, rgba(10, 28, 40, 0.12) 0%, rgba(5, 14, 22, 0.06) 100%);
+  --ma-repo-status-list-border: rgba(90, 255, 220, 0.14);
+  --ma-repo-status-list-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  --ma-repo-status-list-blur: blur(6px);
+  --ma-repo-status-list-radius: 12px;
+  --ma-repo-status-row-divider: rgba(255, 255, 255, 0.032);
+
+  /* Dashboard KPI corner halo — shared by summary + KPI cards */
+  --ma-repo-kpi-corner-halo:
+    radial-gradient(ellipse 80% 100% at 12% 0%, rgba(45, 212, 191, 0.05), transparent 72%),
+    radial-gradient(ellipse 70% 90% at 0% 8%, rgba(45, 212, 191, 0.03), transparent 64%);
+
+  /* Archive outer — Dashboard C.24.84 ma-reference-* outer surface (--ma-mna-surface-*) */
+  --ma-repo-archive-bg: var(--ma-mna-surface-bg);
+  --ma-repo-archive-border: var(--ma-mna-surface-border);
+  --ma-repo-archive-shadow: var(--ma-mna-surface-shadow);
+  --ma-repo-archive-blur: var(--ma-mna-surface-blur);
+  --ma-repo-archive-ambient: var(--ma-mna-surface-ambient);
+  --ma-repo-archive-ambient-height: min(12%, 64px);
+
+  /* Rows — Dashboard mna-valuation-glass-surface snapshot-metric nest (maMnaSurfaceSystem L537) */
+  /* Inner archive table rows — ledger records (not floating cards) */
+  --ma-repo-record-bg: transparent;
+  --ma-repo-record-border: transparent;
+  --ma-repo-record-hover-border: transparent;
+  --ma-repo-record-shadow: none;
+  --ma-repo-record-gap: 0;
+  --ma-repo-record-radius: 0;
+  --ma-repo-record-divider: var(--ma-repo-status-row-divider, rgba(255, 255, 255, 0.032));
+  --ma-repo-record-hover-bg: rgba(45, 212, 191, 0.05);
+  --ma-repo-record-pad-y: 12px;
+  --ma-repo-record-pad-x: 14px;
+
+  /* Inner archive table — Dashboard ma-reference-snapshot-readout glass (maDashboardMaterial L1271) */
+  --ma-repo-record-list-bg: var(--ma-ref-inset-panel-bg);
+  --ma-repo-record-list-border: var(--ma-ref-inset-border);
+  --ma-repo-record-list-shadow: var(--ma-ref-inset-shadow);
+  --ma-repo-record-list-blur: blur(10px);
+  --ma-repo-record-list-radius: 18px;
+
+  /* Page rhythm tokens — branch geometry oracle: maMnaSurfaceSystem C.MNA.GEOMETRY */
+  --ma-repo-section-gap: var(--ma-mna-section-gap, clamp(16px, 1.5vw, 22px));
+  --ma-repo-card-pad: 24px;
+
+  /* Micro sync strip — Dashboard/M&A strip family */
+  --ma-repo-strip-bg: var(--ma-mna-strip-bg, linear-gradient(165deg, rgba(10, 22, 30, 0.58) 0%, rgba(8, 16, 24, 0.42) 100%));
+  --ma-repo-strip-border: var(--ma-mna-strip-border, rgba(148, 163, 184, 0.07));
+  --ma-repo-strip-shadow: var(--ma-mna-strip-shadow, 0 10px 32px rgba(0, 0, 0, 0.18));
+  --ma-repo-strip-blur: var(--ma-mna-strip-blur, blur(14px) saturate(140%));
+  --ma-repo-strip-radius: var(--ma-mna-strip-radius, 16px);
+
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ma-mna-page-section-gap, 20px);
+  color: var(--ma-repo-text);
+  /* Oracle: maExecutiveTheme / Pipeline M&A branch — deep black + 2 ambient radials only */
+  background: #010306 !important;
+  background-color: #010306 !important;
+  background-image:
+    radial-gradient(ellipse 110% 75% at 18% -12%, rgba(32, 201, 151, 0.08), transparent 56%),
+    radial-gradient(ellipse 85% 58% at 92% 8%, rgba(45, 212, 191, 0.043), transparent 50%) !important;
+  overflow-x: visible;
+}
+
+/* —— Hero — open scene (Pipeline parity; kill boxed plate) —— */
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  min-height: var(--ma-mna-hero-min-height, clamp(500px, 48vw, 580px));
+  margin: 0 0 var(--ma-mna-hero-scene-margin-bottom, 12px);
+  padding: var(--ma-mna-hero-padding-top, 8px) 0 var(--ma-mna-hero-padding-bottom, 40px);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  filter: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-hero::before,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-hero::after {
+  content: none;
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-scene-atmo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+  /* Soft continuous bed — bridge left teal toward center; no hard navy plate */
+  background:
+    radial-gradient(ellipse 72% 68% at 18% 40%, rgba(12, 20, 30, 0.1), transparent 76%),
+    radial-gradient(ellipse 92% 72% at 38% 42%, rgba(12, 20, 30, 0.07), transparent 80%),
+    radial-gradient(ellipse 88% 70% at 55% 36%, rgba(12, 20, 30, 0.08), transparent 82%),
+    radial-gradient(ellipse 70% 50% at 48% 58%, rgba(45, 212, 191, 0.032), transparent 82%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-scene-atmo::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 168px;
+  pointer-events: none;
+  z-index: 2;
+  /* Progressive fade — continuity into next section, no rigid dark band */
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(1, 3, 6, 0.12) 36%,
+    rgba(1, 3, 6, 0.48) 68%,
+    rgba(1, 3, 6, 0.78) 100%
+  );
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-scene-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* Cool teal ambient — extend toward center; stay low intensity */
+  background:
+    radial-gradient(ellipse 68% 70% at 14% 36%, rgba(45, 212, 191, 0.13), transparent 70%),
+    radial-gradient(ellipse 96% 78% at 36% 40%, rgba(45, 212, 191, 0.07), transparent 68%),
+    radial-gradient(ellipse 70% 55% at 40% 28%, rgba(45, 212, 191, 0.1), transparent 74%),
+    radial-gradient(ellipse 75% 58% at 60% 48%, rgba(45, 212, 191, 0.07), transparent 76%),
+    radial-gradient(ellipse 80% 55% at 45% 68%, rgba(45, 212, 191, 0.07), transparent 78%),
+    radial-gradient(ellipse 65% 50% at 78% 62%, rgba(45, 212, 191, 0.055), transparent 74%);
+  mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 78%, transparent 100%);
+}
+
+/* Subtle executive mesh — Dashboard/Pipeline family; quieter than Pipeline stage */
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-scene-mesh {
+  position: absolute;
+  inset: 0 2%;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(45, 212, 191, 0.024) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 212, 191, 0.024) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 78% 78% at 48% 40%, black 8%, transparent 82%);
+  -webkit-mask-image: radial-gradient(ellipse 78% 78% at 48% 40%, black 8%, transparent 82%);
+  opacity: 0.2;
+}
+
+/*
+  Repository STREAM FIELD — approved mockup (curved archived information streams).
+  SVG paths + stroke-dashoffset + animateMotion. NOT static gradient. NOT Pipeline horizontals.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-stream-stage,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-stream-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-archive-field,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-base-glow {
+  position: absolute;
+  inset: -14% -10% -12% -8%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+  border-radius: 0;
+  filter: none;
+  box-shadow: none;
+  opacity: 0;
+  background: none;
+  background-color: transparent;
+  background-image: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-back {
+  opacity: 0.78;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-mid {
+  opacity: 0.9;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-front {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-back,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-mid,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-front,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-intersections,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-travelers {
+  transform-box: fill-box;
+  transform-origin: center center;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-strand-front {
+  filter: drop-shadow(0 0 2px rgba(45, 212, 191, 0.22));
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-node-glow {
+  filter: drop-shadow(0 0 5px rgba(45, 212, 191, 0.62));
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-carrier {
+  opacity: 0.95;
+  animation-play-state: running !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-carrier-front {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-back {
+    animation: ma-repo-stream-layer-back-drift 28s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-mid {
+    animation: ma-repo-stream-layer-mid-drift 20s ease-in-out infinite;
+    animation-delay: -6s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-front {
+    animation: ma-repo-stream-layer-front-drift 14s ease-in-out infinite;
+    animation-delay: -3s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-intersections {
+    animation: ma-repo-stream-intersections-drift 18s ease-in-out infinite;
+    animation-delay: -8s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-back,
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-mid,
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-layer-front,
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-intersections,
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-stream-carrier {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+@keyframes ma-repo-stream-layer-back-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.72;
+  }
+  50% {
+    transform: translate3d(-16px, -10px, 0);
+    opacity: 0.88;
+  }
+}
+
+@keyframes ma-repo-stream-layer-mid-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.84;
+  }
+  50% {
+    transform: translate3d(-22px, -14px, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes ma-repo-stream-layer-front-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate3d(-28px, -18px, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes ma-repo-stream-intersections-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-14px, -8px, 0);
+  }
+}
+
+@keyframes ma-repo-stream-travel-bg {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -1188;
+  }
+}
+
+@keyframes ma-repo-stream-travel-mid {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -1008;
+  }
+}
+
+@keyframes ma-repo-stream-travel-fg {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -948;
+  }
+}
+
+/* Kill ALL legacy / static hero layers on Repository */
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-glow,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-mesh,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-history-stage,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-ambient-stage,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-ambient-field,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-memory-field,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive-atmo,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repo-history-field {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-hero-inner {
+  position: relative;
+  z-index: 2;
+  isolation: auto;
+  display: grid;
+  grid-template-columns: var(--ma-mna-hero-grid-columns, minmax(0, 1.18fr) minmax(300px, 380px));
+  gap: var(--ma-mna-hero-grid-gap, 20px 36px);
+  align-items: start;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-hero-main {
+  min-width: 0;
+  max-width: var(--ma-mna-hero-intro-max-width, 620px);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-top: var(--ma-mna-hero-intro-padding-top, 4px);
+  position: relative;
+  z-index: 3;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-kicker {
+  margin: 0 0 var(--ceos-hero-kicker-margin-bottom);
+  color: var(--ws-accent-text);
+  background: transparent;
+  background-image: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-title {
+  margin: 0 0 var(--ma-mna-title-margin-bottom, 10px);
+  color: var(--ceos-hero-title-color);
+  text-shadow:
+    0 2px 28px rgba(0, 0, 0, 0.45),
+    0 0 48px rgba(45, 212, 191, 0.06);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-title-line {
+  display: block;
+  color: #f8fafc;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-title-sub {
+  display: block;
+  margin: 12px 0 0;
+  color: rgba(203, 213, 225, 0.72);
+  font-size: clamp(19px, 2.1vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.22;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-copy {
+  margin: 20px 0 0;
+  max-width: var(--ma-mna-body-max-width, 500px);
+  font-size: var(--ma-mna-body-size, 15px);
+  line-height: var(--ma-mna-body-line-height, 1.7);
+  color: rgba(203, 213, 225, 0.72);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-bar {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ma-repo-section-gap);
+  margin-top: 26px;
+  padding-top: 18px;
+  /* Pipeline parity — no hard divider band under CTAs */
+  border-top: 0;
+  background: transparent;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-item {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 112px;
+  height: 100%;
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  padding: 18px var(--ma-surface-padding-x, 28px);
+  border-radius: var(--ma-repo-outer-radius);
+  border: 1px solid var(--ma-repo-outer-border);
+  background: var(--ma-repo-outer-bg);
+  background-image: var(--ma-repo-outer-bg);
+  box-shadow: var(--ma-repo-outer-shadow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background: var(--ma-mna-surface-ambient);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-item > .ma-ma-panel-ambient {
+  display: none;
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-item > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-item .kpi-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-item strong {
+  display: block;
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.28;
+  letter-spacing: -0.015em;
+  color: var(--ma-repo-text);
+  overflow-wrap: break-word;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-item.is-value-multiline strong {
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: 14px;
+  font-weight: 740;
+  line-height: 1.36;
+  letter-spacing: -0.018em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* —— Repository Status (Pipeline Signal / Valuation Ready glass) —— */
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal {
+  position: relative;
+  z-index: 4;
+  isolation: isolate;
+  overflow: visible;
+  backdrop-filter: blur(20px) saturate(86%) brightness(0.94);
+  -webkit-backdrop-filter: blur(20px) saturate(86%) brightness(0.94);
+  filter: none;
+  width: 100%;
+  max-width: 380px;
+  justify-self: end;
+  margin-left: auto;
+  padding: 36px;
+  border-radius: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.055);
+  border-top-color: rgba(90, 255, 220, 0.074);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.032) 0%, rgba(255, 255, 255, 0) 14%),
+    linear-gradient(
+      158deg,
+      rgba(255, 255, 255, 0.012) 0%,
+      rgba(2, 4, 7, 0.045) 44%,
+      rgba(1, 2, 4, 0.075) 100%
+    );
+  background-color: transparent;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.065),
+    inset 1px 0 0 rgba(45, 212, 191, 0.016),
+    0 10px 28px rgba(0, 0, 0, 0.2),
+    0 -6px 18px rgba(45, 212, 191, 0.009);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  text-align: left;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-title {
+  margin-top: 6px;
+  font-size: clamp(21px, 2vw, 27px);
+  font-weight: 800;
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  color: var(--ma-repo-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 12px;
+  color: var(--ma-repo-teal);
+  background: linear-gradient(
+    165deg,
+    rgba(12, 20, 30, 0.72) 0%,
+    rgba(8, 14, 22, 0.58) 100%
+  );
+  border: 1px solid rgba(90, 255, 220, 0.1);
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-module {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  margin: 0;
+  padding: 16px 18px;
+  overflow: hidden;
+  border-radius: var(--ma-repo-status-list-radius);
+  border: 1px solid var(--ma-repo-status-list-border);
+  background-color: transparent;
+  background-image: var(--ma-repo-status-list-bg);
+  box-shadow: var(--ma-repo-status-list-shadow);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-module::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 95% 60% at 6% -18%, rgba(45, 212, 191, 0.1), transparent 64%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, transparent 32%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-module > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-ring {
+  width: var(--ma-score-ring-size, 84px);
+  height: var(--ma-score-ring-size, 84px);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow:
+    0 0 calc(48px * var(--ma-score-ring-scale, 0.375)) rgba(45, 212, 191, 0.18),
+    0 0 calc(96px * var(--ma-score-ring-scale, 0.375)) rgba(32, 201, 151, 0.08),
+    inset 0 0 calc(18px * var(--ma-score-ring-scale, 0.375)) rgba(45, 212, 191, 0.032);
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-core {
+  width: var(--ma-score-ring-core-size, 70px);
+  height: var(--ma-score-ring-core-size, 70px);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 1;
+  background:
+    radial-gradient(
+      circle,
+      rgba(4, 14, 18, 0.74) 0%,
+      rgba(3, 10, 14, 0.58) 62%,
+      rgba(3, 10, 14, 0.2) 100%
+    ) !important;
+  border: none !important;
+  box-shadow:
+    inset 0 0 calc(40px * var(--ma-score-ring-scale, 0.375)) rgba(0, 0, 0, 0.35),
+    inset 0 0 calc(20px * var(--ma-score-ring-scale, 0.375)) rgba(45, 212, 191, 0.04) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-core strong,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-core .ma-repository-score-figure {
+  font-size: calc(58px * var(--ma-score-ring-scale, 0.375));
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #f8fafc;
+  text-shadow: 0 0 calc(30px * var(--ma-score-ring-scale, 0.375)) rgba(45, 212, 191, 0.25);
+  font-variant-numeric: tabular-nums;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-core strong.is-empty-score,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-core .ma-repository-score-figure.is-empty-score {
+  font-size: 26px;
+  color: rgba(226, 232, 240, 0.55);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-copy strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 780;
+  line-height: 1.25;
+  color: var(--ma-repo-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-copy p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.48;
+  color: rgba(203, 213, 225, 0.68);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-table {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0;
+  margin-top: 0;
+  padding: 10px 16px;
+  overflow: hidden;
+  border-radius: var(--ma-repo-status-list-radius);
+  border: 1px solid var(--ma-repo-status-list-border);
+  background-color: transparent;
+  background-image: var(--ma-repo-status-list-bg);
+  box-shadow: var(--ma-repo-status-list-shadow);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 14px;
+  align-items: center;
+  padding: 12px 6px;
+  border: 0;
+  border-top: 1px solid var(--ma-repo-status-row-divider);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-row .muted {
+  font-size: 11.5px;
+  line-height: 1.42;
+  color: rgba(148, 163, 184, 0.82);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-row:first-child {
+  border-top: 0;
+  padding-top: 6px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-row:last-child {
+  padding-bottom: 6px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-row strong {
+  text-align: right;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ma-repo-text);
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+/* —— Section / KPI (Dashboard slab family) —— */
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-section {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ma-repo-section-gap);
+  margin-top: 0;
+  padding-top: 12px;
+  padding-bottom: 4px;
+  border-top: 1px solid var(--ma-repo-divider);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-section::before {
+  content: none;
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-section-header .ma-repository-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-section-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ma-repo-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-section-header p {
+  max-width: 68ch;
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ma-repo-muted);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* KPI card surface — canonical rules in C.REPO.KPI.MOCKUP at file end */
+
+/* —— State notices / Last sync micro strip —— */
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-state {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 14px;
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-radius: var(--ma-repo-strip-radius);
+  border: 1px solid var(--ma-repo-strip-border);
+  background: var(--ma-repo-strip-bg);
+  background-image: var(--ma-repo-strip-bg);
+  box-shadow: var(--ma-repo-strip-shadow);
+  position: relative;
+  z-index: 1;
+}
+
+/* Section rhythm — no negative fusion into archive */
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-section + .ma-repository-state,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-section + .ma-repository-archive {
+  margin-top: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-state + .ma-repository-archive {
+  margin-top: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-section + .ma-repository-state {
+  border-top: 1px solid var(--ma-repo-divider);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-state.warning {
+  border-color: rgba(245, 158, 11, 0.18);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-state.success {
+  border-color: var(--ma-repo-strip-border);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-state-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(
+    165deg,
+    rgba(12, 20, 30, 0.72) 0%,
+    rgba(8, 14, 22, 0.58) 100%
+  );
+  border: 1px solid rgba(90, 255, 220, 0.1);
+  color: var(--ma-repo-teal);
+  box-shadow: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-state p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ma-repo-muted);
+}
+
+/* —— Private archive outer surface —— */
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  backdrop-filter: var(--ma-repo-archive-blur, var(--ma-mna-surface-blur));
+  -webkit-backdrop-filter: var(--ma-repo-archive-blur, var(--ma-mna-surface-blur));
+  margin-top: 0;
+  padding: 28px 28px 18px;
+  border-radius: var(--ma-repo-outer-radius);
+  border: 1px solid var(--ma-repo-archive-border, var(--ma-mna-surface-border));
+  background-color: transparent;
+  background-image: var(--ma-repo-archive-bg, var(--ma-mna-surface-bg));
+  box-shadow: var(--ma-repo-archive-shadow, var(--ma-mna-surface-shadow));
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: auto;
+  width: 100%;
+  height: var(--ma-repo-archive-ambient-height, min(22%, 96px));
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background: var(--ma-repo-archive-ambient, var(--ma-mna-surface-ambient));
+  opacity: 1;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 18%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 18%, transparent 100%);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive > .ma-ma-panel-ambient {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: none;
+  background-image: none;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 0 0 22px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.038);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ma-repo-text);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive-header p {
+  margin: 10px 0 0;
+  max-width: 58ch;
+  font-size: 13px;
+  line-height: 1.52;
+  color: rgba(203, 213, 225, 0.68);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive-count {
+  flex: 0 0 auto;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.08);
+  background: linear-gradient(
+    165deg,
+    rgba(8, 14, 20, 0.72) 0%,
+    rgba(5, 9, 14, 0.58) 100%
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  text-align: right;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive-count strong {
+  display: block;
+  margin-top: 0;
+  font-size: 22px;
+  font-weight: 850;
+  letter-spacing: -0.025em;
+  color: var(--ma-repo-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* —— Case records (executive archive list, not card wall) —— */
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-list {
+  --ma-repo-record-cols:
+    minmax(0, 1.75fr)
+    minmax(120px, 0.72fr)
+    minmax(112px, 0.64fr)
+    minmax(104px, 0.56fr)
+    minmax(112px, 0.58fr)
+    minmax(168px, auto);
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ma-repo-record-gap);
+  margin: 2px 0 4px;
+  padding: 14px 14px 16px;
+  border-radius: var(--ma-repo-record-list-radius);
+  border: 1px solid var(--ma-repo-record-list-border);
+  /* Avoid `background` shorthand + multi-layer vars (empty !important longhands). */
+  background-color: transparent;
+  background-image: var(--ma-repo-record-list-bg);
+  box-shadow: var(--ma-repo-record-list-shadow);
+  -webkit-backdrop-filter: var(--ma-repo-record-list-blur);
+  backdrop-filter: var(--ma-repo-record-list-blur);
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-list::before {
+  content: none;
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-list > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: var(--ma-repo-record-pad-y, 12px) var(--ma-repo-record-pad-x, 14px);
+  border-radius: var(--ma-repo-record-radius);
+  border: 0;
+  border-bottom: 1px solid var(--ma-repo-record-divider, var(--ma-repo-status-row-divider));
+  background-color: var(--ma-repo-record-bg);
+  background-image: none;
+  box-shadow: var(--ma-repo-record-shadow);
+  transition:
+    background-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record:last-child {
+  border-bottom-color: transparent;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record::before {
+  content: none;
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record::after {
+  content: none;
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record > * {
+  position: relative;
+  z-index: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record + .ma-repository-record {
+  margin-top: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record:hover {
+  border-color: transparent;
+  border-bottom-color: var(--ma-repo-record-divider, var(--ma-repo-status-row-divider));
+  background-color: var(--ma-repo-record-hover-bg, rgba(45, 212, 191, 0.035));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Ledger rows — no per-card top accent */
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-accent {
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-accent::after {
+  content: none;
+  display: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-grid {
+  display: grid;
+  grid-template-columns: var(--ma-repo-record-cols);
+  gap: 8px 22px;
+  align-items: start;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-case,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-field,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-actions {
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-case-name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--ma-repo-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-case-meta {
+  margin: 4px 0 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: rgba(203, 213, 225, 0.52);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-case-id {
+  margin: 3px 0 0;
+  max-width: 100%;
+  font-size: 9px;
+  line-height: 1.35;
+  color: rgba(148, 163, 184, 0.36);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-field-label {
+  display: block;
+  margin: 0 0 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-field-value {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--ma-repo-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: normal;
+  font-variant-numeric: tabular-nums;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-field-value--quiet {
+  color: rgba(248, 250, 252, 0.48);
+  font-weight: 650;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-field-sub {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1.32;
+  color: rgba(203, 213, 225, 0.5);
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-actions .button {
+  width: auto;
+  min-width: 0;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-actions .button.secondary {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-actions .button.ma-repository-delete {
+  flex: 0 0 auto;
+}
+
+/* Muted destructive — same geometry as M&A buttons; lower weight at rest */
+.main-area[data-workspace='ma'] .page .ma-repository-premium .button.danger.ma-repository-delete:not(#__ceos_no_match__) {
+  height: var(--ma-btn-height, 44px) !important;
+  min-height: var(--ma-btn-height, 44px) !important;
+  max-height: var(--ma-btn-height, 44px) !important;
+  padding: var(--ma-btn-pad-y, 10px) 14px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  background: rgba(42, 14, 14, 0.24) !important;
+  background-image: none !important;
+  border: 1px solid rgba(248, 113, 113, 0.14) !important;
+  color: rgba(252, 165, 165, 0.68) !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .button.danger.ma-repository-delete:not(#__ceos_no_match__):hover,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .button.danger.ma-repository-delete:not(#__ceos_no_match__):focus-visible {
+  background: rgba(90, 24, 24, 0.42) !important;
+  border-color: rgba(248, 113, 113, 0.32) !important;
+  color: rgba(254, 202, 202, 0.92) !important;
+  box-shadow: 0 0 14px rgba(220, 38, 38, 0.12) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-empty {
+  margin: 12px 0 18px;
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px dashed rgba(90, 255, 220, 0.16);
+  background: rgba(5, 9, 9, 0.28);
+}
+
+/*
+  Top-section authority — beat workspaceAccent / EPS plates.
+  Mirror Pipeline forensic locks. Scoped to .ma-repository-premium only.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-hero:not(.ma-valuation-hero):not(#__ceos_no_match__) {
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  padding: var(--ma-mna-hero-padding-top, 8px) 0 var(--ma-mna-hero-padding-bottom, 40px) !important;
+  margin: 0 0 var(--ma-mna-hero-scene-margin-bottom, 12px) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-hero:not(.ma-valuation-hero):not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-hero:not(.ma-valuation-hero):not(#__ceos_no_match__)::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  opacity: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-hero-inner:not(#__ceos_no_match__) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-title:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-title-line:not(#__ceos_no_match__) {
+  color: #f8fafc !important;
+  text-shadow:
+    0 2px 28px rgba(0, 0, 0, 0.45),
+    0 0 48px rgba(45, 212, 191, 0.06) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-title-sub:not(#__ceos_no_match__) {
+  color: rgba(203, 213, 225, 0.72) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-copy:not(#__ceos_no_match__) {
+  color: rgba(203, 213, 225, 0.74) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kicker:not(#__ceos_no_match__) {
+  color: var(--ceos-hero-kicker-color) !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  font-size: var(--ceos-hero-kicker-size) !important;
+  font-weight: var(--ceos-hero-kicker-weight) !important;
+  letter-spacing: var(--ceos-hero-kicker-letter-spacing) !important;
+  text-transform: var(--ceos-hero-kicker-transform) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page :is(
+  .ma-repository-signal,
+  .ma-repository-command-item,
+  .ma-repository-kpi,
+  .ma-repository-archive-count
+) .kpi-label:not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  color: rgba(148, 163, 184, 0.9) !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+/*
+  Kill EPS brown/gold plate on [class*="kpi"] descendants.
+  Forensic: executivePolish paints any [class*="kpi"] child with
+  --ceos-polish-surface-soft + gold border — nested black boxes on KPI cards.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi [class*='kpi']:not(.ma-repository-kpi):not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page :is(
+  .ma-repository-kpi-grid,
+  .ma-repository-kpi-spark,
+  .ma-repository-kpi-label-row,
+  .ma-repository-kpi-head,
+  .ma-repository-kpi-value-slot,
+  .ma-repository-kpi-value,
+  .ma-repository-kpi-footer,
+  .ma-repository-kpi-divider,
+  .ma-repository-kpi-footnote,
+  .ma-repository-kpi-foot-icon,
+  .ma-repository-kpi-status-dot,
+  .ma-repository-kpi-corner-icon,
+  .ma-repository-kpi-note
+):not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-spark:not(#__ceos_no_match__) {
+  display: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item.is-value-multiline:not(#__ceos_no_match__) strong {
+  margin-top: auto !important;
+  padding-top: 8px !important;
+  font-size: 14px !important;
+  font-weight: 740 !important;
+  line-height: 1.36 !important;
+  letter-spacing: -0.018em !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi > .ma-ma-panel-ambient:not(#__ceos_no_match__) {
+  background: var(--ma-repo-kpi-corner-halo) !important;
+  background-image: var(--ma-repo-kpi-corner-halo) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  backdrop-filter: blur(22px) saturate(0.98) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(0.98) !important;
+  filter: none !important;
+  border: 1px solid rgba(45, 212, 191, 0.16) !important;
+  border-top-color: rgba(90, 255, 220, 0.18) !important;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -8%, rgba(45, 212, 191, 0.14), transparent 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 20%),
+    linear-gradient(158deg, rgba(12, 36, 46, 0.38) 0%, rgba(8, 20, 32, 0.24) 52%, rgba(5, 12, 20, 0.16) 100%) !important;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -8%, rgba(45, 212, 191, 0.14), transparent 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 20%),
+    linear-gradient(158deg, rgba(12, 36, 46, 0.38) 0%, rgba(8, 20, 32, 0.24) 52%, rgba(5, 12, 20, 0.16) 100%) !important;
+  background-color: transparent !important;
+  box-shadow:
+    0 28px 64px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 1px 0 0 rgba(45, 212, 191, 0.04),
+    0 0 64px rgba(45, 212, 191, 0.1) !important;
+  padding: 36px 36px 38px !important;
+  border-radius: 22px !important;
+  max-width: 380px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-score-module:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-signal-table:not(#__ceos_no_match__) {
+  -webkit-backdrop-filter: blur(6px) !important;
+  backdrop-filter: blur(6px) !important;
+  background-color: transparent !important;
+  background-image: var(--ma-repo-status-list-bg) !important;
+  border: 1px solid var(--ma-repo-status-list-border) !important;
+  border-radius: var(--ma-repo-status-list-radius) !important;
+  box-shadow: var(--ma-repo-status-list-shadow) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-signal-row:not(#__ceos_no_match__) {
+  border: 0 !important;
+  border-top: 1px solid var(--ma-repo-status-row-divider) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  padding: 12px 6px !important;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr) !important;
+  gap: 14px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-signal-row:first-child:not(#__ceos_no_match__) {
+  border-top: 0 !important;
+  padding-top: 6px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-signal-row:last-child:not(#__ceos_no_match__) {
+  padding-bottom: 6px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item.ma-valuation-surface:not(#__ceos_no_match__) {
+  isolation: isolate !important;
+  position: relative !important;
+  overflow: hidden !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+  border: 1px solid var(--ma-repo-outer-border) !important;
+  border-color: rgba(90, 255, 220, 0.12) !important;
+  border-radius: var(--ma-repo-outer-radius, 22px) !important;
+  background: var(--ma-repo-outer-bg) !important;
+  background-image: var(--ma-repo-outer-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-repo-outer-shadow) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-archive.ma-valuation-surface:not(#__ceos_no_match__) {
+  isolation: isolate !important;
+  position: relative !important;
+  overflow: hidden !important;
+  backdrop-filter: var(--ma-repo-archive-blur, var(--ma-mna-surface-blur)) !important;
+  -webkit-backdrop-filter: var(--ma-repo-archive-blur, var(--ma-mna-surface-blur)) !important;
+  border: 1px solid var(--ma-repo-archive-border, var(--ma-mna-surface-border)) !important;
+  border-radius: var(--ma-repo-outer-radius, 22px) !important;
+  background-color: transparent !important;
+  background-image: var(--ma-repo-archive-bg, var(--ma-mna-surface-bg)) !important;
+  box-shadow: var(--ma-repo-archive-shadow, var(--ma-mna-surface-shadow)) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item.ma-valuation-surface:not(#__ceos_no_match__) {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 112px !important;
+  height: 100% !important;
+  padding: 18px var(--ma-surface-padding-x, 28px) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-archive.ma-valuation-surface:not(#__ceos_no_match__) {
+  padding: 28px 28px 18px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item > *:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi > *:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-archive > *:not(#__ceos_no_match__) {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item > .ma-ma-panel-ambient:not(#__ceos_no_match__) {
+  display: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-archive > .ma-ma-panel-ambient:not(#__ceos_no_match__) {
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-ma-panel-ambient:not(#__ceos_no_match__),
+.main-area .page .ma-repository-premium.ma-repository-page .ma-ma-panel-ambient:not(#__ceos_no_match__) {
+  border: 0 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item.ma-valuation-surface:not(#__ceos_no_match__)::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: var(--ma-mna-surface-ambient) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item:not(#__ceos_no_match__)::after,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item.ma-valuation-surface:not(#__ceos_no_match__)::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-bar:not(#__ceos_no_match__) {
+  border-top: 0 !important;
+  background: transparent !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi > .ma-ma-panel-ambient:not(#__ceos_no_match__) {
+  position: absolute !important;
+  inset: 0 !important;
+  border: 0 !important;
+  border-radius: inherit !important;
+  height: auto !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  box-shadow: none !important;
+  background: var(--ma-repo-kpi-corner-halo) !important;
+  background-image: var(--ma-repo-kpi-corner-halo) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-icon-box:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-icon-box.ma-valuation-icon-box:not(#__ceos_no_match__) {
+  background: linear-gradient(
+    165deg,
+    rgba(12, 20, 30, 0.72) 0%,
+    rgba(8, 14, 22, 0.58) 100%
+  ) !important;
+  background-image: linear-gradient(
+    165deg,
+    rgba(12, 20, 30, 0.72) 0%,
+    rgba(8, 14, 22, 0.58) 100%
+  ) !important;
+  border: 1px solid rgba(90, 255, 220, 0.1) !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-record:not(#__ceos_no_match__) {
+  border: 0 !important;
+  border-bottom: 1px solid var(--ma-repo-record-divider, var(--ma-repo-status-row-divider)) !important;
+  border-radius: var(--ma-repo-record-radius) !important;
+  background-image: none !important;
+  padding: var(--ma-repo-record-pad-y, 12px) var(--ma-repo-record-pad-x, 14px) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-record-list:not(#__ceos_no_match__) {
+  gap: var(--ma-repo-record-gap) !important;
+  margin: 2px 0 4px !important;
+  padding: 14px 14px 16px !important;
+  border-radius: var(--ma-repo-record-list-radius) !important;
+  border: 1px solid var(--ma-repo-record-list-border) !important;
+  background-color: transparent !important;
+  background-image: var(--ma-repo-record-list-bg) !important;
+  box-shadow: var(--ma-repo-record-list-shadow) !important;
+  -webkit-backdrop-filter: var(--ma-repo-record-list-blur) !important;
+  backdrop-filter: var(--ma-repo-record-list-blur) !important;
+  overflow: hidden !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-record + .ma-repository-record:not(#__ceos_no_match__) {
+  margin-top: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-state:not(#__ceos_no_match__) {
+  backdrop-filter: blur(14px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  border: 1px solid var(--ma-repo-strip-border) !important;
+  border-radius: var(--ma-repo-strip-radius) !important;
+  background: var(--ma-repo-strip-bg) !important;
+  background-image: var(--ma-repo-strip-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-repo-strip-shadow) !important;
+  padding: 10px 14px !important;
+  min-height: 44px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-archive-count:not(#__ceos_no_match__) {
+  border: 1px solid rgba(148, 163, 184, 0.08) !important;
+  border-radius: 14px !important;
+  background: linear-gradient(
+    165deg,
+    rgba(8, 14, 20, 0.72) 0%,
+    rgba(5, 9, 14, 0.58) 100%
+  ) !important;
+  background-image: linear-gradient(
+    165deg,
+    rgba(8, 14, 20, 0.72) 0%,
+    rgba(5, 9, 14, 0.58) 100%
+  ) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+/*
+  Dedicated glass-blur rules (property-only).
+  Chromium CSSOM was dropping -webkit-backdrop-filter inside multi-decl
+  repository rules; Pipeline keeps blur via the same literal recipe in a
+  clean declaration cluster. Keep these LAST and property-only.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  backdrop-filter: blur(20px) saturate(86%) brightness(0.94) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(86%) brightness(0.94) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-module,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-table,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-score-module:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-signal-table:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-module:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-signal-table:not(#__ceos_no_match__) {
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-item,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-kpi,
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-command-item:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-archive:not(#__ceos_no_match__) {
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-state,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-state:not(#__ceos_no_match__) {
+  backdrop-filter: blur(14px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+}
+
+/* —— Responsive —— */
+@media (max-width: 1280px) {
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal {
+    max-width: none;
+    justify-self: stretch;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-list {
+    --ma-repo-record-cols:
+      minmax(0, 1.4fr)
+      minmax(0, 0.7fr)
+      minmax(0, 0.65fr)
+      minmax(0, 0.6fr);
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 920px) {
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-command-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-archive-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 680px) {
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record-list {
+    --ma-repo-record-cols: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-score-module {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-row {
+    grid-template-columns: 1fr;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-signal-row strong {
+    text-align: left;
+  }
+}
+
+/*
+  C.REPO.GEOMETRY — Valuation hero structural parity (top section only).
+  Reuses ValuationPageLayout + ma-valuation-premium-page on repository page.
+  Neutralizes legacy wrappers; does not override Valuation hero literals.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page.ma-repository-premium:not(#__ceos_no_match__) {
+  gap: var(--ma-mna-page-section-gap, 20px) !important;
+  overflow-x: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 6px 0 0 !important;
+  margin-inline: 0 !important;
+  gap: 18px !important;
+  min-width: 0 !important;
+}
+
+/*
+  C.REPO.P0.GEOMETRY — Valuation fluid grid; strip is a post-hero sibling.
+  Hero clips atmosphere/stream so transparency on the strip samples page black.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__) {
+  min-height: var(--ma-mna-hero-min-height, clamp(500px, 48vw, 580px)) !important;
+  height: auto !important;
+  padding: var(--ma-mna-hero-padding-top, 8px) 0 var(--ma-mna-hero-padding-bottom, 40px) !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  position: relative !important;
+  /* Kill EPS [class*="hero"] petroleum plate — Valuation open-scene parity */
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+}
+
+/* History layers live in atmo; layout/content sit above; glass samples atmo behind.
+   Override Valuation right-biased graphic mask — Repository needs full-hero strata. */
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene.ma-valuation-hero .ma-val-ref-scene-atmo {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  opacity: 1 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene-layout:not(#__ceos_no_match__) {
+  position: relative !important;
+  z-index: 2 !important;
+  isolation: auto !important;
+  display: grid !important;
+  grid-template-columns: var(--ma-mna-hero-grid-columns, minmax(0, 1.18fr) minmax(300px, 380px)) !important;
+  grid-template-rows: auto !important;
+  gap: var(--ma-mna-hero-grid-gap, 20px 36px) !important;
+  align-items: start !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene-intro:not(#__ceos_no_match__) {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  position: relative !important;
+  z-index: 3 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  max-width: var(--ma-mna-hero-intro-max-width, 620px) !important;
+  min-width: 0 !important;
+  padding-top: calc(var(--ma-mna-hero-inner-to-kicker, 28px) - var(--ma-mna-hero-padding-top, 8px)) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro .ma-val-ref-kicker {
+  margin: 0 0 8px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro .ma-val-ref-title {
+  margin: 0 0 10px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro .ma-repository-title-unified:not(#__ceos_no_match__) {
+  display: block !important;
+  white-space: normal !important;
+  word-spacing: 0.04em !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro .ma-val-ref-subtitle {
+  margin: 0 0 14px !important;
+  color: rgba(94, 234, 212, 0.68) !important;
+  font-weight: 520 !important;
+  text-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro .ma-val-ref-lead {
+  margin: 0 0 20px !important;
+  max-width: 42rem !important;
+  line-height: 1.65 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro .ma-val-ref-dss {
+  margin: 0 0 30px !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro .ma-valuation-actions {
+  margin: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Post-hero repository summary strip — sibling after hero, on page black */
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite > .ma-valuation-context-strip:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite > .ma-valuation-active-strip:not(#__ceos_no_match__) {
+  position: relative !important;
+  z-index: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  background: transparent !important;
+  transform: none !important;
+  top: auto !important;
+  bottom: auto !important;
+}
+
+/* Status — shrinkable feature card (no fixed 380 that overflows) */
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-repository-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  align-self: start !important;
+  justify-self: stretch !important;
+  width: 100% !important;
+  max-width: 380px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: calc(
+      var(--ma-mna-right-panel-oracle-y, 157px) - var(--ma-mna-hero-oracle-root-y, 117px) -
+        var(--ma-mna-hero-padding-top, 8px)
+    )
+    0 0 !important;
+  padding: 36px 36px 38px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(45, 212, 191, 0.16) !important;
+  border-top-color: rgba(90, 255, 220, 0.18) !important;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -8%, rgba(45, 212, 191, 0.14), transparent 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 20%),
+    linear-gradient(158deg, rgba(12, 36, 46, 0.38) 0%, rgba(8, 20, 32, 0.24) 52%, rgba(5, 12, 20, 0.16) 100%) !important;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 50% -8%, rgba(45, 212, 191, 0.14), transparent 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 20%),
+    linear-gradient(158deg, rgba(12, 36, 46, 0.38) 0%, rgba(8, 20, 32, 0.24) 52%, rgba(5, 12, 20, 0.16) 100%) !important;
+  background-color: transparent !important;
+  box-shadow:
+    0 28px 64px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 1px 0 0 rgba(45, 212, 191, 0.04),
+    0 0 64px rgba(45, 212, 191, 0.1) !important;
+  backdrop-filter: blur(22px) saturate(0.98) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(0.98) !important;
+  filter: none !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-signal-inner:not(#__ceos_no_match__) {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+  min-width: 0 !important;
+  height: auto !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-signal-title:not(#__ceos_no_match__) {
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+  margin-top: 6px !important;
+  font-size: clamp(22px, 2.05vw, 28px) !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-icon-box:not(#__ceos_no_match__) {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  color: rgba(94, 234, 212, 0.95) !important;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(45, 212, 191, 0.16), transparent 60%),
+    linear-gradient(165deg, rgba(12, 24, 34, 0.8) 0%, rgba(8, 14, 22, 0.62) 100%) !important;
+  border: 1px solid rgba(90, 255, 220, 0.16) !important;
+  box-shadow: 0 0 18px rgba(45, 212, 191, 0.12) !important;
+  flex-shrink: 0 !important;
+}
+
+/* Score ring — Executive Signal SVG family (C.MNA.REPO.RING FINAL / FROZEN) */
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-module:not(#__ceos_no_match__) {
+  position: relative !important;
+  z-index: 1 !important;
+  display: grid !important;
+  grid-template-columns: minmax(100px, 120px) minmax(0, 1fr) !important;
+  gap: 16px !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 18px 16px !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  border-radius: var(--ma-repo-status-list-radius) !important;
+  border: 1px solid var(--ma-repo-status-list-border) !important;
+  background-color: transparent !important;
+  background-image: var(--ma-repo-status-list-bg) !important;
+  box-shadow: var(--ma-repo-status-list-shadow) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-module:not(#__ceos_no_match__)::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background:
+    radial-gradient(ellipse 95% 60% at 6% -18%, rgba(45, 212, 191, 0.1), transparent 64%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, transparent 32%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-module:not(#__ceos_no_match__) > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Score ring — Executive Signal SVG family (C.MNA.REPO.RING FINAL / FROZEN) */
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-ring:not(#__ceos_no_match__) {
+  width: var(--ma-score-ring-size, 120px) !important;
+  height: var(--ma-score-ring-size, 120px) !important;
+  max-width: 100% !important;
+  border-radius: 999px !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+  justify-self: center !important;
+  position: relative !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow:
+    0 0 calc(48px * var(--ma-score-ring-scale, 0.536)) rgba(45, 212, 191, 0.18),
+    0 0 calc(96px * var(--ma-score-ring-scale, 0.536)) rgba(32, 201, 151, 0.08),
+    inset 0 0 calc(18px * var(--ma-score-ring-scale, 0.536)) rgba(45, 212, 191, 0.032) !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-core:not(#__ceos_no_match__) {
+  width: var(--ma-score-ring-core-size, 101px) !important;
+  height: var(--ma-score-ring-core-size, 101px) !important;
+  border-radius: 999px !important;
+  display: grid !important;
+  place-items: center !important;
+  position: relative !important;
+  z-index: 1 !important;
+  background:
+    radial-gradient(
+      circle,
+      rgba(4, 14, 18, 0.74) 0%,
+      rgba(3, 10, 14, 0.58) 62%,
+      rgba(3, 10, 14, 0.2) 100%
+    ) !important;
+  border: none !important;
+  box-shadow:
+    inset 0 0 calc(40px * var(--ma-score-ring-scale, 0.536)) rgba(0, 0, 0, 0.35),
+    inset 0 0 calc(20px * var(--ma-score-ring-scale, 0.536)) rgba(45, 212, 191, 0.04) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-core strong:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-core .ma-repository-score-figure:not(#__ceos_no_match__) {
+  font-size: calc(58px * var(--ma-score-ring-scale, 0.536)) !important;
+  font-weight: 850 !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+  color: #f8fafc !important;
+  text-shadow: 0 0 calc(30px * var(--ma-score-ring-scale, 0.536)) rgba(45, 212, 191, 0.25) !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-core strong.is-empty-score:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-core .ma-repository-score-figure.is-empty-score:not(#__ceos_no_match__) {
+  font-size: 28px !important;
+  color: rgba(226, 232, 240, 0.55) !important;
+  text-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-copy:not(#__ceos_no_match__) {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  padding-block: 4px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-copy strong:not(#__ceos_no_match__) {
+  display: block !important;
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 780 !important;
+  line-height: 1.25 !important;
+  color: rgba(241, 245, 249, 0.96) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-copy p:not(#__ceos_no_match__) {
+  margin: 0 !important;
+  font-size: 12.5px !important;
+  line-height: 1.5 !important;
+  color: rgba(203, 213, 225, 0.72) !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-signal-table:not(#__ceos_no_match__) {
+  display: grid !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 8px 14px !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  border-radius: var(--ma-repo-status-list-radius) !important;
+  border: 1px solid var(--ma-repo-status-list-border) !important;
+  background-color: transparent !important;
+  background-image: var(--ma-repo-status-list-bg) !important;
+  box-shadow: var(--ma-repo-status-list-shadow) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-signal-row:not(#__ceos_no_match__) {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  gap: 14px !important;
+  align-items: center !important;
+  min-height: 42px !important;
+  padding: 12px 4px !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(148, 163, 184, 0.1) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  min-width: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-signal-row:first-child:not(#__ceos_no_match__) {
+  border-top: 0 !important;
+  padding-top: 8px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-signal-row:last-child:not(#__ceos_no_match__) {
+  padding-bottom: 8px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-signal-row .muted:not(#__ceos_no_match__) {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  color: rgba(148, 163, 184, 0.88) !important;
+  min-width: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-signal-row strong:not(#__ceos_no_match__) {
+  text-align: right !important;
+  font-size: 13.5px !important;
+  font-weight: 720 !important;
+  line-height: 1.3 !important;
+  color: rgba(241, 245, 249, 0.96) !important;
+  overflow-wrap: anywhere !important;
+  font-variant-numeric: tabular-nums !important;
+  white-space: nowrap !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-command-bar.ma-valuation-command-strip:not(#__ceos_no_match__) {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  min-height: 88px !important;
+  height: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(90, 255, 220, 0.1) !important;
+  background: linear-gradient(165deg, rgba(10, 22, 30, 0.72) 0%, rgba(8, 16, 24, 0.52) 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 28px rgba(0, 0, 0, 0.16) !important;
+  box-sizing: border-box !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-strip-cell {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  min-height: 88px !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  padding: 16px 22px !important;
+  box-sizing: border-box !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-strip-cell .kpi-label {
+  margin: 0 !important;
+  line-height: 1.2 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-strip-cell strong {
+  margin: 0 !important;
+  font-size: 16px !important;
+  line-height: 1.35 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  white-space: normal !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-strip-cell.is-value-multiline:not(#__ceos_no_match__) {
+  padding: 14px 20px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-strip-cell.is-value-multiline strong:not(#__ceos_no_match__) {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  white-space: normal !important;
+  font-size: 15px !important;
+  line-height: 1.35 !important;
+  max-height: calc(1.35em * 2) !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page > .ma-repository-section {
+  margin-top: 0 !important;
+  padding-top: 24px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-hero-main {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro::before,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro::after,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-hero-main::before,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-hero-main::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+}
+
+/* Stream stage — premium page stack (sole hero motion) */
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-stream-stage,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-repository-stream-stage {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-archive-atmo {
+  display: none !important;
+}
+
+@media (max-width: 1100px) {
+  .main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene-layout:not(#__ceos_no_match__) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-val-ref-scene-intro {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-repository-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repository-score-module:not(#__ceos_no_match__) {
+    grid-template-columns: minmax(100px, 120px) minmax(0, 1fr) !important;
+  }
+}
+
+/*
+  C.REPO.STREAM.MOTION — FINAL STACK (must win over Valuation hero graphic mask).
+  Valuation media rules bias atmo left:10% + hard L fade; Repository needs full-bleed
+  stream strata with SVG-owned text protection.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero .ma-val-ref-scene-atmo,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero .ma-val-ref-scene-atmo {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  opacity: 1 !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  mask: none !important;
+  -webkit-mask: none !important;
+}
+
+/*
+  C.REPO.STREAM.MOTION — FINAL STACK (must win over Valuation hero graphic mask).
+  Repository uses full-bleed curved stream strata with SVG text mask.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero .ma-repository-stream-stage,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero .ma-repository-stream-stage {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero .ma-repository-ambient-stage,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero .ma-repository-ambient-stage,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero .ma-repository-history-stage,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero .ma-repository-history-stage {
+  display: none !important;
+}
+
+@media (min-width: 1181px) {
+  .main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero .ma-val-ref-scene-atmo,
+  .main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero .ma-val-ref-scene-atmo {
+    left: 0 !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+    mask: none !important;
+    -webkit-mask: none !important;
+    overflow: visible !important;
+  }
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero::after,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero::after {
+  display: none !important;
+  content: none !important;
+  box-shadow: none !important;
+}
+
+/*
+  C.REPO.PAGE.CANVAS — Dashboard canonical outer bed (maExecutiveTheme oracle).
+  Static authority in maRepositoryMaterial.css (loaded via main.jsx).
+*/
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-repository-premium.ma-repository-page.ma-valuation-premium-page:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page.ma-executive-page:not(#__ceos_no_match__) {
+  background: #010306 !important;
+  background-color: #010306 !important;
+  background-image:
+    radial-gradient(ellipse 110% 75% at 18% -12%, rgba(32, 201, 151, 0.08), transparent 56%),
+    radial-gradient(ellipse 85% 58% at 92% 8%, rgba(45, 212, 191, 0.043), transparent 50%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page.ma-executive-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__)::before {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-repo-stream-base-glow,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-repo-stream-base-glow {
+  display: block !important;
+  position: absolute !important;
+  inset: -14% -10% -12% -8% !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  filter: none !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/*
+  C.REPO.TOP.CANVAS.FIX — Real-layer petroleum kill (not overlay).
+  Forensic sources on /ma/deals upper section:
+  1) workspaceAccent.css `.page :is([class*='-hero'])` → --ws-hero-gradient plate
+     (.ma-valuation-hero matches; Dashboard .ma-reference-scene does not)
+  2) ExecutivePremiumStyle `.ma-executive-page [class*='hero']` → --premium-surface plate
+  3) maValuationMaterial `.ma-valuation-premium-page` → --ma-val-bg #050c14 petroleum bleed
+  Oracle: maExecutiveTheme.css `.ma-executive-page.ma-dashboard-premium` (#010306 + 3 radials)
+  Dashboard keeps .main-area transparent; canvas lives on page root only.
+*/
+.main-area[data-workspace='ma']:has(.page .ma-repository-page.ma-valuation-premium-page):not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-repository-premium.ma-repository-page.ma-valuation-premium-page:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page.ma-executive-page:not(#__ceos_no_match__) {
+  --ma-val-bg: #010306 !important;
+  --ma-val-page-bg: #010306 !important;
+  --ma-val-page-bg-deep: #010306 !important;
+  --premium-surface: transparent !important;
+  background: #010306 !important;
+  background-color: #010306 !important;
+  background-image:
+    radial-gradient(ellipse 110% 75% at 18% -12%, rgba(32, 201, 151, 0.08), transparent 56%),
+    radial-gradient(ellipse 85% 58% at 92% 8%, rgba(45, 212, 191, 0.043), transparent 50%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__)::after,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__)::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  background-image: none !important;
+  opacity: 0 !important;
+}
+
+/*
+  FORENSIC: .ma-val-ref-scene.ma-valuation-hero matches workspaceAccent
+  `.main-area[data-workspace] .page :is([class*='-hero'])` → --ws-hero-gradient.
+  Mirror Pipeline maPipelineMaterial.css hero-inner kill — open scene on page canvas.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__)::before,
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__)::after,
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page.ma-valuation-premium-page .ma-valuation-upper-suite:not(#__ceos_no_match__) .ma-val-ref-scene.ma-valuation-hero:not(#__ceos_no_match__)::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  background-image: none !important;
+  opacity: 0 !important;
+  box-shadow: none !important;
+}
+
+/*
+  C.REPO.VISUAL.COHERENCE — black canvas, section cuts, archive glass parity.
+  Visual-only. Matches Dashboard / Pipeline / Valuation branch rhythm.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page > .ma-valuation-upper-suite:not(#__ceos_no_match__) {
+  border-bottom: 1px solid var(--ma-repo-divider);
+  padding-bottom: 2px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-page.ma-valuation-premium-page > .ma-repository-archive:not(#__ceos_no_match__) {
+  border-top: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+/*
+  C.REPO.ARCHIVE.MATERIAL — Private Deal Archive only (Dashboard dark-first hierarchy).
+  Wins over ma-valuation-surface + maMnaSurfaceSystem teal wash on archive container.
+  Oracle: maMnaSurfaceSystem C.24.84 outer + maDashboardMaterial snapshot-readout inset.
+*/
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-archive.ma-valuation-surface:not(#__ceos_no_match__) {
+  background-color: transparent !important;
+  background-image: var(--ma-repo-archive-bg, var(--ma-mna-surface-bg)) !important;
+  border-color: var(--ma-repo-archive-border, var(--ma-mna-surface-border)) !important;
+  box-shadow: var(--ma-repo-archive-shadow, var(--ma-mna-surface-shadow)) !important;
+  backdrop-filter: var(--ma-repo-archive-blur, var(--ma-mna-surface-blur)) !important;
+  -webkit-backdrop-filter: var(--ma-repo-archive-blur, var(--ma-mna-surface-blur)) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-archive.ma-valuation-surface:not(#__ceos_no_match__)::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: auto !important;
+  width: 100% !important;
+  height: var(--ma-repo-archive-ambient-height, min(12%, 64px)) !important;
+  border-radius: inherit !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: var(--ma-repo-archive-ambient, var(--ma-mna-surface-ambient)) !important;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 18%, transparent 100%) !important;
+  mask-image: linear-gradient(180deg, #000 0%, #000 18%, transparent 100%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-archive.ma-valuation-surface:not(#__ceos_no_match__)::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+  background: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-record-list:not(#__ceos_no_match__) {
+  border: 1px solid var(--ma-repo-record-list-border) !important;
+  background-color: transparent !important;
+  background-image: var(--ma-repo-record-list-bg) !important;
+  box-shadow: var(--ma-repo-record-list-shadow) !important;
+  -webkit-backdrop-filter: var(--ma-repo-record-list-blur) !important;
+  backdrop-filter: var(--ma-repo-record-list-blur) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-record-list:not(#__ceos_no_match__)::before {
+  content: none !important;
+  display: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record:not(#__ceos_no_match__) {
+  background-image: none !important;
+  border-color: transparent !important;
+  border-bottom-color: var(--ma-repo-record-divider, var(--ma-repo-status-row-divider)) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium .ma-repository-record:hover:not(#__ceos_no_match__) {
+  background-color: var(--ma-repo-record-hover-bg, rgba(45, 212, 191, 0.035)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+/* ==========================================================================
+   C.REPO.KPI.MOCKUP — Deal archive at a glance (4 KPI cards only)
+   Approved composition: label → fixed value slot → footer divider + footnote
+   ONE surface. No nested boxes, pills, or gold outlines.
+   ========================================================================== */
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi.ma-valuation-surface:not(#__ceos_no_match__) {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+  min-height: 204px !important;
+  height: 100% !important;
+  padding: 26px 24px 20px !important;
+  border-radius: var(--ma-mna-surface-radius, 22px) !important;
+  border: 1px solid var(--ma-mna-surface-border, rgba(90, 255, 220, 0.12)) !important;
+  background: var(--ma-mna-surface-bg) !important;
+  background-image: var(--ma-mna-surface-bg) !important;
+  background-color: transparent !important;
+  box-shadow: var(--ma-mna-surface-shadow) !important;
+  backdrop-filter: var(--ma-mna-surface-blur, blur(18px) saturate(135%)) !important;
+  -webkit-backdrop-filter: var(--ma-mna-surface-blur, blur(18px) saturate(135%)) !important;
+  cursor: default !important;
+}
+
+/* Pipeline / Dashboard summary-card ambient — upper-left embedded bloom */
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi:not(#__ceos_no_match__)::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: inherit !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: var(--ma-mna-surface-ambient) !important;
+}
+
+/* Inset glass rim — Pipeline summary-card ::after parity */
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi:not(#__ceos_no_match__)::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi > .ma-repository-kpi-spark:not(#__ceos_no_match__) {
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 7% !important;
+  right: 7% !important;
+  z-index: 3 !important;
+  height: 1px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  pointer-events: none !important;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(45, 212, 191, 0.06) 12%,
+    rgba(90, 255, 220, 0.24) 38%,
+    rgba(45, 212, 191, 0.14) 62%,
+    rgba(45, 212, 191, 0.05) 82%,
+    transparent 100%
+  ) !important;
+  opacity: 0.72 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-label-row:not(#__ceos_no_match__) {
+  position: relative !important;
+  z-index: 1 !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  min-height: 32px !important;
+  margin: 0 0 10px !important;
+  padding: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi .kpi-label:not(#__ceos_no_match__) {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+  color: rgba(148, 163, 184, 0.88) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-corner-icon:not(#__ceos_no_match__) {
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  margin: -2px 0 0 !important;
+  border-radius: 10px !important;
+  color: rgba(94, 234, 212, 0.78) !important;
+  background: rgba(45, 212, 191, 0.08) !important;
+  background-image: none !important;
+  border: 1px solid rgba(45, 212, 191, 0.14) !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-value-slot:not(#__ceos_no_match__) {
+  position: relative !important;
+  z-index: 1 !important;
+  flex: 0 0 84px !important;
+  min-height: 84px !important;
+  max-height: 84px !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-value:not(#__ceos_no_match__) {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: clamp(24px, 2.2vw, 30px) !important;
+  font-weight: 850 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.02em !important;
+  color: #f8fafc !important;
+  font-variant-numeric: tabular-nums !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-value-slot.is-multiline .ma-repository-kpi-value:not(#__ceos_no_match__) {
+  white-space: pre-line !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+  font-size: clamp(15px, 1.28vw, 18px) !important;
+  font-weight: 780 !important;
+  line-height: 1.34 !important;
+  letter-spacing: -0.016em !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-footer:not(#__ceos_no_match__) {
+  position: relative !important;
+  z-index: 1 !important;
+  flex: 0 0 auto !important;
+  margin-top: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-divider:not(#__ceos_no_match__) {
+  display: block !important;
+  width: 100% !important;
+  height: 1px !important;
+  margin: 0 0 11px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(45, 212, 191, 0.1) 18%,
+    rgba(45, 212, 191, 0.14) 50%,
+    rgba(45, 212, 191, 0.1) 82%,
+    transparent 100%
+  ) !important;
+  box-shadow: none !important;
+  opacity: 0.9 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-footnote:not(#__ceos_no_match__) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  color: rgba(148, 163, 184, 0.72) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-footnote > span:not(#__ceos_no_match__) {
+  min-width: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-foot-icon:not(#__ceos_no_match__) {
+  flex: 0 0 auto !important;
+  color: rgba(45, 212, 191, 0.58) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-repository-premium.ma-repository-page .ma-repository-kpi-status-dot:not(#__ceos_no_match__) {
+  flex: 0 0 auto !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 999px !important;
+  background: rgba(45, 212, 191, 0.72) !important;
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.28) !important;
+  border: 0 !important;
+}

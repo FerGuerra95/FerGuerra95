@@ -97,14 +97,13 @@ const complianceDashboardCss = `
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
     gap: 42px;
-    align-items: center;
+    align-items: start;
   }
 
   .compliance-hero-main {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
   }
 
   .compliance-badge-row {
@@ -112,30 +111,20 @@ const complianceDashboardCss = `
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
-    margin-bottom: 24px;
   }
 
   .compliance-title {
-    margin: 0;
     max-width: 720px;
-    font-size: clamp(36px, 3.55vw, 56px);
-    line-height: 1.02;
-    letter-spacing: -0.06em;
     overflow-wrap: normal;
   }
 
   .compliance-title span {
     display: block;
     margin-top: 9px;
-    color: rgba(226, 232, 240, 0.7);
   }
 
   .compliance-copy {
     max-width: 720px;
-    margin: 24px 0 0;
-    font-size: 16px;
-    line-height: 1.72;
-    color: rgba(203, 213, 225, 0.86);
   }
 
   .compliance-command-bar {
@@ -747,13 +736,11 @@ const complianceDashboardCss = `
     }
 
     .compliance-title {
-      font-size: clamp(36px, 3.45vw, 52px);
       max-width: 660px;
     }
 
     .compliance-copy {
       max-width: 650px;
-      font-size: 15.5px;
     }
 
     .compliance-signal-card {
@@ -1322,11 +1309,7 @@ export function ComplianceDashboardPage() {
         <section className="compliance-hero ceos-ws-hero">
           <div className="compliance-hero-layout">
             <div className="compliance-hero-main">
-              <div className="compliance-badge-row">
-                <Badge>Compliance & Risk</Badge>
-                <Badge>Supply Chain Intelligence</Badge>
-                <Badge>Private Workspace</Badge>
-              </div>
+              <p className="compliance-kicker">Compliance & Risk</p>
 
               <h1 className="compliance-title">
                 Supply Chain Compliance.
@@ -1338,6 +1321,10 @@ export function ComplianceDashboardPage() {
                 humanas y riesgo agregado para mantener control documental y
                 operativo sobre la cadena de suministro.
               </p>
+              <div className="compliance-badge-row">
+                <Badge>Supply Chain Intelligence</Badge>
+                <Badge>Private Workspace</Badge>
+              </div>
 
               <div className="compliance-command-bar">
                 <CommandItem

@@ -745,6 +745,7 @@ export function BoardPackModal({ boardPack, loading = false, error = null, onClo
           }
 
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .app-shell > .sidebar,
+          body.${BOARD_PACK_PRINTING_BODY_CLASS} .ceos-shell-body > .sidebar,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .app-shell > .ceos-sidebar,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .main-area > .topbar,
           body.${BOARD_PACK_PRINTING_BODY_CLASS} .main-area > .ceos-main-build-strip,

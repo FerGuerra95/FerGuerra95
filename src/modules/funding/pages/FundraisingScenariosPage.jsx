@@ -71,25 +71,16 @@ const fundraisingScenariosCss = `
   }
 
   .fundraising-title {
-    margin: 0;
     max-width: 920px;
-    font-size: clamp(38px, 4.8vw, 66px);
-    line-height: 0.94;
-    letter-spacing: -0.07em;
   }
 
   .fundraising-title span {
     display: block;
     margin-top: 8px;
-    color: rgba(226, 232, 240, 0.7);
   }
 
   .fundraising-copy {
     max-width: 820px;
-    margin: 24px 0 0;
-    font-size: 16px;
-    line-height: 1.78;
-    color: rgba(203, 213, 225, 0.86);
   }
 
   .fundraising-command-bar {

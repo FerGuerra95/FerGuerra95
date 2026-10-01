@@ -1,7 +1,20 @@
-/*
-  C.24.14B-MA-FINAL-POLISH — M&A dashboard premium reference polish.
+﻿/*
+  C.24.14B-MA-FINAL-POLISH â€” M&A dashboard premium reference polish.
   Scoped to M&A workspace. Namespace: ma-reference-*.
 */
+
+/*
+  C.24.92 â€” Outer canvas parity with /ma/valuation (same shell token + full-bleed page).
+  Reinforces maExecutiveTheme.css so EPS 1380px page-cap cannot win on reload order.
+*/
+
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  box-sizing: border-box !important;
+}
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page {
   --ma-ref-bg: #010306;
@@ -29,7 +42,7 @@
   background: transparent;
 }
 
-/* Depth bed behind internal cards — lets glass read as translucent (not flat black) */
+/* Depth bed behind internal cards â€” lets glass read as translucent (not flat black) */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page::before {
   content: '';
   position: absolute;
@@ -48,18 +61,16 @@
 }
 
 /* Shield: block global flattening without stripping decorative layers */
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page [class*='ma-reference-']:not([class*='ma-reference-globe']):not(.ma-reference-scene-globe):not(.ma-reference-scene-atmo):not(.ma-reference-scene-glow):not(.ma-reference-scene-mesh):not(.ma-reference-scene-stage) {
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page [class*='ma-reference-']:not([class*='ma-intelligence']):not(.ma-reference-scene-atmo):not(.ma-reference-scene-glow):not(.ma-reference-scene-mesh):not(.ma-reference-scene-stage) {
   filter: none;
   transform: none;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-kicker {
-  margin: 0 0 8px;
-  color: var(--ma-ref-teal-dim);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  display: block;
+  margin: 0 0 var(--ceos-hero-kicker-margin-bottom);
+  color: var(--ceos-hero-kicker-color, var(--ma-ref-teal-dim));
+  min-height: 18px;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-caption {
@@ -70,15 +81,12 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-title {
-  margin: 0 0 10px;
-  font-size: clamp(40px, 4.8vw, 64px);
-  font-weight: 850;
-  line-height: 0.98;
-  letter-spacing: -0.03em;
-  color: var(--ma-ref-text);
+  margin: 0 0 var(--ceos-hero-title-margin-bottom);
+  color: var(--ceos-hero-title-color);
   text-shadow:
     0 2px 28px rgba(0, 0, 0, 0.45),
     0 0 48px rgba(45, 212, 191, 0.06);
@@ -123,7 +131,7 @@
   color: var(--ma-ref-text);
 }
 
-/* —— Premium surfaces — softer blend, no sticker stack —— */
+/* â€”â€” Premium surfaces â€” softer blend, no sticker stack â€”â€” */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip:not(.ma-valuation-surface),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(.ma-valuation-surface),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline:not(.ma-valuation-surface),
@@ -137,13 +145,13 @@
   background: linear-gradient(165deg, rgba(12, 20, 30, 0.72) 0%, rgba(8, 14, 22, 0.52) 100%);
 }
 
-/* —— Hero scene: open atmosphere, no sticker box —— */
+/* â€”â€” Hero scene: open atmosphere, no sticker box â€”â€” */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene {
   position: relative;
   isolation: isolate;
   min-height: clamp(500px, 48vw, 580px);
   padding: 8px 0 40px;
-  margin-bottom: 12px;
+  margin-bottom: 0;
   border: none;
   border-radius: 0;
   background: transparent;
@@ -151,7 +159,7 @@
   overflow: hidden;
 }
 
-/* Valuation hero parity — light bed behind right status card (72% / 28%) */
+/* Valuation hero parity â€” light bed behind right status card (72% / 28%) */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene::before {
   content: '';
   position: absolute;
@@ -167,17 +175,16 @@
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-glow {
   position: absolute;
-  top: 44%;
-  left: 58%;
+  top: 49%;
+  left: 60%;
   width: min(960px, 98%);
   height: min(400px, 48vh);
   transform: translate(-50%, -50%);
   background:
-    radial-gradient(ellipse 58% 72% at 50% 40%, rgba(45, 212, 191, 0.28), transparent 68%),
-    radial-gradient(ellipse 82% 52% at 48% 58%, rgba(45, 212, 191, 0.1), transparent 80%),
-    radial-gradient(ellipse 32% 24% at 66% 34%, rgba(45, 212, 191, 0.14), transparent 76%);
-  filter: blur(8px);
-  opacity: 1;
+    radial-gradient(ellipse 52% 62% at 50% 42%, rgba(45, 212, 191, 0.12), transparent 68%),
+    radial-gradient(ellipse 72% 44% at 48% 58%, rgba(45, 212, 191, 0.05), transparent 80%);
+  filter: blur(6px);
+  opacity: 0.72;
   mask-image: linear-gradient(to bottom, black 0%, black 88%, transparent 100%);
 }
 
@@ -210,125 +217,828 @@
   z-index: 2;
   display: grid;
   grid-template-columns: minmax(0, 1.18fr) minmax(300px, 380px);
+  grid-template-rows: auto;
   gap: 20px 36px;
   align-items: start;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-stage {
-  position: absolute;
-  left: 56%;
-  top: 44%;
-  width: min(520px, 48vw);
-  height: min(520px, 48vw);
-  min-width: 340px;
-  min-height: 340px;
-  max-height: 100%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.86;
-  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.28));
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-intro {
+  grid-column: 1;
+  grid-row: 1;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-globe {
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* Active deal strip — post-hero band on page black (sibling of scene) */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page > .ma-reference-strip {
   position: relative;
+  z-index: auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  transform: none;
+  top: auto;
+  bottom: auto;
+}
+
+/* C.34 / P0 — Intelligence effect layer (hero-relative bounding box) */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-stage {
+  position: absolute;
+  left: 35%;
+  top: 2%;
+  width: 43%;
+  height: 92%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intelligence-effect-layer {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-flare {
-  position: absolute;
-  inset: -12%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(94, 234, 212, 0.18) 0%, transparent 68%);
-  filter: blur(22px);
-  opacity: 0.9;
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intelligence-effect-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-halo {
-  position: absolute;
-  inset: -28%;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle, rgba(45, 212, 191, 0.2) 0%, rgba(45, 212, 191, 0.05) 44%, transparent 76%);
-  filter: blur(18px);
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-planet-group path,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-planet-group line,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-planet-group circle,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-planet-group ellipse {
+  vector-effect: non-scaling-stroke;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-sphere-body {
   opacity: 0.92;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-orbit {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  border: 1px solid rgba(94, 234, 212, 0.1);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.55;
-  z-index: 1;
-}
-
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-orbit-a {
-  width: 112%;
-  height: 42%;
-  transform: translate(-50%, -50%) rotate(-22deg);
-}
-
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-orbit-b {
-  width: 118%;
-  height: 36%;
-  transform: translate(-50%, -50%) rotate(28deg);
-  border-color: rgba(94, 234, 212, 0.1);
-}
-
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-svg {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  opacity: 0.78;
-  filter: drop-shadow(0 0 56px rgba(45, 212, 191, 0.22));
-}
-
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-body {
-  transform-origin: 200px 200px;
-  opacity: 0.55;
-}
-
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-grid {
-  animation: ma-ref-globe-spin 96s linear infinite;
-  transform-origin: 200px 200px;
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-lat-ring {
+  stroke: rgba(94, 234, 212, 0.24);
   opacity: 0.95;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-orbit-svg {
-  animation: ma-ref-globe-spin 120s linear infinite reverse;
-  transform-origin: 200px 200px;
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-lat-outer {
+  stroke: rgba(45, 212, 191, 0.08);
+  opacity: 0.38;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-lat7,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-lat8 {
+  stroke: rgba(45, 212, 191, 0.06);
+  opacity: 0.26;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-lat-mid {
+  stroke: rgba(45, 212, 191, 0.22);
+  opacity: 0.72;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-lon-ring {
+  stroke: rgba(45, 212, 191, 0.14);
+  opacity: 0.58;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-tilt-orbit {
+  stroke: rgba(45, 212, 191, 0.2);
+  opacity: 0.82;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-structural {
+  stroke: rgba(45, 212, 191, 0.09);
+  opacity: 0.52;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-mid {
+  stroke: rgba(45, 212, 191, 0.24);
+  opacity: 0.78;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-route-foreground {
+  stroke: rgba(94, 234, 212, 0.72) !important;
+  opacity: 0.98 !important;
+  stroke-width: 1.15;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-outer-arc {
+  stroke: rgba(45, 212, 191, 0.09);
+  opacity: 0.8;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-top {
+  stroke: rgba(45, 212, 191, 0.07);
+  opacity: 0.58;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-side {
+  stroke: rgba(45, 212, 191, 0.09);
+  opacity: 0.72;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-partial-arc {
+  stroke: rgba(45, 212, 191, 0.14);
   opacity: 0.88;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-network {
-  animation: ma-ref-globe-spin 108s linear infinite;
-  transform-origin: 200px 200px;
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-mid-orbit {
+  stroke: rgba(45, 212, 191, 0.19);
+  opacity: 0.86;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbital {
+  stroke: rgba(45, 212, 191, 0.2);
+  opacity: 0.82;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-medium-route {
+  stroke: rgba(45, 212, 191, 0.3);
+  opacity: 0.86;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-inner-loop {
+  stroke: rgba(94, 234, 212, 0.38);
+  opacity: 0.9;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-chamber-loop {
+  stroke: rgba(94, 234, 212, 0.42);
+  opacity: 0.9;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-chamber-connector {
+  stroke: rgba(94, 234, 212, 0.28);
+  opacity: 0.82;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-segment {
+  stroke: rgba(45, 212, 191, 0.62);
+  opacity: 0.24;
+  filter: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-segment.ma-intel-ss5,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-segment.ma-intel-ss6,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-segment.ma-intel-ss7,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-segment.ma-intel-ss8 {
+  opacity: 0.1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-radial {
+  stroke: rgba(167, 243, 232, 0.58);
+  stroke-width: 0.85;
+  opacity: 0.88;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-chamber-ring {
+  opacity: 0.88;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-dashed-arc {
+  stroke: rgba(45, 212, 191, 0.22);
+  opacity: 0.86;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-micro-dot {
+  fill: rgba(167, 243, 232, 0.72);
+  opacity: 0.78;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-micro-dash,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-micro-tick {
+  stroke: rgba(94, 234, 212, 0.42);
+  stroke-width: 0.75;
+  opacity: 0.68;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-micro-arc {
+  stroke: rgba(45, 212, 191, 0.32);
+  stroke-width: 0.8;
+  opacity: 0.65;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-micro-ring {
+  stroke: rgba(94, 234, 212, 0.38);
+  stroke-width: 0.7;
+  opacity: 0.62;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-active-route {
+  stroke: #5eead4;
+  opacity: 0.82;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ar4 {
+  opacity: 0.58;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-back {
+  opacity: 0.32;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-mid {
+  opacity: 0.78;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-front {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-back .ma-intel-lon-ring {
+  opacity: 0.42;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight {
+  stroke: #5eead4;
+  opacity: 0;
+  filter: url(#ma-intel-node-glow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight-trail {
+  stroke: rgba(94, 234, 212, 0.35);
+  opacity: 0;
+  filter: url(#ma-intel-node-glow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight-mid {
+  stroke: rgba(94, 234, 212, 0.58);
+  opacity: 0;
+  filter: url(#ma-intel-node-glow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight-fade {
+  stroke: rgba(45, 212, 191, 0.22);
+  opacity: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-mid {
+  stroke: rgba(94, 234, 212, 0.62);
+  opacity: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-fade {
+  stroke: rgba(45, 212, 191, 0.28);
+  opacity: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-route-reveal {
+  stroke: #5eead4;
+  opacity: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-exec-edge-glow {
+  opacity: 0;
+  filter: url(#ma-intel-node-glow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-inner,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-mid,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-outer,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-delay {
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-vert-energy {
+  stroke: #5eead4;
+  stroke-width: 1.1;
+  opacity: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-inner-loops-life .ma-intel-inner-loop {
+  stroke-dasharray: 4 10;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-back {
+  transform-origin: 500px 440px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-mid {
+  transform-origin: 500px 440px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-front {
+  transform-origin: 500px 440px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbital-wave {
+  stroke: rgba(94, 234, 212, 0.14);
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-cinematic-glint {
+  stroke: rgba(204, 251, 241, 0.18);
+  stroke-width: 1.2;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-spark {
+  opacity: 0.85;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-ripple,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-ripple-2 {
+  opacity: 0;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-pulse,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-radial-pulse,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-halo,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-inner,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-outer,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-seg,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-spark {
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark {
+  opacity: 0.62;
+  fill: #99f6e4;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-light-sweep {
+  stroke: rgba(94, 234, 212, 0.22);
+  stroke-width: 28;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-halo {
   opacity: 0.92;
 }
 
-@keyframes ma-ref-globe-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-body {
+  opacity: 1;
 }
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-hot {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-glow {
+  opacity: 0.92;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-glow-outer {
+  opacity: 0.56;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-inner {
+  stroke: rgba(236, 253, 245, 0.88);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-outer {
+  stroke: rgba(167, 243, 232, 0.78);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-seg {
+  stroke: rgba(94, 234, 212, 0.42);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-spark {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-radial-pulse {
+  opacity: 0;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-energy {
+  stroke: #5eead4;
+  stroke-width: 1.2;
+  opacity: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-featured .ma-intel-checkpoint-dot {
+  opacity: 1;
+  filter: url(#ma-intel-node-glow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-featured .ma-intel-checkpoint-ring {
+  opacity: 0.98;
+  stroke: rgba(167, 243, 232, 0.88);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-glow {
+  opacity: 0.72;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-featured .ma-intel-checkpoint-glow {
+  opacity: 0.88;
+  fill: rgba(45, 212, 191, 0.2);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-checkpoint .ma-intel-checkpoint-dot {
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-target .ma-intel-checkpoint-dot {
+  opacity: 0.95;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-medium .ma-intel-checkpoint-dot {
+  opacity: 0.88;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-small .ma-intel-checkpoint-dot {
+  opacity: 0.78;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-ring {
+  opacity: 0.72;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal {
+  stroke: #5eead4;
+  opacity: 0;
+  filter: url(#ma-intel-node-glow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-trail {
+  stroke: rgba(94, 234, 212, 0.48);
+  opacity: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-signal {
+  stroke: #ecfdf5;
+  stroke-width: 1.4;
+  opacity: 0;
+  filter: url(#ma-intel-node-glow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-signal-trail {
+  stroke: rgba(94, 234, 212, 0.52);
+  stroke-width: 2.4;
+  opacity: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-link {
+  stroke: rgba(94, 234, 212, 0.22);
+  stroke-width: 0.9;
+  opacity: 0.45;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tick {
+  stroke: rgba(94, 234, 212, 0.38);
+  stroke-width: 0.75;
+  opacity: 0.58;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-floor-particle {
+  opacity: 0.62;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed {
+  stroke: rgba(94, 234, 212, 0.42);
+  stroke-width: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-bg {
+  stroke: rgba(45, 212, 191, 0.14);
+  stroke-width: 0.6;
+  opacity: 0.22;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-mid {
+  stroke: rgba(45, 212, 191, 0.38);
+  stroke-width: 0.85;
+  opacity: 0.52;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-active {
+  stroke: rgba(45, 212, 191, 0.72);
+  stroke-width: 1.05;
+  opacity: 0.84;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-node {
+  fill: rgba(45, 212, 191, 0.72);
+  opacity: 0.55;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring {
+  stroke: rgba(94, 234, 212, 0.78);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-bg {
+  stroke: rgba(45, 212, 191, 0.22);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-mid {
+  stroke: rgba(45, 212, 191, 0.52);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-inner {
+  stroke: rgba(94, 234, 212, 0.82);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-outer {
+  stroke: rgba(45, 212, 191, 0.28);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-strong,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-5,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-6,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-7,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-8 {
+  stroke: rgba(94, 234, 212, 0.96);
+}
+
+/* C.44 — Platform presence boost (planet / hero frozen) */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-holo-platform {
+  pointer-events: none;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-surface {
+  transform-origin: 500px 724px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-plane-fill {
+  opacity: 0.96;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-7,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-8 {
+  opacity: 1 !important;
+  stroke: rgba(167, 243, 232, 1);
+  stroke-width: 1.25;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-5,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-6 {
+  opacity: 0.92 !important;
+  stroke: rgba(94, 234, 212, 0.92);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-4,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-10 {
+  opacity: 0.58 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-3 {
+  opacity: 0.52 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-1,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-2 {
+  opacity: 0.2 !important;
+  stroke: rgba(45, 212, 191, 0.32);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-9 {
+  opacity: 0.86 !important;
+  stroke: rgba(94, 234, 212, 0.82);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-projection-beam {
+  stroke: rgba(94, 234, 212, 0.22);
+  stroke-width: 0.75;
+  opacity: 0.42;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-emitter-column {
+  opacity: 0.72;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-runner {
+  opacity: 0;
+  filter: url(#ma-intel-node-glow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-bright-arc {
+  stroke: rgba(167, 243, 232, 0.96);
+  opacity: 0.9;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-fragment {
+  stroke: rgba(45, 212, 191, 0.48);
+  opacity: 0.68;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-perimeter-dot {
+  opacity: 0.74;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-radial {
+  stroke: rgba(45, 212, 191, 0.26);
+  stroke-width: 0.55;
+  opacity: 0.4;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection {
+  opacity: 0.52;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-1,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-2,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-3,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-4 {
+  opacity: 0.78;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem {
+  stroke: rgba(94, 234, 212, 0.48);
+  stroke-width: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-bg {
+  stroke: rgba(45, 212, 191, 0.18);
+  stroke-width: 0.75;
+  opacity: 0.38;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-mid {
+  stroke: rgba(94, 234, 212, 0.38);
+  stroke-width: 0.85;
+  opacity: 0.58;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-active {
+  stroke: #5eead4;
+  stroke-width: 1.05;
+  opacity: 0.88;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip {
+  opacity: 0.95;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-active {
+  opacity: 0.88;
+  fill: #2dd4bf;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-mid {
+  opacity: 0.82;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-bg {
+  opacity: 0.55;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-halo {
+  opacity: 0.88;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-disc {
+  opacity: 0.98;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-glow {
+  opacity: 0.86;
+  fill: rgba(94, 234, 212, 0.24);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-inner-1 {
+  opacity: 1;
+  stroke: rgba(167, 243, 232, 0.96);
+  stroke-width: 1.2;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-inner-2 {
+  opacity: 0.94;
+  stroke: rgba(94, 234, 212, 0.84);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-hot {
+  opacity: 1;
+  fill: #ecfdf5;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-transfer {
+  stroke: rgba(45, 212, 191, 0.42);
+  stroke-width: 0.9;
+  fill: none;
+  opacity: 0.52;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-sphere-touch {
+  opacity: 0;
+  filter: url(#ma-intel-node-glow);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-ring {
+  opacity: 0.96;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-ring-2 {
+  opacity: 0.78;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-ring-3 {
+  opacity: 0.62;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-inner-3 {
+  opacity: 0.88;
+  stroke: rgba(45, 212, 191, 0.58);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-ring-5 {
+  opacity: 0.42;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-horizon {
+  opacity: 1;
+  fill: rgba(45, 212, 191, 0.12);
+  stroke: rgba(45, 212, 191, 0.44);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-spoke {
+  stroke: rgba(45, 212, 191, 0.22);
+  stroke-width: 0.55;
+  opacity: 0.32;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tick {
+  stroke: rgba(94, 234, 212, 0.48);
+  stroke-width: 0.6;
+  opacity: 0.52;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-floor-particle {
+  opacity: 0.48;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-link {
+  stroke: rgba(94, 234, 212, 0.38);
+  stroke-width: 0.95;
+  opacity: 0.62;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-vert-energy {
+  stroke: rgba(45, 212, 191, 0.28);
+  stroke-width: 0.75;
+  opacity: 0.32;
+}
+
+/* P0 — Static frame QA: freeze motion, reveal static WOW hierarchy */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame * {
+  animation: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-orbit-highlight,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-orbit-highlight-trail,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-orbit-highlight-mid,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-orbit-highlight-fade,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-light-sweep,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-cinematic-glint,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-orbital-wave,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-base-ripple,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-base-ripple-2,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-base-energy,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-route-reveal,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-core-pulse,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-core-radial-pulse,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-ripple-inner,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-ripple-mid,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-ripple-outer,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-core-ring-delay,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-exec-edge-glow,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-signal,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-signal-trail,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-signal-mid,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-signal-fade,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-feed-signal,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-feed-signal-trail {
+  opacity: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-chamber-ring-inner,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-chamber-ring-outer,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-core-ring-inner,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-core-ring-outer,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-frame .ma-intel-core-ring-seg {
+  opacity: 1;
+}
+
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-intro {
   max-width: 620px;
   min-width: 0;
-  padding-top: 4px;
   position: relative;
   z-index: 3;
 }
@@ -360,7 +1070,7 @@
   color: var(--ma-ref-teal-bright);
 }
 
-/* —— Executive Signal — luxury glass —— */
+/* â€”â€” Executive Signal â€” luxury glass â€”â€” */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(.ma-valuation-status-card) {
   padding: 30px 30px 34px;
   border-radius: 22px;
@@ -412,27 +1122,59 @@
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal-ring {
-  --ma-ref-score: 0deg;
+  --ma-ref-score-pct: 0;
   width: 224px;
   height: 224px;
   margin: 0 auto 20px;
   border-radius: 50%;
-  padding: 4px;
-  background: conic-gradient(
-    var(--ma-ref-teal) var(--ma-ref-score),
-    rgba(45, 212, 191, 0.08) var(--ma-ref-score)
-  );
+  padding: 0;
+  background: transparent;
   display: grid;
   place-items: center;
   box-shadow:
-    0 0 48px rgba(45, 212, 191, 0.22),
-    0 0 96px rgba(32, 201, 151, 0.1),
-    inset 0 0 24px rgba(45, 212, 191, 0.06);
+    0 0 48px rgba(45, 212, 191, 0.18),
+    0 0 96px rgba(32, 201, 151, 0.08);
   position: relative;
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* C.45d — Executive Signal score ring FINAL / FROZEN — arc-end polish only */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-ref-ring-track-glass {
+  stroke: rgba(8, 26, 32, 0.58);
+  stroke-width: 16;
+  opacity: 1;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-ref-ring-track {
+  stroke: url(#ma-ref-ring-track-grad);
+  stroke-width: 16;
+  opacity: 0.71;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-ref-ring-track-edge {
+  stroke: rgba(94, 234, 212, 0.1);
+  stroke-width: 16.5;
+  opacity: 0.6;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-ref-ring-active {
+  stroke: url(#ma-ref-ring-active-grad);
+  stroke-width: 16;
+  stroke-linecap: butt;
+  shape-rendering: geometricPrecision;
+  filter: url(#ma-ref-ring-glow);
+  opacity: 0.98;
+}
+
 /* ==========================================================================
-   C.24.101 — EMERGENCY: restore Qualified Opportunity circular gauge
+   C.24.101 â€” EMERGENCY: restore Qualified Opportunity circular gauge
    Outer card = Valuation L13728 only. Ring/conic/--ma-ref-score untouched.
    ========================================================================== */
 
@@ -441,26 +1183,28 @@
   width: 224px !important;
   height: 224px !important;
   margin: 0 auto 20px !important;
-  padding: 4px !important;
+  padding: 0 !important;
   border-radius: 50% !important;
   box-sizing: border-box !important;
-  background: conic-gradient(
-    var(--ma-ref-teal, #2dd4bf) var(--ma-ref-score, 0deg),
-    rgba(45, 212, 191, 0.08) var(--ma-ref-score, 0deg)
-  ) !important;
-  background-image: conic-gradient(
-    var(--ma-ref-teal, #2dd4bf) var(--ma-ref-score, 0deg),
-    rgba(45, 212, 191, 0.08) var(--ma-ref-score, 0deg)
-  ) !important;
+  background: transparent !important;
+  background-image: none !important;
   border: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   box-shadow:
-    0 0 48px rgba(45, 212, 191, 0.22),
-    0 0 96px rgba(32, 201, 151, 0.1),
-    inset 0 0 24px rgba(45, 212, 191, 0.06) !important;
+    0 0 48px rgba(45, 212, 191, 0.18),
+    0 0 96px rgba(32, 201, 151, 0.08),
+    inset 0 0 18px rgba(45, 212, 191, 0.032) !important;
   filter: none !important;
   overflow: visible !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene .ma-reference-signal:not(#__ceos_no_match__) .ma-reference-signal-ring,
+.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-signal.mna-valuation-glass-status:not(#__ceos_no_match__) .ma-reference-signal-ring {
+  box-shadow:
+    0 0 32px rgba(45, 212, 191, 0.14),
+    0 0 56px rgba(32, 201, 151, 0.06),
+    inset 0 0 18px rgba(45, 212, 191, 0.032) !important;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface .ma-reference-signal-ring::before,
@@ -500,8 +1244,8 @@
   position: absolute;
   inset: -6px;
   border-radius: 50%;
-  border: 1px solid rgba(94, 234, 212, 0.12);
-  opacity: 0.65;
+  border: 1px solid rgba(94, 234, 212, 0.1);
+  opacity: 0.52;
   pointer-events: none;
 }
 
@@ -513,6 +1257,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(.ma-valuation-status-card) .ma-reference-signal-ring-core {
@@ -559,16 +1305,19 @@
   text-align: center;
 }
 
-/* —— Active Deal strip —— */
+/* —— Active Deal strip ——
+   Single layout owner. Focus shares growth; metric columns share remaining
+   width with a slight bias to financial columns (EV / Net Debt / Adj. Equity).
+   Materials owned by maReferenceSurfaces / maMnaSurfaceSystem. */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip {
   position: relative;
   z-index: 4;
   isolation: isolate;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 0 22px;
-  padding: 20px 30px;
+  gap: 0 12px;
+  padding: 20px 24px;
   border-radius: 20px;
   background: var(--ma-ref-surface-solid);
   box-shadow: var(--ma-ref-shadow-soft);
@@ -577,54 +1326,105 @@
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-focus {
   display: flex;
   align-items: center;
-  gap: 14px;
-  min-width: 210px;
+  gap: 12px;
+  flex: 1.65 1 0;
+  min-width: 248px;
+  max-width: 320px;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-glyph {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  align-self: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
   background: rgba(45, 212, 191, 0.1);
   color: var(--ma-ref-teal);
-  flex-shrink: 0;
+  flex: 0 0 48px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-focus-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  flex: 1 1 auto;
+  /* Match fact columns so eyebrow/value baselines share one row system */
+  padding: 2px 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-focus-copy .ma-reference-caption,
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-fact .ma-reference-caption {
+  margin: 0;
+  /* Match Valuation command-strip kpi-label hierarchy (Engine Status oracle) */
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-focus strong {
   display: block;
-  font-size: 17px;
-  font-weight: 750;
+  margin: 0;
+  /* Same primary value recipe as .ma-reference-strip-fact strong (command-strip oracle) */
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
   color: var(--ma-ref-text);
-  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-divider {
   width: 1px;
-  height: 42px;
+  height: 44px;
+  align-self: center;
   background: linear-gradient(180deg, transparent, var(--ma-ref-line-soft), transparent);
-  flex-shrink: 0;
+  flex: 0 0 1px;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-fact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  flex: 0.9 1 0;
+  min-width: 0;
+  padding: 2px 0;
+}
+
+/* Financial columns (EV / Net Debt / Adj. Equity) — DOM: children 9, 11, 13 */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip > .ma-reference-strip-fact:nth-child(9),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip > .ma-reference-strip-fact:nth-child(11),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip > .ma-reference-strip-fact:nth-child(13) {
+  flex: 1.28 1 0;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-fact strong {
   display: block;
-  font-size: 15px;
-  font-weight: 750;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
   font-variant-numeric: tabular-nums;
   color: var(--ma-ref-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-action {
   margin-left: auto;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-action .button {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-}
+/* C.24.95 â€” strip action button paint deferred to maButtonSystem.css */
 
-/* —— KPI stat row —— */
+/* â€”â€” KPI stat row â€”â€” */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -633,7 +1433,7 @@
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab {
   position: relative;
-  padding: 22px 24px 22px;
+  padding: 30px 24px 30px;
   border-radius: 22px;
   overflow: hidden;
   cursor: default;
@@ -666,13 +1466,14 @@
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-glyph {
-  margin-bottom: 10px;
-  color: rgba(45, 212, 191, 0.5);
+  display: block;
+  margin-bottom: 16px;
+  color: rgba(45, 212, 191, 0.48);
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-mini-bars {
   position: absolute;
-  top: 22px;
+  top: 30px;
   right: 24px;
   display: flex;
   align-items: flex-end;
@@ -691,7 +1492,7 @@
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-figure {
-  margin-bottom: 4px;
+  margin-bottom: 10px;
   font-size: clamp(24px, 2.2vw, 32px);
   font-weight: 850;
   font-variant-numeric: tabular-nums;
@@ -700,19 +1501,28 @@
   letter-spacing: -0.02em;
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab > .ma-reference-caption {
+  margin: 0;
+  /* Secondary label — softer than value; tracking restored via ExecutiveTheme exclusion */
+  color: rgba(148, 163, 184, 0.78);
+  letter-spacing: 0.14em;
+}
+
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab p.muted {
-  margin: 10px 0 0;
+  margin: 14px 0 0;
   font-size: 11px;
   line-height: 1.5;
+  color: rgba(203, 213, 225, 0.62);
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-spark {
   position: absolute;
-  bottom: 0;
+  top: 0;
+  bottom: auto;
   left: 0;
   right: 0;
   height: 2px;
-  border-radius: 0 0 20px 20px;
+  border-radius: 20px 20px 0 0;
   background: rgba(45, 212, 191, 0.06);
   overflow: hidden;
 }
@@ -726,7 +1536,7 @@
   box-shadow: 0 0 12px rgba(45, 212, 191, 0.4);
 }
 
-/* —— Pipeline + Operating —— */
+/* â€”â€” Pipeline + Operating â€”â€” */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-duo {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -748,10 +1558,10 @@
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-track {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-wrap: nowrap;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 2px 0;
+  gap: 0;
   margin-bottom: 22px;
   padding: 20px 8px 8px;
 }
@@ -759,7 +1569,8 @@
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-track::before {
   content: '';
   position: absolute;
-  top: 27px;
+  /* Shared optical rail through 22px node slot centers (pad 20 + 11) */
+  top: 31px;
   left: 8%;
   right: 8%;
   height: 2px;
@@ -771,20 +1582,28 @@
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 22px auto;
+  justify-items: center;
   align-items: center;
   gap: 10px;
-  min-width: 68px;
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: 88px;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-dot {
+  box-sizing: border-box;
   width: 16px;
   height: 16px;
+  margin: 0;
   border-radius: 50%;
   border: 2px solid rgba(148, 163, 184, 0.4);
   background: var(--ma-ref-bg);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  justify-self: center;
+  align-self: center;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node.is-done .ma-reference-pipeline-dot {
@@ -795,38 +1614,48 @@
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node.is-active .ma-reference-pipeline-dot {
   width: 22px;
   height: 22px;
+  margin: 0;
   border-color: var(--ma-ref-teal-bright);
   background: radial-gradient(circle at 35% 30%, #5eead4, #2dd4bf 55%, #14b8a6);
   box-shadow:
     0 0 20px rgba(45, 212, 191, 0.35),
     0 0 40px rgba(32, 201, 151, 0.12),
     inset 0 0 8px rgba(255, 255, 255, 0.15);
-  transform: scale(1.08);
+  transform: none;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node.is-active::after {
   content: '';
   position: absolute;
-  top: 0;
+  /* Center glow on the 22px active dot (slot center = 11px from node top) */
+  top: 11px;
+  left: 50%;
   width: 36px;
   height: 36px;
+  margin: 0;
   border-radius: 50%;
   border: 1px solid rgba(94, 234, 212, 0.2);
   opacity: 0.7;
   pointer-events: none;
+  transform: translate(-50%, -50%);
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-name {
+  display: block;
+  width: 100%;
+  text-align: center;
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.06em;
+  line-height: 1.2;
   text-transform: uppercase;
   color: rgba(148, 163, 184, 0.7);
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node.is-active .ma-reference-pipeline-name {
   color: var(--ma-ref-teal-bright);
-  font-size: 10px;
+  font-size: 9px;
+  font-weight: 800;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node.is-done .ma-reference-pipeline-name {
@@ -835,8 +1664,11 @@
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-arrow {
   color: rgba(148, 163, 184, 0.28);
+  flex: 0 0 auto;
   flex-shrink: 0;
-  margin-top: -18px;
+  /* Align chevron to shared 22px rail center (pad 20 + 11 âˆ’ ~7) */
+  margin-top: 24px;
+  align-self: flex-start;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-detail {
@@ -904,7 +1736,7 @@
   line-height: 1.5;
 }
 
-/* —— Workbench —— */
+/* â€”â€” Workbench â€”â€” */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench {
   padding: 24px 0 4px;
 }
@@ -919,9 +1751,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  min-height: 176px;
-  padding: 22px 22px 48px;
+  align-items: stretch;
+  gap: 0;
+  min-height: 196px;
+  padding: 24px 22px 22px;
   border-radius: 20px;
   color: inherit;
   text-decoration: none;
@@ -949,38 +1782,58 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
+  align-self: flex-start;
   width: 44px;
   height: 44px;
+  margin: 0 0 14px;
   border-radius: 13px;
   background: linear-gradient(145deg, rgba(45, 212, 191, 0.14), rgba(45, 212, 191, 0.05));
   color: var(--ma-ref-teal-bright);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile > div {
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-copy {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  flex: 1 1 auto;
+  gap: 0;
+  min-width: 0;
+  padding-bottom: 30px;
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile > div:not(.ma-reference-workbench-glyph) {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-title,
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile strong {
+  display: block;
+  min-height: calc(1.3em * 2);
+  margin: 0 0 8px;
   font-size: 14px;
   font-weight: 780;
+  line-height: 1.3;
   letter-spacing: -0.015em;
   color: var(--ma-ref-text);
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-desc,
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile p {
   margin: 0;
   font-size: 11px;
-  line-height: 1.58;
+  line-height: 1.55;
   color: rgba(203, 213, 225, 0.72);
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-arrow {
   position: absolute;
   right: 22px;
-  bottom: 22px;
+  bottom: 18px;
+  left: auto;
+  top: auto;
   color: rgba(94, 234, 212, 0.45);
   transition: color 0.15s ease, transform 0.15s ease;
 }
@@ -997,7 +1850,7 @@
   transform: translate(2px, -2px);
 }
 
-/* —— Snapshot + Next —— */
+/* â€”â€” Snapshot + Next â€”â€” */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-duo-snap {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1115,7 +1968,7 @@
   color: var(--ma-ref-text);
 }
 
-/* —— Bottom row —— */
+/* â€”â€” Bottom row â€”â€” */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1130,6 +1983,7 @@
   border-radius: 22px;
   cursor: default;
   min-width: 0;
+  height: 100%;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab:not(.ma-valuation-surface) {
@@ -1149,13 +2003,23 @@
   letter-spacing: -0.015em;
 }
 
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab > .ma-reference-bottom-note,
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab > p.muted {
   margin: 0 0 16px;
+  min-height: calc(1.5em * 2);
+  line-height: 1.5;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-meta {
+  display: flex;
+  align-items: center;
+  min-height: 1.4em;
+  margin: 0 0 14px;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-highlight {
   display: block;
-  margin: 0 0 14px;
+  margin: 0;
   font-size: 15px;
   font-weight: 720;
   color: var(--ma-ref-text);
@@ -1165,19 +2029,39 @@
   letter-spacing: -0.01em;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab .ma-reference-snapshot-readout {
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-readout-slot {
   flex: 1 1 auto;
-  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab .ma-reference-snapshot-readout {
+  flex: 0 0 auto;
+  margin: 0;
   padding: 14px 16px;
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(4, 8, 14, 0.55), rgba(2, 4, 8, 0.35));
-  border: 1px solid rgba(45, 212, 191, 0.06);
+  background: var(--ma-ref-inset-panel-bg, linear-gradient(168deg, rgba(10, 24, 24, 0.5) 0%, rgba(5, 12, 12, 0.36) 100%));
+  background-image: var(--ma-ref-inset-panel-bg, linear-gradient(168deg, rgba(10, 24, 24, 0.5) 0%, rgba(5, 12, 12, 0.36) 100%));
+  border: 1px solid var(--ma-ref-inset-border, rgba(90, 255, 220, 0.07));
+  box-shadow: var(--ma-ref-inset-shadow, inset 0 1px 0 rgba(255, 255, 255, 0.025));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-action {
+  display: flex;
+  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 18px;
+  min-height: 58px;
+  box-sizing: border-box;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab > a,
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab > .ma-reference-inline-link,
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab > .ma-reference-inline-note {
-  margin-top: auto;
+  margin-top: 0;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-inline-link {
@@ -1201,28 +2085,7 @@
   font-size: 12px;
 }
 
-/* Latest saved case — Abrir repositorio only.
-   executivePolish .button.secondary uses background !important (rgba(8,7,6,0.72))
-   and .button uses box-shadow: none !important. This selector must match that
-   weight; it does not restyle other dashboard secondaries. */
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab a[href='/ma/deals'] .button.secondary {
-  background: rgba(45, 212, 191, 0.08) !important;
-  border: 1px solid rgba(94, 234, 212, 0.32) !important;
-  color: #f8fafc !important;
-  box-shadow:
-    0 0 16px rgba(45, 212, 191, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
-}
-
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab a[href='/ma/deals'] .button.secondary:hover,
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab a[href='/ma/deals'] .button.secondary:focus-visible {
-  background: rgba(45, 212, 191, 0.12) !important;
-  border-color: rgba(94, 234, 212, 0.5) !important;
-  color: #f8fafc !important;
-  box-shadow:
-    0 0 18px rgba(45, 212, 191, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-}
+/* C.24.95 â€” Abrir repositorio secondary deferred to maButtonSystem.css */
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-bottom-slab .ma-reference-readout-row {
   padding: 9px 0;
@@ -1232,27 +2095,9 @@
   border-bottom: 0;
 }
 
-/* —— Buttons —— */
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .button.primary {
-  background: linear-gradient(135deg, var(--ma-ref-teal), #20c997);
-  border-color: transparent;
-  color: #010306;
-  font-weight: 700;
-  box-shadow: 0 4px 20px rgba(45, 212, 191, 0.25);
-}
+/* C.24.95 â€” Dashboard button paints deferred to maButtonSystem.css */
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .button.secondary {
-  background: rgba(45, 212, 191, 0.07);
-  border-color: rgba(45, 212, 191, 0.2);
-  color: var(--ma-ref-text);
-}
-
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-page .button.secondary:hover {
-  background: rgba(45, 212, 191, 0.12);
-  border-color: rgba(45, 212, 191, 0.3);
-}
-
-/* —— Responsive —— */
+/* â€”â€” Responsive â€”â€” */
 @media (max-width: 1280px) {
   .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-deck {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1269,18 +2114,23 @@
     gap: 24px;
   }
 
-  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-stage {
-    left: 50%;
-    top: 40%;
-    width: min(360px, 78vw);
-    height: min(360px, 78vw);
-    min-width: 280px;
-    min-height: 280px;
-    opacity: 0.7;
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-intro {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: none;
   }
 
-  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-intro {
-    max-width: none;
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-scene-stage {
+    left: 33%;
+    top: 3%;
+    width: 44%;
+    height: 90%;
+    opacity: 0.88;
   }
 
   .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-title {
@@ -1313,7 +2163,25 @@
   }
 
   .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip {
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 14px 16px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-focus {
+    flex: 1 1 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-fact {
+    flex: 1 1 calc(33.333% - 12px);
+    min-width: 120px;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip > .ma-reference-strip-fact:nth-child(9),
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip > .ma-reference-strip-fact:nth-child(11),
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip > .ma-reference-strip-fact:nth-child(13) {
+    flex: 1 1 calc(33.333% - 12px);
   }
 
   .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-action {
@@ -1354,9 +2222,72 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-svg,
-  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-globe-nodes {
-    animation: none;
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-pulse,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-radial-pulse,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-active-route,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-signal,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-signal-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-inner-loop,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-medium-route,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-light-sweep,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-cinematic-glint,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbital-wave,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-energy,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-ripple,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-ripple-2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-spark,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-halo,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-glow-outer,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-back,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-front,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-dashed-arc,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-chamber-loop,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring {
+    animation: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-pulse,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-radial-pulse,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight-fade,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-fade,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-route-reveal,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-exec-edge-glow,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-inner,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-outer,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-delay,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-vert-energy,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-ripple,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-ripple-2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-spark {
+    opacity: 0 !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-back,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-front {
+    transform: none !important;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-halo {
+    opacity: 0.88 !important;
   }
 
   .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:hover {
@@ -1365,9 +2296,9 @@
 }
 
 /* ==========================================================================
-   C.24.80 — Dashboard glass crystal surfaces (Intelligence final pass)
+   C.24.80 â€” Dashboard glass crystal surfaces (Intelligence final pass)
    Translucent dark navy/teal panels inspired by Valuation internal surfaces.
-   Hero/scene stays open. Visual-only — no structure or content changes.
+   Hero/scene stays open. Visual-only â€” no structure or content changes.
    ========================================================================== */
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface),
@@ -1416,7 +2347,7 @@
 }
 
 /* ==========================================================================
-   C.24.81 — Executive Signal card = Ready for valuation glass parity
+   C.24.81 â€” Executive Signal card = Ready for valuation glass parity
    Scoped to .ma-reference-signal only. Visual-only. Ring/graphic untouched.
    ========================================================================== */
 
@@ -1461,7 +2392,7 @@
   z-index: 1 !important;
 }
 
-/* Icon — ma-valuation-icon-box parity */
+/* Icon â€” ma-valuation-icon-box parity */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__) .ma-reference-signal-badge {
   display: inline-grid !important;
   place-items: center !important;
@@ -1475,7 +2406,7 @@
   box-shadow: 0 0 20px rgba(45, 212, 191, 0.12) !important;
 }
 
-/* Label / title / copy — Ready for valuation hierarchy */
+/* Label / title / copy â€” Ready for valuation hierarchy */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__) .ma-reference-kicker {
   margin: 0 0 8px !important;
   font-size: 10px !important;
@@ -1522,7 +2453,7 @@
 }
 
 /* ==========================================================================
-   C.24.82 — Executive Signal: true translucent glass (not solid dark card)
+   C.24.82 â€” Executive Signal: true translucent glass (not solid dark card)
    Wins over C.24.81. Lower alpha backgrounds + real backdrop blur.
    Ring structure/values unchanged; ring-core softened to sit on glass.
    ========================================================================== */
@@ -1547,7 +2478,7 @@
     0 -12px 40px rgba(33, 255, 210, 0.04) inset !important;
 }
 
-/* Ambient luminous overlay — premium, not decorative */
+/* Ambient luminous overlay â€” premium, not decorative */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__)::before {
   inset: 0 !important;
   height: auto !important;
@@ -1569,7 +2500,7 @@
   opacity: 0.9 !important;
 }
 
-/* Icon — translucent, integrated in glass */
+/* Icon â€” translucent, integrated in glass */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__) .ma-reference-signal-badge {
   background: rgba(45, 212, 191, 0.08) !important;
   border: 1px solid rgba(110, 255, 225, 0.14) !important;
@@ -1578,7 +2509,7 @@
   -webkit-backdrop-filter: blur(8px) !important;
 }
 
-/* Typography — integrated on glass surface */
+/* Typography â€” integrated on glass surface */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__) .ma-reference-kicker {
   color: rgba(210, 226, 225, 0.62) !important;
   letter-spacing: 0.08em !important;
@@ -1606,7 +2537,7 @@
 }
 
 /* ==========================================================================
-   C.24.83 — Dashboard internal surfaces = Valuation C.24.55 material parity
+   C.24.83 â€” Dashboard internal surfaces = Valuation C.24.55 material parity
    Source-of-truth: maValuationMaterial.css .ma-valuation-surface (C.24.55)
    and .ma-valuation-command-strip. NOT generic glass. Visual-only.
    Wins over C.24.80 / C.24.81 / C.24.82.
@@ -1621,16 +2552,14 @@
     0 16px 40px rgba(0, 0, 0, 0.30),
     0 0 38px rgba(45, 212, 191, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  --ma-ref-val-shadow-strip:
-    0 14px 38px rgba(0, 0, 0, 0.28),
-    0 0 30px rgba(45, 212, 191, 0.045);
+  --ma-ref-val-shadow-strip: var(--ma-mna-strip-shadow);
   --ma-ref-val-radius-card: 22px;
   --ma-ref-val-radius-strip: 20px;
   --ma-ref-val-inset-bg: rgba(5, 9, 9, 0.42);
   --ma-ref-val-inset-border: rgba(90, 255, 220, 0.08);
 }
 
-/* Primary card surfaces — same as Valuation Adjusted equity / Deal structure / panels */
+/* Primary card surfaces â€” same as Valuation Adjusted equity / Deal structure / panels */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__),
@@ -1646,7 +2575,7 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* Active deal strip — Valuation command strip / metrics band */
+/* Active deal strip â€” Valuation command strip / metrics band */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__) {
   border-radius: var(--ma-ref-val-radius-strip) !important;
   border: 1px solid var(--ma-ref-val-line) !important;
@@ -1656,7 +2585,7 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* Qualified Opportunity — sober Valuation surface (not bright crystal) */
+/* Qualified Opportunity â€” sober Valuation surface (not bright crystal) */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__) {
   border-radius: var(--ma-ref-val-radius-card) !important;
   border: 1px solid var(--ma-ref-val-line) !important;
@@ -1692,16 +2621,16 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* Dividers — Valuation strip cells / ledger hairlines */
+/* Dividers — Valuation command-strip cell separators (oracle) */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-divider:not(#__ceos_no_match__) {
-  background: linear-gradient(180deg, transparent, rgba(90, 255, 220, 0.08), transparent) !important;
+  background: linear-gradient(180deg, transparent, var(--ma-mna-command-strip-divider, var(--ma-mna-divider-strip)), transparent) !important;
 }
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-readout-row:not(#__ceos_no_match__) {
   border-bottom-color: var(--ma-ref-val-line-divider) !important;
 }
 
-/* Inner zones — integrated rows, not sub-boxes (Valuation ledger / checklist pattern) */
+/* Inner zones â€” integrated rows, not sub-boxes (Valuation ledger / checklist pattern) */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-detail:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-snapshot-body:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-next-callout:not(#__ceos_no_match__) {
@@ -1727,7 +2656,7 @@
   -webkit-backdrop-filter: none !important;
 }
 
-/* KPI slabs — remove decorative teal rail + neon spark */
+/* KPI slabs â€” remove decorative teal rail + neon spark */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__)::before {
   display: none !important;
   content: none !important;
@@ -1743,7 +2672,7 @@
   background: linear-gradient(180deg, rgba(94, 234, 212, 0.55), rgba(45, 212, 191, 0.14)) !important;
 }
 
-/* Workbench tiles — hairline top accent, sober hover */
+/* Workbench tiles â€” hairline top accent, sober hover */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(.ma-valuation-status-card):not(.ma-valuation-command-strip):not(.ma-valuation-surface):not(#__ceos_no_match__)::before {
   height: 1px !important;
   opacity: 0.35 !important;
@@ -1757,7 +2686,7 @@
   transform: none !important;
 }
 
-/* Icon chips — Valuation input-band parity */
+/* Icon chips â€” Valuation input-band parity */
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-strip-glyph:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-operating-glyph:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-glyph:not(#__ceos_no_match__) {
@@ -1774,13 +2703,13 @@
    C.24.86 - Qualified Opportunity = Valuation Executive Readiness glass (final)
    Selector: .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface
    Material copied from Valuation C.24.81 / EPS status-card glass.
-   Gauge ring / --ma-ref-score / conic geometry UNTOUCHED.
+   C.45 — Qualified Opportunity gauge = SVG continuous track (C.24.86 panel material unchanged).
    ========================================================================== */
 
 .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
 .main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-scene .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
 .main-area .page .ma-executive-page.ma-dashboard-premium .ma-reference-scene .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
-  padding: 34px 36px !important;
+  padding: 36px 36px !important;
   border-radius: 22px !important;
   border: 1px solid rgba(148, 163, 184, 0.055) !important;
   border-top-color: rgba(90, 255, 220, 0.074) !important;
@@ -1846,43 +2775,1664 @@
 }
 
 /* ==========================================================================
-   C.24.87 - Qualified Opportunity VERTICAL BALANCE ONLY
-   Equal top/bottom padding + symmetric air around the gauge.
-   Does not change glass, colors, typography, or gauge geometry.
+   C.24.96 REMOVED â€” outer position handled by C.24.90 in
+   maValuationCanonicalParity.css. Do not stretch/spacer the card interior.
    ========================================================================== */
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
-.main-area[data-workspace='ma'] .page .ma-executive-page.ma-dashboard-premium .ma-reference-scene .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__),
-.main-area .page .ma-executive-page.ma-dashboard-premium .ma-reference-scene .ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  padding: 34px 36px !important;
-  box-sizing: border-box !important;
+/* ==========================================================================
+   Dashboard KPI stat slabs â€” internal spacing micro-polish only.
+   Cause: maMnaSurfaceSystem forced all .ma-reference-stat-slab > * to
+   position:relative, so spark + mini-bars entered document flow and created
+   an oversized iconâ†’value gap (~50px). Restore absolute dÃ©cor; unify gaps.
+   Does not change colors, materials, typography size, width, or layout grid.
+   ========================================================================== */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) {
+  padding: 30px 24px 30px !important;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-badge,
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-valuation-icon-box {
-  margin: 0 auto 10px !important;
+/* Top teal progress/hairline â€” absolute, same inset on all 4 cards */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) > .ma-reference-stat-spark:not(#__ceos_no_match__) {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-kicker {
-  margin: 0 0 8px !important;
+/* Mini bars â€” corner dÃ©cor only; never in flow between icon and value */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) > .ma-reference-stat-mini-bars:not(#__ceos_no_match__) {
+  position: absolute !important;
+  top: 30px !important;
+  right: 24px !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-headline {
-  margin: 0 0 22px !important;
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) > .ma-reference-stat-glyph:not(#__ceos_no_match__) {
+  display: block !important;
+  margin: 0 0 16px !important;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-ring {
-  margin: 0 auto 22px !important;
-}
-
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-status {
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) > .ma-reference-stat-figure:not(#__ceos_no_match__) {
   margin: 0 0 10px !important;
 }
 
-.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-signal.ma-valuation-status-card.ma-valuation-surface:not(#__ceos_no_match__) .ma-reference-signal-note {
-  margin: 0 auto !important;
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) > .ma-reference-caption:not(#__ceos_no_match__) {
+  margin: 0 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-stat-slab:not(#__ceos_no_match__) > p.muted:not(#__ceos_no_match__) {
+  margin: 14px 0 0 !important;
+}
+
+/* ==========================================================================
+   Decision workbench â€” internal alignment grid (spacing only).
+   Cause: maMnaSurfaceSystem forced tile children to position:relative, so the
+   CTA arrow left document flow and sat at inconsistent heights. Restore
+   absolute bottom-right arrow; lock shared icon/title/desc rhythm.
+   Materials / colors / copy / deck width UNTOUCHED.
+   ========================================================================== */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  min-height: 196px !important;
+  padding: 24px 22px 22px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) > .ma-reference-workbench-glyph:not(#__ceos_no_match__) {
+  flex: 0 0 auto !important;
+  align-self: flex-start !important;
+  margin: 0 0 14px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) > .ma-reference-workbench-copy:not(#__ceos_no_match__) {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  gap: 0 !important;
+  min-width: 0 !important;
+  padding-bottom: 30px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) .ma-reference-workbench-title:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) > .ma-reference-workbench-copy > strong:not(#__ceos_no_match__) {
+  display: block !important;
+  min-height: calc(1.3em * 2) !important;
+  margin: 0 0 8px !important;
+  line-height: 1.3 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) .ma-reference-workbench-desc:not(#__ceos_no_match__),
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) > .ma-reference-workbench-copy > p:not(#__ceos_no_match__) {
+  margin: 0 !important;
+  line-height: 1.55 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-workbench-tile:not(#__ceos_no_match__) > .ma-reference-workbench-arrow:not(#__ceos_no_match__) {
+  position: absolute !important;
+  right: 22px !important;
+  bottom: 18px !important;
+  left: auto !important;
+  top: auto !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+}
+
+/* ==========================================================================
+   Portfolio flow â€” active CLOSE node alignment only.
+   Cause: .is-active::after used top:0 without horizontal centering, so the
+   36px glow ring sat ~7px below / slightly off the active 22px dot.
+   Shared 22px vertical rail + centered glow; connector top locked to rail.
+   Colors / glow language / copy UNTOUCHED.
+   ========================================================================== */
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-track:not(#__ceos_no_match__) {
+  align-items: flex-start !important;
+  flex-wrap: nowrap !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-track:not(#__ceos_no_match__)::before {
+  top: 31px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node:not(#__ceos_no_match__) {
+  display: grid !important;
+  grid-template-rows: 22px auto !important;
+  justify-items: center !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex: 1 1 0 !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 88px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node:not(#__ceos_no_match__) .ma-reference-pipeline-dot:not(#__ceos_no_match__) {
+  margin: 0 !important;
+  transform: none !important;
+  justify-self: center !important;
+  align-self: center !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node.is-active:not(#__ceos_no_match__) .ma-reference-pipeline-dot:not(#__ceos_no_match__) {
+  width: 22px !important;
+  height: 22px !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node.is-active:not(#__ceos_no_match__)::after {
+  top: 11px !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 36px !important;
+  height: 36px !important;
+  margin: 0 !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node:not(#__ceos_no_match__) .ma-reference-pipeline-name:not(#__ceos_no_match__) {
+  width: 100% !important;
+  text-align: center !important;
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-node.is-active:not(#__ceos_no_match__) .ma-reference-pipeline-name:not(#__ceos_no_match__) {
+  font-size: 9px !important;
+}
+
+.main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-reference-pipeline-arrow:not(#__ceos_no_match__) {
+  margin-top: 24px !important;
+  align-self: flex-start !important;
+}
+
+/* ==========================================================================
+   C.30 â€” Internal density + motion pass (geometry frozen, effect-only)
+   Mid-layer network, processing chamber, checkpoint reactions, 8s cycle
+   ========================================================================== */
+/* ==========================================================================
+   C.34 — Intelligence planet motion (1000×1000 SVG, CSS keyframes only)
+   ========================================================================== */
+
+/* ==========================================================================
+   C.39 — FINAL WOW POLISH / FROZEN (light + motion only, geometry locked)
+   8s signature cycle: Ambient → Input → Checkpoints → Core → Exec → Ambient
+   DO NOT modify planet/platform geometry without explicit re-authorization.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-back {
+    animation: ma-intel-parallax-back 28s ease-in-out infinite, ma-intel-cascade-depth-back 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-mid {
+    animation: ma-intel-parallax-mid 22s ease-in-out infinite, ma-intel-cascade-planet-mid 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-layer-front {
+    animation: ma-intel-parallax-front 18s ease-in-out infinite, ma-intel-cascade-depth-front 8s ease-in-out infinite, ma-intel-cascade-planet-outer 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-a,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-a-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-a-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-a-fade {
+    animation: ma-intel-travel-a 4.5s linear infinite;
+    animation-delay: -0.15s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-b,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-b-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-b-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-b-fade {
+    animation: ma-intel-travel-b 5.8s linear infinite;
+    animation-delay: -0.45s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-c,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-c-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-c-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-c-fade {
+    animation: ma-intel-travel-c 7.1s linear infinite;
+    animation-delay: -0.65s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-d,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-d-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-d-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-d-fade {
+    animation: ma-intel-cascade-exec-travel 8s ease-in-out infinite, ma-intel-cascade-exec 8s ease-in-out infinite;
+    animation-delay: 0s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-e,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-e-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-e-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-e-fade {
+    animation: ma-intel-travel-e 10s linear infinite;
+    animation-delay: -1.2s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-f,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-f-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-f-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-signal-f-fade {
+    animation: ma-intel-travel-f 11.5s linear infinite;
+    animation-delay: -2.4s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight.ma-intel-oh1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh1-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh1-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh1-fade {
+    animation: ma-intel-orbit-travel-a 4.5s linear infinite;
+    animation-delay: -0.15s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight.ma-intel-oh2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh2-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh2-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh2-fade {
+    animation: ma-intel-orbit-travel-b 5.8s linear infinite, ma-intel-cascade-incoming 8s ease-in-out infinite;
+    animation-delay: -0.4s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight.ma-intel-oh3,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh3-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh3-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh3-fade {
+    animation: ma-intel-orbit-travel-c 7.1s linear infinite;
+    animation-delay: -0.55s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight.ma-intel-oh4,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh4-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh4-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh4-fade {
+    animation: ma-intel-orbit-travel-d 8.5s linear infinite;
+    animation-delay: -0.85s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight.ma-intel-oh5,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh5-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh5-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh5-fade {
+    animation: ma-intel-orbit-travel-e 11.3s linear infinite;
+    animation-delay: -1.2s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbit-highlight.ma-intel-oh6,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh6-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh6-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh6-fade {
+    animation: ma-intel-cascade-exec-runner 8s ease-in-out infinite;
+    animation-delay: 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp1 { animation: ma-intel-spark-a 3.6s ease-in-out infinite; animation-delay: -0.2s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp2 { animation: ma-intel-spark-b 5.6s ease-in-out infinite; animation-delay: -1.1s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp3 { animation: ma-intel-spark-a 6.2s ease-in-out infinite; animation-delay: -2.4s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp4 { animation: ma-intel-spark-b 5.1s ease-in-out infinite; animation-delay: -0.7s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp5 { animation: ma-intel-spark-a 8s ease-in-out infinite; animation-delay: -3.2s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp6 { animation: ma-intel-spark-b 4.5s ease-in-out infinite; animation-delay: -1.8s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp7 { animation: ma-intel-spark-a 5.8s ease-in-out infinite; animation-delay: -2.9s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp8 { animation: ma-intel-spark-b 6.5s ease-in-out infinite; animation-delay: -0.5s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp9 { animation: ma-intel-spark-a 4.2s ease-in-out infinite; animation-delay: -1.5s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp10 { animation: ma-intel-spark-b 5.4s ease-in-out infinite; animation-delay: -2.6s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-light-sweep {
+    animation: ma-intel-light-sweep 13s ease-in-out infinite;
+    animation-delay: -2.5s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-cinematic-glint {
+    animation: ma-intel-cinematic-glint 13s ease-in-out infinite;
+    animation-delay: -4s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-energy {
+    animation: ma-intel-base-transfer 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-pulse {
+    animation: ma-intel-core-pulse 3.8s ease-in-out infinite, ma-intel-process-core-ring 8s ease-in-out infinite, ma-intel-cascade-core-flash 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-inner {
+    animation: ma-intel-process-core-ring 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-delay {
+    animation: ma-intel-process-core-ring-b 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-inner {
+    animation: ma-intel-cascade-ripple-inner 8s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-mid {
+    animation: ma-intel-cascade-ripple-mid 8s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-hot {
+    animation: ma-intel-process-core-hot 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-segment.ma-intel-ss1 {
+    animation: ma-intel-seg-seq-1 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-segment.ma-intel-ss2 {
+    animation: ma-intel-seg-seq-2 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-segment.ma-intel-ss3 {
+    animation: ma-intel-seg-seq-3 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-static-segment.ma-intel-ss4 {
+    animation: ma-intel-seg-seq-4 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-featured .ma-intel-checkpoint-dot {
+    animation: ma-intel-hero-cp-pulse 4.2s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-featured .ma-intel-checkpoint-ring {
+    animation: ma-intel-hero-cp-ring 4.2s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp1 .ma-intel-checkpoint-dot,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp1 .ma-intel-checkpoint-ring {
+    animation-duration: 4.2s;
+    animation-delay: -0.4s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp3 .ma-intel-checkpoint-dot,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp3 .ma-intel-checkpoint-ring {
+    animation-duration: 4.8s;
+    animation-delay: -1.6s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp5 .ma-intel-checkpoint-dot,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp5 .ma-intel-checkpoint-ring {
+    animation-duration: 5.4s;
+    animation-delay: -2.8s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp16 .ma-intel-checkpoint-dot,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp16 .ma-intel-checkpoint-ring {
+    animation-duration: 4.6s;
+    animation-delay: -0.9s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp16 {
+    animation: ma-intel-cp-idle 7s ease-in-out infinite, ma-intel-cascade-cp-intake 8s ease-in-out infinite;
+    animation-delay: -0.5s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp4 {
+    animation: ma-intel-cp-idle 6.5s ease-in-out infinite, ma-intel-cascade-cp-mid 8s ease-in-out infinite;
+    animation-delay: -0.4s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-radial-pulse {
+    animation: ma-intel-core-radial-breathe 4.2s ease-in-out infinite, ma-intel-process-core-ring 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-halo {
+    animation: ma-intel-core-halo-breathe 4.2s ease-in-out infinite, ma-intel-cascade-core-approach 8s ease-in-out infinite, ma-intel-process-core-glow 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-glow {
+    animation: ma-intel-core-glow 3.8s ease-in-out infinite, ma-intel-cascade-core-approach 8s ease-in-out infinite, ma-intel-process-core-glow 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-signal.ma-intel-fs1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-fs1 {
+    animation: ma-intel-feed-travel 7s linear infinite;
+    animation-delay: -0.35s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-signal-trail.ma-intel-fs1-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-fs1-trail {
+    animation: ma-intel-feed-travel 7s linear infinite;
+    animation-delay: -0.6s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-signal.ma-intel-fs2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-fs2 {
+    animation: ma-intel-feed-travel-b 7s linear infinite;
+    animation-delay: -2.8s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-signal-trail.ma-intel-fs2-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-fs2-trail {
+    animation: ma-intel-feed-travel-b 7s linear infinite;
+    animation-delay: -3.05s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-inner-1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-inner-2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-inner-3,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-disc {
+    animation: ma-intel-platform-base-pulse 4.8s ease-in-out infinite, ma-intel-platform-signature 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-hot {
+    animation: ma-intel-platform-base-pulse 4.8s ease-in-out infinite, ma-intel-platform-signature 7s ease-in-out infinite, ma-intel-base-focal-flash 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-ring,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-ring-2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-ring-3 {
+    animation: ma-intel-platform-ring-sweep 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-ring-2 {
+    animation-delay: -0.1s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-base-ring-3 {
+    animation-delay: -0.2s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-body {
+    animation: ma-intel-process-core-body 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-outer {
+    animation: ma-intel-process-core-ring 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ar1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ar2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ar3 {
+    animation: ma-intel-route-pulse 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ar1 { animation-delay: -0.15s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ar2 { animation-delay: -0.3s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ar3 { animation-delay: -0.45s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ar4 {
+    animation: ma-intel-route-pulse 8s ease-in-out infinite, ma-intel-cascade-exec-route 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-np1 {
+    animation: ma-intel-mid-process 8s ease-in-out infinite, ma-intel-cascade-orbit-seq-a 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-np5 {
+    animation: ma-intel-mid-process 8s ease-in-out infinite, ma-intel-cascade-orbit-seq-b 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-np9 {
+    animation: ma-intel-mid-process 8s ease-in-out infinite, ma-intel-cascade-orbit-seq-c 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-np3,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-np7,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-np11 {
+    animation: ma-intel-mid-process 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-np3 { animation-delay: -0.35s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-np7 { animation-delay: -0.65s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-np11 { animation-delay: -0.95s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-cl1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-cl2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-cl3 {
+    animation: ma-intel-loop-pulse 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-cl2 { animation-delay: -0.2s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-chamber-ring-inner {
+    animation: ma-intel-process-core-ring 8s ease-in-out infinite, ma-intel-cascade-planet-inner 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-chamber-ring-outer {
+    animation: ma-intel-process-core-ring-b 8s ease-in-out infinite, ma-intel-cascade-planet-mid 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-il1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-il3,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-il5,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-il7 {
+    animation: ma-intel-loop-pulse 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-il5 { animation-delay: -0.25s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-il7 { animation-delay: -0.4s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-micro-details .ma-intel-micro {
+    animation: ma-intel-micro-ambient 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp1 {
+    animation: ma-intel-cp-idle 8s ease-in-out infinite, ma-intel-cascade-cp-chain-d 8s ease-in-out infinite;
+    animation-delay: -1s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp3 {
+    animation: ma-intel-cp-idle 8s ease-in-out infinite, ma-intel-cascade-cp-chain-e 8s ease-in-out infinite;
+    animation-delay: -2.2s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp5 {
+    animation: ma-intel-cp-idle 6.8s ease-in-out infinite, ma-intel-cascade-exec-cp 8s ease-in-out infinite;
+    animation-delay: -0.7s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp7,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp9,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp12,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp14 {
+    animation: ma-intel-cp-idle 6.8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp7 { animation-delay: -1.6s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp9 { animation-delay: -2.5s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp12 { animation-delay: -3.1s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp14 { animation-delay: -3.8s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp13 {
+    animation: ma-intel-cp-idle 7.4s ease-in-out infinite;
+    animation-delay: -4.2s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp8 {
+    animation: ma-intel-cp-idle 7.8s ease-in-out infinite;
+    animation-delay: -5.1s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp1 .ma-intel-checkpoint-ring,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp3 .ma-intel-checkpoint-ring,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp5 .ma-intel-checkpoint-ring {
+    animation: ma-intel-cp-ring 8s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp3 .ma-intel-checkpoint-ring {
+    animation-delay: -0.35s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp5 .ma-intel-checkpoint-ring {
+    animation-delay: -0.58s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-df2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-df3 {
+    animation: ma-intel-feed-rise 7s ease-in-out infinite, ma-intel-cascade-feed 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-df2 { animation-delay: -0.12s, 0s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-df3 { animation-delay: -3.2s, 0s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-df4 {
+    animation: ma-intel-feed-rise 7s ease-in-out infinite, ma-intel-cascade-feed 7s ease-in-out infinite;
+    animation-delay: -1.6s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-df5 {
+    animation: ma-intel-feed-rise 9s ease-in-out infinite;
+    animation-delay: -4.2s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp16 {
+    animation: ma-intel-cp-idle 7.2s ease-in-out infinite, ma-intel-cascade-cp-chain-a 8s ease-in-out infinite, ma-intel-feed-checkpoint 8s ease-in-out infinite;
+    animation-delay: -0.5s, 0s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp17 {
+    animation: ma-intel-cp-idle 8s ease-in-out infinite, ma-intel-cascade-cp-chain-b2 8s ease-in-out infinite, ma-intel-feed-checkpoint 8s ease-in-out infinite;
+    animation-delay: -1.8s, 0s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp18 {
+    animation: ma-intel-cp-idle 6.8s ease-in-out infinite, ma-intel-cascade-cp-chain-b 8s ease-in-out infinite;
+    animation-delay: -2.1s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-df2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-df3,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-df4 {
+    animation: ma-intel-platform-tip 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-df2 { animation-delay: -0.3s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-df3 { animation-delay: -1.4s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-df4 { animation-delay: -2.2s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-transfer.ma-intel-ft1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-transfer.ma-intel-ft2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-feed-transfer.ma-intel-ft3 {
+    animation: ma-intel-feed-transfer-pulse 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ft2 { animation-delay: -0.14s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ft3 { animation-delay: -0.28s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-st1 {
+    animation: ma-intel-feed-sphere-touch 7s ease-out infinite;
+    animation-delay: -0.18s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-st2 {
+    animation: ma-intel-feed-sphere-touch 7s ease-out infinite;
+    animation-delay: -0.06s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-st3 {
+    animation: ma-intel-feed-sphere-touch 7s ease-out infinite;
+    animation-delay: -0.3s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-bright-arc-1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-bright-arc-2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-bright-arc-3 {
+    animation: ma-intel-platform-arc-sweep 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-bright-arc-2 {
+    animation-delay: -0.12s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-bright-arc-3 {
+    animation-delay: -0.24s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-5,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-6,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-7,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-8 {
+    animation: ma-intel-platform-ring-sweep 7s ease-in-out infinite, ma-intel-platform-ring-ripple 7s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-5 {
+    animation-delay: -0.08s, -0.08s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-6 {
+    animation-delay: -0.16s, -0.16s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-7 {
+    animation-delay: -0.24s, -0.24s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-ring-8 {
+    animation-delay: -0.32s, -0.32s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-projection-beam.ma-intel-pb1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-projection-beam.ma-intel-pb2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-projection-beam.ma-intel-pb3 {
+    animation: ma-intel-platform-projection-pulse 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-pb2 { animation-delay: -0.18s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-pb3 { animation-delay: -0.36s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-emitter-column {
+    animation: ma-intel-platform-projection-pulse 7s ease-in-out infinite;
+    animation-delay: -0.08s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-pr1 {
+    animation: ma-intel-platform-runner-a 7s linear infinite;
+    animation-delay: -0.3s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-pr2 {
+    animation: ma-intel-platform-runner-b 7s linear infinite;
+    animation-delay: -1.1s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-pr3 {
+    animation: ma-intel-platform-runner-c 7s linear infinite;
+    animation-delay: -2.4s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-3,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-4 {
+    animation: ma-intel-platform-intersection-flash 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-2 {
+    animation-delay: -0.1s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-3 {
+    animation-delay: -0.2s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-intersection-4 {
+    animation-delay: -0.3s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-spoke-1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-spoke-3,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-spoke-5 {
+    animation: ma-intel-platform-spoke-sweep 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-micro-mx3,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-micro-mx7,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-micro-mx23,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-micro-mx24 {
+    animation: ma-intel-micro-ambient 8s ease-in-out infinite, ma-intel-micro-flash 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-4,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-7,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-10,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-13,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-16 {
+    animation: ma-intel-stem-brighten 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-1 { animation-delay: -0.12s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-4 { animation-delay: -0.38s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-7 { animation-delay: -0.62s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-10 { animation-delay: -0.88s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-13 { animation-delay: -1.14s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-16 { animation-delay: -1.4s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp11 { animation: ma-intel-spark-a 4.1s ease-in-out infinite; animation-delay: -0.9s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp12 { animation: ma-intel-spark-b 5.2s ease-in-out infinite; animation-delay: -1.7s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp13 { animation: ma-intel-spark-c 3.8s ease-in-out infinite; animation-delay: -2.3s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp14 { animation: ma-intel-spark-a 4.6s ease-in-out infinite; animation-delay: -3.1s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp15 { animation: ma-intel-spark-b 5.8s ease-in-out infinite; animation-delay: -0.4s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-spark-sp16 { animation: ma-intel-spark-c 4.4s ease-in-out infinite; animation-delay: -1.2s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-orbital-wave {
+    animation: ma-intel-orbital-wave 10.5s ease-in-out infinite;
+    animation-delay: -1.5s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-ripple {
+    animation: ma-intel-base-ripple-depth 7s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-ripple-2 {
+    animation: ma-intel-base-ripple-depth 7s ease-out infinite;
+    animation-delay: -0.1s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-base-ripple-3 {
+    animation: ma-intel-base-ripple-depth 7s ease-out infinite;
+    animation-delay: -0.2s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-spark {
+    animation: ma-intel-core-spark 3.2s ease-in-out infinite, ma-intel-process-core-burst 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-glow-outer {
+    animation: ma-intel-core-halo-breathe 4.2s ease-in-out infinite, ma-intel-process-core-burst 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-da1 {
+    animation: ma-intel-dash-drift-a 24s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-da2 {
+    animation: ma-intel-dash-drift-b 31s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-da3 {
+    animation: ma-intel-dash-drift-c 19s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-exec-edge-glow {
+    animation: ma-intel-cascade-exec-edge 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-spoke-3,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-spoke-5,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-spoke-7 {
+    animation: ma-intel-platform-spoke-sweep 7s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-spoke-3 { animation-delay: -0.4s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-spoke-5 { animation-delay: -1.2s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-spoke-7 { animation-delay: -2s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp2 {
+    animation: ma-intel-cp-idle 6.2s ease-in-out infinite;
+    animation-delay: -0.8s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp6 {
+    animation: ma-intel-cp-idle 7.6s ease-in-out infinite;
+    animation-delay: -2.8s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp10 {
+    animation: ma-intel-cp-idle 5.8s ease-in-out infinite;
+    animation-delay: -1.4s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp11 {
+    animation: ma-intel-cp-idle 6.4s ease-in-out infinite;
+    animation-delay: -3.4s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-checkpoint-cp15 {
+    animation: ma-intel-cp-idle 7.1s ease-in-out infinite;
+    animation-delay: -4.6s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-4,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-6 {
+    animation: ma-intel-stem-brighten 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-2 { animation-delay: -0.22s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-4 { animation-delay: -0.48s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-stem-6 { animation-delay: -0.72s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-2,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-4 {
+    animation: ma-intel-platform-tip 3.8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-2 { animation-delay: -0.9s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-platform-tip-4 { animation-delay: -2.1s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-to1,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-to3,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-lat8 {
+    animation: ma-intel-cascade-orbit-ripple 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-to3 { animation-delay: -0.12s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-lat8 { animation-delay: -0.22s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-floor-particle-1 { animation: ma-intel-floor-dot-travel 4.8s ease-in-out infinite; animation-delay: -0.3s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-floor-particle-3 { animation: ma-intel-floor-dot-travel 5.4s ease-in-out infinite; animation-delay: -1.1s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-floor-particle-5 { animation: ma-intel-floor-dot-travel 6.2s ease-in-out infinite; animation-delay: -2s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-floor-particle-7 { animation: ma-intel-floor-dot-travel 5.8s ease-in-out infinite; animation-delay: -0.8s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-floor-particle-9 { animation: ma-intel-floor-dot-travel 4.5s ease-in-out infinite; animation-delay: -1.6s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-floor-particle-11 { animation: ma-intel-floor-dot-travel 5.1s ease-in-out infinite; animation-delay: -2.4s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-runner-back .ma-intel-orbit-highlight,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-runner-back .ma-intel-orbit-highlight-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-runner-back .ma-intel-orbit-highlight-mid {
+    opacity: 0.72;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-core-ring-delay {
+    animation: ma-intel-cascade-ring-delay 8s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-inner {
+    animation: ma-intel-cascade-ripple-inner 8s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-mid {
+    animation: ma-intel-cascade-ripple-mid 8s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ripple-outer {
+    animation: ma-intel-cascade-ripple-outer 8s ease-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-density-layer .ma-intel-micro,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-chamber-connector,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-dashed-arc {
+    animation: ma-intel-micro-ambient 8s ease-in-out infinite, ma-intel-cascade-density 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-route-reveal {
+    animation: ma-intel-cascade-route-reveal 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-rr1 { animation-delay: -0.05s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-rr2 { animation-delay: -0.12s; }
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-rr3 { animation-delay: -0.2s; }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-exec-edge-glow {
+    animation: ma-intel-cascade-exec-edge 8s ease-in-out infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-inner-loops-life {
+    animation: ma-intel-inner-loop-drift 32s linear infinite;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ve1 {
+    animation: ma-intel-vert-energy-rise 5.5s linear infinite;
+    animation-delay: -0.6s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ve2 {
+    animation: ma-intel-vert-energy-rise 6.8s linear infinite;
+    animation-delay: -1.4s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-ve3 {
+    animation: ma-intel-vert-energy-rise 7.4s linear infinite, ma-intel-cascade-feed 8s ease-in-out infinite;
+    animation-delay: -2.2s, 0s;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh1-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh2-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh3-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh4-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh5-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh6-trail,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh1-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh2-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh3-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh4-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh5-mid,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh6-mid {
+    opacity: 0.62;
+  }
+
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh1-fade,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh2-fade,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh3-fade,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh4-fade,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh5-fade,
+  .main-area[data-workspace='ma'] .page .ma-dashboard-premium .ma-intel-oh6-fade {
+    opacity: 0.38;
+  }
+}
+
+@keyframes ma-intel-travel-a {
+  0%, 4% { stroke-dashoffset: 720; opacity: 0; }
+  8%, 92% { opacity: 0.92; }
+  100% { stroke-dashoffset: 0; opacity: 0.15; }
+}
+
+@keyframes ma-intel-travel-b {
+  0%, 4% { stroke-dashoffset: 820; opacity: 0; }
+  8%, 92% { opacity: 0.88; }
+  100% { stroke-dashoffset: 0; opacity: 0.12; }
+}
+
+@keyframes ma-intel-travel-c {
+  0%, 4% { stroke-dashoffset: 480; opacity: 0; }
+  8%, 92% { opacity: 0.85; }
+  100% { stroke-dashoffset: 0; opacity: 0.14; }
+}
+
+@keyframes ma-intel-travel-e {
+  0%, 4% { stroke-dashoffset: 640; opacity: 0; }
+  8%, 92% { opacity: 0.82; }
+  100% { stroke-dashoffset: 0; opacity: 0.12; }
+}
+
+@keyframes ma-intel-travel-f {
+  0%, 4% { stroke-dashoffset: 560; opacity: 0; }
+  8%, 92% { opacity: 0.8; }
+  100% { stroke-dashoffset: 0; opacity: 0.11; }
+}
+
+@keyframes ma-intel-travel-d {
+  from { stroke-dashoffset: 260; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes ma-intel-core-pulse {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.62; transform: scale(1.04); }
+}
+
+@keyframes ma-intel-core-glow {
+  0%, 100% { opacity: 0.82; }
+  50% { opacity: 0.94; }
+}
+
+@keyframes ma-intel-core-radial-breathe {
+  0%, 100% { opacity: 0; transform: scale(0.96); }
+  50% { opacity: 0.32; transform: scale(1.06); }
+}
+
+@keyframes ma-intel-core-halo-breathe {
+  0%, 100% { opacity: 0.88; transform: scale(0.98); }
+  50% { opacity: 0.96; transform: scale(1.04); }
+}
+
+@keyframes ma-intel-cp-idle {
+  0%, 100%, 10%, 62% { opacity: 0.78; }
+  36%, 46% { opacity: 1; }
+  52%, 58% { opacity: 0.92; }
+}
+
+@keyframes ma-intel-cp-ring {
+  0%, 100%, 6%, 90% { opacity: 0.72; transform: scale(0.92); }
+  10%, 16% { opacity: 0.95; transform: scale(1); }
+  22%, 30% { opacity: 0.65; transform: scale(1.28); }
+  36%, 44% { opacity: 0.72; transform: scale(1.45); }
+}
+
+@keyframes ma-intel-platform-tip {
+  0%, 100% { opacity: 0.42; }
+  50% { opacity: 1; }
+}
+
+@keyframes ma-intel-feed-rise {
+  0%, 100%, 4%, 88% { opacity: 0.22; }
+  10%, 18% { opacity: 0.78; }
+}
+
+@keyframes ma-intel-mid-process {
+  0%, 100%, 12%, 52% { opacity: 0.22; }
+  46%, 54% { opacity: 0.68; }
+}
+
+@keyframes ma-intel-feed-checkpoint {
+  0%, 100%, 4%, 86% { opacity: 0.42; }
+  8%, 14% { opacity: 0.95; }
+}
+
+@keyframes ma-intel-loop-pulse {
+  0%, 100%, 38%, 70% { opacity: 0.22; }
+  44%, 52% { opacity: 0.55; }
+}
+
+@keyframes ma-intel-route-pulse {
+  0%, 100%, 10%, 52% { opacity: 0.42; }
+  48%, 56% { opacity: 0.82; }
+}
+
+@keyframes ma-intel-process-incoming {
+  0%, 100%, 2%, 90% { opacity: 0.48; }
+  6%, 12% { opacity: 1; }
+}
+
+@keyframes ma-intel-process-cp1 {
+  0%, 100%, 18%, 84% { opacity: 0.48; }
+  22%, 28% { opacity: 1; }
+}
+
+@keyframes ma-intel-process-cp2 {
+  0%, 100%, 28%, 78% { opacity: 0.48; }
+  32%, 38% { opacity: 1; }
+}
+
+@keyframes ma-intel-process-exec-cp {
+  0%, 100%, 54%, 88% { opacity: 0.48; }
+  58%, 66% { opacity: 1; }
+}
+
+@keyframes ma-intel-process-core-glow {
+  0%, 100%, 32%, 70% { opacity: 0.28; }
+  38%, 42% { opacity: 1; }
+  46%, 54% { opacity: 0.62; }
+}
+
+@keyframes ma-intel-cascade-depth-back {
+  0%, 100%, 32%, 70% { opacity: 0.88; }
+  36%, 48% { opacity: 0.58; }
+}
+
+@keyframes ma-intel-cascade-depth-front {
+  0%, 100%, 32%, 70% { opacity: 1; }
+  36%, 48% { opacity: 1.08; }
+}
+
+@keyframes ma-intel-base-transfer-pulse {
+  0%, 100%, 4%, 88% { opacity: 0.52; }
+  6%, 14% { opacity: 1; }
+}
+
+@keyframes ma-intel-feed-transfer-pulse {
+  0%, 100%, 6%, 88% { opacity: 0.24; }
+  3%, 6% { opacity: 0.68; }
+  10%, 18% { opacity: 0.38; }
+}
+
+@keyframes ma-intel-feed-sphere-touch {
+  0%, 100%, 10%, 88% { opacity: 0; transform: scale(0.55); }
+  14%, 20% { opacity: 0.88; transform: scale(1.12); }
+  26%, 34% { opacity: 0.24; transform: scale(1); }
+}
+
+@keyframes ma-intel-process-core-hot {
+  0%, 100%, 34%, 72% { opacity: 0.82; }
+  44%, 48% { opacity: 1; }
+  52%, 58% { opacity: 0.88; }
+}
+
+@keyframes ma-intel-process-core-body {
+  0%, 100%, 34%, 72% { opacity: 0.85; }
+  44%, 48% { opacity: 1; }
+  52%, 58% { opacity: 0.9; }
+}
+
+@keyframes ma-intel-process-core-ring {
+  0%, 100%, 36%, 68% { opacity: 0.48; transform: scale(1); }
+  44%, 48% { opacity: 1; transform: scale(1.06); }
+  54%, 62% { opacity: 0.72; transform: scale(1.18); }
+  68%, 76% { opacity: 0.38; transform: scale(1.32); }
+}
+
+@keyframes ma-intel-process-core-ring-b {
+  0%, 100%, 38%, 70% { opacity: 0.42; transform: scale(1); }
+  46%, 50% { opacity: 1; transform: scale(1.06); }
+  56%, 64% { opacity: 0.68; transform: scale(1.16); }
+  70%, 78% { opacity: 0.34; transform: scale(1.28); }
+}
+
+@keyframes ma-intel-cascade-planet-inner {
+  0%, 100%, 32%, 72% { opacity: 1; }
+  36%, 38% { opacity: 1.14; }
+  40%, 48% { opacity: 1; }
+}
+
+@keyframes ma-intel-cascade-planet-mid {
+  0%, 100%, 32%, 72% { opacity: 1; }
+  38%, 40% { opacity: 1.1; }
+  42%, 48% { opacity: 1; }
+}
+
+@keyframes ma-intel-cascade-planet-outer {
+  0%, 100%, 32%, 72% { opacity: 1; }
+  40%, 42% { opacity: 1.08; }
+  44%, 48% { opacity: 1; }
+}
+
+@keyframes ma-intel-process-exec {
+  0%, 100%, 48%, 82% { opacity: 0.38; }
+  56%, 74% { opacity: 1; }
+}
+
+@keyframes ma-intel-process-exec-trail {
+  0%, 100%, 48%, 82% { opacity: 0.22; }
+  56%, 74% { opacity: 0.82; }
+}
+
+@keyframes ma-intel-process-exec-route {
+  0%, 100%, 46%, 80% { opacity: 0.22; }
+  54%, 72% { opacity: 0.95; }
+}
+
+@keyframes ma-intel-feed-travel {
+  0%, 3% { stroke-dashoffset: 160; opacity: 0; }
+  8%, 88% { opacity: 0.95; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes ma-intel-feed-travel-b {
+  0%, 3% { stroke-dashoffset: 155; opacity: 0; }
+  8%, 88% { opacity: 0.92; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes ma-intel-platform-base-pulse {
+  0%, 100% { opacity: 0.58; }
+  50% { opacity: 0.92; }
+}
+
+@keyframes ma-intel-micro-ambient {
+  0%, 100%, 12%, 54% { opacity: 0.38; }
+  44%, 52% { opacity: 0.82; }
+}
+
+@keyframes ma-intel-orbit-travel-a {
+  0%, 4% { stroke-dashoffset: 920; opacity: 0; }
+  8%, 92% { opacity: 0.96; }
+  100% { stroke-dashoffset: 0; opacity: 0.12; }
+}
+
+@keyframes ma-intel-orbit-travel-b {
+  0%, 4% { stroke-dashoffset: 880; opacity: 0; }
+  8%, 92% { opacity: 0.92; }
+  100% { stroke-dashoffset: 0; opacity: 0.1; }
+}
+
+@keyframes ma-intel-orbit-travel-c {
+  0%, 4% { stroke-dashoffset: 720; opacity: 0; }
+  8%, 92% { opacity: 0.98; }
+  100% { stroke-dashoffset: 0; opacity: 0.14; }
+}
+
+@keyframes ma-intel-orbit-travel-d {
+  0%, 4% { stroke-dashoffset: 850; opacity: 0; }
+  8%, 92% { opacity: 0.9; }
+  100% { stroke-dashoffset: 0; opacity: 0.12; }
+}
+
+@keyframes ma-intel-orbit-travel-e {
+  0%, 4% { stroke-dashoffset: 680; opacity: 0; }
+  8%, 92% { opacity: 0.85; }
+  100% { stroke-dashoffset: 0; opacity: 0.14; }
+}
+
+@keyframes ma-intel-parallax-back {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-1px, 0.5px) rotate(-0.15deg); }
+}
+
+@keyframes ma-intel-parallax-mid {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(1px, -0.5px) rotate(0.12deg); }
+}
+
+@keyframes ma-intel-parallax-front {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(0.5px, 0.25px); }
+}
+
+@keyframes ma-intel-orbital-wave {
+  0%, 86%, 100% { opacity: 0; stroke-dashoffset: 375; }
+  88% { opacity: 0.12; }
+  90%, 94% { opacity: 0.38; stroke-dashoffset: 0; }
+  96% { opacity: 0.08; }
+}
+
+@keyframes ma-intel-cinematic-glint {
+  0%, 90%, 100% { opacity: 0; stroke-dashoffset: 504; }
+  92% { opacity: 0.08; }
+  94%, 96% { opacity: 0.28; stroke-dashoffset: 0; }
+  98% { opacity: 0; }
+}
+
+@keyframes ma-intel-base-ripple-depth {
+  0%, 100%, 82%, 88% { opacity: 0; transform: scale(0.55); }
+  2%, 5% { opacity: 0.95; transform: scale(1); }
+  10%, 16% { opacity: 0.55; transform: scale(2.4); }
+  22%, 30% { opacity: 0.18; transform: scale(3.8); }
+  36%, 80% { opacity: 0; transform: scale(4.4); }
+}
+
+@keyframes ma-intel-base-ripple {
+  0%, 100%, 8%, 88% { opacity: 0; transform: scale(0.6); }
+  10%, 14% { opacity: 0.72; transform: scale(1); }
+  22%, 32% { opacity: 0.28; transform: scale(2.8); }
+  38%, 48% { opacity: 0; transform: scale(3.6); }
+}
+
+@keyframes ma-intel-core-spark {
+  0%, 100%, 38%, 72% { opacity: 0.55; transform: scale(0.85); }
+  44%, 48% { opacity: 1; transform: scale(1.35); }
+  52%, 58% { opacity: 0.78; transform: scale(1); }
+}
+
+@keyframes ma-intel-process-core-burst {
+  0%, 100%, 34%, 72% { opacity: 0.08; transform: scale(0.96); }
+  44%, 48% { opacity: 0.22; transform: scale(1.12); }
+  54%, 62% { opacity: 0.12; transform: scale(1.05); }
+}
+
+@keyframes ma-intel-dash-drift-a {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -120; }
+}
+
+@keyframes ma-intel-dash-drift-b {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 96; }
+}
+
+@keyframes ma-intel-dash-drift-c {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -72; }
+}
+
+@keyframes ma-intel-feed-travel-c {
+  0%, 3% { stroke-dashoffset: 150; opacity: 0; }
+  8%, 88% { opacity: 0.9; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes ma-intel-feed-travel-d {
+  0%, 3% { stroke-dashoffset: 145; opacity: 0; }
+  8%, 88% { opacity: 0.88; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes ma-intel-spark-c {
+  0%, 100% { opacity: 0; transform: translate(0, 0); }
+  15%, 35% { opacity: 0.92; transform: translate(2px, -2px); }
+  55%, 75% { opacity: 0.48; transform: translate(-1px, 2px); }
+}
+
+@keyframes ma-intel-spark-a {
+  0%, 100% { opacity: 0; transform: translate(0, 0); }
+  18%, 42% { opacity: 0.85; transform: translate(1px, -2px); }
+  62%, 78% { opacity: 0.45; transform: translate(-1px, 1px); }
+}
+
+@keyframes ma-intel-spark-b {
+  0%, 100% { opacity: 0; transform: translate(0, 0); }
+  22%, 48% { opacity: 0.72; transform: translate(-2px, -1px); }
+  68%, 82% { opacity: 0.38; transform: translate(1px, 2px); }
+}
+
+@keyframes ma-intel-light-sweep {
+  0%, 88%, 100% { opacity: 0; stroke-dashoffset: 480; }
+  90% { opacity: 0.18; }
+  92%, 96% { opacity: 0.32; stroke-dashoffset: 0; }
+  98% { opacity: 0; }
+}
+
+@keyframes ma-intel-base-transfer {
+  0%, 100%, 5%, 84% { opacity: 0; stroke-dashoffset: 124; }
+  7%, 12% { opacity: 0.85; stroke-dashoffset: 62; }
+  14%, 20% { opacity: 0.62; stroke-dashoffset: 0; }
+}
+
+@keyframes ma-intel-stem-brighten {
+  0%, 100%, 6%, 88% { opacity: 0.38; stroke: rgba(45, 212, 191, 0.28); }
+  10%, 18% { opacity: 0.82; stroke: rgba(94, 234, 212, 0.62); }
+}
+
+@keyframes ma-intel-platform-ring-sweep {
+  0%, 100%, 10%, 84% { opacity: 0.78; stroke: rgba(94, 234, 212, 0.68); }
+  14%, 24% { opacity: 1; stroke: rgba(167, 243, 232, 0.98); }
+}
+
+@keyframes ma-intel-platform-ring-ripple {
+  0%, 100%, 78%, 90% { opacity: 0.74; stroke-width: 0.9; transform: scale(1); }
+  2%, 4% { opacity: 1; stroke-width: 1.25; transform: scale(1.05); }
+  8%, 18% { opacity: 0.92; stroke-width: 1.02; transform: scale(1.1); }
+  22%, 30% { opacity: 0.84; stroke-width: 0.92; transform: scale(1.16); }
+}
+
+@keyframes ma-intel-platform-spoke-sweep {
+  0%, 100%, 6%, 88% { opacity: 0.32; }
+  10%, 18% { opacity: 0.68; }
+}
+
+@keyframes ma-intel-platform-runner-a {
+  0%, 4% { stroke-dashoffset: 572; opacity: 0; }
+  8%, 88% { opacity: 0.98; }
+  100% { stroke-dashoffset: 0; opacity: 0.12; }
+}
+
+@keyframes ma-intel-platform-runner-b {
+  0%, 4% { stroke-dashoffset: 506; opacity: 0; }
+  8%, 88% { opacity: 0.88; }
+  100% { stroke-dashoffset: 0; opacity: 0.06; }
+}
+
+@keyframes ma-intel-platform-runner-c {
+  0%, 4% { stroke-dashoffset: 508; opacity: 0; }
+  8%, 88% { opacity: 0.85; }
+  100% { stroke-dashoffset: 0; opacity: 0.06; }
+}
+
+/* C.44 — Platform signature ripple (7s local cycle) */
+@keyframes ma-intel-platform-signature {
+  0%, 100%, 54%, 92% { opacity: 0.68; transform: scale(1); }
+  1%, 3% { opacity: 1; transform: scale(1.16); }
+  4.3%, 9% { opacity: 0.96; transform: scale(1.03); }
+  21%, 30% { opacity: 0.88; transform: scale(1); }
+  51%, 58% { opacity: 0.82; transform: scale(1); }
+}
+
+@keyframes ma-intel-platform-projection-pulse {
+  0%, 100%, 12%, 88% { opacity: 0.28; stroke-width: 0.75; }
+  4%, 8% { opacity: 0.72; stroke-width: 1; }
+  14%, 22% { opacity: 0.42; stroke-width: 0.8; }
+}
+
+@keyframes ma-intel-platform-intersection-flash {
+  0%, 100%, 14%, 88% { opacity: 0.52; transform: scale(1); }
+  4.5%, 8% { opacity: 1; transform: scale(1.18); }
+  22%, 28% { opacity: 0.72; transform: scale(1); }
+}
+
+/* C.38 — Platform cascade choreography */
+@keyframes ma-intel-cascade-platform {
+  0%, 100%, 74%, 94% { opacity: 0.55; transform: scale(1); }
+  1%, 3% { opacity: 1; transform: scale(1.18); }
+  6%, 22% { opacity: 0.78; transform: scale(1); }
+}
+
+@keyframes ma-intel-cascade-feed {
+  0%, 100%, 15%, 88% { opacity: 0.28; }
+  4.3%, 7% { opacity: 0.95; }
+  10%, 14% { opacity: 0.68; }
+  26%, 32% { opacity: 0.52; }
+}
+
+@keyframes ma-intel-cascade-feed-mid {
+  0%, 100%, 10%, 90% { opacity: 0.52; }
+  6%, 9% { opacity: 0.78; }
+}
+
+@keyframes ma-intel-base-focal-flash {
+  0%, 100%, 10%, 92% { fill: #5eead4; }
+  1.5%, 3.5% { fill: #ecfdf5; }
+  45%, 48% { fill: #ecfdf5; }
+}
+
+@keyframes ma-intel-cascade-feed-runner {
+  0%, 100%, 5%, 88% { stroke-dashoffset: 118; opacity: 0; }
+  3.75%, 18% { stroke-dashoffset: 0; opacity: 0.95; }
+  24%, 32% { opacity: 0.28; }
+}
+
+@keyframes ma-intel-seg-seq-1 {
+  0%, 100%, 26%, 72% { opacity: 0.12; }
+  28%, 30% { opacity: 0.96; filter: url(#ma-intel-node-glow); }
+}
+
+@keyframes ma-intel-seg-seq-2 {
+  0%, 100%, 28%, 74% { opacity: 0.12; }
+  30%, 32% { opacity: 0.92; filter: url(#ma-intel-node-glow); }
+}
+
+@keyframes ma-intel-seg-seq-3 {
+  0%, 100%, 30%, 76% { opacity: 0.12; }
+  32%, 34% { opacity: 0.88; filter: url(#ma-intel-node-glow); }
+}
+
+@keyframes ma-intel-seg-seq-4 {
+  0%, 100%, 32%, 78% { opacity: 0.12; }
+  34%, 36% { opacity: 0.84; filter: url(#ma-intel-node-glow); }
+}
+
+@keyframes ma-intel-hero-cp-pulse {
+  0%, 100% { opacity: 0.92; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes ma-intel-hero-cp-ring {
+  0%, 100%, 62% { opacity: 0.78; transform: scale(0.94); }
+  36%, 44% { opacity: 0.98; transform: scale(1.04); }
+  50%, 58% { opacity: 0.88; transform: scale(1.1); }
+}
+
+@keyframes ma-intel-cascade-cp-intake {
+  0%, 100%, 10%, 88% { opacity: 0.38; }
+  8%, 12% { opacity: 1; }
+}
+
+@keyframes ma-intel-cascade-cp-mid {
+  0%, 100%, 14%, 88% { opacity: 0.38; }
+  12%, 16% { opacity: 0.95; }
+}
+
+@keyframes ma-intel-micro-flash {
+  0%, 100%, 34%, 72% { opacity: 0.62; }
+  36%, 38% { opacity: 1; }
+  44%, 48% { opacity: 0.78; }
+}
+
+@keyframes ma-intel-platform-arc-sweep {
+  0%, 100%, 10%, 84% { opacity: 0.52; }
+  3%, 6% { opacity: 0.95; }
+  14%, 24% { opacity: 0.68; }
+}
+
+@keyframes ma-intel-cascade-cp-chain-a {
+  0%, 100%, 16%, 88% { opacity: 0.38; }
+  14%, 18% { opacity: 1; }
+}
+
+@keyframes ma-intel-cascade-cp-chain-b {
+  0%, 100%, 20%, 84% { opacity: 0.38; }
+  18%, 22% { opacity: 1; }
+}
+
+@keyframes ma-intel-cascade-cp-chain-c {
+  0%, 100%, 24%, 80% { opacity: 0.38; }
+  22%, 26% { opacity: 1; }
+}
+
+@keyframes ma-intel-cascade-cp-chain-d {
+  0%, 100%, 28%, 76% { opacity: 0.38; }
+  26%, 30% { opacity: 1; }
+}
+
+@keyframes ma-intel-cascade-cp-chain-e {
+  0%, 100%, 32%, 72% { opacity: 0.38; }
+  30%, 34% { opacity: 1; }
+}
+
+@keyframes ma-intel-cascade-exec-cp {
+  0%, 100%, 50%, 86% { opacity: 0.38; }
+  54%, 62% { opacity: 1; }
+}
+
+@keyframes ma-intel-cascade-core-flash {
+  0%, 100%, 32%, 68% { opacity: 0.85; }
+  34%, 36% { opacity: 1; }
+  38%, 44% { opacity: 0.92; }
+}
+
+@keyframes ma-intel-cascade-ring-delay {
+  0%, 100%, 34%, 70% { opacity: 0; transform: scale(0.88); }
+  36%, 38% { opacity: 0.9; transform: scale(1); }
+  42%, 48% { opacity: 0.5; transform: scale(1.2); }
+  52%, 58% { opacity: 0; transform: scale(1.32); }
+}
+
+@keyframes ma-intel-cascade-ripple-inner {
+  0%, 100%, 34%, 72% { opacity: 0; transform: scale(0.95); }
+  36%, 38% { opacity: 0.72; transform: scale(1); }
+  42%, 48% { opacity: 0.28; transform: scale(1.12); }
+}
+
+@keyframes ma-intel-cascade-ripple-mid {
+  0%, 100%, 36%, 74% { opacity: 0; transform: scale(0.92); }
+  39%, 41% { opacity: 0.52; transform: scale(1); }
+  45%, 50% { opacity: 0.18; transform: scale(1.1); }
+}
+
+@keyframes ma-intel-cascade-ripple-outer {
+  0%, 100%, 38%, 76% { opacity: 0; transform: scale(0.9); }
+  42%, 44% { opacity: 0.38; transform: scale(1); }
+  48%, 54% { opacity: 0.12; transform: scale(1.08); }
+}
+
+@keyframes ma-intel-cascade-orbit-seq-a {
+  0%, 100%, 26%, 72% { opacity: 0.16; }
+  28%, 30% { opacity: 0.82; }
+}
+
+@keyframes ma-intel-cascade-orbit-seq-b {
+  0%, 100%, 28%, 74% { opacity: 0.16; }
+  30%, 32% { opacity: 0.78; }
+}
+
+@keyframes ma-intel-cascade-orbit-seq-c {
+  0%, 100%, 30%, 76% { opacity: 0.16; }
+  32%, 34% { opacity: 0.74; }
+}
+
+@keyframes ma-intel-cascade-route-reveal {
+  0%, 100%, 38%, 72% { opacity: 0; stroke-dashoffset: 620; }
+  40%, 42% { opacity: 0.48; }
+  44%, 50% { opacity: 0.85; stroke-dashoffset: 0; }
+  54%, 58% { opacity: 0.28; }
+}
+
+@keyframes ma-intel-cascade-exec-route {
+  0%, 100%, 46%, 80% { opacity: 0.22; }
+  50%, 68% { opacity: 0.98; }
+}
+
+@keyframes ma-intel-cascade-exec-travel {
+  0%, 100%, 46%, 82% { stroke-dashoffset: 260; opacity: 0; }
+  50%, 52% { stroke-dashoffset: 200; opacity: 0.55; }
+  58%, 68% { stroke-dashoffset: 0; opacity: 0.95; }
+  72%, 78% { stroke-dashoffset: 0; opacity: 0.35; }
+}
+
+@keyframes ma-intel-cascade-exec {
+  0%, 100%, 48%, 82% { opacity: 0.35; }
+  52%, 68% { opacity: 1; }
+}
+
+@keyframes ma-intel-cascade-exec-runner {
+  0%, 100%, 48%, 82% { opacity: 0.15; }
+  52%, 68% { opacity: 0.95; }
+}
+
+@keyframes ma-intel-cascade-exec-edge {
+  0%, 100%, 54%, 88% { opacity: 0; }
+  58%, 64% { opacity: 0.78; }
+  68%, 72% { opacity: 0.32; }
+}
+
+@keyframes ma-intel-cascade-density {
+  0%, 100%, 28%, 72% { opacity: 0.38; }
+  38%, 50% { opacity: 0.78; }
+}
+
+@keyframes ma-intel-inner-loop-drift {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -48; }
+}
+
+@keyframes ma-intel-vert-energy-rise {
+  0%, 100%, 6%, 88% { opacity: 0; stroke-dashoffset: 95; }
+  10%, 22% { opacity: 0.82; stroke-dashoffset: 0; }
+}
+
+@keyframes ma-intel-orbit-travel-f {
+  0%, 4% { stroke-dashoffset: 260; opacity: 0; }
+  8%, 92% { opacity: 0.88; }
+  100% { stroke-dashoffset: 0; opacity: 0.12; }
+}
+
+@keyframes ma-intel-cascade-core-approach {
+  0%, 100%, 26%, 72% { opacity: 0.42; transform: scale(0.96); }
+  28%, 32% { opacity: 0.72; transform: scale(1.02); }
+  34%, 38% { opacity: 0.95; transform: scale(1.06); }
+  42%, 48% { opacity: 0.58; transform: scale(1); }
+}
+
+@keyframes ma-intel-cascade-incoming {
+  0%, 100%, 6%, 88% { opacity: 0.55; }
+  8%, 14% { opacity: 1; }
+  18%, 24% { opacity: 0.78; }
+}
+
+@keyframes ma-intel-cascade-orbit-ripple {
+  0%, 100%, 34%, 72% { opacity: 0.22; }
+  36%, 38% { opacity: 0.62; }
+  42%, 48% { opacity: 0.34; }
+}
+
+@keyframes ma-intel-cascade-cp-chain-b2 {
+  0%, 100%, 18%, 82% { opacity: 0.38; }
+  16%, 20% { opacity: 1; }
+}
+
+@keyframes ma-intel-floor-dot-travel {
+  0%, 100% { opacity: 0.28; transform: translate(0, 0); }
+  35%, 55% { opacity: 0.85; transform: translate(6px, -4px); }
+  65%, 80% { opacity: 0.42; transform: translate(12px, -2px); }
 }

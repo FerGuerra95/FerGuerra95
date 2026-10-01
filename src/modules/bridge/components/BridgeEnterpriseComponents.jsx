@@ -6,8 +6,7 @@ import { Card } from '../../../shared/components/ui/Card.jsx';
 export const bridgeEnterpriseCss = `
   .bridge-enterprise-page { width: min(1540px, 100%); margin: 0 auto; display: grid; gap: 24px; }
   .bridge-enterprise-hero { border: 1px solid rgba(148,163,184,0.18); border-radius: 24px; padding: 28px; background: linear-gradient(135deg, rgba(45,212,191,0.14), rgba(15,23,42,0.9)); }
-  .bridge-enterprise-title { margin: 8px 0 10px; font-size: clamp(30px, 4vw, 52px); line-height: 1; letter-spacing: 0; }
-  .bridge-enterprise-copy { max-width: 920px; color: rgba(203,213,225,0.86); line-height: 1.65; margin: 0; }
+  .bridge-enterprise-copy { max-width: 920px; color: rgba(203,213,225,0.86); }
   .bridge-enterprise-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
   .bridge-enterprise-grid-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
   .bridge-enterprise-panel { border: 1px solid rgba(148,163,184,0.16); border-radius: 18px; padding: 18px; background: rgba(15,23,42,0.68); }

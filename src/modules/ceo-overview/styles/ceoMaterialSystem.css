@@ -22,9 +22,12 @@
   --ceo-mat-carved: linear-gradient(168deg, #0d0d0d 0%, #060606 46%, #090909 100%);
   --ceo-mat-module: radial-gradient(ellipse 80% 70% at 18% 0%, rgba(245, 197, 92, 0.18), transparent 54%),
     linear-gradient(155deg, #141210 0%, #080807 100%);
-  --ceo-mat-hero: radial-gradient(ellipse 70% 85% at 58% 42%, rgba(245, 197, 92, 0.24), transparent 62%),
-    radial-gradient(ellipse 45% 55% at 12% 18%, rgba(255, 214, 112, 0.12), transparent 58%),
-    linear-gradient(152deg, #040404 0%, #080808 48%, #030303 100%);
+  --ceo-mat-hero:
+    radial-gradient(ellipse 38% 42% at 52% 46%, rgba(245, 197, 92, 0.12), transparent 70%),
+    linear-gradient(168deg, #010101 0%, #030302 52%, #000000 100%);
+  --ceo-mat-hero-rail:
+    radial-gradient(circle at 50% 42%, rgba(245, 197, 92, 0.07), transparent 70%),
+    linear-gradient(180deg, rgba(6, 5, 4, 0.3), rgba(2, 2, 2, 0.36));
   gap: 28px !important;
 }
 
@@ -37,6 +40,32 @@
     inset 0 0 0 1px rgba(245, 197, 92, 0.22) !important;
   padding: 26px 28px 24px !important;
   gap: 18px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page > .ceo-command-section:first-of-type .ceo-command-section-shell {
+  background: var(--ceo-mat-hero) !important;
+  overflow: hidden !important;
+  box-shadow: var(--ceo-mat-shadow-deep), var(--ceo-mat-inset-top),
+    inset 0 0 0 1px rgba(245, 197, 92, 0.2) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page > .ceo-command-section:first-of-type .ceo-command-section-header {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page > .ceo-command-section:first-of-type .ceo-command-hero {
+  background: transparent !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  box-shadow: none !important;
+  position: static !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page > .ceo-command-section:first-of-type .ceo-command-hero::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-section-header {
@@ -65,78 +94,120 @@
 /* ——— Cinematic hero ——— */
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero {
   position: relative !important;
-  border: 1px solid var(--ceo-mat-gold-border) !important;
-  border-radius: 22px !important;
+  border-radius: 26px !important;
+  /*
+    One dark cinematic field. The section shell already frames the scene;
+    a second gold stroke here was the hard cut / sticker edge.
+  */
   background: var(--ceo-mat-hero) !important;
-  box-shadow:
-    var(--ceo-mat-shadow-lift),
-    var(--ceo-mat-inset-top),
-    inset 0 0 80px rgba(0, 0, 0, 0.35),
-    0 0 72px var(--ceo-mat-gold-halo) !important;
-  padding: 22px 24px 22px !important;
+  border: 0 !important;
+  box-shadow: var(--ceo-mat-inset-top) !important;
+  padding: 20px 22px 18px !important;
   overflow: hidden !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero::after {
   content: '' !important;
   display: block !important;
   position: absolute !important;
-  left: 24px !important;
-  right: 24px !important;
+  inset: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
   bottom: 0 !important;
-  height: 1px !important;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(245, 197, 92, 0.52) 18%,
-    rgba(212, 175, 55, 0.34) 50%,
-    rgba(245, 197, 92, 0.52) 82%,
-    transparent
+  height: auto !important;
+  background: radial-gradient(
+    ellipse 92% 84% at 52% 44%,
+    transparent 38%,
+    rgba(0, 0, 0, 0.58) 100%
   ) !important;
   pointer-events: none !important;
-  opacity: 0.92 !important;
+  opacity: 1 !important;
+  z-index: 0 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main {
-  grid-template-columns: minmax(420px, 1fr) minmax(210px, 272px) !important;
-  gap: 22px !important;
-  align-items: center !important;
-  min-height: 300px !important;
+  grid-template-columns: minmax(400px, 1fr) minmax(300px, 360px) !important;
+  gap: 6px !important;
+  align-items: start !important;
+  min-height: 0 !important;
   background: transparent !important;
   border: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-copy,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-actions {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-copy {
   width: min(100%, 620px) !important;
   max-width: 620px !important;
-  background: transparent !important;
-  border: 0 !important;
+  align-self: start !important;
+  gap: 10px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main > * {
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title {
-  font-size: clamp(2.25rem, 3vw, 2.85rem) !important;
-  line-height: 1.02 !important;
-  font-weight: 680 !important;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45) !important;
+  font-size: var(--ceos-hero-title-size) !important;
+  line-height: var(--ceos-hero-title-line-height) !important;
+  font-weight: var(--ceos-hero-title-weight) !important;
+  letter-spacing: var(--ceos-hero-title-letter-spacing) !important;
+  color: var(--ceos-hero-title-color) !important;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(245, 197, 92, 0.08) !important;
   max-width: 22ch !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title span {
-  font-size: clamp(1.04rem, 1.25vw, 1.16rem) !important;
+  font-size: var(--ceos-hero-copy-size) !important;
   margin-top: 12px !important;
-  color: rgba(248, 243, 231, 0.74) !important;
+  color: var(--ceos-hero-copy-color) !important;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.5) !important;
   max-width: 31rem !important;
 }
 
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-badge-row {
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  gap: 0 !important;
+}
+
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-badge {
-  font-size: 0.68rem !important;
-  letter-spacing: 0.16em !important;
-  color: rgba(243, 218, 138, 0.9) !important;
+  font-size: var(--ceos-hero-kicker-size) !important;
+  font-weight: var(--ceos-hero-kicker-weight) !important;
+  letter-spacing: var(--ceos-hero-kicker-letter-spacing) !important;
+  line-height: var(--ceos-hero-kicker-line-height) !important;
+  text-transform: var(--ceos-hero-kicker-transform) !important;
+  color: var(--ws-accent-text) !important;
   text-shadow: 0 0 22px rgba(212, 175, 55, 0.2) !important;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap {
-  max-width: 272px !important;
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-badge + .ceo-command-badge::before {
+  margin: 0 5px !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-emblem-wrap {
+  max-width: 360px !important;
   margin-left: auto !important;
   margin-right: 0 !important;
 }
@@ -147,19 +218,22 @@
   align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
-  max-width: 376px !important;
-  min-height: 376px !important;
+  max-width: 360px !important;
+  min-height: 360px !important;
   margin-left: auto !important;
   margin-right: 0 !important;
   pointer-events: none !important;
   z-index: 1 !important;
   flex-shrink: 0 !important;
+  transform: scale(1.06) !important;
+  transform-origin: center center !important;
+  align-self: center !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-executive-core {
   position: relative !important;
   width: 100% !important;
-  max-width: 376px !important;
+  max-width: 360px !important;
   aspect-ratio: 1 / 1 !important;
   pointer-events: none !important;
 }
@@ -168,11 +242,11 @@
   display: block !important;
   width: 100% !important;
   height: auto !important;
-  filter: drop-shadow(0 0 48px rgba(212, 175, 55, 0.2)) drop-shadow(0 22px 48px rgba(0, 0, 0, 0.52)) !important;
+  filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.28)) drop-shadow(0 14px 28px rgba(0, 0, 0, 0.55)) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-orbit--ultra {
-  animation-duration: 32s !important;
+  animation-duration: 88s !important;
   animation-direction: reverse !important;
 }
 
@@ -181,18 +255,21 @@
   left: 50% !important;
   top: 50% !important;
   transform: translate(-50%, -50%) !important;
-  width: 53.75% !important;
-  height: 53.75% !important;
+  width: 72% !important;
+  height: 72% !important;
   border-radius: 50% !important;
   pointer-events: none !important;
   z-index: 1 !important;
   background: radial-gradient(
     circle at 50% 42%,
-    rgba(245, 197, 92, 0.16) 0%,
-    rgba(212, 175, 55, 0.06) 38%,
-    transparent 72%
+    rgba(245, 197, 92, 0.42) 0%,
+    rgba(212, 175, 55, 0.16) 22%,
+    rgba(245, 197, 92, 0.05) 42%,
+    transparent 58%
   ) !important;
-  box-shadow: 0 0 64px rgba(212, 175, 55, 0.12) !important;
+  box-shadow:
+    0 0 22px rgba(212, 175, 55, 0.28),
+    0 0 36px rgba(245, 197, 92, 0.12) !important;
   animation: ceoSovCoreGlow 20s ease-in-out infinite !important;
 }
 
@@ -201,17 +278,17 @@
   left: 50% !important;
   top: 50% !important;
   transform: translate(-50%, -50%) !important;
-  width: 51.25% !important;
-  height: 51.25% !important;
+  width: 54% !important;
+  height: 54% !important;
   border-radius: 50% !important;
   overflow: hidden !important;
   pointer-events: none !important;
   z-index: 3 !important;
-  border: 1px solid rgba(245, 197, 92, 0.34) !important;
+  border: 1px solid rgba(245, 197, 92, 0.28) !important;
   background: transparent !important;
   box-shadow:
-    0 0 52px rgba(212, 175, 55, 0.2),
-    0 0 18px rgba(245, 197, 92, 0.12) !important;
+    0 0 22px rgba(212, 175, 55, 0.16),
+    0 0 10px rgba(245, 197, 92, 0.08) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-lion-mark {
@@ -226,31 +303,22 @@
   transform-origin: center 40% !important;
   -webkit-mask-image: none !important;
   mask-image: none !important;
-  filter: sepia(0.3) saturate(1.06) brightness(0.94) contrast(1.06)
-    drop-shadow(0 0 28px rgba(212, 175, 55, 0.28)) !important;
-}
-
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-pulse-aura {
-  position: absolute !important;
-  inset: 10% !important;
-  border-radius: 50% !important;
-  background: radial-gradient(circle, rgba(245, 197, 92, 0.1) 0%, transparent 70%) !important;
-  animation: ceoSovCoreGlow 20s ease-in-out infinite !important;
-  pointer-events: none !important;
+  filter: sepia(0.22) saturate(1.02) brightness(0.92) contrast(1.08)
+    drop-shadow(0 0 16px rgba(212, 175, 55, 0.16)) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-orbit {
   transform-origin: 160px 160px !important;
-  animation: ceoSovCoreOrbit 24s linear infinite !important;
+  animation: ceoSovCoreOrbit 48s linear infinite !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-orbit--mid {
-  animation-duration: 20s !important;
+  animation-duration: 64s !important;
   animation-direction: reverse !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-orbit--inner {
-  animation-duration: 30s !important;
+  animation-duration: 40s !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-pulse-ring,
@@ -271,36 +339,29 @@
 @keyframes ceoSovCoreGlow {
   0%,
   100% {
-    opacity: 0.55;
+    opacity: 0.72;
     transform: scale(0.98);
   }
 
   50% {
-    opacity: 0.92;
-    transform: scale(1.03);
+    opacity: 1;
+    transform: scale(1.04);
   }
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap::before {
-  inset: -28% -20% !important;
-  background: radial-gradient(
-    circle at 50% 46%,
-    rgba(212, 175, 55, 0.28) 0%,
-    rgba(212, 175, 55, 0.1) 28%,
-    rgba(212, 175, 55, 0.03) 52%,
-    transparent 72%
-  ) !important;
-  filter: blur(8px) !important;
+  content: none !important;
+  display: none !important;
+  background: none !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark {
-  max-width: 272px !important;
+  max-width: 360px !important;
   mix-blend-mode: normal !important;
   opacity: 1 !important;
   -webkit-mask-image: none !important;
   mask-image: none !important;
-  filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.32)) drop-shadow(0 0 80px rgba(212, 175, 55, 0.12))
-    drop-shadow(0 16px 32px rgba(0, 0, 0, 0.5)) !important;
+  filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.18)) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45)) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-status-grid {
@@ -309,36 +370,47 @@
   border-top: none !important;
   box-shadow: none !important;
   gap: 14px !important;
-  grid-template-columns: minmax(660px, 1fr) minmax(296px, 0.4fr) !important;
-  grid-template-areas:
-    "main readiness"
-    "main priorities" !important;
-  align-items: start !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(268px, 300px) !important;
+  grid-template-areas: none !important;
+  grid-template-rows: none !important;
+  align-items: stretch !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main {
-  grid-area: main !important;
+  grid-area: auto !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-rail {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+  justify-content: flex-start !important;
+  align-self: stretch !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card {
-  grid-area: readiness !important;
+  grid-area: auto !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priorities-card {
-  grid-area: priorities !important;
+  grid-area: auto !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priorities-card {
-  background: radial-gradient(ellipse 90% 85% at 16% 0%, rgba(245, 197, 92, 0.16), transparent 56%),
-    linear-gradient(160deg, #121110, #070707) !important;
-  border: 1px solid var(--ceo-mat-gold-border-soft) !important;
+  background: var(--ceo-mat-hero-rail) !important;
+  border: 1px solid rgba(245, 197, 92, 0.36) !important;
   border-radius: 18px !important;
-  box-shadow: var(--ceo-mat-inset-top), inset 0 -16px 32px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.35) !important;
-  padding: 15px 14px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 230, 0.12),
+    0 0 18px rgba(245, 197, 92, 0.08),
+    0 10px 26px rgba(0, 0, 0, 0.28) !important;
+  padding: 14px 14px !important;
   min-height: 0 !important;
-  align-self: start !important;
-  justify-content: center !important;
+  align-self: stretch !important;
+  justify-content: flex-start !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-readiness-card,
@@ -351,50 +423,76 @@
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-wrap {
-  width: 96px !important;
-  height: 96px !important;
+  width: 188px !important;
+  height: 188px !important;
+  filter: none !important;
+  isolation: auto !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  background-image: radial-gradient(
+    circle at 50% 48%,
+    rgba(245, 197, 92, 0.07),
+    transparent 72%
+  ) !important;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-center strong {
-  font-size: 1.22rem !important;
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-center {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-progress {
+  filter: drop-shadow(0 0 2px rgba(246, 227, 164, 0.7)) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-track {
+  stroke-width: 6.2 !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-progress {
+  stroke-width: 6.8 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-meta {
-  font-size: 0.72rem !important;
-  line-height: 1.42 !important;
+  font-size: 0.68rem !important;
+  line-height: 1.32 !important;
   color: rgba(248, 243, 231, 0.6) !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  max-height: 3.96em !important;
+  padding-top: 4px !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-item {
-  padding: 6px 0 !important;
+  padding: 4px 0 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-value {
-  font-size: 0.86rem !important;
-  line-height: 1.42 !important;
+  font-size: 0.74rem !important;
+  line-height: 1.28 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-card {
-  border-color: rgba(245, 197, 92, 0.36) !important;
-  box-shadow:
-    var(--ceo-mat-inset-top),
-    inset 0 -16px 32px rgba(0, 0, 0, 0.35),
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    0 0 42px rgba(245, 197, 92, 0.2) !important;
-}
-
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priorities-card {
-  border-color: rgba(245, 197, 92, 0.32) !important;
-  box-shadow:
-    var(--ceo-mat-inset-top),
-    inset 0 -16px 32px rgba(0, 0, 0, 0.35),
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    0 0 36px rgba(212, 175, 55, 0.16) !important;
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-title {
+  font-size: 0.82rem !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-dot {
-  background: rgba(245, 197, 92, 0.88) !important;
-  box-shadow: 0 0 12px rgba(245, 197, 92, 0.52) !important;
+  background: rgba(245, 197, 92, 0.92) !important;
+  box-shadow: 0 0 12px rgba(245, 197, 92, 0.55) !important;
 }
 
 /* ——— Operational modules (decision / intelligence / readiness) ——— */
@@ -500,10 +598,18 @@
   color: color-mix(in srgb, var(--branch-tone, rgba(243, 218, 138, 0.72)) 82%, rgba(248, 243, 231, 0.88)) !important;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card strong {
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card:not(.ceo-readiness-card) strong {
   font-size: 1.18rem !important;
   font-weight: 650 !important;
   line-height: 1.35 !important;
+}
+
+/* Score must outrank generic card strong; keep after that rule */
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-center strong {
+  font-size: 2.22rem !important;
+  letter-spacing: -0.03em !important;
+  font-weight: 720 !important;
+  line-height: 1.05 !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-card p {
@@ -747,16 +853,6 @@
   font-size: 1.16rem !important;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-priority-title {
-  font-size: 0.96rem !important;
-}
-
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-truthfulness-banner {
-  font-size: 0.78rem !important;
-  color: rgba(248, 243, 231, 0.45) !important;
-  letter-spacing: 0.02em !important;
-}
-
 @media (max-width: 1180px) {
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-module-readiness-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -764,26 +860,33 @@
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-status-grid {
     grid-template-columns: 1fr !important;
-    grid-template-areas:
-      "main"
-      "readiness"
-      "priorities" !important;
+    grid-template-areas: none !important;
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main {
-    grid-template-columns: minmax(0, 1fr) minmax(180px, 240px) !important;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 340px) !important;
     min-height: 0 !important;
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-emblem-wrap,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-wrap {
-    max-width: 308px !important;
-    min-height: 308px !important;
+    max-width: 340px !important;
+    min-height: 340px !important;
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-executive-core {
-    max-width: 308px !important;
+    max-width: 340px !important;
+  }
+
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-wrap {
+    width: 172px !important;
+    height: 172px !important;
+  }
+
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-center strong {
+    font-size: 2rem !important;
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .executive-radar-panel.ceo-radar-premium {
@@ -809,20 +912,28 @@
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-title {
-    font-size: 2rem !important;
     max-width: 100% !important;
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark-wrap,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-wrap {
-    max-width: 244px !important;
-    min-height: 244px !important;
+    max-width: 280px !important;
+    min-height: 280px !important;
     margin: 0 auto !important;
     order: -1 !important;
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-executive-core {
-    max-width: 244px !important;
+    max-width: 280px !important;
+  }
+
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-wrap {
+    width: 148px !important;
+    height: 148px !important;
+  }
+
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-readiness-ring-center strong {
+    font-size: 1.68rem !important;
   }
 
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-lion-mark {
@@ -1208,7 +1319,7 @@
   height: 520px !important;
   pointer-events: none !important;
   z-index: 0 !important;
-  opacity: 0.55 !important;
+  opacity: 0.1 !important;
   background: linear-gradient(
     118deg,
     transparent 0%,
@@ -1235,64 +1346,73 @@
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-field-aura {
   position: absolute !important;
   inset: 0 !important;
-  background:
-    radial-gradient(ellipse 62% 78% at 74% 44%, rgba(245, 197, 92, 0.16), transparent 64%),
-    radial-gradient(ellipse 38% 52% at 18% 22%, rgba(212, 175, 55, 0.06), transparent 62%),
-    linear-gradient(148deg, rgba(2, 2, 2, 0.98) 0%, rgba(6, 5, 4, 0.94) 48%, rgba(3, 3, 3, 0.98) 100%) !important;
+  background: radial-gradient(ellipse 42% 48% at 52% 46%, rgba(245, 197, 92, 0.16), transparent 72%) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-beam {
   position: absolute !important;
-  inset: -12% 8% -8% 22% !important;
-  background: linear-gradient(
-    112deg,
-    transparent 8%,
-    rgba(245, 197, 92, 0.03) 28%,
-    rgba(243, 218, 138, 0.1) 46%,
-    rgba(212, 175, 55, 0.04) 62%,
-    transparent 82%
+  left: 6% !important;
+  right: 28% !important;
+  bottom: -6% !important;
+  top: auto !important;
+  height: 46% !important;
+  background: radial-gradient(
+    ellipse 58% 52% at 48% 100%,
+    rgba(245, 197, 92, 0.1),
+    transparent 74%
   ) !important;
-  opacity: 0.88 !important;
-  mix-blend-mode: screen !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-orbitals,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-neural,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-field-network {
   position: absolute !important;
-  inset: -8% -12% -10% 10% !important;
-  width: 114% !important;
-  height: 118% !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-orbitals {
-  opacity: 0.78 !important;
+  opacity: 1 !important;
+  filter: saturate(1.02) brightness(0.96) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-neural {
-  opacity: 0.82 !important;
+  opacity: 1 !important;
+  filter: saturate(1.04) brightness(1.0) !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-orbit-field {
+  transform-origin: 900px 248px !important;
+  animation: ceoIntelCoreOrbit 128s linear infinite reverse !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-orbit-group {
   transform-origin: 900px 248px !important;
-  animation: ceoIntelCoreOrbit 26s linear infinite !important;
+  animation: ceoIntelCoreOrbit 72s linear infinite !important;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-hub,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-pulse {
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-east {
+  transform-origin: 900px 248px !important;
+  animation: ceoIntelCoreDrift 52s ease-in-out infinite reverse !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-west-sparks,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-sparks {
+  transform-origin: 640px 260px !important;
+  animation: none !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-spark-twinkle {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: ceoIntelCoreGlow 16s ease-in-out infinite;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-hub {
   animation: ceoIntelCoreGlow 18s ease-in-out infinite !important;
-}
-
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-pulse {
-  position: absolute !important;
-  right: 16% !important;
-  top: 42% !important;
-  width: 120px !important;
-  height: 120px !important;
-  margin: -60px -60px 0 0 !important;
-  border-radius: 50% !important;
-  background: radial-gradient(circle, rgba(245, 197, 92, 0.16) 0%, rgba(212, 175, 55, 0.04) 42%, transparent 72%) !important;
-  box-shadow: 0 0 48px rgba(245, 197, 92, 0.12) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-sheen,
@@ -1300,34 +1420,25 @@
   position: absolute !important;
   inset: 0 !important;
   background: conic-gradient(
-    from 208deg at 76% 42%,
+    from 208deg at 48% 42%,
     transparent 0deg,
-    rgba(245, 197, 92, 0.04) 14deg,
-    transparent 34deg,
+    rgba(245, 197, 92, 0.05) 6deg,
+    transparent 16deg,
     transparent 360deg
   ) !important;
-  opacity: 0.72 !important;
-  animation: ceoIntelCoreOrbit 26s linear infinite !important;
+  opacity: 0.28 !important;
+  animation: ceoIntelCoreOrbit 40s linear infinite !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-vignette,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-field-vignette {
   position: absolute !important;
   inset: 0 !important;
-  background:
-    linear-gradient(102deg, rgba(2, 2, 2, 0.82) 0%, transparent 32%, transparent 56%, rgba(1, 1, 1, 0.42) 100%),
-    radial-gradient(ellipse 96% 90% at 50% 50%, transparent 34%, rgba(0, 0, 0, 0.52) 100%) !important;
+  background: radial-gradient(ellipse 140% 120% at 52% 48%, transparent 58%, rgba(0, 0, 0, 0.14) 100%) !important;
 }
 
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-hero,
-.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero {
-  overflow: hidden !important;
-  box-shadow:
-    var(--ceo-mat-shadow-lift),
-    var(--ceo-mat-inset-top),
-    inset 0 0 120px rgba(0, 0, 0, 0.38),
-    0 0 88px rgba(245, 197, 92, 0.1),
-    inset 0 0 0 1px rgba(245, 197, 92, 0.16) !important;
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-hero {
+  overflow: visible !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero-main,
@@ -1342,16 +1453,25 @@
   z-index: 1 !important;
 }
 
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page > .ceo-command-section:first-of-type .ceo-command-section-body {
+  position: static !important;
+}
+
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page > .ceo-command-section:first-of-type .ceo-intelligence-core,
+.main-area[data-workspace='overview'] .page .ceo-executive-command-page > .ceo-command-section:first-of-type .ceo-intelligence-field {
+  border-radius: 28px !important;
+}
+
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-readiness-card,
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-command-hero .ceo-priorities-card {
-  backdrop-filter: blur(10px) saturate(125%) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(125%) !important;
-  background:
-    linear-gradient(165deg, rgba(12, 11, 9, 0.72), rgba(6, 6, 5, 0.58)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: var(--ceo-mat-hero-rail) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 248, 230, 0.06),
-    inset 0 0 0 1px rgba(245, 197, 92, 0.12),
-    0 12px 36px rgba(0, 0, 0, 0.38) !important;
+    inset 0 1px 0 rgba(255, 248, 230, 0.12),
+    0 0 18px rgba(245, 197, 92, 0.08),
+    0 10px 26px rgba(0, 0, 0, 0.28) !important;
+  border: 1px solid rgba(245, 197, 92, 0.36) !important;
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap {
@@ -1380,19 +1500,6 @@
   border-radius: 50% !important;
   pointer-events: none !important;
   z-index: 0 !important;
-}
-
-@keyframes ceoIntelCoreGlow {
-  0%,
-  100% {
-    opacity: 0.58;
-    transform: scale(0.98);
-  }
-
-  50% {
-    opacity: 0.92;
-    transform: scale(1.02);
-  }
 }
 
 .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap::before {
@@ -1827,6 +1934,19 @@
   }
 }
 
+@keyframes ceoIntelCoreDrift {
+  0%,
+  100% {
+    transform: translate3d(-5px, 0.4px, 0);
+    opacity: 0.97;
+  }
+
+  50% {
+    transform: translate3d(6px, -1.2px, 0);
+    opacity: 1;
+  }
+}
+
 @keyframes ceoIntelCoreGlow {
   0%,
   100% {
@@ -1877,12 +1997,15 @@
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-orbit,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-medallion-ring,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-pulse-ring,
-  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-sovereign-core-pulse-aura,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-orbit-group,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-orbit-field,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-east,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-west-sparks,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-sparks,
+  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-spark-twinkle,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-sheen,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-field-scan,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-hub,
-  .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-intelligence-core-pulse,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap::before,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-visual-wrap::after,
   .main-area[data-workspace='overview'] .page .ceo-executive-command-page .ceo-radar-sweep-beam,

@@ -49,10 +49,8 @@ function formatScoreValue(value) {
 function MetricBox({ label, value, hint }) {
   return (
     <div className="ma-premium-stat">
-      <div>
-        <span>{label}</span>
-        <strong className="ma-val-financial-figure">{value}</strong>
-      </div>
+      <span>{label}</span>
+      <strong className="ma-val-financial-figure">{value}</strong>
       <small>{hint}</small>
     </div>
   );
@@ -74,13 +72,78 @@ function BridgeRow({ number, title, description, value, meta }) {
   );
 }
 
-export function ValuationDealStructurePanel({ derived, settings }) {
+export const VALUATION_LEDGER_TITLE = 'Value ledger — equity bridge';
+
+export function getValuationEquityBridgeRows(derived = {}, settings = {}) {
   const normalizedEbitda = readNumber(derived, ['normalizedEbitda']);
   const adjustedMultiple = readNumber(derived, ['adjustedMultiple']);
   const evBase = readNumber(derived, ['evBase', 'enterpriseValue']);
   const netDebt = readNumber(derived, ['netDebt']);
+  const wcAdjustment = readNumber(derived, [
+    'wcAdjustment',
+    'workingCapitalAdjustment'
+  ]);
   const equityBase = readNumber(derived, ['equityBase', 'equityValue']);
   const netProceeds = readNumber(derived, ['netProceeds']);
+  const reportCurrency =
+    settings?.reportCurrency || derived?.reportCurrency || derived?.currency || 'EUR';
+
+  return [
+    {
+      id: 'enterprise',
+      number: '01',
+      title: 'Adjusted DSS enterprise value',
+      description:
+        'Normalized EBITDA × adjusted multiple (sector, risk, quality, compliance).',
+      numericValue: evBase,
+      value: formatCurrencyValue(evBase, reportCurrency),
+      meta: `${formatCurrencyValue(normalizedEbitda, reportCurrency)} x ${formatMultipleValue(adjustedMultiple)}`
+    },
+    {
+      id: 'netDebt',
+      number: '02',
+      title: 'Net debt',
+      description: 'Bridge from enterprise value toward equity (debt minus cash).',
+      numericValue: netDebt,
+      value: formatCurrencyValue(netDebt, reportCurrency),
+      meta: 'Net financial debt / cash'
+    },
+    {
+      id: 'workingCapital',
+      number: '03',
+      title: 'Working capital adjustment',
+      description:
+        'Actual working capital minus target working capital. Applied to adjusted equity.',
+      numericValue: wcAdjustment,
+      value: formatCurrencyValue(wcAdjustment, reportCurrency),
+      meta: 'actualWC − targetWC'
+    },
+    {
+      id: 'equity',
+      number: '04',
+      title: 'Adjusted equity value',
+      description:
+        'Enterprise value − net debt + working capital adjustment — not the simple Golden equity benchmark.',
+      numericValue: equityBase,
+      value: formatCurrencyValue(equityBase, reportCurrency),
+      meta: 'Live engine · adjusted bridge'
+    },
+    {
+      id: 'proceeds',
+      number: '05',
+      title: 'Estimated net proceeds',
+      description:
+        'Product waterfall output after fees and taxes — not simple seller-cash distribution.',
+      numericValue: netProceeds,
+      value: formatCurrencyValue(netProceeds, reportCurrency),
+      meta: 'After fees/taxes · indicative DSS'
+    }
+  ];
+}
+
+export function ValuationDealStructurePanel({ derived, settings }) {
+  const normalizedEbitda = readNumber(derived, ['normalizedEbitda']);
+  const adjustedMultiple = readNumber(derived, ['adjustedMultiple']);
   const qualityScore = readNumber(derived, ['qualityScore']);
   const riskLabel = derived?.riskLevel?.label || derived?.riskLevel || 'Moderate';
   const reportCurrency =
@@ -88,6 +151,7 @@ export function ValuationDealStructurePanel({ derived, settings }) {
 
   return (
     <section className="ma-premium-deal-card ma-valuation-deal-structure ma-valuation-value-ledger ma-valuation-surface">
+      <div className="ma-ma-panel-ambient" aria-hidden="true" />
       <div className="ma-premium-deal-inner">
         <div className="ma-premium-deal-header">
           <div>
@@ -95,7 +159,7 @@ export function ValuationDealStructurePanel({ derived, settings }) {
               <BarChart3 size={14} />
               Deal Structure
             </div>
-            <h3>Clear, defensible closing structure.</h3>
+            <h3>Clear, defensible equity bridge.</h3>
             <p className="muted">
               Live engine bridge: normalized EBITDA → adjusted DSS enterprise value →
               net debt and working capital → adjusted equity → estimated net proceeds
@@ -133,10 +197,10 @@ export function ValuationDealStructurePanel({ derived, settings }) {
         <div className="ma-closing-structure-box">
           <div className="ma-closing-structure-title">
             <div>
-              <h4>Value ledger — closing structure</h4>
+              <h4>{VALUATION_LEDGER_TITLE}</h4>
               <p className="muted">
-                Committee-format economic bridge: enterprise value, debt/cash
-                adjustments, shareholder value and estimated proceeds.
+                Committee-format economic bridge: enterprise value, net debt,
+                working capital adjustment, shareholder value and estimated proceeds.
               </p>
             </div>
             <div className="ma-closing-label">
@@ -146,34 +210,16 @@ export function ValuationDealStructurePanel({ derived, settings }) {
           </div>
 
           <div className="ma-bridge-list ma-bridge-list-open ma-value-ledger-build">
-            <BridgeRow
-              number="01"
-              title="Adjusted DSS enterprise value"
-              description="Normalized EBITDA × adjusted multiple (sector, risk, quality, compliance)."
-              value={formatCurrencyValue(evBase, reportCurrency)}
-              meta={`${formatCurrencyValue(normalizedEbitda, reportCurrency)} x ${formatMultipleValue(adjustedMultiple)}`}
-            />
-            <BridgeRow
-              number="02"
-              title="Net debt"
-              description="Bridge from enterprise value toward equity (debt minus cash)."
-              value={formatCurrencyValue(netDebt, reportCurrency)}
-              meta="Net financial debt / cash"
-            />
-            <BridgeRow
-              number="03"
-              title="Adjusted equity value"
-              description="Includes net debt and working capital adjustment — not the simple Golden equity benchmark."
-              value={formatCurrencyValue(equityBase, reportCurrency)}
-              meta="Live engine · adjusted bridge"
-            />
-            <BridgeRow
-              number="04"
-              title="Estimated net proceeds"
-              description="Product waterfall output after fees and taxes — not simple seller-cash distribution."
-              value={formatCurrencyValue(netProceeds, reportCurrency)}
-              meta="After fees/taxes · indicative DSS"
-            />
+            {getValuationEquityBridgeRows(derived, settings).map((row) => (
+              <BridgeRow
+                key={row.id}
+                number={row.number}
+                title={row.title}
+                description={row.description}
+                value={row.value}
+                meta={row.meta}
+              />
+            ))}
           </div>
 
           <div className="ma-closing-footer">
@@ -211,22 +257,24 @@ export function ValuationEvidenceLedgerPanel({ derived }) {
     : 0;
 
   return (
-    <section className="ma-traceability-panel ma-valuation-evidence-ledger ma-valuation-executive-ledger ma-valuation-surface">
-      <div className="ma-panel-header">
+    <section className="ma-traceability-panel ma-valuation-evidence-ledger ma-valuation-executive-ledger ma-valuation-surface ma-committee-readiness">
+      <div className="ma-ma-panel-ambient" aria-hidden="true" />
+      <div className="ma-panel-header ma-committee-readiness-header">
         <div>
           <div className="ma-kicker">
             <ShieldCheck size={14} />
             Committee readiness
           </div>
           <h3>Committee readiness checklist</h3>
-          <p className="muted">
-            Critical controls linked to case documents. Review coverage before export or
-            committee circulation.
+          <p className="muted ma-committee-readiness-lead">
+            Control evidence for committee circulation. Coverage reflects linked
+            documents — not engine calculation status. Human review required before
+            external use.
           </p>
         </div>
-        <div className="ma-traceability-score">
+        <div className="ma-traceability-score ma-committee-coverage-score" aria-label="Evidence coverage">
           <span className="ma-val-financial-figure">{coverage}%</span>
-          <small>evidence coverage</small>
+          <small>Evidence coverage</small>
         </div>
       </div>
 
@@ -235,6 +283,7 @@ export function ValuationEvidenceLedgerPanel({ derived }) {
           const docCount = source.documentCount || 0;
           const hasDocs =
             Array.isArray(source.documents) && source.documents.length > 0;
+          const statusLabel = hasDocs ? 'Linked' : 'Pending';
           const evidenceLine = hasDocs
             ? source.documents
                 .map((document) => document.title)
@@ -245,41 +294,44 @@ export function ValuationEvidenceLedgerPanel({ derived }) {
           return (
             <article
               key={source.sourceId}
-              className="ma-evidence-checklist-row ma-evidence-ledger-row ma-evidence-ledger-row-premium ma-valuation-ledger ma-committee-check-unit"
+              className={`ma-evidence-checklist-row ma-evidence-ledger-row ma-evidence-ledger-row-premium ma-valuation-ledger ma-committee-check-unit ${hasDocs ? 'is-linked' : 'is-pending'}`}
             >
-              <div className="ma-committee-check-main">
+              <div className="ma-committee-col ma-committee-col-control">
                 <strong className="ma-evidence-ledger-title">{source.label}</strong>
-                <p className="ma-committee-check-explain">{source.sourceType}</p>
-                <p className="ma-committee-check-source">
+                {source.sourceType ? (
+                  <p className="ma-committee-check-category">{source.sourceType}</p>
+                ) : null}
+                <div className="ma-committee-meta-row ma-committee-meta-evidence">
                   <span className="ma-evidence-ledger-label">Source / evidence</span>
                   <span className="ma-evidence-ledger-value">{evidenceLine}</span>
-                </p>
+                </div>
               </div>
 
-              <div className="ma-committee-check-rail" aria-label="Control metadata">
-                <div className="ma-committee-check-rail-item">
-                  <span className="ma-evidence-ledger-label">Formula / reference</span>
-                  <code className="ma-traceability-formula-ref">{source.sourceId}</code>
-                </div>
-                <div className="ma-committee-check-rail-item">
-                  <span className="ma-evidence-ledger-label">Coverage</span>
-                  <span className="ma-evidence-ledger-value">
-                    {docCount} doc(s) linked
-                  </span>
-                </div>
-                <div className="ma-committee-check-rail-item ma-committee-check-status">
-                  <span className="ma-evidence-ledger-label">Status</span>
-                  <span className="ma-traceability-status-label">
-                    {hasDocs ? 'Linked' : 'Pending'}
-                  </span>
-                </div>
+              <div className="ma-committee-col ma-committee-col-formula ma-committee-meta-formula">
+                <span className="ma-evidence-ledger-label">Formula / reference</span>
+                <code className="ma-traceability-formula-ref">{source.sourceId}</code>
+              </div>
+
+              <div className="ma-committee-col ma-committee-col-coverage">
+                <span className="ma-evidence-ledger-label">Coverage</span>
+                <span className="ma-evidence-ledger-value">
+                  {docCount} doc(s) linked
+                </span>
+              </div>
+
+              <div className="ma-committee-col ma-committee-col-status">
+                <span
+                  className={`ma-committee-status-chip ${hasDocs ? 'is-linked' : 'is-pending'}`}
+                >
+                  {statusLabel}
+                </span>
               </div>
             </article>
           );
         })}
       </div>
 
-      <div className="ma-traceability-footer">
+      <div className="ma-traceability-footer ma-committee-readiness-footer">
         <CheckCircle2 size={16} />
         <span>
           {summary.linked || 0}/{summary.total || sources.length} controls linked to

@@ -112,6 +112,8 @@ export function FinancialInputPanel({
 
   return (
     <div className={`ma-input-cockpit-shell ma-valuation-sidebar-premium ma-valuation-surface ma-valuation-underwriting-rail ${isDisabled ? 'is-readonly' : ''}`}>
+      {/* Dashboard table ambient — left/upper-left teal wash */}
+      <div className="ma-ma-panel-ambient" aria-hidden="true" />
       <header
         className="ma-valuation-input-cockpit-band"
         aria-label="Inputs and assumptions"

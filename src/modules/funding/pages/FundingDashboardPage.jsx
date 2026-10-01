@@ -178,29 +178,19 @@ const fundingDashboardCss = `
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
-    margin-bottom: 26px;
   }
 
   .funding-title {
-    margin: 0;
     max-width: 950px;
-    font-size: clamp(42px, 5vw, 72px);
-    line-height: 0.92;
-    letter-spacing: -0.075em;
   }
 
   .funding-title span {
     display: block;
     margin-top: 8px;
-    color: rgba(226, 232, 240, 0.7);
   }
 
   .funding-copy {
     max-width: 860px;
-    margin: 26px 0 0;
-    font-size: 17px;
-    line-height: 1.82;
-    color: rgba(203, 213, 225, 0.86);
   }
 
   .funding-actions {
@@ -1692,12 +1682,7 @@ export function FundingDashboardPage() {
           <section className="funding-hero ceos-ws-hero">
             <div className="funding-hero-layout">
               <div>
-                <div className="funding-badge-row">
-                  <Badge>{FUNDING_SOURCE_COPY.draftBadge}</Badge>
-                  <Badge>Capital Strategy</Badge>
-                  <Badge>{stage}</Badge>
-                  <Badge>{scenarioMode}</Badge>
-                </div>
+                <p className="funding-kicker">Funding</p>
 
                 <h1 className="funding-title" data-testid="funding-dashboard-title">
                   Funding Command Center.
@@ -1709,6 +1694,12 @@ export function FundingDashboardPage() {
                   runway, dilución estimada, uso de fondos, readiness inversor y
                   memo exportable para preparar una ronda más defendible.
                 </p>
+                <div className="funding-badge-row">
+                  <Badge>{FUNDING_SOURCE_COPY.draftBadge}</Badge>
+                  <Badge>Capital Strategy</Badge>
+                  <Badge>{stage}</Badge>
+                  <Badge>{scenarioMode}</Badge>
+                </div>
                 <p className="muted" style={{ marginTop: 10 }}>
                   Funding Intelligence is a decision-support layer. Financial, legal and investor
                   actions require human review.

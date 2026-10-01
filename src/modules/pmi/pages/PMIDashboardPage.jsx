@@ -98,7 +98,7 @@ const pmiDashboardCss = `
     display: grid;
     grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
     gap: 38px;
-    align-items: center;
+    align-items: start;
   }
 
   .pmi-badge-row {
@@ -106,15 +106,10 @@ const pmiDashboardCss = `
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
-    margin-bottom: 26px;
   }
 
   .pmi-title {
-    margin: 0;
     max-width: 940px;
-    font-size: clamp(40px, 4.8vw, 68px);
-    line-height: 1.08;
-    letter-spacing: 0;
     overflow-wrap: break-word;
     word-break: normal;
   }
@@ -122,15 +117,10 @@ const pmiDashboardCss = `
   .pmi-title span {
     display: block;
     margin-top: 9px;
-    color: rgba(226, 232, 240, 0.7);
   }
 
   .pmi-copy {
     max-width: 850px;
-    margin: 28px 0 0;
-    font-size: 17px;
-    line-height: 1.82;
-    color: rgba(203, 213, 225, 0.86);
   }
 
   .pmi-actions {
@@ -772,10 +762,6 @@ const pmiDashboardCss = `
       grid-template-columns: 1fr;
     }
 
-    .pmi-title {
-      font-size: clamp(36px, 11vw, 54px);
-    }
-
     .pmi-section-header {
       align-items: flex-start;
       flex-direction: column;
@@ -1404,12 +1390,7 @@ export function PMIDashboardPage() {
         <section className="pmi-hero ceos-ws-hero">
           <div className="pmi-hero-layout">
             <div>
-              <div className="pmi-badge-row">
-                <Badge>PMI & Synergies</Badge>
-                <Badge>Post-Merger Integration</Badge>
-                <Badge>Execution Layer</Badge>
-                <Badge>{pmiCase.status}</Badge>
-              </div>
+              <p className="pmi-kicker">PMI & Synergies</p>
 
               <h1 className="pmi-title">
                 PMI & Synergies Command Center.
@@ -1421,6 +1402,11 @@ export function PMIDashboardPage() {
                 plan 30-60-90, workstreams, sinergias, riesgos, owners,
                 presupuesto y memo ejecutivo para comité.
               </p>
+              <div className="pmi-badge-row">
+                <Badge>Post-Merger Integration</Badge>
+                <Badge>Execution Layer</Badge>
+                <Badge>{pmiCase.status}</Badge>
+              </div>
               <div className="pmi-actions">
                 <Button onClick={handleExportBoardMemo} variant="secondary">
                   <Download size={16} />

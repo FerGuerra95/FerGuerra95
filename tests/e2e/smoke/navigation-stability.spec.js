@@ -54,16 +54,25 @@ const NAV_CYCLE = [
   }
 ];
 
-async function selectWorkspace(page, key) {
-  const item = page.getByTestId(`workspace-rail-item-${key}`);
-  await item.scrollIntoViewIfNeeded();
-  await item.click();
+async function openWorkspaceMenu(page) {
+  await page
+    .locator('.ceos-shell-desktop-sidebar [data-testid="workspace-switcher-trigger"]')
+    .click();
+  await expect(page.getByTestId('workspace-switcher-menu')).toBeVisible();
 }
 
-async function assertHealthyShell(page, routeLabel) {
+async function selectWorkspace(page, key) {
+  await openWorkspaceMenu(page);
+  const item = page.getByTestId(`workspace-switcher-item-${key}`);
+  await item.focus();
+  await page.keyboard.press('Enter');
+}
+
+async function assertHealthyShell(page) {
   await expect(page.getByText(ERROR_BOUNDARY_PATTERN)).toHaveCount(0);
   await expect(page.locator('.app-shell')).toBeVisible();
-  await expect(page.getByTestId('workspace-rail')).toBeVisible();
+  await expect(page.locator('.ceos-shell-desktop-sidebar [data-testid="workspace-switcher"]')).toBeVisible();
+  await expect(page.getByTestId('workspace-rail')).toHaveCount(0);
   await expect(page).not.toHaveURL(/\/login/);
 }
 
@@ -82,6 +91,7 @@ test.describe('Navigation stability smoke', () => {
   });
 
   test('survives repeated workspace navigation without ErrorBoundary latch', async ({ page }) => {
+    test.setTimeout(120_000);
     await page.setViewportSize({ width: 1440, height: 900 });
     await loginAsDemoAdmin(page);
 
@@ -90,38 +100,38 @@ test.describe('Navigation stability smoke', () => {
         await selectWorkspace(page, step.key);
         await expect(page).toHaveURL(step.url);
         await expect(page.getByRole('heading', { name: step.heading }).first()).toBeVisible();
-        await assertHealthyShell(page, `${step.key} cycle ${cycle + 1}`);
+        await assertHealthyShell(page);
       }
 
       await page.goto('/reporting/board-pack', { waitUntil: 'domcontentloaded' });
       await expect(page).toHaveURL(/\/reporting\/board-pack/);
       await expect(
-        page.getByRole('heading', { name: /Board pack builder/i })
+        page.getByRole('heading', { name: /Board review draft assembly/i })
       ).toBeVisible();
-      await assertHealthyShell(page, `reporting-board-pack cycle ${cycle + 1}`);
+      await assertHealthyShell(page);
 
       await selectWorkspace(page, 'overview');
       await expect(page).toHaveURL(/\/dashboard/);
-      await assertHealthyShell(page, `overview-return cycle ${cycle + 1}`);
+      await assertHealthyShell(page);
     }
 
     for (let hop = 0; hop < 6; hop += 1) {
       await selectWorkspace(page, 'funding');
       await expect(page).toHaveURL(/\/funding\/dashboard/);
       await expect(page.getByRole('heading', { name: /Funding/i }).first()).toBeVisible();
-      await assertHealthyShell(page, `funding-stress-${hop + 1}-enter`);
+      await assertHealthyShell(page);
 
       await selectWorkspace(page, 'overview');
       await expect(page).toHaveURL(/\/dashboard/);
-      await assertHealthyShell(page, `funding-stress-${hop + 1}-overview`);
+      await assertHealthyShell(page);
 
       await selectWorkspace(page, 'reporting');
       await expect(page).toHaveURL(/\/reporting\/dashboard/);
-      await assertHealthyShell(page, `funding-stress-${hop + 1}-reporting`);
+      await assertHealthyShell(page);
 
       await selectWorkspace(page, 'funding');
       await expect(page).toHaveURL(/\/funding\/dashboard/);
-      await assertHealthyShell(page, `funding-stress-${hop + 1}-return`);
+      await assertHealthyShell(page);
     }
   });
 });

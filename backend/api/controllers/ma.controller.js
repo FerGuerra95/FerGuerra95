@@ -243,7 +243,10 @@ export async function deleteCase(req, res, next) {
       return notFound(res, 'Caso M&A no encontrado');
     }
 
-    await auditMaAction(scope, 'ma.case.deleted', req.params.id);
+    await auditMaAction(scope, 'ma.case.deleted', req.params.id, {
+      retention: 'archived',
+      status: 'archived'
+    });
 
     return ok(res, result);
   } catch (error) {
