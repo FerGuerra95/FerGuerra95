@@ -2,7 +2,7 @@
 
 **Baseline:** 17 September 2026 · forensic HEAD `43e470f630b8b2b79cc5241aeac6279492108081`. This is the dependency order from Astra. It authorizes no implementation, infrastructure change, AI activation or release.
 
-**Governance checkpoint:** Phase 0.7 — AI Delivery Safety Harness is CLOSED by human approval and FROZEN. **Active technical phase:** 1 — Isolated Validation Foundation. Its explicitly preserved uncommitted work is not validated or checkpointed by Phase 0.7. Phase 0, Phase 0.5, Phase 0.6 and Phase 0.7 are CLOSED by human acceptance; 0.5, 0.6 and 0.7 do not add a fifteenth roadmap phase. A01 remains OPEN; A02–A30 remain OPEN; A31 remains IN PROGRESS under the explicit 33-document review exception.
+**Governance checkpoint:** Phase 0.7 — AI Delivery Safety Harness is CLOSED by human approval and FROZEN. **Active technical phase:** Phase 1 is VERIFIED CLOSED. Phase 0, Phase 0.5, Phase 0.6 and Phase 0.7 are CLOSED by human acceptance; 0.5, 0.6 and 0.7 do not add a fifteenth roadmap phase. A01 remains OPEN P0. A02–A25 and A28–A30 remain OPEN. A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The next phase is Phase 2 and is not started by this closure.
 
 Each phase needs an explicit file whitelist and its own evidence. Exit gates describe future requirements. Preserve the M&A black canvas, workspace accent, page/hero geometry and approved surfaces throughout functional remediation.
 
@@ -26,9 +26,9 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 
 **P0/P1 COVERAGE:** A26, A27; foundations for A29/A30.
 
-**EXIT GATE:** All intended JS/JSX discovered; real integration assertions; isolation guard rejects canonical data; current-source runs recorded.
+**EXIT GATE:** PASSED. Phase 1 is VERIFIED CLOSED. JSX discovery, real integration assertions, canonical-data rejection and recorded current-source runs are in place.
 
-**DO NOT DO YET:** Do not run mutating tests on canonical DB or weaken oracles; do not fix product incidentally.
+**DO NOT DO YET:** Do not start A01 from this closure. Do not run mutating tests on canonical DB or weaken oracles.
 
 ## Phase 2 — Security/access
 

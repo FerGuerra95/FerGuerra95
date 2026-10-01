@@ -10,7 +10,9 @@ VERIFIED FACT: 105 unit files (97 `.test.js`, 8 `.test.jsx`), 21 integration fil
 
 Astra did not run unit, integration or E2E suites. Existing “passed” artifacts and older documentation results lack sufficient current-source/build/database provenance. **Historical PASS output is not current validation.** The existing JS bundle budget was checked read-only; it does not establish functional, security, CSS or build correctness.
 
-## A26 — discovery and placeholders remain OPEN
+## A26 — discovery and placeholders VERIFIED CLOSED
+
+Current status: Vite discovers `tests/unit/**/*.test.{js,jsx}` and `tests/integration/**/*.test.{js,jsx}`. The three named integration suites below no longer use `expect(true).toBe(true)`. Closure evidence is the isolated Vitest run of those suites. The list that follows is the historical defect, not a live exclusion.
 
 `vite.config.js` includes only `tests/unit/**/*.test.js` and `tests/integration/**/*.test.js`. Eight JSX suites are currently excluded:
 
@@ -49,11 +51,11 @@ Use real routers/services with isolated SQLite and filesystem roots. Assert tena
 
 For A01, create synthetic files for two isolated tenants and verify that an organization cannot reference the other's physical storage object even when its key is known. For A02, cover generic create/update plus dedicated approve; UI hiding alone is insufficient.
 
-## A27 — DB, VDR and fixture isolation remain OPEN
+## A27 — DB, VDR and fixture isolation VERIFIED CLOSED
 
-E2E isolation is currently insufficient. Playwright can target an external app through `CEOS_BASE_URL`; managed-server configuration does not guarantee unique `DB_PATH` and VDR roots. Existing service suites often use temp DBs, but that is not a universal E2E safety gate.
+The E2E harness allocates unique run-owned DB, VDR and port resources, rejects canonical paths and port 4000, requires an explicit API target and verifies canonical DB/WAL/SHM and VDR snapshots before cleanup.
 
-Future harness requirements:
+Verified harness contract:
 
 1. Allocate unique per-run DB and VDR directories under an explicitly controlled temporary test root; set all relevant paths before app/storage imports.
 2. Resolve absolute paths and reject canonical/default DB/VDR locations, user directories outside the test root, production hosts and accidental reuse of the canonical server.
@@ -62,6 +64,8 @@ Future harness requirements:
 5. Track created IDs and tenant ownership. Archive is not physical cleanup: M&A case “delete” now archives; repeated fixtures by name can accumulate.
 6. Dispose only the verified run-owned root after closing DB/process handles. No broad deletion or cross-shell computed-path cleanup.
 7. Assert canonical DB/WAL/VDR hashes or equivalent guarded invariants remain unchanged.
+
+Phase-1 evidence, independently re-reviewed on 2 October 2026: focused unit and isolation tests passed 15/15; one independent full `npm run test:e2e` passed 26/26; four post-fix full suites passed in total. The backend survived, teardown removed the run-owned root, and the canonical DB digest was unchanged. Negative checks abort a missing target, Render, any other external host, port 4000, the canonical database and the canonical VDR. Pages on 5173 and 5174 resolve to same-origin `/api`. Residual P2 fixture collisions and the unrendered `commandCalendar` do not reopen A27. The earlier seven stale Command Center heading assertions were reconciled to the rendered surface and are not an isolation defect.
 
 Authenticated GETs can update session/access metadata; public secure-share resolution can audit access; Compliance hydration can POST data. “Read-only smoke” must be defined by actual side effects.
 
@@ -84,11 +88,11 @@ A HEAD SHA alone is insufficient while A30 is open. A passing existing artifact,
 | Gate | Required evidence | Blocks next step |
 |---|---|---|
 | 0 — Baseline | Reviewed docs, accepted source manifest and explicit file scope | Unexplained source/provenance changes |
-| 1 — Isolation/discovery | JS/JSX discovery, real integration assertions, DB/VDR guard and fixture lifecycle | A26/A27 unresolved |
+| 1 — Isolation/discovery | JS/JSX discovery, real integration assertions, DB/VDR guard and fixture lifecycle | Phase 1 PASSED. Next block is A01, not A26/A27. |
 | 2 — Unit/oracles | Production-path regressions and approved business expected outputs | Unexplained mismatch; altered oracle to fit code |
 | 3 — API/services | Negative security tests; durable audit; fresh/upgraded schema parity | A01 and scoped P1 failures |
 | 4 — Product E2E | Roles, tenants, persistence, reports, archive/share lifecycle and failure states | Material workflow or truthfulness failure |
 | 5 — Build/runtime | Known-source production build and served-dist proof on canonical QA port | Unknown source/build/schema |
 | 6 — Operations/UAT | Restore including VDR, environment/monitoring evidence, human review and scoped UAT | Open release-blocking P0/P1 |
 
-A26/A27 are Phase 1; A29 is completed with Phase 5 product/oracle work. The hierarchy is a future gate, not authorization to run commands or alter tests now. See [roadmap](../roadmap.md).
+A26 and A27 are VERIFIED CLOSED with Phase 1. A29 remains with Phase 5 product/oracle work. See [roadmap](../roadmap.md).

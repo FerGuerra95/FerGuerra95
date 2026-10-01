@@ -12,7 +12,7 @@ This file is the **MASTER CONTROL CANÓNICO / canonical execution tracker** for 
 
 **Canonical path:** `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`. Creation was explicitly authorized to finalize Phase 0. The [dated source](CEO_OS_MASTER_CONTROL_BASELINE_2026-09-17.md) remains byte-for-byte unchanged and is a historical input, not the current tracker.
 
-**Active technical phase:** 1 — Isolated Validation Foundation. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. Phase-1 isolation work remains explicitly preserved, uncommitted work in progress. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. A01–A30 and A32–A44 remain OPEN; no P0/P1 finding has been fixed, closed or downgraded.
+**Active technical phase:** Phase 1 — Isolated Validation Foundation is VERIFIED CLOSED. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. **Next phase:** 2 — Security / access, starting at A01. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. **A01** remains OPEN P0. **A26** and **A27** are VERIFIED CLOSED. A02–A25, A28–A30 and A32–A44 remain OPEN. The 17 September forensic inventory later in this file is a historical snapshot, not the current operational state.
 
 Current document roles: this master owns execution/status; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) supplies evidence and closure criteria; [Source of Truth](../architecture/SOURCE_OF_TRUTH_REGISTRY.md) supplies detailed current/persisted/target owners; [workspace matrix](PLATFORM_PRODUCT_MATRIX.md) supplies dimension ratings; [test strategy](../testing/TEST_STRATEGY.md) supplies validation/isolation requirements; [roadmap](../roadmap.md) supplies dependency gates. When evidence changes, update the affected records together. These documents do not claim that proposed consolidation or product remediation has occurred.
 
@@ -394,13 +394,15 @@ Target:
 
 ### A26 — Eight JSX suites excluded; three integration placeholders
 - **Class:** F
-- **Status:** OPEN
+- **Status:** VERIFIED CLOSED
 - Closure: test discovery corrected; placeholders replaced with meaningful assertions.
+- Evidence: Vite discovers 8/8 JSX suites; named integration placeholders have real assertions; suites executed under isolated Vitest; oracles not weakened. Five remaining JSX failures are classified as product/stale/query-uniqueness defects, not discovery/setup defects.
 
 ### A27 — E2E DB isolation not enforced
 - **Class:** F
-- **Status:** OPEN
+- **Status:** VERIFIED CLOSED
 - Closure: unique isolated DB and file roots; tests cannot target canonical data accidentally.
+- Evidence: independent re-review on 2 October 2026. Build passed. Focused unit/isolation tests passed 15/15. Independent `npm run test:e2e` passed 26/26 on a temporary DB and VDR, ports outside 4000/5173/5174, with backend survival, teardown, unchanged canonical digest and provenance. Four post-fix full suites passed 26/26. Negative guards reject a missing target, Render, other external hosts, port 4000, the canonical DB and the canonical VDR. Same-origin `/api` replaced the silent 5173/5174 fallback. Residual P2 items are E2E fixture collisions and `commandCalendar` computed but not rendered. They are not isolation escapes.
 
 ### A28 — Existing DB constraints differ from fresh schema
 - **Class:** F
@@ -677,7 +679,7 @@ This order supersedes ad-hoc page-by-page expansion. The original material below
 
 **Covers:** A26, A27
 
-**Exit gate**
+**Exit gate:** PASSED — VERIFIED CLOSED
 - no test can mutate canonical DB accidentally;
 - current tests execute from known source.
 
@@ -689,9 +691,9 @@ This order supersedes ad-hoc page-by-page expansion. The original material below
 
 **P0/P1 COVERAGE:** A26, A27; foundations for A29/A30.
 
-**EXIT GATE:** All intended JS/JSX discovered; real integration assertions; isolation guard rejects canonical data; current-source runs recorded.
+**EXIT GATE:** PASSED. All intended JS/JSX are discovered; the named integration placeholders have real assertions; isolation guards reject canonical data; current-source runs are recorded. Phase 1 is VERIFIED CLOSED.
 
-**DO NOT DO YET:** Do not run mutating tests on canonical DB or weaken oracles; do not fix product incidentally.
+**DO NOT DO YET:** Do not treat this closure as A01 remediation. Do not run mutating tests on canonical DB or weaken oracles.
 
 ## PHASE 2 — Security/access
 
@@ -1004,7 +1006,7 @@ Must prove:
 
 # 11. NEXT IMMEDIATE ACTIONS
 
-**Current next action:** resume Phase 1 — Isolated Validation Foundation from the preserved uncommitted test-isolation implementation. A31 remains IN PROGRESS; Phase-0.6 closure grants no additional product-file scope.
+**Current next action:** Phase 1 is VERIFIED CLOSED. Do not start Phase 2 until a new authorized session. The next phase is Phase 2 — A01 VDR tenant ownership and security closure. A31 remains IN PROGRESS.
 
 The original audit sequence is preserved below. Step 2 is now prepared for human review; step 3 still requires source-manifest acceptance. Steps 5–7 remain future work in the stated dependency order.
 
@@ -1100,13 +1102,13 @@ At the end of every material work package, update `CURRENT_HANDOFF_STATE` in pla
 
 **Phase 0.7 — AI Delivery Safety Harness:** CLOSED by human approval; governance FROZEN; does not add a fifteenth roadmap phase
 
-**Current active technical phase:** 1 — Isolated Validation Foundation; uncommitted work is preserved
+**Current active technical phase:** Phase 1 VERIFIED CLOSED
 
-**Next phase after Phase 1:** 2 — Security / access
+**Next phase:** 2 — Security / access. Not started by the Phase 1 checkpoint.
 
 **Active P0:** A01 OPEN
 
-**Open P1:** A02–A30 OPEN; A31 IN PROGRESS — no P1 closed
+**Open P1:** A02–A25 and A28–A30 OPEN; A31 IN PROGRESS. A26 and A27 are VERIFIED CLOSED.
 
 **Open P2:** A32–A43
 
@@ -1144,7 +1146,7 @@ This section records documentation consistency, not passing product tests or sec
 
 ## A01–A44 alignment
 
-All 44 IDs and titles match [CODEBASE_ROBUSTNESS_AUDIT.md](CODEBASE_ROBUSTNESS_AUDIT.md). Priority bands remain A01 P0; A02–A31 P1; A32–A43 P2; A44 P3. A31 is IN PROGRESS; all others OPEN. A42 remains INFERENCE / UNVERIFIED. No P0/P1 has been closed or downgraded.
+Historical snapshot, 17 September 2026: all 44 IDs and titles match [CODEBASE_ROBUSTNESS_AUDIT.md](CODEBASE_ROBUSTNESS_AUDIT.md). Priority bands remain A01 P0; A02–A31 P1; A32–A43 P2; A44 P3. At that date A31 was IN PROGRESS and the other findings were OPEN. Current operational status is `CURRENT_HANDOFF_STATE`: A26 and A27 are VERIFIED CLOSED, Phase 1 is VERIFIED CLOSED, and A01 remains OPEN P0. A42 remains INFERENCE / UNVERIFIED.
 
 ## Source of Truth alignment
 
@@ -1192,7 +1194,7 @@ Historical PASS output is not current validation. Current unit/integration/E2E a
 
 ## Roadmap alignment
 
-Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Phase 1 is the active technical phase; its uncommitted work remains outside the governance checkpoint.
+Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Current operational status: Phase 1 is VERIFIED CLOSED; its former uncommitted isolation work is part of the Phase 1 checkpoint.
 
 # 17. PHASE 0 FINALIZATION CHANGELOG
 
@@ -1469,17 +1471,21 @@ The grouped inventory records all 140 files present at audit start. Deleted cand
 
 # 20. CURRENT_HANDOFF_STATE
 
-- **CURRENT HEAD:** `938ac7c29b728c187a934a9f917d9fd4d07c88e0`
-- **ACTIVE PHASE:** 1 — Isolated Validation Foundation.
-- **LAST COMPLETED PACKAGE:** Phase 0.7 — AI Delivery Safety Harness.
+- **CURRENT HEAD:** `873974c58afe06bbb51020b494058dfd883333e4`
+- **ACTIVE PHASE:** Phase 1 VERIFIED CLOSED.
+- **LAST COMPLETED PACKAGE:** Phase 1 — Isolated Validation Foundation.
+- **VERIFIED BASELINE:** `873974c58afe06bbb51020b494058dfd883333e4`
+- **TESTED CODE BASELINE:** `873974c58afe06bbb51020b494058dfd883333e4`
 - **A26:** VERIFIED CLOSED.
-- **A27:** FIXED NOT YET VERIFIED.
-- **A01:** OPEN.
+- **A27:** VERIFIED CLOSED.
+- **A01:** OPEN P0.
 - **A31:** IN PROGRESS.
-- **OPEN BLOCKERS RELEVANT TO NEXT WORK:** A01 OPEN; A31 IN PROGRESS; A27 verification evidence remains incomplete.
+- **OPEN BLOCKERS RELEVANT TO NEXT WORK:** A01 OPEN P0; A31 IN PROGRESS.
 - **GOVERNANCE:** FROZEN — change only on evidence of a missing or broken guardrail.
-- **FROZEN AREAS:** governance, approved visual areas and unrelated product work outside Phase 1.
-- **CURRENT DIRTY/UNTRACKED RISK:** Phase-1 isolation work and unrelated pre-existing product work remain uncommitted.
-- **EXACT NEXT ACTION:** Resume Phase 1 / A27 from preserved uncommitted isolation work.
-- **NEXT AUTHORIZED SCOPE:** A27 verification and follow-up only with an explicit whitelist; preserve canonical DB/VDR data and unrelated work.
-- **KNOWN UNVERIFIED ITEMS:** canonical DB/WAL/VDR hash (file locked by port 4000); A27 Test Strategy items 5/7; build provenance; live remote and production operations.
+- **FROZEN AREAS:** governance. Approved visual surfaces shipped in the Phase 1 checkpoint remain the current product baseline. A01 VDR ownership is the next phase and is not open for incidental edits.
+- **CURRENT DIRTY/UNTRACKED RISK:** Deliberately excluded: `backend-server.err`, `docs/academy/screenshots/`, and unconsumed `PipelineFlowFieldVisual.jsx` plus `MADataRoomRouteFieldVisual.jsx`.
+- **REMAINING P2:** E2E fixture collisions (`DUPLICATE_SUPPLIER_NAME`, UNIQUE `compliance_alerts.id`, `compliance_evidence.id`, `compliance_reviews.id`); `commandCalendar` is computed and not rendered.
+- **REMAINING P3:** `tests/ceos-login.spec.js` still flags `localhost:4000` request URLs. That check is narrower than the isolation guard and is not an A27 bypass.
+- **EXACT NEXT ACTION:** Phase 2 — A01 VDR tenant ownership and security closure. Do not start it from the Phase 1 checkpoint session.
+- **NEXT AUTHORIZED SCOPE:** A fresh session for Phase 2 / A01 only, after this baseline is on `origin/main`.
+- **KNOWN UNVERIFIED ITEMS:** A01 remains OPEN. A30 reproducibility of every historical dirty tree is closed only for this checkpointed baseline, not for older audit manifests. Production deploy evidence belongs to the checkpoint report, not to a claim that A01 is remediated.

@@ -4,7 +4,7 @@
 
 ## Status and evidence rules
 
-**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Both current registers retain identical A01–A44 IDs/priorities/statuses. A31 remains IN PROGRESS under the explicit 33-document review exception; no P0/P1 is closed.
+**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 1 is VERIFIED CLOSED. A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. A01 remains OPEN P0. The 17 September audit narrative below is historical evidence, not a claim that A26 or A27 are still open.
 
 - **OPEN:** no accepted remediation.
 - **IN PROGRESS:** scoped work underway; not closed.
@@ -15,7 +15,7 @@
 
 VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a conclusion requiring further validation; UNVERIFIED describes missing execution/operational proof. Static findings do not claim a successful exploit.
 
-**Current totals:** one P0 OPEN (A01); 30 P1 not closed (A02–A30 OPEN, A31 IN PROGRESS); 12 P2 OPEN (A32–A43); one P3 OPEN (A44). No P0/P1 has been fixed or closed in this documentation pass.
+**Current totals:** one P0 OPEN (A01); 27 P1 OPEN (A02–A25 and A28–A30); A31 IN PROGRESS; A26 and A27 VERIFIED CLOSED; 12 P2 OPEN (A32–A43); one P3 OPEN (A44). Residual non-register P2 notes are E2E fixture collisions and an unrendered `commandCalendar`. They do not close A01.
 
 ## Current A01–A44 register
 
@@ -230,7 +230,7 @@ VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a
 
 ### A26 — Eight JSX suites excluded; three integration placeholders
 
-**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+**Priority:** P1 · **Status:** VERIFIED CLOSED · **Evidence:** VERIFIED FACT (isolated Vitest discovery and assertion review).
 
 - Closure: test discovery corrected; placeholders replaced with meaningful assertions.
 
@@ -238,7 +238,7 @@ VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a
 
 ### A27 — E2E DB isolation not enforced
 
-**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+**Priority:** P1 · **Status:** VERIFIED CLOSED · **Evidence:** VERIFIED FACT (independent re-review, 2 October 2026: isolation guards, 15/15 focused tests, independent 26/26 E2E, canonical digest unchanged).
 
 - Closure: unique isolated DB and file roots; tests cannot target canonical data accidentally.
 

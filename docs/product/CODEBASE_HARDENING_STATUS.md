@@ -4,7 +4,7 @@
 
 This is the canonical technical-state document. [Master control](CEO_OS_MASTER_CONTROL_BASELINE.md) owns execution tracking; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) owns finding details. Historical May closures below are not current validation.
 
-**Documentation governance:** Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Temporary Phase 0.6 consolidates AI context and code-quality rules and is ready for human review. Phase 1 remains the next technical phase; its preserved uncommitted isolation work is outside this governance package and is not validated here. A31 remains IN PROGRESS because 33 documentation files still require human review; no product finding is closed.
+**Documentation governance:** Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 0.6 and Phase 0.7 are CLOSED. Phase 1 is VERIFIED CLOSED: A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS because 33 documentation files still require human review. A01 remains OPEN P0. The September audit observations below are historical.
 
 ## Implemented — VERIFIED FACT from source inspection
 
@@ -52,7 +52,8 @@ Release posture: **BLOCKED for multinational production**. External sensitive-da
 | M&A DCF/ranges, documentary readiness, snapshots/currency | A16–A20 | OPEN |
 | Funding null handling, PMI source pairing, Heritage empty state | A21–A23 | OPEN |
 | Executive metric authority and human-review flag | A24, A25 | OPEN |
-| Test discovery/placeholders, isolation, composed business oracles | A26, A27, A29 | OPEN |
+| Test discovery/placeholders and isolation | A26, A27 | VERIFIED CLOSED |
+| Composed business oracles | A29 | OPEN |
 | Reproducibility and documentation truthfulness | A30, A31 | A30 OPEN; A31 IN PROGRESS, not closed |
 
 No P0/P1 was marked FIXED or VERIFIED CLOSED by this documentation pass. A32–A43 remain open P2; A44 remains open P3. A42 is INFERENCE / operationally UNVERIFIED.
@@ -63,7 +64,7 @@ No P0/P1 was marked FIXED or VERIFIED CLOSED by this documentation pass. A32–A
 
 **Phase 0 / 0.5:** CLOSED. The documentation/governance checkpoint is accepted while A31 remains cross-phase IN PROGRESS. All prior dirty/untracked product work remains outside the checkpoint and A30 remains OPEN.
 
-**Next execution phase:** [Phase 1 — Isolated Validation Foundation](../roadmap.md). It needs a separate explicit implementation whitelist. No product fix, test modification, CSS change, migration or release is authorized by this document.
+**Next execution phase:** [Phase 2 — Security/access](../roadmap.md), starting at A01. Phase 1 is VERIFIED CLOSED. This status note does not authorize A01 implementation.
 
 The approved M&A visual foundation remains frozen. Functional remediation must preserve its black canvas, workspace accent, page/hero geometry and reference surfaces.
 
@@ -72,4 +73,4 @@ The approved M&A visual foundation remains frozen. Functional remediation must p
 
 The Phase 0 handoff previously duplicated here is no longer an active continuity record. Its substantive baseline, decisions, file scope and validation are preserved in sections 17–20 of the [Master Control](CEO_OS_MASTER_CONTROL_BASELINE.md).
 
-Use only `CURRENT_HANDOFF_STATE` in the Master for session resume and end-of-work-package updates. Phase 0 and Phase 0.5 are CLOSED; temporary Phase 0.6 is ready for human review; Phase 1 remains the next technical phase with preserved uncommitted work outside this package; A31 remains IN PROGRESS and no P0/P1 is closed.
+Use only `CURRENT_HANDOFF_STATE` in the Master for session resume and end-of-work-package updates. Phase 0 through Phase 1 are CLOSED. A26 and A27 are VERIFIED CLOSED. A01 remains OPEN P0. A31 remains IN PROGRESS.
