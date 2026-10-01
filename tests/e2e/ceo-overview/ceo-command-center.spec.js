@@ -20,14 +20,15 @@ test('CEO Command Center enterprise overview loads with executive panels', async
   await page.setViewportSize({ width: 1366, height: 900 });
   await loginAsDemoAdmin(page);
 
-  await expect(page.getByRole('heading', { name: 'Executive Command Center.' })).toBeVisible();
   const commandCenter = page.getByTestId('ceo-command-center-enterprise');
   await expect(commandCenter).toBeVisible();
-  await expect(commandCenter.getByText('Executive Readiness Index')).toBeVisible();
-  await expect(commandCenter.getByText('Corporate Health Radar')).toBeVisible();
-  await expect(commandCenter.getByText('Executive Signal Feed')).toBeVisible();
-  await expect(commandCenter.getByText('Decision Queue')).toBeVisible();
-  await expect(commandCenter.getByText('Executive Calendar')).toBeVisible();
+  await expect(commandCenter.getByText('Executive Command Center', { exact: true })).toBeVisible();
+  await expect(commandCenter.locator('h1.ceo-command-hero-title')).toBeVisible();
+  await expect(commandCenter.getByText('Executive Readiness Index', { exact: true })).toBeVisible();
+  await expect(commandCenter.getByText('Corporate Health Radar', { exact: true })).toBeVisible();
+  await expect(commandCenter.getByText('Executive Decision Queue', { exact: true })).toBeVisible();
+  await expect(commandCenter.getByText('Cross-Module Intelligence Summary', { exact: true })).toBeVisible();
+  await expect(commandCenter.getByText('Executive Decision Queue — Live', { exact: true })).toBeVisible();
   await assertNoSurfaceRegression(page);
 
   await page.goto('/overview');
