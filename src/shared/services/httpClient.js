@@ -1,28 +1,19 @@
-function resolveApiBaseUrl() {
-  if (typeof window === 'undefined') {
-    return '/api';
-  }
-
-  const { hostname, port } = window.location;
-
-  const isLocalHost =
-    hostname === 'localhost' ||
-    hostname === '127.0.0.1';
-
-  const isViteDevServer =
-    isLocalHost &&
-    (port === '5173' || port === '5174');
-
-  if (isViteDevServer) {
-    return `http://${hostname}:4000/api`;
-  }
-
+/**
+ * API base is always same-origin `/api`.
+ * The page port, including Vite 5173/5174, must not select an upstream.
+ * Local dev declares that upstream in the Vite proxy.
+ * Isolated E2E declares it on the temporary Vite server.
+ * Production serves the SPA and API on the same host.
+ * `location` is accepted so callers can prove a page port cannot change the result.
+ */
+export function resolveApiBaseUrl({ location } = {}) {
+  void location;
   return '/api';
 }
 
 const API_BASE_URL = resolveApiBaseUrl().replace(/\/$/, '');
 
-/** Base URL del API (p. ej. `/api` o `http://localhost:4000/api`) para redirecciones SSO absolutas. */
+/** Base URL del API. Siempre es `/api` en el mismo origen. */
 export function getResolvedApiBaseUrl() {
   return API_BASE_URL;
 }

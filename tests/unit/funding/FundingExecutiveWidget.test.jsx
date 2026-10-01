@@ -8,16 +8,27 @@ describe('FundingExecutiveWidget', () => {
   it('renders persisted enterprise source labels', () => {
     render(<FundingExecutiveWidget summary={{}} currency="EUR" />);
 
-    expect(screen.getByText('Enterprise rounds summary')).toBeTruthy();
+    expect(screen.getByText('Funding rounds summary')).toBeTruthy();
     expect(
-      screen.getByText(/From backend summary and stored funding rounds/i)
+      screen.getByText(/From enterprise funding rounds and stored round records/i)
     ).toBeTruthy();
   });
 
   it('renders safe fallbacks for incomplete summary data', () => {
     render(<FundingExecutiveWidget summary={{}} currency="EUR" />);
 
-    expect(screen.getByText('Insufficient data')).toBeTruthy();
+    expect(
+      screen.getByText('Liquidity and runway').parentElement?.textContent
+    ).toContain('Insufficient data');
+    expect(screen.getByText('Runway status').parentElement?.textContent).toContain(
+      'Insufficient data'
+    );
+    expect(
+      screen.getByText('Monthly burn rate').parentElement?.textContent
+    ).toContain('Insufficient data');
+    expect(screen.getByText('Funding window').parentElement?.textContent).toContain(
+      'Insufficient data'
+    );
     expect(screen.getByText('Pending data')).toBeTruthy();
     expect(screen.getByText('Not available')).toBeTruthy();
     expect(screen.getByText(/Human review:/i)).toBeTruthy();

@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = process.env.CEOS_BASE_URL || 'https://ceos-os.onrender.com';
+import { readMutationSuiteBaseUrl } from '../scripts/lib/test-isolation.mjs';
+
+const BASE_URL = readMutationSuiteBaseUrl(process.env);
 const TEST_USER = process.env.CEOS_USER;
 const TEST_PASSWORD = process.env.CEOS_PASSWORD;
 

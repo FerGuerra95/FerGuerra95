@@ -1,26 +1,12 @@
-import dotenv from 'dotenv';
 import { expect } from '@playwright/test';
 
-dotenv.config();
+import { resolveIsolatedApiBaseUrl } from '../../../scripts/lib/test-isolation.mjs';
 
 const AUTH_STORAGE_KEY = 'ceo_os_auth_session';
 const AUTH_TOKEN_KEY = 'ceo_os_auth_token';
 
-function resolveApiBaseUrl() {
-  if (process.env.CEOS_API_BASE_URL) {
-    return process.env.CEOS_API_BASE_URL.replace(/\/$/, '');
-  }
-
-  const appBaseUrl = new URL(process.env.CEOS_BASE_URL || 'http://127.0.0.1:5173');
-  const isLocalVite =
-    (appBaseUrl.hostname === 'localhost' || appBaseUrl.hostname === '127.0.0.1') &&
-    (appBaseUrl.port === '5173' || appBaseUrl.port === '5174');
-
-  if (isLocalVite) {
-    return `${appBaseUrl.protocol}//${appBaseUrl.hostname}:4000/api`;
-  }
-
-  return new URL('/api', appBaseUrl).toString().replace(/\/$/, '');
+export function resolveApiBaseUrl() {
+  return resolveIsolatedApiBaseUrl(process.env);
 }
 
 export function getE2eCredentials() {

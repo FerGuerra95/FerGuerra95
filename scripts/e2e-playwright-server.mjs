@@ -1,23 +1,40 @@
-import dotenv from 'dotenv';
 import { createServer as createHttpServer } from 'node:http';
 import { createServer as createViteServer } from 'vite';
 
 import { buildHttpApp } from '../backend/httpApp.js';
 import { initializeDatabaseSchema } from '../backend/storage/databaseSchema.js';
 import { closeDatabase } from '../backend/storage/sqliteStorage.js';
+import {
+  assertSafeE2eTarget,
+  cleanupIsolatedTestEnvironment,
+  emitTestProvenance
+} from './lib/test-isolation.mjs';
 
-dotenv.config();
-
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-process.env.CEOS_E2E = process.env.CEOS_E2E || 'true';
+process.env.NODE_ENV = 'test';
+process.env.CEOS_E2E = 'true';
 process.env.BOOTSTRAP_ADMIN_EMAIL = process.env.BOOTSTRAP_ADMIN_EMAIL || '';
 process.env.BOOTSTRAP_ADMIN_PASSWORD = process.env.BOOTSTRAP_ADMIN_PASSWORD || '';
 process.env.BOOTSTRAP_USERS_JSON = process.env.BOOTSTRAP_USERS_JSON || '';
 
 const BACKEND_HOST = '127.0.0.1';
-const BACKEND_PORT = Number.parseInt(process.env.PORT || '4000', 10);
+const BACKEND_PORT = Number.parseInt(process.env.PORT || '', 10);
 const FRONTEND_HOST = '127.0.0.1';
-const FRONTEND_PORT = Number.parseInt(process.env.CEOS_E2E_FRONTEND_PORT || '5173', 10);
+const FRONTEND_PORT = Number.parseInt(
+  process.env.CEOS_E2E_FRONTEND_PORT || '',
+  10
+);
+const BASE_URL = `http://${FRONTEND_HOST}:${FRONTEND_PORT}`;
+const API_BASE_URL = `http://${BACKEND_HOST}:${BACKEND_PORT}/api`;
+
+if (!Number.isInteger(BACKEND_PORT) || !Number.isInteger(FRONTEND_PORT)) {
+  throw new Error('E2E requires explicit backend and frontend ports.');
+}
+
+assertSafeE2eTarget({
+  baseUrl: BASE_URL,
+  apiBaseUrl: API_BASE_URL,
+  env: process.env
+});
 
 const app = buildHttpApp();
 let backendServer = null;
@@ -39,6 +56,7 @@ function closeHttp(server) {
 }
 
 async function start() {
+  emitTestProvenance({ result: 'SERVER_STARTING' });
   initializeDatabaseSchema();
 
   backendServer = createHttpServer(app);
@@ -48,13 +66,24 @@ async function start() {
     server: {
       host: FRONTEND_HOST,
       port: FRONTEND_PORT,
-      strictPort: true
+      strictPort: true,
+      hmr: false,
+      // E2E does not reload source. A live glob watcher on this tree can
+      // abort the process with Windows 0xC0000409 while Playwright writes
+      // artifacts. Vite treats null as an explicit disabled watcher.
+      watch: null,
+      proxy: {
+        '/api': {
+          target: `http://${BACKEND_HOST}:${BACKEND_PORT}`,
+          changeOrigin: false
+        }
+      }
     }
   });
   await viteServer.listen();
 
   console.log(`E2E backend ready: http://${BACKEND_HOST}:${BACKEND_PORT}`);
-  console.log(`E2E frontend ready: http://${FRONTEND_HOST}:${FRONTEND_PORT}`);
+  console.log(`E2E frontend ready: ${BASE_URL}`);
 }
 
 async function shutdown() {
@@ -63,14 +92,31 @@ async function shutdown() {
     closeHttp(backendServer)
   ]);
   closeDatabase();
+  emitTestProvenance({ result: 'SERVER_STOPPED' });
+  if (process.env.CEOS_TEST_CLEANUP_OWNER === 'server') {
+    cleanupIsolatedTestEnvironment(process.env);
+  }
   process.exit(0);
 }
 
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
+process.on('uncaughtException', (error) => {
+  console.error('[e2e-server] UNCAUGHT_EXCEPTION', error);
+  closeDatabase();
+  process.exit(1);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('[e2e-server] UNHANDLED_REJECTION', reason);
+  closeDatabase();
+  process.exit(1);
+});
 
 start().catch((error) => {
-  console.error(error);
+  console.error('[e2e-server] START_FAILED', error);
   closeDatabase();
+  if (process.env.CEOS_TEST_CLEANUP_OWNER === 'server') {
+    cleanupIsolatedTestEnvironment(process.env);
+  }
   process.exit(1);
 });

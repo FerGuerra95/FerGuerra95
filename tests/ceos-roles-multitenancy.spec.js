@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = process.env.CEOS_BASE_URL || 'https://ceos-os.onrender.com';
+import { readMutationSuiteBaseUrl } from '../scripts/lib/test-isolation.mjs';
+
+const BASE_URL = readMutationSuiteBaseUrl(process.env);
 
 const ADMIN_A_EMAIL = process.env.CEOS_ADMIN_A_USER;
 const ADMIN_A_PASSWORD = process.env.CEOS_ADMIN_A_PASSWORD;
@@ -490,14 +492,24 @@ test.describe('CEO’s OS - QA roles y multi-tenancy online', () => {
       }
 
       if (maCaseId) {
-        await apiRequest(
+        const listPayload = await apiRequest(
+          request,
+          'get',
+          '/api/ma/cases',
+          adminAToken
+        );
+        const listed = extractItems(listPayload);
+        expect(listed.some((item) => item.id === maCaseId)).toBe(false);
+
+        const payload = await apiRequest(
           request,
           'get',
           `/api/ma/cases/${maCaseId}`,
-          adminAToken,
-          undefined,
-          404
+          adminAToken
         );
+        const item = extractData(payload);
+        expect(item?.id).toBe(maCaseId);
+        expect(item?.status).toBe('archived');
       }
     });
   });

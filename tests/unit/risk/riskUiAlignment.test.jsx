@@ -30,7 +30,7 @@ describe('RiskHeatmap UI alignment', () => {
     );
 
     expect(screen.getByText(/Op\. residual max 87/)).toBeTruthy();
-    expect(screen.getByText(/L×I ref 20/)).toBeTruthy();
+    expect(screen.getAllByText(/L×I ref 20/)).toHaveLength(2);
   });
 
   it('falls back to risks without breaking empty cells', () => {

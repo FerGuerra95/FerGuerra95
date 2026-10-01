@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = process.env.CEOS_BASE_URL || 'https://ceos-os.onrender.com';
+import { readMutationSuiteBaseUrl } from '../scripts/lib/test-isolation.mjs';
+
+const BASE_URL = readMutationSuiteBaseUrl(process.env);
 const TEST_USER = process.env.CEOS_USER;
 const TEST_PASSWORD = process.env.CEOS_PASSWORD;
 
@@ -405,21 +407,27 @@ test.describe('CEO’s OS - QA CRUD online por API', () => {
       }
     }
 
-    await test.step('Confirmar borrado caso M&A', async () => {
+    await test.step('Confirmar archivo caso M&A', async () => {
       if (!createdMaCaseId) return;
 
-      const response = await request.get(
-        `${BASE_URL}/api/ma/cases/${createdMaCaseId}`,
-        {
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          failOnStatusCode: false
-        }
+      const listPayload = await apiRequest(
+        request,
+        'get',
+        '/api/ma/cases',
+        token
       );
+      const listed = extractItems(listPayload);
+      expect(listed.some((item) => item.id === createdMaCaseId)).toBe(false);
 
-      expect(response.status()).toBe(404);
+      const payload = await apiRequest(
+        request,
+        'get',
+        `/api/ma/cases/${createdMaCaseId}`,
+        token
+      );
+      const item = extractData(payload);
+      expect(item?.id).toBe(createdMaCaseId);
+      expect(item?.status).toBe('archived');
     });
 
     await test.step('Confirmar borrado proveedor', async () => {

@@ -5,7 +5,7 @@ import { render, screen } from '@testing-library/react';
 import { ReportHeader } from '../../../src/modules/reporting/components/ReportHeader.jsx';
 
 describe('ReportHeader', () => {
-  it('renders logo, status labels, generated metadata, and human review label', () => {
+  it('renders logo, status labels, prepared metadata, and human review label', () => {
     render(
       <ReportHeader
         logoSrc="/brand/ceos-logo.svg"
@@ -22,7 +22,7 @@ describe('ReportHeader', () => {
     expect(screen.getByText('Board Review Draft')).toBeTruthy();
     expect(screen.getByText('Human Review Required')).toBeTruthy();
     expect(screen.getByText('Not Board Approved')).toBeTruthy();
-    expect(screen.getByText(/Generated at:/)).toBeTruthy();
+    expect(screen.getByText(/Prepared at:/)).toBeTruthy();
     expect(screen.getByText(/Acme Holdings - Reporting/)).toBeTruthy();
   });
 

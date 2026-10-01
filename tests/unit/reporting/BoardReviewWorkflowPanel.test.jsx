@@ -27,8 +27,8 @@ describe('BoardReviewWorkflowPanel', () => {
   it('shows preview-only and backend persistence note', () => {
     render(<BoardReviewWorkflowPanel snapshot={snapshot} />);
 
-    expect(screen.getByText(/Preview only/)).toBeTruthy();
-    expect(screen.getByText(/Requires backend persistence/)).toBeTruthy();
+    const notice = screen.getByText(/^Preview only\./);
+    expect(notice.textContent).toMatch(/Requires backend persistence/);
   });
 
   it('shows missing data and limitations', () => {

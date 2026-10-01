@@ -1,8 +1,27 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+const localDevApiOrigin = `http://127.0.0.1:${process.env.PORT || '4000'}`;
+
+const localDevServer =
+  process.env.CEOS_E2E === 'true'
+    ? {}
+    : {
+        server: {
+          proxy: {
+            '/api': {
+              target: localDevApiOrigin,
+              changeOrigin: false
+            }
+          }
+        }
+      };
+
 export default defineConfig({
   plugins: [react()],
+  // Isolated E2E sets CEOS_E2E and supplies its own /api proxy.
+  // This proxy exists only for `vite` local development.
+  ...localDevServer,
   build: {
     rollupOptions: {
       output: {
@@ -28,15 +47,18 @@ export default defineConfig({
   },
   test: {
     include: [
-      'tests/unit/**/*.test.js',
-      'tests/integration/**/*.test.js'
+      'tests/unit/**/*.test.{js,jsx}',
+      'tests/integration/**/*.test.{js,jsx}'
     ],
     exclude: [
       'node_modules/**',
       'dist/**',
-      'tests/**/*.spec.js',
-      'tests/e2e/**'
+      'tests/**/*.spec.{js,jsx}',
+      'tests/e2e/**',
+      'tests/**/generated/**',
+      'docs/academy/screenshots/**'
     ],
+    setupFiles: ['tests/setup/isolatedTestEnvironment.js'],
     environment: 'jsdom'
   }
 });

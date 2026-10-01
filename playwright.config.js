@@ -1,36 +1,55 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const baseURL = process.env.CEOS_BASE_URL || 'http://127.0.0.1:5173';
-const useExternalApp = Boolean(process.env.CEOS_BASE_URL);
-const useManagedWebServer =
-  !useExternalApp && process.env.CEOS_PLAYWRIGHT_MANAGED_SERVER === '1';
+import {
+  allocateIsolatedE2ePort,
+  applyTestEnvironment,
+  assertSafeE2eTarget,
+  createIsolatedTestEnvironment
+} from './scripts/lib/test-isolation.mjs';
+
+const configuredExternalBaseUrl = String(process.env.CEOS_BASE_URL || '').trim();
+const useExternalApp = Boolean(configuredExternalBaseUrl);
+let managedIsolation = null;
+
+if (!useExternalApp) {
+  managedIsolation = createIsolatedTestEnvironment({
+    label: 'playwright-managed'
+  });
+  applyTestEnvironment(managedIsolation.environment);
+
+  const backendPort = await allocateIsolatedE2ePort();
+  const frontendPort = await allocateIsolatedE2ePort({
+    avoid: [backendPort]
+  });
+
+  process.env.PORT = String(backendPort);
+  process.env.CEOS_E2E_FRONTEND_PORT = String(frontendPort);
+  process.env.CEOS_BASE_URL = `http://127.0.0.1:${frontendPort}`;
+  process.env.CEOS_API_BASE_URL = `http://127.0.0.1:${backendPort}/api`;
+  process.env.CEOS_E2E = 'true';
+  process.env.CEOS_TEST_CLEANUP_OWNER = 'server';
+  process.env.CEOS_E2E_TARGET_ISOLATED = '1';
+  process.env.CEOS_E2E_TARGET_RUN_ID = managedIsolation.runId;
+  process.env.CEOS_E2E_USER =
+    process.env.CEOS_E2E_USER || 'admin@ceoos.local';
+  process.env.CEOS_E2E_PASSWORD =
+    process.env.CEOS_E2E_PASSWORD || 'admin123';
+  process.env.BOOTSTRAP_ADMIN_EMAIL = '';
+  process.env.BOOTSTRAP_ADMIN_PASSWORD = '';
+  process.env.BOOTSTRAP_USERS_JSON = '';
+}
+
+const baseURL = process.env.CEOS_BASE_URL;
+const apiBaseURL = process.env.CEOS_API_BASE_URL;
+assertSafeE2eTarget({
+  baseUrl: baseURL,
+  apiBaseUrl: apiBaseURL,
+  env: process.env
+});
+
 const configuredWorkers = Number(
   process.env.CEOS_E2E_WORKERS || process.env.PLAYWRIGHT_WORKERS || 1
 );
-
-if (!useExternalApp) {
-  process.env.CEOS_E2E = process.env.CEOS_E2E || 'true';
-}
-
-const reuseDevServers = process.env.CEOS_REUSE_DEV_SERVER === '1';
-
-/**
- * Cuando Playwright arranca backend+Vite, el servidor hace `dotenv.config()` y
- * rellenaria BOOTSTRAP_* desde .env si esas claves no existen en process.env.
- * Eso dejaba la API sin DEMO_USERS y rompia login e2e (401). Fijamos claves
- * vacias y NODE_ENV aqui para que dotenv no las sobreescriba desde fichero.
- */
-const webServerEnv = useExternalApp
-  ? process.env
-  : {
-      ...process.env,
-      NODE_ENV: process.env.NODE_ENV || 'development',
-      BOOTSTRAP_ADMIN_EMAIL: process.env.BOOTSTRAP_ADMIN_EMAIL || '',
-      BOOTSTRAP_ADMIN_PASSWORD: process.env.BOOTSTRAP_ADMIN_PASSWORD || '',
-      BOOTSTRAP_USERS_JSON: process.env.BOOTSTRAP_USERS_JSON || '',
-      CEOS_E2E: process.env.CEOS_E2E || 'true'
-    };
-
 const extraBrowsers = process.env.CEOS_PLAYWRIGHT_EXTRA_BROWSERS === '1';
 
 const projects = [
@@ -63,9 +82,10 @@ export default defineConfig({
   testDir: './tests',
   testMatch: ['**/*.spec.js'],
   timeout: 60_000,
-  workers: Number.isFinite(configuredWorkers) && configuredWorkers > 0
-    ? Math.floor(configuredWorkers)
-    : 1,
+  workers:
+    Number.isFinite(configuredWorkers) && configuredWorkers > 0
+      ? Math.floor(configuredWorkers)
+      : 1,
   expect: {
     timeout: 10_000
   },
@@ -73,18 +93,21 @@ export default defineConfig({
     ['list'],
     ['html', { open: 'never', outputFolder: 'playwright-report' }]
   ],
+  globalTeardown: managedIsolation
+    ? './tests/e2e/global-teardown.mjs'
+    : undefined,
   use: {
     baseURL,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure'
   },
   projects,
-  webServer: useManagedWebServer
+  webServer: managedIsolation
     ? {
         command: 'node ./scripts/e2e-playwright-server.mjs',
-        env: webServerEnv,
-        url: 'http://127.0.0.1:5173',
-        reuseExistingServer: reuseDevServers,
+        env: process.env,
+        url: baseURL,
+        reuseExistingServer: false,
         timeout: 120_000
       }
     : undefined

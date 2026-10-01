@@ -19,7 +19,7 @@ describe('BoardReviewSnapshotList', () => {
 
     expect(screen.getByText('Persisted Draft')).toBeTruthy();
     expect(screen.getByText('Board Review Draft')).toBeTruthy();
-    expect(screen.getByText('Human Review Required')).toBeTruthy();
+    expect(screen.getAllByText('Human Review Required')).toHaveLength(2);
   });
 
   it('blocks active preview for revoked snapshots', () => {
@@ -36,7 +36,7 @@ describe('BoardReviewSnapshotList', () => {
       />
     );
 
-    expect(screen.getByText('Revoked').disabled).toBe(true);
+    expect(screen.getByRole('button', { name: 'Revoked' }).disabled).toBe(true);
     expect(screen.getByText(/cannot be previewed as an active Board Review Draft/)).toBeTruthy();
     expect(onPreview).not.toHaveBeenCalled();
   });
