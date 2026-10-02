@@ -1,12 +1,10 @@
-import dotenv from 'dotenv';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { buildHttpApp } from './httpApp.js';
-import { initializeDatabaseSchema } from './storage/databaseSchema.js';
+import { loadRuntimeModules } from './bootstrap/loadRuntime.js';
 
-dotenv.config();
+const { buildHttpApp, initializeDatabaseSchema } = await loadRuntimeModules();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
