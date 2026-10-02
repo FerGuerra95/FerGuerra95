@@ -249,6 +249,8 @@ Parallel material agents are allowed only when work can be safely partitioned. D
 
 Parallelize independent tasks. Do not parallelize competing modifications to the same Source of Truth, lifecycle, formula owner, schema authority, shared security primitive or shared API contract unless that interface has first been explicitly frozen. A worktree does not replace DB, port or file isolation.
 
+Role cards, worktree and branch operations, ownership classes, merge sequence, and task templates live in `.agents/`. They extend this section. They do not override this file, Git, `CURRENT_HANDOFF_STATE`, or Source of Truth. The builder of a material change is not its reviewer and cannot mark that change VERIFIED. `.agents/HANDOFF_TEMPLATE.md` is task evidence, not a second product handoff. `.agents/ACTIVE_TASKS.md` lists concurrent assignments only.
+
 ## Security and enterprise safeguards
 
 - Enforce authentication, authorization and tenant scope on the server.

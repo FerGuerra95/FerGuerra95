@@ -1471,21 +1471,23 @@ The grouped inventory records all 140 files present at audit start. Deleted cand
 
 # 20. CURRENT_HANDOFF_STATE
 
-- **CURRENT HEAD:** `557a3051b5f4a3cf7499ab38596a84b584eb161d`
-- **ACTIVE PHASE:** Phase 1 VERIFIED CLOSED.
-- **LAST COMPLETED PACKAGE:** Phase 1 — Isolated Validation Foundation.
-- **VERIFIED BASELINE:** `557a3051b5f4a3cf7499ab38596a84b584eb161d`
+- **CURRENT HEAD:** parent `52b81c0e149ba240b3b9016cd9e092abd082ca46`. The expected tip is the `main` commit `docs(agents): establish multi-agent execution foundation`. That commit cannot record its own hash. If HEAD is that commit, do not stop only because this line names the parent.
+- **ACTIVE PHASE:** Phase 1 VERIFIED CLOSED. Multi-agent execution foundation is in place and is not a product phase.
+- **LAST COMPLETED PACKAGE:** Multi-agent execution foundation. Phase 1 remains VERIFIED CLOSED.
+- **VERIFIED BASELINE:** `52b81c0e149ba240b3b9016cd9e092abd082ca46` for product and runtime. New agent branches start from `origin/main` after the foundation commit.
 - **TESTED CODE BASELINE:** `873974c58afe06bbb51020b494058dfd883333e4`
+- **PHASE 1 CLOSURE COMMIT:** `557a3051b5f4a3cf7499ab38596a84b584eb161d`
 - **A26:** VERIFIED CLOSED.
 - **A27:** VERIFIED CLOSED.
 - **A01:** OPEN P0.
 - **A31:** IN PROGRESS.
 - **OPEN BLOCKERS RELEVANT TO NEXT WORK:** A01 OPEN P0; A31 IN PROGRESS.
-- **GOVERNANCE:** FROZEN — change only on evidence of a missing or broken guardrail.
+- **GOVERNANCE:** FROZEN. Change only on evidence of a missing or broken guardrail. `.agents/` is a subordinate role layer, not a second authority.
 - **FROZEN AREAS:** governance. Approved visual surfaces shipped in the Phase 1 checkpoint remain the current product baseline. A01 VDR ownership is the next phase and is not open for incidental edits.
 - **CURRENT DIRTY/UNTRACKED RISK:** Deliberately excluded: `backend-server.err`, `docs/academy/screenshots/`, and unconsumed `PipelineFlowFieldVisual.jsx` plus `MADataRoomRouteFieldVisual.jsx`.
 - **REMAINING P2:** E2E fixture collisions (`DUPLICATE_SUPPLIER_NAME`, UNIQUE `compliance_alerts.id`, `compliance_evidence.id`, `compliance_reviews.id`); `commandCalendar` is computed and not rendered.
 - **REMAINING P3:** `tests/ceos-login.spec.js` still flags `localhost:4000` request URLs. That check is narrower than the isolation guard and is not an A27 bypass.
-- **EXACT NEXT ACTION:** Phase 2 — A01 VDR tenant ownership and security closure. Do not start it from the Phase 1 checkpoint session.
-- **NEXT AUTHORIZED SCOPE:** A fresh session for Phase 2 / A01 only, after this baseline is on `origin/main`.
-- **KNOWN UNVERIFIED ITEMS:** A01 remains OPEN. A30 reproducibility of every historical dirty tree is closed only for this checkpointed baseline, not for older audit manifests. Production deploy evidence belongs to the checkpoint report, not to a claim that A01 is remediated.
+- **EXACT NEXT ACTION:** Phase 2 — A01 VDR tenant ownership and security closure. Do not start it from the multi-agent foundation session.
+- **NEXT AUTHORIZED SCOPE:** A fresh engineering session for Phase 2 / A01 only, on its own branch and worktree, after human assignment.
+- **RENDER:** SUSPENDED. Production verification is blocked. Do not repair Render from this foundation.
+- **KNOWN UNVERIFIED ITEMS:** A01 remains OPEN. Render deployment of `52b81c0` was not verifiable because the service is suspended. A30 reproducibility of every historical dirty tree is closed only for the checkpointed Phase 1 baseline, not for older audit manifests.

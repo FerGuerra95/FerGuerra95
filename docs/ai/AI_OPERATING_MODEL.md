@@ -6,6 +6,8 @@ Governance framework for AI-assisted engineering on CEO's OS / The Sovereign OS.
 
 This model configures how AI may work. It does not certify that current product code is correct.
 
+Parallel role cards are in `.agents/`. They are subordinate to `AGENTS.md`. They do not create a second operating model.
+
 ## Product Identity (Non-Negotiable)
 
 CEO's OS is an Enterprise Decision Support System (DSS).
