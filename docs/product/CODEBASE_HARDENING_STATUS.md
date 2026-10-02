@@ -4,7 +4,7 @@
 
 This is the canonical technical-state document. [Master control](CEO_OS_MASTER_CONTROL_BASELINE.md) owns execution tracking; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) owns finding details. Historical May closures below are not current validation.
 
-**Documentation governance:** Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 0.6 and Phase 0.7 are CLOSED. Phase 1 is VERIFIED CLOSED: A26 and A27 are VERIFIED CLOSED. Phase 2 — Security / access is ACTIVE. A01 is VERIFIED CLOSED. The next finding is A02, OPEN P1. A31 remains IN PROGRESS because 33 documentation files still require human review. The September audit observations below are historical.
+**Documentation governance:** Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 0.6 and Phase 0.7 are CLOSED. Phase 1 is VERIFIED CLOSED: A26 and A27 are VERIFIED CLOSED. Phase 2 — Security / access is ACTIVE. A01 and A02 are VERIFIED CLOSED. There is no OPEN P0. The next finding is A03, OPEN P1. A31 remains IN PROGRESS because 33 documentation files still require human review. The September audit observations below are historical.
 
 ## Implemented — VERIFIED FACT from source inspection
 
@@ -42,7 +42,9 @@ Authenticated reads can write session/access audit metadata, and Compliance hydr
 
 **A01 — VERIFIED CLOSED, P0:** physical VDR file references are server-owned. Tenant scope is the authenticated server context. Download binds the file to that tenant and the requested document. Client `storage` and `versions` are rejected, and a poisoned historical reference fails closed. Product commit `46932c22021be9c0baedd4754c108f6d74411225`. This does not close A33, A05, or the rest of VDR or tenant security.
 
-**Next finding:** A02 — Governance approval transition bypass, OPEN P1. A31 remains IN PROGRESS.
+**A02 — VERIFIED CLOSED, P1:** generic Governance decision CRUD no longer owns workflow transitions. Generic create cannot create a privileged workflow state, and generic update cannot perform a workflow transition. Dedicated approve, reject and request-changes remain under `APPROVE_GOVERNANCE_DECISION`. Product commit `cbc97d692021b5f03ce2549524bae46eaa76b5e4`. This does not close A03, A04, A05, or the rest of Governance or Phase 2.
+
+**Next finding:** A03 — Security config captured before dotenv, OPEN P1. A31 remains IN PROGRESS.
 
 Release posture: **BLOCKED for multinational production**. External sensitive-data pilot: **NOT YET CLEARED**. This is an INFERENCE from the remaining open defects and validation gaps, not a certification assessment.
 
@@ -50,7 +52,7 @@ Release posture: **BLOCKED for multinational production**. External sensitive-da
 
 | Family | IDs | Current state |
 |---|---|---|
-| Authorization, bootstrap, token/error handling, reset | A02, A03, A05, A07 | OPEN |
+| Authorization, bootstrap, token/error handling, reset | A02, A03, A05, A07 | A02 VERIFIED CLOSED; A03, A05 and A07 OPEN |
 | Audit durability/actor, hydration writes, schema drift | A04, A06, A08, A28 | OPEN |
 | M&A save, identity, lifecycle, provenance, relationships and risk serialization | A09–A15 | OPEN |
 | M&A DCF/ranges, documentary readiness, snapshots/currency | A16–A20 | OPEN |
@@ -60,7 +62,7 @@ Release posture: **BLOCKED for multinational production**. External sensitive-da
 | Composed business oracles | A29 | OPEN |
 | Reproducibility and documentation truthfulness | A30, A31 | A30 OPEN; A31 IN PROGRESS, not closed |
 
-No P0/P1 was marked FIXED or VERIFIED CLOSED by the September documentation pass. A01 was later VERIFIED CLOSED by its own product package. A32–A43 remain open P2; A44 remains open P3. A42 is INFERENCE / operationally UNVERIFIED.
+No P0/P1 was marked FIXED or VERIFIED CLOSED by the September documentation pass. A01 and A02 were later VERIFIED CLOSED by their own product packages. A32–A43 remain open P2; A44 remains open P3. A42 is INFERENCE / operationally UNVERIFIED.
 
 ## Active phase and next action
 
@@ -68,7 +70,7 @@ No P0/P1 was marked FIXED or VERIFIED CLOSED by the September documentation pass
 
 **Phase 0 / 0.5:** CLOSED. The documentation/governance checkpoint is accepted while A31 remains cross-phase IN PROGRESS. All prior dirty/untracked product work remains outside the checkpoint and A30 remains OPEN.
 
-**Active execution phase:** [Phase 2 — Security/access](../roadmap.md) is ACTIVE. A01 is VERIFIED CLOSED inside Phase 2. The next finding is A02. The Phase 2 exit gate is not passed. Phase 1 remains VERIFIED CLOSED.
+**Active execution phase:** [Phase 2 — Security/access](../roadmap.md) is ACTIVE. A01 and A02 are VERIFIED CLOSED inside Phase 2. The next finding is A03. The Phase 2 exit gate is not passed. Phase 1 remains VERIFIED CLOSED.
 
 The approved M&A visual foundation remains frozen. Functional remediation must preserve its black canvas, workspace accent, page/hero geometry and reference surfaces.
 
@@ -77,4 +79,4 @@ The approved M&A visual foundation remains frozen. Functional remediation must p
 
 The Phase 0 handoff previously duplicated here is no longer an active continuity record. Its substantive baseline, decisions, file scope and validation are preserved in sections 17–20 of the [Master Control](CEO_OS_MASTER_CONTROL_BASELINE.md).
 
-Use only `CURRENT_HANDOFF_STATE` in the Master for session resume and end-of-work-package updates. Phase 0 through Phase 1 are CLOSED. Phase 2 is ACTIVE and is not closed. A01, A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS. The next product finding is A02.
+Use only `CURRENT_HANDOFF_STATE` in the Master for session resume and end-of-work-package updates. Phase 0 through Phase 1 are CLOSED. Phase 2 is ACTIVE and is not closed. A01, A02, A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS. The next product finding is A03.

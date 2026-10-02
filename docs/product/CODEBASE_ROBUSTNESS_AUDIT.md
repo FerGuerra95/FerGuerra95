@@ -4,7 +4,7 @@
 
 ## Status and evidence rules
 
-**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 1 is VERIFIED CLOSED. Phase 2 — Security / access is ACTIVE. A01, A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The next product finding is A02, OPEN P1. The 17 September audit narrative below is historical evidence, not a claim that A01, A26 or A27 are still open.
+**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 1 is VERIFIED CLOSED. Phase 2 — Security / access is ACTIVE. A01, A02, A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The next product finding is A03, OPEN P1. The 17 September audit narrative below is historical evidence, not a claim that A01, A02, A26 or A27 are still open.
 
 - **OPEN:** no accepted remediation.
 - **IN PROGRESS:** scoped work underway; not closed.
@@ -15,7 +15,7 @@
 
 VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a conclusion requiring further validation; UNVERIFIED describes missing execution/operational proof. Static findings do not claim a successful exploit.
 
-**Current totals:** zero P0 OPEN; 27 P1 OPEN (A02–A25 and A28–A30); A31 IN PROGRESS; A01, A26 and A27 VERIFIED CLOSED; 12 P2 OPEN (A32–A43); one P3 OPEN (A44). Residual non-register P2 notes are E2E fixture collisions and an unrendered `commandCalendar`. They remain separate from the A01 closure.
+**Current totals:** zero P0 OPEN; 26 P1 OPEN (A03–A25 and A28–A30); A31 IN PROGRESS; A01, A02, A26 and A27 VERIFIED CLOSED; 12 P2 OPEN (A32–A43); one P3 OPEN (A44). Residual non-register P2 notes are E2E fixture collisions and an unrendered `commandCalendar`. They remain separate from the A01 and A02 closures.
 
 ## Current A01–A44 register
 
@@ -33,10 +33,11 @@ VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a
 
 ### A02 — Governance approval transition bypass
 
-**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+**Priority:** P1 · **Status:** VERIFIED CLOSED · **Evidence:** independent review and post-merge validation.
 
 - Generic create/update can accept `status: approved` even though explicit approval requires a stronger permission.
 - Closure: permission-aware state machine; generic CRUD cannot perform privileged transitions.
+- **Closure evidence:** generic decision CRUD no longer owns workflow transitions. Generic create cannot create a privileged workflow state, and generic update cannot perform workflow transitions. A service-level backstop prevents a direct-call bypass. The validator rejects forbidden HTTP status writes visibly. Dedicated approve, reject and request-changes retain `APPROVE_GOVERNANCE_DECISION`. `under_review` to `draft` cannot emulate request-changes through generic update. A legitimate dedicated approval still writes `approvedAt`, `lockedAt`, history and the audit action. Board Pack and PMI/Ecosystem fixtures use the canonical approval workflow. Tenant isolation is preserved. Mutation sensitivity was independently reviewed. Post-merge validation passed A02 focused 13/13, governanceEnterprise 3/3, boardPackReporting 6/6, pmiEcosystemEnterprise 5/5, test isolation 10/10, combined 37/37, and `npm run build`. Product commit `cbc97d692021b5f03ce2549524bae46eaa76b5e4`. This closure is the generic Governance decision workflow-transition bypass only. It does not close A03, A04, A05, or the rest of Governance or Phase 2.
 
 **Evidence anchors:** backend/api/routes/governance.routes.js; backend/api/validators/governance.validator.js; backend/services/governance/governance.service.js — generic status vs approve.
 

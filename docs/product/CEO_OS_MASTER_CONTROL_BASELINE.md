@@ -12,7 +12,7 @@ This file is the **MASTER CONTROL CANÓNICO / canonical execution tracker** for 
 
 **Canonical path:** `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`. Creation was explicitly authorized to finalize Phase 0. The [dated source](CEO_OS_MASTER_CONTROL_BASELINE_2026-09-17.md) remains byte-for-byte unchanged and is a historical input, not the current tracker.
 
-**Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. **A01** is VERIFIED CLOSED. There is no OPEN P0. The next product finding is A02, OPEN P1. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. **A26** and **A27** are VERIFIED CLOSED. A02–A25, A28–A30 and A32–A44 remain OPEN. The Phase 2 exit gate is not passed. The 17 September forensic inventory later in this file is a historical snapshot, not the current operational state.
+**Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. **A01** and **A02** are VERIFIED CLOSED. There is no OPEN P0. The next product finding is A03, OPEN P1. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. **A26** and **A27** are VERIFIED CLOSED. A03–A25, A28–A30 and A32–A44 remain OPEN. Open P1 count is 26. The Phase 2 exit gate is not passed. The 17 September forensic inventory later in this file is a historical snapshot, not the current operational state.
 
 Current document roles: this master owns execution/status; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) supplies evidence and closure criteria; [Source of Truth](../architecture/SOURCE_OF_TRUTH_REGISTRY.md) supplies detailed current/persisted/target owners; [workspace matrix](PLATFORM_PRODUCT_MATRIX.md) supplies dimension ratings; [test strategy](../testing/TEST_STRATEGY.md) supplies validation/isolation requirements; [roadmap](../roadmap.md) supplies dependency gates. When evidence changes, update the affected records together. These documents do not claim that proposed consolidation or product remediation has occurred.
 
@@ -249,7 +249,7 @@ Target:
 
 # 5. COMPLETE FORENSIC FINDINGS REGISTER
 
-> Initial state after audit: all findings OPEN. Current documentation delta: A31 IN PROGRESS; A01–A30 and A32–A44 remain OPEN. A42 retains INFERENCE / UNVERIFIED evidence. No P0/P1 closure is authorized by this pass.
+> Initial state after audit: all findings OPEN. Current operational status is `CURRENT_HANDOFF_STATE`: A01 and A02 are VERIFIED CLOSED, there is no OPEN P0, A03–A25 and A28–A30 remain OPEN P1, A26 and A27 are VERIFIED CLOSED, and A31 remains IN PROGRESS. The September documentation pass itself did not close P0/P1 findings. A42 retains INFERENCE / UNVERIFIED evidence.
 
 ## P0
 
@@ -268,9 +268,10 @@ Target:
 
 ### A02 — Governance approval transition bypass
 - **Class:** F
-- **Status:** OPEN
+- **Status:** VERIFIED CLOSED
 - Generic create/update can accept `status: approved` even though explicit approval requires a stronger permission.
 - Closure: permission-aware state machine; generic CRUD cannot perform privileged transitions.
+- **Closure evidence:** generic decision CRUD no longer owns workflow transitions. Product commit `cbc97d692021b5f03ce2549524bae46eaa76b5e4`. This closure is that workflow-transition bypass only.
 
 ### A03 — Security config captured before dotenv
 - **Class:** F
@@ -1006,9 +1007,9 @@ Must prove:
 
 # 11. NEXT IMMEDIATE ACTIONS
 
-**Current next action:** Phase 2 — Security / access is ACTIVE. A01 is VERIFIED CLOSED. The next product finding is A02 — Governance approval transition bypass, OPEN P1. Do not start A02 until a fresh authorized Engineering Task Capsule. A31 remains IN PROGRESS. Phase 2 is not closed.
+**Current next action:** Phase 2 — Security / access is ACTIVE. A01 and A02 are VERIFIED CLOSED. The next product finding is A03 — Security config captured before dotenv, OPEN P1. Do not start A03 until a fresh authorized Engineering Task Capsule. A31 remains IN PROGRESS. Phase 2 is not closed.
 
-The original 17 September audit sequence is preserved below and is not the current work queue. A01, listed there as step 6, is VERIFIED CLOSED. Current next work is A02.
+The original 17 September audit sequence is preserved below and is not the current work queue. A01, listed there as step 6, is VERIFIED CLOSED. A02 is VERIFIED CLOSED. Current next work is A03.
 
 1. **Human-review this master control document.**
 2. Run a **documentation-only baseline pass** against the existing canonical docs.
@@ -1106,11 +1107,13 @@ At the end of every material work package, update `CURRENT_HANDOFF_STATE` in pla
 
 **A01:** VERIFIED CLOSED
 
+**A02:** VERIFIED CLOSED
+
 **Active P0:** none
 
-**Open P1:** A02–A25 and A28–A30 OPEN; A31 IN PROGRESS. A26 and A27 are VERIFIED CLOSED.
+**Open P1:** A03–A25 and A28–A30 OPEN; A31 IN PROGRESS. A26 and A27 are VERIFIED CLOSED.
 
-**Next product finding:** A02 — Governance approval transition bypass
+**Next product finding:** A03 — Security config captured before dotenv
 
 **Open P2:** A32–A43
 
@@ -1148,7 +1151,7 @@ This section records documentation consistency, not passing product tests or sec
 
 ## A01–A44 alignment
 
-Historical snapshot, 17 September 2026: all 44 IDs and titles match [CODEBASE_ROBUSTNESS_AUDIT.md](CODEBASE_ROBUSTNESS_AUDIT.md). Priority bands remain A01 P0; A02–A31 P1; A32–A43 P2; A44 P3. At that date A31 was IN PROGRESS and the other findings were OPEN. Current operational status is `CURRENT_HANDOFF_STATE`: A01, A26 and A27 are VERIFIED CLOSED, Phase 2 is ACTIVE, there is no OPEN P0, and A31 remains IN PROGRESS. A42 remains INFERENCE / UNVERIFIED.
+Historical snapshot, 17 September 2026: all 44 IDs and titles match [CODEBASE_ROBUSTNESS_AUDIT.md](CODEBASE_ROBUSTNESS_AUDIT.md). Priority bands remain A01 P0; A02–A31 P1; A32–A43 P2; A44 P3. At that date A31 was IN PROGRESS and the other findings were OPEN. Current operational status is `CURRENT_HANDOFF_STATE`: A01, A02, A26 and A27 are VERIFIED CLOSED, Phase 2 is ACTIVE, there is no OPEN P0, and A31 remains IN PROGRESS. A42 remains INFERENCE / UNVERIFIED.
 
 ## Source of Truth alignment
 
@@ -1156,8 +1159,8 @@ The original conflict descriptions in section 4 are preserved. This crosswalk ma
 
 | Master conflict family | Registry domains | Current consistency check |
 |---|---|---|
-| Organization / tenant | Organization, Tenant, User, Role, Permission, Session | Server auth/session-derived scope; no general organization/membership master. VDR physical-file ownership is server-enforced and bound to tenant + document (A01 VERIFIED CLOSED). Domain permission A02 remains open. Related-row ownership outside that VDR file contract is not closed. |
-| Permissions | Role, Permission | Backend is authorization authority; frontend mirror/legacy vocabulary and generic transition bypass remain unresolved. |
+| Organization / tenant | Organization, Tenant, User, Role, Permission, Session | Server auth/session-derived scope; no general organization/membership master. VDR physical-file ownership is server-enforced and bound to tenant + document (A01 VERIFIED CLOSED). A02 generic Governance workflow-transition bypass is VERIFIED CLOSED. Related-row ownership outside that VDR file contract is not closed. |
+| Permissions | Role, Permission | Backend auth middleware remains permission authority. Frontend mirror and legacy vocabulary remain. Generic Governance CRUD cannot perform dedicated workflow transitions (A02 VERIFIED CLOSED). The rest of the role and permission model is not complete. |
 | M&A case/deal identity | M&A case, M&A deal, Repository | Persisted cases/deals coexist with active draft and inferred identity; A09/A10/A14 remain open. |
 | M&A lifecycle | Lifecycle | Persisted stage plus saved/live merge precedence; A11 open; target is one read-only selector over persisted lifecycle. |
 | Valuation / EV / equity | Valuation, EV, Equity | Frontend engine remains live calculation owner; snapshots/reports persist/reconstruct values; no universal backend computation claimed; A16/A17/A19/A29 open. |
@@ -1166,7 +1169,7 @@ The original conflict descriptions in section 4 are preserved. This crosswalk ma
 | Reports / documents / shares | Report, Document, Secure Share, Archive | Module-owned records and Reporting workflow are distinct; VDR bytes separate from metadata. A01 physical-file binding is VERIFIED CLOSED. A14/A19/A32/A33/A40 remain open. |
 | Audit | Audit Event | Shared and workflow audit storage exists, but durability/actor policy remains incomplete (A04/A06). |
 | Funding / PMI / Heritage / Executive | Funding, PMI, Heritage, Executive signal | Draft vs persisted layers, paired-source PMI defect, empty Heritage scores and competing Executive formulas remain A21–A25. |
-| Other domain contracts | Compliance, Governance, Bridge, Risk workspace, Reporting, Strategy | Domain services own operational records; no universal consolidation claimed. Compliance hydration A08, Governance A02, links/executors A35/A36 and reporting provenance remain open. |
+| Other domain contracts | Compliance, Governance, Bridge, Risk workspace, Reporting, Strategy | Domain services own operational records; no universal consolidation claimed. Compliance hydration A08 remains open. A02 generic Governance workflow-transition bypass is VERIFIED CLOSED. Links/executors A35/A36 and reporting provenance remain open. |
 
 Preserved positive boundaries: PMI persisted hydration no longer silently merges demo data; A22 is a separate defect. Strategy retains empty/null/insufficient-data behavior. Reporting backend snapshots/workflow exist and its renderer is display-only. Risk/Bridge operational formulas intentionally differ from Golden benchmarks. AI foundation remains disabled/mock and is never official source-of-truth.
 
@@ -1196,7 +1199,7 @@ Historical PASS output is not current validation. Current unit/integration/E2E a
 
 ## Roadmap alignment
 
-Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Current operational status: Phase 1 is VERIFIED CLOSED and its isolation work is part of the Phase 1 checkpoint. Phase 2 is ACTIVE. A01 is VERIFIED CLOSED. The Phase 2 exit gate is not passed.
+Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Current operational status: Phase 1 is VERIFIED CLOSED and its isolation work is part of the Phase 1 checkpoint. Phase 2 is ACTIVE. A01 and A02 are VERIFIED CLOSED. The next product finding is A03. The Phase 2 exit gate is not passed.
 
 # 17. PHASE 0 FINALIZATION CHANGELOG
 
@@ -1473,22 +1476,23 @@ The grouped inventory records all 140 files present at audit start. Deleted cand
 
 # 20. CURRENT_HANDOFF_STATE
 
-- **CURRENT HEAD:** parent `46932c22021be9c0baedd4754c108f6d74411225`. The expected tip is the governance closure commit that will be created after this documentation diff is approved. If HEAD is that governance commit, do not stop only because this line names the parent.
+- **CURRENT HEAD:** parent `cbc97d692021b5f03ce2549524bae46eaa76b5e4`. The expected tip is the governance closure commit that will be created after this documentation diff is approved. If HEAD is that governance commit, do not stop only because this line names the parent.
 - **ACTIVE PHASE:** Phase 2 — Security / access ACTIVE. Phase 2 is not closed.
-- **LAST COMPLETED PACKAGE:** A01 VDR tenant/file ownership closure.
-- **VERIFIED PRODUCT BASELINE:** `46932c22021be9c0baedd4754c108f6d74411225`
-- **A01:** VERIFIED CLOSED. Post-merge validation: A01 8/8, maServices 10/10, VDR isolation 1/1, test isolation 10/10, build PASS. Canonical DB/VDR were not mutated. Port 4000 was not used.
+- **LAST COMPLETED PACKAGE:** A02 Governance approval transition bypass closure.
+- **VERIFIED PRODUCT BASELINE:** `cbc97d692021b5f03ce2549524bae46eaa76b5e4`
+- **A01:** VERIFIED CLOSED.
+- **A02:** VERIFIED CLOSED. Post-merge validation: A02 focused 13/13, governanceEnterprise 3/3, boardPackReporting 6/6, pmiEcosystemEnterprise 5/5, test isolation 10/10, combined 37/37, build PASS. Canonical DB/VDR were not mutated. Port 4000 was not used.
 - **A26:** VERIFIED CLOSED.
 - **A27:** VERIFIED CLOSED.
 - **A31:** IN PROGRESS.
 - **OPEN P0:** none.
-- **NEXT FINDING:** A02 — Governance approval transition bypass — OPEN P1.
+- **NEXT FINDING:** A03 — Security config captured before dotenv — OPEN P1.
 - **GOVERNANCE:** FROZEN. Change only on evidence of a missing or broken guardrail. `.agents/` is a subordinate role layer, not a second authority.
 - **FROZEN AREAS:** governance. Approved visual surfaces shipped in the Phase 1 checkpoint remain the current product baseline.
 - **CURRENT DIRTY/UNTRACKED RISK:** Deliberately excluded: `backend-server.err`, `docs/academy/screenshots/`, and unconsumed `PipelineFlowFieldVisual.jsx` plus `MADataRoomRouteFieldVisual.jsx`.
 - **REMAINING P2:** E2E fixture collisions (`DUPLICATE_SUPPLIER_NAME`, UNIQUE `compliance_alerts.id`, `compliance_evidence.id`, `compliance_reviews.id`); `commandCalendar` is computed and not rendered.
 - **REMAINING P3:** `tests/ceos-login.spec.js` still flags `localhost:4000` request URLs. That check is narrower than the isolation guard and is not an A27 bypass.
-- **EXACT NEXT ACTION:** Issue a fresh Engineering Task Capsule for A02.
-- **NEXT AUTHORIZED SCOPE:** A02 only, after human assignment, in a dedicated branch and worktree.
-- **RENDER:** SUSPENDED. Do not repair Render as part of A02 setup.
-- **KNOWN UNVERIFIED ITEMS:** Render remains suspended and was not verified. A30 reproducibility of every historical dirty tree is closed only for the checkpointed Phase 1 baseline, not for older audit manifests. A01 closure does not close A33, A05, or the rest of Phase 2.
+- **EXACT NEXT ACTION:** Issue a fresh Engineering Task Capsule for A03.
+- **NEXT AUTHORIZED SCOPE:** A03 only, after human assignment, in a dedicated branch and worktree.
+- **RENDER:** SUSPENDED. Do not repair Render as part of A03 setup.
+- **KNOWN UNVERIFIED ITEMS:** Render remains suspended and was not verified. A30 reproducibility of every historical dirty tree is closed only for the checkpointed Phase 1 baseline, not for older audit manifests. A02 closure does not close A03, A04, A05, or the rest of Governance or Phase 2.

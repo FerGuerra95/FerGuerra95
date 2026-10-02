@@ -53,6 +53,8 @@ For A01, create synthetic files for two isolated tenants and verify that an orga
 
 A01 closure evidence, independently verified and re-run after merge: isolated synthetic tenant and document fixtures; a cross-tenant negative read; a same-tenant wrong-document negative read; a forged storage reference; an organization-binding regression that fails when only organization-directory binding is removed; mutation sensitivity for document binding, client-storage rejection and validator rejection; A27 isolated DB and VDR; post-merge A01 regression 8/8. Product commit `46932c22021be9c0baedd4754c108f6d74411225`. That evidence closes physical VDR file ownership binding only.
 
+A02 closure evidence, independently verified and re-run after merge: the clean-baseline bypass was reproduced before the fix; a service-level direct-call guard; validator-level rejection of forbidden status writes; negative create and update privileged transitions; the `under_review` to `draft` request-changes edge; a dedicated approval positive path that writes `approvedAt`, `lockedAt`, history and the audit action; permission separation under `APPROVE_GOVERNANCE_DECISION`; tenant isolation; Board Pack and PMI/Ecosystem fixtures migrated to the canonical workflow; mutation sensitivity; A27 temporary DB and VDR; post-merge A02 focused 13/13 and combined 37/37, with build PASS. Product commit `cbc97d692021b5f03ce2549524bae46eaa76b5e4`. That evidence closes the generic Governance decision workflow-transition bypass only.
+
 ## A27 — DB, VDR and fixture isolation VERIFIED CLOSED
 
 The E2E harness allocates unique run-owned DB, VDR and port resources, rejects canonical paths and port 4000, requires an explicit API target and verifies canonical DB/WAL/SHM and VDR snapshots before cleanup.
@@ -90,9 +92,9 @@ A HEAD SHA alone is insufficient while A30 is open. A passing existing artifact,
 | Gate | Required evidence | Blocks next step |
 |---|---|---|
 | 0 — Baseline | Reviewed docs, accepted source manifest and explicit file scope | Unexplained source/provenance changes |
-| 1 — Isolation/discovery | JS/JSX discovery, real integration assertions, DB/VDR guard and fixture lifecycle | Phase 1 PASSED. A01 is VERIFIED CLOSED. Next product finding is A02. |
+| 1 — Isolation/discovery | JS/JSX discovery, real integration assertions, DB/VDR guard and fixture lifecycle | Phase 1 PASSED. A01 and A02 are VERIFIED CLOSED. Next product finding is A03. |
 | 2 — Unit/oracles | Production-path regressions and approved business expected outputs | Unexplained mismatch; altered oracle to fit code |
-| 3 — API/services | Negative security tests; durable audit; fresh/upgraded schema parity | Remaining open P1 failures. A01 physical-file binding is VERIFIED CLOSED. |
+| 3 — API/services | Negative security tests; durable audit; fresh/upgraded schema parity | Remaining open P1 failures. A01 physical-file binding and the A02 generic workflow-transition bypass are VERIFIED CLOSED. |
 | 4 — Product E2E | Roles, tenants, persistence, reports, archive/share lifecycle and failure states | Material workflow or truthfulness failure |
 | 5 — Build/runtime | Known-source production build and served-dist proof on canonical QA port | Unknown source/build/schema |
 | 6 — Operations/UAT | Restore including VDR, environment/monitoring evidence, human review and scoped UAT | Open release-blocking P0/P1 |
