@@ -12,7 +12,7 @@ This file is the **MASTER CONTROL CANÓNICO / canonical execution tracker** for 
 
 **Canonical path:** `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`. Creation was explicitly authorized to finalize Phase 0. The [dated source](CEO_OS_MASTER_CONTROL_BASELINE_2026-09-17.md) remains byte-for-byte unchanged and is a historical input, not the current tracker.
 
-**Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. **A01** and **A02** are VERIFIED CLOSED. There is no OPEN P0. The next product finding is A03, OPEN P1. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. **A26** and **A27** are VERIFIED CLOSED. A03–A25, A28–A30 and A32–A44 remain OPEN. Open P1 count is 26. The Phase 2 exit gate is not passed. The 17 September forensic inventory later in this file is a historical snapshot, not the current operational state.
+**Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. **A01**, **A02** and **A03** are VERIFIED CLOSED. There is no OPEN P0. The next product finding is A04, OPEN P1. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. **A26** and **A27** are VERIFIED CLOSED. A04–A25, A28–A30 and A32–A44 remain OPEN. Open P1 count is 25. The Phase 2 exit gate is not passed. Render remains SUSPENDED. There is no production-readiness claim. The 17 September forensic inventory later in this file is a historical snapshot, not the current operational state.
 
 Current document roles: this master owns execution/status; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) supplies evidence and closure criteria; [Source of Truth](../architecture/SOURCE_OF_TRUTH_REGISTRY.md) supplies detailed current/persisted/target owners; [workspace matrix](PLATFORM_PRODUCT_MATRIX.md) supplies dimension ratings; [test strategy](../testing/TEST_STRATEGY.md) supplies validation/isolation requirements; [roadmap](../roadmap.md) supplies dependency gates. When evidence changes, update the affected records together. These documents do not claim that proposed consolidation or product remediation has occurred.
 
@@ -249,7 +249,7 @@ Target:
 
 # 5. COMPLETE FORENSIC FINDINGS REGISTER
 
-> Initial state after audit: all findings OPEN. Current operational status is `CURRENT_HANDOFF_STATE`: A01 and A02 are VERIFIED CLOSED, there is no OPEN P0, A03–A25 and A28–A30 remain OPEN P1, A26 and A27 are VERIFIED CLOSED, and A31 remains IN PROGRESS. The September documentation pass itself did not close P0/P1 findings. A42 retains INFERENCE / UNVERIFIED evidence.
+> Initial state after audit: all findings OPEN. Current operational status is `CURRENT_HANDOFF_STATE`: A01, A02 and A03 are VERIFIED CLOSED, there is no OPEN P0, A04–A25 and A28–A30 remain OPEN P1, A26 and A27 are VERIFIED CLOSED, and A31 remains IN PROGRESS. The September documentation pass itself did not close P0/P1 findings. A42 retains INFERENCE / UNVERIFIED evidence.
 
 ## P0
 
@@ -275,9 +275,10 @@ Target:
 
 ### A03 — Security config captured before dotenv
 - **Class:** F
-- **Status:** OPEN
+- **Status:** VERIFIED CLOSED
 - ESM module evaluation can capture auth/signing configuration before `dotenv.config()`.
 - Closure: deterministic environment bootstrap before dependent config capture; startup tests.
+- **Closure evidence:** supported product startup loads environment before runtime modules capture AUTH_SECRET, NODE_ENV and CEOS_E2E. Product commit `46348857294d41a1c1feb995d9c65032f08bf1ed`. This closure is bootstrap ordering only. It does not close the development AUTH_SECRET fallback, A04, A42, Render, or Phase 2.
 
 ### A04 — Audit persistence failures swallowed
 - **Class:** F
@@ -1007,9 +1008,9 @@ Must prove:
 
 # 11. NEXT IMMEDIATE ACTIONS
 
-**Current next action:** Phase 2 — Security / access is ACTIVE. A01 and A02 are VERIFIED CLOSED. The next product finding is A03 — Security config captured before dotenv, OPEN P1. Do not start A03 until a fresh authorized Engineering Task Capsule. A31 remains IN PROGRESS. Phase 2 is not closed.
+**Current next action:** Phase 2 — Security / access is ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. The next product finding is A04 — Audit persistence failures swallowed, OPEN P1. Do not start A04 from this closure. A31 remains IN PROGRESS. Phase 2 is not closed.
 
-The original 17 September audit sequence is preserved below and is not the current work queue. A01, listed there as step 6, is VERIFIED CLOSED. A02 is VERIFIED CLOSED. Current next work is A03.
+The original 17 September audit sequence is preserved below and is not the current work queue. A01, listed there as step 6, is VERIFIED CLOSED. A02 is VERIFIED CLOSED. A03 is VERIFIED CLOSED. Current next product finding is A04. A04 is not assigned by this closure.
 
 1. **Human-review this master control document.**
 2. Run a **documentation-only baseline pass** against the existing canonical docs.
@@ -1109,11 +1110,13 @@ At the end of every material work package, update `CURRENT_HANDOFF_STATE` in pla
 
 **A02:** VERIFIED CLOSED
 
+**A03:** VERIFIED CLOSED
+
 **Active P0:** none
 
-**Open P1:** A03–A25 and A28–A30 OPEN; A31 IN PROGRESS. A26 and A27 are VERIFIED CLOSED.
+**Open P1:** 25 — A04–A25 and A28–A30 OPEN; A31 IN PROGRESS. A01, A02, A03, A26 and A27 are VERIFIED CLOSED.
 
-**Next product finding:** A03 — Security config captured before dotenv
+**Next product finding:** A04 — Audit persistence failures swallowed — OPEN P1. A04 is not assigned by this closure.
 
 **Open P2:** A32–A43
 
@@ -1151,7 +1154,7 @@ This section records documentation consistency, not passing product tests or sec
 
 ## A01–A44 alignment
 
-Historical snapshot, 17 September 2026: all 44 IDs and titles match [CODEBASE_ROBUSTNESS_AUDIT.md](CODEBASE_ROBUSTNESS_AUDIT.md). Priority bands remain A01 P0; A02–A31 P1; A32–A43 P2; A44 P3. At that date A31 was IN PROGRESS and the other findings were OPEN. Current operational status is `CURRENT_HANDOFF_STATE`: A01, A02, A26 and A27 are VERIFIED CLOSED, Phase 2 is ACTIVE, there is no OPEN P0, and A31 remains IN PROGRESS. A42 remains INFERENCE / UNVERIFIED.
+Historical snapshot, 17 September 2026: all 44 IDs and titles match [CODEBASE_ROBUSTNESS_AUDIT.md](CODEBASE_ROBUSTNESS_AUDIT.md). Priority bands remain A01 P0; A02–A31 P1; A32–A43 P2; A44 P3. At that date A31 was IN PROGRESS and the other findings were OPEN. Current operational status is `CURRENT_HANDOFF_STATE`: A01, A02, A03, A26 and A27 are VERIFIED CLOSED, Phase 2 is ACTIVE, there is no OPEN P0, Open P1 count is 25, and A31 remains IN PROGRESS. A42 remains INFERENCE / UNVERIFIED.
 
 ## Source of Truth alignment
 
@@ -1199,7 +1202,7 @@ Historical PASS output is not current validation. Current unit/integration/E2E a
 
 ## Roadmap alignment
 
-Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Current operational status: Phase 1 is VERIFIED CLOSED and its isolation work is part of the Phase 1 checkpoint. Phase 2 is ACTIVE. A01 and A02 are VERIFIED CLOSED. The next product finding is A03. The Phase 2 exit gate is not passed.
+Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Current operational status: Phase 1 is VERIFIED CLOSED and its isolation work is part of the Phase 1 checkpoint. Phase 2 is ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. The next product finding is A04. The Phase 2 exit gate is not passed.
 
 # 17. PHASE 0 FINALIZATION CHANGELOG
 
@@ -1476,23 +1479,26 @@ The grouped inventory records all 140 files present at audit start. Deleted cand
 
 # 20. CURRENT_HANDOFF_STATE
 
-- **CURRENT HEAD:** parent `cbc97d692021b5f03ce2549524bae46eaa76b5e4`. The expected tip is the governance closure commit that will be created after this documentation diff is approved. If HEAD is that governance commit, do not stop only because this line names the parent.
+- **CURRENT HEAD:** parent `46348857294d41a1c1feb995d9c65032f08bf1ed`. The expected tip is the governance closure commit that will be created after this documentation diff is approved. If HEAD is that governance commit, do not stop only because this line names the parent.
 - **ACTIVE PHASE:** Phase 2 — Security / access ACTIVE. Phase 2 is not closed.
-- **LAST COMPLETED PACKAGE:** A02 Governance approval transition bypass closure.
-- **VERIFIED PRODUCT BASELINE:** `cbc97d692021b5f03ce2549524bae46eaa76b5e4`
+- **LAST COMPLETED PACKAGE:** A03 security config bootstrap closure.
+- **VERIFIED PRODUCT BASELINE:** `46348857294d41a1c1feb995d9c65032f08bf1ed`
+- **A03 PRODUCT COMMIT:** `46348857294d41a1c1feb995d9c65032f08bf1ed`
 - **A01:** VERIFIED CLOSED.
 - **A02:** VERIFIED CLOSED. Post-merge validation: A02 focused 13/13, governanceEnterprise 3/3, boardPackReporting 6/6, pmiEcosystemEnterprise 5/5, test isolation 10/10, combined 37/37, build PASS. Canonical DB/VDR were not mutated. Port 4000 was not used.
+- **A03:** VERIFIED CLOSED. Supported product startup loads environment before runtime modules capture AUTH_SECRET, NODE_ENV and CEOS_E2E. Post-merge validation: A03 focused 4/4, auth/health/unit-auth/isolation regression 36/36, A27 isolation PASS, build PASS. Canonical DB/VDR were not mutated. Port 4000 was not used. The development AUTH_SECRET fallback remains.
 - **A26:** VERIFIED CLOSED.
 - **A27:** VERIFIED CLOSED.
 - **A31:** IN PROGRESS.
 - **OPEN P0:** none.
-- **NEXT FINDING:** A03 — Security config captured before dotenv — OPEN P1.
+- **OPEN P1:** 25 (A04–A25 and A28–A30).
+- **NEXT FINDING:** A04 — Audit persistence failures swallowed — OPEN P1. A04 is not assigned by this closure.
 - **GOVERNANCE:** FROZEN. Change only on evidence of a missing or broken guardrail. `.agents/` is a subordinate role layer, not a second authority.
 - **FROZEN AREAS:** governance. Approved visual surfaces shipped in the Phase 1 checkpoint remain the current product baseline.
 - **CURRENT DIRTY/UNTRACKED RISK:** Deliberately excluded: `backend-server.err`, `docs/academy/screenshots/`, and unconsumed `PipelineFlowFieldVisual.jsx` plus `MADataRoomRouteFieldVisual.jsx`.
 - **REMAINING P2:** E2E fixture collisions (`DUPLICATE_SUPPLIER_NAME`, UNIQUE `compliance_alerts.id`, `compliance_evidence.id`, `compliance_reviews.id`); `commandCalendar` is computed and not rendered.
 - **REMAINING P3:** `tests/ceos-login.spec.js` still flags `localhost:4000` request URLs. That check is narrower than the isolation guard and is not an A27 bypass.
-- **EXACT NEXT ACTION:** Issue a fresh Engineering Task Capsule for A03.
-- **NEXT AUTHORIZED SCOPE:** A03 only, after human assignment, in a dedicated branch and worktree.
-- **RENDER:** SUSPENDED. Do not repair Render as part of A03 setup.
-- **KNOWN UNVERIFIED ITEMS:** Render remains suspended and was not verified. A30 reproducibility of every historical dirty tree is closed only for the checkpointed Phase 1 baseline, not for older audit manifests. A02 closure does not close A03, A04, A05, or the rest of Governance or Phase 2.
+- **EXACT NEXT ACTION:** Do not start A04 from this documentation closure. Technical Direction will assign the next package.
+- **NEXT AUTHORIZED SCOPE:** none. A04 remains the next product finding and is not started here.
+- **RENDER:** SUSPENDED. Do not repair Render as part of this closure. There is no production-readiness claim.
+- **KNOWN UNVERIFIED ITEMS:** Render remains suspended and was not verified. A30 reproducibility of every historical dirty tree is closed only for the checkpointed Phase 1 baseline, not for older audit manifests. A03 closure does not close the development AUTH_SECRET fallback, A04, A05, A07, A42, A43, general configuration architecture, or Phase 2.

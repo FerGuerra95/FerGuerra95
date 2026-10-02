@@ -4,7 +4,7 @@
 
 ## Status and evidence rules
 
-**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 1 is VERIFIED CLOSED. Phase 2 — Security / access is ACTIVE. A01, A02, A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The next product finding is A03, OPEN P1. The 17 September audit narrative below is historical evidence, not a claim that A01, A02, A26 or A27 are still open.
+**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 1 is VERIFIED CLOSED. Phase 2 — Security / access is ACTIVE. A01, A02, A03, A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The next product finding is A04, OPEN P1. The 17 September audit narrative below is historical evidence, not a claim that A01, A02, A03, A26 or A27 are still open.
 
 - **OPEN:** no accepted remediation.
 - **IN PROGRESS:** scoped work underway; not closed.
@@ -15,7 +15,7 @@
 
 VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a conclusion requiring further validation; UNVERIFIED describes missing execution/operational proof. Static findings do not claim a successful exploit.
 
-**Current totals:** zero P0 OPEN; 26 P1 OPEN (A03–A25 and A28–A30); A31 IN PROGRESS; A01, A02, A26 and A27 VERIFIED CLOSED; 12 P2 OPEN (A32–A43); one P3 OPEN (A44). Residual non-register P2 notes are E2E fixture collisions and an unrendered `commandCalendar`. They remain separate from the A01 and A02 closures.
+**Current totals:** zero P0 OPEN; 25 P1 OPEN (A04–A25 and A28–A30); A31 IN PROGRESS; A01, A02, A03, A26 and A27 VERIFIED CLOSED; 12 P2 OPEN (A32–A43); one P3 OPEN (A44). Residual non-register P2 notes are E2E fixture collisions and an unrendered `commandCalendar`. They remain separate from the A01, A02 and A03 closures.
 
 ## Current A01–A44 register
 
@@ -43,12 +43,13 @@ VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a
 
 ### A03 — Security config captured before dotenv
 
-**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+**Priority:** P1 · **Status:** VERIFIED CLOSED · **Evidence:** independent review and post-merge validation.
 
 - ESM module evaluation can capture auth/signing configuration before `dotenv.config()`.
 - Closure: deterministic environment bootstrap before dependent config capture; startup tests.
+- **Closure evidence:** On the clean baseline, isolated server startup captured the development AUTH_SECRET fallback, missed `NODE_ENV=production` from dotenv, and missed `CEOS_E2E=true` from dotenv. Focused baseline result: 3 failed / 1 passed. The fix is a structural bootstrap boundary: environment initialization, then runtime module evaluation, then application construction, then database initialization and listen. Supported product entrypoints (`package.json` `server`, `server:dev`, `start` and `prod`, and `render.yaml` through `npm start`) enter through `backend/server.js`. A login token matched the dotenv-loaded synthetic AUTH_SECRET. Production health omitted the development environment field when `NODE_ENV=production` came only from dotenv. The login limiter followed `CEOS_E2E=true` from dotenv. Pre-existing `process.env` values still take precedence. The development AUTH_SECRET fallback remains. Independent review verdict: VERIFIED. Post-merge validation passed A03 focused 4/4, auth/health/unit-auth/isolation regression 36/36, A27 isolation, and `npm run build`. Canonical DB and VDR were not mutated. Port 4000 was not used. Product commit `46348857294d41a1c1feb995d9c65032f08bf1ed`. This closure is deterministic environment bootstrap ordering for supported product runtime startup only. It does not close the development AUTH_SECRET fallback, A42, Render or deployment, A43, general configuration architecture, or unrelated auth or security findings.
 
-**Evidence anchors:** backend/server.js; backend/httpApp.js; backend/services/auth/auth.service.js — static imports and module-level env capture.
+**Evidence anchors:** backend/server.js; backend/bootstrap/loadEnvironment.js; backend/bootstrap/loadRuntime.js; backend/httpApp.js; backend/services/auth/auth.service.js.
 
 ### A04 — Audit persistence failures swallowed
 
@@ -414,7 +415,7 @@ VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a
 
 ## Interpretation and closure limits
 
-A01 is a conditional cross-tenant physical-file path if another storage key is known; no exploit was attempted. A03 impact depends on bootstrap/environment; actual running configuration was not exposed. A05 describes possible URL/token leakage, not an observed leaked token. A10 collision consequences are inferred from inspected identity matching. A42 is an inference requiring provider-specific tests.
+A01 is a conditional cross-tenant physical-file path if another storage key is known; no exploit was attempted. A03 deterministic bootstrap ordering is VERIFIED CLOSED for supported product startup. The original inspection did not expose a live production configuration, and the development AUTH_SECRET fallback remains. A05 describes possible URL/token leakage, not an observed leaked token. A10 collision consequences are inferred from inspected identity matching. A42 is an inference requiring provider-specific tests.
 
 Missing FKs alone do not prove tenant leakage. Basic Golden helpers do not validate the full productive formula. Intentional Risk/Bridge benchmark separation and removed PMI demo merge are not reopened as defects by this register.
 
