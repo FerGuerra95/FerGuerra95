@@ -195,6 +195,77 @@ function resolveStoragePath(storageKey) {
   return target;
 }
 
+function hasClientFileOwnershipClaim(source) {
+  return Boolean(
+    source &&
+      typeof source === 'object' &&
+      !Array.isArray(source) &&
+      (Object.prototype.hasOwnProperty.call(source, 'storage') ||
+        Object.prototype.hasOwnProperty.call(source, 'versions'))
+  );
+}
+
+function assertNoClientFileOwnership(...sources) {
+  if (sources.some((source) => hasClientFileOwnershipClaim(source))) {
+    throw createError(
+      'La referencia fisica VDR no puede ser definida por el cliente.',
+      400,
+      'MA_VDR_STORAGE_CLIENT_CONTROLLED'
+    );
+  }
+}
+
+function assertServerOwnedStoragePath(storageKey, { organizationId, documentId }) {
+  const rawKey = String(storageKey ?? '');
+
+  if (!rawKey.trim() || rawKey.includes('\0') || path.isAbsolute(rawKey)) {
+    throw createError(
+      'La referencia fisica VDR no pertenece a este documento.',
+      403,
+      'MA_VDR_STORAGE_OWNERSHIP_INVALID'
+    );
+  }
+
+  const filePath = resolveStoragePath(rawKey);
+  const orgSegment = normalizeStorageSegment(organizationId, 'org');
+  const documentSegment = normalizeStorageSegment(documentId, 'document');
+
+  if (
+    orgSegment === '.' ||
+    orgSegment === '..' ||
+    documentSegment === '.' ||
+    documentSegment === '..'
+  ) {
+    throw createError(
+      'La referencia fisica VDR no pertenece a este documento.',
+      403,
+      'MA_VDR_STORAGE_OWNERSHIP_INVALID'
+    );
+  }
+
+  const ownedDirectory = path.resolve(
+    path.resolve(getVdrStorageRoot()),
+    orgSegment,
+    documentSegment
+  );
+  const relativePath = path.relative(ownedDirectory, filePath);
+  const relativeSegments = relativePath.split(/[/\\]/);
+
+  if (
+    !relativePath ||
+    path.isAbsolute(relativePath) ||
+    relativeSegments.some((segment) => segment === '' || segment === '.' || segment === '..')
+  ) {
+    throw createError(
+      'La referencia fisica VDR no pertenece a este documento.',
+      403,
+      'MA_VDR_STORAGE_OWNERSHIP_INVALID'
+    );
+  }
+
+  return filePath;
+}
+
 function toFileBuffer(value) {
   if (Buffer.isBuffer(value)) return value;
   if (value instanceof Uint8Array) return Buffer.from(value);
@@ -332,6 +403,18 @@ function mergeVdrGovernancePayload(existingPayload = {}, patch = {}) {
       normalizeText(nextGovernance.purgePolicy, 'manual_review') ||
       'manual_review'
   };
+
+  if (Object.prototype.hasOwnProperty.call(existing, 'storage')) {
+    next.storage = existing.storage;
+  } else {
+    delete next.storage;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(existing, 'versions')) {
+    next.versions = existing.versions;
+  } else {
+    delete next.versions;
+  }
 
   return next;
 }
@@ -528,6 +611,7 @@ export async function getMaDataRoomDocumentById(id, scope = {}) {
 export async function createMaDataRoomDocument(payload = {}) {
   assertOrganizationScope(payload.organizationId);
   assertUserScope(payload.userId);
+  assertNoClientFileOwnership(payload, payload.payload);
 
   const caseId = normalizeText(payload.caseId) || null;
   const reportId = normalizeText(payload.reportId) || null;
@@ -586,6 +670,7 @@ export async function createMaDataRoomDocument(payload = {}) {
 export async function createMaDataRoomFileDocument(payload = {}) {
   assertOrganizationScope(payload.organizationId);
   assertUserScope(payload.userId);
+  assertNoClientFileOwnership(payload, payload.payload);
 
   const fileBuffer = toFileBuffer(payload.fileBuffer);
   const originalFileName = normalizeFileName(
@@ -754,6 +839,14 @@ export async function getMaDataRoomFileDownload({
     );
   }
 
+  if (normalizeText(item.organizationId) !== normalizeText(organizationId)) {
+    throw createError(
+      'Documento VDR no encontrado para esta organizacion.',
+      404,
+      'MA_VDR_DOCUMENT_NOT_FOUND'
+    );
+  }
+
   const expanded = expandDocument(item);
   assertDownloadPolicy(expanded, {
     organizationId,
@@ -771,12 +864,23 @@ export async function getMaDataRoomFileDownload({
     );
   }
 
-  const filePath = resolveStoragePath(storage.storageKey);
+  const filePath = assertServerOwnedStoragePath(storage.storageKey, {
+    organizationId: item.organizationId,
+    documentId: item.id
+  });
   let stats;
 
   try {
-    stats = await fs.stat(filePath);
+    stats = await fs.lstat(filePath);
   } catch (_error) {
+    throw createError(
+      'El fichero VDR no existe en storage.',
+      404,
+      'MA_VDR_FILE_NOT_FOUND'
+    );
+  }
+
+  if (stats.isSymbolicLink() || !stats.isFile()) {
     throw createError(
       'El fichero VDR no existe en storage.',
       404,
@@ -813,6 +917,7 @@ export async function updateMaDataRoomDocumentGovernance(
   scope = {}
 ) {
   assertOrganizationScope(scope.organizationId);
+  assertNoClientFileOwnership(patch, patch.payload);
 
   const existing = await dataRoomStore.getByIdForOrganization(
     normalizeText(id),
@@ -928,6 +1033,7 @@ export async function registerSecureShareDataRoomDocument({
           : undefined
     }
   };
+  assertNoClientFileOwnership(payload, payload.payload);
 
   if (!existing) {
     return createMaDataRoomDocument(payload);

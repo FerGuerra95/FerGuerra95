@@ -349,6 +349,7 @@ function reportExport(body = {}) {
 
 function updateDataRoomDocumentGovernance(body = {}) {
   const payload = assertPlainObject(body, 'body');
+  assertNoClientVdrFileOwnership(payload);
   const next = {
     ...payload
   };
@@ -397,8 +398,31 @@ function createSecureShare(body = {}) {
   };
 }
 
+function assertNoClientVdrFileOwnership(body = {}) {
+  const sources = [body];
+
+  if (body?.payload && typeof body.payload === 'object' && !Array.isArray(body.payload)) {
+    sources.push(body.payload);
+  }
+
+  if (
+    sources.some(
+      (source) =>
+        source &&
+        typeof source === 'object' &&
+        (Object.prototype.hasOwnProperty.call(source, 'storage') ||
+          Object.prototype.hasOwnProperty.call(source, 'versions'))
+    )
+  ) {
+    validationError(
+      'La referencia fisica VDR no puede ser definida por el cliente.'
+    );
+  }
+}
+
 function createDataRoomDocument(body = {}) {
   const payload = assertPlainObject(body, 'body');
+  assertNoClientVdrFileOwnership(payload);
   const next = {
     ...payload
   };
