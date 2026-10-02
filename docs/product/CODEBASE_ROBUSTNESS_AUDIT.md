@@ -4,7 +4,7 @@
 
 ## Status and evidence rules
 
-**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 1 is VERIFIED CLOSED. A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. A01 remains OPEN P0. The 17 September audit narrative below is historical evidence, not a claim that A26 or A27 are still open.
+**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 1 is VERIFIED CLOSED. Phase 2 — Security / access is ACTIVE. A01, A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The next product finding is A02, OPEN P1. The 17 September audit narrative below is historical evidence, not a claim that A01, A26 or A27 are still open.
 
 - **OPEN:** no accepted remediation.
 - **IN PROGRESS:** scoped work underway; not closed.
@@ -15,18 +15,19 @@
 
 VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a conclusion requiring further validation; UNVERIFIED describes missing execution/operational proof. Static findings do not claim a successful exploit.
 
-**Current totals:** one P0 OPEN (A01); 27 P1 OPEN (A02–A25 and A28–A30); A31 IN PROGRESS; A26 and A27 VERIFIED CLOSED; 12 P2 OPEN (A32–A43); one P3 OPEN (A44). Residual non-register P2 notes are E2E fixture collisions and an unrendered `commandCalendar`. They do not close A01.
+**Current totals:** zero P0 OPEN; 27 P1 OPEN (A02–A25 and A28–A30); A31 IN PROGRESS; A01, A26 and A27 VERIFIED CLOSED; 12 P2 OPEN (A32–A43); one P3 OPEN (A44). Residual non-register P2 notes are E2E fixture collisions and an unrendered `commandCalendar`. They remain separate from the A01 closure.
 
 ## Current A01–A44 register
 
 ### A01 — VDR file ownership binding
 
-**Priority:** P0 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+**Priority:** P0 · **Status:** VERIFIED CLOSED · **Evidence:** independent review and post-merge validation.
 
 - **Problem:** client-controlled storage reference is persisted; download containment is checked against the global VDR root but the physical file reference is not bound to the requesting organization/document.
 - **Impact:** conditional cross-tenant file access path if another storage key is known.
 - **Owner:** VDR / Security.
 - **Required closure:** server-owned storage reference + tenant/document binding + negative cross-tenant tests.
+- **Closure:** physical VDR file identity is server-generated and server-controlled. Tenant scope comes from the authenticated server context. Download requires the resolved file to sit in the tenant and document directory. Client `storage` and `versions` are rejected. A poisoned historical storage reference fails closed. Negative regressions cover cross-tenant reads, same-tenant wrong-document reads, forged storage keys, and an organization-directory case that fails when only organization binding is removed. Tests used the A27 temporary DB and VDR. Post-merge validation on `main` passed A01 8/8, maServices 10/10, VDR isolation 1/1, test isolation 10/10, and `npm run build`. Product commit `46932c22021be9c0baedd4754c108f6d74411225`. This closure is physical file ownership binding only. It does not close A33 content/ACL, A05, or the rest of Phase 2.
 
 **Evidence anchors:** backend/api/validators/ma.validator.js; backend/services/ma/dataRoom.service.js — nested payload.storage; resolveStoragePath; create/download.
 

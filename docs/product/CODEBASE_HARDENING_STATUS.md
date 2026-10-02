@@ -4,7 +4,7 @@
 
 This is the canonical technical-state document. [Master control](CEO_OS_MASTER_CONTROL_BASELINE.md) owns execution tracking; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) owns finding details. Historical May closures below are not current validation.
 
-**Documentation governance:** Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 0.6 and Phase 0.7 are CLOSED. Phase 1 is VERIFIED CLOSED: A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS because 33 documentation files still require human review. A01 remains OPEN P0. The September audit observations below are historical.
+**Documentation governance:** Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 0.6 and Phase 0.7 are CLOSED. Phase 1 is VERIFIED CLOSED: A26 and A27 are VERIFIED CLOSED. Phase 2 — Security / access is ACTIVE. A01 is VERIFIED CLOSED. The next finding is A02, OPEN P1. A31 remains IN PROGRESS because 33 documentation files still require human review. The September audit observations below are historical.
 
 ## Implemented — VERIFIED FACT from source inspection
 
@@ -38,9 +38,13 @@ Authenticated reads can write session/access audit metadata, and Compliance hydr
 
 ## Blockers and current P0
 
-**A01 — OPEN, P0:** a client-controlled nested VDR storage reference can be persisted, while download checks global-root containment without binding the physical reference to the organization/document. Conditional cross-tenant file access requires knowledge of another storage key. The source path is VERIFIED FACT; successful exploitation was not tested.
+**Active P0:** none.
 
-Release posture: **BLOCKED for multinational production**. External sensitive-data pilot: **NOT YET CLEARED**. This is an INFERENCE from the open defects and validation gaps, not a certification assessment.
+**A01 — VERIFIED CLOSED, P0:** physical VDR file references are server-owned. Tenant scope is the authenticated server context. Download binds the file to that tenant and the requested document. Client `storage` and `versions` are rejected, and a poisoned historical reference fails closed. Product commit `46932c22021be9c0baedd4754c108f6d74411225`. This does not close A33, A05, or the rest of VDR or tenant security.
+
+**Next finding:** A02 — Governance approval transition bypass, OPEN P1. A31 remains IN PROGRESS.
+
+Release posture: **BLOCKED for multinational production**. External sensitive-data pilot: **NOT YET CLEARED**. This is an INFERENCE from the remaining open defects and validation gaps, not a certification assessment.
 
 ## Remaining P1 families
 
@@ -56,7 +60,7 @@ Release posture: **BLOCKED for multinational production**. External sensitive-da
 | Composed business oracles | A29 | OPEN |
 | Reproducibility and documentation truthfulness | A30, A31 | A30 OPEN; A31 IN PROGRESS, not closed |
 
-No P0/P1 was marked FIXED or VERIFIED CLOSED by this documentation pass. A32–A43 remain open P2; A44 remains open P3. A42 is INFERENCE / operationally UNVERIFIED.
+No P0/P1 was marked FIXED or VERIFIED CLOSED by the September documentation pass. A01 was later VERIFIED CLOSED by its own product package. A32–A43 remain open P2; A44 remains open P3. A42 is INFERENCE / operationally UNVERIFIED.
 
 ## Active phase and next action
 
@@ -64,7 +68,7 @@ No P0/P1 was marked FIXED or VERIFIED CLOSED by this documentation pass. A32–A
 
 **Phase 0 / 0.5:** CLOSED. The documentation/governance checkpoint is accepted while A31 remains cross-phase IN PROGRESS. All prior dirty/untracked product work remains outside the checkpoint and A30 remains OPEN.
 
-**Next execution phase:** [Phase 2 — Security/access](../roadmap.md), starting at A01. Phase 1 is VERIFIED CLOSED. This status note does not authorize A01 implementation.
+**Active execution phase:** [Phase 2 — Security/access](../roadmap.md) is ACTIVE. A01 is VERIFIED CLOSED inside Phase 2. The next finding is A02. The Phase 2 exit gate is not passed. Phase 1 remains VERIFIED CLOSED.
 
 The approved M&A visual foundation remains frozen. Functional remediation must preserve its black canvas, workspace accent, page/hero geometry and reference surfaces.
 
@@ -73,4 +77,4 @@ The approved M&A visual foundation remains frozen. Functional remediation must p
 
 The Phase 0 handoff previously duplicated here is no longer an active continuity record. Its substantive baseline, decisions, file scope and validation are preserved in sections 17–20 of the [Master Control](CEO_OS_MASTER_CONTROL_BASELINE.md).
 
-Use only `CURRENT_HANDOFF_STATE` in the Master for session resume and end-of-work-package updates. Phase 0 through Phase 1 are CLOSED. A26 and A27 are VERIFIED CLOSED. A01 remains OPEN P0. A31 remains IN PROGRESS.
+Use only `CURRENT_HANDOFF_STATE` in the Master for session resume and end-of-work-package updates. Phase 0 through Phase 1 are CLOSED. Phase 2 is ACTIVE and is not closed. A01, A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS. The next product finding is A02.

@@ -2,7 +2,7 @@
 
 **Baseline:** 17 September 2026 · forensic HEAD `43e470f630b8b2b79cc5241aeac6279492108081`. This is the dependency order from Astra. It authorizes no implementation, infrastructure change, AI activation or release.
 
-**Governance checkpoint:** Phase 0.7 — AI Delivery Safety Harness is CLOSED by human approval and FROZEN. **Active technical phase:** Phase 1 is VERIFIED CLOSED. Phase 0, Phase 0.5, Phase 0.6 and Phase 0.7 are CLOSED by human acceptance; 0.5, 0.6 and 0.7 do not add a fifteenth roadmap phase. A01 remains OPEN P0. A02–A25 and A28–A30 remain OPEN. A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The next phase is Phase 2 and is not started by this closure.
+**Governance checkpoint:** Phase 0.7 — AI Delivery Safety Harness is CLOSED by human approval and FROZEN. **Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. Phase 0, Phase 0.5, Phase 0.6 and Phase 0.7 are CLOSED by human acceptance; 0.5, 0.6 and 0.7 do not add a fifteenth roadmap phase. A01 is VERIFIED CLOSED. A02 is the next OPEN finding. A02–A25 and A28–A30 remain OPEN. A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The Phase 2 exit gate is not passed.
 
 Each phase needs an explicit file whitelist and its own evidence. Exit gates describe future requirements. Preserve the M&A black canvas, workspace accent, page/hero geometry and approved surfaces throughout functional remediation.
 
@@ -31,6 +31,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 **DO NOT DO YET:** Do not start A01 from this closure. Do not run mutating tests on canonical DB or weaken oracles.
 
 ## Phase 2 — Security/access
+
+**CURRENT STATUS:** ACTIVE. A01 is VERIFIED CLOSED. A02 is the next OPEN finding. This phase exit gate is not passed.
 
 **OBJECTIVE:** Close VDR ownership, approvals, env bootstrap, reset route, token path; validate upload/OIDC policy.
 
