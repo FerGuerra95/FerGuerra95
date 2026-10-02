@@ -260,6 +260,30 @@ function assertMutableDecision(decision) {
   }
 }
 
+function workflowStatusRequiredError() {
+  return createError(
+    'El estado de la decision requiere el workflow dedicado.',
+    403,
+    'GOVERNANCE_DECISION_WORKFLOW_REQUIRED'
+  );
+}
+
+function assertGenericDecisionStatusWrite(payload = {}, existing = null) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  if (!Object.prototype.hasOwnProperty.call(source, 'status')) return;
+
+  const normalized = text(source.status).toLowerCase();
+  const known = DECISION_STATUSES.includes(normalized);
+
+  if (!existing) {
+    if (known && normalized !== 'draft') throw workflowStatusRequiredError();
+    return;
+  }
+
+  const current = text(existing.status, 'draft').toLowerCase();
+  if (!known || normalized !== current) throw workflowStatusRequiredError();
+}
+
 function commonCreate(scope = {}, actor = {}) {
   const userId = actorId(actor);
   return {
@@ -413,6 +437,7 @@ export async function getGovernanceDecisionById(organizationId, id) {
 
 export async function createGovernanceDecision(organizationId, payload = {}, actor = {}) {
   assertOrganizationId(organizationId);
+  assertGenericDecisionStatusWrite(payload);
   const created = await decisionsStore.create({
     ...sanitizeDecision(payload, { requireTitle: true }),
     ...commonCreate({ organizationId }, actor)
@@ -425,6 +450,7 @@ export async function createGovernanceDecision(organizationId, payload = {}, act
 export async function updateGovernanceDecision(organizationId, id, payload = {}, actor = {}) {
   assertOrganizationId(organizationId);
   const existing = await getDecisionOrThrow(organizationId, id);
+  assertGenericDecisionStatusWrite(payload, existing);
   assertMutableDecision(existing);
   const patch = sanitizeDecision(payload, { patch: true });
   const updated = await decisionsStore.updateForOrganization(existing.id, patch, organizationId);

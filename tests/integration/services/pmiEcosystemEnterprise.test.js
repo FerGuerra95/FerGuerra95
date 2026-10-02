@@ -28,6 +28,7 @@ import {
   getBridgeMatches
 } from '../../../backend/services/bridge/bridge.service.js';
 import {
+  approveGovernanceDecision,
   createGovernanceControl,
   createGovernanceDecision,
   createGovernanceEsgMetric,
@@ -312,16 +313,21 @@ describe('PMI and ecosystem enterprise foundations', () => {
       { status: 'ready' },
       { userId: 'u_ecosystem_enterprise' }
     );
-    await createGovernanceDecision(
+    const governanceDecision = await createGovernanceDecision(
       'org_ecosystem_enterprise',
       {
         title: 'Approve ESG control cadence',
-        status: 'approved',
         evidenceStatus: 'approved',
         boardApprovalRequired: false
       },
       { userId: 'u_ecosystem_enterprise' }
     );
+    const approvedGovernanceDecision = await approveGovernanceDecision(
+      'org_ecosystem_enterprise',
+      governanceDecision.id,
+      { userId: 'u_ecosystem_enterprise' }
+    );
+    expect(approvedGovernanceDecision.status).toBe('approved');
     await createGovernanceControl(
       'org_ecosystem_enterprise',
       {

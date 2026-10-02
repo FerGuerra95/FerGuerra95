@@ -2,7 +2,8 @@ import {
   assertFiniteNumber,
   assertId,
   assertPlainObject,
-  normalizeString
+  normalizeString,
+  validationError
 } from '../middlewares/validate.middleware.js';
 
 const DECISION_STATUSES = ['draft', 'under_review', 'approved', 'rejected', 'deferred', 'escalated', 'implemented', 'archived'];
@@ -29,8 +30,22 @@ function optionalNumber(source, target, key) {
   if (source[key] !== undefined) target[key] = assertFiniteNumber(source[key], key);
 }
 
-function decisionBody(value = {}) {
+function rejectGenericDecisionWorkflowStatus() {
+  validationError(
+    'El estado de la decision requiere el workflow dedicado.',
+    [{ field: 'status', code: 'GOVERNANCE_DECISION_WORKFLOW_REQUIRED' }]
+  );
+}
+
+function decisionBody(value = {}, { update = false } = {}) {
   const source = assertPlainObject(value, 'governance decision');
+  if (Object.prototype.hasOwnProperty.call(source, 'status')) {
+    const normalized = normalizeString(source.status).toLowerCase();
+    const knownWorkflowStatus = DECISION_STATUSES.includes(normalized);
+    if (update || (knownWorkflowStatus && normalized !== 'draft')) {
+      rejectGenericDecisionWorkflowStatus();
+    }
+  }
   const next = pickStrings(source, [
     'title',
     'category',
@@ -136,8 +151,8 @@ function esgMetricBody(value = {}) {
 
 export const governanceValidator = {
   idParams: { params: idParams },
-  decisionCreate: { body: decisionBody },
-  decisionUpdate: { params: idParams, body: decisionBody },
+  decisionCreate: { body: (value) => decisionBody(value, { update: false }) },
+  decisionUpdate: { params: idParams, body: (value) => decisionBody(value, { update: true }) },
   workflow: { params: idParams, body: workflowBody },
   boardPackCreate: { body: boardPackBody },
   boardPackUpdate: { params: idParams, body: boardPackBody },

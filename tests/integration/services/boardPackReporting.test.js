@@ -14,6 +14,7 @@ import {
   generateBridgeNetworkReport
 } from '../../../backend/services/bridge/bridge.service.js';
 import {
+  approveGovernanceDecision,
   createGovernanceControl,
   createGovernanceDecision,
   createGovernanceEsgMetric
@@ -149,16 +150,21 @@ describe('Unified Board Pack reporting', () => {
       { title: 'Board Pack Bridge Network Memo', opportunityId: bridgeOpportunity.id }
     );
 
-    await createGovernanceDecision(
+    const governanceDecision = await createGovernanceDecision(
       organizationId,
       {
         title: 'Approve Board Pack governance cadence',
-        status: 'approved',
         evidenceStatus: 'approved',
         boardApprovalRequired: false
       },
       { userId }
     );
+    const approvedGovernanceDecision = await approveGovernanceDecision(
+      organizationId,
+      governanceDecision.id,
+      { userId }
+    );
+    expect(approvedGovernanceDecision.status).toBe('approved');
     await createGovernanceControl(
       organizationId,
       {
