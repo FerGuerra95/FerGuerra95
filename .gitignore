@@ -80,3 +80,6 @@ reports/
 .tools/
 .pw-artifacts*/
 ceos_os_compliance_enterprise_*.txt
+
+# Trusted evidence bundles are local records, not commits
+.agents/evidence/

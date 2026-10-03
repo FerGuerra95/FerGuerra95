@@ -1,0 +1,306 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { fingerprintCapsule, validateCapsule } from '../capsule.mjs';
+import { checkPaths } from '../policy.mjs';
+import { createInitialState } from '../stateMachine.mjs';
+import { hashFile } from './bundle.mjs';
+import {
+  blobId,
+  changedPaths,
+  EvidenceError,
+  git,
+  hashObject,
+  isAncestor,
+  parsePorcelain,
+  snapshotRepository,
+  trackedWorktreeClean,
+  worktreeMatchesHead
+} from './gitFacts.mjs';
+
+export const AUTHORITY_FILES = [
+  'scripts/agents/evidence.mjs',
+  'scripts/agents/lib/capsule.mjs',
+  'scripts/agents/lib/evidence/bundle.mjs',
+  'scripts/agents/lib/evidence/execute.mjs',
+  'scripts/agents/lib/evidence/gitFacts.mjs',
+  'scripts/agents/lib/evidence/trust.mjs',
+  'scripts/agents/lib/guards.json',
+  'scripts/agents/lib/ownership.mjs',
+  'scripts/agents/lib/policy.mjs',
+  'scripts/agents/lib/stateMachine.mjs',
+  'scripts/agents/lib/transitions.json'
+];
+
+const RUNTIME_ENV_FILES = [
+  '.env',
+  '.env.local',
+  '.env.development',
+  '.env.development.local',
+  '.env.test',
+  '.env.test.local',
+  '.env.production',
+  '.env.production.local'
+];
+
+const KNOWN_EXCLUSION_FILES = new Set([
+  'backend-server.err',
+  'src/modules/ma/components/madataroomroutefieldvisual.jsx',
+  'src/modules/ma/components/pipelineflowfieldvisual.jsx'
+]);
+
+export function controlRootFrom(moduleUrl) {
+  const modulePath = fileURLToPath(moduleUrl);
+  return fs.realpathSync(path.resolve(path.dirname(modulePath), '../..'));
+}
+
+export function isInside(root, target) {
+  const relative = path.relative(root, target);
+  return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative));
+}
+
+function canonicalLoose(filePath) {
+  return String(filePath || '').replace(/\\/g, '/').replace(/^\.\//, '').toLowerCase();
+}
+
+export function isKnownExclusion(filePath) {
+  const canonical = canonicalLoose(filePath);
+  if (KNOWN_EXCLUSION_FILES.has(canonical)) return true;
+  return canonical === 'docs/academy/screenshots' || canonical.startsWith('docs/academy/screenshots/');
+}
+
+function assertTaskId(task) {
+  if (!/^[A-Za-z0-9][A-Za-z0-9._-]{0,80}$/.test(task)) {
+    throw new EvidenceError('TASK_ID', 'Task id cannot be used as an evidence path.');
+  }
+}
+
+export function assertDistinctRoots(controlRoot, candidateRoot) {
+  const control = fs.realpathSync(controlRoot);
+  const candidate = fs.realpathSync(candidateRoot);
+  if (control === candidate) {
+    throw new EvidenceError('ROOT_IDENTITY', 'Control and candidate must be different real directories.');
+  }
+  return { control, candidate };
+}
+
+export function assertControlBaseline(controlRoot, baseline) {
+  const snapshot = snapshotRepository(controlRoot);
+  if (snapshot.head !== baseline) {
+    throw new EvidenceError('CONTROL_BASELINE', 'Control HEAD does not equal the authorized capsule baseline.');
+  }
+  if (!trackedWorktreeClean(snapshot)) {
+    throw new EvidenceError('CONTROL_DIRTY', 'Control index and tracked worktree must be clean.');
+  }
+  for (const relativePath of AUTHORITY_FILES) {
+    if (!worktreeMatchesHead(controlRoot, relativePath)) {
+      throw new EvidenceError('CONTROL_IDENTITY', `Control authority bytes do not match HEAD: ${relativePath}`);
+    }
+  }
+  return snapshot;
+}
+
+export function readExternalCapsule(capsulePath, forbiddenRoots) {
+  const capsuleReal = fs.realpathSync(capsulePath);
+  for (const root of forbiddenRoots) {
+    if (!root || !fs.existsSync(root)) continue;
+    if (isInside(fs.realpathSync(root), capsuleReal)) {
+      throw new EvidenceError('CAPSULE_LOCATION', 'The authoritative capsule must be outside the candidate worktree and the evidence bundle.');
+    }
+  }
+  const bytes = fs.readFileSync(capsuleReal);
+  let parsed;
+  try {
+    parsed = validateCapsule(JSON.parse(bytes.toString('utf8')));
+  } catch (error) {
+    throw new EvidenceError(error.code || 'CAPSULE_INVALID', error.message);
+  }
+  return {
+    bytes,
+    path: capsuleReal,
+    sha256: hashFile(capsuleReal),
+    parsed,
+    fingerprint: fingerprintCapsule(parsed)
+  };
+}
+
+export function capsuleBytesUnchanged(capsule) {
+  return fs.readFileSync(capsule.path).equals(capsule.bytes);
+}
+
+function orchestrationPair(task) {
+  const directory = `.agents/tasks/${task}`;
+  return {
+    directory,
+    capsule: `${directory}/capsule.json`,
+    state: `${directory}/STATE.json`
+  };
+}
+
+function listTaskFiles(candidateRoot) {
+  const root = path.join(candidateRoot, '.agents', 'tasks');
+  if (!fs.existsSync(root)) return [];
+  const files = [];
+  const walk = (current) => {
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const absolute = path.join(current, entry.name);
+      if (entry.isDirectory()) walk(absolute);
+      else if (entry.isFile()) {
+        files.push(path.relative(candidateRoot, absolute).split(path.sep).join('/'));
+      }
+    }
+  };
+  walk(root);
+  return files;
+}
+
+export function inspectCandidate(candidateRoot, capsule) {
+  assertTaskId(capsule.parsed.task);
+  const head = git(candidateRoot, ['rev-parse', 'HEAD']).stdout.trim().toLowerCase();
+  if (!isAncestor(candidateRoot, capsule.parsed.baseline, head)) {
+    throw new EvidenceError('CANDIDATE_ANCESTRY', 'Candidate tip does not descend from the capsule baseline.');
+  }
+  const pair = orchestrationPair(capsule.parsed.task);
+  const allowedTask = new Set([pair.capsule, pair.state]);
+  const onDisk = listTaskFiles(candidateRoot);
+  for (const relativePath of onDisk) {
+    if (!allowedTask.has(relativePath)) {
+      throw new EvidenceError('TASK_STATE_UNEXPECTED', `Unexpected task-state file: ${relativePath}`);
+    }
+  }
+  if (onDisk.length === 1) {
+    throw new EvidenceError('TASK_STATE_UNEXPECTED', 'Orchestration state must be the exact capsule.json and STATE.json pair.');
+  }
+  const trackedState = git(candidateRoot, ['ls-files', '--', pair.capsule, pair.state], { allowFail: true }).stdout.trim();
+  if (trackedState) {
+    throw new EvidenceError('TASK_STATE_COMMITTED', 'Orchestration state is tracked or staged and is invalid.');
+  }
+  const present = onDisk.length === 2;
+  const snapshot = snapshotRepository(candidateRoot);
+  const entries = parsePorcelain(snapshot.porcelain);
+  const knownExclusions = [];
+  for (const entry of entries) {
+    const file = canonicalLoose(entry.file);
+    const pairFile = file === pair.capsule.toLowerCase() || file === pair.state.toLowerCase();
+    if (pairFile) {
+      if (entry.xy !== '??') {
+        throw new EvidenceError('TASK_STATE_STAGED', 'Orchestration state must be untracked. Staged or tracked task state is invalid.');
+      }
+      continue;
+    }
+    if (isKnownExclusion(entry.file)) {
+      if (entry.xy !== '??') {
+        throw new EvidenceError('KNOWN_EXCLUSION', 'A known exclusion is staged or tracked and cannot pass silently.');
+      }
+      knownExclusions.push(entry.file.replace(/\\/g, '/'));
+      continue;
+    }
+    throw new EvidenceError('CANDIDATE_DIRTY', `Candidate worktree is not a clean committed tip: ${entry.file}`);
+  }
+  const paths = changedPaths(candidateRoot, capsule.parsed.baseline, head);
+  if (paths.some((filePath) => canonicalLoose(filePath).startsWith('.agents/tasks/'))) {
+    throw new EvidenceError('TASK_STATE_COMMITTED', 'Committed orchestration state is invalid.');
+  }
+  if (paths.some((filePath) => isKnownExclusion(filePath))) {
+    throw new EvidenceError('KNOWN_EXCLUSION', 'A known exclusion is part of the candidate commit and cannot pass silently.');
+  }
+  for (const relativePath of RUNTIME_ENV_FILES) {
+    const absolute = path.join(candidateRoot, relativePath);
+    if (!fs.existsSync(absolute)) continue;
+    const committed = blobId(candidateRoot, `HEAD:${relativePath}`);
+    const local = hashObject(candidateRoot, absolute);
+    if (!committed || committed !== local) {
+      throw new EvidenceError('RUNTIME_ENV', `Runtime environment file does not match the committed candidate blob: ${relativePath}`);
+    }
+  }
+  let orchestration = { present: false, human_authorizations_fact: null };
+  if (present) {
+    const candidateCapsuleBytes = fs.readFileSync(path.join(candidateRoot, pair.capsule));
+    let candidateFingerprint;
+    try {
+      candidateFingerprint = fingerprintCapsule(JSON.parse(candidateCapsuleBytes.toString('utf8')));
+    } catch (error) {
+      throw new EvidenceError('TASK_STATE_FINGERPRINT', error.message);
+    }
+    if (candidateFingerprint !== capsule.fingerprint) {
+      throw new EvidenceError('TASK_STATE_FINGERPRINT', 'Candidate task capsule fingerprint differs from the external design-freeze capsule.');
+    }
+    const state = JSON.parse(fs.readFileSync(path.join(candidateRoot, pair.state), 'utf8'));
+    if (state?.capsule_fingerprint !== capsule.fingerprint) {
+      throw new EvidenceError('TASK_STATE_FINGERPRINT', 'Candidate STATE.json fingerprint differs from the external design-freeze capsule.');
+    }
+    orchestration = {
+      present: true,
+      files: [pair.capsule, pair.state],
+      human_authorizations_fact: state.human_authorizations || null,
+      fingerprint: candidateFingerprint
+    };
+  }
+  const boundState = createInitialState(capsule.parsed);
+  try {
+    checkPaths({ capsule: capsule.parsed, changedFiles: paths, state: boundState });
+  } catch (error) {
+    throw new EvidenceError(error.code || 'PATH_POLICY', error.message);
+  }
+  return {
+    head,
+    snapshot,
+    paths,
+    knownExclusions,
+    orchestration,
+    authorityPathsChanged: authorityChanges(candidateRoot, capsule.parsed.baseline, head),
+    toolchain: toolchainFacts(candidateRoot, head, capsule.parsed)
+  };
+}
+
+function authorityChanges(candidateRoot, baseline, head) {
+  return AUTHORITY_FILES.filter((relativePath) => {
+    return blobId(candidateRoot, `${baseline}:${relativePath}`) !== blobId(candidateRoot, `${head}:${relativePath}`);
+  });
+}
+
+function nearestVersion(candidateRoot, absolutePath) {
+  const root = fs.realpathSync(candidateRoot);
+  let directory = fs.realpathSync(path.dirname(absolutePath));
+  while (isInside(root, directory)) {
+    const packagePath = path.join(directory, 'package.json');
+    if (fs.existsSync(packagePath) && !canonicalLoose(packagePath).endsWith('.env')) {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+        return typeof parsed.version === 'string' ? parsed.version : null;
+      } catch {
+        return null;
+      }
+    }
+    if (directory === root) break;
+    directory = path.dirname(directory);
+  }
+  return null;
+}
+
+function toolchainFacts(candidateRoot, head, parsed) {
+  const tools = [];
+  const entries = [...(parsed.evidence_plan?.required || []), ...(parsed.evidence_plan?.optional || [])];
+  for (const entry of entries) {
+    for (const token of entry.argv) {
+      if (token.type !== 'candidate_path') continue;
+      const absolute = path.resolve(candidateRoot, ...token.value.split('/'));
+      if (!fs.existsSync(absolute)) {
+        tools.push({ path: token.value, present: false, sha256: null, version: null });
+        continue;
+      }
+      tools.push({
+        path: token.value,
+        present: true,
+        sha256: hashFile(absolute),
+        version: nearestVersion(candidateRoot, absolute)
+      });
+    }
+  }
+  return {
+    package_json_blob: blobId(candidateRoot, `${head}:package.json`),
+    package_lock_blob: blobId(candidateRoot, `${head}:package-lock.json`),
+    tools
+  };
+}

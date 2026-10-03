@@ -26,7 +26,7 @@ Phase labels are reported state:
 - `VALIDATED` means the orchestration record reports validation completion. 02A does not independently prove that tests or the build passed.
 - `CLOSED` means the orchestration lifecycle records closure. It is not independent evidence of product correctness.
 
-Trusted machine-generated evidence belongs to A-MULTI-02B. Execution and repository reconciliation belong to A-MULTI-02C.
+Trusted machine-generated evidence belongs to A-MULTI-02B. The evidence contract is `.agents/orchestration/EVIDENCE.md`. 02A does not attest evidence. Evidence PASS is not a human gate, merge authorization, or `VERIFIED`. Execution and repository reconciliation belong to A-MULTI-02C.
 
 A-MULTI-02A provides schemas, validation primitives, transition primitives, and authorization primitives. It does not provide cross-worktree shared-state transport, global task-state synchronization, multi-agent messaging, a canonical shared-state location, or multi-writer coordination. Builder and Reviewer worktrees can contain different filesystem copies. Until A-MULTI-02C owns execution, routing, and state transport, the execution layer must provide one authoritative state file and one writer at a time. 02A is not multi-writer safe. If two writers are permitted concurrently, correctness is not guaranteed.
 
