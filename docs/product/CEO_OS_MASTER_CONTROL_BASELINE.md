@@ -1,6 +1,6 @@
 # CEO’S OS — MASTER CONTROL BASELINE & EXECUTION TRACKER
 **Date:** 17 September 2026  
-**Last governance update:** 2 October 2026
+**Last governance update:** 3 October 2026
 
 **Purpose:** Single persistent control document to prevent loss of context, preserve the audited baseline, track every material defect, and govern the order in which CEO’S OS is corrected.
 
@@ -12,7 +12,7 @@ This file is the **MASTER CONTROL CANÓNICO / canonical execution tracker** for 
 
 **Canonical path:** `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`. Creation was explicitly authorized to finalize Phase 0. The [dated source](CEO_OS_MASTER_CONTROL_BASELINE_2026-09-17.md) remains byte-for-byte unchanged and is a historical input, not the current tracker.
 
-**Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. **A01**, **A02** and **A03** are VERIFIED CLOSED. There is no OPEN P0. The next product finding is A04, OPEN P1. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. **A26** and **A27** are VERIFIED CLOSED. A04–A25, A28–A30 and A32–A44 remain OPEN. Open P1 count is 25. The Phase 2 exit gate is not passed. Render remains SUSPENDED. There is no production-readiness claim. The 17 September forensic inventory later in this file is a historical snapshot, not the current operational state.
+**Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. **A01**, **A02** and **A03** are VERIFIED CLOSED. There is no OPEN P0. The next product finding is A04, OPEN P1. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. **A26** and **A27** are VERIFIED CLOSED. A04–A25, A28–A30 and A32–A44 remain OPEN. Open P1 count is 25. The Phase 2 exit gate is not passed. Render remains SUSPENDED. There is no production-readiness claim. Multi-agent infrastructure A-MULTI-02A — Orchestration Core is VERIFIED CLOSED locally at `4b2b9907829b37d80daf6b8ffd73614582d224ce`. `origin/main` remains `194736151ea66d6d4eab0001baf8f78cc271a0ee` until the governance closure push. A-MULTI-02A leaves A01–A44 status, Open P0 and Open P1 unchanged. The next infrastructure action is A-MULTI-02B Design Preflight, which is not started. The 17 September forensic inventory later in this file is a historical snapshot, not the current operational state.
 
 Current document roles: this master owns execution/status; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) supplies evidence and closure criteria; [Source of Truth](../architecture/SOURCE_OF_TRUTH_REGISTRY.md) supplies detailed current/persisted/target owners; [workspace matrix](PLATFORM_PRODUCT_MATRIX.md) supplies dimension ratings; [test strategy](../testing/TEST_STRATEGY.md) supplies validation/isolation requirements; [roadmap](../roadmap.md) supplies dependency gates. When evidence changes, update the affected records together. These documents do not claim that proposed consolidation or product remediation has occurred.
 
@@ -1008,7 +1008,7 @@ Must prove:
 
 # 11. NEXT IMMEDIATE ACTIONS
 
-**Current next action:** Phase 2 — Security / access is ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. The next product finding is A04 — Audit persistence failures swallowed, OPEN P1. Do not start A04 from this closure. A31 remains IN PROGRESS. Phase 2 is not closed.
+**Current next action:** Phase 2 — Security / access is ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. The next product finding is A04 — Audit persistence failures swallowed, OPEN P1. A04 is not started. A31 remains IN PROGRESS. Phase 2 is not closed. The next infrastructure action is A-MULTI-02B — Trusted Evidence Design Preflight. A-MULTI-02B is not started, and this closure does not authorize its implementation. A-MULTI-02A — Orchestration Core is VERIFIED CLOSED locally and is recorded in section 14.
 
 The original 17 September audit sequence is preserved below and is not the current work queue. A01, listed there as step 6, is VERIFIED CLOSED. A02 is VERIFIED CLOSED. A03 is VERIFIED CLOSED. Current next product finding is A04. A04 is not assigned by this closure.
 
@@ -1116,7 +1116,52 @@ At the end of every material work package, update `CURRENT_HANDOFF_STATE` in pla
 
 **Open P1:** 25 — A04–A25 and A28–A30 OPEN; A31 IN PROGRESS. A01, A02, A03, A26 and A27 are VERIFIED CLOSED.
 
-**Next product finding:** A04 — Audit persistence failures swallowed — OPEN P1. A04 is not assigned by this closure.
+**Next product finding:** A04 — Audit persistence failures swallowed — OPEN P1. A04 is not started.
+
+**Multi-agent infrastructure:** separate from A01–A44 and from the Phase 2 exit gate. A-MULTI-02A — Orchestration Core is VERIFIED CLOSED locally. Infrastructure commit `4b2b9907829b37d80daf6b8ffd73614582d224ce`, integrated on local main by fast-forward. `origin/main` remains `194736151ea66d6d4eab0001baf8f78cc271a0ee` and does not contain A-MULTI-02A until the final closure push. Final independent review was VERIFIED. No structural defect was found. Design freeze was approved. Post-merge validation on local main: orchestration core 29/29, governance regression 9/9, `npm run agents:orchestrate -- --help` PASS, `npm run build` PASS, `git diff --check` PASS. Canonical DB/VDR were not touched. Port 4000 was not used. Preview was not started.
+
+A-MULTI-02A establishes these orchestration-control capabilities:
+
+- machine-readable task capsule
+- deterministic capsule fingerprint
+- capsule/state binding
+- explicit state-machine transitions
+- fail-closed role authority
+- seven human-gate classes
+- human authorization representation separated from execution
+- canonical lexical path authorization
+- protected-path authorization
+- forbidden-path precedence
+- task ownership collision primitive
+- exact-file ownership semantics
+- atomic state persistence
+- init overwrite protection
+- post-merge lifecycle role matrix
+- deterministic orchestration CLI
+
+These capabilities remain deferred. A-MULTI-02A does not implement them:
+
+- trusted machine-generated evidence
+- Git/test/build attestation
+- candidate evidence binding
+- cross-worktree state transport
+- canonical shared-state service/location
+- multi-writer coordination
+- automatic active-task discovery
+- Builder/Reviewer execution routing
+- agent runner
+- preview supervisor
+- Architecture Agent
+- cryptographic human identity
+- symlink/junction/reparse-point execution validation
+
+A-MULTI-02B — Trusted Evidence is NOT STARTED. A-MULTI-02C execution, routing and state transport remains deferred. Later preview and architecture-agent work remains unstarted. Until A-MULTI-02B exists, high-risk evidence remains partly manually executed and reported.
+
+**Next infrastructure action:** A-MULTI-02B Design Preflight only. No implementation before design freeze. The preflight must define evidence authority, candidate SHA binding, capsule fingerprint binding, test/build evidence provenance, Git diff/path evidence, environment/runtime provenance, evidence immutability, fail-closed validation, and what evidence can and cannot prove.
+
+**High-risk execution discipline:** P0/P1 security, architecture, Source of Truth, Golden, persistence, multi-agent infrastructure and production-sensitive work follow this lifecycle: task proposed, design preflight, scope / authority / invariants / failure modes, design freeze, engineering, machine-generated evidence when available, ready for review, independent adversarial review, human merge gate, merge, post-merge validation, governance closure, closed. Until A-MULTI-02B exists, the evidence step remains partly manual.
+
+**Infrastructure review lesson:** A-MULTI-02A required multiple adversarial iterations. Observed failure classes included competing state/capsule authority, path-normalization bypasses, protected-path bypasses, ownership spelling collisions, capsule substitution, split-brain / state-topology limitations, concurrent-writer limitations, human-gate authority defects and Builder self-authorization risk. The verified design corrected or explicitly bounded those issues. Green tests alone are insufficient for high-risk infrastructure. Independent adversarial review and explicit authority design are required.
 
 **Open P2:** A32–A43
 
@@ -1202,7 +1247,7 @@ Historical PASS output is not current validation. Current unit/integration/E2E a
 
 ## Roadmap alignment
 
-Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Current operational status: Phase 1 is VERIFIED CLOSED and its isolation work is part of the Phase 1 checkpoint. Phase 2 is ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. The next product finding is A04. The Phase 2 exit gate is not passed.
+Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Current operational status: Phase 1 is VERIFIED CLOSED and its isolation work is part of the Phase 1 checkpoint. Phase 2 is ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. The next product finding is A04. The Phase 2 exit gate is not passed. A-MULTI-02A is VERIFIED CLOSED locally as multi-agent infrastructure and does not change this product status. The next infrastructure action is A-MULTI-02B Design Preflight, not started.
 
 # 17. PHASE 0 FINALIZATION CHANGELOG
 
@@ -1479,10 +1524,11 @@ The grouped inventory records all 140 files present at audit start. Deleted cand
 
 # 20. CURRENT_HANDOFF_STATE
 
-- **CURRENT HEAD:** parent `46348857294d41a1c1feb995d9c65032f08bf1ed`. The expected tip is the governance closure commit that will be created after this documentation diff is approved. If HEAD is that governance commit, do not stop only because this line names the parent.
-- **ACTIVE PHASE:** Phase 2 — Security / access ACTIVE. Phase 2 is not closed.
-- **LAST COMPLETED PACKAGE:** A03 security config bootstrap closure.
-- **VERIFIED PRODUCT BASELINE:** `46348857294d41a1c1feb995d9c65032f08bf1ed`
+- **CURRENT LOCAL MAIN:** `4b2b9907829b37d80daf6b8ffd73614582d224ce`. This is the A-MULTI-02A infrastructure commit, integrated by fast-forward. The governance closure commit for this documentation diff does not exist yet.
+- **ORIGIN/MAIN:** `194736151ea66d6d4eab0001baf8f78cc271a0ee`. It remains the A03 governance closure. It does not contain A-MULTI-02A until the final closure push.
+- **ACTIVE PHASE:** Phase 2 — Security / access ACTIVE. Phase 1 is VERIFIED CLOSED. Phase 2 is not closed. The Phase 2 exit gate is not passed.
+- **LAST COMPLETED PRODUCT PACKAGE:** A03 security config bootstrap closure. Product commit `46348857294d41a1c1feb995d9c65032f08bf1ed`. Its governance closure is `194736151ea66d6d4eab0001baf8f78cc271a0ee`.
+- **LAST COMPLETED INFRASTRUCTURE PACKAGE:** A-MULTI-02A — Orchestration Core — VERIFIED CLOSED locally, pending the canonical governance closure commit and push. Infrastructure commit `4b2b9907829b37d80daf6b8ffd73614582d224ce`. This closure is the orchestration-control core. It is not an A01–A44 closure. Section 14 records the established capabilities and the deferred limits.
 - **A03 PRODUCT COMMIT:** `46348857294d41a1c1feb995d9c65032f08bf1ed`
 - **A01:** VERIFIED CLOSED.
 - **A02:** VERIFIED CLOSED. Post-merge validation: A02 focused 13/13, governanceEnterprise 3/3, boardPackReporting 6/6, pmiEcosystemEnterprise 5/5, test isolation 10/10, combined 37/37, build PASS. Canonical DB/VDR were not mutated. Port 4000 was not used.
@@ -1491,14 +1537,18 @@ The grouped inventory records all 140 files present at audit start. Deleted cand
 - **A27:** VERIFIED CLOSED.
 - **A31:** IN PROGRESS.
 - **OPEN P0:** none.
-- **OPEN P1:** 25 (A04–A25 and A28–A30).
-- **NEXT FINDING:** A04 — Audit persistence failures swallowed — OPEN P1. A04 is not assigned by this closure.
+- **OPEN P1:** 25 (A04–A25 and A28–A30). A04–A25 are 22 OPEN. A28–A30 are 3 OPEN.
+- **NEXT PRODUCT FINDING:** A04 — Audit persistence failures swallowed — OPEN P1. A04 is not started.
+- **NEXT INFRASTRUCTURE ACTION:** A-MULTI-02B — Trusted Evidence — NOT STARTED. Design Preflight only. No implementation before design freeze. The preflight must define evidence authority, candidate SHA binding, capsule fingerprint binding, test/build evidence provenance, Git diff/path evidence, environment/runtime provenance, evidence immutability, fail-closed validation, and what evidence can and cannot prove.
+- **A-MULTI-02A LIMIT:** trusted machine-generated evidence, Git/test/build attestation, candidate evidence binding, cross-worktree state transport, a canonical shared-state service, multi-writer coordination, automatic active-task discovery, Builder/Reviewer execution routing, an agent runner, a preview supervisor, an Architecture Agent, cryptographic human identity, and symlink/junction/reparse-point execution validation remain deferred. A-MULTI-02C execution, routing and state transport is not started.
+- **HIGH-RISK DISCIPLINE:** P0/P1 security, architecture, Source of Truth, Golden, persistence, multi-agent infrastructure and production-sensitive work require design preflight and design freeze before engineering, then independent adversarial review, a human merge gate, post-merge validation and governance closure. Until A-MULTI-02B exists, evidence remains partly manually executed and reported.
+- **REVIEW LESSON:** green tests alone are insufficient for high-risk infrastructure. Independent adversarial review and explicit authority design are required.
 - **GOVERNANCE:** FROZEN. Change only on evidence of a missing or broken guardrail. `.agents/` is a subordinate role layer, not a second authority.
 - **FROZEN AREAS:** governance. Approved visual surfaces shipped in the Phase 1 checkpoint remain the current product baseline.
 - **CURRENT DIRTY/UNTRACKED RISK:** Deliberately excluded: `backend-server.err`, `docs/academy/screenshots/`, and unconsumed `PipelineFlowFieldVisual.jsx` plus `MADataRoomRouteFieldVisual.jsx`.
 - **REMAINING P2:** E2E fixture collisions (`DUPLICATE_SUPPLIER_NAME`, UNIQUE `compliance_alerts.id`, `compliance_evidence.id`, `compliance_reviews.id`); `commandCalendar` is computed and not rendered.
 - **REMAINING P3:** `tests/ceos-login.spec.js` still flags `localhost:4000` request URLs. That check is narrower than the isolation guard and is not an A27 bypass.
-- **EXACT NEXT ACTION:** Do not start A04 from this documentation closure. Technical Direction will assign the next package.
-- **NEXT AUTHORIZED SCOPE:** none. A04 remains the next product finding and is not started here.
+- **EXACT NEXT ACTION:** The next infrastructure action is the A-MULTI-02B Design Preflight. The next product finding remains A04. Start neither A04 nor A-MULTI-02B implementation from this closure.
+- **NEXT AUTHORIZED SCOPE:** none. This closure does not authorize A04 work or A-MULTI-02B implementation.
 - **RENDER:** SUSPENDED. Do not repair Render as part of this closure. There is no production-readiness claim.
-- **KNOWN UNVERIFIED ITEMS:** Render remains suspended and was not verified. A30 reproducibility of every historical dirty tree is closed only for the checkpointed Phase 1 baseline, not for older audit manifests. A03 closure does not close the development AUTH_SECRET fallback, A04, A05, A07, A42, A43, general configuration architecture, or Phase 2.
+- **KNOWN UNVERIFIED ITEMS:** Render remains suspended and was not verified. A30 reproducibility of every historical dirty tree is closed only for the checkpointed Phase 1 baseline, not for older audit manifests. A03 closure does not close the development AUTH_SECRET fallback, A04, A05, A07, A42, A43, general configuration architecture, or Phase 2. A-MULTI-02A does not provide trusted machine evidence and does not verify Render, production, or Phase 2.
