@@ -2,7 +2,7 @@
 
 **Current baseline: 17 September 2026.** Source/schema inspection is VERIFIED FACT unless qualified; desired architecture is TARGET, not implemented. Current runtime/business correctness and current test pass status remain UNVERIFIED, except that A03 deterministic environment bootstrap ordering for supported product startup is implemented and VERIFIED CLOSED. That closure does not establish full runtime correctness, production readiness, or configuration closure. The [master tracker](../product/CEO_OS_MASTER_CONTROL_BASELINE.md) governs execution; [A01–A44](../product/CODEBASE_ROBUSTNESS_AUDIT.md) remain the defect authority.
 
-This is the single Level 2 Source of Truth registry. Specialized documents may refine a named domain but cannot establish a parallel owner.
+This is the single Level 2 Source of Truth registry. Specialized documents may refine a named domain but cannot establish a parallel owner. GOV-ASSURANCE-01 architecture, reporting, and release gates consult this registry. They do not create a second Source of Truth. The assurance policy itself remains Master Control section 21.
 
 There is no universal implemented “backend owns everything” rule. Persisted records, drafts, calculations, rendered reports and workflow states have different owners. Golden datasets are engineering oracles; they are not customer data or automatically the productive formula.
 

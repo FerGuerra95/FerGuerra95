@@ -12,9 +12,9 @@ This file is the **MASTER CONTROL CANÓNICO / canonical execution tracker** for 
 
 **Canonical path:** `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`. Creation was explicitly authorized to finalize Phase 0. The [dated source](CEO_OS_MASTER_CONTROL_BASELINE_2026-09-17.md) remains byte-for-byte unchanged and is a historical input, not the current tracker.
 
-**Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. **A01**, **A02** and **A03** are VERIFIED CLOSED. There is no OPEN P0. The next product finding is A04, OPEN P1. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. **A26** and **A27** are VERIFIED CLOSED. A04–A25, A28–A30 and A32–A44 remain OPEN. Open P1 count is 25. The Phase 2 exit gate is not passed. Render remains SUSPENDED. There is no production-readiness claim. Multi-agent infrastructure A-MULTI-02A — Orchestration Core is VERIFIED CLOSED locally at `4b2b9907829b37d80daf6b8ffd73614582d224ce`. `origin/main` remains `194736151ea66d6d4eab0001baf8f78cc271a0ee` until the governance closure push. A-MULTI-02A leaves A01–A44 status, Open P0 and Open P1 unchanged. The next infrastructure action is A-MULTI-02B Design Preflight, which is not started. The 17 September forensic inventory later in this file is a historical snapshot, not the current operational state.
+**Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. **Phase 0:** CLOSED. **Phase 0.5:** CLOSED. **Phase 0.6:** CLOSED by human approval. **Phase 0.7:** CLOSED by human approval; governance is FROZEN. **A01**, **A02** and **A03** are VERIFIED CLOSED. There is no OPEN P0. The next product finding is A04, OPEN P1. **A31:** remains IN PROGRESS under the explicit human-review exception for 33 documentation files. **A26** and **A27** are VERIFIED CLOSED. A04–A25, A28–A30 and A32–A44 remain OPEN. Open P1 count is 25. The Phase 2 exit gate is not passed. Render remains SUSPENDED. There is no production-readiness claim. Multi-agent infrastructure A-MULTI-02A — Orchestration Core is CANONICALLY CLOSED. Infrastructure commit `4b2b9907829b37d80daf6b8ffd73614582d224ce`. Governance closure `826dc9331dab39725041499dc032bed488de6d07` is main and origin/main. A-MULTI-02A leaves A01–A44 status, Open P0 and Open P1 unchanged. The next infrastructure action is A-MULTI-02B Design Preflight, which is not started. GOV-ASSURANCE-01 is the assurance policy in section 21. It does not close Phase 2, start A04, or start A-MULTI-02B. The 17 September forensic inventory later in this file is a historical snapshot, not the current operational state.
 
-Current document roles: this master owns execution/status; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) supplies evidence and closure criteria; [Source of Truth](../architecture/SOURCE_OF_TRUTH_REGISTRY.md) supplies detailed current/persisted/target owners; [workspace matrix](PLATFORM_PRODUCT_MATRIX.md) supplies dimension ratings; [test strategy](../testing/TEST_STRATEGY.md) supplies validation/isolation requirements; [roadmap](../roadmap.md) supplies dependency gates. When evidence changes, update the affected records together. These documents do not claim that proposed consolidation or product remediation has occurred.
+Current document roles: this master owns execution/status and, in section 21, the GOV-ASSURANCE-01 assurance policy; [technical debt](CODEBASE_ROBUSTNESS_AUDIT.md) supplies evidence and closure criteria; [Source of Truth](../architecture/SOURCE_OF_TRUTH_REGISTRY.md) supplies detailed current/persisted/target owners; [workspace matrix](PLATFORM_PRODUCT_MATRIX.md) supplies dimension ratings; [test strategy](../testing/TEST_STRATEGY.md) supplies validation, isolation and assurance-evidence obligations; [roadmap](../roadmap.md) supplies dependency order and assurance-gate placement. When evidence changes, update the affected records together. These documents do not claim that proposed consolidation or product remediation has occurred. Section 21 does not add a fifteenth phase.
 
 It must be updated when:
 - a P0/P1/P2/P3 finding is verified, fixed, downgraded, split, or closed;
@@ -636,7 +636,7 @@ Historical “closed”, “certified”, “multinational”, “enterprise rea
 
 # 10. ORDERED EXECUTION PROGRAM
 
-This order supersedes ad-hoc page-by-page expansion. The original material below is retained; each phase additionally carries the exact synchronized objective, dependencies, P0/P1 coverage, exit gate and do-not-do-yet fields from the current roadmap. These are future acceptance requirements, not implementation authorization.
+This order supersedes ad-hoc page-by-page expansion. The original material below is retained; each phase additionally carries the exact synchronized objective, dependencies, P0/P1 coverage, exit gate and do-not-do-yet fields from the current roadmap. These are future acceptance requirements, not implementation authorization. GOV-ASSURANCE-01 adds transversal checks and named phase assurance gates. Those gates are defined in section 21 and placed in [roadmap.md](../roadmap.md). They do not replace the finding exit gates below and do not add a phase.
 
 ## PHASE 0 — Documentation / baseline
 
@@ -1008,7 +1008,7 @@ Must prove:
 
 # 11. NEXT IMMEDIATE ACTIONS
 
-**Current next action:** Phase 2 — Security / access is ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. The next product finding is A04 — Audit persistence failures swallowed, OPEN P1. A04 is not started. A31 remains IN PROGRESS. Phase 2 is not closed. The next infrastructure action is A-MULTI-02B — Trusted Evidence Design Preflight. A-MULTI-02B is not started, and this closure does not authorize its implementation. A-MULTI-02A — Orchestration Core is VERIFIED CLOSED locally and is recorded in section 14.
+**Current next action:** Phase 2 — Security / access is ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. The next product finding is A04 — Audit persistence failures swallowed, OPEN P1. A04 is not started. A31 remains IN PROGRESS. Phase 2 is not closed. The next infrastructure action is A-MULTI-02B — Trusted Evidence Design Preflight. A-MULTI-02B is not started, and this record does not authorize its implementation. A-MULTI-02A — Orchestration Core is CANONICALLY CLOSED and is recorded in section 14. GOV-ASSURANCE-01 does not start A04 or A-MULTI-02B.
 
 The original 17 September audit sequence is preserved below and is not the current work queue. A01, listed there as step 6, is VERIFIED CLOSED. A02 is VERIFIED CLOSED. A03 is VERIFIED CLOSED. Current next product finding is A04. A04 is not assigned by this closure.
 
@@ -1118,7 +1118,7 @@ At the end of every material work package, update `CURRENT_HANDOFF_STATE` in pla
 
 **Next product finding:** A04 — Audit persistence failures swallowed — OPEN P1. A04 is not started.
 
-**Multi-agent infrastructure:** separate from A01–A44 and from the Phase 2 exit gate. A-MULTI-02A — Orchestration Core is VERIFIED CLOSED locally. Infrastructure commit `4b2b9907829b37d80daf6b8ffd73614582d224ce`, integrated on local main by fast-forward. `origin/main` remains `194736151ea66d6d4eab0001baf8f78cc271a0ee` and does not contain A-MULTI-02A until the final closure push. Final independent review was VERIFIED. No structural defect was found. Design freeze was approved. Post-merge validation on local main: orchestration core 29/29, governance regression 9/9, `npm run agents:orchestrate -- --help` PASS, `npm run build` PASS, `git diff --check` PASS. Canonical DB/VDR were not touched. Port 4000 was not used. Preview was not started.
+**Multi-agent infrastructure:** separate from A01–A44 and from the Phase 2 exit gate. A-MULTI-02A — Orchestration Core is CANONICALLY CLOSED. Infrastructure commit `4b2b9907829b37d80daf6b8ffd73614582d224ce`, integrated on local main by fast-forward. Governance closure `826dc9331dab39725041499dc032bed488de6d07` is main and origin/main. Final independent review was VERIFIED. No structural defect was found. Design freeze was approved. Post-merge validation on local main: orchestration core 29/29, governance regression 9/9, `npm run agents:orchestrate -- --help` PASS, `npm run build` PASS, `git diff --check` PASS. Canonical DB/VDR were not touched. Port 4000 was not used. Preview was not started.
 
 A-MULTI-02A establishes these orchestration-control capabilities:
 
@@ -1159,7 +1159,7 @@ A-MULTI-02B — Trusted Evidence is NOT STARTED. A-MULTI-02C execution, routing 
 
 **Next infrastructure action:** A-MULTI-02B Design Preflight only. No implementation before design freeze. The preflight must define evidence authority, candidate SHA binding, capsule fingerprint binding, test/build evidence provenance, Git diff/path evidence, environment/runtime provenance, evidence immutability, fail-closed validation, and what evidence can and cannot prove.
 
-**High-risk execution discipline:** P0/P1 security, architecture, Source of Truth, Golden, persistence, multi-agent infrastructure and production-sensitive work follow this lifecycle: task proposed, design preflight, scope / authority / invariants / failure modes, design freeze, engineering, machine-generated evidence when available, ready for review, independent adversarial review, human merge gate, merge, post-merge validation, governance closure, closed. Until A-MULTI-02B exists, the evidence step remains partly manual.
+**High-risk execution discipline:** the canonical risk tiers, high-risk lifecycle and phase assurance gates are GOV-ASSURANCE-01 in section 21. Until A-MULTI-02B exists, the evidence step remains partly manual. Trusted machine-generated evidence is not claimed.
 
 **Infrastructure review lesson:** A-MULTI-02A required multiple adversarial iterations. Observed failure classes included competing state/capsule authority, path-normalization bypasses, protected-path bypasses, ownership spelling collisions, capsule substitution, split-brain / state-topology limitations, concurrent-writer limitations, human-gate authority defects and Builder self-authorization risk. The verified design corrected or explicitly bounded those issues. Green tests alone are insufficient for high-risk infrastructure. Independent adversarial review and explicit authority design are required.
 
@@ -1247,7 +1247,7 @@ Historical PASS output is not current validation. Current unit/integration/E2E a
 
 ## Roadmap alignment
 
-Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Current operational status: Phase 1 is VERIFIED CLOSED and its isolation work is part of the Phase 1 checkpoint. Phase 2 is ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. The next product finding is A04. The Phase 2 exit gate is not passed. A-MULTI-02A is VERIFIED CLOSED locally as multi-agent infrastructure and does not change this product status. The next infrastructure action is A-MULTI-02B Design Preflight, not started.
+Exactly fourteen phases, 0–13, match [roadmap.md](../roadmap.md) by name/order and synchronized five-field contract in section 10. Phase 0.5, Phase 0.6 and Phase 0.7 are governance locks and do not add a fifteenth phase. Frozen visual rules and port-4000 QA remain unchanged. A31 remains IN PROGRESS under the explicit 33-document review exception. Current operational status: Phase 1 is VERIFIED CLOSED and its isolation work is part of the Phase 1 checkpoint. Phase 2 is ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. The next product finding is A04. The Phase 2 exit gate is not passed. A-MULTI-02A is CANONICALLY CLOSED as multi-agent infrastructure and does not change this product status. The next infrastructure action is A-MULTI-02B Design Preflight, not started. GOV-ASSURANCE-01 in section 21 adds gates inside the existing fourteen phases.
 
 # 17. PHASE 0 FINALIZATION CHANGELOG
 
@@ -1524,11 +1524,11 @@ The grouped inventory records all 140 files present at audit start. Deleted cand
 
 # 20. CURRENT_HANDOFF_STATE
 
-- **CURRENT LOCAL MAIN:** `4b2b9907829b37d80daf6b8ffd73614582d224ce`. This is the A-MULTI-02A infrastructure commit, integrated by fast-forward. The governance closure commit for this documentation diff does not exist yet.
-- **ORIGIN/MAIN:** `194736151ea66d6d4eab0001baf8f78cc271a0ee`. It remains the A03 governance closure. It does not contain A-MULTI-02A until the final closure push.
+- **CURRENT LOCAL MAIN:** `826dc9331dab39725041499dc032bed488de6d07`. Commit message: `docs(agents): close A-MULTI-02A orchestration core`. The GOV-ASSURANCE-01 documentation diff is uncommitted on top of this SHA.
+- **ORIGIN/MAIN:** `826dc9331dab39725041499dc032bed488de6d07`.
 - **ACTIVE PHASE:** Phase 2 — Security / access ACTIVE. Phase 1 is VERIFIED CLOSED. Phase 2 is not closed. The Phase 2 exit gate is not passed.
 - **LAST COMPLETED PRODUCT PACKAGE:** A03 security config bootstrap closure. Product commit `46348857294d41a1c1feb995d9c65032f08bf1ed`. Its governance closure is `194736151ea66d6d4eab0001baf8f78cc271a0ee`.
-- **LAST COMPLETED INFRASTRUCTURE PACKAGE:** A-MULTI-02A — Orchestration Core — VERIFIED CLOSED locally, pending the canonical governance closure commit and push. Infrastructure commit `4b2b9907829b37d80daf6b8ffd73614582d224ce`. This closure is the orchestration-control core. It is not an A01–A44 closure. Section 14 records the established capabilities and the deferred limits.
+- **LAST COMPLETED INFRASTRUCTURE PACKAGE:** A-MULTI-02A — Orchestration Core — CANONICALLY CLOSED. Infrastructure commit `4b2b9907829b37d80daf6b8ffd73614582d224ce`. Governance closure `826dc9331dab39725041499dc032bed488de6d07`. This closure is the orchestration-control core. It is not an A01–A44 closure. Section 14 records the established capabilities and the deferred limits.
 - **A03 PRODUCT COMMIT:** `46348857294d41a1c1feb995d9c65032f08bf1ed`
 - **A01:** VERIFIED CLOSED.
 - **A02:** VERIFIED CLOSED. Post-merge validation: A02 focused 13/13, governanceEnterprise 3/3, boardPackReporting 6/6, pmiEcosystemEnterprise 5/5, test isolation 10/10, combined 37/37, build PASS. Canonical DB/VDR were not mutated. Port 4000 was not used.
@@ -1541,14 +1541,116 @@ The grouped inventory records all 140 files present at audit start. Deleted cand
 - **NEXT PRODUCT FINDING:** A04 — Audit persistence failures swallowed — OPEN P1. A04 is not started.
 - **NEXT INFRASTRUCTURE ACTION:** A-MULTI-02B — Trusted Evidence — NOT STARTED. Design Preflight only. No implementation before design freeze. The preflight must define evidence authority, candidate SHA binding, capsule fingerprint binding, test/build evidence provenance, Git diff/path evidence, environment/runtime provenance, evidence immutability, fail-closed validation, and what evidence can and cannot prove.
 - **A-MULTI-02A LIMIT:** trusted machine-generated evidence, Git/test/build attestation, candidate evidence binding, cross-worktree state transport, a canonical shared-state service, multi-writer coordination, automatic active-task discovery, Builder/Reviewer execution routing, an agent runner, a preview supervisor, an Architecture Agent, cryptographic human identity, and symlink/junction/reparse-point execution validation remain deferred. A-MULTI-02C execution, routing and state transport is not started.
-- **HIGH-RISK DISCIPLINE:** P0/P1 security, architecture, Source of Truth, Golden, persistence, multi-agent infrastructure and production-sensitive work require design preflight and design freeze before engineering, then independent adversarial review, a human merge gate, post-merge validation and governance closure. Until A-MULTI-02B exists, evidence remains partly manually executed and reported.
+- **HIGH-RISK DISCIPLINE:** canonical risk tiers and the high-risk lifecycle are GOV-ASSURANCE-01 in section 21. High-risk work includes P0/P1 security, architecture, Source of Truth, Golden/business oracle, persistence/data integrity, multi-agent infrastructure, production-sensitive work, AI authority, and tenant/customer-data access. No high-risk implementation before Design Freeze. Until A-MULTI-02B exists, evidence remains partly manually executed and reported. Trusted machine-generated evidence is not claimed.
 - **REVIEW LESSON:** green tests alone are insufficient for high-risk infrastructure. Independent adversarial review and explicit authority design are required.
 - **GOVERNANCE:** FROZEN. Change only on evidence of a missing or broken guardrail. `.agents/` is a subordinate role layer, not a second authority.
 - **FROZEN AREAS:** governance. Approved visual surfaces shipped in the Phase 1 checkpoint remain the current product baseline.
 - **CURRENT DIRTY/UNTRACKED RISK:** Deliberately excluded: `backend-server.err`, `docs/academy/screenshots/`, and unconsumed `PipelineFlowFieldVisual.jsx` plus `MADataRoomRouteFieldVisual.jsx`.
 - **REMAINING P2:** E2E fixture collisions (`DUPLICATE_SUPPLIER_NAME`, UNIQUE `compliance_alerts.id`, `compliance_evidence.id`, `compliance_reviews.id`); `commandCalendar` is computed and not rendered.
 - **REMAINING P3:** `tests/ceos-login.spec.js` still flags `localhost:4000` request URLs. That check is narrower than the isolation guard and is not an A27 bypass.
-- **EXACT NEXT ACTION:** The next infrastructure action is the A-MULTI-02B Design Preflight. The next product finding remains A04. Start neither A04 nor A-MULTI-02B implementation from this closure.
-- **NEXT AUTHORIZED SCOPE:** none. This closure does not authorize A04 work or A-MULTI-02B implementation.
+- **EXACT NEXT ACTION:** Technical Direction reviews the uncommitted GOV-ASSURANCE-01 diff. The next infrastructure action remains the A-MULTI-02B Design Preflight. The next product finding remains A04. Start neither A04 nor A-MULTI-02B implementation from this design.
+- **NEXT AUTHORIZED SCOPE:** none. GOV-ASSURANCE-01 does not authorize A04 work, A-MULTI-02B implementation, or a new roadmap phase.
 - **RENDER:** SUSPENDED. Do not repair Render as part of this closure. There is no production-readiness claim.
-- **KNOWN UNVERIFIED ITEMS:** Render remains suspended and was not verified. A30 reproducibility of every historical dirty tree is closed only for the checkpointed Phase 1 baseline, not for older audit manifests. A03 closure does not close the development AUTH_SECRET fallback, A04, A05, A07, A42, A43, general configuration architecture, or Phase 2. A-MULTI-02A does not provide trusted machine evidence and does not verify Render, production, or Phase 2.
+- **KNOWN UNVERIFIED ITEMS:** Render remains suspended and was not verified. A30 reproducibility of every historical dirty tree is closed only for the checkpointed Phase 1 baseline, not for older audit manifests. A03 closure does not close the development AUTH_SECRET fallback, A04, A05, A07, A42, A43, general configuration architecture, or Phase 2. A-MULTI-02A does not provide trusted machine evidence and does not verify Render, production, or Phase 2. GOV-ASSURANCE-01 records future gates. It does not claim those gates have been passed, that release provenance already exists, or that a final Astra audit has been performed.
+
+# 21. GOV-ASSURANCE-01 — QUALITY AND FINAL AUDIT GATES
+
+This section is the canonical assurance policy. [roadmap.md](../roadmap.md) places the gates on the existing phases. [TEST_STRATEGY.md](../testing/TEST_STRATEGY.md) states the evidence obligations. [CODEBASE_HARDENING_STATUS.md](CODEBASE_HARDENING_STATUS.md) keeps only a current-state pointer. The [Source of Truth registry](../architecture/SOURCE_OF_TRUTH_REGISTRY.md) remains the ownership registry these gates consult.
+
+GOV-ASSURANCE-01 is governance design. It does not close Phase 2, start A04, or start A-MULTI-02B. CEO's OS keeps exactly Phase 0 through Phase 13. The new controls are transversal gates and phase exit gates. They strengthen the existing roadmap. They do not create a product phase.
+
+## Purpose and proportion
+
+The roadmap must be able to finish CEO's OS functionally correct, secure for customer and tenant data, internally consistent, maintainable, reasonably refactored, free of accidental competing Sources of Truth, audited for semantic duplication, understandable to a final human reviewer, operationally recoverable, traceable from source to release artifact, and independently auditable by Astra at Release Candidate.
+
+Controls are proportional to risk. This policy does not turn CEO's OS into an endless audit project.
+
+**LOW RISK:** a small, local, non-security change. Use the checks that match that scope.
+
+**MEDIUM RISK:** a multi-file, workflow, or domain change. Use broader regression, contract, and ownership checks.
+
+**HIGH RISK:** P0/P1 security, architecture, Source of Truth, Golden or other business oracle, persistence or data integrity, multi-agent infrastructure, production-sensitive work, AI authority, or tenant/customer-data access. Use the complete lifecycle below. No implementation before Design Freeze.
+
+## High-risk task lifecycle
+
+TASK PROPOSED → DESIGN PREFLIGHT → SCOPE / AUTHORITY / INVARIANTS / FAILURE MODES → DESIGN FREEZE → ENGINEERING → EVIDENCE → READY_FOR_REVIEW → INDEPENDENT ADVERSARIAL REVIEW → HUMAN MERGE GATE → MERGE → POST-MERGE VALIDATION → GOVERNANCE CLOSURE → CLOSED.
+
+Until A-MULTI-02B exists, evidence may still be partly manually executed and reported. This policy does not claim that trusted machine-generated evidence exists.
+
+## Transversal checks from Phase 2 onward
+
+Every phase closure from Phase 2 through Phase 13 includes a lightweight Architecture Health Check and a Security Regression Check. Include a mini-UAT when the phase exposes a meaningful usable workflow.
+
+Architecture Health looks for a competing Source of Truth, semantic business-logic duplication, frontend/backend rule divergence, contract divergence, an ownership conflict, a dependency-direction violation, a new circular dependency, a new god file or god service, a dead or legacy path becoming authoritative, and accidental cross-module coupling. Stylistic imperfection alone does not require refactoring.
+
+Security is transversal. Phase 2 establishes the security baseline. Phases 3–13 continue Security Regression. Any later module that creates a new endpoint, data path, AI tool, report, integration, job, or import/export path must prove that it does not bypass established customer and tenant security.
+
+Architecture is transversal. The deep architecture audit is the mandatory gate after Phase 5. Every Phase 2–13 closure still includes lightweight Architecture Health. A new competing Source of Truth is recorded when it appears.
+
+## Phase assurance gates
+
+**Phase 2 — Client Security Gate.** Before Phase 2 closes, evidence covers, where applicable: authentication, authorization, tenant isolation, cross-tenant negative access, ID or reference tampering, direct API bypass, service-layer bypass, privileged workflow bypass, document and VDR isolation, secret handling, fail-closed behavior, and logging or telemetry exposure of sensitive data. Passing Phase 2 does not finish security permanently.
+
+**Phase 3 — Data Integrity / Migration / Recovery Gate.** Cover swallowed persistence failures, transaction consistency, audit-trail correctness, partial-write behavior, migration safety, rollback strategy, schema compatibility, backup validity, actual restore verification, data retention and deletion where relevant, test-data separation, and the customer-data lifecycle. A backup that has never been restored is not sufficient evidence of recoverability.
+
+**Phase 4 — Workflow Integrity Gate.** Require end-to-end workflow continuity, negative paths, role transitions, persistence continuity, a mini-UAT using realistic business workflows, and no silent fall-through between UI, API, service, and persistence layers.
+
+**Phase 5 — Business Correctness Gate.** Keep implementation separate from the business oracle and Golden truth. Check financial calculations, valuation logic, metrics, business-state transitions, frontend/backend calculation divergence, and competing calculation authorities. Tests generated from the implementation alone are insufficient.
+
+**Post-Phase-5 gate — 360° Architecture & Codebase Integrity Audit.** This is not Phase 6. It is a mandatory gate between Phase 5 and Phase 6. It assesses correctness, security and tenant isolation, Source of Truth integrity, semantic duplication, contract divergence, ownership boundaries, module boundaries, dependency direction, circular dependencies, god files and god services, frontend/backend duplicated business logic, dead and legacy code, configuration drift, security-policy drift, dependency and supply-chain health, test quality, business-oracle independence, data lifecycle, maintainability, and human reviewability.
+
+**Refactor only on evidence.** Required sequence: UNDERSTAND → CAPTURE CURRENT BEHAVIOR → VALIDATE BUSINESS ORACLE → TEST → REFACTOR → RE-TEST → REVIEW. Do not rewrite code merely because it looks inelegant. A refactor has a concrete objective, such as removing competing authority, eliminating harmful duplication, reducing dangerous coupling, breaking a god component or service, removing dead paths, restoring ownership boundaries, or improving human reviewability. Avoid both a monolithic design and an over-fragmented micro-abstraction design. Modularity optimizes cohesion, clarity, ownership, dependency direction, and reviewability.
+
+**Phase 6.** Reporting consumes canonical data, canonical business rules, and canonical calculations. Reporting must not silently become another business-calculation Source of Truth.
+
+**Phase 7 — Operability / Recovery Gate.** Cover structured errors, logs, sensitive-data logging, observability, failed-job recovery, retry safety, idempotency where relevant, degraded operation, rollback, restore, incident diagnosis, and the recovery procedure.
+
+**Phase 8 — Cross-module Integrity Gate.** Assess accidental duplicated domain logic, a competing Source of Truth, shared-module misuse, an unauthorized cross-workspace dependency, business-contract divergence, and configuration or security drift.
+
+**Phase 9.** Preserve visual convergence. Add an accessibility check, visual consistency, interaction consistency, a mini-UAT, and responsive behavior where required. Visual refactoring must not alter business authority.
+
+**Phase 10 — AI Authority / Tool / Data Security Gate.** CEO's OS AI must not become canonical authority for permissions, tenant ownership, official stored facts, financial canonical calculations, Source of Truth, human approvals, or irreversible or destructive action authorization. Audit prompts, tools, retrieval, the tenant and data boundary, action authority, hallucination handling, evidence and citation behavior, and fail-closed operations.
+
+**Phase 11.** Require locale correctness, financial, date, and number format correctness, no business-rule divergence by locale, and translated UI that preserves domain meaning.
+
+**Phase 12 — Performance + Dependency Health Gate.** Cover representative load, performance budgets, critical-path latency, regressions, database and query behavior, memory and resource issues, dependency vulnerabilities, unnecessary dependencies, lockfile integrity, and supply-chain review. Do not postpone every performance observation until Phase 12. Earlier phases may introduce basic performance budgets.
+
+**Phase 13.** Require a Human Reviewability Gate, a Completeness Gate, full Security Regression, a Release Provenance Gate, and a No Critical Unknown Gate.
+
+## Human reviewability
+
+Before Release Candidate, a competent external engineer should be able to understand the system without reverse-engineering the entire repository. Canonical documentation must be sufficient to answer where the application starts, how it is divided, who owns each domain, where each critical business rule lives, where authorization lives, where data is persisted, what the canonical Source of Truth is, what remains legacy, where customer data can be accessed, what protects each critical rule, how tests are run, how the system is deployed, how failure is recovered, where AI is used, what AI may decide, and what AI may never decide.
+
+The target responsibilities are system overview, module map, data flow, authorization model, Source of Truth registry, business oracles, AI authority boundaries, test and evidence map, deployment and recovery, and known limitations. Do not create ten duplicated documents when an existing canonical document can carry the responsibility.
+
+## Completeness, provenance, and unknown critical behavior
+
+The Completeness Gate asks whether the Release Candidate contains everything required for the defined product, as well as whether existing code works. Missing workflows and features are classified separately from implementation defects.
+
+Release provenance is the required traceability from source SHA to dependency and lockfile identity, build, artifact, staging, and production release. The deployed artifact must be provable as the audited Release Candidate. This traceability is a future gate. It is not claimed as already implemented.
+
+No Critical Unknown means a Release Candidate cannot leave an unresolved critical area classified only as unknown or not audited for security, tenant isolation, persistence, financial or business calculations, Source of Truth, AI authority, deployment provenance, or recovery. Known limitations are allowed. Known non-critical debt is allowed. Unknown critical behavior presented as verified is not allowed.
+
+## Final Astra audit
+
+After the Phase 13 Release Candidate, require an independent Astra audit with two passes.
+
+**Pass A — blind audit.** Inputs are the Release Candidate SHA, the repository, the requirements, the business oracles, and the threat model. Previous verified conclusions are not inputs to this pass. The objective is to reconstruct the architecture independently and find contradictions, missing controls, unexpected duplication, security and data-boundary issues, and maintainability or reviewability problems.
+
+**Pass B — evidence reconciliation.** After Pass A, provide machine evidence, tests, the Source of Truth registry, architecture documents, the security model, known limitations, and previous verified states. Compare Astra's independently reconstructed model with the claimed state.
+
+Each important audit domain is classified as one of: verified by evidence, verified with limited scope, not verified, contradictory, or not audited / insufficient evidence. “Everything looks good” is not a sufficient final audit conclusion.
+
+Astra does not automatically rewrite the repository. Each supported finding becomes a concrete finding or task, then follows Design Preflight, engineering, evidence, independent review, and a targeted Astra re-check when needed. Do not rebuild the entire project unless evidence demonstrates a genuinely systemic architectural failure.
+
+## Data lifecycle and supply chain
+
+Where relevant, assurance considers data classification, customer and tenant ownership, PII and other sensitive data, retention, deletion, export, backup, restore, test fixtures, logs and telemetry, and production versus non-production separation. This policy does not invent a regulatory certification claim.
+
+Supply-chain review includes dependency review, lockfile integrity, known vulnerability review, unnecessary dependency review, install and build scripts, and runtime provenance. This policy does not claim SOC 2, ISO, or another regulatory certification.
+
+## Acceptance
+
+CEO's OS is not release-ready merely because a build passes, tests are green, the UI looks finished, or an agent says verified. Release readiness requires correctness, security, business truth, data integrity, architecture integrity, operability, human reviewability, completeness, release provenance, and the independent final audit.
+
+None of these gates is marked passed by this section. Phase 2 remains ACTIVE. Its exit gate is not passed. Render remains SUSPENDED. A-MULTI-02B remains NOT STARTED.

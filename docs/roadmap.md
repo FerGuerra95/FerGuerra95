@@ -6,6 +6,8 @@
 
 Each phase needs an explicit file whitelist and its own evidence. Exit gates describe future requirements. Preserve the M&A black canvas, workspace accent, page/hero geometry and approved surfaces throughout functional remediation.
 
+GOV-ASSURANCE-01 adds transversal gates and phase assurance gates inside these fourteen phases. It does not add Phase 14. The canonical policy is section 21 of the [master control](product/CEO_OS_MASTER_CONTROL_BASELINE.md). Evidence obligations are in the [test strategy](testing/TEST_STRATEGY.md). From Phase 2 onward, every phase closure includes lightweight Architecture Health and Security Regression, plus a mini-UAT when the phase exposes a meaningful usable workflow. The deep architecture audit sits between Phase 5 and Phase 6 and is not itself a phase. None of these gates is passed by recording them. Phase 2 remains ACTIVE and its exit gate is not passed.
+
 ## Phase 0 — Documentation / baseline
 
 **OBJECTIVE:** Reconcile canonical docs, claims and accepted source manifest; complete the Phase 0.5 authority hierarchy, continuity protocol and legacy classification.
@@ -42,6 +44,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 
 **EXIT GATE:** Tenant/file/role negative tests pass, generic approval bypass blocked, deterministic startup/reset and redaction evidenced; provider-specific findings dispositioned.
 
+**ASSURANCE GATE:** Client Security Gate. Phase 2 establishes the security baseline. Phases 3–13 continue Security Regression. Criteria are in Master Control section 21.
+
 **DO NOT DO YET:** Do not open external-data pilots, enable AI or infer platform security from one test.
 
 ## Phase 3 — Persistence/audit/data integrity
@@ -53,6 +57,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 **P0/P1 COVERAGE:** A04, A06, A08, A28; supporting A35/A32.
 
 **EXIT GATE:** Fresh/upgraded schema and ownership checks proven; failed audit policy tested; reads do not seed records; archive/delete graph documented.
+
+**ASSURANCE GATE:** Data Integrity / Migration / Recovery Gate, including an actual restore. A backup that has never been restored is not recoverability evidence. Also complete the Phase 2 onward Architecture Health and Security Regression checks.
 
 **DO NOT DO YET:** Do not edit applied migrations, mutate canonical DB, bulk delete archived fixtures or redesign UI.
 
@@ -66,6 +72,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 
 **EXIT GATE:** Save→reload→pipeline→detail→report/share→archive keeps identity/version/provenance; errors remain visible; documentary readiness uses evidence.
 
+**ASSURANCE GATE:** Workflow Integrity Gate, including negative paths, role transitions, persistence continuity, a realistic mini-UAT, and no silent fall-through across UI, API, service, and persistence. Also complete Architecture Health and Security Regression.
+
 **DO NOT DO YET:** Do not redesign frozen M&A surfaces or persist demo rows as operational facts.
 
 ## Phase 5 — Calculation/oracle closure
@@ -78,7 +86,13 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 
 **EXIT GATE:** Manual approved oracles and production-path tests cover invalid DCF, ranges, currencies, null dilution, source pairs and empty data.
 
+**ASSURANCE GATE:** Business Correctness Gate. Implementation stays separate from the business oracle and Golden truth. Tests generated only from the implementation are insufficient. Also complete Architecture Health and Security Regression.
+
 **DO NOT DO YET:** Do not change expected values to fit defects or conflate simple Golden benchmarks with product formulas.
+
+## Gate between Phase 5 and Phase 6 — 360° Architecture & Codebase Integrity Audit
+
+This is not a phase and does not change the fourteen-phase count. It is mandatory before Phase 6. The twenty assessment areas, the refactor-only-on-evidence rule, and the Astra classification used later at Release Candidate are defined in Master Control section 21.
 
 ## Phase 6 — Executive/reporting convergence
 
@@ -89,6 +103,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 **P0/P1 COVERAGE:** A24, A25; A19 cross-module completion; A38/A40.
 
 **EXIT GATE:** Executive/Reporting preserve module values, missing/error state, review requirement and snapshots through reload/export.
+
+**ASSURANCE GATE:** Reporting consumes canonical data, canonical business rules, and canonical calculations. It must not become another business-calculation Source of Truth. Also complete Architecture Health and Security Regression.
 
 **DO NOT DO YET:** Do not invent fallback scores, recalculate module truth in renderers or imply board approval.
 
@@ -102,6 +118,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 
 **EXIT GATE:** Known-source build served on canonical QA runtime; coordinated restore drill and operational controls evidenced.
 
+**ASSURANCE GATE:** Operability / Recovery Gate, covering structured errors, sensitive-data logging, failed-job recovery, retry safety, idempotency where relevant, degraded operation, rollback, restore, incident diagnosis, and recovery procedure. Also complete Architecture Health and Security Regression.
+
 **DO NOT DO YET:** Do not assume Docker/Postgres scaffold is current production or deploy without scoped authorization.
 
 ## Phase 8 — Remaining workspaces
@@ -113,6 +131,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 **P0/P1 COVERAGE:** Remaining scoped P1 validation; A35/A36/A38/A39.
 
 **EXIT GATE:** Advertised actions, roles, evidence links, schedules/notifications or explicit non-execution labels match tested reality.
+
+**ASSURANCE GATE:** Cross-module Integrity Gate, covering duplicated domain logic, competing Source of Truth, shared-module misuse, unauthorized cross-workspace dependency, contract divergence, and configuration or security drift. Also complete Architecture Health and Security Regression.
 
 **DO NOT DO YET:** Do not promote internal marketplace or add features to hide unfinished workflows.
 
@@ -126,6 +146,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 
 **EXIT GATE:** Computed-style and visual equivalence at approved sizes; one material/border/radius owner; reviewed quarantine before deletion.
 
+**ASSURANCE GATE:** Preserve visual convergence. Add accessibility, visual consistency, interaction consistency, a mini-UAT, and responsive behavior where required. Visual refactoring must not alter business authority. Also complete Architecture Health and Security Regression.
+
 **DO NOT DO YET:** Do not broad-redesign frozen surfaces, add patch layers by default or delete by intuition.
 
 ## Phase 10 — AI governance
@@ -137,6 +159,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 **P0/P1 COVERAGE:** Prevent reopening security/SoT P1; A41.
 
 **EXIT GATE:** Provider/legal/security/evaluation evidence before any activation; source values/workflow remain human governed.
+
+**ASSURANCE GATE:** AI Authority / Tool / Data Security Gate. AI must not become canonical authority for permissions, tenant ownership, official stored facts, financial calculations, Source of Truth, human approvals, or irreversible or destructive action authorization. Also complete Architecture Health and Security Regression.
 
 **DO NOT DO YET:** Do not enable external providers or autonomous decisions through this roadmap.
 
@@ -150,6 +174,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 
 **EXIT GATE:** Approved multi-currency/locale cases preserve meaning and provenance across UI/reports.
 
+**ASSURANCE GATE:** Locale, financial, date, and number formats stay correct. Locale and translation must not create a divergent business rule or change domain meaning. Also complete Architecture Health and Security Regression.
+
 **DO NOT DO YET:** Do not treat symbol switching or translation as multinational readiness.
 
 ## Phase 12 — Scale/performance
@@ -161,6 +187,8 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 **P0/P1 COVERAGE:** Performance-related P1 regressions if established; A34/A37/A43 follow-through.
 
 **EXIT GATE:** Measured budgets/load and failure/recovery evidence meet approved workload requirements.
+
+**ASSURANCE GATE:** Performance + Dependency Health Gate, including representative load, budgets, critical-path latency, query and resource behavior, vulnerability review, unnecessary dependencies, lockfile integrity, and supply-chain review. Earlier phases may already carry basic performance budgets. Also complete Architecture Health and Security Regression.
 
 **DO NOT DO YET:** Do not replace SQLite or rewrite architecture without measured justification.
 
@@ -174,7 +202,9 @@ Each phase needs an explicit file whitelist and its own evidence. Exit gates des
 
 **EXIT GATE:** Known commit/build/schema; UAT evidence; no release-blocking P0/P1; pilot/release decision explicitly reopened and approved.
 
-**DO NOT DO YET:** Do not use historical PASS, polished visuals or documentation closure as release authorization.
+**ASSURANCE GATE:** Human Reviewability Gate, Completeness Gate, full Security Regression, Release Provenance Gate, and No Critical Unknown Gate. After Release Candidate, the independent Astra audit has a blind pass and a separate evidence-reconciliation pass. Criteria, classification labels, and the rule that Astra does not automatically rewrite the repository are in Master Control section 21. Release provenance and the final Astra audit are future requirements. Recording this gate does not claim they already exist.
+
+**DO NOT DO YET:** Do not use historical PASS, polished visuals, green tests, or documentation closure as release authorization.
 
 ## Tracking rule
 
