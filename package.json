@@ -27,7 +27,8 @@
     "playwright:install": "playwright install chromium",
     "postinstall": "npm rebuild better-sqlite3",
     "quality": "npm run build && npm rebuild better-sqlite3 && npm run check:bundle-budget && npm run test:unit && npm run test:integration",
-    "ci": "npm run quality && npm run test:e2e && npm run test:a11y && npm run test:lighthouse && npm run test:lighthouse:perf"
+    "ci": "npm run quality && npm run test:e2e && npm run test:a11y && npm run test:lighthouse && npm run test:lighthouse:perf",
+    "agents:orchestrate": "node scripts/agents/orchestrate.mjs"
   },
   "dependencies": {
     "better-sqlite3": "^12.9.0",

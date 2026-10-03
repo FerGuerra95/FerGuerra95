@@ -1,0 +1,15 @@
+{
+  "knownRoles": ["builder", "engineering", "reviewer", "human", "technical_direction", "orchestrator"],
+  "implementRoles": ["builder", "engineering"],
+  "reviewRoles": ["reviewer", "orchestrator", "technical_direction"],
+  "verifiedRoles": ["reviewer"],
+  "notVerifiedRoles": ["reviewer"],
+  "correctionRoles": ["builder", "engineering"],
+  "mergeGateRoles": ["reviewer", "technical_direction", "orchestrator"],
+  "mergeRoles": ["human", "technical_direction"],
+  "postMergeRoles": ["builder", "engineering"],
+  "validatedRoles": ["reviewer"],
+  "closureRoles": ["human", "technical_direction", "orchestrator"],
+  "builderCannotVerify": true,
+  "mergeRequiresAuthorization": true
+}

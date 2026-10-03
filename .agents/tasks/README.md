@@ -1,0 +1,3 @@
+# Task state folders
+
+`.agents/tasks/<TASK_ID>/` may hold `capsule.json` and `STATE.json` for one orchestration record in that worktree. That folder is a filesystem copy, not a synchronized global store. The capsule is the authority for baseline, allowed files, and the seven human-gate requirements. Protected scope is not human approval. `STATE.json` stores `capsule_fingerprint` and `human_authorizations`, and it fails closed when a supplied capsule does not match the fingerprint. Do not store secrets. Do not copy those files into `ACTIVE_TASKS.md`. This package does not create a live task snapshot and does not synchronize copies across worktrees.
