@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import {
+  assertArtifactConsistency,
   assertSeals,
   createExclusiveRun,
   LIMITATIONS,
@@ -98,9 +99,17 @@ async function executePlan(plan, context) {
     const raw = await runCommand(entry, { ...context, required });
     let artifacts = [];
     try {
-      const sealed = sealCommandOutputs(context.runDir, before, raw.outputs || []);
+      const sealed = sealCommandOutputs(context.runDir, before, raw.outputs || [], seals);
       artifacts = sealed.digests;
-      for (const digest of sealed.digests) seals.set(digest.path, digest.sha256);
+      for (const digest of sealed.digests) {
+        if (seals.has(digest.path)) {
+          if (seals.get(digest.path) !== digest.sha256) {
+            throw new Error(`Sealed artifact changed: ${digest.path}`);
+          }
+          continue;
+        }
+        seals.set(digest.path, digest.sha256);
+      }
       if (sealed.missing.length > 0 && raw.status === 'PASS') raw.status = 'ERROR';
     } catch {
       integrityOk = false;
@@ -170,7 +179,14 @@ async function runEvidence(options) {
     controlPre,
     candidatePre
   });
-  const overall = overallStatus(executed.commands, executed.integrityOk && capsuleBytesUnchanged(capsule));
+  let overall = overallStatus(executed.commands, executed.integrityOk && capsuleBytesUnchanged(capsule));
+  if (overall === 'PASS') {
+    try {
+      assertArtifactConsistency(run.runDir, executed.commands, executed.artifactDigests);
+    } catch {
+      overall = 'INVALID';
+    }
+  }
   const manifest = writeManifest(run.runDir, manifestBody({
     artifactDigests: executed.artifactDigests,
     authorityPathsChanged: candidate.authorityPathsChanged,

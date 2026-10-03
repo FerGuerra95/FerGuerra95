@@ -138,10 +138,11 @@ function canonicalEvidenceOutput(value) {
   if (parts.length === 0 || parts.some((part) => part === '' || part === '.' || part === '..')) {
     throw new CapsuleError('EVIDENCE_PLAN_INVALID', 'evidence_output escapes the run directory.');
   }
-  if (parts[parts.length - 1] === 'manifest.json') {
+  const canonicalParts = parts.map((part) => part.toLowerCase());
+  if (canonicalParts[canonicalParts.length - 1] === 'manifest.json') {
     throw new CapsuleError('EVIDENCE_PLAN_INVALID', 'evidence_output cannot target manifest.json.');
   }
-  return value;
+  return `${EVIDENCE_OUTPUT_PLACEHOLDER}/${canonicalParts.join('/')}`;
 }
 
 function canonicalToken(token) {
@@ -168,19 +169,26 @@ function canonicalToken(token) {
   return { type: token.type, value: token.value };
 }
 
-function canonicalEntry(entry, seen) {
+function canonicalEntry(entry, seenIds, seenOutputs) {
   exactKeys(entry, ENTRY_KEYS, 'Evidence entry');
   if (typeof entry.id !== 'string' || entry.id === '' || entry.id.includes('\0')) {
     throw new CapsuleError('EVIDENCE_PLAN_INVALID', 'Evidence id must be a non-empty string.');
   }
-  if (seen.has(entry.id)) {
+  if (seenIds.has(entry.id)) {
     throw new CapsuleError('EVIDENCE_PLAN_INVALID', `Duplicate evidence id ${entry.id}.`);
   }
-  seen.add(entry.id);
+  seenIds.add(entry.id);
   if (!Array.isArray(entry.argv) || entry.argv.length === 0) {
     throw new CapsuleError('EVIDENCE_PLAN_INVALID', 'Evidence argv must be a non-empty list.');
   }
   const argv = entry.argv.map((token) => canonicalToken(token));
+  for (const token of argv) {
+    if (token.type !== 'evidence_output') continue;
+    if (seenOutputs.has(token.value)) {
+      throw new CapsuleError('EVIDENCE_PLAN_INVALID', `Duplicate evidence output ${token.value}.`);
+    }
+    seenOutputs.add(token.value);
+  }
   if (argv[0].type !== 'exec' || argv.filter((token) => token.type === 'exec').length !== 1) {
     throw new CapsuleError('EVIDENCE_PLAN_INVALID', 'Evidence argv must start with exactly one exec token.');
   }
@@ -195,10 +203,11 @@ export function canonicalEvidencePlan(plan) {
   if (!Array.isArray(plan.required) || !Array.isArray(plan.optional)) {
     throw new CapsuleError('EVIDENCE_PLAN_INVALID', 'evidence_plan lists must be arrays.');
   }
-  const seen = new Set();
+  const seenIds = new Set();
+  const seenOutputs = new Set();
   return {
-    required: plan.required.map((entry) => canonicalEntry(entry, seen)),
-    optional: plan.optional.map((entry) => canonicalEntry(entry, seen))
+    required: plan.required.map((entry) => canonicalEntry(entry, seenIds, seenOutputs)),
+    optional: plan.optional.map((entry) => canonicalEntry(entry, seenIds, seenOutputs))
   };
 }
 

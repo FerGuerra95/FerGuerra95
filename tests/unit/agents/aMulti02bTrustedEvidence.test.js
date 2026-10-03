@@ -554,6 +554,37 @@ test('timeout and repository or control mutations cannot pass', () => {
   }
 });
 
+test('a repeated evidence output cannot produce a passing run', () => {
+  const baseline = 'a'.repeat(40);
+  const owned = entry('one', "require('fs').writeFileSync(process.argv[1],'a')", 'same.txt');
+  const again = entry('two', "require('fs').writeFileSync(process.argv[1],'b')", 'same.txt');
+  const mixedCase = entry('three', "require('fs').writeFileSync(process.argv[1],'c')", 'Same.txt');
+  expect(() => validateCapsule(capsuleFor(baseline, { required: [owned, again], optional: [] }))).toThrow(/duplicate evidence output/i);
+  expect(() => validateCapsule(capsuleFor(baseline, { required: [owned], optional: [mixedCase] }))).toThrow(/duplicate evidence output/i);
+  expect(() => validateCapsule(capsuleFor(baseline, {
+    required: [entry('dir', "require('fs').writeFileSync(process.argv[1],'a')", 'Dir/same.txt')],
+    optional: [entry('dir2', "require('fs').writeFileSync(process.argv[1],'b')", 'dir/Same.txt')]
+  }))).toThrow(/duplicate evidence output/i);
+
+  const world = makeWorld({
+    plan: {
+      required: [
+        entry('one', "require('fs').writeFileSync('ran.txt','1'); require('fs').writeFileSync(process.argv[1],'a')", 'same.txt'),
+        entry('two', "require('fs').writeFileSync(process.argv[1],'b')", 'same.txt')
+      ],
+      optional: []
+    }
+  });
+  try {
+    const result = parsed(run(world));
+    expect(result.overall_status).not.toBe('PASS');
+    expect(result.overall_status).toBe('INVALID');
+    expect(fs.existsSync(path.join(world.candidate, 'ran.txt'))).toBe(false);
+  } finally {
+    world.cleanup();
+  }
+});
+
 test('artifact sealing and bundle validation reject tampering', () => {
   const manifestWriter = makeWorld({
     plan: {

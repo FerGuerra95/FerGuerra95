@@ -103,9 +103,14 @@ export function assertSeals(runDir, seals) {
   return current;
 }
 
-export function sealCommandOutputs(runDir, before, allowedAbsolute) {
+export function sealCommandOutputs(runDir, before, allowedAbsolute, sealed = new Map()) {
   const after = snapshotFiles(runDir);
   const allowed = new Set(allowedAbsolute.map((filePath) => relativeTo(runDir, filePath)));
+  for (const [relativePath, digest] of sealed.entries()) {
+    if (after.get(relativePath) !== digest) {
+      throw new EvidenceError('ARTIFACT_SEAL', `Sealed artifact changed: ${relativePath}`);
+    }
+  }
   for (const [relativePath, digest] of after.entries()) {
     if (relativePath.toLowerCase() === 'manifest.json' || relativePath.toLowerCase().endsWith('/manifest.json')) {
       throw new EvidenceError('ARTIFACT_UNEXPECTED', 'A child wrote manifest.json.');
@@ -116,6 +121,7 @@ export function sealCommandOutputs(runDir, before, allowedAbsolute) {
     }
   }
   for (const [relativePath, digest] of before.entries()) {
+    if (sealed.has(relativePath)) continue;
     if (after.get(relativePath) !== digest && !allowed.has(relativePath)) {
       throw new EvidenceError('ARTIFACT_SEAL', `Sealed artifact changed: ${relativePath}`);
     }
@@ -123,11 +129,49 @@ export function sealCommandOutputs(runDir, before, allowedAbsolute) {
   const digests = [];
   const missing = [];
   for (const relativePath of allowed) {
+    if (sealed.has(relativePath)) continue;
     const digest = after.get(relativePath);
     if (!digest) missing.push(relativePath);
     else digests.push({ path: relativePath, sha256: digest });
   }
   return { after, digests, missing };
+}
+
+export function assertArtifactConsistency(runDir, commands, artifactDigests) {
+  if (!Array.isArray(artifactDigests)) {
+    throw new EvidenceError('ARTIFACT_MISSING', 'Artifact digests are missing.');
+  }
+  const digests = new Map();
+  for (const entry of artifactDigests) {
+    if (!entry || typeof entry.path !== 'string' || typeof entry.sha256 !== 'string') {
+      throw new EvidenceError('ARTIFACT_MISSING', 'Artifact digest is incomplete.');
+    }
+    if (digests.has(entry.path) && digests.get(entry.path) !== entry.sha256) {
+      throw new EvidenceError('ARTIFACT_SEAL', `Conflicting artifact digest: ${entry.path}`);
+    }
+    digests.set(entry.path, entry.sha256);
+  }
+  for (const [relativePath, digest] of digests.entries()) {
+    const absolute = path.join(runDir, ...relativePath.split('/'));
+    if (!fs.existsSync(absolute) || hashFile(absolute) !== digest) {
+      throw new EvidenceError('ARTIFACT_MISSING', `Artifact digest mismatch: ${relativePath}`);
+    }
+  }
+  for (const command of commands || []) {
+    if (command.status !== 'PASS') continue;
+    for (const artifact of command.artifacts || []) {
+      if (!digests.has(artifact.path) || digests.get(artifact.path) !== artifact.sha256) {
+        throw new EvidenceError('ARTIFACT_MISSING', `Missing required artifact ${artifact.path}.`);
+      }
+      const absolute = path.join(runDir, ...artifact.path.split('/'));
+      if (!fs.existsSync(absolute) || hashFile(absolute) !== artifact.sha256) {
+        throw new EvidenceError('ARTIFACT_MISSING', `Missing required artifact ${artifact.path}.`);
+      }
+    }
+    if (command.required && (command.artifacts || []).length === 0 && command.expects_json === true) {
+      throw new EvidenceError('ARTIFACT_MISSING', `Missing required artifact for ${command.id}.`);
+    }
+  }
 }
 
 export function overallStatus(commands, integrityOk) {
@@ -217,27 +261,6 @@ export function validateManifest(runDir, manifest, capsule, options = {}) {
   if (capsule.baseline !== manifest.baseline || capsule.task !== manifest.task) {
     throw new EvidenceError('CAPSULE_MISMATCH', 'External capsule identity does not match the evidence bundle.');
   }
-  const digests = new Map(manifest.artifact_digests.map((entry) => [entry.path, entry.sha256]));
-  for (const [relativePath, digest] of digests.entries()) {
-    const absolute = path.join(runDir, ...relativePath.split('/'));
-    if (!fs.existsSync(absolute) || hashFile(absolute) !== digest) {
-      throw new EvidenceError('ARTIFACT_MISSING', `Artifact digest mismatch: ${relativePath}`);
-    }
-  }
-  for (const command of manifest.commands) {
-    if (!command.required || command.status !== 'PASS') continue;
-    for (const artifact of command.artifacts || []) {
-      if (!digests.has(artifact.path) || digests.get(artifact.path) !== artifact.sha256) {
-        throw new EvidenceError('ARTIFACT_MISSING', `Missing required artifact ${artifact.path}.`);
-      }
-      const absolute = path.join(runDir, ...artifact.path.split('/'));
-      if (!fs.existsSync(absolute)) {
-        throw new EvidenceError('ARTIFACT_MISSING', `Missing required artifact ${artifact.path}.`);
-      }
-    }
-    if ((command.artifacts || []).length === 0 && command.expects_json === true) {
-      throw new EvidenceError('ARTIFACT_MISSING', `Missing required artifact for ${command.id}.`);
-    }
-  }
+  assertArtifactConsistency(runDir, manifest.commands, manifest.artifact_digests);
   return { ok: true, overall_status: manifest.overall_status };
 }
