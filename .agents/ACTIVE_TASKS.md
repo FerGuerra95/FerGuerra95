@@ -4,6 +4,7 @@ Exists because `CURRENT_HANDOFF_STATE` records one product phase, not concurrent
 
 | Agent | Task | Branch | Baseline | Worktree | Status | Owned paths | Blockers |
 |---|---|---|---|---|---|---|---|
-| none | none | none | A-MULTI-02B governance closure commit is the current local main tip after integration; origin/main remains `0adf5a3b56d324cc2d2f6985455868e4d233bec0` | main checkout | none | none | A-MULTI-02B is CANONICALLY CLOSED locally. Method Integration Micro-Package planning is next; Assurance Baseline Audit and A04 Design Preflight / pilot follow. None is started. No push is authorized. |
+| none | A-MULTI-02B-FIX-01 | main | implementation `1ba019eff05588c8346b653f5a13b297f38b6026`; origin/main remains `bc2d6ba41da3dd687264009faeb3d192a8e6705b` | main checkout | CANONICALLY CLOSED locally | none | Push not authorized. Local main is ahead of origin/main. |
+| none | METHOD-INTEGRATION-01 | agent/engineering/method-integration-01 | old capsule remains bound to `bc2d6ba41da3dd687264009faeb3d192a8e6705b` and must not be reused | C:\ceos-worktrees\method-integration-01 | DESIGN FREEZE APPROVED / ASSIGNED / ACTIVATION_BLOCKED | none | Reactivation requires a new baseline after authorized FIX-01 push. Assurance Baseline Audit and A04 are not started. |
 
 Update a row when Technical Direction assigns, blocks, or closes a task. Remove finished rows. Do not accumulate history.
