@@ -129,6 +129,8 @@ export function capsuleBytesUnchanged(capsule) {
   return fs.readFileSync(capsule.path).equals(capsule.bytes);
 }
 
+const TASK_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,80}$/;
+
 function orchestrationPair(task) {
   const directory = `.agents/tasks/${task}`;
   return {
@@ -138,45 +140,113 @@ function orchestrationPair(task) {
   };
 }
 
-function listTaskFiles(candidateRoot) {
-  const root = path.join(candidateRoot, '.agents', 'tasks');
-  if (!fs.existsSync(root)) return [];
+function repoRel(parts) {
+  return parts.join('/');
+}
+
+function readActualEntries(directory) {
+  try {
+    return fs.readdirSync(directory, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+}
+
+function listTaskTreeEntries(candidateRoot) {
   const files = [];
-  const walk = (current) => {
-    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+  const walk = (current, parts) => {
+    for (const entry of readActualEntries(current)) {
+      const nextParts = [...parts, entry.name];
       const absolute = path.join(current, entry.name);
-      if (entry.isDirectory()) walk(absolute);
-      else if (entry.isFile()) {
-        files.push(path.relative(candidateRoot, absolute).split(path.sep).join('/'));
-      }
+      if (entry.isDirectory()) walk(absolute, nextParts);
+      else if (entry.isFile()) files.push(repoRel(nextParts));
     }
   };
-  walk(root);
+  for (const agents of readActualEntries(candidateRoot)) {
+    if (!agents.isDirectory() || agents.name.toLowerCase() !== '.agents') continue;
+    const agentsPath = path.join(candidateRoot, agents.name);
+    for (const tasks of readActualEntries(agentsPath)) {
+      if (!tasks.isDirectory() || tasks.name.toLowerCase() !== 'tasks') continue;
+      walk(path.join(agentsPath, tasks.name), [agents.name, tasks.name]);
+    }
+  }
   return files;
 }
 
-export function inspectCandidate(candidateRoot, capsule) {
+function isValidTaskId(value) {
+  return TASK_ID_PATTERN.test(String(value || ''));
+}
+
+function isTaskStateShaped(relativePath) {
+  const parts = String(relativePath || '').replace(/\\/g, '/').split('/');
+  if (parts.length !== 4) return false;
+  if (parts[0].toLowerCase() !== '.agents' || parts[1].toLowerCase() !== 'tasks') return false;
+  if (!isValidTaskId(parts[2])) return false;
+  const leaf = parts[3].toLowerCase();
+  return leaf === 'capsule.json' || leaf === 'state.json';
+}
+
+function isInsideTaskRecordDirectory(relativePath) {
+  const parts = String(relativePath || '').replace(/\\/g, '/').split('/');
+  if (parts.length < 4) return false;
+  if (parts[0].toLowerCase() !== '.agents' || parts[1].toLowerCase() !== 'tasks') return false;
+  return isValidTaskId(parts[2]);
+}
+
+function isRootTaskDocumentation(relativePath) {
+  const parts = String(relativePath || '').replace(/\\/g, '/').split('/');
+  return parts.length === 3
+    && parts[0].toLowerCase() === '.agents'
+    && parts[1].toLowerCase() === 'tasks'
+    && parts[2] !== ''
+    && !parts[2].includes('\\');
+}
+
+function controlBaselineTaskPaths(controlRoot, baseline) {
+  if (!controlRoot) {
+    throw new EvidenceError('CONTROL_REQUIRED', 'Candidate inspection requires the trusted control root.');
+  }
+  const listed = git(controlRoot, ['ls-tree', '-r', '--name-only', baseline, '--', '.agents/tasks'], { allowFail: true });
+  if (listed.status !== 0) {
+    throw new EvidenceError('CONTROL_BASELINE', 'Control baseline task-path listing failed.');
+  }
+  return new Set(
+    String(listed.stdout || '')
+      .split(/\n/)
+      .map((line) => line.replace(/\\/g, '/').trim())
+      .filter(Boolean)
+  );
+}
+
+export function inspectCandidate(candidateRoot, capsule, controlRoot) {
   assertTaskId(capsule.parsed.task);
   const head = git(candidateRoot, ['rev-parse', 'HEAD']).stdout.trim().toLowerCase();
   if (!isAncestor(candidateRoot, capsule.parsed.baseline, head)) {
     throw new EvidenceError('CANDIDATE_ANCESTRY', 'Candidate tip does not descend from the capsule baseline.');
   }
   const pair = orchestrationPair(capsule.parsed.task);
-  const allowedTask = new Set([pair.capsule, pair.state]);
-  const onDisk = listTaskFiles(candidateRoot);
+  const baselineDocs = controlBaselineTaskPaths(controlRoot, capsule.parsed.baseline);
+  const onDisk = listTaskTreeEntries(candidateRoot);
   for (const relativePath of onDisk) {
-    if (!allowedTask.has(relativePath)) {
+    if (relativePath === pair.capsule || relativePath === pair.state) continue;
+    if (isTaskStateShaped(relativePath) || isInsideTaskRecordDirectory(relativePath)) {
       throw new EvidenceError('TASK_STATE_UNEXPECTED', `Unexpected task-state file: ${relativePath}`);
     }
+    if (isRootTaskDocumentation(relativePath) && baselineDocs.has(relativePath)) {
+      continue;
+    }
+    throw new EvidenceError('TASK_STATE_UNEXPECTED', `Unexpected task-state file: ${relativePath}`);
   }
-  if (onDisk.length === 1) {
+  const hasCapsule = onDisk.includes(pair.capsule);
+  const hasState = onDisk.includes(pair.state);
+  if (hasCapsule !== hasState) {
     throw new EvidenceError('TASK_STATE_UNEXPECTED', 'Orchestration state must be the exact capsule.json and STATE.json pair.');
   }
   const trackedState = git(candidateRoot, ['ls-files', '--', pair.capsule, pair.state], { allowFail: true }).stdout.trim();
   if (trackedState) {
     throw new EvidenceError('TASK_STATE_COMMITTED', 'Orchestration state is tracked or staged and is invalid.');
   }
-  const present = onDisk.length === 2;
+  const present = hasCapsule && hasState;
   const snapshot = snapshotRepository(candidateRoot);
   const entries = parsePorcelain(snapshot.porcelain);
   const knownExclusions = [];

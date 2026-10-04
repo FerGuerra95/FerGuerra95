@@ -161,7 +161,7 @@ async function runEvidence(options) {
     path.join(roots.control, '.agents', 'evidence')
   ]);
   assertControlBaseline(roots.control, capsule.parsed.baseline);
-  const candidate = inspectCandidate(roots.candidate, capsule);
+  const candidate = inspectCandidate(roots.candidate, capsule, roots.control);
   if (options.expectCandidate && options.expectCandidate.toLowerCase() !== candidate.head) {
     throw Object.assign(new Error('Candidate tip does not match expect-candidate.'), { code: 'CANDIDATE_MISMATCH' });
   }

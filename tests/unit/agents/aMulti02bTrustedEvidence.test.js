@@ -82,6 +82,7 @@ function makeWorld(options = {}) {
   const candidate = path.join(dir, 'candidate');
   fs.mkdirSync(control);
   copyAuthority(control);
+  if (options.prepareControl) options.prepareControl(control);
   git(control, ['init', '-b', 'main']);
   commitAll(control, 'baseline');
   const baseline = git(control, ['rev-parse', 'HEAD']).stdout.trim();
@@ -349,6 +350,227 @@ test('staged or committed task state is rejected', () => {
     expect(parsed(run(committed)).code).toBe('TASK_STATE_COMMITTED');
   } finally {
     committed.cleanup();
+  }
+});
+
+function writeControlDoc(control, relativePath, contents) {
+  const absolute = path.join(control, ...relativePath.split('/'));
+  fs.mkdirSync(path.dirname(absolute), { recursive: true });
+  fs.writeFileSync(absolute, contents);
+}
+
+function mkdirExact(root, segments) {
+  let current = root;
+  for (const segment of segments) {
+    current = path.join(current, segment);
+    fs.mkdirSync(current, { recursive: true });
+  }
+  return current;
+}
+
+function writeActivePair(root, capsule, extras = {}) {
+  const taskDir = extras.segments
+    ? mkdirExact(root, extras.segments)
+    : mkdirExact(root, ['.agents', 'tasks', extras.task || 'T02B']);
+  if (extras.capsule !== false) {
+    fs.writeFileSync(path.join(taskDir, extras.capsuleName || 'capsule.json'), extras.capsuleText || JSON.stringify(capsule));
+  }
+  if (extras.state !== false) {
+    fs.writeFileSync(
+      path.join(taskDir, extras.stateName || 'STATE.json'),
+      extras.stateText || JSON.stringify({ capsule_fingerprint: fingerprintCapsule(capsule) })
+    );
+  }
+  return taskDir;
+}
+
+test('baseline root task documentation is accepted and not treated as task state', () => {
+  const readme = makeWorld({
+    prepareControl(control) {
+      writeControlDoc(control, '.agents/tasks/README.md', 'task folders\n');
+    }
+  });
+  try {
+    const result = parsed(run(readme));
+    expect(result.overall_status).toBe('PASS');
+    const manifest = JSON.parse(fs.readFileSync(result.manifest, 'utf8'));
+    expect(manifest.orchestration_state.present).toBe(false);
+  } finally {
+    readme.cleanup();
+  }
+
+  const guide = makeWorld({
+    prepareControl(control) {
+      writeControlDoc(control, '.agents/tasks/GUIDE.md', 'guide\n');
+    }
+  });
+  try {
+    const result = parsed(run(guide));
+    expect(result.overall_status).toBe('PASS');
+    expect(JSON.parse(fs.readFileSync(result.manifest, 'utf8')).orchestration_state.present).toBe(false);
+  } finally {
+    guide.cleanup();
+  }
+});
+
+test('candidate-invented or task-directory files under .agents/tasks remain invalid', () => {
+  const inventedReadme = makeWorld({
+    mutateCandidate(candidate) {
+      writeControlDoc(candidate, '.agents/tasks/README.md', 'candidate invented\n');
+    }
+  });
+  try {
+    expect(parsed(run(inventedReadme)).code).toBe('TASK_STATE_UNEXPECTED');
+  } finally {
+    inventedReadme.cleanup();
+  }
+
+  const foreignDoc = makeWorld({
+    prepareControl(control) {
+      writeControlDoc(control, '.agents/tasks/OTHER/readme.txt', 'not a root document\n');
+    }
+  });
+  try {
+    expect(parsed(run(foreignDoc)).code).toBe('TASK_STATE_UNEXPECTED');
+  } finally {
+    foreignDoc.cleanup();
+  }
+
+  const random = makeWorld({
+    mutateCandidate(candidate) {
+      writeControlDoc(candidate, '.agents/tasks/random.txt', 'noise\n');
+    }
+  });
+  try {
+    expect(parsed(run(random)).code).toBe('TASK_STATE_UNEXPECTED');
+  } finally {
+    random.cleanup();
+  }
+
+  const baselineForeignState = makeWorld({
+    prepareControl(control) {
+      writeControlDoc(control, '.agents/tasks/OTHER/capsule.json', '{"task":"OTHER"}\n');
+    }
+  });
+  try {
+    expect(parsed(run(baselineForeignState)).code).toBe('TASK_STATE_UNEXPECTED');
+  } finally {
+    baselineForeignState.cleanup();
+  }
+});
+
+test('active pair presence is exact identity and rejects partial, foreign, and case-variant state', () => {
+  const onlyCapsule = makeWorld({
+    after(ctx) {
+      writeActivePair(ctx.candidate, ctx.capsule, { state: false });
+    }
+  });
+  try {
+    expect(parsed(run(onlyCapsule)).code).toBe('TASK_STATE_UNEXPECTED');
+  } finally {
+    onlyCapsule.cleanup();
+  }
+
+  const committedCapsule = makeWorld({
+    mutateCandidate(candidate) {
+      writeControlDoc(candidate, '.agents/tasks/T02B/capsule.json', '{"task":"T02B"}\n');
+    }
+  });
+  try {
+    expect(parsed(run(committedCapsule)).overall_status).toBe('INVALID');
+  } finally {
+    committedCapsule.cleanup();
+  }
+
+  const committedState = makeWorld({
+    mutateCandidate(candidate) {
+      writeControlDoc(candidate, '.agents/tasks/T02B/STATE.json', '{}\n');
+    }
+  });
+  try {
+    expect(parsed(run(committedState)).overall_status).toBe('INVALID');
+  } finally {
+    committedState.cleanup();
+  }
+
+  const foreign = makeWorld({
+    after(ctx) {
+      writeActivePair(ctx.candidate, ctx.capsule, { task: 'OTHER' });
+    }
+  });
+  try {
+    expect(parsed(run(foreign)).code).toBe('TASK_STATE_UNEXPECTED');
+  } finally {
+    foreign.cleanup();
+  }
+
+  const caseVariant = makeWorld({
+    after(ctx) {
+      writeActivePair(ctx.candidate, ctx.capsule, { capsuleName: 'CAPSULE.JSON' });
+    }
+  });
+  try {
+    const taskDir = path.join(caseVariant.candidate, '.agents', 'tasks', 'T02B');
+    const names = fs.readdirSync(taskDir);
+    expect(names).toContain('CAPSULE.JSON');
+    expect(names).not.toContain('capsule.json');
+    const result = parsed(run(caseVariant));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('TASK_STATE_UNEXPECTED');
+    expect(result.orchestration_state?.present).not.toBe(true);
+  } finally {
+    caseVariant.cleanup();
+  }
+
+  const agentsParent = makeWorld({
+    after(ctx) {
+      writeActivePair(ctx.candidate, ctx.capsule, { segments: ['.Agents', 'tasks', 'T02B'] });
+    }
+  });
+  try {
+    const rootNames = fs.readdirSync(agentsParent.candidate);
+    expect(rootNames).toContain('.Agents');
+    expect(rootNames).not.toContain('.agents');
+    const result = parsed(run(agentsParent));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('TASK_STATE_UNEXPECTED');
+    expect(result.orchestration_state?.present).not.toBe(true);
+  } finally {
+    agentsParent.cleanup();
+  }
+
+  const tasksParent = makeWorld({
+    after(ctx) {
+      writeActivePair(ctx.candidate, ctx.capsule, { segments: ['.agents', 'Tasks', 'T02B'] });
+    }
+  });
+  try {
+    const childNames = fs.readdirSync(path.join(tasksParent.candidate, '.agents'));
+    expect(childNames).toContain('Tasks');
+    expect(childNames).not.toContain('tasks');
+    const result = parsed(run(tasksParent));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('TASK_STATE_UNEXPECTED');
+    expect(result.orchestration_state?.present).not.toBe(true);
+  } finally {
+    tasksParent.cleanup();
+  }
+
+  const taskIdCase = makeWorld({
+    after(ctx) {
+      writeActivePair(ctx.candidate, ctx.capsule, { segments: ['.agents', 'tasks', 't02b'] });
+    }
+  });
+  try {
+    const idNames = fs.readdirSync(path.join(taskIdCase.candidate, '.agents', 'tasks'));
+    expect(idNames).toContain('t02b');
+    expect(idNames).not.toContain('T02B');
+    const result = parsed(run(taskIdCase));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('TASK_STATE_UNEXPECTED');
+    expect(result.orchestration_state?.present).not.toBe(true);
+  } finally {
+    taskIdCase.cleanup();
   }
 });
 
