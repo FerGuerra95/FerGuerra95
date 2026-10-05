@@ -26,13 +26,19 @@ function parseMetadata(value) {
   }
 }
 
+function isAuditPersistenceFailure(error) {
+  if (error?.name === 'SqliteError') return true;
+  return typeof error?.code === 'string' && error.code.startsWith('SQLITE_');
+}
+
 export async function recordAuditLog({
   organizationId,
   userId,
   action,
   entityType,
   entityId = '',
-  metadata = {}
+  metadata = {},
+  required = true
 } = {}) {
   const safeOrganizationId = normalizeText(organizationId);
   const safeUserId = normalizeText(userId);
@@ -52,8 +58,17 @@ export async function recordAuditLog({
       entityId: normalizeText(entityId),
       metadata: sanitizeAuditMetadata(metadata)
     });
-  } catch {
-    return null;
+  } catch (error) {
+    if (!isAuditPersistenceFailure(error)) {
+      throw error;
+    }
+    if (required === false) {
+      return null;
+    }
+    const persistenceError = new Error('Audit persistence failed');
+    persistenceError.code = 'AUDIT_PERSISTENCE_FAILED';
+    persistenceError.status = 500;
+    throw persistenceError;
   }
 }
 
@@ -67,7 +82,8 @@ export async function recordAuthAuditLog({
   action,
   entityType = 'auth',
   entityId = '',
-  metadata = {}
+  metadata = {},
+  required = true
 } = {}) {
   const safeAction = normalizeText(action);
   const safeEntityType = normalizeText(entityType) || 'auth';
@@ -86,7 +102,8 @@ export async function recordAuthAuditLog({
       ...emailAuditHint(metadata.email),
       ...metadata,
       email: undefined
-    })
+    }),
+    required
   });
 }
 

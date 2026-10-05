@@ -150,20 +150,17 @@ function sanitizeReport(payload = {}, { requireTitle = false } = {}) {
   return next;
 }
 
-async function recordHeritageAudit({ organizationId, userId, action, entityId = '', metadata = {} }) {
+async function recordHeritageAudit({ organizationId, userId, action, entityId = '', metadata = {}, required = true }) {
   if (!normalizeText(userId)) return;
-  try {
-    await recordAuditLog({
-      organizationId,
-      userId,
-      action,
-      entityType: 'heritage',
-      entityId,
-      metadata
-    });
-  } catch {
-    // Heritage audit never blocks owner continuity workflows.
-  }
+  await recordAuditLog({
+    organizationId,
+    userId,
+    action,
+    entityType: 'heritage',
+    entityId,
+    metadata,
+    required
+  });
 }
 
 export async function listHeritageAssets(organizationId) {

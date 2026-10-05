@@ -129,22 +129,20 @@ async function recordFundingAudit({
   userId,
   action,
   entityId = '',
-  metadata = {}
+  metadata = {},
+  required = true
 }) {
   if (!normalizeText(userId)) return;
 
-  try {
-    await recordAuditLog({
-      organizationId,
-      userId,
-      action,
-      entityType: 'funding_round',
-      entityId,
-      metadata
-    });
-  } catch {
-    // Audit never blocks funding operations.
-  }
+  await recordAuditLog({
+    organizationId,
+    userId,
+    action,
+    entityType: 'funding_round',
+    entityId,
+    metadata,
+    required
+  });
 }
 
 async function markExecutiveFundingUpdate({
@@ -155,21 +153,17 @@ async function markExecutiveFundingUpdate({
 }) {
   if (!normalizeText(userId)) return;
 
-  try {
-    await recordAuditLog({
-      organizationId,
-      userId,
-      action: 'executive.funding_update_required',
-      entityType: 'executive',
-      entityId: 'funding',
-      metadata: {
-        reason,
-        fundingRoundId: normalizeText(fundingRoundId) || null
-      }
-    });
-  } catch {
-    // Audit never blocks funding operations.
-  }
+  await recordAuditLog({
+    organizationId,
+    userId,
+    action: 'executive.funding_update_required',
+    entityType: 'executive',
+    entityId: 'funding',
+    metadata: {
+      reason,
+      fundingRoundId: normalizeText(fundingRoundId) || null
+    }
+  });
 }
 
 function toSafeNumber(value) {
@@ -583,6 +577,7 @@ export async function getFundingSummary(organizationId, actor = {}) {
     organizationId,
     userId: actor.userId,
     action: 'funding.bridge.evaluated',
+    required: false,
     metadata: {
       complianceStatus: complianceSignal.complianceStatus,
       valuationSource: valuationSignal.suggestedValuationSource
@@ -592,6 +587,7 @@ export async function getFundingSummary(organizationId, actor = {}) {
     organizationId,
     userId: actor.userId,
     action: 'funding.window.evaluated',
+    required: false,
     metadata: {
       optimalFundingWindow: windowSignal.optimalFundingWindow,
       optimalFundingWindowStatus: windowSignal.optimalFundingWindowStatus
@@ -601,6 +597,7 @@ export async function getFundingSummary(organizationId, actor = {}) {
     organizationId,
     userId: actor.userId,
     action: 'funding.summary.viewed',
+    required: false,
     metadata: {
       roundsCount: rounds.length,
       totalRaised

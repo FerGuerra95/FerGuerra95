@@ -286,6 +286,7 @@ export async function getExecutiveOverview(scope = {}) {
     action: 'executive.decision_queue.viewed',
     entityType: 'executive',
     entityId: 'overview',
+    required: false,
     metadata: { readinessScore: readiness.score, signalCount: signals.length }
   });
 

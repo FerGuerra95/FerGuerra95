@@ -248,22 +248,20 @@ async function recordEcosystemAudit({
   userId,
   action,
   entityId = '',
-  metadata = {}
+  metadata = {},
+  required = true
 }) {
   if (!normalizeText(userId)) return;
 
-  try {
-    await recordAuditLog({
-      organizationId,
-      userId,
-      action,
-      entityType: 'ecosystem_record',
-      entityId,
-      metadata
-    });
-  } catch {
-    // Audit never blocks ecosystem operations.
-  }
+  await recordAuditLog({
+    organizationId,
+    userId,
+    action,
+    entityType: 'ecosystem_record',
+    entityId,
+    metadata,
+    required
+  });
 }
 
 export async function listEcosystemRecords(organizationId, branch) {

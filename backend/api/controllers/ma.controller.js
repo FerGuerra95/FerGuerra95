@@ -125,14 +125,15 @@ function validateScope(res, scope) {
   return true;
 }
 
-async function auditMaAction(scope, action, entityId = '', metadata = {}) {
+async function auditMaAction(scope, action, entityId = '', metadata = {}, required = true) {
   return recordAuditLog({
     organizationId: scope.organizationId,
     userId: scope.userId,
     action,
     entityType: 'ma',
     entityId,
-    metadata
+    metadata,
+    required
   });
 }
 
@@ -190,7 +191,7 @@ export async function getCaseById(req, res, next) {
 
     if (!item) return notFound(res, 'Caso M&A no encontrado');
 
-    await auditMaAction(scope, 'ma.case.accessed', item.id);
+    await auditMaAction(scope, 'ma.case.accessed', item.id, {}, false);
 
     return ok(res, item);
   } catch (error) {
@@ -613,7 +614,7 @@ export async function downloadDataRoomDocument(req, res, next) {
       sizeBytes: file.sizeBytes,
       checksumSha256: file.checksumSha256,
       watermark: file.watermark
-    });
+    }, false);
 
     res.setHeader('Content-Type', file.mimeType);
     res.setHeader('Content-Length', String(file.sizeBytes));
@@ -692,7 +693,7 @@ export async function getSecureShare(req, res, next) {
 
     await auditMaAction(scope, 'ma.secure_share.accessed', req.params.id, {
       reportId: item.report?.id
-    });
+    }, false);
 
     return ok(res, item);
   } catch (error) {

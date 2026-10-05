@@ -338,6 +338,7 @@ export async function getMaSecureSharePublic({ id, token } = {}) {
     action: 'ma.secure_share.public_accessed',
     entityType: 'ma',
     entityId: safeId,
+    required: false,
     metadata: sanitizeAuditMetadata({
       reportId: report.id,
       via: 'public_link',

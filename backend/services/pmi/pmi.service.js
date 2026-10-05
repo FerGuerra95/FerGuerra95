@@ -610,21 +610,18 @@ export function buildPmiSignal(pmiCase) {
   };
 }
 
-async function recordPmiAudit({ organizationId, userId, action, entityId = '', metadata = {} }) {
+async function recordPmiAudit({ organizationId, userId, action, entityId = '', metadata = {}, required = true }) {
   if (!normalizeText(userId)) return;
 
-  try {
-    await recordAuditLog({
-      organizationId,
-      userId,
-      action,
-      entityType: 'pmi_case',
-      entityId,
-      metadata
-    });
-  } catch {
-    // Audit never blocks PMI operations.
-  }
+  await recordAuditLog({
+    organizationId,
+    userId,
+    action,
+    entityType: 'pmi_case',
+    entityId,
+    metadata,
+    required
+  });
 }
 
 export async function listPmiCases(organizationId) {
@@ -1458,7 +1455,8 @@ export async function getPmiBridgeSignals(scope = {}) {
       organizationId: scope.organizationId,
       userId: scope.userId || '',
       action: 'bridge.pmi_signal.created',
-      metadata: { signals }
+      metadata: { signals },
+      required: false
     });
   }
   return {

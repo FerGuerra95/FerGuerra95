@@ -864,6 +864,7 @@ export async function loginUser({ email, password }) {
   if (!user || user.status === 'inactive') {
     await recordAuthAuditLog({
       action: 'auth.login.failed',
+      required: false,
       metadata: {
         email: normalizedEmail,
         reason: 'user_not_found'
@@ -885,6 +886,7 @@ export async function loginUser({ email, password }) {
       userId: user.id,
       entityId: user.id,
       action: 'auth.login.failed',
+      required: false,
       metadata: {
         email: normalizedEmail,
         reason: 'invalid_credentials',

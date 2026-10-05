@@ -363,20 +363,17 @@ function getMatchScore(opportunity, counterparty) {
   return clampScore(score);
 }
 
-async function recordBridgeAudit({ organizationId, userId, action, entityId = '', metadata = {} }) {
+async function recordBridgeAudit({ organizationId, userId, action, entityId = '', metadata = {}, required = true }) {
   if (!normalizeText(userId)) return;
-  try {
-    await recordAuditLog({
-      organizationId,
-      userId,
-      action,
-      entityType: 'bridge',
-      entityId,
-      metadata
-    });
-  } catch {
-    // Bridge audit never blocks transaction workflows.
-  }
+  await recordAuditLog({
+    organizationId,
+    userId,
+    action,
+    entityType: 'bridge',
+    entityId,
+    metadata,
+    required
+  });
 }
 
 export async function listBridgeOpportunities(organizationId) {

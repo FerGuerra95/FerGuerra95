@@ -317,6 +317,7 @@ export async function completeOidcAuthorization(req, res) {
     ) {
       await recordAuthAuditLog({
         action: 'auth.login.failed',
+        required: false,
         metadata: {
           method: 'oidc',
           reason: 'oidc_token_verification_failed',
