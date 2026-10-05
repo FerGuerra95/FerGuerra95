@@ -35,7 +35,8 @@ const MANIFEST_KEYS = [
   'orchestration_state',
   'overall_status',
   'task',
-  'toolchain'
+  'toolchain',
+  'trusted_state_sha256'
 ];
 
 export function stableStringify(value) {
@@ -233,7 +234,8 @@ export function manifestBody(record) {
     orchestration_state: record.orchestrationState,
     overall_status: record.overallStatus,
     task: record.task,
-    toolchain: record.toolchain
+    toolchain: record.toolchain,
+    trusted_state_sha256: record.trustedStateSha256 === undefined ? null : record.trustedStateSha256
   };
 }
 
@@ -260,6 +262,9 @@ export function validateManifest(runDir, manifest, capsule, options = {}) {
   }
   if (capsule.baseline !== manifest.baseline || capsule.task !== manifest.task) {
     throw new EvidenceError('CAPSULE_MISMATCH', 'External capsule identity does not match the evidence bundle.');
+  }
+  if (manifest.trusted_state_sha256 !== null && !/^[0-9a-f]{64}$/.test(String(manifest.trusted_state_sha256))) {
+    throw new EvidenceError('MANIFEST_INCOMPLETE', 'trusted_state_sha256 must be null or a SHA-256 hex digest.');
   }
   assertArtifactConsistency(runDir, manifest.commands, manifest.artifact_digests);
   return { ok: true, overall_status: manifest.overall_status };

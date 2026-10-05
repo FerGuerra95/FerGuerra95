@@ -10,6 +10,7 @@ import { expect, it } from 'vitest';
 import { fingerprintCapsule, validateCapsule } from '../../../scripts/agents/lib/capsule.mjs';
 import { stableStringify } from '../../../scripts/agents/lib/evidence/bundle.mjs';
 import { AUTHORITY_FILES } from '../../../scripts/agents/lib/evidence/trust.mjs';
+import { authorizeGate, createInitialState } from '../../../scripts/agents/lib/stateMachine.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const GATES = {
@@ -64,14 +65,14 @@ function entry(id, code, output = 'out.txt', extra = [], timeout = 15000) {
   };
 }
 
-function capsuleFor(baseline, plan, allowed = ['notes.txt']) {
+function capsuleFor(baseline, plan, allowed = ['notes.txt'], extras = {}) {
   return {
-    task: 'T02B',
+    task: extras.task || 'T02B',
     baseline,
     allowed_files: allowed,
-    forbidden_files: [],
-    protected_authorization: [],
-    human_gates: GATES,
+    forbidden_files: extras.forbidden_files || [],
+    protected_authorization: extras.protected_authorization || [],
+    human_gates: extras.human_gates || GATES,
     evidence_plan: plan
   };
 }
@@ -94,7 +95,12 @@ function makeWorld(options = {}) {
   const context = { dir, control, candidate, baseline };
   const plan = (typeof options.plan === 'function' ? options.plan(context) : options.plan)
     || { required: [entry('run', "require('fs').writeFileSync(process.argv[1], 'ok')")], optional: [] };
-  const capsule = capsuleFor(baseline, plan, options.allowed);
+  const capsule = capsuleFor(baseline, plan, options.allowed, {
+    forbidden_files: options.forbidden_files,
+    human_gates: options.human_gates,
+    protected_authorization: options.protected_authorization,
+    task: options.task
+  });
   const capsulePath = path.join(dir, 'capsule.json');
   fs.writeFileSync(capsulePath, JSON.stringify(capsule));
   if (options.after) options.after({ dir, control, candidate, baseline, capsule, capsulePath });
@@ -914,5 +920,298 @@ test('a run does not call human gates or transition', () => {
     expect(source).not.toMatch(/authorizeGate/);
     expect(source).not.toMatch(/authorize-gate/);
     expect(source).not.toMatch(/\btransition\s*\(/);
+  }
+});
+
+const MASTER = 'docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md';
+const GOV_GATES = {
+  ...GATES,
+  governance_change: true,
+  merge: false
+};
+
+function writeTrustedState(filePath, capsule, grantGates = []) {
+  const authority = validateCapsule(capsule);
+  let state = createInitialState(authority);
+  for (const gate of grantGates) {
+    state = authorizeGate(state, { gate, role: 'human' }, { capsule: authority });
+  }
+  fs.writeFileSync(filePath, `${JSON.stringify(state)}\n`);
+  return state;
+}
+
+function masterWorld(extras = {}) {
+  return makeWorld({
+    allowed: ['notes.txt', MASTER],
+    protected_authorization: ['governance_handoff'],
+    human_gates: extras.human_gates || GOV_GATES,
+    prepareControl(control) {
+      writeControlDoc(control, MASTER, 'baseline master\n');
+    },
+    mutateCandidate(candidate) {
+      fs.appendFileSync(path.join(candidate, ...MASTER.split('/')), 'candidate\n');
+    },
+    ...extras
+  });
+}
+
+test('case 1: trusted governance_change=true allows the Master path', () => {
+  const world = masterWorld();
+  try {
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    const state = writeTrustedState(statePath, world.capsule, ['governance_change']);
+    expect(state.human_authorizations.governance_change).toBe(true);
+    const result = parsed(run(world, ['--state', statePath]));
+    expect(result.overall_status).toBe('PASS');
+    const manifest = JSON.parse(fs.readFileSync(result.manifest, 'utf8'));
+    expect(manifest.trusted_state_sha256).toMatch(/^[0-9a-f]{64}$/);
+    expect(manifest.candidate_paths.map((item) => String(item).toLowerCase())).toContain(MASTER.toLowerCase());
+    expect(manifest).not.toHaveProperty('human_authorizations');
+    expect(manifest).not.toHaveProperty('governance_change');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 2: trusted governance_change=false rejects the Master path', () => {
+  const world = masterWorld();
+  try {
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    writeTrustedState(statePath, world.capsule, []);
+    const result = parsed(run(world, ['--state', statePath]));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('HUMAN_AUTHORIZATION_REQUIRED');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 3: candidate self-grant cannot substitute for trusted STATE', () => {
+  const world = masterWorld();
+  try {
+    const granted = writeTrustedState(path.join(world.dir, 'candidate-looking.json'), world.capsule, ['governance_change']);
+    writeActivePair(world.candidate, world.capsule, { stateText: `${JSON.stringify(granted)}\n` });
+    const result = parsed(run(world));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('HUMAN_AUTHORIZATION_REQUIRED');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 4: trusted STATE with the wrong capsule fingerprint is invalid', () => {
+  const world = makeWorld();
+  try {
+    const other = validateCapsule({
+      ...world.capsule,
+      allowed_files: ['notes.txt', 'other.txt']
+    });
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    writeTrustedState(statePath, other, []);
+    const result = parsed(run(world, ['--state', statePath]));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('STATE_CAPSULE_DIVERGENCE');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 5: trusted STATE with the wrong task is invalid', () => {
+  const world = makeWorld();
+  try {
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    const state = writeTrustedState(statePath, world.capsule, []);
+    state.task = 'OTHER';
+    fs.writeFileSync(statePath, `${JSON.stringify(state)}\n`);
+    const result = parsed(run(world, ['--state', statePath]));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('STATE_CAPSULE_DIVERGENCE');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 6: trusted STATE with the wrong baseline or binding is invalid', () => {
+  const world = makeWorld();
+  try {
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    const state = writeTrustedState(statePath, world.capsule, []);
+    state.baseline = 'b'.repeat(40);
+    fs.writeFileSync(statePath, `${JSON.stringify(state)}\n`);
+    const result = parsed(run(world, ['--state', statePath]));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('STATE_CAPSULE_DIVERGENCE');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 7: merge=true does not authorize governance_handoff', () => {
+  const world = masterWorld({
+    human_gates: { ...GATES, governance_change: true, merge: true }
+  });
+  try {
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    const state = writeTrustedState(statePath, world.capsule, ['merge']);
+    expect(state.human_authorizations.merge).toBe(true);
+    expect(state.human_authorizations.governance_change).toBe(false);
+    const result = parsed(run(world, ['--state', statePath]));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('HUMAN_AUTHORIZATION_REQUIRED');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 8: governance_change=true does not authorize merge', () => {
+  const world = masterWorld();
+  try {
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    const state = writeTrustedState(statePath, world.capsule, ['governance_change']);
+    expect(state.human_authorizations.merge).toBe(false);
+    expect(state.merge_authorized).toBe(false);
+    const result = parsed(run(world, ['--state', statePath]));
+    expect(result.overall_status).toBe('PASS');
+    const after = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+    expect(after.human_authorizations.merge).toBe(false);
+    expect(after.merge_authorized).toBe(false);
+    const manifest = JSON.parse(fs.readFileSync(result.manifest, 'utf8'));
+    expect(manifest).not.toHaveProperty('merge');
+    expect(manifest).not.toHaveProperty('merge_authorized');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 9: a malformed candidate pair stays fail-closed even with trusted STATE', () => {
+  const world = makeWorld({
+    after(ctx) {
+      writeActivePair(ctx.candidate, ctx.capsule);
+      fs.writeFileSync(path.join(ctx.candidate, '.agents', 'tasks', 'T02B', 'NOTES.md'), 'extra\n');
+    }
+  });
+  try {
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    writeTrustedState(statePath, world.capsule, []);
+    const result = parsed(run(world, ['--state', statePath]));
+    expect(result.overall_status).toBe('INVALID');
+    expect(result.code).toBe('TASK_STATE_UNEXPECTED');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 10: STATE inside candidate or control is rejected', () => {
+  const world = makeWorld();
+  try {
+    const insideCandidate = path.join(world.candidate, 'trusted-state.json');
+    writeTrustedState(insideCandidate, world.capsule, []);
+    expect(parsed(run(world, ['--state', insideCandidate])).code).toBe('STATE_LOCATION');
+    const insideControl = path.join(world.control, '.agents', 'evidence', 'trusted-state.json');
+    fs.mkdirSync(path.dirname(insideControl), { recursive: true });
+    writeTrustedState(insideControl, world.capsule, []);
+    expect(parsed(run(world, ['--state', insideControl])).code).toBe('STATE_LOCATION');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 11: validate rejects a different-byte STATE with the same capsule fingerprint', () => {
+  const world = makeWorld({
+    human_gates: { ...GATES, governance_change: true, merge: true }
+  });
+  try {
+    const stateA = path.join(world.dir, 'state-a.json');
+    const stateB = path.join(world.dir, 'state-b.json');
+    writeTrustedState(stateA, world.capsule, ['governance_change']);
+    writeTrustedState(stateB, world.capsule, []);
+    expect(fingerprintCapsule(world.capsule)).toBe(JSON.parse(fs.readFileSync(stateA, 'utf8')).capsule_fingerprint);
+    expect(JSON.parse(fs.readFileSync(stateB, 'utf8')).capsule_fingerprint).toBe(
+      JSON.parse(fs.readFileSync(stateA, 'utf8')).capsule_fingerprint
+    );
+    expect(fs.readFileSync(stateA).equals(fs.readFileSync(stateB))).toBe(false);
+    const result = parsed(run(world, ['--state', stateA]));
+    expect(result.overall_status).toBe('PASS');
+    const validate = runCli(world, [
+      'validate',
+      '--bundle',
+      path.dirname(result.manifest),
+      '--capsule',
+      world.capsulePath,
+      '--state',
+      stateB
+    ]);
+    expect(validate.status).not.toBe(0);
+    expect(parsed(validate).code).toBe('STATE_MISMATCH');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 12: trusted_state_sha256 present without --state is invalid', () => {
+  const world = makeWorld();
+  try {
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    writeTrustedState(statePath, world.capsule, []);
+    const result = parsed(run(world, ['--state', statePath]));
+    expect(result.overall_status).toBe('PASS');
+    const validate = runCli(world, ['validate', '--bundle', path.dirname(result.manifest), '--capsule', world.capsulePath]);
+    expect(validate.status).not.toBe(0);
+    expect(parsed(validate).code).toBe('STATE_REQUIRED');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 13: trusted_state_sha256 null with --state is invalid', () => {
+  const world = makeWorld();
+  try {
+    const result = parsed(run(world));
+    expect(result.overall_status).toBe('PASS');
+    const manifest = JSON.parse(fs.readFileSync(result.manifest, 'utf8'));
+    expect(manifest.trusted_state_sha256).toBeNull();
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    writeTrustedState(statePath, world.capsule, []);
+    const validate = runCli(world, [
+      'validate',
+      '--bundle',
+      path.dirname(result.manifest),
+      '--capsule',
+      world.capsulePath,
+      '--state',
+      statePath
+    ]);
+    expect(validate.status).not.toBe(0);
+    expect(parsed(validate).code).toBe('STATE_UNEXPECTED');
+  } finally {
+    world.cleanup();
+  }
+});
+
+test('case 14: PASS with governance_change does not grant merge or call lifecycle', () => {
+  const world = masterWorld();
+  try {
+    const statePath = path.join(world.dir, 'trusted-state.json');
+    const before = writeTrustedState(statePath, world.capsule, ['governance_change']);
+    expect(before.human_authorizations.merge).toBe(false);
+    const result = parsed(run(world, ['--state', statePath]));
+    expect(result.overall_status).toBe('PASS');
+    const after = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+    expect(after.human_authorizations.governance_change).toBe(true);
+    expect(after.human_authorizations.merge).toBe(false);
+    expect(after.merge_authorized).toBe(false);
+    expect(after.production_authorized).toBe(false);
+    const sources = [
+      'scripts/agents/evidence.mjs',
+      ...AUTHORITY_FILES.filter((relativePath) => relativePath.startsWith('scripts/agents/lib/evidence/'))
+    ];
+    for (const relativePath of sources) {
+      const source = fs.readFileSync(path.join(repoRoot, relativePath), 'utf8');
+      expect(source).not.toMatch(/authorizeGate/);
+      expect(source).not.toMatch(/authorize-gate/);
+      expect(source).not.toMatch(/\btransition\s*\(/);
+    }
+  } finally {
+    world.cleanup();
   }
 });

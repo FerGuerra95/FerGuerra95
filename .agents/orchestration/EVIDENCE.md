@@ -32,6 +32,10 @@ Before commands, control HEAD must equal the external capsule baseline, and the 
 
 The authoritative capsule is outside the candidate and outside the evidence bundle. Its bytes are read once. A later byte change is `INVALID`. Changed bytes are not parsed.
 
+Trusted authorization state, when supplied, is an external `STATE.json` outside the candidate, control, and evidence bundle. 02B reads its exact bytes, validates them through canonical 02A `validateState` and capsule binding, and uses that STATE as the only grant source for `checkPaths`. Candidate `STATE.json` remains observational and never authorizes paths. `--state` is optional. Without `--state`, 02B keeps fail-closed `createInitialState(capsule)` and records `trusted_state_sha256 = null`. With `--state`, it records `trusted_state_sha256` as SHA-256 of the exact trusted STATE bytes. Those bytes are re-read before `manifest.json`; mutation is `INVALID`.
+
+`trusted_state_sha256` is authorization-state identity only. The manifest does not store or consume human gate values as authority. If the recorded digest is non-null, `validate` requires the same external `--state`, the same containment rules, exact byte equality, and 02A validation. If the digest is null, `--state` must not be supplied.
+
 The candidate tip must be a commit that descends from the capsule baseline. `--expect-candidate` must match that tip. Orchestration state is only the untracked pair `.agents/tasks/<task>/capsule.json` and `STATE.json`. Any other task-state file, or a staged or committed copy, is `INVALID`. Known global exclusions may be recorded when untracked. They are not candidate code. A staged or committed known exclusion does not pass.
 
 Runtime `.env` files that exist locally and do not match the committed blob fail closed. Contents are not copied into the bundle. Tracked `.env.example` does not fail solely because of its name.
@@ -62,6 +66,6 @@ Evidence is written only under `CONTROL/.agents/evidence/<task>/<candidate-tip>/
 02B does not attest itself. A trusted bundle for the 02B implementation is not claimed. Future tasks may use 02B only after it is the canonical merged baseline.
 
 ```text
-node scripts/agents/evidence.mjs run --candidate-worktree <path> --capsule <external-capsule> [--expect-candidate <sha>]
-node scripts/agents/evidence.mjs validate --bundle <run-dir> --capsule <external-capsule> [--expect-candidate <sha>]
+node scripts/agents/evidence.mjs run --candidate-worktree <path> --capsule <external-capsule> [--state <external-state>] [--expect-candidate <sha>]
+node scripts/agents/evidence.mjs validate --bundle <run-dir> --capsule <external-capsule> [--state <external-state>] [--expect-candidate <sha>]
 ```

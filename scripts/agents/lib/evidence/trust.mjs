@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import { fingerprintCapsule, validateCapsule } from '../capsule.mjs';
 import { checkPaths } from '../policy.mjs';
-import { createInitialState } from '../stateMachine.mjs';
+import { assertStateMatchesCapsule, createInitialState, validateState } from '../stateMachine.mjs';
 import { hashFile } from './bundle.mjs';
 import {
   blobId,
@@ -14,6 +14,7 @@ import {
   hashObject,
   isAncestor,
   parsePorcelain,
+  sha256Buffer,
   snapshotRepository,
   trackedWorktreeClean,
   worktreeMatchesHead
@@ -129,6 +130,51 @@ export function capsuleBytesUnchanged(capsule) {
   return fs.readFileSync(capsule.path).equals(capsule.bytes);
 }
 
+export function readExternalState(statePath, forbiddenRoots) {
+  const stateReal = fs.realpathSync(statePath);
+  for (const root of forbiddenRoots) {
+    if (!root || !fs.existsSync(root)) continue;
+    if (isInside(fs.realpathSync(root), stateReal)) {
+      throw new EvidenceError(
+        'STATE_LOCATION',
+        'The trusted authorization state must be outside the candidate, control, and evidence bundle.'
+      );
+    }
+  }
+  const bytes = fs.readFileSync(stateReal);
+  let parsed;
+  try {
+    parsed = JSON.parse(bytes.toString('utf8'));
+  } catch {
+    throw new EvidenceError('STATE_INVALID', 'Trusted authorization state is not valid JSON.');
+  }
+  return {
+    bytes,
+    path: stateReal,
+    sha256: sha256Buffer(bytes),
+    parsed
+  };
+}
+
+export function bindTrustedState(trusted, capsule) {
+  try {
+    validateState(trusted.parsed, { capsule: capsule.parsed });
+    assertStateMatchesCapsule(trusted.parsed, capsule.parsed);
+  } catch (error) {
+    throw new EvidenceError(error.code || 'STATE_INVALID', error.message);
+  }
+  return structuredClone(trusted.parsed);
+}
+
+export function stateBytesUnchanged(trusted) {
+  if (!trusted) return true;
+  try {
+    return fs.readFileSync(trusted.path).equals(trusted.bytes);
+  } catch {
+    return false;
+  }
+}
+
 const TASK_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,80}$/;
 
 function orchestrationPair(task) {
@@ -218,7 +264,7 @@ function controlBaselineTaskPaths(controlRoot, baseline) {
   );
 }
 
-export function inspectCandidate(candidateRoot, capsule, controlRoot) {
+export function inspectCandidate(candidateRoot, capsule, controlRoot, grantState = null) {
   assertTaskId(capsule.parsed.task);
   const head = git(candidateRoot, ['rev-parse', 'HEAD']).stdout.trim().toLowerCase();
   if (!isAncestor(candidateRoot, capsule.parsed.baseline, head)) {
@@ -307,7 +353,7 @@ export function inspectCandidate(candidateRoot, capsule, controlRoot) {
       fingerprint: candidateFingerprint
     };
   }
-  const boundState = createInitialState(capsule.parsed);
+  const boundState = grantState ? structuredClone(grantState) : createInitialState(capsule.parsed);
   try {
     checkPaths({ capsule: capsule.parsed, changedFiles: paths, state: boundState });
   } catch (error) {

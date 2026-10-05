@@ -18,15 +18,18 @@ import { sameSnapshot, snapshotRepository } from './lib/evidence/gitFacts.mjs';
 import {
   assertControlBaseline,
   assertDistinctRoots,
+  bindTrustedState,
   capsuleBytesUnchanged,
   controlRootFrom,
   inspectCandidate,
-  readExternalCapsule
+  readExternalCapsule,
+  readExternalState,
+  stateBytesUnchanged
 } from './lib/evidence/trust.mjs';
 
 const HELP = [
-  'node scripts/agents/evidence.mjs run --candidate-worktree <path> --capsule <external-capsule> [--expect-candidate <sha>]',
-  'node scripts/agents/evidence.mjs validate --bundle <run-dir> --capsule <external-capsule> [--expect-candidate <sha>]'
+  'node scripts/agents/evidence.mjs run --candidate-worktree <path> --capsule <external-capsule> [--state <external-state>] [--expect-candidate <sha>]',
+  'node scripts/agents/evidence.mjs validate --bundle <run-dir> --capsule <external-capsule> [--state <external-state>] [--expect-candidate <sha>]'
 ].join('\n');
 
 function fail(code, message) {
@@ -153,6 +156,11 @@ async function executePlan(plan, context) {
   };
 }
 
+function loadTrustedState(statePath, capsule, forbiddenRoots) {
+  const trusted = readExternalState(statePath, forbiddenRoots);
+  return { trusted, grantState: bindTrustedState(trusted, capsule) };
+}
+
 async function runEvidence(options) {
   const controlRoot = controlRootFrom(import.meta.url);
   const roots = assertDistinctRoots(controlRoot, options.candidate);
@@ -161,7 +169,18 @@ async function runEvidence(options) {
     path.join(roots.control, '.agents', 'evidence')
   ]);
   assertControlBaseline(roots.control, capsule.parsed.baseline);
-  const candidate = inspectCandidate(roots.candidate, capsule, roots.control);
+  let trusted = null;
+  let grantState = null;
+  if (options.state) {
+    const bound = loadTrustedState(options.state, capsule, [
+      roots.candidate,
+      roots.control,
+      path.join(roots.control, '.agents', 'evidence')
+    ]);
+    trusted = bound.trusted;
+    grantState = bound.grantState;
+  }
+  const candidate = inspectCandidate(roots.candidate, capsule, roots.control, grantState);
   if (options.expectCandidate && options.expectCandidate.toLowerCase() !== candidate.head) {
     throw Object.assign(new Error('Candidate tip does not match expect-candidate.'), { code: 'CANDIDATE_MISMATCH' });
   }
@@ -179,7 +198,11 @@ async function runEvidence(options) {
     controlPre,
     candidatePre
   });
-  let overall = overallStatus(executed.commands, executed.integrityOk && capsuleBytesUnchanged(capsule));
+  const stateIntact = stateBytesUnchanged(trusted);
+  let overall = overallStatus(
+    executed.commands,
+    executed.integrityOk && capsuleBytesUnchanged(capsule) && stateIntact
+  );
   if (overall === 'PASS') {
     try {
       assertArtifactConsistency(run.runDir, executed.commands, executed.artifactDigests);
@@ -187,6 +210,7 @@ async function runEvidence(options) {
       overall = 'INVALID';
     }
   }
+  if (!stateIntact) overall = 'INVALID';
   const manifest = writeManifest(run.runDir, manifestBody({
     artifactDigests: executed.artifactDigests,
     authorityPathsChanged: candidate.authorityPathsChanged,
@@ -202,7 +226,8 @@ async function runEvidence(options) {
     orchestrationState: candidate.orchestration,
     overallStatus: overall,
     task: capsule.parsed.task,
-    toolchain: candidate.toolchain
+    toolchain: candidate.toolchain,
+    trustedStateSha256: trusted ? trusted.sha256 : null
   }));
   process.stdout.write(`${JSON.stringify({
     ok: overall === 'PASS',
@@ -223,6 +248,25 @@ function validateEvidence(options) {
   if (capsule.parsed.baseline !== manifest.baseline) {
     throw Object.assign(new Error('Control baseline does not match the bundle.'), { code: 'CONTROL_BASELINE' });
   }
+  const recorded = Object.prototype.hasOwnProperty.call(manifest, 'trusted_state_sha256')
+    ? manifest.trusted_state_sha256
+    : undefined;
+  if (recorded) {
+    if (!options.state) {
+      throw Object.assign(new Error('Validation of a trusted-state bundle requires --state.'), { code: 'STATE_REQUIRED' });
+    }
+    const trusted = readExternalState(options.state, [
+      runDir,
+      controlRoot,
+      path.join(controlRoot, '.agents', 'evidence')
+    ]);
+    if (trusted.sha256 !== recorded) {
+      throw Object.assign(new Error('Trusted authorization state bytes do not match trusted_state_sha256.'), { code: 'STATE_MISMATCH' });
+    }
+    bindTrustedState(trusted, capsule);
+  } else if (options.state) {
+    throw Object.assign(new Error('A null trusted_state_sha256 bundle must not be validated with --state.'), { code: 'STATE_UNEXPECTED' });
+  }
   const result = validateManifest(runDir, manifest, {
     sha256: capsule.sha256,
     fingerprint: capsule.fingerprint,
@@ -240,18 +284,19 @@ async function main() {
   }
   const command = argv[0];
   const expectCandidate = readFlag(argv, '--expect-candidate');
+  const state = readFlag(argv, '--state');
   if (command === 'run') {
     const candidate = readFlag(argv, '--candidate-worktree');
     const capsule = readFlag(argv, '--capsule');
     if (!candidate || !capsule) throw new Error('run requires --candidate-worktree and --capsule.');
-    await runEvidence({ candidate, capsule, expectCandidate });
+    await runEvidence({ candidate, capsule, expectCandidate, state });
     return;
   }
   if (command === 'validate') {
     const bundle = readFlag(argv, '--bundle');
     const capsule = readFlag(argv, '--capsule');
     if (!bundle || !capsule) throw new Error('validate requires --bundle and --capsule.');
-    validateEvidence({ bundle, capsule, expectCandidate });
+    validateEvidence({ bundle, capsule, expectCandidate, state });
     return;
   }
   throw new Error(`Unknown evidence command ${command}.`);
