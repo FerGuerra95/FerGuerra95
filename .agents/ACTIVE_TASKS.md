@@ -4,7 +4,7 @@ Exists because `CURRENT_HANDOFF_STATE` records one product phase, not concurrent
 
 | Agent | Task | Branch | Baseline | Worktree | Status | Owned paths | Blockers |
 |---|---|---|---|---|---|---|---|
-| none | A-MULTI-02B-FIX-02 | main | implementation `cefde6a2ad9b796290243d42e7a83f242bd7095e`; origin/main remains `c04bbc8735c05745d19a2d3adfee6d6f805e384f` | main checkout | CANONICALLY CLOSED locally | none | Push not authorized. Local main is ahead of origin/main. |
-| none | METHOD-INTEGRATION-01 | agent/engineering/method-integration-01-v2 | donor `50bb8274fe41bb18dbcb6e2d855696f674f71ab9`; must rematerialize after authorized FIX-02 push | C:\ceos-worktrees\method-integration-01-v2 | DESIGN_CONTRADICTION_BLOCKED / donor-reference only | none | Do not reactivate on this closure. Assurance Baseline Audit and A04 are not started. |
+| Engineering | METHOD-INTEGRATION-01 | agent/engineering/method-integration-01-v3 | c92aabd3b781af862cff9a85bb491ebd12eeaf58 | C:\ceos-worktrees\method-integration-01-v3 | IN PROGRESS / IMPLEMENTING | AGENTS.md; .agents/README.md; .agents/ACTIVE_TASKS.md; docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md; docs/product/CODEBASE_HARDENING_STATUS.md; docs/testing/TEST_STRATEGY.md; docs/ai/AI_OPERATING_MODEL.md; docs/ai/PROMPT_LIBRARY.md; tests/unit/agents/methodIntegrationGovernance.test.js | Candidate is not canonical. Independent Review is not started. |
+| none | A04 | none | not assigned | none | OPEN P1 / NOT STARTED | none | Assurance Baseline Audit is not started. Do not start A04. |
 
 Update a row when Technical Direction assigns, blocks, or closes a task. Remove finished rows. Do not accumulate history.

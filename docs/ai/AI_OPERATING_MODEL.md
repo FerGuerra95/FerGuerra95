@@ -8,6 +8,31 @@ This model configures how AI may work. It does not certify that current product 
 
 Parallel role cards are in `.agents/`. They are subordinate to `AGENTS.md`. They do not create a second operating model.
 
+This document has section-level authority. Do not treat the entire file as one class. Canonical Product-AI boundaries remain canonical. Only actual legacy developer operating guidance is advisory.
+
+## Product-AI authority boundaries
+
+These Product-AI rules remain canonical. They are not Legacy Guidance and they are not advisory developer workflow text.
+
+CEO's OS AI must not become canonical authority for:
+
+- permissions
+- tenant ownership
+- official stored facts
+- canonical financial calculations
+- Source of Truth
+- human approvals
+- irreversible or destructive action authorization
+
+Canonical Product-AI owners:
+
+- `AGENTS.md` owns repository-wide agent operating authority.
+- Phase 10 of the Master Control owns the AI Authority / Tool / Data Security Gate.
+- C.16 and `docs/ai/AI_DATA_BOUNDARIES.md` own Product-AI data, provider, and use-case boundaries.
+- `docs/ai/AI_GUARDRAILS.md` owns runtime Product-AI guardrails.
+
+AI output is draft/DSS only. It cannot create official facts, close findings, grant human gates, or replace a business oracle.
+
 ## Product Identity (Non-Negotiable)
 
 CEO's OS is an Enterprise Decision Support System (DSS).
@@ -54,6 +79,19 @@ CEO's OS is not:
 - Use `git add .`
 - Commit `backend-server.err`
 - Refactor broadly outside scope
+
+## Legacy developer operating guidance
+
+The remainder of this file is Legacy Guidance for developer/coding workflows. Classification: MIGRATE under `AGENTS.md` and 02A. It is advisory and subordinate. It is not a second constitution.
+
+| Block | Classification | Reason |
+|---|---|---|
+| Copy/Paste Output Discipline | KEEP | Operational helper; does not own authority |
+| Operating Sequence and AI Operating Modes | DUPLICATED | Subordinate to `AGENTS.md` bootstrap, 02A lifecycle, and named human gates |
+| Layered Governance Blindaje / IA-2 / C.13 stack | CONTRADICTORY if read as a second constitution | `AGENTS.md` precedence wins |
+| Next Recommended Phase C.13.3K | OBSOLETE | Current execution is Phase 2; A04 is not started |
+
+Do not use these classifications to demote the Product-AI section.
 
 ## Copy/Paste Output Discipline
 

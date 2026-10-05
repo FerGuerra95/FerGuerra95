@@ -2,9 +2,11 @@
 
 ## Purpose
 
-Official library of repeatable prompts for audits, fixes, validation, and handoffs.
+Advisory helper templates for audits, fixes, validation, and handoffs. Classification: MIGRATE. These prompts are subordinate to `AGENTS.md`, 02A, 02B, and named human gates.
 
-Copy a template verbatim into Cursor. Replace bracketed placeholders.
+Prompts cannot own or determine baseline, scope, VERIFIED, CLOSED, merge authorization, production authorization, canonical lifecycle, or Source of Truth. A prompt saying PASS is not evidence. A prompt saying done is not closure. Prompt-produced HANDOFF_STATE is a draft note. It does not update `CURRENT_HANDOFF_STATE` and cannot close a task.
+
+Replace bracketed placeholders before use. Using a template does not create authority.
 
 ## Rules For All Prompts
 

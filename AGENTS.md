@@ -45,6 +45,20 @@ Current work is resumed from the repository, not from chat memory. State authori
 
 Cursor Project memory is not a Source of Truth. Stale conversational memory never overrides repository evidence.
 
+### Canonical governance, orchestration, and Legacy Guidance
+
+Canonical governance owns authority. This file, `CURRENT_HANDOFF_STATE`, and the named canonical project authorities below are the constitution. They are not a second hierarchy and they are not parallel instruction manuals.
+
+02A owns enforceable orchestration: capsule scope, lifecycle, role boundaries, and named human gates. 02B owns trusted local execution evidence bound to baseline, candidate SHA, capsule fingerprint, and the frozen evidence plan. Neither 02A nor 02B is a second constitution.
+
+Human authorization satisfies only one named gate. Human authorization is non-transitive. Merge authorization does not imply `governance_change`, `production`, or any other gate. Production authorization is a separate named gate. Prose cannot grant merge or production authority.
+
+`.agents/` role cards operate inside this authority. They do not override this file, Git, `CURRENT_HANDOFF_STATE`, or Source of Truth. Cursor rules and commands are adapters. They must not override this contract.
+
+Legacy Guidance is subordinate. `docs/ai/PROMPT_LIBRARY.md` and historical developer operating-sequence text are advisory templates only. Legacy Guidance must never become a second constitution. It cannot widen capsule-authorized paths, invent lifecycle states, or outrank canonical governance.
+
+Prose cannot create `VERIFIED` or `CLOSED`. A document, prompt, or chat saying PASS, done, or completed is not Independent Review and is not closure.
+
 ## Canonical project authorities
 
 - `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`: current execution state, A01–A44, frozen areas and `CURRENT_HANDOFF_STATE`.

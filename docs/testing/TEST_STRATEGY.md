@@ -61,9 +61,9 @@ A-MULTI-02A orchestration-core evidence, re-run on local main after fast-forward
 
 A-MULTI-02B — Trusted Evidence implementation commit `bead43ddcd8cfe50730b1ab5fe3cdf29ff180b87` received an initial independent verdict of NOT VERIFIED for one P1 artifact-seal defect. Correction commit `9a85adec13fb7595a0271af76ca9ef53f091fda6` received focused independent re-review verdict VERIFIED. Human merge authorization was granted only for that corrected tip. Local main was fast-forwarded to it. Post-merge validation passed the focused 02B suite 16/16, 02A regression 29/29, governance regression 9/9, `npm run build`, `node scripts/agents/evidence.mjs --help`, and `git diff --check 0adf5a3b56d324cc2d2f6985455868e4d233bec0..HEAD`. Remaining original 02B P0: 0. Remaining original 02B P1: 0. A-MULTI-02B was CANONICALLY CLOSED by that governance closure.
 
-A-MULTI-02B-FIX-01 later repaired a post-closure defect discovered during the first real METHOD-INTEGRATION-01 activation. Synthetic fixtures had omitted the real-repository shape of baseline-tracked `.agents/tasks/README.md`, so the original suite did not see `TASK_STATE_UNEXPECTED` on that path. The repair classifies runtime task state by exact active pair identity (`capsule.json` / `STATE.json`) and treats control-baseline-tracked root documentation as documentation, not task state. Active-pair acceptance uses exact-case directory-entry names on Windows. Count-based pair presence was removed. Focused 02B regression after local merge: 19/19 PASS. Real-repository post-merge proof: tracked README accepted; exact untracked pair recognized; foreign state, partial pair, case-variant state and a candidate-invented task file remained INVALID; a frozen evidence command executed; bundle SHA-256 `229e1b2b5de5f987c4fce062b6dc75248d2737094faf22c4ac3af5c805046a05`; canonical validation `ok: true`, `overall_status: PASS`. That proof is local trusted evidence. It is not production, remote-CI, sandbox, host or deployment attestation. Remaining FIX-01 P0: 0. Remaining FIX-01 P1: 0. A-MULTI-02B-FIX-01 is CANONICALLY CLOSED. It was later pushed; origin/main became `c04bbc8735c05745d19a2d3adfee6d6f805e384f`. Escaped-defect taxonomy is not assigned here.
+A-MULTI-02B-FIX-01 later repaired a post-closure defect discovered during the first real METHOD-INTEGRATION-01 activation. Synthetic fixtures had omitted the real-repository shape of baseline-tracked `.agents/tasks/README.md`, so the original suite did not see `TASK_STATE_UNEXPECTED` on that path. The repair classifies runtime task state by exact active pair identity (`capsule.json` / `STATE.json`) and treats control-baseline-tracked root documentation as documentation, not task state. Active-pair acceptance uses exact-case directory-entry names on Windows. Count-based pair presence was removed. Focused 02B regression after local merge: 19/19 PASS. Real-repository post-merge proof: tracked README accepted; exact untracked pair recognized; foreign state, partial pair, case-variant state and a candidate-invented task file remained INVALID; a frozen evidence command executed; bundle SHA-256 `229e1b2b5de5f987c4fce062b6dc75248d2737094faf22c4ac3af5c805046a05`; canonical validation `ok: true`, `overall_status: PASS`. That proof is local trusted evidence. It is not production, remote-CI, sandbox, host or deployment attestation. Remaining FIX-01 P0: 0. Remaining FIX-01 P1: 0. A-MULTI-02B-FIX-01 is CANONICALLY CLOSED. Historical FIX-01 governance SHA `c04bbc8735c05745d19a2d3adfee6d6f805e384f` is not the current baseline. Escaped-defect taxonomy is not assigned here.
 
-A-MULTI-02B-FIX-02 later repaired the post-FIX-01 defect in which `inspectCandidate` discarded trusted grants and used `createInitialState`, so a real METHOD-INTEGRATION candidate that changed Master Control failed with `HUMAN_AUTHORIZATION_REQUIRED` even when an external STATE recorded `governance_change=true`. 02B now supports an external trusted authorization STATE for protected-path evidence. The authorization source is that external STATE, validated by 02A. Candidate STATE remains non-authoritative. The bundle remains non-authoritative. Manifest identity `trusted_state_sha256` binds later validate to the exact STATE bytes used during run. That is not production, CI, sandbox, or host attestation. Implementation commit `cefde6a2ad9b796290243d42e7a83f242bd7095e`. Design review VERIFIED. Independent implementation review VERIFIED. Remaining FIX-02 P0: 0. Remaining FIX-02 P1: 0. Post-merge focused 02B suite: 32 passed; one inherited timeout test (`timeout and repository or control mutations cannot pass`) remained close to or over its 90s budget on this host. That residual is not a FIX-02 correctness defect and does not reopen FIX-02. 02A regression 29/29 PASS. Real-repository post-merge proof: a real candidate modified the authorized Master Control / `governance_handoff` path; external STATE A had `governance_change=true`; the frozen command executed; run PASS; bundle generated with `trusted_state_sha256=6c69b7997a1bcda139c08167422af986c93e9b2985d633dda90be881a14b8897`; validate with the same STATE A bytes PASS; STATE B with the same capsule fingerprint but different bytes/grants INVALID / `STATE_MISMATCH`; missing `--state` with the digest present INVALID / `STATE_REQUIRED`; trusted external `governance_change=false` plus candidate self-grant `true` INVALID / `HUMAN_AUTHORIZATION_REQUIRED`; FIX-01 task-state classification remained fail-closed (tracked README accepted; exact pair accepted; foreign/partial/case-variant/malformed INVALID). Bundle SHA-256 `e2cfd90266ff73be66fc12ba2dba9bfa34672349438f7aa9b58053e243a5d956`. That proof is local trusted evidence. It is not production, remote-CI, sandbox, host or deployment attestation. A-MULTI-02B-FIX-02 is CANONICALLY CLOSED locally. METHOD-INTEGRATION-01 remains DESIGN_CONTRADICTION_BLOCKED / donor-reference only at `50bb8274fe41bb18dbcb6e2d855696f674f71ab9`. Escaped-defect taxonomy is not assigned here.
+A-MULTI-02B-FIX-02 later repaired the post-FIX-01 defect in which `inspectCandidate` discarded trusted grants and used `createInitialState`, so a real METHOD-INTEGRATION candidate that changed Master Control failed with `HUMAN_AUTHORIZATION_REQUIRED` even when an external STATE recorded `governance_change=true`. 02B now supports an external trusted authorization STATE for protected-path evidence. The authorization source is that external STATE, validated by 02A. Candidate STATE remains non-authoritative. The bundle remains non-authoritative. Manifest identity `trusted_state_sha256` binds later validate to the exact STATE bytes used during run. That is not production, CI, sandbox, or host attestation. Implementation commit `cefde6a2ad9b796290243d42e7a83f242bd7095e`. Design review VERIFIED. Independent implementation review VERIFIED. Remaining FIX-02 P0: 0. Remaining FIX-02 P1: 0. Post-merge focused 02B suite: 32 passed; one inherited timeout test (`timeout and repository or control mutations cannot pass`) remained close to or over its 90s budget on this host. That residual is not a FIX-02 correctness defect and does not reopen FIX-02. 02A regression 29/29 PASS. Real-repository post-merge proof: a real candidate modified the authorized Master Control / `governance_handoff` path; external STATE A had `governance_change=true`; the frozen command executed; run PASS; bundle generated with `trusted_state_sha256=6c69b7997a1bcda139c08167422af986c93e9b2985d633dda90be881a14b8897`; validate with the same STATE A bytes PASS; STATE B with the same capsule fingerprint but different bytes/grants INVALID / `STATE_MISMATCH`; missing `--state` with the digest present INVALID / `STATE_REQUIRED`; trusted external `governance_change=false` plus candidate self-grant `true` INVALID / `HUMAN_AUTHORIZATION_REQUIRED`; FIX-01 task-state classification remained fail-closed (tracked README accepted; exact pair accepted; foreign/partial/case-variant/malformed INVALID). Bundle SHA-256 `e2cfd90266ff73be66fc12ba2dba9bfa34672349438f7aa9b58053e243a5d956`. That proof is local trusted evidence. It is not production, remote-CI, sandbox, host or deployment attestation. A-MULTI-02B-FIX-02 is CANONICALLY CLOSED. METHOD-INTEGRATION-01 is DESIGN FREEZE APPROVED / IMPLEMENTING against the frozen design on baseline `c92aabd3b781af862cff9a85bb491ebd12eeaf58`. This candidate is not canonical. Escaped-defect taxonomy is not assigned here.
 
 A-MULTI-02B records and validates defined local execution facts bound to an authorized baseline, candidate SHA, capsule fingerprint and frozen evidence plan. Its baseline-pinned judge applies repository mutation checks, capsule immutability, per-command artifact sealing, bundle validation and human-gate separation. It is not an OS sandbox, host or remote-CI attestation, malware containment, network isolation, clean-install attestation, cryptographic execution identity, production or deployment provenance, business-oracle correctness, proof that an evidence plan is sufficient, automatic merge or automatic deployment. Green evidence still does not close high-risk work without independent review and the applicable human gate. The next product finding remains A04, which is not started.
 
@@ -134,3 +134,60 @@ Release evidence at Phase 13 must separate missing product scope from implementa
 The final Astra audit is two evidence passes. Pass A uses the Release Candidate SHA, repository, requirements, business oracles, and threat model, without previous verified conclusions as assumptions. Pass B then reconciles that reconstruction with machine evidence, tests, the Source of Truth registry, architecture documents, the security model, known limitations, and previous verified states. Each important domain uses one classification: verified by evidence, verified with limited scope, not verified, contradictory, or not audited / insufficient evidence. A general statement that everything looks good is not audit evidence.
 
 A green build, a green suite, a finished-looking UI, or an agent verdict of verified is not release readiness. Data-lifecycle evidence, where the change touches it, covers classification, tenant ownership, sensitive data, retention, deletion, export, backup, restore, fixtures, logs, and production versus non-production separation. Supply-chain evidence covers dependency review, lockfile integrity, known vulnerabilities, unnecessary dependencies, install and build scripts, and runtime provenance. Neither evidence set is a SOC 2, ISO, or other regulatory certification.
+
+## Provisional HIGH-risk A04 assurance profile
+
+This section records approved method concepts for the later A04 Design Preflight / pilot. It is provisional. It is not globally mandatory. A04 is OPEN P1 and is not started. These controls have not been validated by A04. They do not replace current canonical mechanisms: isolated Vitest/integration contracts, A27 isolation, Golden oracles where they already exist, and 02B trusted local execution evidence.
+
+Current canonical mechanisms remain:
+
+- production-path unit and integration assertions
+- isolated DB/VDR and protected-port rejection
+- 02B real execution evidence bound to baseline, candidate SHA, capsule fingerprint, and a frozen evidence plan
+- independent semantic review
+- named human gates
+
+Future / pilot assurance enhancements below are proportional to HIGH-risk persistence and data-integrity work. They are A04-scoped unless a later authorized task widens them.
+
+### Independent Truth / Oracle
+
+An Independent Truth / Oracle is a success criterion that is not copied from the implementation under test. For A04, the oracle is the durable audit-write contract: a persistence failure must remain visible and must not be swallowed into an apparent success. A test generated only by copying the implementation is not oracle evidence.
+
+### Adversarial Evidence Plan
+
+Every HIGH-risk evidence plan must answer this Assurance Question: "What plausible incorrect implementation could still pass this evidence plan?" If the answer is a silent catch, a skipped write, or a success-shaped empty result, the plan is insufficient. The Reviewer evidence packet must include that answer.
+
+### Selective Mutation Testing
+
+Selective Mutation Testing is a control-plane check: remove or invert the intended guard and confirm the focused suite fails. It is not a repository-wide mutation campaign. Use it on the A04 swallow path and on other HIGH-risk persistence guards when the Design Freeze names them.
+
+### Fault Injection
+
+Fault Injection applies to appropriate persistence and data work. For A04, inject a failing audit write and prove the caller cannot report success. Fault Injection is not required for ordinary documentation or display-only changes.
+
+### Negative / known-bad controls
+
+A negative control is a known-bad fixture or implementation that must fail. Green-only evidence is insufficient for HIGH-risk persistence work. Known-bad controls belong in the Reviewer evidence packet.
+
+### Environment Gap levels E0–E5
+
+These levels describe how far execution evidence is from the claimed environment. They are provisional labels for later A04 and release-provenance work:
+
+| Level | Meaning |
+|---|---|
+| E0 | Author narrative or unexecuted prompt output |
+| E1 | Local unit fixture with no persistence |
+| E2 | Isolated local integration / 02B candidate execution |
+| E3 | Isolated local product runtime, non-canonical ports and data |
+| E4 | Staging or equivalent controlled remote |
+| E5 | Production or customer data |
+
+Current 02B evidence is at most E2. It is not E4 or E5. Do not treat a local PASS as production provenance.
+
+### Escaped Defect vocabulary — later pilot only
+
+DESIGN_ESCAPE, ENGINEERING_ESCAPE, REVIEW_ESCAPE, and CLOSURE_ESCAPE are provisional Escaped Defect labels for the later A04 / Assurance Baseline Audit pilot. They are not current metrics. This task does not assign them. Do not treat their presence here as a canonical taxonomy already in force.
+
+### Success criteria and proportionality
+
+A04 success criteria remain the finding closure criteria in the robustness audit plus the evidence obligations above. Controls stay proportional: low-risk local work does not inherit the full HIGH-risk profile. Independent semantic review still judges whether the frozen evidence plan and oracle are sufficient. 02B records real execution facts; it does not prove sufficiency.

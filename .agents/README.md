@@ -1,18 +1,8 @@
 # Agent role layer
 
-Exists because parallel agents need a short index. This directory is not a second constitution.
+This directory is a navigation pointer. It is not a second constitution, a second state machine, a second authorization source, or a competing Source of Truth.
 
-Authority, highest first:
-
-1. `AGENTS.md` and `.cursorrules`
-2. Git, plus `CURRENT_HANDOFF_STATE` in `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`
-3. Verified code and runtime, `docs/architecture/SOURCE_OF_TRUTH_REGISTRY.md`, and approved oracles
-4. The role card in this directory
-5. The Task Capsule for the assigned task
-6. Independent review evidence
-7. Human approval before merge
-
-No role card, capsule, or review note overrides a higher layer.
+Canonical governance owns authority. Start at `AGENTS.md`. Current product phase state lives only in `CURRENT_HANDOFF_STATE` inside `docs/product/CEO_OS_MASTER_CONTROL_BASELINE.md`. 02A enforces scope, lifecycle, role boundaries, and named human gates. 02B records trusted local execution facts. Role cards here operate inside that precedence. They do not establish independent precedence.
 
 | Role | Card | Writes product code | Reviews | Merges | Deploys |
 |---|---|---|---|---|---|
