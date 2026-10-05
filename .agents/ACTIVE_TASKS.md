@@ -4,7 +4,7 @@ Exists because `CURRENT_HANDOFF_STATE` records one product phase, not concurrent
 
 | Agent | Task | Branch | Baseline | Worktree | Status | Owned paths | Blockers |
 |---|---|---|---|---|---|---|---|
-| none | A-MULTI-02B-FIX-01 | main | implementation `1ba019eff05588c8346b653f5a13b297f38b6026`; origin/main remains `bc2d6ba41da3dd687264009faeb3d192a8e6705b` | main checkout | CANONICALLY CLOSED locally | none | Push not authorized. Local main is ahead of origin/main. |
-| none | METHOD-INTEGRATION-01 | agent/engineering/method-integration-01 | old capsule remains bound to `bc2d6ba41da3dd687264009faeb3d192a8e6705b` and must not be reused | C:\ceos-worktrees\method-integration-01 | DESIGN FREEZE APPROVED / ASSIGNED / ACTIVATION_BLOCKED | none | Reactivation requires a new baseline after authorized FIX-01 push. Assurance Baseline Audit and A04 are not started. |
+| none | A-MULTI-02B-FIX-02 | main | implementation `cefde6a2ad9b796290243d42e7a83f242bd7095e`; origin/main remains `c04bbc8735c05745d19a2d3adfee6d6f805e384f` | main checkout | CANONICALLY CLOSED locally | none | Push not authorized. Local main is ahead of origin/main. |
+| none | METHOD-INTEGRATION-01 | agent/engineering/method-integration-01-v2 | donor `50bb8274fe41bb18dbcb6e2d855696f674f71ab9`; must rematerialize after authorized FIX-02 push | C:\ceos-worktrees\method-integration-01-v2 | DESIGN_CONTRADICTION_BLOCKED / donor-reference only | none | Do not reactivate on this closure. Assurance Baseline Audit and A04 are not started. |
 
 Update a row when Technical Direction assigns, blocks, or closes a task. Remove finished rows. Do not accumulate history.
