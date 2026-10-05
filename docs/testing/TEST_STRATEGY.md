@@ -65,7 +65,7 @@ A-MULTI-02B-FIX-01 later repaired a post-closure defect discovered during the fi
 
 A-MULTI-02B-FIX-02 later repaired the post-FIX-01 defect in which `inspectCandidate` discarded trusted grants and used `createInitialState`, so a real METHOD-INTEGRATION candidate that changed Master Control failed with `HUMAN_AUTHORIZATION_REQUIRED` even when an external STATE recorded `governance_change=true`. 02B now supports an external trusted authorization STATE for protected-path evidence. The authorization source is that external STATE, validated by 02A. Candidate STATE remains non-authoritative. The bundle remains non-authoritative. Manifest identity `trusted_state_sha256` binds later validate to the exact STATE bytes used during run. That is not production, CI, sandbox, or host attestation. Implementation commit `cefde6a2ad9b796290243d42e7a83f242bd7095e`. Design review VERIFIED. Independent implementation review VERIFIED. Remaining FIX-02 P0: 0. Remaining FIX-02 P1: 0. Post-merge focused 02B suite: 32 passed; one inherited timeout test (`timeout and repository or control mutations cannot pass`) remained close to or over its 90s budget on this host. That residual is not a FIX-02 correctness defect and does not reopen FIX-02. 02A regression 29/29 PASS. Real-repository post-merge proof: a real candidate modified the authorized Master Control / `governance_handoff` path; external STATE A had `governance_change=true`; the frozen command executed; run PASS; bundle generated with `trusted_state_sha256=6c69b7997a1bcda139c08167422af986c93e9b2985d633dda90be881a14b8897`; validate with the same STATE A bytes PASS; STATE B with the same capsule fingerprint but different bytes/grants INVALID / `STATE_MISMATCH`; missing `--state` with the digest present INVALID / `STATE_REQUIRED`; trusted external `governance_change=false` plus candidate self-grant `true` INVALID / `HUMAN_AUTHORIZATION_REQUIRED`; FIX-01 task-state classification remained fail-closed (tracked README accepted; exact pair accepted; foreign/partial/case-variant/malformed INVALID). Bundle SHA-256 `e2cfd90266ff73be66fc12ba2dba9bfa34672349438f7aa9b58053e243a5d956`. That proof is local trusted evidence. It is not production, remote-CI, sandbox, host or deployment attestation. A-MULTI-02B-FIX-02 is CANONICALLY CLOSED. METHOD-INTEGRATION-01 later bound canonical governance as authority, 02A as orchestration/gates, 02B as trusted evidence, and Legacy Guidance as subordinate/advisory. Implementation commit `793795252c1099a11fe833159e7847880b492a6c`. Independent implementation review VERIFIED. Remaining METHOD-INTEGRATION-01 P0: 0. Remaining METHOD-INTEGRATION-01 P1: 0. Post-merge focused tests: Method Integration 10/10, 02A 29/29, 02B 33/33, governance 9/9, build PASS, CLI smokes PASS, `git diff --check` PASS. Pre-merge 02B bundle SHA-256 `50ce6ed45f0dd6c4adcf2b58b9b6ff64ae0cc0cde3bb3e6cd513e45f01868b60`; `trusted_state_sha256` `04ea1df3a1ad938750dd67898757280937670af8b1d23e11e6d541b6c6f4e007`; canonical validation `ok: true`, `overall_status: PASS`. That proof is local trusted evidence. It is not production, remote-CI, sandbox, host or deployment attestation. METHOD-INTEGRATION-01 is CANONICALLY CLOSED locally. Escaped-defect taxonomy is not assigned here.
 
-A-MULTI-02B records and validates defined local execution facts bound to an authorized baseline, candidate SHA, capsule fingerprint and frozen evidence plan. Its baseline-pinned judge applies repository mutation checks, capsule immutability, per-command artifact sealing, bundle validation and human-gate separation. It is not an OS sandbox, host or remote-CI attestation, malware containment, network isolation, clean-install attestation, cryptographic execution identity, production or deployment provenance, business-oracle correctness, proof that an evidence plan is sufficient, automatic merge or automatic deployment. Green evidence still does not close high-risk work without independent review and the applicable human gate. The next product finding remains A04, which is not started.
+A-MULTI-02B records and validates defined local execution facts bound to an authorized baseline, candidate SHA, capsule fingerprint and frozen evidence plan. Its baseline-pinned judge applies repository mutation checks, capsule immutability, per-command artifact sealing, bundle validation and human-gate separation. It is not an OS sandbox, host or remote-CI attestation, malware containment, network isolation, clean-install attestation, cryptographic execution identity, production or deployment provenance, business-oracle correctness, proof that an evidence plan is sufficient, automatic merge or automatic deployment. Green evidence still does not close high-risk work without independent review and the applicable human gate. A04 completed the first Full Assurance Pilot and is VERIFIED CLOSED. The assurance method is not automatically globally mandatory merely because A04 passed.
 
 ## A27 — DB, VDR and fixture isolation VERIFIED CLOSED
 
@@ -104,7 +104,7 @@ A HEAD SHA alone is insufficient while A30 is open. A passing existing artifact,
 | Gate | Required evidence | Blocks next step |
 |---|---|---|
 | 0 — Baseline | Reviewed docs, accepted source manifest and explicit file scope | Unexplained source/provenance changes |
-| 1 — Isolation/discovery | JS/JSX discovery, real integration assertions, DB/VDR guard and fixture lifecycle | Phase 1 PASSED. A01, A02 and A03 are VERIFIED CLOSED. Next product finding is A04. |
+| 1 — Isolation/discovery | JS/JSX discovery, real integration assertions, DB/VDR guard and fixture lifecycle | Phase 1 PASSED. A01, A02, A03 and A04 are VERIFIED CLOSED. No next product finding is started. |
 | 2 — Unit/oracles | Production-path regressions and approved business expected outputs | Unexplained mismatch; altered oracle to fit code |
 | 3 — API/services | Negative security tests; durable audit; fresh/upgraded schema parity | Remaining open P1 failures. A01 physical-file binding, the A02 generic workflow-transition bypass, and A03 deterministic environment bootstrap ordering are VERIFIED CLOSED. |
 | 4 — Product E2E | Roles, tenants, persistence, reports, archive/share lifecycle and failure states | Material workflow or truthfulness failure |
@@ -137,7 +137,7 @@ A green build, a green suite, a finished-looking UI, or an agent verdict of veri
 
 ## Provisional HIGH-risk A04 assurance profile
 
-This section records approved method concepts for the later A04 Design Preflight / pilot. It is provisional. It is not globally mandatory. A04 is OPEN P1 and is not started. These controls have not been validated by A04. They do not replace current canonical mechanisms: isolated Vitest/integration contracts, A27 isolation, Golden oracles where they already exist, and 02B trusted local execution evidence.
+This section records the assurance method used by the first Full Assurance Pilot (A04). It is provisional. It is not automatically globally mandatory merely because A04 passed. Further validation on subsequent findings is still required before universal adoption. These controls do not replace current canonical mechanisms: isolated Vitest/integration contracts, A27 isolation, Golden oracles where they already exist, and 02B trusted local execution evidence.
 
 Current canonical mechanisms remain:
 
@@ -147,7 +147,7 @@ Current canonical mechanisms remain:
 - independent semantic review
 - named human gates
 
-Future / pilot assurance enhancements below are proportional to HIGH-risk persistence and data-integrity work. They are A04-scoped unless a later authorized task widens them.
+Future / pilot assurance enhancements below remain proportional to HIGH-risk persistence and data-integrity work. They were used by A04. They are not automatically globally mandatory for later findings unless a later authorized task widens them.
 
 ### Independent Truth / Oracle
 
@@ -171,7 +171,7 @@ A negative control is a known-bad fixture or implementation that must fail. Gree
 
 ### Environment Gap levels E0–E5
 
-These levels describe how far execution evidence is from the claimed environment. They are provisional labels for later A04 and release-provenance work:
+These levels describe how far execution evidence is from the claimed environment. They remain provisional labels. A04 executed at E2 and did not make them a canonical taxonomy already in force:
 
 | Level | Meaning |
 |---|---|
@@ -186,8 +186,8 @@ Current 02B evidence is at most E2. It is not E4 or E5. Do not treat a local PAS
 
 ### Escaped Defect vocabulary — later pilot only
 
-DESIGN_ESCAPE, ENGINEERING_ESCAPE, REVIEW_ESCAPE, and CLOSURE_ESCAPE are provisional Escaped Defect labels for the later A04 / Assurance Baseline Audit pilot. They are not current metrics. This task does not assign them. Do not treat their presence here as a canonical taxonomy already in force.
+DESIGN_ESCAPE, ENGINEERING_ESCAPE, REVIEW_ESCAPE, and CLOSURE_ESCAPE are provisional Escaped Defect labels. They are not current metrics. A04 did not assign them. Do not treat their presence here as a canonical taxonomy already in force.
 
 ### Success criteria and proportionality
 
-A04 success criteria remain the finding closure criteria in the robustness audit plus the evidence obligations above. Controls stay proportional: low-risk local work does not inherit the full HIGH-risk profile. Independent semantic review still judges whether the frozen evidence plan and oracle are sufficient. 02B records real execution facts; it does not prove sufficiency.
+A04 success criteria remain the finding closure criteria in the robustness audit plus the evidence obligations above. A04 completed the first Full Assurance Pilot. Controls stay proportional: low-risk local work does not inherit the full HIGH-risk profile. Independent semantic review still judges whether the frozen evidence plan and oracle are sufficient. 02B records real execution facts; it does not prove sufficiency. The method is not automatically globally mandatory merely because A04 passed.

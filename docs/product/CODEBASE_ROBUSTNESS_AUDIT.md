@@ -4,7 +4,7 @@
 
 ## Status and evidence rules
 
-**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 1 is VERIFIED CLOSED. Phase 2 — Security / access is ACTIVE. A01, A02, A03, A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The next product finding is A04, OPEN P1. The 17 September audit narrative below is historical evidence, not a claim that A01, A02, A03, A26 or A27 are still open.
+**Master synchronized:** the canonical undated tracker was created under explicit authorization; the dated source remains unchanged. Phase 0 and Phase 0.5 are CLOSED by human acceptance as of 18 September 2026. Phase 1 is VERIFIED CLOSED. Phase 2 — Security / access is ACTIVE. A01, A02, A03, A04, A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. No next product finding is started. The 17 September audit narrative below is historical evidence, not a claim that A01, A02, A03, A04, A26 or A27 are still open.
 
 - **OPEN:** no accepted remediation.
 - **IN PROGRESS:** scoped work underway; not closed.
@@ -15,7 +15,7 @@
 
 VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a conclusion requiring further validation; UNVERIFIED describes missing execution/operational proof. Static findings do not claim a successful exploit.
 
-**Current totals:** zero P0 OPEN; 25 P1 OPEN (A04–A25 and A28–A30); A31 IN PROGRESS; A01, A02, A03, A26 and A27 VERIFIED CLOSED; 12 P2 OPEN (A32–A43); one P3 OPEN (A44). Residual non-register P2 notes are E2E fixture collisions and an unrendered `commandCalendar`. They remain separate from the A01, A02 and A03 closures.
+**Current totals:** zero P0 OPEN; 24 P1 OPEN (A05–A25 and A28–A30); A31 IN PROGRESS; A01, A02, A03, A04, A26 and A27 VERIFIED CLOSED; 12 P2 OPEN (A32–A43); one P3 OPEN (A44). Residual non-register P2 notes are E2E fixture collisions and an unrendered `commandCalendar`. They remain separate from the A01, A02, A03 and A04 closures.
 
 ## Current A01–A44 register
 
@@ -53,12 +53,13 @@ VERIFIED FACT means inspected source/Git/schema/runtime evidence; INFERENCE is a
 
 ### A04 — Audit persistence failures swallowed
 
-**Priority:** P1 · **Status:** OPEN · **Evidence:** VERIFIED FACT (audit inspection).
+**Priority:** P1 · **Status:** VERIFIED CLOSED · **Evidence:** independent review and post-merge validation.
 
 - Mutations may succeed without durable audit event.
 - Closure: explicit failure policy; transactional/outbox or documented durable alternative.
+- **Closure evidence:** Required mutation and security-side-effect audit writes fail closed at the operation boundary when audit persistence fails (`AUDIT_PERSISTENCE_FAILED`). Availability/access CLASS B sites remain explicit best-effort. Business mutation and audit persistence remain non-atomic. A required business mutation may already be committed when audit persistence fails. A04 does not provide atomic mutation+audit persistence and does not close Phase 3 transactional/outbox durability. Independent Implementation Review: P0 0 / P1 0 / IMPLEMENTATION VERIFIED. Product commit `4ad1e263ac5396999eb750fc69b1a734b6a8ab49`. Implementation parent `d34248b02ea4370fb8414dc9c0e871dd7ca5cf2e`. A04 merge-authority fingerprint `bbe96861eafab6095e5d67b5137222f7a30c1a4c7985c60c08ba1d223b3a4c76`. A04 02B bundle SHA `2d08a089c6a782d67beb72008cb86476b646b189b33b616c14a2aa85b02c19c9`. `trusted_state_sha256` `6763170b2d4db2da722ac3e80cb062c40222269b42bf4820d5d6d7b4e866dd39`. Evidence PASS. Post-merge validation 95/95 PASS. Build PASS. Known-bad RED on the original defect. Selective mutations 4/4 killed. Fault injection used real isolated SQLite. Maximum evidence provenance E2. Design correction loops: 2. Implementation correction loops: 0. Design Review P1 sequence: 3 → 1 → 0. Implementation Review P1: 0. Known-bad effective: YES. This closure is the two-class failure policy only.
 
-**Evidence anchors:** backend/services/audit/auditLog.service.js — recordAuditLog catch/return; domain mutation-before-audit callers.
+**Evidence anchors:** backend/services/audit/auditLog.service.js — recordAuditLog required/fail-closed versus required:false best-effort; domain mutation-before-audit callers.
 
 ### A05 — Secure-share query token can enter URL/error logs
 

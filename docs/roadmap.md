@@ -2,7 +2,7 @@
 
 **Baseline:** 17 September 2026 · forensic HEAD `43e470f630b8b2b79cc5241aeac6279492108081`. This is the dependency order from Astra. It authorizes no implementation, infrastructure change, AI activation or release.
 
-**Governance checkpoint:** Phase 0.7 — AI Delivery Safety Harness is CLOSED by human approval and FROZEN. **Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. Phase 0, Phase 0.5, Phase 0.6 and Phase 0.7 are CLOSED by human acceptance; 0.5, 0.6 and 0.7 do not add a fifteenth roadmap phase. A01, A02 and A03 are VERIFIED CLOSED. A04 is the next OPEN product finding. A04–A25 and A28–A30 remain OPEN. A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The Phase 2 exit gate is not passed.
+**Governance checkpoint:** Phase 0.7 — AI Delivery Safety Harness is CLOSED by human approval and FROZEN. **Active technical phase:** Phase 2 — Security / access is ACTIVE. Phase 1 is VERIFIED CLOSED. Phase 0, Phase 0.5, Phase 0.6 and Phase 0.7 are CLOSED by human acceptance; 0.5, 0.6 and 0.7 do not add a fifteenth roadmap phase. A01, A02, A03 and A04 are VERIFIED CLOSED. A05–A25 and A28–A30 remain OPEN. A26 and A27 are VERIFIED CLOSED. A31 remains IN PROGRESS under the explicit 33-document review exception. The Phase 2 exit gate is not passed. No next product finding is started.
 
 Each phase needs an explicit file whitelist and its own evidence. Exit gates describe future requirements. Preserve the M&A black canvas, workspace accent, page/hero geometry and approved surfaces throughout functional remediation.
 
@@ -34,7 +34,7 @@ GOV-ASSURANCE-01 adds transversal gates and phase assurance gates inside these f
 
 ## Phase 2 — Security/access
 
-**CURRENT STATUS:** ACTIVE. A01, A02 and A03 are VERIFIED CLOSED. A04 is the next OPEN product finding. This phase exit gate is not passed.
+**CURRENT STATUS:** ACTIVE. A01, A02, A03 and A04 are VERIFIED CLOSED. This phase exit gate is not passed. No next product finding is started.
 
 **OBJECTIVE:** Close VDR ownership, approvals, env bootstrap, reset route, token path; validate upload/OIDC policy.
 
@@ -54,7 +54,7 @@ GOV-ASSURANCE-01 adds transversal gates and phase assurance gates inside these f
 
 **DEPENDENCIES:** Phase 2 access boundaries and Phase 1 storage harness.
 
-**P0/P1 COVERAGE:** A04, A06, A08, A28; supporting A35/A32.
+**P0/P1 COVERAGE:** A04 two-class audit failure policy is VERIFIED CLOSED; remaining A06, A08, A28; supporting A35/A32. Transactional/outbox durability remains this phase's work.
 
 **EXIT GATE:** Fresh/upgraded schema and ownership checks proven; failed audit policy tested; reads do not seed records; archive/delete graph documented.
 

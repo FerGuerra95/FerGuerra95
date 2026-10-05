@@ -220,10 +220,11 @@ describe('METHOD-INTEGRATION-01 governance semantics', () => {
       expect(lineHas(text, /origin\/main/i, STALE), `${name} origin/main + stale`).toBe(false);
     }
     expect(docs.active).toMatch(/METHOD-INTEGRATION-01/);
-    expect(lineHas(docs.active, /A04/, /not started/i)).toBe(true);
-    expect(lineHas(docs.master, /A04/, /not started/i)).toBe(true);
-    expect(lineHas(docs.hardening, /A04/, /OPEN P1/i)).toBe(true);
-    expect(lineHas(docs.hardening, /A04/, /not started/i)).toBe(true);
+    expect(lineHas(docs.active, /A04/, /VERIFIED CLOSED/i)).toBe(true);
+    expect(lineHas(docs.master, /A04/, /VERIFIED CLOSED/i)).toBe(true);
+    expect(lineHas(docs.hardening, /A04/, /VERIFIED CLOSED/i)).toBe(true);
+    expect(docs.hardening).toMatch(/Open P1 count is 24/);
+    expect(docs.master).toMatch(/\*\*OPEN P1:\*\* 24\b/);
     expect(docs.hardening).toMatch(/Phase 2[^\n]{0,160}ACTIVE/i);
   });
 
@@ -261,8 +262,10 @@ describe('METHOD-INTEGRATION-01 governance semantics', () => {
   it('requires structural assurance semantics rather than keyword presence alone', () => {
     const profile = sectionAfter(docs.strategy, /^## Provisional HIGH-risk A04 assurance profile/m);
     expect(profile).toMatch(/provisional/i);
-    expect(profile).toMatch(/not[^\n]{0,60}globally mandatory/i);
+    expect(profile).toMatch(/not[^\n]{0,80}globally mandatory/i);
     expect(profile).toMatch(/A04/);
+    expect(profile).toMatch(/Full Assurance Pilot/i);
+    expect(profile).toMatch(/further validation/i);
     expect(profile).toMatch(/Independent Truth/);
     expect(profile).toMatch(/Oracle/);
     expect(profile).toMatch(/Adversarial Evidence Plan/);
@@ -277,7 +280,6 @@ describe('METHOD-INTEGRATION-01 governance semantics', () => {
     expect(profile).toMatch(/Assurance Question/);
     expect(profile).toMatch(/success criteria/i);
     expect(profile).toMatch(/proportional/i);
-    expect(profile).toMatch(/have not been validated by A04/i);
     expect(profile).toMatch(/02B/);
     expect(profile).toMatch(/independent semantic review/i);
 
@@ -287,7 +289,7 @@ describe('METHOD-INTEGRATION-01 governance semantics', () => {
     expect(escaped).toMatch(/REVIEW_ESCAPE/);
     expect(escaped).toMatch(/CLOSURE_ESCAPE/);
     expect(escaped).toMatch(/not current metrics/i);
-    expect(escaped).toMatch(/later A04/i);
+    expect(escaped).toMatch(/not assign/i);
 
     const phases = linesOf(docs.master)
       .filter((line) => /^##\s+PHASE\s+\d+\s/i.test(line))
