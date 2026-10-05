@@ -132,8 +132,8 @@ describe('METHOD-INTEGRATION-01 governance semantics', () => {
     expect(prohibition).toMatch(/Prose cannot create `VERIFIED` or `CLOSED`/i);
     expect(prohibition).toMatch(/completed is not Independent Review and is not closure/i);
     expect(docs.prompts).toMatch(/A prompt saying done is not closure/i);
-    expect(docs.active).toMatch(/IN PROGRESS \/ IMPLEMENTING/);
-    expect(docs.active).not.toMatch(/\bCLOSED\b/);
+    expect(docs.active).toMatch(/CANONICALLY CLOSED locally/);
+    expect(docs.active).not.toMatch(/IN PROGRESS \/ IMPLEMENTING/);
   });
 
   it('keeps merge authorization from implying governance_change or production', () => {
